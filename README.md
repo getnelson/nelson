@@ -2,7 +2,7 @@
 
 ![image](docs/src/hugo/static/images/logo.png)
 
-[![Build Status](https://travis-ci.org/Verizon/nelson)](https://travis-ci.org/Verizon/nelson)
+[![Build Status](https://travis-ci.org/Verizon/nelson.svg?branch=master)](https://travis-ci.org/Verizon/nelson)
 [![codecov.io](https://codecov.io/github/Verizon/nelson?branch=master)](https://codecov.io/github/Verizon/nelson?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.verizon.nelson/core_2.11)](https://maven-badges.herokuapp.com/maven-central/io.verizon.nelson/core_2.11)
 
