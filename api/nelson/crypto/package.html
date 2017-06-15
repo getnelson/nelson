@@ -1,0 +1,625 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>crypto - nelson.crypto</title>
+          <meta name="description" content="crypto - nelson.crypto" />
+          <meta name="keywords" content="crypto nelson.crypto" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'nelson.crypto.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="nelson">nelson</a></p>
+        <h1>crypto</h1><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">crypto</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/crypto/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="nelson.crypto"><span>crypto</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="nelson.crypto.AuthEnv" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuthEnv=nelson.crypto.AuthEnvironment[nelson.crypto.package.AuthResult]"></a>
+      <a id="AuthEnv:AuthEnv"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">AuthEnv</span><span class="result"> = <a href="AuthEnvironment.html" class="extype" name="nelson.crypto.AuthEnvironment">AuthEnvironment</a>[<a href="#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@AuthEnv=nelson.crypto.AuthEnvironment[nelson.crypto.package.AuthResult]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.AuthEnvironment" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AuthEnvironment[F[_]]extendsAnyRef"></a>
+      <a id="AuthEnvironment[F[_]]:AuthEnvironment[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthEnvironment.html"><span class="name">AuthEnvironment</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@AuthEnvironment[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An environment in which authentication is performed.</p><div class="fullcomment"><div class="comment cmt"><p>An environment in which authentication is performed.</p><p>It is expected that you will have a singleton instance of this class for
+your entire app/service. The <code>default</code> method in the companion object
+creates an instance with some reasonable defaults and caching.</p><p>It is not strictly necessary to use this class, but it certain classes such
+as <code>EncryptedCodec</code> and <code>SignedCodec</code> have convenient instantiation methods
+that take an authentication environment.</p><p>The environment can also be set up for asymmetric signing and verification.
+To set it up for asymmetric signing, set the signing key. For asymmetric
+verification, set the verify key. Both can be set if the library user needs
+to perform both functions.
+</p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>the context wrapping most of the results of the environment.
+ For example, <code>F</code> is usually <code>AuthResult</code>, which means that an <code>F[A]</code>
+ is either an <code>AuthFailure</code> or a successful <code>A</code>.</p></dd></dl></div>
+    </li><li name="nelson.crypto.AuthFailure" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AuthFailureextendsProductwithSerializable"></a>
+      <a id="AuthFailure:AuthFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthFailure.html"><span class="name">AuthFailure</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@AuthFailureextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An error encountered during authentication.</p>
+    </li><li name="nelson.crypto.AuthResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]"></a>
+      <a id="AuthResult[A]:AuthResult[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">AuthResult</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.\/">\/</span>[<a href="AuthFailure.html" class="extype" name="nelson.crypto.AuthFailure">AuthFailure</a>, <span class="extype" name="nelson.crypto.AuthResult.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.CipherMode" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CipherModeextendsAnyRef"></a>
+      <a id="CipherMode:CipherMode"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CipherMode.html"><span class="name">CipherMode</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@CipherModeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.Decryptor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Decryptor[F[_]]extendsAnyRef"></a>
+      <a id="Decryptor[F[_]]:Decryptor[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Decryptor.html"><span class="name">Decryptor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@Decryptor[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.EncryptionKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EncryptionKeyextendsAnyRef"></a>
+      <a id="EncryptionKey:EncryptionKey"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="EncryptionKey.html"><span class="name">EncryptionKey</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@EncryptionKeyextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.Encryptor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Encryptor[F[_]]extendsAnyRef"></a>
+      <a id="Encryptor[F[_]]:Encryptor[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Encryptor.html"><span class="name">Encryptor</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@Encryptor[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.InitializationVector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InitializationVectorextendsAnyRef"></a>
+      <a id="InitializationVector:InitializationVector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="InitializationVector.html"><span class="name">InitializationVector</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@InitializationVectorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.Nonce" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonceextendsAnyRef"></a>
+      <a id="Nonce:Nonce"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Nonce.html"><span class="name">Nonce</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@NonceextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.SafeHolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SafeHolder[V]extendsAnyRef"></a>
+      <a id="SafeHolder[V]:SafeHolder[V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SafeHolder.html"><span class="name">SafeHolder</span></a><span class="tparams">[<span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@SafeHolder[V]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The SafeHolder utility provide safe reuse of objects that could not be shared
+between thread (not thread-safe) like many java crypto objects, e.g.</p><div class="fullcomment"><div class="comment cmt"><p>The SafeHolder utility provide safe reuse of objects that could not be shared
+between thread (not thread-safe) like many java crypto objects, e.g. Cipher.
+</p></div></div>
+    </li><li name="nelson.crypto.SafeHolderEncryption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SafeHolderEncryptionextendsEncryptor[nelson.crypto.AuthResult]withDecryptor[nelson.crypto.AuthResult]"></a>
+      <a id="SafeHolderEncryption:SafeHolderEncryption"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SafeHolderEncryption.html"><span class="name">SafeHolderEncryption</span></a><span class="result"> extends <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>] with <a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@SafeHolderEncryptionextendsEncryptor[nelson.crypto.AuthResult]withDecryptor[nelson.crypto.AuthResult]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.SafeHolderHmac" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SafeHolderHmacextendsSigner[nelson.crypto.AuthResult]"></a>
+      <a id="SafeHolderHmac:SafeHolderHmac"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SafeHolderHmac.html"><span class="name">SafeHolderHmac</span></a><span class="result"> extends <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@SafeHolderHmacextendsSigner[nelson.crypto.AuthResult]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An HMAC-based implementation of <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a> that caches <code>Mac</code> instances to
+reduce the overhead of initialization.</p><div class="fullcomment"><div class="comment cmt"><p>An HMAC-based implementation of <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a> that caches <code>Mac</code> instances to
+reduce the overhead of initialization.</p><p>Caching a per-key <code>Mac</code> instead of just a thread-local <code>Mac</code> would remove
+the need to initialize the mac on each signature, but benchmarks show that
+it doesn't make a significant performance difference.
+</p></div></div>
+    </li><li name="nelson.crypto.SignatureKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SignatureKeyextendsAnyRef"></a>
+      <a id="SignatureKey:SignatureKey"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SignatureKey.html"><span class="name">SignatureKey</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@SignatureKeyextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.Signer" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Signer[F[_]]extendsAnyRef"></a>
+      <a id="Signer[F[_]]:Signer[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Signer.html"><span class="name">Signer</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@Signer[F[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Signer</code> computes a signature (such as a checksum) of data.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>Signer</code> computes a signature (such as a checksum) of data.
+</p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>The context in which results are wrapped. This allows a Signer
+ to return a possible failure via Option, a disjunction, etc.</p></dd></dl></div>
+    </li><li name="nelson.crypto.TokenAuthenticator" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="TokenAuthenticator[SerializedToken,DeserializedToken]extendsAnyRef"></a>
+      <a id="TokenAuthenticator[SerializedToken,DeserializedToken]:TokenAuthenticator[SerializedToken,DeserializedToken]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TokenAuthenticator.html"><span class="name">TokenAuthenticator</span></a><span class="tparams">[<span name="SerializedToken">SerializedToken</span>, <span name="DeserializedToken">DeserializedToken</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@TokenAuthenticator[SerializedToken,DeserializedToken]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <a href="TokenAuthenticator.html" class="extype" name="nelson.crypto.TokenAuthenticator">TokenAuthenticator</a> can authenticate with a provided encoded token
+and can serialize a decoded token.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="TokenAuthenticator.html" class="extype" name="nelson.crypto.TokenAuthenticator">TokenAuthenticator</a> can authenticate with a provided encoded token
+and can serialize a decoded token.
+</p></div><dl class="paramcmts block"><dt class="tparam">SerializedToken</dt><dd class="cmt"><p>the form of the serialized token
+ (for example String for tokens that are base-64-encoded).</p></dd><dt class="tparam">DeserializedToken</dt><dd class="cmt"><p>the result of successful authentication
+   (for example an <code>AuthToken</code> or <code>User</code> model).</p></dd></dl></div>
+    </li><li name="nelson.crypto.TokenVersion" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TokenVersionextendsProductwithSerializable"></a>
+      <a id="TokenVersion:TokenVersion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TokenVersion.html"><span class="name">TokenVersion</span></a><span class="params">(<span name="major">major: <span class="extype" name="scala.Int">Int</span></span>, <span name="minor">minor: <span class="extype" name="scala.Int">Int</span></span>, <span name="micro">micro: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@TokenVersionextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The serialization version of a token.</p><div class="fullcomment"><div class="comment cmt"><p>The serialization version of a token.</p><p>While the major/minor/micro versions are represented as <code>Int</code> at runtime,
+note that the serializer treats them as unsigned integers, so their range is
+0 to 255.</p><p>We must increment major whenever there are incompatible structural changes on the part of the core library:</p><ol class="decimal"><li>changes to secret part structure
+ 2. change to secret encryption algorithm,
+ 3. change token signing algorithm
+ 4. change to keyId -&gt; key calculation
+Changes 2-4 could come from authentication library or if we overwrite the default values.
+</li></ol></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="nelson.crypto.AuthEnv" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuthEnv"></a>
+      <a id="AuthEnv:AuthEnv"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthEnv$.html"><span class="name">AuthEnv</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@AuthEnv" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.AuthFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AuthFailure"></a>
+      <a id="AuthFailure:AuthFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AuthFailure$.html"><span class="name">AuthFailure</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@AuthFailure" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.CipherMode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CipherMode"></a>
+      <a id="CipherMode:CipherMode"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CipherMode$.html"><span class="name">CipherMode</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@CipherMode" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.Encryption" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Encryption"></a>
+      <a id="Encryption:Encryption"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Encryption$.html"><span class="name">Encryption</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@Encryption" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Set of cipher functions for Web Service Key (WSK-based) authentication
+exposed through instances of <code>Encryptor</code> and <code>Decryptor</code></p><div class="fullcomment"><div class="comment cmt"><p>Set of cipher functions for Web Service Key (WSK-based) authentication
+exposed through instances of <code>Encryptor</code> and <code>Decryptor</code></p><p>CBC mode is used with a dynamic initialization vector.</p><p>There is a large performance improvement with caching a cipher per-thread
+and reusing it instead of creating new cipher instances.
+</p></div></div>
+    </li><li name="nelson.crypto.EncryptionKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EncryptionKey"></a>
+      <a id="EncryptionKey:EncryptionKey"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EncryptionKey$.html"><span class="name">EncryptionKey</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@EncryptionKey" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.Hmac" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Hmac"></a>
+      <a id="Hmac:Hmac"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Hmac$.html"><span class="name">Hmac</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@Hmac" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.InitializationVector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InitializationVector"></a>
+      <a id="InitializationVector:InitializationVector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="InitializationVector$.html"><span class="name">InitializationVector</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@InitializationVector" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.Nonce" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Nonce"></a>
+      <a id="Nonce:Nonce"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Nonce$.html"><span class="name">Nonce</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@Nonce" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.SignatureKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SignatureKey"></a>
+      <a id="SignatureKey:SignatureKey"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SignatureKey$.html"><span class="name">SignatureKey</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@SignatureKey" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.crypto.protocol" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="protocol"></a>
+      <a id="protocol:protocol"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="protocol/package.html"><span class="name">protocol</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.crypto.package@protocol" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

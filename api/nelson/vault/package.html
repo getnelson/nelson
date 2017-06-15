@@ -1,0 +1,377 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>vault - nelson.vault</title>
+          <meta name="description" content="vault - nelson.vault" />
+          <meta name="keywords" content="vault nelson.vault" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'nelson.vault.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="nelson">nelson</a></p>
+        <h1>vault</h1><span class="permalink">
+      <a href="../../index.html#nelson.vault.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">vault</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/vault/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="nelson.vault"><span>vault</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="nelson.vault.InitialCreds" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="InitialCredsextendsProductwithSerializable"></a>
+      <a id="InitialCreds:InitialCreds"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="InitialCreds.html"><span class="name">InitialCreds</span></a><span class="params">(<span name="keys">keys: <span class="extype" name="scala.List">List</span>[<a href="#MasterKey=String" class="extmbr" name="nelson.vault.MasterKey">MasterKey</a>]</span>, <span name="rootToken">rootToken: <a href="RootToken.html" class="extype" name="nelson.vault.RootToken">RootToken</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@InitialCredsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This contains the result of the <code>initialize</code> call, it *must* have
+the number of MasterKeys requested.</p><div class="fullcomment"><div class="comment cmt"><p>This contains the result of the <code>initialize</code> call, it *must* have
+the number of MasterKeys requested. They should distributed to N
+trusted individuals, a quorum of which will have to present keys to
+unseal a vault.</p><p>the rootToken is a omnipotent bearer token for this vault, so treat
+it with the utmost of care. It will be required to create other
+less privileged tokens.
+</p></div></div>
+    </li><li name="nelson.vault.Initialization" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="InitializationextendsProductwithSerializable"></a>
+      <a id="Initialization:Initialization"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Initialization.html"><span class="name">Initialization</span></a><span class="params">(<span name="secretShares">secretShares: <span class="extype" name="scala.Int">Int</span></span>, <span name="secretThreshold">secretThreshold: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@InitializationextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Parameters needed to initialize a new vault</p><div class="fullcomment"><div class="comment cmt"><p>Parameters needed to initialize a new vault</p></div><dl class="paramcmts block"><dt class="param">secretShares</dt><dd class="cmt"><p>the numbers of unseal keys</p></dd><dt class="param">secretThreshold</dt><dd class="cmt"><p>the quorum of unseal keys needed to unseal</p></dd></dl></div>
+    </li><li name="nelson.vault.MasterKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MasterKey=String"></a>
+      <a id="MasterKey:MasterKey"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MasterKey</span><span class="result"> = <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@MasterKey=String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.vault.Mount" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MountextendsProductwithSerializable"></a>
+      <a id="Mount:Mount"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Mount.html"><span class="name">Mount</span></a><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="type">type: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="defaultLeaseTTL">defaultLeaseTTL: <span class="extype" name="scala.Int">Int</span></span>, <span name="maxLeaseTTL">maxLeaseTTL: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@MountextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.vault.RootToken" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RootTokenextendsAnyValwithProductwithSerializable"></a>
+      <a id="RootToken:RootToken"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RootToken.html"><span class="name">RootToken</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@RootTokenextendsAnyValwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.vault.Rule" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RuleextendsProductwithSerializable"></a>
+      <a id="Rule:Rule"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Rule.html"><span class="name">Rule</span></a><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="capabilities">capabilities: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="policy">policy: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@RuleextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.vault.SealStatus" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SealStatusextendsProductwithSerializable"></a>
+      <a id="SealStatus:SealStatus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SealStatus.html"><span class="name">SealStatus</span></a><span class="params">(<span name="sealed">sealed: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="total">total: <span class="extype" name="scala.Int">Int</span></span>, <span name="quorum">quorum: <span class="extype" name="scala.Int">Int</span></span>, <span name="progress">progress: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@SealStatusextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">sealed</dt><dd class="cmt"><p>Whether or not the vault is sealed.</p></dd><dt class="param">total</dt><dd class="cmt"><p>The number of existing MasterKeys</p></dd><dt class="param">progress</dt><dd class="cmt"><p>The number of keys out of total that have been provided so far to unseal</p></dd></dl></div>
+    </li><li name="nelson.vault.Token" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TokenextendsAnyValwithProductwithSerializable"></a>
+      <a id="Token:Token"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Token.html"><span class="name">Token</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@TokenextendsAnyValwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.vault.Vault" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Vault[A]extendsProductwithSerializable"></a>
+      <a id="Vault[A]:Vault[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Vault.html"><span class="name">Vault</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@Vault[A]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An algebra which represents an operation interacting with a
+[HashiCorp Vault](https://www.vaultproject.io/docs/) server
+</p>
+    </li><li name="nelson.vault.VaultC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VaultC[A]=scalaz.Coyoneda[nelson.vault.Vault,A]"></a>
+      <a id="VaultC[A]:VaultC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">VaultC</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="nelson.vault.VaultC.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@VaultC[A]=scalaz.Coyoneda[nelson.vault.Vault,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.vault.VaultF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]"></a>
+      <a id="VaultF[A]:VaultF[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">VaultF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.vault.VaultF.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.vault.VaultFOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VaultFOps[A]extendsAnyRef"></a>
+      <a id="VaultFOps[A]:VaultFOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$VaultFOps.html"><span class="name">VaultFOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@VaultFOps[A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="nelson.vault.Vault" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vault"></a>
+      <a id="Vault:Vault"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Vault$.html"><span class="name">Vault</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@Vault" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.vault.http4s" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="http4s"></a>
+      <a id="http4s:http4s"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="http4s/package.html"><span class="name">http4s</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.vault.package@http4s" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

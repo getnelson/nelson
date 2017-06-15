@@ -1,0 +1,370 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>loadbalancers - nelson.loadbalancers</title>
+          <meta name="description" content="loadbalancers - nelson.loadbalancers" />
+          <meta name="keywords" content="loadbalancers nelson.loadbalancers" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'nelson.loadbalancers.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="nelson">nelson</a></p>
+        <h1>loadbalancers</h1><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadbalancers</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/loadbalancers/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="nelson.loadbalancers"><span>loadbalancers</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="nelson.loadbalancers.ASGSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ASGSizeextendsProductwithSerializable"></a>
+      <a id="ASGSize:ASGSize"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ASGSize.html"><span class="name">ASGSize</span></a><span class="params">(<span name="desired">desired: <span class="extype" name="scala.Int">Int</span></span>, <span name="min">min: <span class="extype" name="scala.Int">Int</span></span>, <span name="max">max: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@ASGSizeextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers.Aws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Awsextends~&gt;[nelson.loadbalancers.LoadbalancerOp,scalaz.concurrent.Task]"></a>
+      <a id="Aws:Aws"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Aws.html"><span class="name">Aws</span></a><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="LoadbalancerOp.html" class="extype" name="nelson.loadbalancers.LoadbalancerOp">LoadbalancerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@Awsextends~&gt;[nelson.loadbalancers.LoadbalancerOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers.Inbound" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="InboundextendsProductwithSerializable"></a>
+      <a id="Inbound:Inbound"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Inbound.html"><span class="name">Inbound</span></a><span class="params">(<span name="stackName">stackName: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="label">label: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="port">port: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@InboundextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents an incomming loadbalancer.</p><div class="fullcomment"><div class="comment cmt"><p>Represents an incomming loadbalancer. The port exposes the backend service (i.e. stackName)
+to the outside world.
+</p></div></div>
+    </li><li name="nelson.loadbalancers.LoadbalancerOp" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LoadbalancerOp[A]extendsProductwithSerializable"></a>
+      <a id="LoadbalancerOp[A]:LoadbalancerOp[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LoadbalancerOp.html"><span class="name">LoadbalancerOp</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@LoadbalancerOp[A]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="nelson.loadbalancers.Json" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Json"></a>
+      <a id="Json:Json"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Json$.html"><span class="name">Json</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@Json" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers.LoadbalancerOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LoadbalancerOp"></a>
+      <a id="LoadbalancerOp:LoadbalancerOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LoadbalancerOp$.html"><span class="name">LoadbalancerOp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@LoadbalancerOp" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#delete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="delete(lb:nelson.Datacenter.LoadbalancerDeployment,dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[Unit]"></a>
+      <a id="delete(LoadbalancerDeployment,Datacenter,Namespace):LoadbalancerF[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">delete</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=scalaz.Free.FreeC[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@delete(lb:nelson.Datacenter.LoadbalancerDeployment,dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[Unit]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#deleteLoadbalancerConfigFromConsul" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deleteLoadbalancerConfigFromConsul(lb:nelson.Datacenter.LoadbalancerDeployment):helm.ConsulOp.ConsulOpF[Unit]"></a>
+      <a id="deleteLoadbalancerConfigFromConsul(LoadbalancerDeployment):ConsulOpF[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deleteLoadbalancerConfigFromConsul</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@deleteLoadbalancerConfigFromConsul(lb:nelson.Datacenter.LoadbalancerDeployment):helm.ConsulOp.ConsulOpF[Unit]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#launch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="launch(lb:nelson.Manifest.Loadbalancer,v:nelson.MajorVersion,dc:nelson.Datacenter,ns:nelson.NamespaceName,pl:nelson.Manifest.Plan,hash:String):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[String]"></a>
+      <a id="launch(Loadbalancer,MajorVersion,Datacenter,NamespaceName,Plan,String):LoadbalancerF[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">launch</span><span class="params">(<span name="lb">lb: <a href="../Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a></span>, <span name="v">v: <a href="../MajorVersion.html" class="extype" name="nelson.MajorVersion">MajorVersion</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="pl">pl: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=scalaz.Free.FreeC[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@launch(lb:nelson.Manifest.Loadbalancer,v:nelson.MajorVersion,dc:nelson.Datacenter,ns:nelson.NamespaceName,pl:nelson.Manifest.Plan,hash:String):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[String]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#loadbalancerConfigs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="loadbalancerConfigs(graph:nelson.routing.RoutingGraph):Vector[(nelson.Datacenter.LoadbalancerDeployment,Vector[nelson.loadbalancers.Inbound])]"></a>
+      <a id="loadbalancerConfigs(RoutingGraph):Vector[(LoadbalancerDeployment,Vector[Inbound])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadbalancerConfigs</span><span class="params">(<span name="graph">graph: <a href="../routing/package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a></span>)</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[(<a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>, <span class="extype" name="scala.Vector">Vector</span>[<a href="Inbound.html" class="extype" name="nelson.loadbalancers.Inbound">Inbound</a>])]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@loadbalancerConfigs(graph:nelson.routing.RoutingGraph):Vector[(nelson.Datacenter.LoadbalancerDeployment,Vector[nelson.loadbalancers.Inbound])]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#loadbalancerKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="loadbalancerKey(name:String):String"></a>
+      <a id="loadbalancerKey(String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadbalancerKey</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@loadbalancerKey(name:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#resize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="resize(lb:nelson.Datacenter.LoadbalancerDeployment,p:nelson.Manifest.Plan):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[Unit]"></a>
+      <a id="resize(LoadbalancerDeployment,Plan):LoadbalancerF[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">resize</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=scalaz.Free.FreeC[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@resize(lb:nelson.Datacenter.LoadbalancerDeployment,p:nelson.Manifest.Plan):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[Unit]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="run[F[_],A](interpreter:scalaz.~&gt;[nelson.loadbalancers.LoadbalancerOp,F],op:nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]"></a>
+      <a id="run[F[_],A](~&gt;[LoadbalancerOp,F],LoadbalancerF[A])(Monad[F]):F[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="interpreter">interpreter: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="LoadbalancerOp.html" class="extype" name="nelson.loadbalancers.LoadbalancerOp">LoadbalancerOp</a>, <span class="extype" name="nelson.loadbalancers.run.F">F</span>]</span>, <span name="op">op: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=scalaz.Free.FreeC[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<span class="extype" name="nelson.loadbalancers.run.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.loadbalancers.run.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.loadbalancers.run.F">F</span>[<span class="extype" name="nelson.loadbalancers.run.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@run[F[_],A](interpreter:scalaz.~&gt;[nelson.loadbalancers.LoadbalancerOp,F],op:nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#writeLoadbalancerConfigToConsul" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="writeLoadbalancerConfigToConsul(lb:nelson.Datacenter.LoadbalancerDeployment)(routes:Vector[nelson.loadbalancers.Inbound]):helm.ConsulOp.ConsulOpF[Unit]"></a>
+      <a id="writeLoadbalancerConfigToConsul(LoadbalancerDeployment)(Vector[Inbound]):ConsulOpF[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeLoadbalancerConfigToConsul</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>)</span><span class="params">(<span name="routes">routes: <span class="extype" name="scala.Vector">Vector</span>[<a href="Inbound.html" class="extype" name="nelson.loadbalancers.Inbound">Inbound</a>]</span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@writeLoadbalancerConfigToConsul(lb:nelson.Datacenter.LoadbalancerDeployment)(routes:Vector[nelson.loadbalancers.Inbound]):helm.ConsulOp.ConsulOpF[Unit]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

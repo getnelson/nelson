@@ -1,0 +1,1580 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Nelson - nelson.Nelson</title>
+          <meta name="description" content="Nelson - nelson.Nelson" />
+          <meta name="keywords" content="Nelson nelson.Nelson" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../index.html';
+            var hash = 'nelson.Nelson$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Object" src="../lib/object_big.png" />
+        <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a></p>
+        <h1>Nelson</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="nelson">package nelson</a>
+          </div></span></h3><span class="permalink">
+      <a href="../index.html#nelson.Nelson$" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Nelson</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Nelson.scala" target="_blank">Nelson.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="nelson.Nelson"><span>Nelson</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="nelson.Nelson.CommitUnit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CommitUnitextendsProductwithSerializable"></a>
+      <a id="CommitUnit:CommitUnit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Nelson$$CommitUnit.html"><span class="name">CommitUnit</span></a><span class="params">(<span name="unitName">unitName: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="version">version: <a href="Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="target">target: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@CommitUnitextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson.LoadbalancerSummary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LoadbalancerSummaryextendsProductwithSerializable"></a>
+      <a id="LoadbalancerSummary:LoadbalancerSummary"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Nelson$$LoadbalancerSummary.html"><span class="name">LoadbalancerSummary</span></a><span class="params">(<span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="loadbalancer">loadbalancer: <a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>, <span name="outboundDependencies">outboundDependencies: <span class="extype" name="scala.Vector">Vector</span>[<a href="routing/RoutingNode.html" class="extype" name="nelson.routing.RoutingNode">RoutingNode</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@LoadbalancerSummaryextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson.NelsonFK" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NelsonFK[F[_[_],_],U]=scalaz.Kleisli[[β$0$]F[scalaz.concurrent.Task,β$0$],nelson.NelsonConfig,U]"></a>
+      <a id="NelsonFK[F[_[_],_],U]:NelsonFK[F,U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NelsonFK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="_">_</span>]</span></span>, <span name="U">U</span>]</span><span class="result"> = <span class="extype" name="scalaz.Kleisli">Kleisli</span>[[β$0$]<span class="extype" name="nelson.Nelson.NelsonFK.F">F</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.Nelson.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>], <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.NelsonFK.U">U</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@NelsonFK[F[_[_],_],U]=scalaz.Kleisli[[β$0$]F[scalaz.concurrent.Task,β$0$],nelson.NelsonConfig,U]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson.NelsonK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]"></a>
+      <a id="NelsonK[U]:NelsonK[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NelsonK</span><span class="tparams">[<span name="U">U</span>]</span><span class="result"> = <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.NelsonK.U">U</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">NelsonK[U] provides us with a context that accepts a configuration and gives us a scalaz Task[U]
+NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and gives us an F[Task, U]
+   this gives us the flexibility of defining a monadic function that yields scalaz streams of
+   Task and U as emitted values (e.g.</p><div class="fullcomment"><div class="comment cmt"><p>NelsonK[U] provides us with a context that accepts a configuration and gives us a scalaz Task[U]
+NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and gives us an F[Task, U]
+   this gives us the flexibility of defining a monadic function that yields scalaz streams of
+   Task and U as emitted values (e.g. Process[Task, U], Sink[Task, U])
+</p></div></div>
+    </li><li name="nelson.Nelson.RecentStatistics" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RecentStatisticsextendsProductwithSerializable"></a>
+      <a id="RecentStatistics:RecentStatistics"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Nelson$$RecentStatistics.html"><span class="name">RecentStatistics</span></a><span class="params">(<span name="statusCounts">statusCounts: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Int">Int</span>)]</span>, <span name="mostDeployed">mostDeployed: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Int">Int</span>)]</span>, <span name="leastDeployed">leastDeployed: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Int">Int</span>)]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@RecentStatisticsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson.RuntimeSummary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RuntimeSummaryextendsProductwithSerializable"></a>
+      <a id="RuntimeSummary:RuntimeSummary"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Nelson$$RuntimeSummary.html"><span class="name">RuntimeSummary</span></a><span class="params">(<span name="deployment">deployment: <a href="scheduler/DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a></span>, <span name="health">health: <span class="extype" name="scala.List">List</span>[<a href="ConsulHealthStatus.html" class="extype" name="nelson.ConsulHealthStatus">ConsulHealthStatus</a>]</span>, <span name="currentStatus">currentStatus: <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a></span>, <span name="expiresAt">expiresAt: <span class="extype" name="java.time.Instant">Instant</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@RuntimeSummaryextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson.StackSummary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StackSummaryextendsProductwithSerializable"></a>
+      <a id="StackSummary:StackSummary"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Nelson$$StackSummary.html"><span class="name">StackSummary</span></a><span class="params">(<span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="deployment">deployment: <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>, <span name="statuses">statuses: <span class="extype" name="scala.List">List</span>[(<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="java.time.Instant">Instant</span>)]</span>, <span name="expiration">expiration: <span class="extype" name="java.time.Instant">Instant</span></span>, <span name="inboundDependencies">inboundDependencies: <span class="extype" name="scala.Vector">Vector</span>[(<a href="routing/RoutePath.html" class="extype" name="nelson.routing.RoutePath">RoutePath</a>, <a href="routing/RoutingNode.html" class="extype" name="nelson.routing.RoutingNode">RoutingNode</a>)]</span>, <span name="outboundDependencies">outboundDependencies: <span class="extype" name="scala.Vector">Vector</span>[(<a href="routing/RoutePath.html" class="extype" name="nelson.routing.RoutePath">RoutePath</a>, <a href="routing/RoutingNode.html" class="extype" name="nelson.routing.RoutingNode">RoutingNode</a>)]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@StackSummaryextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson.StorageK" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StorageK[U]=scalaz.Kleisli[scalaz.concurrent.Task,scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task],U]"></a>
+      <a id="StorageK[U]:StorageK[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StorageK</span><span class="tparams">[<span name="U">U</span>]</span><span class="result"> = <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>], <span class="extype" name="nelson.Nelson.StorageK.U">U</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@StorageK[U]=scalaz.Kleisli[scalaz.concurrent.Task,scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task],U]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@##():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@clone():Object" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="nelson.Nelson#commit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="commit(un:nelson.UnitName,v:nelson.Version,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="commit(UnitName,Version,NamespaceName):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">commit</span><span class="params">(<span name="un">un: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="v">v: <a href="Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@commit(un:nelson.UnitName,v:nelson.Version,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#commit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="commit(un:nelson.UnitName,ns:nelson.NamespaceName,dcs:List[nelson.Datacenter],m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="commit(UnitName,NamespaceName,List[Datacenter],@@[Manifest,Versioned]):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">commit</span><span class="params">(<span name="un">un: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="m">m: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@commit(un:nelson.UnitName,ns:nelson.NamespaceName,dcs:List[nelson.Datacenter],m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#commitLoadbalancer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="commitLoadbalancer(name:String,v:Int,dcName:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="commitLoadbalancer(String,Int,DatacenterRef,NamespaceName):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">commitLoadbalancer</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Int">Int</span></span>, <span name="dcName">dcName: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@commitLoadbalancer(name:String,v:Int,dcName:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#config" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="config:nelson.Nelson.NelsonK[nelson.NelsonConfig]"></a>
+      <a id="config:NelsonK[NelsonConfig]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">config</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@config:nelson.Nelson.NelsonK[nelson.NelsonConfig]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="nelson.Nelson#createDatacenters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createDatacenters(list:List[nelson.Datacenter]):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="createDatacenters(List[Datacenter]):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createDatacenters</span><span class="params">(<span name="list">list: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@createDatacenters(list:List[nelson.Datacenter]):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This is a bootstrapping function - definitions of datacenters come
+from the Nelson configuration, and the database is a read-only reference
+of that, simply so we can provide forigen key constraints when doing
+queries.</p><div class="fullcomment"><div class="comment cmt"><p>This is a bootstrapping function - definitions of datacenters come
+from the Nelson configuration, and the database is a read-only reference
+of that, simply so we can provide forigen key constraints when doing
+queries.</p><p>This function should only ever be called at bootup.
+</p></div></div>
+    </li><li name="nelson.Nelson#createDefaultNamespaceIfAbsent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="createDefaultNamespaceIfAbsent(dcs:List[nelson.Datacenter],ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="createDefaultNamespaceIfAbsent(List[Datacenter],NamespaceName):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createDefaultNamespaceIfAbsent</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@createDefaultNamespaceIfAbsent(dcs:List[nelson.Datacenter],ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#createHook" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createHook(session:nelson.Session,slug:nelson.Slug):nelson.Nelson.NelsonK[nelson.Repo]"></a>
+      <a id="createHook(Session,Slug):NelsonK[Repo]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createHook</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Repo.html" class="extype" name="nelson.Repo">Repo</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@createHook(session:nelson.Session,slug:nelson.Slug):nelson.Nelson.NelsonK[nelson.Repo]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Actually setup the webhook both in the nelson database, and also
+on the remote github repository.</p><div class="fullcomment"><div class="comment cmt"><p>Actually setup the webhook both in the nelson database, and also
+on the remote github repository. The user must have admin privileges
+on the repo for this to successfully work.
+</p></div></div>
+    </li><li name="nelson.Nelson#createManualDeployment" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createManualDeployment(s:nelson.Session,m:nelson.Datacenter.ManualDeployment):nelson.Nelson.NelsonK[nelson.GUID]"></a>
+      <a id="createManualDeployment(Session,ManualDeployment):NelsonK[GUID]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createManualDeployment</span><span class="params">(<span name="s">s: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="m">m: <a href="Datacenter$$ManualDeployment.html" class="extype" name="nelson.Datacenter.ManualDeployment">ManualDeployment</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@createManualDeployment(s:nelson.Session,m:nelson.Datacenter.ManualDeployment):nelson.Nelson.NelsonK[nelson.GUID]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create a manual deployment.</p><div class="fullcomment"><div class="comment cmt"><p>Create a manual deployment. That is to say, let Nelson know about something
+that was not deployed via Nelson (e.g. databases and other ops-infrastructure)
+</p></div></div>
+    </li><li name="nelson.Nelson#createSessionFromGithubToken" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createSessionFromGithubToken(githubToken:nelson.AccessToken):nelson.Nelson.NelsonK[nelson.Session]"></a>
+      <a id="createSessionFromGithubToken(AccessToken):NelsonK[Session]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createSessionFromGithubToken</span><span class="params">(<span name="githubToken">githubToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Session.html" class="extype" name="nelson.Session">Session</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@createSessionFromGithubToken(githubToken:nelson.AccessToken):nelson.Nelson.NelsonK[nelson.Session]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Given a users Github personal access token - obtained either directly by user input,
+or via the OAtuh web flow - and lift it into a Github session.</p><div class="fullcomment"><div class="comment cmt"><p>Given a users Github personal access token - obtained either directly by user input,
+or via the OAtuh web flow - and lift it into a Github session. This function is
+distinct from <code>createSessionFromOAuthCode</code> because we require a way for non-web
+clients to obtain a token they can use when calling the Nelson API programatically.
+</p></div></div>
+    </li><li name="nelson.Nelson#createSessionFromOAuthCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createSessionFromOAuthCode(code:nelson.TempoaryAccessCode):nelson.Nelson.NelsonK[nelson.Session]"></a>
+      <a id="createSessionFromOAuthCode(TempoaryAccessCode):NelsonK[Session]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createSessionFromOAuthCode</span><span class="params">(<span name="code">code: <a href="package.html#TempoaryAccessCode=String" class="extmbr" name="nelson.TempoaryAccessCode">TempoaryAccessCode</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Session.html" class="extype" name="nelson.Session">Session</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@createSessionFromOAuthCode(code:nelson.TempoaryAccessCode):nelson.Nelson.NelsonK[nelson.Session]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create a Nelson session based on the web-flow Github provides.</p><div class="fullcomment"><div class="comment cmt"><p>Create a Nelson session based on the web-flow Github provides. The
+AccessToken is an opaque, one-time code used to obtain the github token
+for the user who is currently logged in. This function will only ever work
+in an OAuth web-flow, as TempoaryAccessCode tokens cannot be obtained apiori
+or out of band.
+</p></div></div>
+    </li><li name="nelson.Nelson#deleteHook" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deleteHook(session:nelson.Session,slug:nelson.Slug):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="deleteHook(Session,Slug):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deleteHook</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@deleteHook(session:nelson.Session,slug:nelson.Slug):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Remove the webhook from the repository.</p>
+    </li><li name="nelson.Nelson#deleteLoadbalancerDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deleteLoadbalancerDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="deleteLoadbalancerDeployment(GUID):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deleteLoadbalancerDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@deleteLoadbalancerDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#deploy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deploy(actions:List[nelson.Manifest.Action]):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="deploy(List[Action]):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deploy</span><span class="params">(<span name="actions">actions: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@deploy(actions:List[nelson.Manifest.Action]):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#deprecateService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deprecateService(sn:nelson.Datacenter.ServiceName):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="deprecateService(ServiceName):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deprecateService</span><span class="params">(<span name="sn">sn: <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@deprecateService(sn:nelson.Datacenter.ServiceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Deprecates all deloyments for a service / feature version accross all datacenters and namepaces
+</p>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Nelson#expireService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="expireService(sn:nelson.Datacenter.ServiceName):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="expireService(ServiceName):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">expireService</span><span class="params">(<span name="sn">sn: <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@expireService(sn:nelson.Datacenter.ServiceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Expires all deloyments for a service accross all datacenters and namepaces
+</p>
+    </li><li name="nelson.Nelson#fetchDatacenterByName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fetchDatacenterByName(name:String):nelson.Nelson.NelsonK[Option[(nelson.Datacenter,Set[nelson.Datacenter.Namespace])]]"></a>
+      <a id="fetchDatacenterByName(String):NelsonK[Option[(Datacenter,Set[Namespace])]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fetchDatacenterByName</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Option">Option</span>[(<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>])]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@fetchDatacenterByName(name:String):nelson.Nelson.NelsonK[Option[(nelson.Datacenter,Set[nelson.Datacenter.Namespace])]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fetch a specific datacenter based on its name, along with the namespaces
+that are avalible in that specific datacenter (if any).</p>
+    </li><li name="nelson.Nelson#fetchDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fetchDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.StackSummary]]"></a>
+      <a id="fetchDeployment(GUID):NelsonK[Option[StackSummary]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fetchDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Option">Option</span>[<a href="Nelson$$StackSummary.html" class="extype" name="nelson.Nelson.StackSummary">StackSummary</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@fetchDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.StackSummary]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#fetchDeploymentStatuses" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fetchDeploymentStatuses(guid:nelson.GUID):nelson.Nelson.NelsonK[List[(nelson.DeploymentStatus,Option[String],java.time.Instant)]]"></a>
+      <a id="fetchDeploymentStatuses(GUID):NelsonK[List[(DeploymentStatus,Option[String],Instant)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fetchDeploymentStatuses</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>, <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="java.time.Instant">Instant</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@fetchDeploymentStatuses(guid:nelson.GUID):nelson.Nelson.NelsonK[List[(nelson.DeploymentStatus,Option[String],java.time.Instant)]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Given a deployment GUID, list the deployment statuses
+</p>
+    </li><li name="nelson.Nelson#fetchLoadbalancerDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fetchLoadbalancerDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.LoadbalancerSummary]]"></a>
+      <a id="fetchLoadbalancerDeployment(GUID):NelsonK[Option[LoadbalancerSummary]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fetchLoadbalancerDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Option">Option</span>[<a href="Nelson$$LoadbalancerSummary.html" class="extype" name="nelson.Nelson.LoadbalancerSummary">LoadbalancerSummary</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@fetchLoadbalancerDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.LoadbalancerSummary]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#fetchRawRepoManifest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fetchRawRepoManifest(token:nelson.AccessToken)(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[String]"></a>
+      <a id="fetchRawRepoManifest(AccessToken)(Slug,String):NelsonK[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fetchRawRepoManifest</span><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;master&quot;</span></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@fetchRawRepoManifest(token:nelson.AccessToken)(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[String]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#fetchRepoManifestAndValidateDeployable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[scalaz.ValidationNel[nelson.NelsonError,nelson.Manifest]]"></a>
+      <a id="fetchRepoManifestAndValidateDeployable(Slug,String):NelsonK[ValidationNel[NelsonError,Manifest]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fetchRepoManifestAndValidateDeployable</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;master&quot;</span></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.ValidationNel">ValidationNel</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>, <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[scalaz.ValidationNel[nelson.NelsonError,nelson.Manifest]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Actually reach out to the repository in question using the github content
+API and fetch the manifest file, if it exists.</p><div class="fullcomment"><div class="comment cmt"><p>Actually reach out to the repository in question using the github content
+API and fetch the manifest file, if it exists.</p><p>This function ensures that the file exists, that its content can be loaded
+into a Manifest instance, and validates that it cab be deployed</p><p>Anything else is just not cricket.
+</p></div></div>
+    </li><li name="nelson.Nelson#fetchWorkflowLog" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fetchWorkflowLog(guid:nelson.GUID,offset:Int):nelson.Nelson.NelsonK[Option[(Int,List[String])]]"></a>
+      <a id="fetchWorkflowLog(GUID,Int):NelsonK[Option[(Int,List[String])]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fetchWorkflowLog</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="offset">offset: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>])]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@fetchWorkflowLog(guid:nelson.GUID,offset:Int):nelson.Nelson.NelsonK[Option[(Int,List[String])]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="nelson.Nelson#findDeploymentExpiration" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="findDeploymentExpiration(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[java.time.Instant]]"></a>
+      <a id="findDeploymentExpiration(GUID):NelsonK[Option[Instant]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">findDeploymentExpiration</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.time.Instant">Instant</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@findDeploymentExpiration(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[java.time.Instant]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Nelson#getDeploymentsByDatacenter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getDeploymentsByDatacenter(dc:nelson.Datacenter,f:nelson.Datacenter.Namespace=&gt;nelson.storage.StoreOpF[List[nelson.Datacenter.Deployment]]):nelson.storage.StoreOpF[Set[nelson.Datacenter.Deployment]]"></a>
+      <a id="getDeploymentsByDatacenter(Datacenter,(Namespace)⇒StoreOpF[List[Deployment]]):StoreOpF[Set[Deployment]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getDeploymentsByDatacenter</span><span class="params">(<span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="f">f: (<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>) ⇒ <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.List">List</span>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]</span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getDeploymentsByDatacenter(dc:nelson.Datacenter,f:nelson.Datacenter.Namespace=&gt;nelson.storage.StoreOpF[List[nelson.Datacenter.Deployment]]):nelson.storage.StoreOpF[Set[nelson.Datacenter.Deployment]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#getLoadbalancerByGUID" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getLoadbalancerByGUID(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Datacenter.LoadbalancerDeployment]]"></a>
+      <a id="getLoadbalancerByGUID(GUID):NelsonK[Option[LoadbalancerDeployment]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getLoadbalancerByGUID</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Option">Option</span>[<a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getLoadbalancerByGUID(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Datacenter.LoadbalancerDeployment]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#getOrCreateNamespace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getOrCreateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.storage.StoreOpF[nelson.ID]"></a>
+      <a id="getOrCreateNamespace(DatacenterRef,NamespaceName):StoreOpF[ID]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrCreateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getOrCreateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.storage.StoreOpF[nelson.ID]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#getRelease" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getRelease(id:Long):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
+      <a id="getRelease(Long):NelsonK[==&gt;&gt;[Released,List[ReleasedDeployment]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getRelease</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getRelease(id:Long):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Given the ID of a particular release, show the release information and any associated deployments
+</p>
+    </li><li name="nelson.Nelson#getRoutingGraphs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getRoutingGraphs(dc:nelson.DatacenterRef,ns:List[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.routing.RoutingGraph)]]"></a>
+      <a id="getRoutingGraphs(DatacenterRef,List[NamespaceName]):NelsonK[List[(Namespace,RoutingGraph)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getRoutingGraphs</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <span class="extype" name="scala.List">List</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="routing/package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getRoutingGraphs(dc:nelson.DatacenterRef,ns:List[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.routing.RoutingGraph)]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Gets routing graphs for a given datacenter and list of namespaces.</p><div class="fullcomment"><div class="comment cmt"><p>Gets routing graphs for a given datacenter and list of namespaces. If namespaces is not provided then
+default to all namespaces
+</p></div></div>
+    </li><li name="nelson.Nelson#getRuntimeSummary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getRuntimeSummary(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.RuntimeSummary]]"></a>
+      <a id="getRuntimeSummary(GUID):NelsonK[Option[RuntimeSummary]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getRuntimeSummary</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Option">Option</span>[<a href="Nelson$$RuntimeSummary.html" class="extype" name="nelson.Nelson.RuntimeSummary">RuntimeSummary</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getRuntimeSummary(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.RuntimeSummary]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#getStatusOfReleaseUnit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getStatusOfReleaseUnit(s:nelson.Slug,u:nelson.UnitName):nelson.Nelson.NelsonK[Option[nelson.DeploymentStatus]]"></a>
+      <a id="getStatusOfReleaseUnit(Slug,UnitName):NelsonK[Option[DeploymentStatus]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getStatusOfReleaseUnit</span><span class="params">(<span name="s">s: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="u">u: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Option">Option</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getStatusOfReleaseUnit(s:nelson.Slug,u:nelson.UnitName):nelson.Nelson.NelsonK[Option[nelson.DeploymentStatus]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Given a repo slug and a specific unit, figure out what the state of the latest released version is,
+for the specified unit only.</p><div class="fullcomment"><div class="comment cmt"><p>Given a repo slug and a specific unit, figure out what the state of the latest released version is,
+for the specified unit only. This is primarily used to power the SVG badging.</p><p>TIM: REALLY NEEDS CACHING TO SCALE; *PROBALLY* TOO EXPENSIVE RIGHT NOW.
+</p></div></div>
+    </li><li name="nelson.Nelson#getVersionedManifestForRelease" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getVersionedManifestForRelease(r:nelson.Released):nelson.Nelson.NelsonK[scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]]"></a>
+      <a id="getVersionedManifestForRelease(Released):NelsonK[@@[Manifest,Versioned]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getVersionedManifestForRelease</span><span class="params">(<span name="r">r: <a href="Released.html" class="extype" name="nelson.Released">Released</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@getVersionedManifestForRelease(r:nelson.Released):nelson.Nelson.NelsonK[scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#handleRelease" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="handleRelease(e:nelson.Github.ReleaseEvent):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="handleRelease(ReleaseEvent):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handleRelease</span><span class="params">(<span name="e">e: <a href="Github$$ReleaseEvent.html" class="extype" name="nelson.Github.ReleaseEvent">ReleaseEvent</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@handleRelease(e:nelson.Github.ReleaseEvent):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Invoked when the inbound webhook from Github arrives, notifying Nelson
+that a new deployment needs to take place.</p>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.Nelson#lift" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lift[F[_[_],_],U](f:nelson.NelsonConfig=&gt;F[scalaz.concurrent.Task,U]):scalaz.Kleisli[[β$1$]F[scalaz.concurrent.Task,β$1$],nelson.NelsonConfig,U]"></a>
+      <a id="lift[F[_[_],_],U]((NelsonConfig)⇒F[Task,U]):Kleisli[[β$1$]F[Task,β$1$],NelsonConfig,U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lift</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="_">_</span>]</span></span>, <span name="U">U</span>]</span><span class="params">(<span name="f">f: (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>) ⇒ <span class="extype" name="nelson.Nelson.lift.F">F</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.Nelson.lift.U">U</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.Kleisli">Kleisli</span>[[β$1$]<span class="extype" name="nelson.Nelson.lift.F">F</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.Nelson.&lt;refinement&gt;.Λ$.β$1$">β$1$</span>], <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.lift.U">U</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@lift[F[_[_],_],U](f:nelson.NelsonConfig=&gt;F[scalaz.concurrent.Task,U]):scalaz.Kleisli[[β$1$]F[scalaz.concurrent.Task,β$1$],nelson.NelsonConfig,U]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">a simple lift operation for easy construction of a NelsonFK
+</p>
+    </li><li name="nelson.Nelson#listAuditEvents" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listAuditEvents(limit:Long,offset:Long,releaseId:Option[Long],action:Option[String],category:Option[String]):nelson.Nelson.NelsonK[List[nelson.audit.AuditLog]]"></a>
+      <a id="listAuditEvents(Long,Long,Option[Long],Option[String],Option[String]):NelsonK[List[AuditLog]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listAuditEvents</span><span class="params">(<span name="limit">limit: <span class="extype" name="scala.Long">Long</span></span>, <span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>, <span name="releaseId">releaseId: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Long">Long</span>]</span>, <span name="action">action: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="category">category: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[<a href="audit/AuditLog.html" class="extype" name="nelson.audit.AuditLog">AuditLog</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listAuditEvents(limit:Long,offset:Long,releaseId:Option[Long],action:Option[String],category:Option[String]):nelson.Nelson.NelsonK[List[nelson.audit.AuditLog]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#listDatacenterDeployments" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="listDatacenterDeployments(dcName:String,ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]"></a>
+      <a id="listDatacenterDeployments(String,NonEmptyList[NamespaceName],NonEmptyList[DeploymentStatus],Option[UnitName]):NelsonK[List[(Namespace,Deployment,DeploymentStatus)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listDatacenterDeployments</span><span class="params">(<span name="dcName">dcName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <span class="extype" name="scala.Option">Option</span>[<a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listDatacenterDeployments(dcName:String,ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Given a specific datacenter and a list of namespaces figure out deployments by DeploymentStatus.</p><div class="fullcomment"><div class="comment cmt"><p>Given a specific datacenter and a list of namespaces figure out deployments by DeploymentStatus.
+TIM: this probally wont scale, but its likley ok for the moment.
+</p></div></div>
+    </li><li name="nelson.Nelson#listDatacenterUnitsByStatus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listDatacenterUnitsByStatus(dc:String,ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]"></a>
+      <a id="listDatacenterUnitsByStatus(String,NonEmptyList[NamespaceName],NonEmptyList[DeploymentStatus]):NelsonK[List[(Namespace,GUID,ServiceName)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listDatacenterUnitsByStatus</span><span class="params">(<span name="dc">dc: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>, <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listDatacenterUnitsByStatus(dc:String,ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#listDatacenters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listDatacenters:nelson.Nelson.NelsonK[Map[nelson.Datacenter,Set[nelson.Datacenter.Namespace]]]"></a>
+      <a id="listDatacenters:NelsonK[Map[Datacenter,Set[Namespace]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listDatacenters</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Predef.Map">Map</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listDatacenters:nelson.Nelson.NelsonK[Map[nelson.Datacenter,Set[nelson.Datacenter.Namespace]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">List all the datacenters Nelson is currently aware of, and return
+the namespaces associated with that datacenter.</p>
+    </li><li name="nelson.Nelson#listDeployments" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listDeployments(dcs:List[String],ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]"></a>
+      <a id="listDeployments(List[String],NonEmptyList[NamespaceName],NonEmptyList[DeploymentStatus],Option[UnitName]):NelsonK[List[(DatacenterRef,Namespace,Deployment,DeploymentStatus)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listDeployments</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <span class="extype" name="scala.Option">Option</span>[<a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listDeployments(dcs:List[String],ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#listDeploymentsWithDeprecatedDependencies" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listDeploymentsWithDeprecatedDependencies(dc:nelson.Datacenter):nelson.Nelson.NelsonK[Vector[nelson.DependencyEdge]]"></a>
+      <a id="listDeploymentsWithDeprecatedDependencies(Datacenter):NelsonK[Vector[DependencyEdge]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listDeploymentsWithDeprecatedDependencies</span><span class="params">(<span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#DependencyEdge=(nelson.routing.RoutingNode,nelson.routing.RoutingNode)" class="extmbr" name="nelson.DependencyEdge">DependencyEdge</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listDeploymentsWithDeprecatedDependencies(dc:nelson.Datacenter):nelson.Nelson.NelsonK[Vector[nelson.DependencyEdge]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Like listDeploymentsWithDeprecatedDependencies but for a single Datacenter
+</p>
+    </li><li name="nelson.Nelson#listDeploymentsWithDeprecatedDependencies" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listDeploymentsWithDeprecatedDependencies:nelson.Nelson.NelsonK[Vector[nelson.DependencyEdge]]"></a>
+      <a id="listDeploymentsWithDeprecatedDependencies:NelsonK[Vector[DependencyEdge]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listDeploymentsWithDeprecatedDependencies</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#DependencyEdge=(nelson.routing.RoutingNode,nelson.routing.RoutingNode)" class="extmbr" name="nelson.DependencyEdge">DependencyEdge</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listDeploymentsWithDeprecatedDependencies:nelson.Nelson.NelsonK[Vector[nelson.DependencyEdge]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lists all deployments accross datacenters and namspaces that depend on
+a deployment that is deprecated.</p>
+    </li><li name="nelson.Nelson#listLoadbalancerDeployments" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listLoadbalancerDeployments(dc:nelson.DatacenterRef,ns:scalaz.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]"></a>
+      <a id="listLoadbalancerDeployments(DatacenterRef,NonEmptyList[NamespaceName]):NelsonK[List[(Namespace,LoadbalancerDeployment)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listLoadbalancerDeployments</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listLoadbalancerDeployments(dc:nelson.DatacenterRef,ns:scalaz.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#listLoadbalancers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listLoadbalancers(dcs:List[String],ns:scalaz.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]"></a>
+      <a id="listLoadbalancers(List[String],NonEmptyList[NamespaceName]):NelsonK[List[(DatacenterRef,Namespace,LoadbalancerDeployment)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listLoadbalancers</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listLoadbalancers(dcs:List[String],ns:scalaz.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#listReleases" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listReleases(limit:Option[Int]):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
+      <a id="listReleases(Option[Int]):NelsonK[==&gt;&gt;[Released,List[ReleasedDeployment]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listReleases</span><span class="params">(<span name="limit">limit: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listReleases(limit:Option[Int]):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">list recent releases, regardless of repository.</p>
+    </li><li name="nelson.Nelson#listRepositories" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="listRepositories(session:nelson.Session,owner:Option[String]):nelson.Nelson.NelsonK[List[nelson.Repo]]"></a>
+      <a id="listRepositories(Session,Option[String]):NelsonK[List[Repo]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listRepositories</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="owner">owner: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[<a href="Repo.html" class="extype" name="nelson.Repo">Repo</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listRepositories(session:nelson.Session,owner:Option[String]):nelson.Nelson.NelsonK[List[nelson.Repo]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@SuppressWarnings</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="nelson.Nelson#listRepositoryReleases" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="listRepositoryReleases(s:nelson.Slug):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
+      <a id="listRepositoryReleases(Slug):NelsonK[==&gt;&gt;[Released,List[ReleasedDeployment]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listRepositoryReleases</span><span class="params">(<span name="s">s: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listRepositoryReleases(s:nelson.Slug):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">list releases this repository has had.</p><div class="fullcomment"><div class="comment cmt"><p>list releases this repository has had. Feels a little hack to be doing
+the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
+</p></div></div>
+    </li><li name="nelson.Nelson#listUnitsByStatus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listUnitsByStatus(dcs:List[nelson.DatacenterRef],ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]"></a>
+      <a id="listUnitsByStatus(List[DatacenterRef],NonEmptyList[NamespaceName],NonEmptyList[DeploymentStatus]):NelsonK[List[(DatacenterRef,Namespace,GUID,ServiceName)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listUnitsByStatus</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>]</span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>, <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@listUnitsByStatus(dcs:List[nelson.DatacenterRef],ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@notify():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="nelson.Nelson#recentActivityStatistics" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recentActivityStatistics:nelson.Nelson.NelsonK[nelson.Nelson.RecentStatistics]"></a>
+      <a id="recentActivityStatistics:NelsonK[RecentStatistics]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recentActivityStatistics</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Nelson$$RecentStatistics.html" class="extype" name="nelson.Nelson.RecentStatistics">RecentStatistics</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@recentActivityStatistics:nelson.Nelson.NelsonK[nelson.Nelson.RecentStatistics]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fetches statistics about what happened over the last N days, where
+<code>N</code> is defined by the <code>whence</code> instance of <code>java.time.Instant</code>.</p>
+    </li><li name="nelson.Nelson#recursiveCreateNamespace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recursiveCreateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="recursiveCreateNamespace(DatacenterRef,NamespaceName):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recursiveCreateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@recursiveCreateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#recursiveCreateSubordinateNamespace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recursiveCreateSubordinateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="recursiveCreateSubordinateNamespace(DatacenterRef,NamespaceName):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recursiveCreateSubordinateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@recursiveCreateSubordinateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#redeploy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="redeploy(deploymentGuid:nelson.GUID):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="redeploy(GUID):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">redeploy</span><span class="params">(<span name="deploymentGuid">deploymentGuid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@redeploy(deploymentGuid:nelson.GUID):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#reverseTrafficShift" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reverseTrafficShift(guid:nelson.GUID):nelson.Nelson.NelsonK[nelson.Datacenter.TrafficShift]"></a>
+      <a id="reverseTrafficShift(GUID):NelsonK[TrafficShift]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reverseTrafficShift</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Datacenter$$TrafficShift.html" class="extype" name="nelson.Datacenter.TrafficShift">TrafficShift</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@reverseTrafficShift(guid:nelson.GUID):nelson.Nelson.NelsonK[nelson.Datacenter.TrafficShift]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#storeManifest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="storeManifest(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned],repoId:nelson.ID):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="storeManifest(@@[Manifest,Versioned],ID):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storeManifest</span><span class="params">(<span name="m">m: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="repoId">repoId: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@storeManifest(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned],repoId:nelson.ID):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Nelson#syncRepos" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="syncRepos(session:nelson.Session):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="syncRepos(Session):NelsonK[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">syncRepos</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@syncRepos(session:nelson.Session):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Given a session, sync up the users repositories to nelson to make
+sure we have the latest set of repos and their associated access.</p>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@toString():String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@wait():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Nelson$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

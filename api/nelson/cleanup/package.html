@@ -1,0 +1,354 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>cleanup - nelson.cleanup</title>
+          <meta name="description" content="cleanup - nelson.cleanup" />
+          <meta name="keywords" content="cleanup nelson.cleanup" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'nelson.cleanup.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="nelson">nelson</a></p>
+        <h1>cleanup</h1><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cleanup</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="nelson.cleanup.DeploymentCtx" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DeploymentCtxextendsProductwithSerializable"></a>
+      <a id="DeploymentCtx:DeploymentCtx"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DeploymentCtx.html"><span class="name">DeploymentCtx</span></a><span class="params">(<span name="deployment">deployment: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>, <span name="status">status: <a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a></span>, <span name="exp">exp: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.time.Instant">Instant</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@DeploymentCtxextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.ExpirationPolicy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ExpirationPolicyextendsAnyRef"></a>
+      <a id="ExpirationPolicy:ExpirationPolicy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ExpirationPolicy.html"><span class="name">ExpirationPolicy</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@ExpirationPolicyextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="nelson.cleanup.CleanupCron" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CleanupCron"></a>
+      <a id="CleanupCron:CleanupCron"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CleanupCron$.html"><span class="name">CleanupCron</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@CleanupCron" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.ExpirationPolicy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExpirationPolicy"></a>
+      <a id="ExpirationPolicy:ExpirationPolicy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ExpirationPolicy$.html"><span class="name">ExpirationPolicy</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@ExpirationPolicy" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.ExpirationPolicyProcess" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExpirationPolicyProcess"></a>
+      <a id="ExpirationPolicyProcess:ExpirationPolicyProcess"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ExpirationPolicyProcess$.html"><span class="name">ExpirationPolicyProcess</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@ExpirationPolicyProcess" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.GarbageCollector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="GarbageCollector"></a>
+      <a id="GarbageCollector:GarbageCollector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="GarbageCollector$.html"><span class="name">GarbageCollector</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@GarbageCollector" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The GarbageCollector is a process that periodically traverses the
+CleanupGraph and marks deployments as <code>garbage</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The GarbageCollector is a process that periodically traverses the
+CleanupGraph and marks deployments as <code>garbage</code>. Any deployment that
+is marked as <code>garbage</code> becomes a candidate for cleanup.
+</p></div></div>
+    </li><li name="nelson.cleanup.Reaper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Reaper"></a>
+      <a id="Reaper:Reaper"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Reaper$.html"><span class="name">Reaper</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@Reaper" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.RetainActive" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RetainActive"></a>
+      <a id="RetainActive:RetainActive"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RetainActive$.html"><span class="name">RetainActive</span></a><span class="result"> extends <a href="ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@RetainActive" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.RetainLatest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RetainLatest"></a>
+      <a id="RetainLatest:RetainLatest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RetainLatest$.html"><span class="name">RetainLatest</span></a><span class="result"> extends <a href="ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@RetainLatest" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.RetainLatestTwoFeature" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RetainLatestTwoFeature"></a>
+      <a id="RetainLatestTwoFeature:RetainLatestTwoFeature"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RetainLatestTwoFeature$.html"><span class="name">RetainLatestTwoFeature</span></a><span class="result"> extends <a href="ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@RetainLatestTwoFeature" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.RetainLatestTwoMajor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RetainLatestTwoMajor"></a>
+      <a id="RetainLatestTwoMajor:RetainLatestTwoMajor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RetainLatestTwoMajor$.html"><span class="name">RetainLatestTwoMajor</span></a><span class="result"> extends <a href="ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@RetainLatestTwoMajor" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.RetainUntilDeprecated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RetainUntilDeprecated"></a>
+      <a id="RetainUntilDeprecated:RetainUntilDeprecated"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RetainUntilDeprecated$.html"><span class="name">RetainUntilDeprecated</span></a><span class="result"> extends <a href="ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@RetainUntilDeprecated" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.cleanup.Sweeper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Sweeper"></a>
+      <a id="Sweeper:Sweeper"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sweeper$.html"><span class="name">Sweeper</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@Sweeper" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Infrequently running cleanup of &quot;leaked&quot; data or data which is otherwise unaccounted for.</p><div class="fullcomment"><div class="comment cmt"><p>Infrequently running cleanup of &quot;leaked&quot; data or data which is otherwise unaccounted for.  Unlike the cleanup
+process (which is optimized for precision and efficiency), the Sweeper is optimized for comprehensiveness over time
+via repeated execution (even if we miss some &quot;garbage&quot; on execution i, we will eventually clean it up on excution i + N).
+We only need to ensure that we 1.) cleanup data that was missed during the Cleanup operation
+and 2.) ensure we aren't progressively leaking resources over the long-term.</p><p>Items that are identified as an &quot;UnclaimedResource&quot; (items that have no obvious owner -- which may or may not be garbage) are NOT deleted
+but will be tracked and counted by the end of the task.  The number of Unclaimed Resources will be recorded as a histogram, to allow
+us to have visibility of accumulation on such items.  In the event that we discover that the amount of Unclaimed Resources is increasing over time
+this is a possible indication that we have a major leakage signaling the need to modify the sweeper to be more aggressive.
+</p></div></div>
+    </li><li name="nelson.cleanup.SweeperDefaults" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SweeperDefaults"></a>
+      <a id="SweeperDefaults:SweeperDefaults"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SweeperDefaults$.html"><span class="name">SweeperDefaults</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.cleanup.package@SweeperDefaults" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

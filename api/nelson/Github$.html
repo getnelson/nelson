@@ -1,0 +1,964 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Github - nelson.Github</title>
+          <meta name="description" content="Github - nelson.Github" />
+          <meta name="keywords" content="Github nelson.Github" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../index.html';
+            var hash = 'nelson.Github$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Object" src="../lib/object_big.png" />
+        <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a></p>
+        <h1>Github</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="nelson">package nelson</a>
+          </div></span></h3><span class="permalink">
+      <a href="../index.html#nelson.Github$" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Github</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Github.scala" target="_blank">Github.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="nelson.Github"><span>Github</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="nelson.Github.Asset" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AssetextendsProductwithSerializable"></a>
+      <a id="Asset:Asset"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$Asset.html"><span class="name">Asset</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Long">Long</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="state">state: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="content">content: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@AssetextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.Contents" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContentsextendsProductwithSerializable"></a>
+      <a id="Contents:Contents"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$Contents.html"><span class="name">Contents</span></a><span class="params">(<span name="base64">base64: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="size">size: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@ContentsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.DeleteRepoWebHook" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DeleteRepoWebHookextendsGithub.GithubOp[Unit]withProductwithSerializable"></a>
+      <a id="DeleteRepoWebHook:DeleteRepoWebHook"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$DeleteRepoWebHook.html"><span class="name">DeleteRepoWebHook</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="id">id: <span class="extype" name="scala.Long">Long</span></span>, <span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<span class="extype" name="scala.Unit">Unit</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@DeleteRepoWebHookextendsGithub.GithubOp[Unit]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.Event" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="EventextendsAnyRef"></a>
+      <a id="Event:Event"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$Event.html"><span class="name">Event</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@EventextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetAccessToken" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetAccessTokenextendsGithub.GithubOp[nelson.AccessToken]withProductwithSerializable"></a>
+      <a id="GetAccessToken:GetAccessToken"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetAccessToken.html"><span class="name">GetAccessToken</span></a><span class="params">(<span name="fromCode">fromCode: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetAccessTokenextendsGithub.GithubOp[nelson.AccessToken]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetFileFromRepository" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetFileFromRepositoryextendsGithub.GithubOp[Option[nelson.Github.Contents]]withProductwithSerializable"></a>
+      <a id="GetFileFromRepository:GetFileFromRepository"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetFileFromRepository.html"><span class="name">GetFileFromRepository</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<span class="extype" name="scala.Option">Option</span>[<a href="Github$$Contents.html" class="extype" name="nelson.Github.Contents">Contents</a>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetFileFromRepositoryextendsGithub.GithubOp[Option[nelson.Github.Contents]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetOrganizations" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetOrganizationsextendsGithub.GithubOp[List[nelson.Organization]]withProductwithSerializable"></a>
+      <a id="GetOrganizations:GetOrganizations"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetOrganizations.html"><span class="name">GetOrganizations</span></a><span class="params">(<span name="keys">keys: <span class="extype" name="scala.List">List</span>[<a href="Github$$OrgKey.html" class="extype" name="nelson.Github.OrgKey">OrgKey</a>]</span>, <span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<span class="extype" name="scala.List">List</span>[<a href="Organization.html" class="extype" name="nelson.Organization">Organization</a>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetOrganizationsextendsGithub.GithubOp[List[nelson.Organization]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetRelease" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetReleaseextendsGithub.GithubOp[nelson.Github.Release]withProductwithSerializable"></a>
+      <a id="GetRelease:GetRelease"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetRelease.html"><span class="name">GetRelease</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="releaseId">releaseId: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetReleaseextendsGithub.GithubOp[nelson.Github.Release]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetReleaseAssetContent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetReleaseAssetContentextendsGithub.GithubOp[nelson.Github.Asset]withProductwithSerializable"></a>
+      <a id="GetReleaseAssetContent:GetReleaseAssetContent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetReleaseAssetContent.html"><span class="name">GetReleaseAssetContent</span></a><span class="params">(<span name="asset">asset: <a href="Github$$Asset.html" class="extype" name="nelson.Github.Asset">Asset</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="Github$$Asset.html" class="extype" name="nelson.Github.Asset">Asset</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetReleaseAssetContentextendsGithub.GithubOp[nelson.Github.Asset]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetRepoWebHooks" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetRepoWebHooksextendsGithub.GithubOp[List[nelson.Github.WebHook]]withProductwithSerializable"></a>
+      <a id="GetRepoWebHooks:GetRepoWebHooks"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetRepoWebHooks.html"><span class="name">GetRepoWebHooks</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<span class="extype" name="scala.List">List</span>[<a href="Github$$WebHook.html" class="extype" name="nelson.Github.WebHook">WebHook</a>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetRepoWebHooksextendsGithub.GithubOp[List[nelson.Github.WebHook]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetUser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetUserextendsGithub.GithubOp[nelson.Github.User]withProductwithSerializable"></a>
+      <a id="GetUser:GetUser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetUser.html"><span class="name">GetUser</span></a><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="Github$$User.html" class="extype" name="nelson.Github.User">User</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetUserextendsGithub.GithubOp[nelson.Github.User]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetUserOrgKeys" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetUserOrgKeysextendsGithub.GithubOp[List[nelson.Github.OrgKey]]withProductwithSerializable"></a>
+      <a id="GetUserOrgKeys:GetUserOrgKeys"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetUserOrgKeys.html"><span class="name">GetUserOrgKeys</span></a><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<span class="extype" name="scala.List">List</span>[<a href="Github$$OrgKey.html" class="extype" name="nelson.Github.OrgKey">OrgKey</a>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetUserOrgKeysextendsGithub.GithubOp[List[nelson.Github.OrgKey]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GetUserRepositories" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetUserRepositoriesextendsGithub.GithubOp[List[nelson.Repo]]withProductwithSerializable"></a>
+      <a id="GetUserRepositories:GetUserRepositories"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GetUserRepositories.html"><span class="name">GetUserRepositories</span></a><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<span class="extype" name="scala.List">List</span>[<a href="Repo.html" class="extype" name="nelson.Repo">Repo</a>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GetUserRepositoriesextendsGithub.GithubOp[List[nelson.Repo]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GithubHttp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GithubHttpextends~&gt;[nelson.Github.GithubOp,scalaz.concurrent.Task]"></a>
+      <a id="GithubHttp:GithubHttp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GithubHttp.html"><span class="name">GithubHttp</span></a><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GithubHttpextends~&gt;[nelson.Github.GithubOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GithubOp" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GithubOp[A]extendsAnyRef"></a>
+      <a id="GithubOp[A]:GithubOp[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$GithubOp.html"><span class="name">GithubOp</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GithubOp[A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GithubOpC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GithubOpC[A]=scalaz.Coyoneda[nelson.Github.GithubOp,A]"></a>
+      <a id="GithubOpC[A]:GithubOpC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">GithubOpC</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="nelson.Github.GithubOpC.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GithubOpC[A]=scalaz.Coyoneda[nelson.Github.GithubOp,A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.GithubOpF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GithubOpF[A]=scalaz.Free.FreeC[nelson.Github.GithubOp,A]"></a>
+      <a id="GithubOpF[A]:GithubOpF[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">GithubOpF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.Github.GithubOpF.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@GithubOpF[A]=scalaz.Free.FreeC[nelson.Github.GithubOp,A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.OrgKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OrgKeyextendsProductwithSerializable"></a>
+      <a id="OrgKey:OrgKey"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$OrgKey.html"><span class="name">OrgKey</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Long">Long</span></span>, <span name="slug">slug: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@OrgKeyextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.PingEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PingEventextendsGithub.EventwithProductwithSerializable"></a>
+      <a id="PingEvent:PingEvent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$PingEvent.html"><span class="name">PingEvent</span></a><span class="params">(<span name="zen">zen: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Github$$Event.html" class="extype" name="nelson.Github.Event">Event</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@PingEventextendsGithub.EventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">this is sent by github when the hook is initially setup,
+just to make sure that the specified location is actually
+reachable by github and is responding
+</p>
+    </li><li name="nelson.Github.PostRepoWebHook" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PostRepoWebHookextendsGithub.GithubOp[nelson.Github.WebHook]withProductwithSerializable"></a>
+      <a id="PostRepoWebHook:PostRepoWebHook"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$PostRepoWebHook.html"><span class="name">PostRepoWebHook</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="hook">hook: <a href="Github$$WebHook.html" class="extype" name="nelson.Github.WebHook">WebHook</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="Github$$WebHook.html" class="extype" name="nelson.Github.WebHook">WebHook</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@PostRepoWebHookextendsGithub.GithubOp[nelson.Github.WebHook]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.Release" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ReleaseextendsProductwithSerializable"></a>
+      <a id="Release:Release"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$Release.html"><span class="name">Release</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Long">Long</span></span>, <span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="htmlUrl">htmlUrl: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="assets">assets: <span class="extype" name="scala.Seq">Seq</span>[<a href="Github$$Asset.html" class="extype" name="nelson.Github.Asset">Asset</a>]</span>, <span name="tagName">tagName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@ReleaseextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.ReleaseEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ReleaseEventextendsGithub.EventwithProductwithSerializable"></a>
+      <a id="ReleaseEvent:ReleaseEvent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$ReleaseEvent.html"><span class="name">ReleaseEvent</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Long">Long</span></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="repositoryId">repositoryId: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="Github$$Event.html" class="extype" name="nelson.Github.Event">Event</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@ReleaseEventextendsGithub.EventwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.User" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UserextendsProductwithSerializable"></a>
+      <a id="User:User"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$User.html"><span class="name">User</span></a><span class="params">(<span name="login">login: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="avatar">avatar: <span class="extype" name="java.net.URI">URI</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="email">email: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@UserextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.WebHook" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WebHookextendsProductwithSerializable"></a>
+      <a id="WebHook:WebHook"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$WebHook.html"><span class="name">WebHook</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Long">Long</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="events">events: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="active">active: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="config">config: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@WebHookextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@##():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Github.Interpreter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Interpreter"></a>
+      <a id="Interpreter:Interpreter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$Interpreter$.html"><span class="name">Interpreter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@Interpreter" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.Request" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Request"></a>
+      <a id="Request:Request"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$Request$.html"><span class="name">Request</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@Request" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Github.WebHook" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WebHook"></a>
+      <a id="WebHook:WebHook"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$WebHook$.html"><span class="name">WebHook</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@WebHook" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@clone():Object" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@notify():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="nelson.Github#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="run[F[_],A](interpreter:scalaz.~&gt;[nelson.Github.GithubOp,F],op:nelson.Github.GithubOpF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]"></a>
+      <a id="run[F[_],A](~&gt;[GithubOp,F],GithubOpF[A])(Monad[F]):F[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="interpreter">interpreter: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="nelson.Github.run.F">F</span>]</span>, <span name="op">op: <a href="#GithubOpF[A]=scalaz.Free.FreeC[nelson.Github.GithubOp,A]" class="extmbr" name="nelson.Github.GithubOpF">GithubOpF</a>[<span class="extype" name="nelson.Github.run.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.Github.run.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.Github.run.F">F</span>[<span class="extype" name="nelson.Github.run.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@run[F[_],A](interpreter:scalaz.~&gt;[nelson.Github.GithubOp,F],op:nelson.Github.GithubOpF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@toString():String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@wait():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>storage - nelson.storage</title>
+          <meta name="description" content="storage - nelson.storage" />
+          <meta name="keywords" content="storage nelson.storage" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'nelson.storage.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="nelson">nelson</a></p>
+        <h1>storage</h1><span class="permalink">
+      <a href="../../index.html#nelson.storage.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storage</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/storage/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="nelson.storage"><span>storage</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="nelson.storage.H2Storage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="H2Storageextends~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]withProductwithSerializable"></a>
+      <a id="H2Storage:H2Storage"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="H2Storage.html"><span class="name">H2Storage</span></a><span class="params">(<span name="cfg">cfg: <a href="../DatabaseConfig.html" class="extype" name="nelson.DatabaseConfig">DatabaseConfig</a></span>)</span><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.package@H2Storageextends~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.storage.StoreOp" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StoreOp[A]extendsAnyRef"></a>
+      <a id="StoreOp[A]:StoreOp[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StoreOp.html"><span class="name">StoreOp</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.package@StoreOp[A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.storage.StoreOpF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]"></a>
+      <a id="StoreOpF[A]:StoreOpF[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StoreOpF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.storage.StoreOpF.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.package@StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="nelson.storage.StoreOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StoreOp"></a>
+      <a id="StoreOp:StoreOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StoreOp$.html"><span class="name">StoreOp</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.package@StoreOp" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.storage#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="run[F[_],A](interpreter:scalaz.~&gt;[nelson.storage.StoreOp,F],op:nelson.storage.package.StoreOpF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]"></a>
+      <a id="run[F[_],A](~&gt;[StoreOp,F],StoreOpF[A])(Monad[F]):F[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="interpreter">interpreter: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="nelson.storage.run.F">F</span>]</span>, <span name="op">op: <a href="#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="nelson.storage.run.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.storage.run.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.storage.run.F">F</span>[<span class="extype" name="nelson.storage.run.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.package@run[F[_],A](interpreter:scalaz.~&gt;[nelson.storage.StoreOp,F],op:nelson.storage.package.StoreOpF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,0 +1,1029 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Reconciliation - nelson.Reconciliation</title>
+          <meta name="description" content="Reconciliation - nelson.Reconciliation" />
+          <meta name="keywords" content="Reconciliation nelson.Reconciliation" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../index.html';
+            var hash = 'nelson.Reconciliation$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Object" src="../lib/object_big.png" />
+        <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a></p>
+        <h1>Reconciliation</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="nelson">package nelson</a>
+          </div></span></h3><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Reconciliation</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Reconciliation.scala" target="_blank">Reconciliation.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="nelson.Reconciliation"><span>Reconciliation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="nelson.Reconciliation.Conflict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Conflict[A]=scalaz.Coproduct[[α$2$]nelson.Reconciliation.MalformedConflict[α$2$],[α$3$]scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],α$3$],A]"></a>
+      <a id="Conflict[A]:Conflict[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Conflict</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[[α$2$]<a href="Reconciliation$$MalformedConflict.html" class="extype" name="nelson.Reconciliation.MalformedConflict">MalformedConflict</a>[<span class="extype" name="nelson.Reconciliation.&lt;refinement&gt;.Λ$.α$2$">α$2$</span>], [α$3$]<span class="extype" name="scalaz.Coproduct">Coproduct</span>[[α$0$]<span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="Reconciliation$$InNelsonOnly.html" class="extype" name="nelson.Reconciliation.InNelsonOnly">InNelsonOnly</a>, <a href="Reconciliation$$StateConflict.html" class="extype" name="nelson.Reconciliation.StateConflict">StateConflict</a>, <span class="extype" name="nelson.Reconciliation.&lt;refinement&gt;.Λ$.α$0$">α$0$</span>], [α$1$]<span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="Reconciliation$$NelsonExpected.html" class="extype" name="nelson.Reconciliation.NelsonExpected">NelsonExpected</a>, <a href="Reconciliation$$NelsonNotExpected.html" class="extype" name="nelson.Reconciliation.NelsonNotExpected">NelsonNotExpected</a>, <span class="extype" name="nelson.Reconciliation.&lt;refinement&gt;.Λ$.α$1$">α$1$</span>], <span class="extype" name="nelson.Reconciliation.&lt;refinement&gt;.Λ$.α$3$">α$3$</span>], <span class="extype" name="nelson.Reconciliation.Conflict.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@Conflict[A]=scalaz.Coproduct[[α$2$]nelson.Reconciliation.MalformedConflict[α$2$],[α$3$]scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],α$3$],A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.ConflictEntry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConflictEntry[A]=scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],A]"></a>
+      <a id="ConflictEntry[A]:ConflictEntry[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ConflictEntry</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[[α$0$]<span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="Reconciliation$$InNelsonOnly.html" class="extype" name="nelson.Reconciliation.InNelsonOnly">InNelsonOnly</a>, <a href="Reconciliation$$StateConflict.html" class="extype" name="nelson.Reconciliation.StateConflict">StateConflict</a>, <span class="extype" name="nelson.Reconciliation.&lt;refinement&gt;.Λ$.α$0$">α$0$</span>], [α$1$]<span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="Reconciliation$$NelsonExpected.html" class="extype" name="nelson.Reconciliation.NelsonExpected">NelsonExpected</a>, <a href="Reconciliation$$NelsonNotExpected.html" class="extype" name="nelson.Reconciliation.NelsonNotExpected">NelsonNotExpected</a>, <span class="extype" name="nelson.Reconciliation.&lt;refinement&gt;.Λ$.α$1$">α$1$</span>], <span class="extype" name="nelson.Reconciliation.ConflictEntry.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@ConflictEntry[A]=scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.ConflictType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ConflictTypeextendsAnyRef"></a>
+      <a id="ConflictType:ConflictType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$ConflictType.html"><span class="name">ConflictType</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@ConflictTypeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.DCDConflictLabeledMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DCDConflictLabeledMap=scalaz.==&gt;&gt;[nelson.Datacenter,scalaz.==&gt;&gt;[String,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]]"></a>
+      <a id="DCDConflictLabeledMap:DCDConflictLabeledMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DCDConflictLabeledMap</span><span class="result"> = <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="#Conflict[A]=scalaz.Coproduct[[α$2$]nelson.Reconciliation.MalformedConflict[α$2$],[α$3$]scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],α$3$],A]" class="extmbr" name="nelson.Reconciliation.Conflict">Conflict</a>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@DCDConflictLabeledMap=scalaz.==&gt;&gt;[nelson.Datacenter,scalaz.==&gt;&gt;[String,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.DCDConflictMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DCDConflictMap=scalaz.==&gt;&gt;[nelson.Datacenter,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]"></a>
+      <a id="DCDConflictMap:DCDConflictMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DCDConflictMap</span><span class="result"> = <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="#Conflict[A]=scalaz.Coproduct[[α$2$]nelson.Reconciliation.MalformedConflict[α$2$],[α$3$]scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],α$3$],A]" class="extmbr" name="nelson.Reconciliation.Conflict">Conflict</a>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@DCDConflictMap=scalaz.==&gt;&gt;[nelson.Datacenter,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.DeploymentSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DeploymentSetextendsAnyVal"></a>
+      <a id="DeploymentSet:DeploymentSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$DeploymentSet.html"><span class="name">DeploymentSet</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@DeploymentSetextendsAnyVal" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.InNelson" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="InNelsonextendsAnyRef"></a>
+      <a id="InNelson:InNelson"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$InNelson.html"><span class="name">InNelson</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@InNelsonextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.InNelsonOnly" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InNelsonOnly[A]extendsReconciliation.ConflictTypewithReconciliation.InNelsonwithProductwithSerializable"></a>
+      <a id="InNelsonOnly[A]:InNelsonOnly[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$InNelsonOnly.html"><span class="name">InNelsonOnly</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="nelson.Reconciliation.InNelsonOnly.A">A</span></span>, <span name="status">status: <span class="extype" name="scala.Option">Option</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>)</span><span class="result"> extends <a href="Reconciliation$$ConflictType.html" class="extype" name="nelson.Reconciliation.ConflictType">ConflictType</a> with <a href="Reconciliation$$InNelson.html" class="extype" name="nelson.Reconciliation.InNelson">InNelson</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@InNelsonOnly[A]extendsReconciliation.ConflictTypewithReconciliation.InNelsonwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.MalformedConflict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MalformedConflict[A]extendsReconciliation.ConflictTypewithProductwithSerializable"></a>
+      <a id="MalformedConflict[A]:MalformedConflict[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$MalformedConflict.html"><span class="name">MalformedConflict</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="problem">problem: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="conflict">conflict: <span class="extype" name="scala.Option">Option</span>[<a href="#ConflictEntry[A]=scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],A]" class="extmbr" name="nelson.Reconciliation.ConflictEntry">ConflictEntry</a>[<span class="extype" name="nelson.Reconciliation.MalformedConflict.A">A</span>]]</span>)</span><span class="result"> extends <a href="Reconciliation$$ConflictType.html" class="extype" name="nelson.Reconciliation.ConflictType">ConflictType</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@MalformedConflict[A]extendsReconciliation.ConflictTypewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.NelsonAware" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NelsonAware[A]=scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,A]"></a>
+      <a id="NelsonAware[A]:NelsonAware[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NelsonAware</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="Reconciliation$$InNelsonOnly.html" class="extype" name="nelson.Reconciliation.InNelsonOnly">InNelsonOnly</a>, <a href="Reconciliation$$StateConflict.html" class="extype" name="nelson.Reconciliation.StateConflict">StateConflict</a>, <span class="extype" name="nelson.Reconciliation.NelsonAware.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@NelsonAware[A]=scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.NelsonExpected" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NelsonExpected[A]extendsReconciliation.ConflictTypewithReconciliation.RunningwithProductwithSerializable"></a>
+      <a id="NelsonExpected[A]:NelsonExpected[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$NelsonExpected.html"><span class="name">NelsonExpected</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="u">u: <a href="scheduler/RunningUnit.html" class="extype" name="nelson.scheduler.RunningUnit">RunningUnit</a></span>)</span><span class="result"> extends <a href="Reconciliation$$ConflictType.html" class="extype" name="nelson.Reconciliation.ConflictType">ConflictType</a> with <a href="Reconciliation$$Running.html" class="extype" name="nelson.Reconciliation.Running">Running</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@NelsonExpected[A]extendsReconciliation.ConflictTypewithReconciliation.RunningwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.NelsonNotExpected" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NelsonNotExpected[A]extendsReconciliation.ConflictTypewithReconciliation.RunningwithProductwithSerializable"></a>
+      <a id="NelsonNotExpected[A]:NelsonNotExpected[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$NelsonNotExpected.html"><span class="name">NelsonNotExpected</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="u">u: <a href="scheduler/RunningUnit.html" class="extype" name="nelson.scheduler.RunningUnit">RunningUnit</a></span>)</span><span class="result"> extends <a href="Reconciliation$$ConflictType.html" class="extype" name="nelson.Reconciliation.ConflictType">ConflictType</a> with <a href="Reconciliation$$Running.html" class="extype" name="nelson.Reconciliation.Running">Running</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@NelsonNotExpected[A]extendsReconciliation.ConflictTypewithReconciliation.RunningwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.Orphaned" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Orphaned[A]=scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,A]"></a>
+      <a id="Orphaned[A]:Orphaned[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Orphaned</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="Reconciliation$$NelsonExpected.html" class="extype" name="nelson.Reconciliation.NelsonExpected">NelsonExpected</a>, <a href="Reconciliation$$NelsonNotExpected.html" class="extype" name="nelson.Reconciliation.NelsonNotExpected">NelsonNotExpected</a>, <span class="extype" name="nelson.Reconciliation.Orphaned.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@Orphaned[A]=scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.PeriodicRun" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PeriodicRunextendsProductwithSerializable"></a>
+      <a id="PeriodicRun:PeriodicRun"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$PeriodicRun.html"><span class="name">PeriodicRun</span></a><span class="params">(<span name="parent">parent: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="timestamp">timestamp: <span class="extype" name="scala.Long">Long</span></span>, <span name="suffix">suffix: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@PeriodicRunextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.Running" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RunningextendsAnyRef"></a>
+      <a id="Running:Running"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$Running.html"><span class="name">Running</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@RunningextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.RunningUnitAssoc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RunningUnitAssoc[A,B]=(nelson.scheduler.RunningUnit,A,B)"></a>
+      <a id="RunningUnitAssoc[A,B]:RunningUnitAssoc[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RunningUnitAssoc</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> = (<a href="scheduler/RunningUnit.html" class="extype" name="nelson.scheduler.RunningUnit">RunningUnit</a>, <span class="extype" name="nelson.Reconciliation.RunningUnitAssoc.A">A</span>, <span class="extype" name="nelson.Reconciliation.RunningUnitAssoc.B">B</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@RunningUnitAssoc[A,B]=(nelson.scheduler.RunningUnit,A,B)" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.RunningUnitStackNameSet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RunningUnitStackNameSetextendsAnyVal"></a>
+      <a id="RunningUnitStackNameSet:RunningUnitStackNameSet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$RunningUnitStackNameSet.html"><span class="name">RunningUnitStackNameSet</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@RunningUnitStackNameSetextendsAnyVal" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.StateConflict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StateConflict[A]extendsReconciliation.ConflictTypewithReconciliation.InNelsonwithProductwithSerializable"></a>
+      <a id="StateConflict[A]:StateConflict[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$StateConflict.html"><span class="name">StateConflict</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="nelson.Reconciliation.StateConflict.A">A</span></span>, <span name="status">status: <span class="extype" name="scala.Option">Option</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="alloc">alloc: <a href="TaskGroupAllocation.html" class="extype" name="nelson.TaskGroupAllocation">TaskGroupAllocation</a></span>, <span name="u">u: <a href="scheduler/RunningUnit.html" class="extype" name="nelson.scheduler.RunningUnit">RunningUnit</a></span>)</span><span class="result"> extends <a href="Reconciliation$$ConflictType.html" class="extype" name="nelson.Reconciliation.ConflictType">ConflictType</a> with <a href="Reconciliation$$InNelson.html" class="extype" name="nelson.Reconciliation.InNelson">InNelson</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@StateConflict[A]extendsReconciliation.ConflictTypewithReconciliation.InNelsonwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation.TaskAllocAssoc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TaskAllocAssoc[T[_,_],A,B]=(T[A,B],nelson.TaskGroupAllocation)"></a>
+      <a id="TaskAllocAssoc[T[_,_],A,B]:TaskAllocAssoc[T,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TaskAllocAssoc</span><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>, <span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> = (<span class="extype" name="nelson.Reconciliation.TaskAllocAssoc.T">T</span>[<span class="extype" name="nelson.Reconciliation.TaskAllocAssoc.A">A</span>, <span class="extype" name="nelson.Reconciliation.TaskAllocAssoc.B">B</span>], <a href="TaskGroupAllocation.html" class="extype" name="nelson.TaskGroupAllocation">TaskGroupAllocation</a>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@TaskAllocAssoc[T[_,_],A,B]=(T[A,B],nelson.TaskGroupAllocation)" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@##():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Reconciliation.DeploymentConflict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DeploymentConflict"></a>
+      <a id="DeploymentConflict:DeploymentConflict"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Reconciliation$$DeploymentConflict$.html"><span class="name">DeploymentConflict</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@DeploymentConflict" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.Reconciliation#atomicSink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="atomicSink:scalaz.stream.Sink[scalaz.concurrent.Task,nelson.Reconciliation.DCDConflictLabeledMap]"></a>
+      <a id="atomicSink:Sink[Task,DCDConflictLabeledMap]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">atomicSink</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="#DCDConflictLabeledMap=scalaz.==&gt;&gt;[nelson.Datacenter,scalaz.==&gt;&gt;[String,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]]" class="extmbr" name="nelson.Reconciliation.DCDConflictLabeledMap">DCDConflictLabeledMap</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@atomicSink:scalaz.stream.Sink[scalaz.concurrent.Task,nelson.Reconciliation.DCDConflictLabeledMap]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@clone():Object" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="nelson.Reconciliation#counterSink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="counterSink:scalaz.stream.Sink[scalaz.concurrent.Task,nelson.Reconciliation.DCDConflictLabeledMap]"></a>
+      <a id="counterSink:Sink[Task,DCDConflictLabeledMap]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">counterSink</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="#DCDConflictLabeledMap=scalaz.==&gt;&gt;[nelson.Datacenter,scalaz.==&gt;&gt;[String,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]]" class="extmbr" name="nelson.Reconciliation.DCDConflictLabeledMap">DCDConflictLabeledMap</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@counterSink:scalaz.stream.Sink[scalaz.concurrent.Task,nelson.Reconciliation.DCDConflictLabeledMap]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation#dcSchedulerConflicts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="dcSchedulerConflicts(sch:Set[nelson.scheduler.RunningUnit],dc:nelson.Datacenter)(implicitstoI:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task],implicitschI:scalaz.~&gt;[nelson.scheduler.SchedulerOp,scalaz.concurrent.Task]):scalaz.concurrent.Task[Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]"></a>
+      <a id="dcSchedulerConflicts(Set[RunningUnit],Datacenter)(~&gt;[StoreOp,Task],~&gt;[SchedulerOp,Task]):Task[Set[Conflict[Deployment]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dcSchedulerConflicts</span><span class="params">(<span name="sch">sch: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="scheduler/RunningUnit.html" class="extype" name="nelson.scheduler.RunningUnit">RunningUnit</a>]</span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="stoI">stoI: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>, <span name="schI">schI: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="scheduler/SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<a href="#Conflict[A]=scalaz.Coproduct[[α$2$]nelson.Reconciliation.MalformedConflict[α$2$],[α$3$]scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],α$3$],A]" class="extmbr" name="nelson.Reconciliation.Conflict">Conflict</a>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@dcSchedulerConflicts(sch:Set[nelson.scheduler.RunningUnit],dc:nelson.Datacenter)(implicitstoI:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task],implicitschI:scalaz.~&gt;[nelson.scheduler.SchedulerOp,scalaz.concurrent.Task]):scalaz.concurrent.Task[Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation#drain" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="drain(cfg:nelson.NelsonConfig)(w:scalaz.stream.Writer[scalaz.concurrent.Task,Throwable,nelson.Reconciliation.DCDConflictLabeledMap]):scalaz.stream.Process[scalaz.concurrent.Task,Unit]"></a>
+      <a id="drain(NelsonConfig)(Writer[Task,Throwable,DCDConflictLabeledMap]):Process[Task,Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">drain</span><span class="params">(<span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="params">(<span name="w">w: <span class="extype" name="scalaz.stream.Writer">Writer</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="scala.Throwable">Throwable</span>, <a href="#DCDConflictLabeledMap=scalaz.==&gt;&gt;[nelson.Datacenter,scalaz.==&gt;&gt;[String,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]]" class="extmbr" name="nelson.Reconciliation.DCDConflictLabeledMap">DCDConflictLabeledMap</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@drain(cfg:nelson.NelsonConfig)(w:scalaz.stream.Writer[scalaz.concurrent.Task,Throwable,nelson.Reconciliation.DCDConflictLabeledMap]):scalaz.stream.Process[scalaz.concurrent.Task,Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="nelson.Reconciliation#getAllRunningUnits" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getAllRunningUnits(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[scalaz.==&gt;&gt;[nelson.Datacenter,Set[nelson.scheduler.RunningUnit]]]"></a>
+      <a id="getAllRunningUnits(NelsonConfig):Task[==&gt;&gt;[Datacenter,Set[RunningUnit]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getAllRunningUnits</span><span class="params">(<span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="scheduler/RunningUnit.html" class="extype" name="nelson.scheduler.RunningUnit">RunningUnit</a>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@getAllRunningUnits(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[scalaz.==&gt;&gt;[nelson.Datacenter,Set[nelson.scheduler.RunningUnit]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Reconciliation#groupByConflictLabel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="groupByConflictLabel[A](conflicts:List[nelson.Reconciliation.Conflict[A]]):scalaz.==&gt;&gt;[String,Set[nelson.Reconciliation.Conflict[A]]]"></a>
+      <a id="groupByConflictLabel[A](List[Conflict[A]]):==&gt;&gt;[String,Set[Conflict[A]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupByConflictLabel</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="conflicts">conflicts: <span class="extype" name="scala.List">List</span>[<a href="#Conflict[A]=scalaz.Coproduct[[α$2$]nelson.Reconciliation.MalformedConflict[α$2$],[α$3$]scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],α$3$],A]" class="extmbr" name="nelson.Reconciliation.Conflict">Conflict</a>[<span class="extype" name="nelson.Reconciliation.groupByConflictLabel.A">A</span>]]</span>)</span><span class="result">: <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="#Conflict[A]=scalaz.Coproduct[[α$2$]nelson.Reconciliation.MalformedConflict[α$2$],[α$3$]scalaz.Coproduct[[α$0$]scalaz.Coproduct[nelson.Reconciliation.InNelsonOnly,nelson.Reconciliation.StateConflict,α$0$],[α$1$]scalaz.Coproduct[nelson.Reconciliation.NelsonExpected,nelson.Reconciliation.NelsonNotExpected,α$1$],α$3$],A]" class="extmbr" name="nelson.Reconciliation.Conflict">Conflict</a>[<span class="extype" name="nelson.Reconciliation.groupByConflictLabel.A">A</span>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@groupByConflictLabel[A](conflicts:List[nelson.Reconciliation.Conflict[A]]):scalaz.==&gt;&gt;[String,Set[nelson.Reconciliation.Conflict[A]]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.Reconciliation#latest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="latest:scalaz.concurrent.Task[nelson.Reconciliation.DCDConflictLabeledMap]"></a>
+      <a id="latest:Task[DCDConflictLabeledMap]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">latest</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="#DCDConflictLabeledMap=scalaz.==&gt;&gt;[nelson.Datacenter,scalaz.==&gt;&gt;[String,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]]" class="extmbr" name="nelson.Reconciliation.DCDConflictLabeledMap">DCDConflictLabeledMap</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@latest:scalaz.concurrent.Task[nelson.Reconciliation.DCDConflictLabeledMap]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation#log" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="log:journal.Logger"></a>
+      <a id="log:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">log</span><span class="result">: <span class="extype" name="journal.Logger">Logger</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@log:journal.Logger" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="nelson.Reconciliation#loop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="loop(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,Unit]"></a>
+      <a id="loop(NelsonConfig):Process[Task,Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loop</span><span class="params">(<span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@loop(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,Unit]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@notify():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="nelson.Reconciliation#onlyExpectedInNelsonStatuses" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="onlyExpectedInNelsonStatuses:Set[nelson.DeploymentStatus]"></a>
+      <a id="onlyExpectedInNelsonStatuses:Set[DeploymentStatus]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">onlyExpectedInNelsonStatuses</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@onlyExpectedInNelsonStatuses:Set[nelson.DeploymentStatus]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation#partitionJobs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="partitionJobs(s:Set[String]):(scalaz.==&gt;&gt;[nelson.Datacenter.StackName,List[nelson.Reconciliation.PeriodicRun]],Set[String])"></a>
+      <a id="partitionJobs(Set[String]):(==&gt;&gt;[StackName,List[PeriodicRun]],Set[String])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">partitionJobs</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: (<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a>, <span class="extype" name="scala.List">List</span>[<a href="Reconciliation$$PeriodicRun.html" class="extype" name="nelson.Reconciliation.PeriodicRun">PeriodicRun</a>]], <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@partitionJobs(s:Set[String]):(scalaz.==&gt;&gt;[nelson.Datacenter.StackName,List[nelson.Reconciliation.PeriodicRun]],Set[String])" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Reconciliation#schedulerConflicts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="schedulerConflicts(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[nelson.Reconciliation.DCDConflictMap]"></a>
+      <a id="schedulerConflicts(NelsonConfig):Task[DCDConflictMap]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">schedulerConflicts</span><span class="params">(<span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="#DCDConflictMap=scalaz.==&gt;&gt;[nelson.Datacenter,Set[nelson.Reconciliation.Conflict[nelson.Datacenter.Deployment]]]" class="extmbr" name="nelson.Reconciliation.DCDConflictMap">DCDConflictMap</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@schedulerConflicts(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[nelson.Reconciliation.DCDConflictMap]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@toString():String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@wait():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Reconciliation$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

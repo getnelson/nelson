@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://github.com/pages/oss/nelson/internals.html">
+
+  <meta name="generator" content="Hugo 0.16" />
+
+  <title>Nelson</title>
+
+  
+  
+
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://github.com/pages/oss/nelson/css/docs.min.css" rel="stylesheet">
+  <link href="https://github.com/pages/oss/nelson/css/style.css" rel="stylesheet">
+  <link href="https://github.com/pages/oss/nelson/css/style.blue.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
+  <script src="https://github.com/pages/oss/nelson/js/docs.min.js"></script>
+</head>
+
+<body>
+
+  
+  <header class="navbar navbar-static-top bs-docs-nav" id="top">
+  <div class="container">
+    <div class="navbar-header" role="banner">
+      <a class="navbar-brand" href="https://github.com/pages/oss/nelson/">Nelson</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        
+        
+        <li class="">
+          <a href="/pages/oss/nelson/reference.html">Reference</a>
+        </li>
+        
+        <li class="">
+          <a href="/pages/oss/nelson/internals.html">Internals</a>
+        </li>
+        
+        <li class="">
+          <a href="/pages/oss/nelson/development.html">Development</a>
+        </li>
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li>
+          <a href="https://verizon.github.io/nelson">GitHub</a>
+        </li>
+        
+        <li>
+          <a href="https://verizon.github.io/nelson/api/">API Docs</a>
+        </li>
+        
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+  
+
+  <div class="bs-docs-header" id="content">
+    <div class="container">
+      <h1>Internals</h1>
+      <p></p>
+    </div>
+  </div>
+
+  <div class="container bs-docs-container">
+    <div class="row">
+      
+      <div class="col-md-9" role="main">
+        <article class="post-content">
+          <section class="bs-docs-section">
+            <h1 id="database" class="page-header">Database</h1>
+
+<p><em>Nelson</em>&rsquo;s main mode of data storage is by way of a SQL H2 database. At the time of writing Nelson was deployed to a single machine and relies on <code>systemd</code> supervision. The schema in use looks like:</p>
+
+<div class="clearing">
+  <img src="images/erd.png" width="100%" />
+</div>
+
+<p>As can be seen from the diagram, Nelson has a rather normalized structure. Given Nelson is not in the runtime hot path, the system does not suffer serious performance penalties from such a design, and will be able to scale far in excess of the query and write load Nelson actually receives.</p>
+
+<h1 id="known-issues" class="page-header">Known Issues</h1>
+
+<ol>
+<li><p>Upon receiving notification of a release event on Github, Nelson converts this to events published to its internal event stream (called <code>Pipeline</code>). <code>Pipeline</code> and messages on it, are not durable. If Nelson is processing a message (or has messages queued because of contention or existing backpressure), and an outage / upgrade or any reason that causes a halt to the JVM process, will loose said messages.</p></li>
+
+<li><p>Nelson does not have a high-availability data store. As mentioned above in the database section, this is typically not a problem, but should be a consideration. In the future, the authors may consider upgrading Nelson so it can cluster, but the expectation is that scaling-up will be more cost-effective than scaling-out for most users. Nelson will currently eat up several thousand deployments a minute, which is larger than most organizations will ever reach.</p></li>
+</ol>
+
+          </section>
+        </article>
+      </div>
+      
+      <div class="col-md-3" role="complementary">
+  <div class="bs-docs-sidebar hidden-print">
+    <ul class="nav bs-docs-sidenav">
+    </ul>
+    <a class="back-to-top" href="#top">
+      <i class="glyphicon glyphicon-chevron-up"></i> Back to top
+    </a>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+  <footer class="bs-docs-footer" role="contentinfo">
+  <div class="container">
+    <p>
+      Built with &hearts; by the infrastructure engineering team.</p>
+    <p>
+      Documentation template by <a href="http://getbootstrap.com">Bootstrap team</a>,
+      adapted for use with <a href="https://gohugo.com">Hugo</a>
+    </p>
+
+    <ul class="bs-docs-footer-links muted">
+      <li>Currently v0.9.8</li>
+    
+      <li>&middot;</li>
+      <li><a href="https://verizon.github.io/nelson">GitHub</a></li>
+    
+      <li>&middot;</li>
+      <li><a href="https://verizon.github.io/nelson/issues">Issues</a></li>
+    
+    </ul>
+  </div>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.1.2/trianglify.min.js"></script>
+
+
+
+  <script>trianglify('#041F33', '#3772AD');</script>
+
+
+</body>
+</html>
+
