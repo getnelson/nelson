@@ -27,15 +27,7 @@ lazy val http = project.dependsOn(core % "test->test;compile->compile")
 
 lazy val docs = project
 
-/*
-// TIM: all releases from master are deployed to beta, therefore they
-// shall be considered pre-release, and not marked on the github as
-// official releases.
-github.isPrerelease := {
-  sys.env.get("TRAVIS_BRANCH")
-    .exists(_.toLowerCase.trim == "master")
-}
- */
+enablePlugins(DisablePublishingPlugin)
 
 // by adding this to the root project, we make ensime happy
 addCompilerPlugin(dependencies.si2712fix.plugin)
