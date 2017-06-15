@@ -39,8 +39,9 @@ object Magnetar extends Workflow[Unit] {
     // DeploymentMonitor background process).  However, units without ports are not registered in consul, and
     // thus we should immediately advance mark the deployment as "Ready".  Once Reconciliation is also used as
     // a gating factor for promoting deployments to "Ready", we can potentially set all units to "Warming" here.
-    def getStatus(unit: UnitDef): DeploymentStatus =
-      unit.ports.cata(_ => Warming, Ready)
+    def getStatus(unit: UnitDef, plan: Plan):  DeploymentStatus =
+      if (Manifest.isPeriodic(unit,plan)) Ready
+      else unit.ports.cata(_ => Warming, Ready)
 
     def getTrafficShift: Option[TrafficShift] =
       if (!Manifest.isPeriodic(unit, p))
@@ -64,7 +65,7 @@ object Magnetar extends Workflow[Unit] {
       l  <- launch(i, dc, ns.name, vunit, p, hash)
       _  <- debug(s"response from scheduler $l")
 
-      _  <- status(id, getStatus(unit), "======> workflow completed <======")
+      _  <- status(id, getStatus(unit, p), "======> workflow completed <======")
     } yield ()
   }
 
