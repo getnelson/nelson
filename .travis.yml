@@ -35,7 +35,7 @@ install:
   - docker pull verizon/nelson-consul-template:1.0.1
   - |
     if [ $TRAVIS_PULL_REQUEST = 'false' ]; then
-      docker login -u $DOCKER_USER -p $DOCKER_PASS && \
+      docker login -u $DOCKER_USER -p $DOCKER_PASS
     fi
 
 before_script:
