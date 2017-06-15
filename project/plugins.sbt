@@ -23,3 +23,5 @@ addSbtPlugin("io.spray"          % "sbt-revolver"    % "0.7.2")
 addSbtPlugin("io.verizon.build"  % "sbt-rig"         % "3.0.31")
 
 addSbtPlugin("org.brianmckenna"  % "sbt-wartremover" % "0.14")
+
+libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"

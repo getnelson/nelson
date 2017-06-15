@@ -23,7 +23,7 @@ import Server._
 
 class ServerSpec extends NelsonSuite {
   "resources" should "return Ok for resources in /nelson/www" in {
-    val req = Request(GET, uri("/css/nelson.css"))
+    val req = Request(GET, uri("/css/style.css"))
     resources.orNotFound(req).map(_.status).run should equal (Ok)
   }
 
