@@ -22,6 +22,8 @@ scala:
 jdk:
   - oraclejdk8
 
+sudo: required
+
 services:
   - docker
 
@@ -35,6 +37,8 @@ install:
   - docker pull verizon/nelson-consul-template:1.0.1
   - |
     if [ $TRAVIS_PULL_REQUEST = 'false' ]; then
+      sudo mkdir -p $HOME/.docker && \
+      sudo chown -R travis:travis $HOME/.docker && \
       docker login -u $DOCKER_USER -p $DOCKER_PASS
     fi
 
