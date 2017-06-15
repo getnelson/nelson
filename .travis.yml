@@ -22,11 +22,12 @@ scala:
 jdk:
   - oraclejdk8
 
+services:
+  - docker
+
 branches:
   only:
     - master
-    - 0.7.x
-    - 0.8.x
     - 0.9.x
 
 install:
