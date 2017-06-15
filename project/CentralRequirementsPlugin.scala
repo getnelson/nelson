@@ -26,6 +26,7 @@ object CentralRequirementsPlugin extends AutoPlugin {
   override def requires = RigPlugin
 
   override lazy val projectSettings = Seq(
+    publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
     sonatypeProfileName := "io.verizon",
     pomExtra in Global := {
       <developers>
