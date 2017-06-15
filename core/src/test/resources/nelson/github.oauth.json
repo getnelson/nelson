@@ -1,0 +1,5 @@
+{
+  "access_token": "some-access-token",
+  "scope": "repo,gist",
+  "token_type": "bearer"
+}

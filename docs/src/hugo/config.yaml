@@ -1,0 +1,26 @@
+---
+uglyurls: true
+theme: hugo-bootstrap-doc
+params:
+  project_name: Nelson
+  project_tagline: Automated, multi-region container deployment
+  github_host: github.com
+  github_repository: Verizon/nelson
+  travis_url: https://travis-ci.org/Verizon/nelson
+  license: Copyright Verizon 2015-2017
+  license_url: https://en.wikipedia.org/wiki/All_rights_reserved
+  version: 0.7.x # can be overriden by site data `global.json`
+  header:
+    # blue | green | orange | purple | red
+    color: blue
+    trianglify: true
+  header_links:
+    - title: GitHub
+      url: https://verizon.github.io/nelson
+    - title: API Docs
+      url: https://verizon.github.io/nelson/api/
+  footer_links:
+    - title: GitHub
+      url: https://verizon.github.io/nelson
+    - title: Issues
+      url: https://verizon.github.io/nelson/issues

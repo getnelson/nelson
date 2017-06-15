@@ -1,0 +1,49 @@
+#!/bin/bash
+
+function ensure_param {
+  if [ -z "$2" ]; then
+    echo "You must supply a $1";
+    exit 1;
+  fi
+}
+
+function prompt {
+  echo -n "Enter your $1 and press [ENTER]: "
+}
+
+prompt "github host"
+read github_host
+ensure_param "github host" $github_host
+
+prompt "github username"
+read github_username
+ensure_param "github username" $github_username
+
+prompt "github password"
+read github_password
+ensure_param "github password" $github_password
+
+prompt "github application ID"
+read github_app_id
+ensure_param "github application id" $github_app_id
+
+prompt "github application secret"
+read github_app_secret
+ensure_param "github application secret" $github_app_secret
+
+fingerprint=`whoami | md5`
+
+(curl -X PUT -u "${github_username}:${github_password}" \
+  -H "Content-type: application/json" \
+  "https://${github_host}/api/v3/authorizations/clients/${github_app_id}/${fingerprint}" \
+  -d @- <<REQUEST_BODY
+{
+  "client_id": "${github_app_id}",
+  "client_secret": "${github_app_secret}",
+  "scopes": [
+    "repo"
+  ],
+  "note": "nelson admin script"
+}
+REQUEST_BODY
+) | jq '.token'

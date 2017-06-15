@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" debug="false">
+  <!-- gets rid of all the logback registration output -->
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} %highlight([%level]) %logger{30} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- nelson -->
+  <logger name="nelson" level="OFF" />
+
+  <!-- Temporary while we're debugging a hang -->
+  <logger name="TestInterruptor" level="INFO" />
+  
+  <!-- other -->
+  <logger name="com.ning.http.client" level="OFF" />
+
+  <root level="OFF">
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>

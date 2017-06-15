@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+DIR=$( cd $(dirname $0) ; pwd -P )
+
+echo "==>>> Generating security keys..."
+eval $($DIR/generate-keys)
+
+echo "==>>> Booting the container..."
+
+docker run -i -t --rm \
+  --name nelson-local \
+  -e NELSON_SECURITY_ENCRYPTION_KEY="$NELSON_SECURITY_ENCRYPTION_KEY" \
+  -e NELSON_SECURITY_SIGNATURE_KEY="$NELSON_SECURITY_SIGNATURE_KEY" \
+  -e NELSON_GITHUB_DOMAIN="github.com" \
+  -e NELSON_GITHUB_SECRET \
+  -e NELSON_GITHUB_TOKEN \
+  -e NELSON_GITHUB_CLIENT="$NELSON_GITHUB_CLIENT" \
+  -e GITHUB_USER \
+  -e GITHUB_TOKEN \
+  -p 9000:9000 \
+  -v "$DIR/../etc/classpath/revolver/logback.xml":/opt/application/conf/logback.xml \
+  -v "$DIR/../etc/development/docker/nelson.cfg":/opt/application/conf/nelson.cfg \
+  -v "$DIR/../db":/opt/application/db \
+  registry.hub.docker.com/verizon/nelson:latest

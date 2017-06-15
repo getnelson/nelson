@@ -1,0 +1,45 @@
+//: ----------------------------------------------------------------------------
+//: Copyright (C) 2017 Verizon.  All Rights Reserved.
+//:
+//:   Licensed under the Apache License, Version 2.0 (the "License");
+//:   you may not use this file except in compliance with the License.
+//:   You may obtain a copy of the License at
+//:
+//:       http://www.apache.org/licenses/LICENSE-2.0
+//:
+//:   Unless required by applicable law or agreed to in writing, software
+//:   distributed under the License is distributed on an "AS IS" BASIS,
+//:   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//:   See the License for the specific language governing permissions and
+//:   limitations under the License.
+//:
+//: ----------------------------------------------------------------------------
+package nelson
+
+import alerts.Promtool._
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import nelson.Manifest.{ PrometheusAlert, PrometheusConfig, PrometheusRule }
+
+import org.scalatest.prop.Checkers
+import scalaz.concurrent.Task
+import scalaz.stream.Process
+
+
+class PromtoolSpec extends NelsonSuite with Checkers {
+  import Task.delay
+
+  "validateRules" should "return Valid for valid rules" in {
+    val alerting = PrometheusConfig(
+      List(PrometheusAlert("InstanceDown", "IF up == 0 FOR 1m")),
+      List(PrometheusRule("a:b:c", "avg(abc)"))
+    )
+    validateRules("example_unit", "ALERT InstanceDown IF up == 0 FOR 1m").run should equal (Valid)
+  }
+
+  it should "return Invalid with the atrocities documented for invalid rules" in {
+    val result = validateRules("example_unit", "ALERT InstanceDown Duh?").run
+    result shouldBe an[Invalid]
+    result.asInstanceOf[Invalid].msg should include ("""FAILED: parse error at char 20: unexpected identifier "Duh" in alert statement, expected "if"""")
+  }
+}

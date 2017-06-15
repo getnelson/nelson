@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+  <logger name="nelson" level="INFO" />
+  <logger name="helm" level="INFO" />
+  <logger name="nelson.storage" level="INFO" />
+  <logger name="nelson.cleanup" level="INFO" />
+  <logger name="nelson.JsonRequest" level="DEBUG" />
+  <!-- <logger name="nelson.scheduler.NomadHttp" level="DEBUG" /> -->
+  <logger name="nelson.RelationalStorage" level="INFO" />
+  <logger name="nelson.routing.cron" level="WARN" />
+  <logger name="nelson.Reconciliation" level="ERROR" />
+  <logger name="org.http4s" level="WARN" />
+</included>

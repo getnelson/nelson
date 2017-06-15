@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" debug="false">
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} %highlight([%level]) %logger{30} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="org.apache.http" level="WARN" />
+  <logger name="io.netty" level="WARN" />
+  <logger name="nelson" level="DEBUG" />
+  <logger name="com.ning.http.client.providers.netty" level="OFF" />
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>

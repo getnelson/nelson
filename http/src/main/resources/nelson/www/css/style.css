@@ -1,0 +1,60 @@
+body{
+  background-color: #eeeeee;
+  font-family: 'Roboto', sans-serif;
+}
+code {
+  font-family: 'Roboto Mono', monospace;
+}
+h4 {
+  font-weight: 300;
+}
+.grey-font {
+  color: #BDBDBD;
+}
+.card.login {
+  width: 20rem;
+  margin-top: 45px!important;
+}
+.logo {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 106px;
+  height: 106px;
+}
+.navbar {
+  background-color: #4285F4!important;
+  color: #ffffff;
+}
+.white-text{
+  color: #ffffff;
+}
+.nav-link {
+  color: #ffffff;
+}
+.card-container {
+  padding: 0.5em`;
+}
+.github-svg {
+  fill: #ffffff;
+}
+.btn {
+  background-color: #4285F4;
+  width: 120px;
+  border-radius: 50px;
+  margin-top: 20px!important;
+  margin: auto;
+  padding: 12px;
+}
+p.code{
+  width: 100%;
+  background: #f7f7f7;
+}
+a.code{
+  background: #f7f7f7;
+}
+pre {
+  background-color: #eeeeee;
+  border: 1px solid #d8d8d8;
+  padding: 0.5em;
+  border-radius: 0.3em;
+}

@@ -1,0 +1,42 @@
+/************************ background ************************/
+
+#content {
+  background: #041F33;
+  background:linear-gradient(135deg, #041F33, #3772AD);
+}
+
+/************************ nav ************************/
+.bs-docs-nav .navbar-brand,
+.bs-docs-nav .navbar-nav>li>a {
+  color: #333333;
+}
+.bs-docs-nav .navbar-nav>li>a:hover,
+.bs-docs-nav .navbar-nav>.active>a,
+.bs-docs-nav .navbar-nav>.active>a:hover {
+  color: #3772AD;
+}
+
+/************************ sidebar ************************/
+.bs-docs-sidebar .nav>li>a:hover,
+.bs-docs-sidebar .nav>li>a:focus {
+  color: #3772AD;
+}
+.bs-docs-sidebar .nav>.active>a,
+.bs-docs-sidebar .nav>.active:hover>a,
+.bs-docs-sidebar .nav>.active:focus>a {
+  border-left: 2px solid #3772AD;
+  color: #3772AD;
+}
+
+/************************ masthead ************************/
+.bs-docs-masthead .version {
+  color: #fff;
+}
+.btn-outline-inverse {
+  border-color: #56A5F5;
+}
+.btn-outline-inverse:hover,
+.btn-outline-inverse:focus,
+.btn-outline-inverse:active {
+  color: #3772AD;
+}

@@ -1,0 +1,14 @@
+name = "Hugo Bootstrap Doc"
+description = ""
+tags = ["", ""]
+features = ["", ""]
+min_version = 0.14
+
+[author]
+  name = "Timothy Perrett"
+  homepage = "http://timperrett.com"
+
+[original]
+  name = "Jekyll Bootstrap Doc"
+  homepage = "http://mistic100.github.io/jekyll-bootstrap-doc/"
+  repo = "https://github.com/mistic100/jekyll-bootstrap-doc"

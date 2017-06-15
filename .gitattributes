@@ -1,0 +1,3 @@
+*.graffle binary
+*.enc binary
+docs/src/graffle/*.graffle binary

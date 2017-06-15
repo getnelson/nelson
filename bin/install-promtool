@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+PROMETHEUS_VERSION=${PROMETHEUS_VERSION:-1.4.1}
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    PLATFORM="linux-amd64"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    PLATFORM="darwin-amd64"
+else
+    echo "Unsupported platform: $OSTYPE"
+    exit 1
+fi
+PROMETHEUS_TARBALL="https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.${PLATFORM}.tar.gz"
+
+echo "====>> Downloading and extracting prometheus-${PROMETHEUS_VERSION}"
+
+cd /tmp
+curl -sSL $PROMETHEUS_TARBALL | tar xzf -
+
+echo "====>> Copying promtool to /usr/local/bin"
+
+cd prometheus-${PROMETHEUS_VERSION}.${PLATFORM}
+sudo cp promtool /usr/local/bin

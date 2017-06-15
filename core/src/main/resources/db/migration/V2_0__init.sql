@@ -1,0 +1,246 @@
+--: ----------------------------------------------------------------------------
+--: Copyright (C) 2017 Verizon.  All Rights Reserved.
+--:
+--:   Licensed under the Apache License, Version 2.0 (the "License");
+--:   you may not use this file except in compliance with the License.
+--:   You may obtain a copy of the License at
+--:
+--:       http://www.apache.org/licenses/LICENSE-2.0
+--:
+--:   Unless required by applicable law or agreed to in writing, software
+--:   distributed under the License is distributed on an "AS IS" BASIS,
+--:   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+--:   See the License for the specific language governing permissions and
+--:   limitations under the License.
+--:
+--: ----------------------------------------------------------------------------
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_C4953F67_DF00_4DE9_B7B8_9EF750F3F0E2 START WITH 1 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_CFF927A0_B332_4847_B09F_F893CDDC632F START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_B3287B6B_8976_4D6F_BCD0_998C90EA65A2 START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_8D9BAA7A_6D0A_47E6_9351_5297B94040E4 START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_15FD08D0_DDC1_4ECB_8FB3_38AB48CE23B4 START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_74CA8882_CA83_4DDE_8076_3C5418BEF8DB START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_82B3DAB6_30D4_4A6C_BBC7_19B0AB1B0B2D START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_83948908_3625_409D_B8DA_0CAA2190994C START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_058F9373_F2CF_4FBD_A3C7_292A3061A95A START WITH 1 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_4D9E1F50_01EB_4E0D_BF67_F8377FEEBF85 START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_F0EA93F1_AB0B_4262_B55A_A61B178FCF7F START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_FA7B84B5_2965_4327_8CDE_8A27CAD12458 START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_37BBCB01_F6C9_48A1_963B_FDA8724B2CB1 START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_AD03FD8F_2979_46F8_B967_A03942036851 START WITH 0 BELONGS_TO_TABLE;     
+CREATE SEQUENCE PUBLIC.SYSTEM_SEQUENCE_6D6D8253_D983_45BF_B007_F99A26BC6689 START WITH 0 BELONGS_TO_TABLE;     
+CREATE CACHED TABLE PUBLIC."repositories"(
+    "id" BIGINT NOT NULL,
+    "slug" VARCHAR(250) NOT NULL,
+    "hook_id" BIGINT DEFAULT NULL,
+    "hook_is_active" BOOLEAN DEFAULT FALSE,
+    "description" VARCHAR(255) DEFAULT NULL,
+    "is_deleted" BOOLEAN NOT NULL DEFAULT FALSE
+);           
+ALTER TABLE PUBLIC."repositories" ADD CONSTRAINT PUBLIC."repository_pk" PRIMARY KEY("id");     
+-- 1 +/- SELECT COUNT(*) FROM PUBLIC."repositories";           
+INSERT INTO PUBLIC."repositories"("id", "slug", "hook_id", "hook_is_active", "description") VALUES
+(-1, 'manual', NULL, FALSE, 'manually deployed');           
+CREATE CACHED TABLE PUBLIC."loadbalancers"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_B3287B6B_8976_4D6F_BCD0_998C90EA65A2) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_B3287B6B_8976_4D6F_BCD0_998C90EA65A2,
+    "name" VARCHAR(100) NOT NULL,
+    "major_version" SMALLINT NOT NULL,
+    "repository_id" BIGINT NOT NULL
+);
+ALTER TABLE PUBLIC."loadbalancers" ADD CONSTRAINT PUBLIC.CONSTRAINT_E PRIMARY KEY("id");       
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."loadbalancers";          
+CREATE CACHED TABLE PUBLIC."traffic_shifts"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_82B3DAB6_30D4_4A6C_BBC7_19B0AB1B0B2D) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_82B3DAB6_30D4_4A6C_BBC7_19B0AB1B0B2D,
+    "policy" VARCHAR(15) NOT NULL,
+    "duration" LONG NOT NULL,
+    "to_deployment" INTEGER NOT NULL,
+    "namespace_id" INTEGER NOT NULL
+); 
+ALTER TABLE PUBLIC."traffic_shifts" ADD CONSTRAINT PUBLIC.CONSTRAINT_89 PRIMARY KEY("id");     
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."traffic_shifts";         
+CREATE CACHED TABLE PUBLIC."user_repositories"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_F0EA93F1_AB0B_4262_B55A_A61B178FCF7F) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_F0EA93F1_AB0B_4262_B55A_A61B178FCF7F,
+    "repository_id" BIGINT NOT NULL,
+    "login" VARCHAR(100) NOT NULL,
+    "access" VARCHAR(10) NOT NULL
+);               
+ALTER TABLE PUBLIC."user_repositories" ADD CONSTRAINT PUBLIC.CONSTRAINT_3 PRIMARY KEY("id");   
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."user_repositories";      
+CREATE CACHED TABLE PUBLIC."unit_dependencies"(
+    "from_unit" INTEGER NOT NULL,
+    "to_service" VARCHAR(64),
+    "to_version" VARCHAR(24)
+);
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."unit_dependencies";      
+CREATE CACHED TABLE PUBLIC."releases"(
+    "repository_id" BIGINT NOT NULL,
+    "version" VARCHAR(24) NOT NULL,
+    "release_id" VARCHAR(25) DEFAULT NULL,
+    "release_url" VARCHAR(200) DEFAULT NULL,
+    "release_html_url" VARCHAR(200) DEFAULT NULL,
+    "timestamp" BIGINT NOT NULL,
+    "guid" VARCHAR(32) DEFAULT LEFT(CONVERT(SECURE_RAND(64),VARCHAR(32)), 12) NOT NULL
+);           
+ALTER TABLE PUBLIC."releases" ADD CONSTRAINT PUBLIC."repository_version_pk" PRIMARY KEY("repository_id", "version");           
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."releases";               
+CREATE INDEX PUBLIC."releases_guid_idx" ON PUBLIC."releases"("guid");          
+CREATE CACHED TABLE PUBLIC."service_ports"(
+    "unit" INTEGER NOT NULL,
+    "port" INTEGER NOT NULL,
+    "ref" VARCHAR(64) NOT NULL,
+    "protocol" VARCHAR(17) NOT NULL
+);   
+ALTER TABLE PUBLIC."service_ports" ADD CONSTRAINT PUBLIC."service_port_pk" PRIMARY KEY("unit", "ref");         
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."service_ports";          
+CREATE CACHED TABLE PUBLIC."traffic_shift_start"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_6D6D8253_D983_45BF_B007_F99A26BC6689) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_6D6D8253_D983_45BF_B007_F99A26BC6689,
+    "traffic_shift_id" LONG NOT NULL,
+    "start_time" LONG NOT NULL,
+    "from_deployment" INTEGER NOT NULL
+);          
+ALTER TABLE PUBLIC."traffic_shift_start" ADD CONSTRAINT PUBLIC.CONSTRAINT_A PRIMARY KEY("id"); 
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."traffic_shift_start";    
+CREATE CACHED TABLE PUBLIC."deployments"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_FA7B84B5_2965_4327_8CDE_8A27CAD12458) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_FA7B84B5_2965_4327_8CDE_8A27CAD12458,
+    "unit_id" INTEGER NOT NULL,
+    "hash" VARCHAR(20) NOT NULL,
+    "namespace_id" INTEGER NOT NULL,
+    "deploy_time" BIGINT NOT NULL,
+    "workflow" VARCHAR(16) NOT NULL,
+    "guid" VARCHAR(32) DEFAULT LEFT(CONVERT(SECURE_RAND(64),VARCHAR(32)), 12) NOT NULL,
+    "plan" VARCHAR(64),
+    "expiration_policy" VARCHAR(30) NOT NULL
+);    
+ALTER TABLE PUBLIC."deployments" ADD CONSTRAINT PUBLIC.CONSTRAINT_F PRIMARY KEY("id");         
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."deployments";            
+CREATE INDEX PUBLIC."deployments_guid_idx" ON PUBLIC."deployments"("guid");    
+CREATE CACHED TABLE PUBLIC."audit_log"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_15FD08D0_DDC1_4ECB_8FB3_38AB48CE23B4) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_15FD08D0_DDC1_4ECB_8FB3_38AB48CE23B4,
+    "release_id" BIGINT,
+    "event" CLOB(4096) NOT NULL,
+    "category" VARCHAR(24) NOT NULL,
+    "action" VARCHAR(24) NOT NULL,
+    "timestamp" BIGINT NOT NULL,
+    "login" VARCHAR(100) NOT NULL
+);            
+ALTER TABLE PUBLIC."audit_log" ADD CONSTRAINT PUBLIC.CONSTRAINT_B8 PRIMARY KEY("id");          
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."audit_log";              
+CREATE CACHED TABLE PUBLIC."deployment_expiration"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_CFF927A0_B332_4847_B09F_F893CDDC632F) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_CFF927A0_B332_4847_B09F_F893CDDC632F,
+    "deployment_id" BIGINT NOT NULL,
+    "expiration" BIGINT NOT NULL
+);               
+ALTER TABLE PUBLIC."deployment_expiration" ADD CONSTRAINT PUBLIC.CONSTRAINT_34 PRIMARY KEY("id");              
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."deployment_expiration";  
+CREATE CACHED TABLE PUBLIC."deployment_statuses"(
+    "deployment_id" INTEGER NOT NULL,
+    "state" VARCHAR(25) NOT NULL,
+    "status_msg" TEXT,
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_C4953F67_DF00_4DE9_B7B8_9EF750F3F0E2) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_C4953F67_DF00_4DE9_B7B8_9EF750F3F0E2,
+    "status_time" BIGINT NOT NULL
+);      
+ALTER TABLE PUBLIC."deployment_statuses" ADD CONSTRAINT PUBLIC.CONSTRAINT_C PRIMARY KEY("id"); 
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."deployment_statuses";    
+CREATE CACHED TABLE PUBLIC."datacenters"(
+    "name" VARCHAR(25) NOT NULL,
+    "registry_location" VARCHAR(255),
+    "consul_location" VARCHAR(255),
+    "mesos_location" VARCHAR(255),
+    "marathon_location" VARCHAR(255),
+    "chronos_location" VARCHAR(255),
+    "guid" VARCHAR(32) DEFAULT LEFT(CONVERT(SECURE_RAND(64),VARCHAR(32)), 12) NOT NULL
+);   
+ALTER TABLE PUBLIC."datacenters" ADD CONSTRAINT PUBLIC."datacenters_pk" PRIMARY KEY("name");   
+-- 1 +/- SELECT COUNT(*) FROM PUBLIC."datacenters";            
+CREATE INDEX PUBLIC."datacenters_guid_idx" ON PUBLIC."datacenters"("guid");    
+CREATE CACHED TABLE PUBLIC."namespaces"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_058F9373_F2CF_4FBD_A3C7_292A3061A95A) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_058F9373_F2CF_4FBD_A3C7_292A3061A95A,
+    "datacenter" VARCHAR(25) NOT NULL,
+    "name" VARCHAR(64) NOT NULL,
+    "guid" VARCHAR(32) DEFAULT LEFT(CONVERT(SECURE_RAND(64),VARCHAR(32)), 12) NOT NULL
+); 
+ALTER TABLE PUBLIC."namespaces" ADD CONSTRAINT PUBLIC.CONSTRAINT_9C PRIMARY KEY("id");         
+-- 1 +/- SELECT COUNT(*) FROM PUBLIC."namespaces";             
+CREATE INDEX PUBLIC."namespaces_guid_idx" ON PUBLIC."namespaces"("guid");      
+CREATE CACHED TABLE PUBLIC."loadbalancer_deployments"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_83948908_3625_409D_B8DA_0CAA2190994C) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_83948908_3625_409D_B8DA_0CAA2190994C,
+    "hash" VARCHAR(10) NOT NULL,
+    "loadbalancer_id" BIGINT NOT NULL,
+    "namespace_id" BIGINT NOT NULL,
+    "deploy_time" LONG NOT NULL,
+    "guid" VARCHAR(32) DEFAULT LEFT(CONVERT(SECURE_RAND(64),VARCHAR(32)), 12) NOT NULL,
+    "address" VARCHAR(80) NOT NULL
+);          
+ALTER TABLE PUBLIC."loadbalancer_deployments" ADD CONSTRAINT PUBLIC.CONSTRAINT_5 PRIMARY KEY("id");            
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."loadbalancer_deployments";               
+CREATE INDEX PUBLIC."loadbalancer_deployments_idx" ON PUBLIC."loadbalancer_deployments"("guid");               
+CREATE CACHED TABLE PUBLIC."unit_resources"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_4D9E1F50_01EB_4E0D_BF67_F8377FEEBF85) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_4D9E1F50_01EB_4E0D_BF67_F8377FEEBF85,
+    "unit_id" BIGINT NOT NULL,
+    "name" VARCHAR(100) NOT NULL
+);            
+ALTER TABLE PUBLIC."unit_resources" ADD CONSTRAINT PUBLIC.CONSTRAINT_8 PRIMARY KEY("id");      
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."unit_resources";         
+CREATE CACHED TABLE PUBLIC."traffic_shift_reverse"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_8D9BAA7A_6D0A_47E6_9351_5297B94040E4) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_8D9BAA7A_6D0A_47E6_9351_5297B94040E4,
+    "traffic_shift_id" LONG NOT NULL,
+    "reverse_time" LONG NOT NULL
+);              
+ALTER TABLE PUBLIC."traffic_shift_reverse" ADD CONSTRAINT PUBLIC.CONSTRAINT_FD PRIMARY KEY("id");              
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."traffic_shift_reverse";  
+CREATE CACHED TABLE PUBLIC."deployment_resources"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_74CA8882_CA83_4DDE_8076_3C5418BEF8DB) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_74CA8882_CA83_4DDE_8076_3C5418BEF8DB,
+    "deployment_id" BIGINT NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "uri" VARCHAR(256) NOT NULL
+);               
+ALTER TABLE PUBLIC."deployment_resources" ADD CONSTRAINT PUBLIC.CONSTRAINT_2 PRIMARY KEY("id");
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."deployment_resources";   
+CREATE CACHED TABLE PUBLIC."units"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_37BBCB01_F6C9_48A1_963B_FDA8724B2CB1) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_37BBCB01_F6C9_48A1_963B_FDA8724B2CB1,
+    "repository_id" VARCHAR(200) NOT NULL,
+    "version" VARCHAR(24) NOT NULL,
+    "name" VARCHAR(64) NOT NULL,
+    "description" TEXT NOT NULL,
+    "guid" VARCHAR(32) DEFAULT LEFT(CONVERT(SECURE_RAND(64),VARCHAR(32)), 12) NOT NULL
+);             
+ALTER TABLE PUBLIC."units" ADD CONSTRAINT PUBLIC.CONSTRAINT_6 PRIMARY KEY("id");               
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."units";  
+CREATE INDEX PUBLIC."units_guid_idx" ON PUBLIC."units"("guid");
+CREATE CACHED TABLE PUBLIC."loadbalancer_routes"(
+    "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_AD03FD8F_2979_46F8_B967_A03942036851) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_AD03FD8F_2979_46F8_B967_A03942036851,
+    "loadbalancer_id" BIGINT NOT NULL,
+    "port" INTEGER NOT NULL,
+    "port_reference" VARCHAR(64) NOT NULL,
+    "protocol" VARCHAR(17) NOT NULL,
+    "to_unit_name" VARCHAR(64) NOT NULL,
+    "to_port_reference" VARCHAR(64) NOT NULL
+);             
+ALTER TABLE PUBLIC."loadbalancer_routes" ADD CONSTRAINT PUBLIC.CONSTRAINT_CF PRIMARY KEY("id");
+-- 0 +/- SELECT COUNT(*) FROM PUBLIC."loadbalancer_routes";    
+ALTER TABLE PUBLIC."units" ADD CONSTRAINT PUBLIC."unit_name_version_uniqueness" UNIQUE("name", "version");     
+ALTER TABLE PUBLIC."traffic_shift_start" ADD CONSTRAINT PUBLIC."traffic_shift_start_traffic_id_unique" UNIQUE("traffic_shift_id");             
+ALTER TABLE PUBLIC."traffic_shift_reverse" ADD CONSTRAINT PUBLIC."traffi_shift_reverse_traffic_id_unique" UNIQUE("traffic_shift_id");          
+ALTER TABLE PUBLIC."loadbalancers" ADD CONSTRAINT PUBLIC."lb_name_major_version_uniqueness" UNIQUE("name", "major_version");   
+ALTER TABLE PUBLIC."unit_dependencies" ADD CONSTRAINT PUBLIC."unique_unit_dependencies" UNIQUE("from_unit", "to_service", "to_version");       
+ALTER TABLE PUBLIC."loadbalancers" ADD CONSTRAINT PUBLIC."loadbalancers_have_repository" FOREIGN KEY("repository_id") REFERENCES PUBLIC."repositories"("id") NOCHECK;          
+ALTER TABLE PUBLIC."units" ADD CONSTRAINT PUBLIC."repository_version_fk" FOREIGN KEY("repository_id", "version") REFERENCES PUBLIC."releases"("repository_id", "version") ON DELETE CASCADE NOCHECK;           
+ALTER TABLE PUBLIC."unit_dependencies" ADD CONSTRAINT PUBLIC."unit_dependency_fk" FOREIGN KEY("from_unit") REFERENCES PUBLIC."units"("id") ON DELETE CASCADE NOCHECK;          
+ALTER TABLE PUBLIC."user_repositories" ADD CONSTRAINT PUBLIC."user_has_repositories" FOREIGN KEY("repository_id") REFERENCES PUBLIC."repositories"("id") NOCHECK;              
+ALTER TABLE PUBLIC."traffic_shifts" ADD CONSTRAINT PUBLIC."traffic_shift_namespace_fk" FOREIGN KEY("namespace_id") REFERENCES PUBLIC."namespaces"("id") NOCHECK;               
+ALTER TABLE PUBLIC."traffic_shift_start" ADD CONSTRAINT PUBLIC."traffic_shift_start_traffic_shift_fk" FOREIGN KEY("traffic_shift_id") REFERENCES PUBLIC."traffic_shifts"("id") NOCHECK;        
+ALTER TABLE PUBLIC."loadbalancer_deployments" ADD CONSTRAINT PUBLIC."loadbalancer_deployments_loadbalancers_fk" FOREIGN KEY("loadbalancer_id") REFERENCES PUBLIC."loadbalancers"("id") NOCHECK;
+ALTER TABLE PUBLIC."loadbalancer_routes" ADD CONSTRAINT PUBLIC."loadbalancer_routes_loadbalancers_fk" FOREIGN KEY("loadbalancer_id") REFERENCES PUBLIC."loadbalancers"("id") NOCHECK;          
+ALTER TABLE PUBLIC."loadbalancer_deployments" ADD CONSTRAINT PUBLIC."loadbalancer_deployments_namespaces_fk" FOREIGN KEY("namespace_id") REFERENCES PUBLIC."namespaces"("id") NOCHECK;         
+ALTER TABLE PUBLIC."unit_resources" ADD CONSTRAINT PUBLIC."unit_resources_have_unit" FOREIGN KEY("unit_id") REFERENCES PUBLIC."units"("id") NOCHECK;           
+ALTER TABLE PUBLIC."namespaces" ADD CONSTRAINT PUBLIC."datacenter_fk" FOREIGN KEY("datacenter") REFERENCES PUBLIC."datacenters"("name") ON DELETE CASCADE NOCHECK;             
+ALTER TABLE PUBLIC."traffic_shifts" ADD CONSTRAINT PUBLIC."traffic_shift_to_deployment_fk" FOREIGN KEY("to_deployment") REFERENCES PUBLIC."deployments"("id") NOCHECK;         
+ALTER TABLE PUBLIC."deployments" ADD CONSTRAINT PUBLIC."deployment_namespace_fk" FOREIGN KEY("namespace_id") REFERENCES PUBLIC."namespaces"("id") NOCHECK;     
+ALTER TABLE PUBLIC."service_ports" ADD CONSTRAINT PUBLIC."service_units_fk" FOREIGN KEY("unit") REFERENCES PUBLIC."units"("id") ON DELETE CASCADE NOCHECK;     
+ALTER TABLE PUBLIC."releases" ADD CONSTRAINT PUBLIC."repository_fk" FOREIGN KEY("repository_id") REFERENCES PUBLIC."repositories"("id") ON DELETE CASCADE NOCHECK;             
+ALTER TABLE PUBLIC."traffic_shift_start" ADD CONSTRAINT PUBLIC."traffic_shift_start_from_deployment_fk" FOREIGN KEY("from_deployment") REFERENCES PUBLIC."deployments"("id") NOCHECK;          
+ALTER TABLE PUBLIC."deployment_expiration" ADD CONSTRAINT PUBLIC."deployment_id_fk" FOREIGN KEY("deployment_id") REFERENCES PUBLIC."deployments"("id") ON DELETE CASCADE NOCHECK;              
+ALTER TABLE PUBLIC."deployment_statuses" ADD CONSTRAINT PUBLIC."deployment_fk" FOREIGN KEY("deployment_id") REFERENCES PUBLIC."deployments"("id") ON DELETE CASCADE NOCHECK;   
+ALTER TABLE PUBLIC."deployments" ADD CONSTRAINT PUBLIC."units_fk" FOREIGN KEY("unit_id") REFERENCES PUBLIC."units"("id") ON DELETE CASCADE NOCHECK;            
+ALTER TABLE PUBLIC."traffic_shift_reverse" ADD CONSTRAINT PUBLIC."traffic_shift_reverse_traffic_shift_fk" FOREIGN KEY("traffic_shift_id") REFERENCES PUBLIC."traffic_shifts"("id") NOCHECK;    
+ALTER TABLE PUBLIC."deployment_resources" ADD CONSTRAINT PUBLIC."deployment_resources_have_deployment" FOREIGN KEY("deployment_id") REFERENCES PUBLIC."deployments"("id") NOCHECK;             

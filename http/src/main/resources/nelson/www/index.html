@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css?">
+    <title>Nelson &mdash; Automated, Multi-datacenter container deployment</title>
+  </head>
+<body>
+
+  <nav class="navbar navbar-toggleable-md">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand">Nelson</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="https://verizon.github.io/nelson/">Docs<span class="sr-only"></span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+
+    <div class="row">&nbsp;</div>
+
+    <div class="row">
+      <div class="col">
+        &nbsp;
+      </div>
+      <div class="col-6 card">
+
+        <div class="row">
+          <div class="col-12" style="text-align: center">
+            <img class="logo" src="/img/nelson.png"/>
+            <h4 class="card-text">
+              <strong>Welcome to Nelson</strong>
+            </h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <p>Please take a moment to install the command line tool which is the primary way to interact with Nelson.</p>
+            <pre><code>curl -GqL https://nelson.oncue.verizon.net/cli | bash</code></pre>
+            <p>It is safe to rerun this script to keep nelson-cli current. Before getting started,
+               ensure that you have followed these instructions the first time you install:</p>
+            <ol>
+              <li>Obtain a Github personal access token</li>
+              <li>Add the Github token to your environment: <code>export GITHUB_TOKEN=XXXXXXXXXXXXXXXX</code>
+                  you may wish to add this to your <code>~/.bashrc</code> for on-going convenience.</li>
+              <li>Login to the instance: <code>nelson login nelson.yourcompany.com</code></li>
+              <li>Now you're ready to start using the Nelson!</li>
+            </ol>
+            <p>
+              Once logged in, you can use the built-in <code>--help</code> on every subcommand to see
+              exactly what arguments are needed. Please also take some time to read the documentation
+              and familiarize yourself with the core system concepts.
+            </p>
+            <p class="text-center">
+              <em>Thank you for using Nelson.</em>
+            </p>
+          </div>
+        </div>
+
+      </div>
+      <div class="col">
+        &nbsp;
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        &nbsp;
+      </div>
+      <div class="col-6" style="text-align: center">
+        <small class="grey-font"><script type="text/javascript" src="/js/copyright.js"></script></small>
+      </div>
+      <div class="col">
+        &nbsp;
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+##: ----------------------------------------------------------------------------
+##: Copyright (C) 2017 Verizon.  All Rights Reserved.
+##:
+##:   Licensed under the Apache License, Version 2.0 (the "License");
+##:   you may not use this file except in compliance with the License.
+##:   You may obtain a copy of the License at
+##:
+##:       http://www.apache.org/licenses/LICENSE-2.0
+##:
+##:   Unless required by applicable law or agreed to in writing, software
+##:   distributed under the License is distributed on an "AS IS" BASIS,
+##:   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+##:   See the License for the specific language governing permissions and
+##:   limitations under the License.
+##:
+##: ----------------------------------------------------------------------------
+---
+# units define logically `what` we want to deploy
+units:
+  - name: foobar
+    description: description of foobar
+    ports:
+      - default->8080/http
+      - monitoring->7390/tcp
+    dependencies:
+      - ref: inventory@1.4
+      - ref: cassandra@1.0
+    workflow: magnetar
+    expiration_policy: retain-active
+    resources:
+      - name: s3
+        description: description of s3
+    meta:
+      - "foo"
+      - "bar"
+    alerting:
+      prometheus:
+        alerts:
+          - alert: instance_down
+            expression: >-
+              IF up == 0
+              FOR 5m
+              LABELS { severity = "page" }
+              ANNOTATIONS {
+              summary = "Instance {{ $labels.instance }} down",
+              description = "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.",
+              }
+          - alert: api_high_request_latency
+            expression: >-
+              IF api_http_request_latencies_second{quantile="0.5"} > 1
+              FOR 1m
+              ANNOTATIONS {
+              summary = "High request latency on {{ $labels.instance }}",
+              description = "{{ $labels.instance }} has a median request latency above 1s (current value: {{ $value }}s)",
+              }
+        rules:
+          - rule: "Job_service:rpc_durations_microseconds_count:avg_rate5m"
+            expression: "avg(rate(rpc_durations_microseconds_count[5m])) by (job, service)"
+
+  - name: crawler
+    description: crawler description
+    dependencies:
+      - ref: db.example@1.0
+    workflow: magnetar
+    schedule: once
+    alerting:
+      prometheus:
+        alerts:
+          - alert: cassandra_unhealthy
+            expression: >-
+              IF cassandra-traffic-light == 1
+              FOR 5m
+              LABELS { severity = "page" }
+              ANNOTATIONS {
+              summary = "Cassandra is unhealthy",
+              description = "cassandra-traffic-light has been 1 for more than 5 minutes.",
+              }
+
+loadbalancers:
+  - name: howdy-lb
+    routes:
+      - name: http
+        expose: default->8444/http
+        destination: foobar->default
+      - name: http-2
+        expose: monitoring->8441/https
+        destination: foobar->monitoring
+
+# plans define `how` we want to deploy a unit, basically the runtime
+plans:
+  - name: default-foobar
+    cpu: 0.5
+    memory: 512
+    instances:
+      desired: 1
+    alert_opt_outs:
+      - api_high_request_latency
+    health_checks:
+      - name: http-status
+        port_reference: default
+        protocol: https
+        path: "v1/status"
+        interval: "10 seconds"
+        timeout: "2 seconds"
+    resources:
+      - ref: s3
+        uri: http://s3.aws.com
+    expiration_policy: retain-latest-two-major
+
+  - name: qa-crawler-1
+    schedule: once
+    cpu: 1.0
+    memory: 1024
+    retries: 2
+    instances:
+      desired: 1
+    volumes:
+      - mount: /tmp/bar
+        source: /some/host/location
+        mode: rw
+    environment:
+      - FOO=foo-1
+      - QUX=qux-1
+    expiration_policy: retain-latest
+
+  - name: qa-crawler-2
+    schedule: "*/30 * * * *"
+    cpu: 1.0
+    memory: 1024
+    retries: 3
+    instances:
+      desired: 1
+    environment:
+      - FOO=foo-2
+      - QUX=qux-2
+
+  - name: prod-crawler
+    schedule: hourly
+    cpu: 2.0
+    memory: 1024
+    instances:
+      desired: 4
+    retries: 2
+    environment:
+      - FOO=foo-prod
+      - QUX=qux-prod
+    expiration_policy: retain-latest-two-feature
+
+  - name: lb-plan
+    instances:
+      desired: 4
+
+namespaces:
+  - name: qa
+    units:
+      - ref: foobar
+        plans:
+          - default-foobar
+
+      - ref: crawler
+        plans:
+          - qa-crawler-1
+          - qa-crawler-2
+    loadbalancers:
+      - ref: howdy-lb
+        plan: lb-plan
+
+  - name: prod
+    units:
+      - ref: foobar
+        plans:
+          - default-foobar
+
+      - ref: crawler
+        plans:
+          - prod-crawler
+
+datacenters:
+  only:
+    - arlington
+    - rockridge
+  except:
+    - northryde
+
+notifications:
+  email:
+    recipients:
+       - baxter@example.com
+  slack:
+    channels:
+      - development
+      - general

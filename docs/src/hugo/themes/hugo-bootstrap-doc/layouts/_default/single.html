@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{ partial "head.html" . }}
+
+<body>
+
+  <!-- navigation -->
+  {{ partial "top_nav.html" . }}
+  <!-- e/o navigation -->
+
+  <div class="bs-docs-header" id="content">
+    <div class="container">
+      <h1>{{ .Title}}</h1>
+      <p>{{ .Description }}</p>
+    </div>
+  </div>
+
+  <div class="container bs-docs-container">
+    <div class="row">
+      <!-- content -->
+      <div class="col-md-9" role="main">
+        <article class="post-content">
+          <section class="bs-docs-section">
+            {{ .Content }}
+          </section>
+        </article>
+      </div>
+      <!-- page section navigation -->
+      {{ partial "right_nav.html" . }}
+    </div>
+  </div>
+
+  {{ partial "footer.html" . }}
+</body>
+</html>
+

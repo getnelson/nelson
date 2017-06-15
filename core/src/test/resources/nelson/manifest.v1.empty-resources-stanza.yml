@@ -1,0 +1,19 @@
+---
+units:
+  - name: howdy
+    description: >
+      provides the server component of the 'howdy'
+      example service, used for demo'ing nelson
+      deployment system
+    resources:
+
+plans:
+  - name: default
+
+namespaces:
+  - name: dev
+    units:
+      - ref: howdy
+        plans:
+          - default
+

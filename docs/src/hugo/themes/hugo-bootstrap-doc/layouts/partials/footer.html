@@ -1,0 +1,35 @@
+<footer class="bs-docs-footer" role="contentinfo">
+  <div class="container">
+    <p>
+      Built with &hearts; by the infrastructure engineering team.</p>
+    <p>
+      Documentation template by <a href="http://getbootstrap.com">Bootstrap team</a>,
+      adapted for use with <a href="https://gohugo.com">Hugo</a>
+    </p>
+
+    <ul class="bs-docs-footer-links muted">
+      <li>Currently v{{ if (isset .Site.Data.global "release_version") }}{{ .Site.Data.global.release_version }}{{ else }}{{ $.Site.Params.version }}{{ end }}</li>
+    {{ range $element := .Site.Params.footer_links }}
+      <li>&middot;</li>
+      <li><a href="{{ $element.url }}">{{ $element.title }}</a></li>
+    {{ end }}
+    </ul>
+  </div>
+</footer>
+
+<!-- async scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.1.2/trianglify.min.js"></script>
+
+{{ $col := .Site.Params.header.color }}
+{{ if eq $col "green" }}
+  <script>trianglify('#043309', '#37AD41');</script>
+{{else if eq $col "blue" }}
+  <script>trianglify('#041F33', '#3772AD');</script>
+{{else if eq $col "orange" }}
+  <script>trianglify('#782305', '#FF8205');</script>
+{{else if eq $col "purple" }}
+  <script>trianglify('#310433', '#9A20A1');</script>
+{{else if eq $col "red" }}
+  <script>trianglify('#33040D', '#AD374D');</script>
+{{ end }}
