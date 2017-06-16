@@ -37,8 +37,6 @@ dockerExposedPorts := Seq(9000)
 
 dockerBaseImage := "library/openjdk:8u131-jre-alpine"
 
-dockerRepository := Some("registry.hub.docker.com")
-
 publishLocal := (publishLocal in Docker).value
 
 publish := (publish in Docker).value

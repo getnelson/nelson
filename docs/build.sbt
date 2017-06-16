@@ -26,6 +26,8 @@ addCompilerPlugin(dependencies.si2712fix.plugin)
 
 addCompilerPlugin(dependencies.kindprojector.plugin)
 
+baseURL in Hugo := new URI(s"https://${githubOrg.value}.github.io/${githubRepoName.value}")
+
 // dynamically generate a file here that can be automatically
 // imported by hugo as "site data". Doing this here so we don't
 // need to manually update the version every time we bump it.
