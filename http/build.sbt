@@ -33,13 +33,9 @@ defaultLinuxInstallLocation in Docker := "/opt/application"
 
 dockerUpdateLatest := true
 
-dockerExposedPorts := Seq(9000)
+dockerExposedPorts := Seq(9000, 5775)
 
 dockerBaseImage := "library/openjdk:8u131-jre-alpine"
-
-publishLocal := (publishLocal in Docker).value
-
-publish := (publish in Docker).value
 
 custom.resources
 

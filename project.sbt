@@ -33,3 +33,8 @@ enablePlugins(DisablePublishingPlugin)
 addCompilerPlugin(dependencies.si2712fix.plugin)
 
 addCommandAlias("ci", ";test;coverageReport;coverageAggregate;tut;unidoc")
+
+// TIM: This is a hack to get our docker image published for the http module
+import sbtrelease._
+
+releaseProcess += ReleaseStep(releaseStepTask(publish in Docker))
