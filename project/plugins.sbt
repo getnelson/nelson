@@ -20,7 +20,7 @@ addSbtPlugin("io.get-coursier"   % "sbt-coursier"    % "1.0.0-M15-1")
 
 addSbtPlugin("io.spray"          % "sbt-revolver"    % "0.7.2")
 
-addSbtPlugin("io.verizon.build"  % "sbt-rig"         % "3.0.32")
+addSbtPlugin("io.verizon.build"  % "sbt-rig"         % "3.0.33")
 
 addSbtPlugin("org.brianmckenna"  % "sbt-wartremover" % "0.14")
 
