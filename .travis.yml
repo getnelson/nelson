@@ -37,6 +37,7 @@ install:
   - docker pull verizon/nelson-consul-template:1.0.1
   - mkdir -p $HOME/bin
   - wget https://github.com/gohugoio/hugo/releases/download/v0.22.1/hugo_0.22.1_Linux-64bit.tar.gz -o $HOME/hugo.tgz
+  - ls -lah $HOME
   - tar xvf $HOME/hugo.tgz -C $HOME/bin
   - ls -lah $HOME/bin
   - chmod +x $HOME/bin/hugo
