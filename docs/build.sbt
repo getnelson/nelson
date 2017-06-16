@@ -40,8 +40,6 @@ hugoGenerateData := {
   dest
 }
 
-ghpagesNoJekyll := false
-
 makeSite <<= makeSite.dependsOn(hugoGenerateData)
 
 import com.typesafe.sbt.SbtGit.GitKeys.{gitBranch, gitRemoteRepo}
