@@ -41,6 +41,8 @@ publishLocal := (publishLocal in Docker).value
 
 publish := (publish in Docker).value
 
+releasePublishArtifactsAction := publish.value
+
 custom.resources
 
 custom.revolver
