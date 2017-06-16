@@ -1,5 +1,6 @@
+
 +++
-layout = "single"
+layout = "index"
 title  = "Home"
 +++
 
