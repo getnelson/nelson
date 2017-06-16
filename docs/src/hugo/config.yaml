@@ -16,11 +16,11 @@ params:
     trianglify: true
   header_links:
     - title: GitHub
-      url: https://verizon.github.io/nelson
+      url: https://github.com/verizon/nelson
     - title: API Docs
       url: https://verizon.github.io/nelson/api/
   footer_links:
     - title: GitHub
-      url: https://verizon.github.io/nelson
+      url: https://github.com/verizon/nelson
     - title: Issues
       url: https://verizon.github.io/nelson/issues
