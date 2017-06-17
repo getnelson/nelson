@@ -40,7 +40,6 @@ install:
   - tar xvf $HOME/hugo.tgz -C $HOME/bin
   - chmod +x $HOME/bin/hugo
   - export PATH="$HOME/bin:$PATH"
-  - which hugo
   - |
     if [ $TRAVIS_PULL_REQUEST = 'false' ]; then
       if [ $RELEASE_ON_PUSH = 'true' ]; then
