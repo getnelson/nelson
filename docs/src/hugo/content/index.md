@@ -254,6 +254,51 @@ At first glance this appears overwhelming, as there are many states. Some of the
   </tbody>
 </table>
 
+<h3 id="user-guide-lifecycle-cleanup" class="linkable">Cleanup</h3>
+
+A key part of application lifecycle is the ability to cleanup application stacks that are no longer needed. Users can specify an `expiration_policy` for any Nelson `unit`, and whilst these policies provide a varity of semantics (detailed below), there's a common decision tree executed to figure out which policy to apply and when. Figure 2.1 details this algorithm:
+
+<div class="clearing">
+  <img src="images/cleanup.png" width="55%" />
+  <small><em>Figure 2.1: cleanup decision tree</em></small>
+</div>
+
+In practice the "Evaluate Policy" is one of the following policies - which can be selected by the user. The first - and probally most common - is `retain-active`. This is the default for any unit that exposes one or more network ports. 
+
+Nelson has an understanding of the entire systems logical dependencies, and as such is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new service (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.1` and `G 1.0` are declared unnessicary garbage, and scheduled for removal.
+
+<div class="clearing">
+  <img src="images/dependencies-upgrade.png" width="40%" />
+  <small><em>Figure 2.2: retain active</em></small>
+</div>
+
+Where `retain-active` shines is that its exceedingly automatic: all the while some other system needs your services, Nelson will keep it running and automatically manage the traffic shifting to new versions that might come along. 
+
+A somewhat similar but more aggresive strategy is `retain-latest`. Whilst seemingly similar to `retain-active`, `retain-latest` will *always* tear down everything except the latest revision of an application. Typically this tends to be useful for jobs (streaming or batch) but is exceedingly dangerous for services that evolve over time, as `retain-latest` forces all your users up to the very latest revision, when they could well not be ready for a breaking API change (e.g. 1.0 vs 2.0).
+
+<div class="clearing">
+  <img src="images/cleanup-policies-retain-latest.png" width="60%" />
+  <small><em>Figure 2.3: retain two major versions</em></small>
+</div>
+
+A more moderate policy for jobs would be `retain-latest-two-major` or `retain-latest-two-feature`. These policies allow you to keep existing versions of your code operational, whilst adding new versions.
+
+<div class="clearing">
+  <img src="images/cleanup-policies-two-feature.png" width="60%" />
+  <small><em>Figure 2.4: retain latest two feature versions</em></small>
+</div>
+
+These policies are typically used for jobs where you want to actively compare and contrast two different types of output (the one you're currently using vs the next - a typical function in analysing ML model evolution).
+
+<div class="clearing">
+  <img src="images/cleanup-policies-two-major.png" width="60%" />
+  <small><em>Figure 2.5: retain latest two major versions</em></small>
+</div>
+
+Cleanup policies in Nelson can be explored with `nelson system cleanup-policies` from the CLI. If you believe there are additional use cases not covered by the default policies, please [enter the community](#community) and let us know what you think is missing.
+
+Any time Nelson executes or actions a cleanup policy - or inaction causes a state transistion - it will be recorded in the [auditing system](#install-auditing), so you can be aware of exactly what Nelson did on your behalf.
+
 <h2 id="user-guide-manifest" data-subheading-of="user-guide">Manifest</h2>
 
 One of the core tenets of the Nelson workflow is that all changes are checked into source code - nothing should be
@@ -345,14 +390,17 @@ With your repository in good shape, you're ready to enable Nelson to deploy your
   <small><em>Figure 2.1: approve github access page</em></small>
 </div>
 
-Once authorized, you will be redirected to the Nelson home page, where you can enable your repositories for deployment. Nelson might take a moment to sync up your repositories with GitHub on your first login, so give it a moment and then once the list appears, you should see something like this:
+Once authorized, you will be redirected to the Nelson home page which provides instructions on how to get started with the Nelson CLI. You can enable a repository for deployment by using the `nelson repos enable` command:
 
-<div class="clearing">
-  <img src="images/repo-list.png" width="100%" />
-  <small><em>Figure 2.2: list of repositories</em></small>
-</div>
+```
+# list the repositories for a given user or organization
+nelson repos list -o githubuser
 
-Use the search bar to look for your repository, and just slide the button on the left hand side to the "on" position. If for some reason you cannot enable your repository, please use the command line client or sbt-plugin to validate your Nelson manifest file.
+# enable one of those repositories for deployment
+nelson repos enable -o githubuser -r githubrepo
+```
+
+If for some reason you cannot enable your repository, the CLI should inform you why that is. In order to enable deployment for a given repository, you need to ensure that you have a valid `.nelson.yml` manifest file checked in, which passes `nelson lint manifest`. Invalid manifest files cannot be read by Nelson, and therefore cannot be deployed.
 
 <h2 id="user-guide-routing" data-subheading-of="user-guide">Routing</h2>
 
