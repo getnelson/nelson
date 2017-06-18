@@ -794,17 +794,28 @@ The following are examples of **invalid** `mount` paths:
 
 In order to obtain the credentials in your container runtime, it is typically expected that users will leverage [consul-template](https://github.com/hashicorp/consul-template) to render their credentials. Consul Template has built in support for extracting credentials from Vault, so the amount of user-facing integration work is very minimal.
 
-<h1 id="contributing" class="page-header">Contributing</h1>
+<h1 id="community" class="page-header">Community</h1>
 
-Contributing to Nelson is simple. If there is something you think needs to be fixed, either open an issue on GitHub or, better yet, just send a pull request with a patch. Typically speaking we are diligent about backward compatibility, both in the API and in the YAML specifications. Nelson can support breaking changes, but in doing so we have to coordinate upgrades to the command line client.
+The best place to find the developers of Nelson is either the Gitter chat channel or the Nelson mailing list. 
+
+* [Mailing list](https://groups.google.com/group/nelson)
+* [Gitter](gitter.im/Verizon/nelson)
+
+If there are security issues you find with Nelson, please reach out to the <script type="text/javascript" src="/javascript/contact.js"></script> directly, and we will work with you on providing a fix into the project before announcing it publically. 
+
+<h2 id="community-contributing" data-subheading-of="community">Contributing</h2>
+
+Contributing to Nelson is straight forward! If there is something you think needs to be fixed, either open an issue on GitHub or - better yet - just send a pull request with a patch. Typically speaking we are diligent about backward compatibility, both in the API and in the YAML specifications. Nelson can support breaking changes, but in doing so we have to coordinate upgrades to the command line client and the existing user base.
+
+Any contributions you make to Nelson must be wholely owned by you, and we cannot accept any contributions that contain material that is not compatible with the Apache 2.0 license.
 
 <h1 id="credits" class="page-header">Credits</h1>
 
 Building Nelson was a multi-month effort by the Verizon Labs Infrastructure Engineering team. In addition to the specific engineers called out below, thanks to the other engineering staff internally who provided their useful feedback, advice and tollerance for early-adopter pain.
 
-<h2 id="staff" data-subheading-of="credits">Staff</h2>
+<h2 id="team" data-subheading-of="credits">Team</h2>
 
-The enginering staff who origionally laboured over building Neslon are listed below:
+The enginering staff who originally created Neslon are listed below (in order of duration on the project):
 
 * [Timothy Perrett](https://github.com/timperrett)
 * [Stew O'Connor](https://github.com/stew)
@@ -815,12 +826,14 @@ The enginering staff who origionally laboured over building Neslon are listed be
 * [Alice Wu](https://github.com/berkeleybear)
 * [Ryan Delucchi](https://github.com/ryanonsrc)
 
-Finally, a shout out to the following teams at Verizon who helped make this project happen:
+Finally, the engineering team would like to shout out to the following teams at Verizon who helped make this project happen:
 
-* Verizon executive management for believing in us, and affording the time for Nelson to be built
-* Verizon DevOps team for handling all the storage and database systems
-* Verizon Network Engineering for connecting us
+* Verizon executive management for believing in us, and affording the time for Nelson to be built.
+* Verizon Legal for providing us the opertunity to release Nelson into the open.
+* Verizon DevOps for handling all the storage and database systems.
+* Verizon Network engineering for always connecting us.
 
 <h2 id="entymology" data-subheading-of="credits">Entymology</h2>
 
-[Admiral Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) was a famous British naval commander who fought off foreign advances during the Napoleonic Wars - most notably at the Battle of Trafalgar, as commander of [HMS Victory](https://en.wikipedia.org/wiki/HMS_Victory), where he defeated the French navy despite being outnumbered and outgunned.
+[Admiral Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) was a famous British naval commander who fought off foreign advances during the Napoleonic Wars - most notably at the Battle of Trafalgar, as commander of [HMS Victory](https://en.wikipedia.org/wiki/HMS_Victory), where he defeated the French navy despite being outnumbered and outgunned. 
+
