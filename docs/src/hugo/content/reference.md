@@ -1537,7 +1537,7 @@ datacenters:
 
 Using the `except` keyword forms a blacklist, meaning that this deployment would deploy everywhere `except` in seattle. The common use case for this would be that `seattle` had not upgraded to a particular bit of platform infrastructure etc.
 
-<h2 id="manifest-namespaces" data-subheading-of="manifest">Load Balancers</h2>
+<h2 id="manifest-load-balancers" data-subheading-of="manifest">Load Balancers</h2>
 
 Load balancers are another top-level manifest declaration. For an overview of the LB functionality, see the [usage guide](index.html#user-guide-lbs). LBs are first declared logically, with the following block:
 
@@ -2066,6 +2066,25 @@ Nelson manages the entire deployment lifecycle including cleanup. Deployment cle
 </table>
 
 Nelson does not support manual cleanup, by design. All deployed stacks exist on borrowed time, and will (eventually) expire. If you do not explicitly choose an expiration policy (this is common), then Nelson will apply some sane defaults, as described in the preceding table.
+
+<h3 id="manifest-unit-meta" class="linkable">
+  Meta Tags
+</h3>
+
+Sometimes you might want to "tag" a unit with a given set of meta data so that later you can apply some organization-specific auditing or fiscal tracking program. In order to do this, Nelson allows you to tag - or label - your units. Here's an example:
+
+```
+units:
+- name: example
+  description: example
+  ports:
+  - default->9000/http
+  meta:
+  - foobar
+  - buzzfiz
+```
+
+Meta tags may not be longer than 14 characters in length and can only use characters that are acceptable in a DNS name.
 
 <h3 id="manifest-unit-alerting" class="linkable">
   Alerting
