@@ -20,7 +20,8 @@ docker run -i -t --rm \
   -e GITHUB_USER \
   -e GITHUB_TOKEN \
   -p 9000:9000 \
+  -p 5775:5775 \
   -v "$DIR/../etc/classpath/revolver/logback.xml":/opt/application/conf/logback.xml \
   -v "$DIR/../etc/development/docker/nelson.cfg":/opt/application/conf/nelson.cfg \
   -v "$DIR/../db":/opt/application/db \
-  registry.hub.docker.com/verizon/nelson:latest
+  verizon/nelson:latest

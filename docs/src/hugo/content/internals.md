@@ -7,7 +7,7 @@ menu   = "main"
 
 <h1 id="database" class="page-header">Database</h1>
 
-*Nelson*'s main mode of data storage is by way of a SQL H2 database. At the time of writing Nelson was deployed to a single machine and relies on `systemd` supervision. The schema in use looks like:
+*Nelson*'s main mode of data storage is by way of a H2 database. At the time of writing Nelson was designed to explicitly be not high availablility and the intention is that Nelson would be deployed to a single machine. The Nelson process itself then relies on `systemd` for supervision. The schema in use looks like:
 
 <div class="clearing">
   <img src="images/erd.png" width="100%" />
