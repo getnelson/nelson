@@ -134,7 +134,7 @@ This script will download and install the latest version and put it on your `$PA
 
 It is safe to rerun this script to keep nelson-cli current. Before getting started, ensure that you have followed these instructions the first time you install:
 
-1. [Obtain a Github personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) - ensure your token has the following scopes: `repo:*`, `admin:read:org`, `admin:repo_hook:*`.
+1. [Obtain a Github personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) - ensure your token has the following scopes: <br /> `repo:*`, `admin:read:org`, `admin:repo_hook:*`.
 2. Set the Github token into your environment: `export GITHUB_TOKEN=XXXXXXXXXXXXXXXX`
 3. `nelson login nelson.example.com`, then you're ready to start using the other commands! If you're running the Nelson service insecurely - without SSL - then you need to pass the `--disable-tls` flag to the login command.
 
@@ -254,7 +254,13 @@ At first glance this appears overwhelming, as there are many states. Some of the
   </tbody>
 </table>
 
-<h3 id="user-guide-lifecycle-cleanup" class="linkable">Cleanup</h3>
+<h3 id="user-guide-lifecycle-warming" class="linkable">Warming Grace</h3>
+
+When a system is newly deployed, it is very frequent that the system will require a certain grace period to warm up. Sometimes this is to allow the application time to heat up internal caches taking several minutes, or sometimes it simply takes a while for the application to initilize and bind to the appropriate ports. Whatever the case, Nelson provides application a grace period where they are immune from any kind of cleanup after they get deployed. By default, this grace period duration is 30 minutes and is configured via the Nelson configuration `nelson.cleanup.initial-deployment-time-to-live` Knobs property. 
+
+In addition to the initial grace period, Nelson relies on the runtime to indicate what the current status of a newly deploy application is. Units that have ports specified are expdected to be exposing a TCP service on any port they exposed, and when launching your applicarion onto the cluster, Nelson instructs Consul to setup TCP (L4) probes to those ports and report on the status as health checks. If the grace period passes and these health checks are not passing Nelson will remove the stack. If you expose ports, you **must** bind them with something. Nelson controls the cadance in which it checks stack states with Consul via the `nelson.readiness-delay`, which is intervals of 3 minutes by default.
+
+<h3 id="user-guide-lifecycle-gc" class="linkable">Garbage Collection</h3>
 
 A key part of application lifecycle is the ability to cleanup application stacks that are no longer needed. Users can specify an `expiration_policy` for any Nelson `unit`, and whilst these policies provide a varity of semantics (detailed below), there's a common decision tree executed to figure out which policy to apply and when. Figure 2.1 details this algorithm:
 
