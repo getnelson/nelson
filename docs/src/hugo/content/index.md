@@ -12,34 +12,30 @@ Nelson is a fully automated deployment orchestration tool intended to work with 
   Philosophy
 </h3>
 
-* Uniformity is highly desirable / advantageous
-* As many aspects to deployments as possible should be automated
-* Automated lifecycle management is key to providing a holistic, scalable solution
-* Batch and streaming jobs need to be prioritized within the workflow
-* Manual promotion to production is high-cost since the "last-mile" of release management can cause friction
-* Nelson supports manual deployment for those not yet comfortable with continuous deployment processes)
+* Uniformity is highly desirable / advantageous.
+* As many aspects to deployments as possible should be automated.
+* Automated lifecycle management is key to providing a holistic, scalable solution.
+* Manual promotion to production is high-cost since the "last-mile" of release management can cause friction.
+* Nelson supports manual deployment for those not yet comfortable with continuous deployment processes).
 
 <h3 id="overview-features" class="linkable">
   Features
 </h3>
 
-* Fully integrated with GitHub or GitHub Enterprise
-* Developer-driven, automated build & release workflow revisioned as code
-* Support for multiple cluster managers, including [Hashicorp Nomad](https://www.nomadproject.io/)
-* Compatible with any [Docker](https://www.docker.com) container
-* Can deploy applications to any number of datacenters
-* State of the art runtime routing via [Envoy](https://lyft.github.io/envoy/)
-* Integrated support for alert definition and propagation via [Prometheus](https://prometheus.io/)
-* Utilizes secure introduction for safe distribution of credentials from [Vault](https://www.vaultproject.io/)
+* Fully integrated with GitHub or GitHub Enterprise.
+* Developer-driven, automated build & release workflow revisioned as code.
+* Support for multiple cluster managers, including [Hashicorp Nomad](https://www.nomadproject.io/).
+* Compatible with any [Docker](https://www.docker.com) container.
+* Can deploy applications to any number of datacenters.
+* State of the art runtime routing via [Envoy](https://lyft.github.io/envoy/).
+* Integrated support for alert definition and propagation via [Prometheus](https://prometheus.io/).
+* Utilizes secure introduction for safe distribution of credentials from [Vault](https://www.vaultproject.io/).
 
 <h3 id="overview-workflow" class="linkable">
   Workflow
 </h3>
 
-Nelson splits the build->deploy->release phases into two major parts, each with distinctly different properties.
-First, the building, testing and propagating of containers. Second, the deployment,
-validation, and migration of traffic. The following diagram illustrates a high-level
-view of the first major part of the workflow.
+Nelson splits the build->deploy->release phases into two major parts, each with distinctly different properties. First, the building of the containers and publishign to a staging registry. Second, the deployment, validation, and migration of traffic. The following diagram illustrates a high-level view of the first major part of the workflow.
 
 <div class="clearing">
   <img src="images/high-level-workflow.png" />
@@ -52,7 +48,7 @@ There are a range of automated steps at every phase of the build and release pip
 
 The QuickStart guide is a high level document intended to provide migrating users with essential information to successfully leverage Nelson for deployment.
 
-As a user of Nelson, we are making a series of assumptions that impact the way the system is ultimately used (for operator-level concerns, please see [the operator guide](#operator-guide)). Nelson users should have a working knowledge of the following:
+As a user of Nelson, we are making a series of assumptions that impact the way the system is ultimately used (for operator-level concerns such as the instalation, managment and upgrading of a Nelson instalation, please see [the operator guide](#operator-guide)). Nelson users should have a working knowledge of the following:
 
 * GitHub (Pull Requests, Git branches etc)
 * Docker (practical usage of, knowledge of the general workflow)
@@ -138,7 +134,7 @@ This script will download and install the latest version and put it on your `$PA
 
 It is safe to rerun this script to keep nelson-cli current. Before getting started, ensure that you have followed these instructions the first time you install:
 
-1. [Obtain a Github personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) - ensure your token has the following scopes: `repo:*`, `admin:read:org`, `admin:repo_hook:*`.
+1. [Obtain a Github personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) - ensure your token has the following scopes: <br /> `repo:*`, `admin:read:org`, `admin:repo_hook:*`.
 2. Set the Github token into your environment: `export GITHUB_TOKEN=XXXXXXXXXXXXXXXX`
 3. `nelson login nelson.example.com`, then you're ready to start using the other commands! If you're running the Nelson service insecurely - without SSL - then you need to pass the `--disable-tls` flag to the login command.
 
@@ -258,13 +254,62 @@ At first glance this appears overwhelming, as there are many states. Some of the
   </tbody>
 </table>
 
+<h3 id="user-guide-lifecycle-warming" class="linkable">Warming Grace</h3>
+
+When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternitivly it might just take a while for the application to fully initilize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration `nelson.cleanup.initial-deployment-time-to-live` Knobs property.
+
+In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthly applciation cannot have traffic routed to it, and serves no useful purpose in the wider runtime.
+
+If you expose ports, you **must** bind them with something. Nelson controls the cadance in which it checks stack states with Consul via the `nelson.readiness-delay`, which is intervals of 3 minutes by default.
+
+<h3 id="user-guide-lifecycle-gc" class="linkable">Garbage Collection</h3>
+
+A key part of application lifecycle is the ability to cleanup application stacks that are no longer needed. Users can specify an `expiration_policy` for any Nelson `unit`, and whilst these policies provide a varity of semantics (detailed below), there's a common decision tree executed to figure out which policy to apply and when. Figure 2.1 details this algorithm:
+
+<div class="clearing">
+  <img src="images/cleanup.png" width="55%" />
+  <small><em>Figure 2.1: cleanup decision tree</em></small>
+</div>
+
+In practice the "Evaluate Policy" decision block is one of the following policies - which can be selected by the user. The first and most common policy is `retain-active`. This is the default for any unit that exposes one or more network ports.
+
+Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.1` and `G 1.0` are declared unnessicary garbage, and scheduled for removal.
+
+<div class="clearing">
+  <img src="images/dependencies-upgrade.png" width="40%" />
+  <small><em>Figure 2.2: retain active</em></small>
+</div>
+
+Where `retain-active` shines is that its exceedingly automatic: all the while another application needs your service(s), Nelson will keep it running and automatically manage the traffic shifting to any revisions that might come along.
+
+A somewhat similar but more aggresive strategy is `retain-latest`. Whilst this may appear similar to `retain-active`, `retain-latest` will *always* tear down everything except the latest revision of an application. Typically this tends to be useful for jobs (spark streaming or spark batch for example) but it is exceedingly dangerous for services that evolve over time, as `retain-latest` forces all your users up to the very latest revision, when they could well not be ready for a breaking API change (e.g. 1.0 vs 2.0).
+
+<div class="clearing">
+  <img src="images/cleanup-policies-retain-latest.png" width="60%" />
+  <small><em>Figure 2.3: retain two major versions</em></small>
+</div>
+
+A more moderate policy for jobs would be `retain-latest-two-major` or `retain-latest-two-feature`. These policies allow you to keep existing versions of your code operational, whilst adding new versions.
+
+<div class="clearing">
+  <img src="images/cleanup-policies-two-feature.png" width="60%" />
+  <small><em>Figure 2.4: retain latest two feature versions</em></small>
+</div>
+
+These policies are typically used for jobs where you want to actively compare and contrast two different types of output (the one you're currently using vs the next - a typical function in analysing ML model evolution).
+
+<div class="clearing">
+  <img src="images/cleanup-policies-two-major.png" width="60%" />
+  <small><em>Figure 2.5: retain latest two major versions</em></small>
+</div>
+
+Cleanup policies in Nelson can be explored with `nelson system cleanup-policies` from the CLI. If you believe there are additional use cases not covered by the default policies, please [enter the community](#community) and let us know what you think is missing.
+
+Any time Nelson executes or actions a cleanup policy - or inaction causes a state transistion - it will be recorded in the [auditing system](#install-auditing), so you can be aware of exactly what Nelson did on your behalf.
+
 <h2 id="user-guide-manifest" data-subheading-of="user-guide">Manifest</h2>
 
-One of the core tenets of the Nelson workflow is that all changes are checked into source code - nothing should be
-done out of band in an untrackable manner. Nelson requires users to define a manifest file and
-check it into the root of the repository. This file is called `.nelson.yml` (note the preceding `.` since it is a
-UNIX dotfile), in which the deployable units are defined, along with any additional rules for monitoring, alerting and
-scaling those units. Consider a simple example that launches a Hello World service:
+One of the core tenets of the Nelson philosophy is that all changes are checked into source code - nothing should be actioned out of band, in an entirely untrackable manner. Nelson requires users define a manifest file and check it into the root of the repository. This file is called `.nelson.yml` (note the preceding `.` since it is a UNIX dotfile). This file contains the application `unit` definitions, along with any additional configuration for monitoring, alerting and scaling those units. Consider a simple example that launches a Hello World service:
 
 ```yaml
 ---
@@ -288,35 +333,37 @@ namespaces:
          - default
 ```
 
-This is the simplest `.nelson.yml` that one could define for a unit that exposes a service on port 9000. It declares a unit called `hello-world`, and then exposes a port. This is an example of unit that is typically referred to as a service. By comparison, units that are intended to be run periodically define a `schedule`. Such a unit is typically referred to as a job. Below is a simple example of a unit that is run hourly:
+This is the simplest `.nelson.yml` that one could define for a unit that exposes a service on port 9000. It declares a unit called `hello-world`, and then exposes a port. This is an example of a unit that is typically referred to as a service. By comparison, units that are intended to be run periodically define a `schedule`. Such a unit is typically referred to as a job. Below is a simple example of a unit that is run hourly:
 
 ```yaml
 ---
 units:
-  - name: hello-world
-    description: >
-      very simple example job that prints
-      hello world and exits right away
+- name: hello-world
+  description: >
+    very simple example job that prints
+    hello world and exits right away
 
 plans:
-  - name: dev-plan
-    schedule: hourly
+- name: dev-plan
+  schedule: hourly
 
 namespaces:
-  - name: dev
-    units:
-      - ref: howdy
-        plans:
-          - dev-plan
+- name: dev
+  units:
+  - ref: howdy
+    plans:
+    - dev-plan
 ```
 
-Here the two units are similar, but the second defines a `schedule` under the plans stanza, which indicates that the unit is to be run periodically as a `job`. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:
+Here the two units are similar, but the second defines a `schedule` under the plans stanza, which indicates that the unit is to be run periodically as a `job`.
+
+The manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:
 
 * How do I declare a dependency on another unit?
 * How do I get alerted when my unit has a problem at runtime?
 * How do I expose my service to the outside world?
 
-Now that you have your `.nelson.yml` as you want it, add the file to the **root** of your source repository, and commit it to the `master` branch. Nelson will look at the repositories `master` branch when it first attempts to validate your repository is something that is Nelson-compatible.
+Now that you have your `.nelson.yml` as you want it, add the file to the **root** of your source repository, and commit it to the `master` branch. Nelson will look at the repositories' `master` branch when it first attempts to validate your repository is something that is Nelson-compatible. You can check the validity of your manifest definition at anytime without checking in by using the Nelson CLI: `nelson lint manifest`.
 
 <h2 id="user-guide-credentials" data-subheading-of="user-guide">Credentials</h2>
 
@@ -340,7 +387,7 @@ db.password = {{ $secret.Data.password }}
 
 Here, the path being used in the `vault` stanza would be provided to users from the operations team after submitting a request for credentials. Whilst this path is static, Vault will either dynamically provision credentials for your calling application, or read a set of securely stored values from the generic mount.
 
-<h2 id="user-guide-enabling-deployment" data-subheading-of="user-guide">Configure</h2>
+<h2 id="user-guide-enabling-deployment" data-subheading-of="user-guide">Enable Nelson</h2>
 
 With your repository in good shape, you're ready to enable Nelson to deploy your project whenever it sees a new release. To do this, visit the URL where Nelson is deployed, and login using your Github. Upon doing this for the first time, you will see the following prompt (or something similar, for your account):
 
@@ -349,14 +396,17 @@ With your repository in good shape, you're ready to enable Nelson to deploy your
   <small><em>Figure 2.1: approve github access page</em></small>
 </div>
 
-Once authorized, you will be redirected to the Nelson home page, where you can enable your repositories for deployment. Nelson might take a moment to sync up your repositories with GitHub on your first login, so give it a moment and then once the list appears, you should see something like this:
+Once authorized, you will be redirected to the Nelson home page which provides instructions on how to get started with the Nelson CLI. You can enable a repository for deployment by using the `nelson repos enable` command:
 
-<div class="clearing">
-  <img src="images/repo-list.png" width="100%" />
-  <small><em>Figure 2.2: list of repositories</em></small>
-</div>
+```
+# list the repositories for a given user or organization
+nelson repos list -o githubuser
 
-Use the search bar to look for your repository, and just slide the button on the left hand side to the "on" position. If for some reason you cannot enable your repository, please use the command line client or sbt-plugin to validate your Nelson manifest file.
+# enable one of those repositories for deployment
+nelson repos enable -o githubuser -r githubrepo
+```
+
+If for some reason you cannot enable your repository, the CLI should inform you why that is. In order to enable deployment for a given repository, you need to ensure that you have a valid `.nelson.yml` manifest file checked in, which passes `nelson lint manifest`. Invalid manifest files cannot be read by Nelson, and therefore cannot be deployed.
 
 <h2 id="user-guide-routing" data-subheading-of="user-guide">Routing</h2>
 
@@ -469,11 +519,11 @@ The proxy implementation itself should typically be a large container that is ru
 
 <h3 id="user-guide-lbs-alternatives" class="linkable">Alternative Implementations</h3>
 
-At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward.
+At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward but left as an exercise for the reader. Looking toward the future it probally would make sense for Nelson to support the prominant cloud providers natively, but that work is not currently in the roadmap.
 
 <h2 id="user-guide-troubleshooting" data-subheading-of="user-guide">Troubleshooting</h2>
 
-If you added your `.nelson.yml` file, and manifest validation is passing and you're chugging along making GitHub releases, then you will want to know what Nelson is doing with your repo, right? Well, the Nelson CLI has a set of useful utilities into what happened with your project deployments. First, you would want to list the datacenters available on your instance of Nelson:
+If you added your `.nelson.yml` file to your repository `master` branch, and manifest validation is passing and you're chugging along making GitHub releases, then you will want to know what Nelson is doing with your repo, right? Well, the Nelson CLI has a set of useful utilities into what happened with your project deployments. First, you would want to list the datacenters available on your instance of Nelson:
 
 ```
 nelson datacenters list
@@ -508,68 +558,169 @@ Nelson will return a summary response from the scheduler about what state the st
 
 <h1 id="operator-guide" class="page-header">Operator Guide</h1>
 
-Nelson is typically deployed on-premises and should be co-located with network line of sight
-with either github.com or your GitHub Enterprise; wherever you are storing your source code.
+Nelson is typically deployed on-premises and should be co-located with network line of sight with either `github.com` or a GitHub Enterprise instance; wherever you are storing your source code.
 Nelson itself deploys as a docker container, so can be deployed pretty much anywhere, regardless of if its on bare metal with a systemd unit, or on a cloud container service like [AWS EC2](https://aws.amazon.com/ec2/) or [GCE](https://cloud.google.com/container-engine/). It is important to note that Nelson itself is explicitly designed to **not be high availability**. Every subsystem that Nelson talks to (Consul, Vault, etc) is redundant within the target datacenter.
 
 <h2 id="install-machine" data-subheading-of="operator-guide">Installation</h2>
 
-Nelson does not have a huge set of requirements - it is a fairly lightweight process. Most of
-the tasks that Nelson is doing require CPU cycles and memory. With that being said,
-propagating the docker containers from the stage registry to the remote locations can result
-in the docker daemon using a lot of space on disk. With this in mind, the following specs are recommended:
+Nelson has reasonably small runtime requirements, as it is a lightweight process. Nelson is typically consuming CPU and memory resources for its background tasks, and uses loal disk storage as a scratch space whilst replicating containers to a remote registries in the target datacenter(s). With this in mind, the following machine specifications are recommended:
 
 * 8-16GB of RAM
 * 100GB of disk space (preferably SSDs)
 * Ubuntu 16.04
 
-It is strongly advised to not use a RedHat-based OS for running Nelson. After a great deal of testing, Debian-based OS appears to be orders of magnitude faster running Docker than their RedHat counterparts.
+It is strongly advised to **not** use a RedHat-based OS for running Nelson. After a great deal of testing, Debian-based OS has been found to be orders of magnitude faster at running Docker than RedHat counterparts. This seems to be related to the interplay of the I/O subsystems, but the author was unable to find a clear "smoking gun" for this huge delta in perforamnce. If users would like to use Red Hat, please reach out to the Nelson team for operational advice.
+
+<h3 id="install-launching" class="linkable">Configuration</h3>
+
+Nelson has a range of configuration options specified using the [Knobs](https://verizon.github.io/knobs/) format. The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see [defaults.cfg](https://github.com/verizon/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg) in the source tree.
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td><strong>Section</strong></td>
+      <td><strong>Description</strong></td>
+    </tr>
+  </thead>
+  <tr>
+    <td><code>nelson.network</code></td>
+    <td>Specifiy the networking options used by Nelson, including the network inteface the JVM binds too, port binding, and the address Nelson advertizes in its API</td>
+  </tr>
+  <tr>
+    <td><code>nelson.security</code></td>
+    <td>Control the encryption keys used by Nelson for session token encryption, token signing and expiration.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.github</code></td>
+    <td>Most instalations will abosolutely have to configure this section, as the OAuth application identifiers are different for every setup. Whilst Nelson will typically execute actions on Github with the credentials of the active session, this section also allows you to configure a "nelson user" for your Github integration that Nelson will use to interact with Github asyncronusly, for non-user invoked actions. In future this will be replaced by deriving an OAuth token on startup from the configured Nelson OAuth application.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.docker</code></td>
+    <td>Instructs Nelson how it should connect to the docker daemon it should use for replicating containers to the remote datacenter. Typically this is in the style of `unix:///path/to/socket` or `tcp://127.0.0.1:5678`.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.database</code></td>
+    <td>Configure the JDBC connection string Nelson will use. Typically this is not configured by users.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.timeout</code></td>
+    <td>Global timeout Nelson should apply for I/O operations to its dependant systems (Github, Nomad etc)</td>
+  </tr>
+    <tr>
+    <td><code>nelson.cleanup</code></td>
+    <td>Controls the grace periods Nelson gives to new applications, and the size of the bump period when extending expirations. Fields of particular user interest here are `initial-deployment-time-to-live` and `extend-deployment-time-to-live`.</td>
+  </tr>
+  <tr>
+    <td><code>nelson.pipeline</code></td>
+    <td>Whilst typically not edited by users, these settings control the amount of back-pressure in the Nelson deployment pipeline, and the level of concurrency Nelson uses when doing deployments. Altering these values from the default requires taking into account the latency and network I/O limitations of the host, as more concurrency will mean concurrent replication of containers (which is typically limited by docker defaults, unless overriden by a specific instalation).</td>
+  </tr>
+  <tr>
+    <td><code>nelson.template</code></td>
+    <td>When using the <a href="https://github.com/hashicorp/consul-template" target="_blank">consul-template</a> linting feature, this block must be configured. The defautls are usually fine for the majority of users.</td>
+  </tr>
+  <tr>
+    <td><code>nelson.workflow-logger</code></td>
+    <td>Typically not altered by users, but these settings control where and how the workflow logger stores the exeuction logs for a given deployment. These end up being small text files on disk, and the buffer size controls how frequently the queue is flushed to the file writing process.</td>
+  </tr>
+  <tr>
+    <td><code>nelson.email</code></td>
+    <td>If you wish to configure Nelson with email notifications of job status, then you must configure this section with valid SMTP details for an email relay that Nelson can access.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.slack</code></td>
+    <td>Nelson can notifiy you about deployment actions via Slack. For this integration to work a slack team admin must generate a Slack webhook URL and have Nelson configured to use this value.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.datacenters.YOURDC</code></td>
+    <td>Various subsections that configure the credentials and endpoints for your scheuler implementation, consul, vault etc.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.ui</code></td>
+    <td>Nelson ships with a bare-bones UI to support login via Github. You can however easily override the UI and supply whatever interface you want, utilizing the Nelson REST interface.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.nomad</code></td>
+    <td>Some static configuration properties for using Nomad. For example, `required-service-tags` are additional identifiers that Nelson will attach to the Consul service catalog entry, allowing you identify workloads from any other records in the service catalog (typically exceedingly useful for monitoring or migration auditing)</td>
+  </tr>
+    <tr>
+    <td><code>nelson.reconciliation-cadence</code></td>
+    <td>How frequently shall Nelson reconcile the stacks Nelson knows about, versus the stacks the scheudler knows about. This value should be cautiously set, as if it executes too low Nelson will hammer the currently scheudler clutser leader when it requests for metadata about the runtime.</td>
+  </tr>
+    <tr>
+    <td><code>nelson.readiness-delay</code></td>
+    <td>When a unit exposing ports is deployed, how frequently should Nelson check if the consul health checks have transistioned to "healthy". Nelson requires a majority of container instances to be reporting healthy in consul before transistioning the stack state from <code>Warming</code> to <code>Ready </code></td>
+  </tr>
+    <tr>
+    <td><code>nelson.discovery-delay</code></td>
+    <td>The cadance that Nelson should recompute the runtime routing graph and update the consul values for a specific stack. The more stacks you have, the longer this work will take so be sure to set the value here at an appropriate rate relevant to your deployment size. Be aware that the longer this delay is, the more "choppy" your short-duration traffic bleeds will be (this typically isnt an issue, as short-duration traffic shiting is discouraged as it can result in inbound traffic synfloods.).</td>
+  </tr>
+  <tr>
+    <td><code>nelson.lb-port-whitelist</code></td>
+    <td>Control the "outside" ports you want to allow users to expose from load balancers. Typically it is undesirable to have end-users be able to expose any random port at the edge of your network, as this can drastically increase securtiy attack surface and make security auditing challenging. Instead, set a known set of ports that are agreed accross teams that will be used for external traffic ingress.</td>
+  </tr>
+   <tr>
+    <td><code>nelson.manifest-filename</code></td>
+    <td>By default, Nelson will look for a `.nelson.yml` file in the root of a repository, but if you'd prefer to use a different file for some reason then just tell Nelson what that filename should be here.</td>
+  </tr>
+  <tr>
+    <td><code>nelson.default-namespace</code></td>
+    <td>Upon recieving a github release event, where should Nelson assume the application should get deployed too. This can either be a root namespace, or a subordinate namespace, e.g. `stage/unstable`... its arbirary, but the namespace must exist (Nelson will atempt to create the specified namespace on bootup).</td>
+  </tr>
+</table>
+
+This table should be considered an overview, and not an exhaustive list of the configuration options Nelson exposes. The author does not expect most users to be altering the default values for the majority of fields, but know that these values exist.
 
 <h3 id="install-launching" class="linkable">Launching Container</h3>
 
-Typically one will be operating Nelson using a `systemd` unit, but one can run Nelson however it makes most
-sense for your environment. The docker command you use to start the system should look something like the following:
+Typically Nelson is operated and installed as a `systemd` unit, but users are free to configure or operate the system however they please (`initV`, `upstart` etc). The docker command you use to start the system should look something like the following:
 
 ```
-docker run --name nelson \
- --log-driver journald \
- --env-file nelson.env \
- -p 8080:9000 \
- -v /var/lib/nelson/db:/opt/application/db \
- -v /var/run/docker.sock:/opt/application/docker.sock \
- -v /path/to/.docker/config.json:/root/.docker/config.json:ro
- -v /etc/nelson/datacenters.cfg:/opt/application/conf/datacenters.cfg:ro
- verizon/nelson:latest
+docker run -it --rm \
+  --name nelson \
+  -e NELSON_SECURITY_ENCRYPTION_KEY="$NELSON_SECURITY_ENCRYPTION_KEY" \
+  -e NELSON_SECURITY_SIGNATURE_KEY="$NELSON_SECURITY_SIGNATURE_KEY" \
+  -e NELSON_GITHUB_DOMAIN="github.com" \
+  -e NELSON_GITHUB_SECRET="foo" \
+  -e NELSON_GITHUB_TOKEN="bar" \
+  -e NELSON_GITHUB_CLIENT="$NELSON_GITHUB_CLIENT" \
+  -e GITHUB_USER="baz" \
+  -e GITHUB_TOKEN="qux" \
+  -p 9000:9000 \
+  -p 5775:5775 \
+  -v "/etc/nelson/logback.xml":/opt/application/conf/logback.xml \
+  -v "/etc/nelson/config.cfg":/opt/application/conf/nelson.cfg \
+  -v "/var/nelson/db":/opt/application/db \
+  -v "/var/nelson/log":/var/nelson/log \
+  verizon/nelson:latest
 ```
 
-This command - or a command like it - can be run from any system init system (system, upstart etc). The file mounts supplied (using `-v`) are used so that the Nelson database is stored on the host system, and not within the container. This allows Nelson to persist state over process reboots.
+This command - or a command like it - can be run from any system with docker, and the file mounts supplied (using `-v`) are used so that the Nelson database and related configuration files are stored on the host system, and not within the container. This allows Nelson to persist state over process reboots.
 
 <div class="alert alert-warning" role="alert">
-Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-based datastore. Nelson is intended to be running as a singleton and currently does not support clustering. Clustering is planned for later support.
+Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-based datastore. Nelson is intended to be running as a singleton and currently does not support clustering. Support for high-availability deployment modes are planned for a future release, but typically this is not needed as outages of Nelson have no critical affect on the datacenter runtime.
 </div>
-
-Nelson requires a set of environment variables to be filled out, and the contents of the aforementioned `nelson.env` is as follows:
-
-```
-NELSON_SECURITY_ENCRYPTION_KEY=xxxxxxxxxxxxxxxxxxxx
-NELSON_SECURITY_SIGNATURE_KEY=xxxxxxxxxxxxxxxxxxxx
-NELSON_GITHUB_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxx
-NELSON_GITHUB_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxx
-NELSON_GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxx
-NELSON_DOMAIN=your.nelson.domain.com
-```
 
 <h3 id="install-authorize" class="linkable">Authorize with Github</h3>
 
-Nelson is implemented as a Github OAuth application, and it requires a one-time setup when installing it into your Github organization. If you are not familiar with how to setup a Github application, please see the [GitHub documentation site](https://developer.github.com/guides/basics-of-authentication/) for details.
+Nelson is implemented as a Github OAuth application, and it requires a one-time setup when installing it into your Github organization. If you are not familiar with how to setup a Github application, please see the [GitHub documentation site](https://developer.github.com/guides/basics-of-authentication/) for details. This process should work equally well on both [github.com](https://github.com) and Github Enterprise.
 
-Nelson should be registered with the exact domain on which the nelson process runs (take care select the right protocol - http vs https), and the callback URL should be: `https://your.nelson.domain.net/auth/exchange`. From a networking standpoint, provided Github can reach the Nelson server, and the domain specified in the OAuth application and that being used by the client then the system should work.
+When registering Nelson with Github, the exact domain on which the Nelson process is reachable should be specified (take care select the right protocol - `http` vs `https`), and the callback URL should be: `https://your.nelson.domain.net/auth/exchange`. Be sure to take the `clientId` and `clientSecret` supplied by Github and add them to the Nelson configuration:
 
-Be sure to take the `clientId` and `clientSecret` supplied by Github and add them to the nelson configuration mentioned above. This process should work equally well on both [github.com](https://github.com) and Github Enterprise.
+```
+nelson{
+  github {
+    client-id = "XXXXXXX"
+    client-secret = "YYYYYYYYYY"
+    redirect-uri = "http://nelson.yourcompany.com/auth/exchange"
+  }
+}
+```
+
+From a networking standpoint, provided the Github instance can reach the Nelson server, and the domain specified in the OAuth application matches that being used by the client, then the system should work. **If you are using `github.com`, then your Nelson instance must be accessible from the Github outbound NAT address**. If you encounter problems during the setup, the Nelson logs should contain information about the error.
 
 <h3 id="install-telemetry" class="linkable">Telemetry</h3>
 
-Nelson ships with out of the box support for gathering runtime telemetry with [Prometheus](https://prometheus.io/). The metrics being exported here detail all manner of internal details. Here are some of the key metrics:
+Nelson ships with out of the box support for gathering runtime telemetry with [Prometheus](https://prometheus.io/). The metrics being exported detail all manner of internal details, and are exposed by default on port `5775` from the JVM process. Here are some of the key metrics:
 
 <table class="table table-striped">
   <thead>
@@ -608,9 +759,15 @@ In addition to these key metrics, there are a variety of general system and JVM 
 
 <h3 id="install-done" class="linkable">Installation Complete</h3>
 
-With those steps complete, you should be able to browse to the Nelson URL and login using your Github account. If you encounter problems during this setup process, please check the logs from the Nelson container using `journalctl` on the host. Alternatively, install any of the generic log forwarding products (splunk, fluentd, logstash etc) to export the logs into an indexed aggregator (this is highly recommended for production usage).
+With those steps complete, you should be able to browse to the Nelson URL and login using your Github account. If you encounter problems during this setup process, please check the logs from the Nelson container using `journalctl` on the host (assuming modern Linux OS with `systemd`). Alternatively, install any of the generic log forwarding products (splunk, fluentd, logstash etc) to export the logs into an indexed aggregator (this is highly recommended for production usage).
 
-<h2 id="install-datacenter" data-subheading-of="operator-guide">Failure Domains</h2>
+<h2 id="install-auditing" data-subheading-of="operator-guide">Audit Trail</h2>
+
+The Nelson philosphoy is a fairly permissive one: provide a tool that allows engineering staff to move fast and itterate quickly, without having to cleanup after themselves and handle some of the most difficult operational details such as mutual TLS. Whilst moving fast is great, it is frequently viewed as a security nightmare, and as such having bomb-proof auditing to know what changed in the system and why is absolutely key.
+
+With this frame, Nelson supports an auditing API that can inform you about everything that Nelson is doing and why. The supplied API is designed to be a building block that you integrate into your wider environment to detect changes in your security and deployment footprint. Please see the [auditing API documentation for further information](reference.html#api-audit)
+
+<h2 id="install-failure-domains" data-subheading-of="operator-guide">Failure Domains</h2>
 
 To run Nelson you will need access to a target datacenter. One can consider this logical datacenter - in practice - to be a [failure domain](https://en.wikipedia.org/wiki/Failure_domain). Every system should be redundant within the domain, but isolated from other datacenters. Typically Nelson requires the datacenter to be setup with a few key services before it can effectively be used. Imagine the setup with the following components:
 
@@ -691,17 +848,28 @@ The following are examples of **invalid** `mount` paths:
 
 In order to obtain the credentials in your container runtime, it is typically expected that users will leverage [consul-template](https://github.com/hashicorp/consul-template) to render their credentials. Consul Template has built in support for extracting credentials from Vault, so the amount of user-facing integration work is very minimal.
 
-<h1 id="contributing" class="page-header">Contributing</h1>
+<h1 id="community" class="page-header">Community</h1>
 
-Contributing to Nelson is simple. If there is something you think needs to be fixed, either open an issue on GitHub or, better yet, just send a pull request with a patch. Typically speaking we are diligent about backward compatibility, both in the API and in the YAML specifications. Nelson can support breaking changes, but in doing so we have to coordinate upgrades to the command line client.
+The best place to find the developers of Nelson is either the Gitter chat channel or the Nelson mailing list.
+
+* [Mailing list](https://groups.google.com/forum/#!forum/nelson-users)
+* [Gitter](https://gitter.im/Verizon/nelson)
+
+If there are security issues you find with Nelson, please reach out to the <script type="text/javascript" src="/javascript/contact.js"></script> directly, and we will work with you on providing a fix into the project before announcing it publically.
+
+<h2 id="community-contributing" data-subheading-of="community">Contributing</h2>
+
+Contributing to Nelson is straight forward! If there is something you think needs to be fixed, either open an issue on GitHub or - better yet - just send a pull request with a patch. Typically speaking we are diligent about backward compatibility, both in the API and in the YAML specifications. Nelson can support breaking changes, but in doing so we have to coordinate upgrades to the command line client and the existing user base.
+
+Any contributions you make to Nelson must be wholely owned by you, and we cannot accept any contributions that contain material that is not compatible with the Apache 2.0 license.
 
 <h1 id="credits" class="page-header">Credits</h1>
 
 Building Nelson was a multi-month effort by the Verizon Labs Infrastructure Engineering team. In addition to the specific engineers called out below, thanks to the other engineering staff internally who provided their useful feedback, advice and tollerance for early-adopter pain.
 
-<h2 id="staff" data-subheading-of="credits">Staff</h2>
+<h2 id="team" data-subheading-of="credits">Team</h2>
 
-The enginering staff who origionally laboured over building Neslon are listed below:
+The enginering staff who originally created Neslon are listed below (in order of duration on the project):
 
 * [Timothy Perrett](https://github.com/timperrett)
 * [Stew O'Connor](https://github.com/stew)
@@ -712,12 +880,14 @@ The enginering staff who origionally laboured over building Neslon are listed be
 * [Alice Wu](https://github.com/berkeleybear)
 * [Ryan Delucchi](https://github.com/ryanonsrc)
 
-Finally, a shout out to the following teams at Verizon who helped make this project happen:
+Finally, the engineering team would like to shout out to the following teams at Verizon who helped make this project happen:
 
-* Verizon executive management for believing in us, and affording the time for Nelson to be built
-* Verizon DevOps team for handling all the storage and database systems
-* Verizon Network Engineering for connecting us
+* Verizon executive management for believing in us, and affording the time for Nelson to be built.
+* Verizon Legal for providing us the opertunity to release Nelson into the open.
+* Verizon DevOps for handling all the storage and database systems.
+* Verizon Network engineering for always connecting us.
 
 <h2 id="entymology" data-subheading-of="credits">Entymology</h2>
 
 [Admiral Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) was a famous British naval commander who fought off foreign advances during the Napoleonic Wars - most notably at the Battle of Trafalgar, as commander of [HMS Victory](https://en.wikipedia.org/wiki/HMS_Victory), where he defeated the French navy despite being outnumbered and outgunned.
+

@@ -3,8 +3,8 @@
     <p>
       Built with &hearts; by the infrastructure engineering team.</p>
     <p>
-      Documentation template by <a href="http://getbootstrap.com">Bootstrap team</a>,
-      adapted for use with <a href="https://gohugo.com">Hugo</a>
+      Documentation template by <a target="_blank" href="http://getbootstrap.com">Bootstrap team</a>,
+      adapted for use with <a target="_blank" href="https://gohugo.com">Hugo.</a>
     </p>
 
     <ul class="bs-docs-footer-links muted">
@@ -13,6 +13,8 @@
       <li>&middot;</li>
       <li><a href="{{ $element.url }}">{{ $element.title }}</a></li>
     {{ end }}
+      <li>&middot;</li>
+      <li><a href="{{ .Site.Params.license_url }}">{{ .Site.Params.license }}</a></li>
     </ul>
   </div>
 </footer>

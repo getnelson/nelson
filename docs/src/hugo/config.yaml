@@ -7,9 +7,9 @@ params:
   github_host: github.com
   github_repository: Verizon/nelson
   travis_url: https://travis-ci.org/Verizon/nelson
-  license: Copyright Verizon 2015-2017
-  license_url: https://en.wikipedia.org/wiki/All_rights_reserved
-  version: 0.7.x # can be overriden by site data `global.json`
+  license: Apache 2.0
+  license_url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.9.x # can be overriden by site data `global.json`
   google_analytics: UA-57263411-7
   header:
     # blue | green | orange | purple | red

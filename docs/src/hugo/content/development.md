@@ -1,7 +1,7 @@
 +++
 layout = "single"
 title  = "Development"
-weight = 4
+weight = 3
 menu   = "main"
 +++
 
@@ -100,7 +100,7 @@ If you prefer to install this binary manually, then please fetch it [from the pr
 
 There are a few conventions at play within the Nelson codebase:
 
-* `JSON` responses from the api should use `snake_case`. This is because not all client-side scripting languages (namely, JavaScript) can handle keys that have dashes.
+* `JSON` responses from the API should use `snake_case`. This is because not all client-side scripting languages (namely, JavaScript) can handle keys that have dashes.
 
 * Any functions that are going to be called for user or event actions should reside in the `Nelson` object and have a `NelsonK[A]` return value (where `A` is the type you want to return). Functions in this object are meant to assemble results from various other sub-systems (e.g. `Github` and `Storage`) into something usable by clients of the API.
 
@@ -140,6 +140,26 @@ export NELSON_SECURITY_ENCRYPTION_KEY=WWD4N/4oxgPmGlai/MW4Hw==
 export NELSON_SECURITY_SIGNATURE_KEY=YNhJUcF8ggQ7HoWkmGqaxw==
 ```
 
+<h2 id="development-database" data-subheading-of="development">Database</h2>
+
+Nelson's primary data store is a H2 database. This deliberately doesn't scale past a single machine, and was an intentional design choice to limit complexity in the early phases of the project. With that being said, H2 is very capable, and for most users this will work extremely well. If Nelson were reaching the point where H2 on SSD drives were a bottleneck, you would be doing many thousand of deployments a second, which is exceedingly unlikely.
+
+If you start to contribute to Nelson, then its useful to understand the data schema, which is as follows:
+
+<div class="clearing">
+  <img src="images/erd.png" width="100%" />
+</div>
+
+As can be seen from the diagram, Nelson has a rather normalized structure. The authors have avoided denormalization of this schema where possible, as Nelson is not in the runtime hot path so the system does not suffer serious performance penalties from such a design; in short it will be able to scale far in excess of the query and write load Nelson actually receives.
+
+
+<h2 id="development-known-issues" data-subheading-of="development">Known Issues</h2>
+
+1. Upon receiving notification of a release event on Github, Nelson converts this to events published to its internal event stream (called `Pipeline`). `Pipeline` and messages on it, are not durable. If Nelson is processing a message (or has messages queued because of contention or existing backpressure), and an outage / upgrade or any reason that causes a halt to the JVM process, will loose said messages.
+
+1. Nelson does not have a high-availability data store. As mentioned above in the database section, this is typically not a problem, but should be a consideration. In the future, the authors may consider upgrading Nelson so it can cluster, but the expectation is that scaling-up will be more cost-effective than scaling-out for most users. Nelson will currently eat up several thousand deployments a minute, which is larger than most organizations will ever reach.
+
+
 <h1 id="cli" class="page-header">Command Line</h1>
 
 The [Nelson CLI](https://github.com/Verizon/nelson-cli) is useful for debugging the Nelson API locally. Particularly useful are the client's `--debug` and `--debug-curl` flags. You can read about them in the [client's documentation](http://verizon.github.io/nelson-cli/). One option that you need to pay attention to for local usage is the `--disable-tls` flag on the `login` subcommand. To login to a local Nelson instance, you should run the following:
@@ -174,3 +194,4 @@ hugo server -w -b 127.0.0.1 -p 4000
 ```
 
 Hugo will automatically refresh the page when the source files are changed, which can be very helpful when one is itterating on the documentation site over time.
+
