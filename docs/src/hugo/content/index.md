@@ -434,17 +434,19 @@ In addition to service to service routing, Nelson also supports routing traffic 
   <small><em>Figure 3.2: load balancer overview</em></small>
 </div>
 
-Typically load balancers are static at the edge of the network because external DNS is often mapped to them. This is clearly a mismatch between statically configured DNS and the very dynamic, scheduler-based infrastructure Nelson otherwise relies upon. To bridge this gap, Nelson makes the assumption that the LB in question is capable of dynamically updating its runtime routes, either via API directly, or via consul-template triggering updates and reloads on LB configuration (for example, reloading HAProxy config).
+Typically load balancers are static at the edge of the network because external DNS is often mapped to them. This is clearly a mismatch between statically configured DNS and the very dynamic, scheduler-based infrastructure Nelson otherwise relies upon. To bridge this gap, Nelson makes the assumption that the LB in question is capable of dynamically updating its runtime routes via consuming the Lighthouse discovery protocol.
 
-In order to achieve this dynamism on the load balancer, Nelson writes out a whole set of information about source and destination routes to the Consul in the appropriate datacenter. This is intended to then be used / consumed by whatever process needs to keep the load balancer up-to-date. The protocol is as follows:
+Nelson also publishes static configuration pertaining the load balancer before it's launched into the datacenter.
+
+The protocol is as follows and is published to Consul's KV store at nelson/v1/loadbalancers/<lb-name>:
 
 ```
 [
   {
     "port_label": "default",
-    "backend_stack": "foo--1-0-301--aovcp784",
     "frontend_port": 8444,
-    "frontend_name": "default-foo--1-0-301--aovcp784"
+    "service_name": "http-service",
+    "major_version": 1
   }
 ]
 ```
@@ -464,16 +466,16 @@ Whilst the fields should be self-explanatory, here are a list of definitions:
       <td>Port label used to describe this particular port in the manifest definition. All ports require a named label.</td>
     </tr>
     <tr>
-      <td><code>backend_stack</code></td>
-      <td>The runtime name of the service to route traffic too. This name must match a known record in the consul service catalog.</td>
-    </tr>
-    <tr>
       <td><code>frontend_port</code></td>
       <td>Port used to expose traffic on the outside of the load balancer. The available ports are restricted by the configuration parameter <code>proxy-port-whitelist</code>.</td>
     </tr>
     <tr>
-      <td><code>frontend_name</code></td>
-      <td>Name of this particular route; largely informational and a simple convenience that can be used to disambiguate routes in a proxy configuration (irrespective if its NGINX, HAProxy, Envoy etc).</td>
+      <td><code>service_name</code></td>
+      <td>The service to route traffic to.</td>
+    </tr>
+    <tr>
+      <td><code>major_version</code></td>
+      <td>The major version the load balancer is bound to. Note, a load balancer's life cycle is bound the the major version of the service it is proxying</td>
     </tr>
   </tbody>
 </table>

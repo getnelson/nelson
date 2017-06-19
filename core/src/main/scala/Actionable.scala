@@ -107,6 +107,8 @@ object Actionable {
   implicit val LoadbalancerActionable = new Actionable[Loadbalancer @@ Versioned] {
 
     import loadbalancers.LoadbalancerOp
+    import Datacenter.StackName
+    import Manifest.Route
 
     def action(lbv: Loadbalancer @@ Versioned): Kleisli[Task, (NelsonConfig,ActionConfig), Unit] =
       Kleisli { case (cfg, actionConfig) =>
@@ -116,11 +118,13 @@ object Actionable {
         val dc = actionConfig.datacenter
         val ns = actionConfig.namespace
         val hash = actionConfig.hash
+        val sn = StackName(lb.name, major.minVersion, hash)
 
-        def launch(id: ID, nsid: ID)(t: LoadbalancerOp ~> Task): Task[Unit] =
+        def launch(id: ID, sn: StackName, rs: Vector[Route], nsid: ID)(t: LoadbalancerOp ~> Task): Task[Unit] =
           for {
-           dns <- loadbalancers.run(t, loadbalancers.launch(lb, major, dc, ns.name, plan, hash))
-            _  <- runs(cfg.storage, StoreOp.insertLoadbalancerDeployment(id, nsid, hash, dns))
+            _   <- helm.run(dc.consul, loadbalancers.writeLoadbalancerConfigToConsul(sn, rs))
+            dns <- loadbalancers.run(t, loadbalancers.launch(lb, major, dc, ns.name, plan, hash))
+            _   <- runs(dc.storage, StoreOp.insertLoadbalancerDeployment(id, nsid, hash, dns))
           } yield ()
 
         def resize(lbd: Datacenter.LoadbalancerDeployment)(t: LoadbalancerOp ~> Task): Task[Unit] =
@@ -129,13 +133,13 @@ object Actionable {
         for {
           t   <- dc.loadbalancer.tfold(FailedLoadbalancerDeploy(lb.name, s"datacenter ${dc.name} is not configured to deploy loadbalancers"))(identity)
           n   <- runs(cfg.storage, StoreOp.getNamespace(dc.name, ns.name))
-          nsd <- n.tfold(FailedLoadbalancerDeploy(lb.name, s"namespace ${ns.name} was not found for ${dc.name}"))(identity)
+          nsd <- n.tfold(FailedLoadbalancerDeploy(lb.name, s"namespace ${ns.name.asString} was not found for ${dc.name}"))(identity)
           i   <- runs(cfg.storage, StoreOp.getLoadbalancer(lb.name, major)).map(_.map(_.id))
           id  <- i.tfold(FailedLoadbalancerDeploy(lb.name, s"loadbalancer ${lb.name} was not found for major version ${major}"))(identity)
           lbd <- runs(cfg.storage, StoreOp.findLoadbalancerDeployment(lb.name, major, nsd.id))
 
           // if loadbalancer exists resize, otherwise create
-          _   <- lbd.cata(l => resize(l)(t), launch(id,nsd.id)(t))
+          _   <- lbd.cata(l => resize(l)(t), launch(id, sn, lb.routes, nsd.id)(t))
         } yield ()
       }
   }
