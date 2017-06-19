@@ -27,29 +27,13 @@ import routing._
 package object loadbalancers {
   import LoadbalancerOp._
 
-  def loadbalancerConfigs(graph: RoutingGraph): Vector[(LoadbalancerDeployment, Vector[Inbound])] = {
-
-    def findPort(rs: Vector[Route], d: RoutePath, mv: MajorVersion): Option[Port] =
-      rs.find(r =>
-        r.destination.name == d.stack.unit.name &&
-        r.destination.portReference == d.portName &&
-        mv == d.stack.unit.version.toMajorVersion
-      ).map(_.port)
-
-    graph.nodes.flatMap(_.loadbalancer).map { lb =>
-      val routes: Vector[Inbound] = graph.outs(RoutingNode(lb)).flatMap { case (d, n) =>
-        findPort(lb.loadbalancer.routes, d, lb.loadbalancer.version).map(p => Inbound(d.stack.stackName, d.portName, p.port))
-      }
-      (lb, routes)
-    }
-  }
-
   def loadbalancerKey(name: String): String =
     s"nelson/loadbalancers/v1/${name}"
 
-  def writeLoadbalancerConfigToConsul(lb: LoadbalancerDeployment)(routes: Vector[Inbound]): ConsulOp.ConsulOpF[Unit] = {
+  def writeLoadbalancerConfigToConsul(sn: StackName, routes: Vector[Route]): ConsulOp.ConsulOpF[Unit] = {
     import Json._
-    ConsulOp.setJson(loadbalancerKey(lb.stackName.toString), routes)
+    val mv = sn.version.toMajorVersion
+    ConsulOp.setJson(loadbalancerKey(sn.toString), routes.map((mv, _)))
   }
 
   def deleteLoadbalancerConfigFromConsul(lb: LoadbalancerDeployment): ConsulOp.ConsulOpF[Unit] =
@@ -70,12 +54,12 @@ package object loadbalancers {
   object Json {
     import argonaut._, Argonaut._
 
-    implicit lazy val RouteDestination: EncodeJson[Inbound] =
-      EncodeJson { a: Inbound =>
-        ("frontend_name" := s"${a.label}-${a.stackName.toString}") ->:
-        ("frontend_port" := a.port) ->:
-        ("backend_stack" := a.stackName.toString) ->:
-        ("port_label"    := a.label) ->:
+    implicit lazy val RouteEncode: EncodeJson[(MajorVersion, Route)] =
+      EncodeJson { case (mv, r) =>
+        ("frontend_port" := r.port.port) ->:
+        ("port_label"    := r.destination.portReference) ->:
+        ("service_name"  := r.destination.name) ->:
+        ("major_version" := mv.major) ->:
         jEmptyObject
       }
   }
