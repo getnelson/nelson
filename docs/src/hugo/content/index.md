@@ -256,9 +256,9 @@ At first glance this appears overwhelming, as there are many states. Some of the
 
 <h3 id="user-guide-lifecycle-warming" class="linkable">Warming Grace</h3>
 
-When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternitivly it might just take a while for the application to fully initilize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration `nelson.cleanup.initial-deployment-time-to-live` Knobs property. 
+When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternitivly it might just take a while for the application to fully initilize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration `nelson.cleanup.initial-deployment-time-to-live` Knobs property.
 
-In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthly applciation cannot have traffic routed to it, and serves no useful purpose in the wider runtime. 
+In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthly applciation cannot have traffic routed to it, and serves no useful purpose in the wider runtime.
 
 If you expose ports, you **must** bind them with something. Nelson controls the cadance in which it checks stack states with Consul via the `nelson.readiness-delay`, which is intervals of 3 minutes by default.
 
@@ -271,7 +271,7 @@ A key part of application lifecycle is the ability to cleanup application stacks
   <small><em>Figure 2.1: cleanup decision tree</em></small>
 </div>
 
-In practice the "Evaluate Policy" decision block is one of the following policies - which can be selected by the user. The first and most common policy is `retain-active`. This is the default for any unit that exposes one or more network ports. 
+In practice the "Evaluate Policy" decision block is one of the following policies - which can be selected by the user. The first and most common policy is `retain-active`. This is the default for any unit that exposes one or more network ports.
 
 Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.1` and `G 1.0` are declared unnessicary garbage, and scheduled for removal.
 
@@ -280,7 +280,7 @@ Nelson has an understanding of the entire logical topology for the whole system.
   <small><em>Figure 2.2: retain active</em></small>
 </div>
 
-Where `retain-active` shines is that its exceedingly automatic: all the while another application needs your service(s), Nelson will keep it running and automatically manage the traffic shifting to any revisions that might come along. 
+Where `retain-active` shines is that its exceedingly automatic: all the while another application needs your service(s), Nelson will keep it running and automatically manage the traffic shifting to any revisions that might come along.
 
 A somewhat similar but more aggresive strategy is `retain-latest`. Whilst this may appear similar to `retain-active`, `retain-latest` will *always* tear down everything except the latest revision of an application. Typically this tends to be useful for jobs (spark streaming or spark batch for example) but it is exceedingly dangerous for services that evolve over time, as `retain-latest` forces all your users up to the very latest revision, when they could well not be ready for a breaking API change (e.g. 1.0 vs 2.0).
 
@@ -355,7 +355,7 @@ namespaces:
     - dev-plan
 ```
 
-Here the two units are similar, but the second defines a `schedule` under the plans stanza, which indicates that the unit is to be run periodically as a `job`. 
+Here the two units are similar, but the second defines a `schedule` under the plans stanza, which indicates that the unit is to be run periodically as a `job`.
 
 The manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:
 
@@ -573,7 +573,7 @@ It is strongly advised to **not** use a RedHat-based OS for running Nelson. Afte
 
 <h3 id="install-launching" class="linkable">Configuration</h3>
 
-Nelson has a range of configuration options specified using the [Knobs](https://verizon.github.io/knobs/) format. The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see [defaults.cfg](https://github.com/verizon/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg) in the source tree. 
+Nelson has a range of configuration options specified using the [Knobs](https://verizon.github.io/knobs/) format. The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see [defaults.cfg](https://github.com/verizon/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg) in the source tree.
 
 <table class="table table-striped">
   <thead>
@@ -637,7 +637,7 @@ Nelson has a range of configuration options specified using the [Knobs](https://
     <tr>
     <td><code>nelson.ui</code></td>
     <td>Nelson ships with a bare-bones UI to support login via Github. You can however easily override the UI and supply whatever interface you want, utilizing the Nelson REST interface.</td>
-  </tr> 
+  </tr>
     <tr>
     <td><code>nelson.nomad</code></td>
     <td>Some static configuration properties for using Nomad. For example, `required-service-tags` are additional identifiers that Nelson will attach to the Consul service catalog entry, allowing you identify workloads from any other records in the service catalog (typically exceedingly useful for monitoring or migration auditing)</td>
@@ -765,7 +765,7 @@ With those steps complete, you should be able to browse to the Nelson URL and lo
 
 The Nelson philosphoy is a fairly permissive one: provide a tool that allows engineering staff to move fast and itterate quickly, without having to cleanup after themselves and handle some of the most difficult operational details such as mutual TLS. Whilst moving fast is great, it is frequently viewed as a security nightmare, and as such having bomb-proof auditing to know what changed in the system and why is absolutely key.
 
-With this frame, Nelson supports an auditing API that can inform you about everything that Nelson is doing and why. The supplied API is designed to be a building block that you integrate into your wider environment to detect changes in your security and deployment footprint. Please see the [auditing API documentation for further information](reference.html#api-audit) 
+With this frame, Nelson supports an auditing API that can inform you about everything that Nelson is doing and why. The supplied API is designed to be a building block that you integrate into your wider environment to detect changes in your security and deployment footprint. Please see the [auditing API documentation for further information](reference.html#api-audit)
 
 <h2 id="install-failure-domains" data-subheading-of="operator-guide">Failure Domains</h2>
 
@@ -850,12 +850,12 @@ In order to obtain the credentials in your container runtime, it is typically ex
 
 <h1 id="community" class="page-header">Community</h1>
 
-The best place to find the developers of Nelson is either the Gitter chat channel or the Nelson mailing list. 
+The best place to find the developers of Nelson is either the Gitter chat channel or the Nelson mailing list.
 
-* [Mailing list](https://groups.google.com/group/nelson)
+* [Mailing list](https://groups.google.com/forum/#!forum/nelson-users)
 * [Gitter](https://gitter.im/Verizon/nelson)
 
-If there are security issues you find with Nelson, please reach out to the <script type="text/javascript" src="/javascript/contact.js"></script> directly, and we will work with you on providing a fix into the project before announcing it publically. 
+If there are security issues you find with Nelson, please reach out to the <script type="text/javascript" src="/javascript/contact.js"></script> directly, and we will work with you on providing a fix into the project before announcing it publically.
 
 <h2 id="community-contributing" data-subheading-of="community">Contributing</h2>
 
@@ -889,5 +889,5 @@ Finally, the engineering team would like to shout out to the following teams at 
 
 <h2 id="entymology" data-subheading-of="credits">Entymology</h2>
 
-[Admiral Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) was a famous British naval commander who fought off foreign advances during the Napoleonic Wars - most notably at the Battle of Trafalgar, as commander of [HMS Victory](https://en.wikipedia.org/wiki/HMS_Victory), where he defeated the French navy despite being outnumbered and outgunned. 
+[Admiral Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) was a famous British naval commander who fought off foreign advances during the Napoleonic Wars - most notably at the Battle of Trafalgar, as commander of [HMS Victory](https://en.wikipedia.org/wiki/HMS_Victory), where he defeated the French navy despite being outnumbered and outgunned.
 
