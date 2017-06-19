@@ -887,7 +887,7 @@ Finally, the engineering team would like to shout out to the following teams at 
 * Verizon DevOps for handling all the storage and database systems.
 * Verizon Network engineering for always connecting us.
 
-<h2 id="entymology" data-subheading-of="credits">Entymology</h2>
+<h2 id="etymology" data-subheading-of="credits">Etymology</h2>
 
 [Admiral Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) was a famous British naval commander who fought off foreign advances during the Napoleonic Wars - most notably at the Battle of Trafalgar, as commander of [HMS Victory](https://en.wikipedia.org/wiki/HMS_Victory), where he defeated the French navy despite being outnumbered and outgunned.
 
