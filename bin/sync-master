@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Merges master so that the result is identical to master, without destroying
+# the history of the current branch.
+
+set -e
+
+git fetch
+git merge --no-ff -s ours master@{upstream} --no-edit
+git reset --hard HEAD^2; git reset --soft HEAD@{1}
+git commit --amend --no-edit
