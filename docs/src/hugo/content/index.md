@@ -35,7 +35,7 @@ Nelson is a fully automated deployment orchestration tool intended to work with 
   Workflow
 </h3>
 
-Nelson splits the build->deploy->release phases into two major parts, each with distinctly different properties. First, the building of the containers and publishign to a staging registry. Second, the deployment, validation, and migration of traffic. The following diagram illustrates a high-level view of the first major part of the workflow.
+Nelson splits the build->deploy->release phases into two major parts, each with distinctly different properties. First, the building of the containers and publishing to a staging registry. Second, the deployment, validation, and migration of traffic. The following diagram illustrates a high-level view of the first major part of the workflow.
 
 <div class="clearing">
   <img src="images/high-level-workflow.png" />
