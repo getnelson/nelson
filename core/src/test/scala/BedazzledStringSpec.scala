@@ -16,8 +16,12 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-class BedazzledStringSpec extends NelsonSuite {
-  "toSnakeCase" should "split and lowercase camel-cased words" in {
+import org.scalatest.prop.Checkers
+
+class BedazzledStringSpec extends NelsonSuite with Checkers {
+  behavior of "toSnakeCase"
+
+  it should "split and lowercase camel-cased words" in {
     "camelCased".toSnakeCase should equal ("camel_cased")
   }
 
@@ -27,5 +31,15 @@ class BedazzledStringSpec extends NelsonSuite {
 
   it should "collapse spaces" in {
     "this__ is \t st00pid but it works".toSnakeCase should equal ("this_is_st00pid_but_it_works")
+  }
+
+  behavior of "withTrailingSlash"
+
+  it should "always start with the original" in check { s: String =>
+    s.withTrailingSlash.startsWith(s)
+  }
+
+  it should "always end in a slash" in check { s: String =>
+    s.withTrailingSlash.endsWith("/")
   }
 }

@@ -75,7 +75,7 @@ package object nelson {
         s"no major version for $lb when attempting to extract version").minVersion
   }
 
-  implicit class BedazledOpt[A](in: Option[A]){
+  implicit class BedazzledOpt[A](in: Option[A]){
 
     private def fail[B](err: NelsonError): Task[B] =
       Task.fail(err)
@@ -87,7 +87,7 @@ package object nelson {
       in.fold(fail[B](e))(a => Task.delay(f(a)))
   }
 
-  implicit class BedazledTask[A](in: Task[A]){
+  implicit class BedazzledTask[A](in: Task[A]){
     def retryExponentially(seed: Duration = 15.seconds, limit: Int = 5): Task[A] = {
       val periods = List.fill(limit)(seed).zipWithIndex.map {
         case (d,i) => d * i
@@ -105,6 +105,10 @@ package object nelson {
         .replaceAll("""(\p{Upper}+)(\p{Upper}\p{Lower})""", "$1_$2")
         .replaceAll("""[\s_]+""", "_")
         .toLowerCase(Locale.ROOT)
+
+    def withTrailingSlash: String =
+      if (s.trim.endsWith("/")) s
+      else s"${s}/"
   }
 
   import java.net.URI
@@ -127,12 +131,6 @@ package object nelson {
                else s":${network.externalPort}"
 
     new URI(s"${pro}://${network.externalHost}${por}${path}")
-  }
-
-  implicit class BedazledString(in: String){
-    def withTrailingSlash: String =
-      if(in.trim.endsWith("/")) in
-      else s"${in}/"
   }
 
   private[this] val rng = new java.security.SecureRandom
