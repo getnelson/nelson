@@ -71,7 +71,7 @@
         <a href="//github.com/Verizon/nelson" class="btn btn-outline-inverse btn-lg">Source Code</a>
       </p>
       <p class="version">
-        Currently v0.9.34<br />
+        Currently v0.9.35<br />
       </p>
     </div>
     <a href="https://travis-ci.org/Verizon/nelson">
@@ -121,7 +121,7 @@
   Workflow
 </h3>
 
-<p>Nelson splits the build-&gt;deploy-&gt;release phases into two major parts, each with distinctly different properties. First, the building of the containers and publishign to a staging registry. Second, the deployment, validation, and migration of traffic. The following diagram illustrates a high-level view of the first major part of the workflow.</p>
+<p>Nelson splits the build-&gt;deploy-&gt;release phases into two major parts, each with distinctly different properties. First, the building of the containers and publishing to a staging registry. Second, the deployment, validation, and migration of traffic. The following diagram illustrates a high-level view of the first major part of the workflow.</p>
 
 <div class="clearing">
   <img src="images/high-level-workflow.png" />
@@ -531,16 +531,18 @@ nelson repos enable -o githubuser -r githubrepo
   <small><em>Figure 3.2: load balancer overview</em></small>
 </div>
 
-<p>Typically load balancers are static at the edge of the network because external DNS is often mapped to them. This is clearly a mismatch between statically configured DNS and the very dynamic, scheduler-based infrastructure Nelson otherwise relies upon. To bridge this gap, Nelson makes the assumption that the LB in question is capable of dynamically updating its runtime routes, either via API directly, or via consul-template triggering updates and reloads on LB configuration (for example, reloading HAProxy config).</p>
+<p>Typically load balancers are static at the edge of the network because external DNS is often mapped to them. This is clearly a mismatch between statically configured DNS and the very dynamic, scheduler-based infrastructure Nelson otherwise relies upon. To bridge this gap, Nelson makes the assumption that the LB in question is capable of dynamically updating its runtime routes via consuming the Lighthouse discovery protocol.</p>
 
-<p>In order to achieve this dynamism on the load balancer, Nelson writes out a whole set of information about source and destination routes to the Consul in the appropriate datacenter. This is intended to then be used / consumed by whatever process needs to keep the load balancer up-to-date. The protocol is as follows:</p>
+<p>Nelson also publishes static configuration pertaining the load balancer before it&rsquo;s launched into the datacenter.</p>
+
+<p>The protocol is as follows and is published to Consul&rsquo;s KV store at nelson/v1/loadbalancers/<lb-name>:</p>
 
 <pre><code>[
   {
     &quot;port_label&quot;: &quot;default&quot;,
-    &quot;backend_stack&quot;: &quot;foo--1-0-301--aovcp784&quot;,
     &quot;frontend_port&quot;: 8444,
-    &quot;frontend_name&quot;: &quot;default-foo--1-0-301--aovcp784&quot;
+    &quot;service_name&quot;: &quot;http-service&quot;,
+    &quot;major_version&quot;: 1
   }
 ]
 </code></pre>
@@ -560,16 +562,16 @@ nelson repos enable -o githubuser -r githubrepo
       <td>Port label used to describe this particular port in the manifest definition. All ports require a named label.</td>
     </tr>
     <tr>
-      <td><code>backend_stack</code></td>
-      <td>The runtime name of the service to route traffic too. This name must match a known record in the consul service catalog.</td>
-    </tr>
-    <tr>
       <td><code>frontend_port</code></td>
       <td>Port used to expose traffic on the outside of the load balancer. The available ports are restricted by the configuration parameter <code>proxy-port-whitelist</code>.</td>
     </tr>
     <tr>
-      <td><code>frontend_name</code></td>
-      <td>Name of this particular route; largely informational and a simple convenience that can be used to disambiguate routes in a proxy configuration (irrespective if its NGINX, HAProxy, Envoy etc).</td>
+      <td><code>service_name</code></td>
+      <td>The service to route traffic to.</td>
+    </tr>
+    <tr>
+      <td><code>major_version</code></td>
+      <td>The major version the load balancer is bound to. Note, a load balancer's life cycle is bound the the major version of the service it is proxying</td>
     </tr>
   </tbody>
 </table>
@@ -1023,7 +1025,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.9.34</li>
+      <li>Currently v0.9.35</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/verizon/nelson">GitHub</a></li>

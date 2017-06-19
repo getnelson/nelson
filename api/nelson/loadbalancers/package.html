@@ -122,25 +122,6 @@
       </a>
     </span>
       
-    </li><li name="nelson.loadbalancers.Inbound" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="InboundextendsProductwithSerializable"></a>
-      <a id="Inbound:Inbound"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Inbound.html"><span class="name">Inbound</span></a><span class="params">(<span name="stackName">stackName: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="label">label: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="port">port: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.loadbalancers.package@InboundextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Represents an incomming loadbalancer.</p><div class="fullcomment"><div class="comment cmt"><p>Represents an incomming loadbalancer. The port exposes the backend service (i.e. stackName)
-to the outside world.
-</p></div></div>
     </li><li name="nelson.loadbalancers.LoadbalancerOp" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="LoadbalancerOp[A]extendsProductwithSerializable"></a>
       <a id="LoadbalancerOp[A]:LoadbalancerOp[A]"></a>
@@ -250,23 +231,6 @@ to the outside world.
       </a>
     </span>
       
-    </li><li name="nelson.loadbalancers#loadbalancerConfigs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="loadbalancerConfigs(graph:nelson.routing.RoutingGraph):Vector[(nelson.Datacenter.LoadbalancerDeployment,Vector[nelson.loadbalancers.Inbound])]"></a>
-      <a id="loadbalancerConfigs(RoutingGraph):Vector[(LoadbalancerDeployment,Vector[Inbound])]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">loadbalancerConfigs</span><span class="params">(<span name="graph">graph: <a href="../routing/package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a></span>)</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[(<a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>, <span class="extype" name="scala.Vector">Vector</span>[<a href="Inbound.html" class="extype" name="nelson.loadbalancers.Inbound">Inbound</a>])]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.loadbalancers.package@loadbalancerConfigs(graph:nelson.routing.RoutingGraph):Vector[(nelson.Datacenter.LoadbalancerDeployment,Vector[nelson.loadbalancers.Inbound])]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.loadbalancers#loadbalancerKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="loadbalancerKey(name:String):String"></a>
       <a id="loadbalancerKey(String):String"></a>
@@ -319,18 +283,18 @@ to the outside world.
     </span>
       
     </li><li name="nelson.loadbalancers#writeLoadbalancerConfigToConsul" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="writeLoadbalancerConfigToConsul(lb:nelson.Datacenter.LoadbalancerDeployment)(routes:Vector[nelson.loadbalancers.Inbound]):helm.ConsulOp.ConsulOpF[Unit]"></a>
-      <a id="writeLoadbalancerConfigToConsul(LoadbalancerDeployment)(Vector[Inbound]):ConsulOpF[Unit]"></a>
+      <a id="writeLoadbalancerConfigToConsul(sn:nelson.Datacenter.StackName,routes:Vector[nelson.Manifest.Route]):helm.ConsulOp.ConsulOpF[Unit]"></a>
+      <a id="writeLoadbalancerConfigToConsul(StackName,Vector[Route]):ConsulOpF[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeLoadbalancerConfigToConsul</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>)</span><span class="params">(<span name="routes">routes: <span class="extype" name="scala.Vector">Vector</span>[<a href="Inbound.html" class="extype" name="nelson.loadbalancers.Inbound">Inbound</a>]</span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">writeLoadbalancerConfigToConsul</span><span class="params">(<span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="routes">routes: <span class="extype" name="scala.Vector">Vector</span>[<a href="../Manifest$$Route.html" class="extype" name="nelson.Manifest.Route">Route</a>]</span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.loadbalancers.package@writeLoadbalancerConfigToConsul(lb:nelson.Datacenter.LoadbalancerDeployment)(routes:Vector[nelson.loadbalancers.Inbound]):helm.ConsulOp.ConsulOpF[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.loadbalancers.package@writeLoadbalancerConfigToConsul(sn:nelson.Datacenter.StackName,routes:Vector[nelson.Manifest.Route]):helm.ConsulOp.ConsulOpF[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
