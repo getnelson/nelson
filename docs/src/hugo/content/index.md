@@ -256,9 +256,11 @@ At first glance this appears overwhelming, as there are many states. Some of the
 
 <h3 id="user-guide-lifecycle-warming" class="linkable">Warming Grace</h3>
 
-When a system is newly deployed, it is very frequent that the system will require a certain grace period to warm up. Sometimes this is to allow the application time to heat up internal caches taking several minutes, or sometimes it simply takes a while for the application to initilize and bind to the appropriate ports. Whatever the case, Nelson provides application a grace period where they are immune from any kind of cleanup after they get deployed. By default, this grace period duration is 30 minutes and is configured via the Nelson configuration `nelson.cleanup.initial-deployment-time-to-live` Knobs property. 
+When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternitivly it might just take a while for the application to fully initilize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration `nelson.cleanup.initial-deployment-time-to-live` Knobs property. 
 
-In addition to the initial grace period, Nelson relies on the runtime to indicate what the current status of a newly deploy application is. Units that have ports specified are expdected to be exposing a TCP service on any port they exposed, and when launching your applicarion onto the cluster, Nelson instructs Consul to setup TCP (L4) probes to those ports and report on the status as health checks. If the grace period passes and these health checks are not passing Nelson will remove the stack. If you expose ports, you **must** bind them with something. Nelson controls the cadance in which it checks stack states with Consul via the `nelson.readiness-delay`, which is intervals of 3 minutes by default.
+In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthly applciation cannot have traffic routed to it, and serves no useful purpose in the wider runtime. 
+
+If you expose ports, you **must** bind them with something. Nelson controls the cadance in which it checks stack states with Consul via the `nelson.readiness-delay`, which is intervals of 3 minutes by default.
 
 <h3 id="user-guide-lifecycle-gc" class="linkable">Garbage Collection</h3>
 
@@ -269,18 +271,18 @@ A key part of application lifecycle is the ability to cleanup application stacks
   <small><em>Figure 2.1: cleanup decision tree</em></small>
 </div>
 
-In practice the "Evaluate Policy" is one of the following policies - which can be selected by the user. The first - and probally most common - is `retain-active`. This is the default for any unit that exposes one or more network ports. 
+In practice the "Evaluate Policy" decision block is one of the following policies - which can be selected by the user. The first and most common policy is `retain-active`. This is the default for any unit that exposes one or more network ports. 
 
-Nelson has an understanding of the entire systems logical dependencies, and as such is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new service (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.1` and `G 1.0` are declared unnessicary garbage, and scheduled for removal.
+Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.1` and `G 1.0` are declared unnessicary garbage, and scheduled for removal.
 
 <div class="clearing">
   <img src="images/dependencies-upgrade.png" width="40%" />
   <small><em>Figure 2.2: retain active</em></small>
 </div>
 
-Where `retain-active` shines is that its exceedingly automatic: all the while some other system needs your services, Nelson will keep it running and automatically manage the traffic shifting to new versions that might come along. 
+Where `retain-active` shines is that its exceedingly automatic: all the while another application needs your service(s), Nelson will keep it running and automatically manage the traffic shifting to any revisions that might come along. 
 
-A somewhat similar but more aggresive strategy is `retain-latest`. Whilst seemingly similar to `retain-active`, `retain-latest` will *always* tear down everything except the latest revision of an application. Typically this tends to be useful for jobs (streaming or batch) but is exceedingly dangerous for services that evolve over time, as `retain-latest` forces all your users up to the very latest revision, when they could well not be ready for a breaking API change (e.g. 1.0 vs 2.0).
+A somewhat similar but more aggresive strategy is `retain-latest`. Whilst this may appear similar to `retain-active`, `retain-latest` will *always* tear down everything except the latest revision of an application. Typically this tends to be useful for jobs (spark streaming or spark batch for example) but it is exceedingly dangerous for services that evolve over time, as `retain-latest` forces all your users up to the very latest revision, when they could well not be ready for a breaking API change (e.g. 1.0 vs 2.0).
 
 <div class="clearing">
   <img src="images/cleanup-policies-retain-latest.png" width="60%" />
@@ -307,11 +309,7 @@ Any time Nelson executes or actions a cleanup policy - or inaction causes a stat
 
 <h2 id="user-guide-manifest" data-subheading-of="user-guide">Manifest</h2>
 
-One of the core tenets of the Nelson workflow is that all changes are checked into source code - nothing should be
-done out of band in an untrackable manner. Nelson requires users to define a manifest file and
-check it into the root of the repository. This file is called `.nelson.yml` (note the preceding `.` since it is a
-UNIX dotfile), in which the deployable units are defined, along with any additional rules for monitoring, alerting and
-scaling those units. Consider a simple example that launches a Hello World service:
+One of the core tenets of the Nelson philosophy is that all changes are checked into source code - nothing should be actioned out of band, in an entirely untrackable manner. Nelson requires users define a manifest file and check it into the root of the repository. This file is called `.nelson.yml` (note the preceding `.` since it is a UNIX dotfile). This file contains the application `unit` definitions, along with any additional configuration for monitoring, alerting and scaling those units. Consider a simple example that launches a Hello World service:
 
 ```yaml
 ---
@@ -335,35 +333,37 @@ namespaces:
          - default
 ```
 
-This is the simplest `.nelson.yml` that one could define for a unit that exposes a service on port 9000. It declares a unit called `hello-world`, and then exposes a port. This is an example of unit that is typically referred to as a service. By comparison, units that are intended to be run periodically define a `schedule`. Such a unit is typically referred to as a job. Below is a simple example of a unit that is run hourly:
+This is the simplest `.nelson.yml` that one could define for a unit that exposes a service on port 9000. It declares a unit called `hello-world`, and then exposes a port. This is an example of a unit that is typically referred to as a service. By comparison, units that are intended to be run periodically define a `schedule`. Such a unit is typically referred to as a job. Below is a simple example of a unit that is run hourly:
 
 ```yaml
 ---
 units:
-  - name: hello-world
-    description: >
-      very simple example job that prints
-      hello world and exits right away
+- name: hello-world
+  description: >
+    very simple example job that prints
+    hello world and exits right away
 
 plans:
-  - name: dev-plan
-    schedule: hourly
+- name: dev-plan
+  schedule: hourly
 
 namespaces:
-  - name: dev
-    units:
-      - ref: howdy
-        plans:
-          - dev-plan
+- name: dev
+  units:
+  - ref: howdy
+    plans:
+    - dev-plan
 ```
 
-Here the two units are similar, but the second defines a `schedule` under the plans stanza, which indicates that the unit is to be run periodically as a `job`. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:
+Here the two units are similar, but the second defines a `schedule` under the plans stanza, which indicates that the unit is to be run periodically as a `job`. 
+
+The manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:
 
 * How do I declare a dependency on another unit?
 * How do I get alerted when my unit has a problem at runtime?
 * How do I expose my service to the outside world?
 
-Now that you have your `.nelson.yml` as you want it, add the file to the **root** of your source repository, and commit it to the `master` branch. Nelson will look at the repositories `master` branch when it first attempts to validate your repository is something that is Nelson-compatible.
+Now that you have your `.nelson.yml` as you want it, add the file to the **root** of your source repository, and commit it to the `master` branch. Nelson will look at the repositories' `master` branch when it first attempts to validate your repository is something that is Nelson-compatible. You can check the validity of your manifest definition at anytime without checking in by using the Nelson CLI: `nelson lint manifest`.
 
 <h2 id="user-guide-credentials" data-subheading-of="user-guide">Credentials</h2>
 
@@ -387,7 +387,7 @@ db.password = {{ $secret.Data.password }}
 
 Here, the path being used in the `vault` stanza would be provided to users from the operations team after submitting a request for credentials. Whilst this path is static, Vault will either dynamically provision credentials for your calling application, or read a set of securely stored values from the generic mount.
 
-<h2 id="user-guide-enabling-deployment" data-subheading-of="user-guide">Configure</h2>
+<h2 id="user-guide-enabling-deployment" data-subheading-of="user-guide">Enable Nelson</h2>
 
 With your repository in good shape, you're ready to enable Nelson to deploy your project whenever it sees a new release. To do this, visit the URL where Nelson is deployed, and login using your Github. Upon doing this for the first time, you will see the following prompt (or something similar, for your account):
 
@@ -519,11 +519,11 @@ The proxy implementation itself should typically be a large container that is ru
 
 <h3 id="user-guide-lbs-alternatives" class="linkable">Alternative Implementations</h3>
 
-At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward.
+At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward but left as an exercise for the reader. Looking toward the future it probally would make sense for Nelson to support the prominant cloud providers natively, but that work is not currently in the roadmap.
 
 <h2 id="user-guide-troubleshooting" data-subheading-of="user-guide">Troubleshooting</h2>
 
-If you added your `.nelson.yml` file, and manifest validation is passing and you're chugging along making GitHub releases, then you will want to know what Nelson is doing with your repo, right? Well, the Nelson CLI has a set of useful utilities into what happened with your project deployments. First, you would want to list the datacenters available on your instance of Nelson:
+If you added your `.nelson.yml` file to your repository `master` branch, and manifest validation is passing and you're chugging along making GitHub releases, then you will want to know what Nelson is doing with your repo, right? Well, the Nelson CLI has a set of useful utilities into what happened with your project deployments. First, you would want to list the datacenters available on your instance of Nelson:
 
 ```
 nelson datacenters list
@@ -853,7 +853,7 @@ In order to obtain the credentials in your container runtime, it is typically ex
 The best place to find the developers of Nelson is either the Gitter chat channel or the Nelson mailing list. 
 
 * [Mailing list](https://groups.google.com/group/nelson)
-* [Gitter](gitter.im/Verizon/nelson)
+* [Gitter](https://gitter.im/Verizon/nelson)
 
 If there are security issues you find with Nelson, please reach out to the <script type="text/javascript" src="/javascript/contact.js"></script> directly, and we will work with you on providing a fix into the project before announcing it publically. 
 
