@@ -100,7 +100,7 @@ If you prefer to install this binary manually, then please fetch it [from the pr
 
 There are a few conventions at play within the Nelson codebase:
 
-* `JSON` responses from the api should use `snake_case`. This is because not all client-side scripting languages (namely, JavaScript) can handle keys that have dashes.
+* `JSON` responses from the API should use `snake_case`. This is because not all client-side scripting languages (namely, JavaScript) can handle keys that have dashes.
 
 * Any functions that are going to be called for user or event actions should reside in the `Nelson` object and have a `NelsonK[A]` return value (where `A` is the type you want to return). Functions in this object are meant to assemble results from various other sub-systems (e.g. `Github` and `Storage`) into something usable by clients of the API.
 
@@ -142,7 +142,7 @@ export NELSON_SECURITY_SIGNATURE_KEY=YNhJUcF8ggQ7HoWkmGqaxw==
 
 <h2 id="development-database" data-subheading-of="development">Database</h2>
 
-Nelson's primary data store is a H2 database. This deliberetly doesn't scale past a single machine, and was an intentional design choice to limit complexity in the early phases of the project. With that being said, H2 is very capable, and for most users this will work extreamly well. If Nelson were reaching the point where H2 on SSD drives was a bottle neck, you would be doing many thousand of deployments a second (which is exceedingly unlikley).
+Nelson's primary data store is a H2 database. This deliberately doesn't scale past a single machine, and was an intentional design choice to limit complexity in the early phases of the project. With that being said, H2 is very capable, and for most users this will work extremely well. If Nelson were reaching the point where H2 on SSD drives were a bottleneck, you would be doing many thousand of deployments a second, which is exceedingly unlikely.
 
 If you start to contribute to Nelson, then its useful to understand the data schema, which is as follows:
 
@@ -150,7 +150,7 @@ If you start to contribute to Nelson, then its useful to understand the data sch
   <img src="images/erd.png" width="100%" />
 </div>
 
-As can be seen from the diagram, Nelson has a rather normalized structure. The authors have avoided denomalization of this schema where possible, as Nelson is not in the runtime hot path so the system does not suffer serious performance penalties from such a design; in short it will be able to scale far in excess of the query and write load Nelson actually receives.
+As can be seen from the diagram, Nelson has a rather normalized structure. The authors have avoided denormalization of this schema where possible, as Nelson is not in the runtime hot path so the system does not suffer serious performance penalties from such a design; in short it will be able to scale far in excess of the query and write load Nelson actually receives.
 
 
 <h2 id="development-known-issues" data-subheading-of="development">Known Issues</h2>
