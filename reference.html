@@ -41,10 +41,6 @@
         </li>
         
         <li class="">
-          <a href="/nelson/internals.html">Internals</a>
-        </li>
-        
-        <li class="">
           <a href="/nelson/development.html">Development</a>
         </li>
         
@@ -1549,7 +1545,7 @@ $ nelson login nelson.yourdomain.com
 
 <p>Using the <code>except</code> keyword forms a blacklist, meaning that this deployment would deploy everywhere <code>except</code> in seattle. The common use case for this would be that <code>seattle</code> had not upgraded to a particular bit of platform infrastructure etc.</p>
 
-<h2 id="manifest-namespaces" data-subheading-of="manifest">Load Balancers</h2>
+<h2 id="manifest-load-balancers" data-subheading-of="manifest">Load Balancers</h2>
 
 <p>Load balancers are another top-level manifest declaration. For an overview of the LB functionality, see the <a href="index.html#user-guide-lbs">usage guide</a>. LBs are first declared logically, with the following block:</p>
 
@@ -2061,6 +2057,24 @@ namespaces:
 
 <p>Nelson does not support manual cleanup, by design. All deployed stacks exist on borrowed time, and will (eventually) expire. If you do not explicitly choose an expiration policy (this is common), then Nelson will apply some sane defaults, as described in the preceding table.</p>
 
+<h3 id="manifest-unit-meta" class="linkable">
+  Meta Tags
+</h3>
+
+<p>Sometimes you might want to &ldquo;tag&rdquo; a unit with a given set of meta data so that later you can apply some organization-specific auditing or fiscal tracking program. In order to do this, Nelson allows you to tag - or label - your units. Here&rsquo;s an example:</p>
+
+<pre><code>units:
+- name: example
+  description: example
+  ports:
+  - default-&gt;9000/http
+  meta:
+  - foobar
+  - buzzfiz
+</code></pre>
+
+<p>Meta tags may not be longer than 14 characters in length and can only use characters that are acceptable in a DNS name.</p>
+
 <h3 id="manifest-unit-alerting" class="linkable">
   Alerting
 </h3>
@@ -2235,12 +2249,12 @@ namespaces:
     <p>
       Built with &hearts; by the infrastructure engineering team.</p>
     <p>
-      Documentation template by <a href="http://getbootstrap.com">Bootstrap team</a>,
-      adapted for use with <a href="https://gohugo.com">Hugo</a>
+      Documentation template by <a target="_blank" href="http://getbootstrap.com">Bootstrap team</a>,
+      adapted for use with <a target="_blank" href="https://gohugo.com">Hugo.</a>
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.9.32</li>
+      <li>Currently v0.9.33</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/verizon/nelson">GitHub</a></li>
@@ -2248,6 +2262,8 @@ namespaces:
       <li>&middot;</li>
       <li><a href="https://verizon.github.io/nelson/issues">Issues</a></li>
     
+      <li>&middot;</li>
+      <li><a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a></li>
     </ul>
   </div>
 </footer>
