@@ -273,7 +273,7 @@ A key part of application lifecycle is the ability to cleanup application stacks
 
 In practice the "Evaluate Policy" decision block is one of the following policies - which can be selected by the user. The first and most common policy is `retain-active`. This is the default for any unit that exposes one or more network ports.
 
-Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.1` and `G 1.0` are declared unnessesary garbage, and scheduled for removal.
+Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.1` and `G 1.0` are declared unnecessary garbage, and scheduled for removal.
 
 <div class="clearing">
   <img src="images/dependencies-upgrade.png" width="40%" />
