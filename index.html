@@ -71,7 +71,7 @@
         <a href="//github.com/Verizon/nelson" class="btn btn-outline-inverse btn-lg">Source Code</a>
       </p>
       <p class="version">
-        Currently v0.9.35<br />
+        Currently v0.9.36<br />
       </p>
     </div>
     <a href="https://travis-ci.org/Verizon/nelson">
@@ -134,7 +134,7 @@
 
 <p>The QuickStart guide is a high level document intended to provide migrating users with essential information to successfully leverage Nelson for deployment.</p>
 
-<p>As a user of Nelson, we are making a series of assumptions that impact the way the system is ultimately used (for operator-level concerns such as the instalation, managment and upgrading of a Nelson instalation, please see <a href="#operator-guide">the operator guide</a>). Nelson users should have a working knowledge of the following:</p>
+<p>As a user of Nelson, we are making a series of assumptions that impact the way the system is ultimately used (for operator-level concerns such as the installation, management and upgrading of a Nelson installation, please see <a href="#operator-guide">the operator guide</a>). Nelson users should have a working knowledge of the following:</p>
 
 <ul>
 <li>GitHub (Pull Requests, Git branches etc)</li>
@@ -200,12 +200,12 @@
 <p>This means that application builders have the following constraints:</p>
 
 <ol>
-<li><p>Applications which require singleton behaviour can either choose to implement application-layer leader election, or use convergent data structures to make sure that all overlapping changes will always commute.</p></li>
+<li><p>Applications which require singleton behavior can either choose to implement application-layer leader election, or use convergent data structures to make sure that all overlapping changes will always commute.</p></li>
 
 <li><p>Data corruption can - and will - eventually happen and applications need to be able to recover from this. Typically this means checkpointing data writes to limit the blast radius of any potential corruption (more appropriate for batch-style processes), engineering teams should properly evaluate the possibility for corruption and recovery in their particular use case.</p></li>
 </ol>
 
-<p>The authors of <em>Nelson</em> full appreciate that these constraints require more engineering work. However, by applying these constraints it means <em>Nelson</em> can provide a guarantee around several critical behaviours, and set the right expectation from the start about application lifecycle.</p>
+<p>The authors of <em>Nelson</em> full appreciate that these constraints require more engineering work. However, by applying these constraints it means <em>Nelson</em> can provide a guarantee around several critical behaviors, and set the right expectation from the start about application lifecycle.</p>
 
 <h1 id="user-guide" class="page-header">User Guide</h1>
 
@@ -355,15 +355,15 @@
 
 <h3 id="user-guide-lifecycle-warming" class="linkable">Warming Grace</h3>
 
-<p>When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternitivly it might just take a while for the application to fully initilize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration <code>nelson.cleanup.initial-deployment-time-to-live</code> Knobs property.</p>
+<p>When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternatively it might just take a while for the application to fully initialize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration <code>nelson.cleanup.initial-deployment-time-to-live</code> Knobs property.</p>
 
-<p>In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthly applciation cannot have traffic routed to it, and serves no useful purpose in the wider runtime.</p>
+<p>In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthy application cannot have traffic routed to it, and serves no useful purpose in the wider runtime.</p>
 
-<p>If you expose ports, you <strong>must</strong> bind them with something. Nelson controls the cadance in which it checks stack states with Consul via the <code>nelson.readiness-delay</code>, which is intervals of 3 minutes by default.</p>
+<p>If you expose ports, you <strong>must</strong> bind them with something. Nelson controls the cadence in which it checks stack states with Consul via the <code>nelson.readiness-delay</code>, which is intervals of 3 minutes by default.</p>
 
 <h3 id="user-guide-lifecycle-gc" class="linkable">Garbage Collection</h3>
 
-<p>A key part of application lifecycle is the ability to cleanup application stacks that are no longer needed. Users can specify an <code>expiration_policy</code> for any Nelson <code>unit</code>, and whilst these policies provide a varity of semantics (detailed below), there&rsquo;s a common decision tree executed to figure out which policy to apply and when. Figure 2.1 details this algorithm:</p>
+<p>A key part of application lifecycle is the ability to cleanup application stacks that are no longer needed. Users can specify an <code>expiration_policy</code> for any Nelson <code>unit</code>, and whilst these policies provide a variety of semantics (detailed below), there&rsquo;s a common decision tree executed to figure out which policy to apply and when. Figure 2.1 details this algorithm:</p>
 
 <div class="clearing">
   <img src="images/cleanup.png" width="55%" />
@@ -372,7 +372,7 @@
 
 <p>In practice the &ldquo;Evaluate Policy&rdquo; decision block is one of the following policies - which can be selected by the user. The first and most common policy is <code>retain-active</code>. This is the default for any unit that exposes one or more network ports.</p>
 
-<p>Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (<code>F 1.3</code> in the diagram) is deployed which no longer requires its previous dependency <code>G 1.0</code>, both <code>F 1.1</code> and <code>G 1.0</code> are declared unnessicary garbage, and scheduled for removal.</p>
+<p>Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (<code>F 1.3</code> in the diagram) is deployed which no longer requires its previous dependency <code>G 1.0</code>, both <code>F 1.1</code> and <code>G 1.0</code> are declared unnessesary garbage, and scheduled for removal.</p>
 
 <div class="clearing">
   <img src="images/dependencies-upgrade.png" width="40%" />
@@ -381,7 +381,7 @@
 
 <p>Where <code>retain-active</code> shines is that its exceedingly automatic: all the while another application needs your service(s), Nelson will keep it running and automatically manage the traffic shifting to any revisions that might come along.</p>
 
-<p>A somewhat similar but more aggresive strategy is <code>retain-latest</code>. Whilst this may appear similar to <code>retain-active</code>, <code>retain-latest</code> will <em>always</em> tear down everything except the latest revision of an application. Typically this tends to be useful for jobs (spark streaming or spark batch for example) but it is exceedingly dangerous for services that evolve over time, as <code>retain-latest</code> forces all your users up to the very latest revision, when they could well not be ready for a breaking API change (e.g. 1.0 vs 2.0).</p>
+<p>A somewhat similar but more aggressive strategy is <code>retain-latest</code>. Whilst this may appear similar to <code>retain-active</code>, <code>retain-latest</code> will <em>always</em> tear down everything except the latest revision of an application. Typically this tends to be useful for jobs (spark streaming or spark batch for example) but it is exceedingly dangerous for services that evolve over time, as <code>retain-latest</code> forces all your users up to the very latest revision, when they could well not be ready for a breaking API change (e.g. 1.0 vs 2.0).</p>
 
 <div class="clearing">
   <img src="images/cleanup-policies-retain-latest.png" width="60%" />
@@ -395,7 +395,7 @@
   <small><em>Figure 2.4: retain latest two feature versions</em></small>
 </div>
 
-<p>These policies are typically used for jobs where you want to actively compare and contrast two different types of output (the one you&rsquo;re currently using vs the next - a typical function in analysing ML model evolution).</p>
+<p>These policies are typically used for jobs where you want to actively compare and contrast two different types of output (the one you&rsquo;re currently using vs the next - a typical function in analyzing ML model evolution).</p>
 
 <div class="clearing">
   <img src="images/cleanup-policies-two-major.png" width="60%" />
@@ -404,7 +404,7 @@
 
 <p>Cleanup policies in Nelson can be explored with <code>nelson system cleanup-policies</code> from the CLI. If you believe there are additional use cases not covered by the default policies, please <a href="#community">enter the community</a> and let us know what you think is missing.</p>
 
-<p>Any time Nelson executes or actions a cleanup policy - or inaction causes a state transistion - it will be recorded in the <a href="#install-auditing">auditing system</a>, so you can be aware of exactly what Nelson did on your behalf.</p>
+<p>Any time Nelson executes or actions a cleanup policy - or inaction causes a state transition - it will be recorded in the <a href="#install-auditing">auditing system</a>, so you can be aware of exactly what Nelson did on your behalf.</p>
 
 <h2 id="user-guide-manifest" data-subheading-of="user-guide">Manifest</h2>
 
@@ -655,7 +655,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
 
 <h2 id="install-machine" data-subheading-of="operator-guide">Installation</h2>
 
-<p>Nelson has reasonably small runtime requirements, as it is a lightweight process. Nelson is typically consuming CPU and memory resources for its background tasks, and uses loal disk storage as a scratch space whilst replicating containers to a remote registries in the target datacenter(s). With this in mind, the following machine specifications are recommended:</p>
+<p>Nelson has reasonably small runtime requirements, as it is a lightweight process. Nelson is typically consuming CPU and memory resources for its background tasks, and uses local disk storage as a scratch space whilst replicating containers to a remote registries in the target datacenter(s). With this in mind, the following machine specifications are recommended:</p>
 
 <ul>
 <li>8-16GB of RAM</li>
@@ -663,7 +663,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
 <li>Ubuntu 16.04</li>
 </ul>
 
-<p>It is strongly advised to <strong>not</strong> use a RedHat-based OS for running Nelson. After a great deal of testing, Debian-based OS has been found to be orders of magnitude faster at running Docker than RedHat counterparts. This seems to be related to the interplay of the I/O subsystems, but the author was unable to find a clear &ldquo;smoking gun&rdquo; for this huge delta in perforamnce. If users would like to use Red Hat, please reach out to the Nelson team for operational advice.</p>
+<p>It is strongly advised to <strong>not</strong> use a RedHat-based OS for running Nelson. After a great deal of testing, Debian-based OS has been found to be orders of magnitude faster at running Docker than RedHat counterparts. This seems to be related to the interplay of the I/O subsystems, but the author was unable to find a clear &ldquo;smoking gun&rdquo; for this huge delta in performance. If users would like to use Red Hat, please reach out to the Nelson team for operational advice.</p>
 
 <h3 id="install-launching" class="linkable">Configuration</h3>
 
@@ -678,7 +678,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
   </thead>
   <tr>
     <td><code>nelson.network</code></td>
-    <td>Specifiy the networking options used by Nelson, including the network inteface the JVM binds too, port binding, and the address Nelson advertizes in its API</td>
+    <td>Specifiy the networking options used by Nelson, including the network interface the JVM binds too, port binding, and the address Nelson advertises in its API</td>
   </tr>
   <tr>
     <td><code>nelson.security</code></td>
@@ -686,7 +686,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
   </tr>
     <tr>
     <td><code>nelson.github</code></td>
-    <td>Most instalations will abosolutely have to configure this section, as the OAuth application identifiers are different for every setup. Whilst Nelson will typically execute actions on Github with the credentials of the active session, this section also allows you to configure a "nelson user" for your Github integration that Nelson will use to interact with Github asyncronusly, for non-user invoked actions. In future this will be replaced by deriving an OAuth token on startup from the configured Nelson OAuth application.</td>
+    <td>Most installations will absolutely have to configure this section, as the OAuth application identifiers are different for every setup. Whilst Nelson will typically execute actions on Github with the credentials of the active session, this section also allows you to configure a "nelson user" for your Github integration that Nelson will use to interact with Github asynchronously, for non-user invoked actions. In future this will be replaced by deriving an OAuth token on startup from the configured Nelson OAuth application.</td>
   </tr>
     <tr>
     <td><code>nelson.docker</code></td>
@@ -698,7 +698,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
   </tr>
     <tr>
     <td><code>nelson.timeout</code></td>
-    <td>Global timeout Nelson should apply for I/O operations to its dependant systems (Github, Nomad etc)</td>
+    <td>Global timeout Nelson should apply for I/O operations to its dependent systems (Github, Nomad etc)</td>
   </tr>
     <tr>
     <td><code>nelson.cleanup</code></td>
@@ -706,15 +706,15 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
   </tr>
   <tr>
     <td><code>nelson.pipeline</code></td>
-    <td>Whilst typically not edited by users, these settings control the amount of back-pressure in the Nelson deployment pipeline, and the level of concurrency Nelson uses when doing deployments. Altering these values from the default requires taking into account the latency and network I/O limitations of the host, as more concurrency will mean concurrent replication of containers (which is typically limited by docker defaults, unless overriden by a specific instalation).</td>
+    <td>Whilst typically not edited by users, these settings control the amount of back-pressure in the Nelson deployment pipeline, and the level of concurrency Nelson uses when doing deployments. Altering these values from the default requires taking into account the latency and network I/O limitations of the host, as more concurrency will mean concurrent replication of containers (which is typically limited by docker defaults, unless overridden by a specific installation).</td>
   </tr>
   <tr>
     <td><code>nelson.template</code></td>
-    <td>When using the <a href="https://github.com/hashicorp/consul-template" target="_blank">consul-template</a> linting feature, this block must be configured. The defautls are usually fine for the majority of users.</td>
+    <td>When using the <a href="https://github.com/hashicorp/consul-template" target="_blank">consul-template</a> linting feature, this block must be configured. The defaults are usually fine for the majority of users.</td>
   </tr>
   <tr>
     <td><code>nelson.workflow-logger</code></td>
-    <td>Typically not altered by users, but these settings control where and how the workflow logger stores the exeuction logs for a given deployment. These end up being small text files on disk, and the buffer size controls how frequently the queue is flushed to the file writing process.</td>
+    <td>Typically not altered by users, but these settings control where and how the workflow logger stores the execution logs for a given deployment. These end up being small text files on disk, and the buffer size controls how frequently the queue is flushed to the file writing process.</td>
   </tr>
   <tr>
     <td><code>nelson.email</code></td>
@@ -722,11 +722,11 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
   </tr>
     <tr>
     <td><code>nelson.slack</code></td>
-    <td>Nelson can notifiy you about deployment actions via Slack. For this integration to work a slack team admin must generate a Slack webhook URL and have Nelson configured to use this value.</td>
+    <td>Nelson can notify you about deployment actions via Slack. For this integration to work a slack team admin must generate a Slack webhook URL and have Nelson configured to use this value.</td>
   </tr>
     <tr>
     <td><code>nelson.datacenters.YOURDC</code></td>
-    <td>Various subsections that configure the credentials and endpoints for your scheuler implementation, consul, vault etc.</td>
+    <td>Various subsections that configure the credentials and endpoints for your scheduler implementation, consul, vault etc.</td>
   </tr>
     <tr>
     <td><code>nelson.ui</code></td>
@@ -738,19 +738,19 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
   </tr>
     <tr>
     <td><code>nelson.reconciliation-cadence</code></td>
-    <td>How frequently shall Nelson reconcile the stacks Nelson knows about, versus the stacks the scheudler knows about. This value should be cautiously set, as if it executes too low Nelson will hammer the currently scheudler clutser leader when it requests for metadata about the runtime.</td>
+    <td>How frequently shall Nelson reconcile the stacks Nelson knows about, versus the stacks the scheduler knows about. This value should be cautiously set, as if it executes too low Nelson will hammer the currently scheduler cluster leader when it requests for metadata about the runtime.</td>
   </tr>
     <tr>
     <td><code>nelson.readiness-delay</code></td>
-    <td>When a unit exposing ports is deployed, how frequently should Nelson check if the consul health checks have transistioned to "healthy". Nelson requires a majority of container instances to be reporting healthy in consul before transistioning the stack state from <code>Warming</code> to <code>Ready </code></td>
+    <td>When a unit exposing ports is deployed, how frequently should Nelson check if the consul health checks have transitioned to "healthy". Nelson requires a majority of container instances to be reporting healthy in consul before transitioning the stack state from <code>Warming</code> to <code>Ready </code></td>
   </tr>
     <tr>
     <td><code>nelson.discovery-delay</code></td>
-    <td>The cadance that Nelson should recompute the runtime routing graph and update the consul values for a specific stack. The more stacks you have, the longer this work will take so be sure to set the value here at an appropriate rate relevant to your deployment size. Be aware that the longer this delay is, the more "choppy" your short-duration traffic bleeds will be (this typically isnt an issue, as short-duration traffic shiting is discouraged as it can result in inbound traffic synfloods.).</td>
+    <td>The cadence that Nelson should recompute the runtime routing graph and update the consul values for a specific stack. The more stacks you have, the longer this work will take so be sure to set the value here at an appropriate rate relevant to your deployment size. Be aware that the longer this delay is, the more "choppy" your short-duration traffic bleeds will be (this typically isn't an issue, as short-duration traffic shifting is discouraged as it can result in inbound traffic synfloods.).</td>
   </tr>
   <tr>
     <td><code>nelson.lb-port-whitelist</code></td>
-    <td>Control the "outside" ports you want to allow users to expose from load balancers. Typically it is undesirable to have end-users be able to expose any random port at the edge of your network, as this can drastically increase securtiy attack surface and make security auditing challenging. Instead, set a known set of ports that are agreed accross teams that will be used for external traffic ingress.</td>
+    <td>Control the "outside" ports you want to allow users to expose from load balancers. Typically it is undesirable to have end-users be able to expose any random port at the edge of your network, as this can drastically increase security attack surface and make security auditing challenging. Instead, set a known set of ports that are agreed accross teams that will be used for external traffic ingress.</td>
   </tr>
    <tr>
     <td><code>nelson.manifest-filename</code></td>
@@ -758,7 +758,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
   </tr>
   <tr>
     <td><code>nelson.default-namespace</code></td>
-    <td>Upon recieving a github release event, where should Nelson assume the application should get deployed too. This can either be a root namespace, or a subordinate namespace, e.g. `stage/unstable`... its arbirary, but the namespace must exist (Nelson will atempt to create the specified namespace on bootup).</td>
+    <td>Upon receiving a github release event, where should Nelson assume the application should get deployed too. This can either be a root namespace, or a subordinate namespace, e.g. `stage/unstable`... its arbitrary, but the namespace must exist (Nelson will attempt to create the specified namespace on bootup).</td>
   </tr>
 </table>
 
@@ -855,7 +855,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
 <h2 id="install-auditing" data-subheading-of="operator-guide">Audit Trail</h2>
 
-<p>The Nelson philosphoy is a fairly permissive one: provide a tool that allows engineering staff to move fast and itterate quickly, without having to cleanup after themselves and handle some of the most difficult operational details such as mutual TLS. Whilst moving fast is great, it is frequently viewed as a security nightmare, and as such having bomb-proof auditing to know what changed in the system and why is absolutely key.</p>
+<p>The Nelson philosophy is a fairly permissive one: provide a tool that allows engineering staff to move fast and iterate quickly, without having to cleanup after themselves and handle some of the most difficult operational details such as mutual TLS. Whilst moving fast is great, it is frequently viewed as a security nightmare, and as such having bomb-proof auditing to know what changed in the system and why is absolutely key.</p>
 
 <p>With this frame, Nelson supports an auditing API that can inform you about everything that Nelson is doing and why. The supplied API is designed to be a building block that you integrate into your wider environment to detect changes in your security and deployment footprint. Please see the <a href="reference.html#api-audit">auditing API documentation for further information</a></p>
 
@@ -957,21 +957,21 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 <li><a href="https://gitter.im/Verizon/nelson">Gitter</a></li>
 </ul>
 
-<p>If there are security issues you find with Nelson, please reach out to the <script type="text/javascript" src="/javascript/contact.js"></script> directly, and we will work with you on providing a fix into the project before announcing it publically.</p>
+<p>If there are security issues you find with Nelson, please reach out to the <script type="text/javascript" src="/javascript/contact.js"></script> directly, and we will work with you on providing a fix into the project before announcing it publicly.</p>
 
 <h2 id="community-contributing" data-subheading-of="community">Contributing</h2>
 
 <p>Contributing to Nelson is straight forward! If there is something you think needs to be fixed, either open an issue on GitHub or - better yet - just send a pull request with a patch. Typically speaking we are diligent about backward compatibility, both in the API and in the YAML specifications. Nelson can support breaking changes, but in doing so we have to coordinate upgrades to the command line client and the existing user base.</p>
 
-<p>Any contributions you make to Nelson must be wholely owned by you, and we cannot accept any contributions that contain material that is not compatible with the Apache 2.0 license.</p>
+<p>Any contributions you make to Nelson must be wholly owned by you, and we cannot accept any contributions that contain material that is not compatible with the Apache 2.0 license.</p>
 
 <h1 id="credits" class="page-header">Credits</h1>
 
-<p>Building Nelson was a multi-month effort by the Verizon Labs Infrastructure Engineering team. In addition to the specific engineers called out below, thanks to the other engineering staff internally who provided their useful feedback, advice and tollerance for early-adopter pain.</p>
+<p>Building Nelson was a multi-month effort by the Verizon Labs Infrastructure Engineering team. In addition to the specific engineers called out below, thanks to the other engineering staff internally who provided their useful feedback, advice and tolerance for early-adopter pain.</p>
 
 <h2 id="team" data-subheading-of="credits">Team</h2>
 
-<p>The enginering staff who originally created Neslon are listed below (in order of duration on the project):</p>
+<p>The engineering staff who originally created Nelson are listed below (in order of duration on the project):</p>
 
 <ul>
 <li><a href="https://github.com/timperrett">Timothy Perrett</a></li>
@@ -988,7 +988,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
 <ul>
 <li>Verizon executive management for believing in us, and affording the time for Nelson to be built.</li>
-<li>Verizon Legal for providing us the opertunity to release Nelson into the open.</li>
+<li>Verizon Legal for providing us the opportunity to release Nelson into the open.</li>
 <li>Verizon DevOps for handling all the storage and database systems.</li>
 <li>Verizon Network engineering for always connecting us.</li>
 </ul>
@@ -1025,7 +1025,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.9.35</li>
+      <li>Currently v0.9.36</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/verizon/nelson">GitHub</a></li>
