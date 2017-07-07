@@ -20,8 +20,9 @@ read github_username
 ensure_param "github username" $github_username
 
 prompt "github password"
-read github_password
+read -s github_password
 ensure_param "github password" $github_password
+echo
 
 prompt "github application ID"
 read github_app_id
