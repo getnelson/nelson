@@ -71,7 +71,7 @@
         <a href="//github.com/Verizon/nelson" class="btn btn-outline-inverse btn-lg">Source Code</a>
       </p>
       <p class="version">
-        Currently v0.9.38<br />
+        Currently v0.9.39<br />
       </p>
     </div>
     <a href="https://travis-ci.org/Verizon/nelson">
@@ -780,8 +780,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
   -e GITHUB_TOKEN=&quot;qux&quot; \
   -p 9000:9000 \
   -p 5775:5775 \
-  -v &quot;/etc/nelson/logback.xml&quot;:/opt/application/conf/logback.xml \
-  -v &quot;/etc/nelson/config.cfg&quot;:/opt/application/conf/nelson.cfg \
+  -v &quot;/etc/nelson/environment.cfg&quot;:/opt/application/conf/environment.cfg \
   -v &quot;/var/nelson/db&quot;:/opt/application/db \
   -v &quot;/var/nelson/log&quot;:/var/nelson/log \
   verizon/nelson:latest
@@ -1025,7 +1024,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.9.38</li>
+      <li>Currently v0.9.39</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/verizon/nelson">GitHub</a></li>
