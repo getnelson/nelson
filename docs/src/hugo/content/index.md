@@ -689,8 +689,7 @@ docker run -it --rm \
   -e GITHUB_TOKEN="qux" \
   -p 9000:9000 \
   -p 5775:5775 \
-  -v "/etc/nelson/logback.xml":/opt/application/conf/logback.xml \
-  -v "/etc/nelson/config.cfg":/opt/application/conf/nelson.cfg \
+  -v "/etc/nelson/environment.cfg":/opt/application/conf/environment.cfg \
   -v "/var/nelson/db":/opt/application/db \
   -v "/var/nelson/log":/var/nelson/log \
   verizon/nelson:latest
