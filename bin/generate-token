@@ -1,5 +1,10 @@
 #!/bin/bash
 
+export COLOR_RED='\033[0;31m'
+export COLOR_YELLOW='\033[0;33m'
+export COLOR_CYAN='\033[0;36m'
+export COLOR_NC='\033[0m' # no color
+
 function ensure_param {
   if [ -z "$2" ]; then
     echo "You must supply a $1";
@@ -11,39 +16,104 @@ function prompt {
   echo -n "Enter your $1 and press [ENTER]: "
 }
 
-prompt "github host"
-read github_host
-ensure_param "github host" $github_host
+if [ -z "$GITHUB_HOST" ]; then
+  export GITHUB_HOST='github.com'
+  echo "Assuming github.com as your Github domain..."
+else
+  echo "Detected '${GITHUB_HOST}' as your GitHub host domain..."
+fi
 
-prompt "github username"
-read github_username
-ensure_param "github username" $github_username
+if [ -z "$GITHUB_USER" ]; then
+  prompt "GitHub username"
+  read GITHUB_USER
+  ensure_param "github username" $GITHUB_USER
+else
+  echo "Detected '${GITHUB_USER}' as your GitHub host domain..."
+fi
 
-prompt "github password"
-read github_password
-ensure_param "github password" $github_password
+if [ -z "$GITHUB_PASSWORD" ]; then
+  prompt "GitHub password"
+  read -s GITHUB_PASSWORD
+  ensure_param "GitHub password" $GITHUB_PASSWORD
+else
+  echo "Detected your GitHub access token from your shell GITHUB_PASSWORD variable..."
+fi
 
-prompt "github application ID"
-read github_app_id
-ensure_param "github application id" $github_app_id
+if [ -z "$GITHUB_APP_ID" ]; then
+  prompt "GitHub application ID"
+  read GITHUB_APP_ID
+  ensure_param "GitHub application id" $GITHUB_APP_ID
+else
+  echo "Detected your GitHub access token from your shell GITHUB_APP_ID variable..."
+fi
 
-prompt "github application secret"
-read github_app_secret
-ensure_param "github application secret" $github_app_secret
+if [ -z "$GITHUB_APP_SECRET" ]; then
+  prompt "GitHub application secret"
+  read -s GITHUB_APP_SECRET
+  ensure_param "GitHub application secret" $GITHUB_APP_SECRET
+else
+  echo "Detected your GitHub access token from your shell GITHUB_APP_SECRET variable..."
+fi
 
-fingerprint=`whoami | md5`
+FINGERPRINT=`date | base64`
 
-(curl -X PUT -u "${github_username}:${github_password}" \
-  -H "Content-type: application/json" \
-  "https://${github_host}/api/v3/authorizations/clients/${github_app_id}/${fingerprint}" \
-  -d @- <<REQUEST_BODY
+if [ "$GITHUB_HOST" = 'github.com' ]; then
+  GITHUB_PROBE_URL="https://api.github.com/user"
+  GITHUB_URL="https://api.github.com/authorizations/clients/${GITHUB_APP_ID}/${FINGERPRINT}"
+else
+  GITHUB_PROBE_URL="https://${GITHUB_HOST}/api/v3/user"
+  GITHUB_URL="https://${GITHUB_HOST}/api/v3/authorizations/clients/${GITHUB_APP_ID}/${FINGERPRINT}"
+fi
+
+
+JSON=$(cat <<REQUEST_BODY
 {
-  "client_id": "${github_app_id}",
-  "client_secret": "${github_app_secret}",
+  "client_id": "${GITHUB_APP_ID}",
+  "client_secret": "${GITHUB_APP_SECRET}",
   "scopes": [
-    "repo"
+    "repo", "admin:repo_hook", "read:org", "user", "user:email"
   ],
-  "note": "nelson admin script"
+  "note": "Nelson system access (generated via generate-token in the Nelson source)."
 }
-REQUEST_BODY
-) | jq '.token'
+REQUEST_BODY)
+
+STATUS=$(curl -u "${GITHUB_USER}:${GITHUB_PASSWORD}" -s -o /dev/null -w "%{http_code}" "${GITHUB_PROBE_URL}")
+if [ $STATUS -eq 401 ]; then
+
+  CHECK_OTP=$(curl -u "${GITHUB_USER}:${GITHUB_PASSWORD}" -s -i "${GITHUB_PROBE_URL}" | grep -Fi 'X-GitHub-OTP: required;')
+
+  if [ -z "$CHECK_OTP" ]; then
+    echo -e "${COLOR_RED}Please check your GitHub credentials; they appear to be invalid!${COLOR_NC}"
+    exit 1
+  else
+    if [ -z "$GITHUB_OTP" ]; then
+      prompt "GitHub 2FA OTP"
+      read GITHUB_OTP
+      ensure_param "GitHub 2FA OTP" $GITHUB_OTP
+
+      echo "Proceeding with 2FA OTP..."
+
+      RESULT=$(curl -s -X PUT -u "${GITHUB_USER}:${GITHUB_PASSWORD}" \
+        -H "X-GitHub-OTP: ${GITHUB_OTP}" \
+        -H "Content-type: application/json" \
+        -H "Accept: application/vnd.github.v3+json" \
+        "${GITHUB_URL}" \
+        -d "$JSON")
+    else
+      echo "Detected your GitHub 2FA OTP token from your shell GITHUB_OTP variable..."
+    fi
+  fi
+else
+  echo "Proceeding without OTP for 2FA..."
+  RESULT=$(curl -s -X PUT -u "${GITHUB_USER}:${GITHUB_PASSWORD}" \
+  -H "Content-type: application/json" \
+  -H "Accept: application/vnd.github.v3+json" \
+  "${GITHUB_URL}" \
+  -d "$JSON")
+fi
+
+token=$(echo "$RESULT" | jq '.token')
+
+echo -e "${COLOR_CYAN}Your generated token is ${token}."
+echo -e "Set this value into nelson.github.access-token."
+echo -e "Refer to the Nelson documentation for more information: verizon.github.io/nelson/#instalation-github${COLOR_NC}"
