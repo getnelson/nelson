@@ -16,12 +16,12 @@
 //: ----------------------------------------------------------------------------
 addSbtPlugin("com.typesafe.sbt"  % "sbt-native-packager"  % "1.1.5")
 
-addSbtPlugin("io.get-coursier"   % "sbt-coursier"    % "1.0.0-M15-1")
+addSbtPlugin("io.get-coursier"   % "sbt-coursier"         % "1.0.0-M15-1")
 
-addSbtPlugin("io.spray"          % "sbt-revolver"    % "0.7.2")
+addSbtPlugin("io.spray"          % "sbt-revolver"         % "0.7.2")
 
-addSbtPlugin("io.verizon.build"  % "sbt-rig"         % "3.0.35")
+addSbtPlugin("io.verizon.build"  % "sbt-rig"              % "4.0.36")
 
-addSbtPlugin("org.brianmckenna"  % "sbt-wartremover" % "0.14")
+addSbtPlugin("org.brianmckenna"  % "sbt-wartremover"      % "0.14")
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
