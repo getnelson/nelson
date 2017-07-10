@@ -616,8 +616,6 @@ Nelson has a range of configuration options specified using the [Knobs](https://
 Many of the Nelson defaults will be fine for the majority of users. There are however, several configuration sections which must be updated by the operator to ensure Nelson works as expected. Here's an example of the minimal configuration file:
 
 ```
-
-
 nelson {
   network {
     # Typically Nelson is hosted behind a reverse proxy, or otherwise bound
@@ -664,6 +662,10 @@ nelson {
   }
 
   datacenters {
+    # The name of this key must be a DNS value name. Typically you want to call your
+    # datacenters something logical, but keep it short. AWS for example, uses
+    # us-east-1, us-west-1 etc.
+    # Datacenter names must be lowercase, and not include specical characters.
     texas {
 
       docker-registry = "sxxxx.net/bar"
