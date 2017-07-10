@@ -34,6 +34,7 @@ fi
 if [ -z "$GITHUB_PASSWORD" ]; then
   prompt "GitHub password"
   read -s GITHUB_PASSWORD
+  echo
   ensure_param "GitHub password" $GITHUB_PASSWORD
 else
   echo "Detected your GitHub access token from your shell GITHUB_PASSWORD variable..."
@@ -50,6 +51,7 @@ fi
 if [ -z "$GITHUB_APP_SECRET" ]; then
   prompt "GitHub application secret"
   read -s GITHUB_APP_SECRET
+  echo
   ensure_param "GitHub application secret" $GITHUB_APP_SECRET
 else
   echo "Detected your GitHub access token from your shell GITHUB_APP_SECRET variable..."
