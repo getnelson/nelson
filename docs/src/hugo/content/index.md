@@ -570,7 +570,7 @@ Installing Nelson is composed of several steps:
 1. [Checking machine requirements](#installation-machine)
 1. [Adding the Github application](#installation-github)
 1. [Configuring Nelson](#installation-configuration)
-1. [Running Nelson](#installation-github)
+1. [Running Nelson](#installation-launching)
 
 <h3 id="installation-machine" class="linkable">Machine Requirements</h3>
 
@@ -851,7 +851,7 @@ The following table gives an explanation of the configuration file sections and 
 
 This table should be considered an overview, and not an exhaustive list of the configuration options Nelson exposes. The author does not expect most users to be altering the default values for the majority of fields, but know that these values exist.
 
-<h3 id="install-launching" class="linkable">Launching Container</h3>
+<h3 id="installation-launching" class="linkable">Launching Container</h3>
 
 Typically Nelson is operated and installed as a `systemd` unit, but users are free to configure or operate the system however they please (`initV`, `upstart` etc). The docker command you use to start the system should look something like the following:
 
