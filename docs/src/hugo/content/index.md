@@ -561,9 +561,18 @@ Nelson will return a summary response from the scheduler about what state the st
 <h1 id="operator-guide" class="page-header">Operator Guide</h1>
 
 Nelson is typically deployed on-premises and should be co-located with network line of sight with either `github.com` or a GitHub Enterprise instance; wherever you are storing your source code.
-Nelson itself deploys as a docker container, so can be deployed pretty much anywhere, regardless of if its on bare metal with a systemd unit, or on a cloud container service like [AWS EC2](https://aws.amazon.com/ec2/) or [GCE](https://cloud.google.com/container-engine/). It is important to note that Nelson itself is explicitly designed to **not be high availability**. Every subsystem that Nelson talks to (Consul, Vault, etc) is redundant within the target datacenter.
+Nelson itself deploys as a docker container, so can be deployed pretty much anywhere, regardless of if its on bare metal with a [systemd unit](https://www.freedesktop.org/software/systemd/man/systemd.unit.html), or on a cloud container service like [AWS EC2](https://aws.amazon.com/ec2/) or [GCE](https://cloud.google.com/container-engine/). It is important to note that Nelson itself is explicitly designed to **not be high availability**. Every subsystem that Nelson talks to (Consul, Vault, etc) is redundant within the target datacenter. In the event that Nelson is offline, the only impact is that your users cannot deploy for a short period until service is restored. The runtime is fully resilient to a Nelson outage.
 
-<h2 id="install-machine" data-subheading-of="operator-guide">Installation</h2>
+<h2 id="installation" data-subheading-of="operator-guide">Installation</h2>
+
+Installing Nelson is composed of several steps:
+
+1. [Checking machine requirements](#installation-machine)
+1. [Adding the Github application](#installation-github)
+1. [Configuring Nelson](#installation-configuration)
+1. [Running Nelson](#installation-github)
+
+<h3 id="installation-machine" class="linkable">Machine Requirements</h3>
 
 Nelson has reasonably small runtime requirements, as it is a lightweight process. Nelson is typically consuming CPU and memory resources for its background tasks, and uses local disk storage as a scratch space whilst replicating containers to a remote registries in the target datacenter(s). With this in mind, the following machine specifications are recommended:
 
@@ -573,9 +582,177 @@ Nelson has reasonably small runtime requirements, as it is a lightweight process
 
 It is strongly advised to **not** use a RedHat-based OS for running Nelson. After a great deal of testing, Debian-based OS has been found to be orders of magnitude faster at running Docker than RedHat counterparts. This seems to be related to the interplay of the I/O subsystems, but the author was unable to find a clear "smoking gun" for this huge delta in performance. If users would like to use Red Hat, please reach out to the Nelson team for operational advice.
 
-<h3 id="install-launching" class="linkable">Configuration</h3>
+<h3 id="installation-github" class="linkable">Authorize with Github</h3>
 
-Nelson has a range of configuration options specified using the [Knobs](https://verizon.github.io/knobs/) format. The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see [defaults.cfg](https://github.com/verizon/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg) in the source tree.
+Nelson is implemented as a Github OAuth application, and it requires a one-time setup when installing it into your Github organization. If you are not familiar with how to setup a Github application, please see the [GitHub documentation site](https://developer.github.com/guides/basics-of-authentication/) for details. This process should work equally well on both [github.com](https://github.com) and Github Enterprise.
+
+When registering Nelson with Github, the exact domain on which the Nelson process is reachable should be specified (take care select the right protocol - `http` vs `https`), and the callback URL should be: `https://your.nelson.domain.net/auth/exchange`. From a networking standpoint, provided the Github instance can reach the Nelson server, and the domain specified in the OAuth application matches that being used by the client, then the system should work. **If you are using `github.com`, then your Nelson instance must be accessible from the Github outbound NAT address**. If you encounter problems during the setup, the Nelson logs should contain information about the error.
+
+Once setup, Github will present you with a `client_id` and a `client_secret` for the application. These are needed by the Nelson configuration, along with a system OAuth token Nelson can use to execute asynchronous actions on the applications behalf (i.e. without direct user interaction). Run the following to generate the access token:
+
+```
+curl -s https://raw.githubusercontent.com/Verizon/nelson/master/bin/generate-token | bash
+```
+
+If you have the Nelson source checked out locally on your development machine, then you can run `./bin/generate-token` if you would rather not pipe scripts from the internet to bash. The script will ask you a series of questions, and produce a OAuth token. This token - along with the `client_id` and `client_secret` - needs to be set in the Nelson configuration file like so:
+
+```
+nelson{
+  github {
+    client-id = "XXXXXXX"
+    client-secret = "YYYYYYYYYY"
+    redirect-uri = "http://nelson.yourcompany.com/auth/exchange"
+    access-token = "TOKEN-FROM-SCRIPT"
+  }
+}
+```
+
+Please see the [configuration section](#instalation-configuration) for details on where and how the Nelson configuration is loaded.
+
+<h3 id="installation-configuration" class="linkable">Configuration</h3>
+
+Nelson has a range of configuration options specified using the [Knobs](https://verizon.github.io/knobs/) format, read from fils on disk. Nelson can either be told where to load configuration from, but if no path is specified then it will assume that it should be loaded from `/opt/application/conf/nelson.cfg`.
+
+Many of the Nelson defaults will be fine for the majority of users. There are however, several configuration sections which must be updated by the operator to ensure Nelson works as expected. Here's an example of the minimal configuration file:
+
+```
+
+
+nelson {
+  network {
+    # Typically Nelson is hosted behind a reverse proxy, or otherwise bound
+    # to an internal address. In order for cookie retention to work for browsers,
+    # and for Nelson to rewrite its generated URLs to locations that are
+    # network accessible, the operator must tell Nelson what that external address is.
+    external-host = "nelson.yourco.com"
+  }
+  github {
+    # If you're operating Nelson in conjunction with Github Enterprise, then you
+    # need to be sure you've set this value to the host (without protocol prefix).
+    # For example <code>github.yourco.com</code>
+    domain = "github.yourco.com"
+    # The client_id and client_secret provided to you from Github, whilst
+    # setting up the application. See the "Authorize with Github" section for more
+    # on the paramaters below:
+    client-id = "XXXXXXX"
+    client-secret = "YYYYYYYYYY"
+    redirect-uri = "http://nelson.yourcompany.com/auth/exchange"
+    access-token = "TOKEN-FROM-SCRIPT"
+    # Certain operations in Nelson make serious state modifications, and as such
+    # these are restricted to a specific set of "admin" users. The operator must
+    # specifiy these users at boot time. Changing these values whilst Nelson is
+    # running will have absolutely no effect (i.e. the process must be rebooted
+    # for changes to take effect)
+    organization-admins = [ "user1", "user2" ]
+  }
+  security {
+    # These keys are used to securely encrypt the Nelson session token that are
+    # generated when a user logs into the system. The keys themselves must be
+    # at least 24 characters long. A helpful script in ./bin/generate-keys can
+    # be used to automatically generate the right values.
+    # *****DO NOT USE THESE VALUES*****
+    encryption-key = "4e08LjzM42El6+Gbfp9XaQ=="
+    signature-key = "ZRq3NkqbccXE7+ZkRirjOg=="
+  }
+  docker {
+    # Decide how you would like Nelson to attempt to interact with Docker.
+    # This is typically done either by a unix domain socket, or via a tcp
+    # endpoint. Nelson itself is controling docker via the CLI, so it will
+    # use whatever the configuration is for a given host.
+    connection = "unix:///path/to/docker.sock"
+    # connection = "tcp://0.0.0.0:12345"
+  }
+
+  datacenters {
+    texas {
+
+      docker-registry = "sxxxx.net/bar"
+
+      # this is the DNS domain used for a given datacenter. When writing out the lighthouse
+      # routing graph or similar, Nelson will use this value as the TLD for a given datacenter
+      # "world". An assumption is being made here that you're running DNS fowrading for
+      # the consul service: https://www.consul.io/docs/guides/forwarding.html
+      domain = "service.example.com"
+
+      # What should the default traffic shifting policy be in this particular DC.
+      # Configurable per-DC such that you might have production DCs, vs dev DCs
+      # (of course remember DC is a virtual concept)
+      traffic-shift {
+        policy = "atomic"
+        duration = 2 minute
+      }
+
+      infrastructure {
+        scheduler {
+          nomad {
+            # Where can Nelson access the Nomad leader cluster
+            endpoint  = "https://nomad.service"
+            # How much grace shall we give when talking to Nomad.
+            # Depending upon your link speed (e.g. if you're tunneling via SSH or
+            # IPSEC it might be slower)
+            timeout   = 1 second
+            # On average, how many MHz of CPU does each node in this datacenter have?
+            # This is used to compute the `cores` convenience in the Nelson manifest;
+            # its typically better to under-specify this value, rather than over-specify
+            # in the event you have a mixed fleet of machines.
+            mhz-per-cpu = 2300
+            # location of the runtime Docker registry. Optionally, if you require auth
+            # for pushing or pulling from this registry, specify it here.
+            # NOTE: Nomad does not currently encrypt these values in its `nomad inspect`
+            # functionality, so be aware that unless you have a secure API access to
+            # nomad, then users might see these values.
+            docker {
+              user = "randal mcmurphy"
+              password = "one flew"
+              host = "registery.service.whatever.com"
+            }
+          }
+        }
+        consul {
+          # Location of the consul service in this datacenter.
+          endpoint  = "https://consul.service.whatever.com"
+          # How much grace shall we give when talking to Consul.
+          # Depending upon your link speed (e.g. if you're tunneling via SSH or
+          # IPSEC it might be slower)
+          timeout   = 1 second
+          # Nelson will be writing to the KV store in Consul, so be sure to have
+          # an appropriate ACL token set here if required for read or write operations.
+          acl-token = "..."
+        }
+        vault {
+          endpoint = "https://vault.california.service"
+          # How much grace shall we give when talking to Vault.
+          # Depending upon your link speed (e.g. if you're tunneling via SSH or
+          # IPSEC it might be slower)
+          timeout   = 1 second
+          # Nelson will be administering Vault, creating policies and such. With this
+          # in mind, you need to ensure that Nelson has a vault authentication token
+          # which permits these operations.
+          auth-token = "..."
+        }
+      }
+      policy {
+        # When Nelson manages policies and credential stores in Vault, where should
+        # it assume it can find them. This simplistic substitution syntax allows you
+        # to control how Nelson will read and write to and from Vault storage paths.
+        resource-creds-path = "nelson/%env/%resource%/creds/%unit%"
+        # If you have Vault configured to generate SSL certificates, then in order for
+        # deployed containers to be able to generate these certs at runtime, you need
+        # to have Nelosn include that backend in the policy it generates. If you have
+        # a global PKI backend called "sslpki", then you can statically set the
+        # backend like this:
+        # pki-path = "sslpki"
+        # In the event you have a dynamic "per-environment" SSL security world, then
+        # this simple substitution language allows you to tell Nelson how it should
+        # discover the PKI backend path in vault.
+        pki-path = "%env%_certificates"
+      }
+    }
+  }
+}
+```
+
+The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see [defaults.cfg](https://github.com/verizon/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg) in the source tree.
 
 <table class="table table-striped">
   <thead>
@@ -679,17 +856,9 @@ Typically Nelson is operated and installed as a `systemd` unit, but users are fr
 ```
 docker run -it --rm \
   --name nelson \
-  -e NELSON_SECURITY_ENCRYPTION_KEY="$NELSON_SECURITY_ENCRYPTION_KEY" \
-  -e NELSON_SECURITY_SIGNATURE_KEY="$NELSON_SECURITY_SIGNATURE_KEY" \
-  -e NELSON_GITHUB_DOMAIN="github.com" \
-  -e NELSON_GITHUB_SECRET="foo" \
-  -e NELSON_GITHUB_TOKEN="bar" \
-  -e NELSON_GITHUB_CLIENT="$NELSON_GITHUB_CLIENT" \
-  -e GITHUB_USER="baz" \
-  -e GITHUB_TOKEN="qux" \
   -p 9000:9000 \
   -p 5775:5775 \
-  -v "/etc/nelson/environment.cfg":/opt/application/conf/environment.cfg \
+  -v "/etc/nelson/nelson.cfg":/opt/application/conf/nelson.cfg \
   -v "/var/nelson/db":/opt/application/db \
   -v "/var/nelson/log":/var/nelson/log \
   verizon/nelson:latest
@@ -701,23 +870,7 @@ This command - or a command like it - can be run from any system with docker, an
 Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-based datastore. Nelson is intended to be running as a singleton and currently does not support clustering. Support for high-availability deployment modes are planned for a future release, but typically this is not needed as outages of Nelson have no critical affect on the datacenter runtime.
 </div>
 
-<h3 id="install-authorize" class="linkable">Authorize with Github</h3>
 
-Nelson is implemented as a Github OAuth application, and it requires a one-time setup when installing it into your Github organization. If you are not familiar with how to setup a Github application, please see the [GitHub documentation site](https://developer.github.com/guides/basics-of-authentication/) for details. This process should work equally well on both [github.com](https://github.com) and Github Enterprise.
-
-When registering Nelson with Github, the exact domain on which the Nelson process is reachable should be specified (take care select the right protocol - `http` vs `https`), and the callback URL should be: `https://your.nelson.domain.net/auth/exchange`. Be sure to take the `clientId` and `clientSecret` supplied by Github and add them to the Nelson configuration:
-
-```
-nelson{
-  github {
-    client-id = "XXXXXXX"
-    client-secret = "YYYYYYYYYY"
-    redirect-uri = "http://nelson.yourcompany.com/auth/exchange"
-  }
-}
-```
-
-From a networking standpoint, provided the Github instance can reach the Nelson server, and the domain specified in the OAuth application matches that being used by the client, then the system should work. **If you are using `github.com`, then your Nelson instance must be accessible from the Github outbound NAT address**. If you encounter problems during the setup, the Nelson logs should contain information about the error.
 
 <h3 id="install-telemetry" class="linkable">Telemetry</h3>
 
@@ -758,7 +911,7 @@ Nelson ships with out of the box support for gathering runtime telemetry with [P
 
 In addition to these key metrics, there are a variety of general system and JVM metrics that are being exported, and these should also be carefully monitored for issues. Naturally, this goes for any application and not just Nelson.
 
-<h3 id="install-done" class="linkable">Installation Complete</h3>
+<h3 id="installation-complete" class="linkable">Installation Complete</h3>
 
 With those steps complete, you should be able to browse to the Nelson URL and login using your Github account. If you encounter problems during this setup process, please check the logs from the Nelson container using `journalctl` on the host (assuming modern Linux OS with `systemd`). Alternatively, install any of the generic log forwarding products (splunk, fluentd, logstash etc) to export the logs into an indexed aggregator (this is highly recommended for production usage).
 

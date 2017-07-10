@@ -1,4 +1,8 @@
 #!/bin/sh
 
-echo "export NELSON_SECURITY_ENCRYPTION_KEY="$(dd if=/dev/urandom bs=16 count=1 2>/dev/null | base64)
-echo "export NELSON_SECURITY_SIGNATURE_KEY="$(dd if=/dev/urandom bs=16 count=1 2>/dev/null | base64)
+function gen {
+  dd if=/dev/urandom bs=16 count=1 2>/dev/null | base64
+}
+
+echo "nelson.security.encryption-key = \"`gen`\" "
+echo "nelson.security.signature-key = \"`gen`\" "
