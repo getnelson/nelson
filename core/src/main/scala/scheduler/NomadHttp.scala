@@ -249,7 +249,13 @@ object NomadJson {
       ){ case (i, n, j, g, s) => TaskGroupAllocation.build(i, n, j, g, s getOrElse Map.empty)}
     )
 
-  def dockerConfigJson(nomad: Nomad, container: Docker.Image, ports: Option[Ports], nm: NetworkMode, name: String, ns: NamespaceName): argonaut.Json = {
+  def dockerConfigJson(
+    nomad: Nomad,
+    container: Docker.Image,
+    ports: Option[Ports],
+    nm: NetworkMode,
+    name: String,
+    ns: NamespaceName): argonaut.Json = {
 
     val maybeLogging = nomad.splunk.map(splunk =>
       List(dockerSplunkJson(name, ns, splunk.splunkUrl, splunk.splunkToken)))
@@ -409,19 +415,23 @@ object NomadJson {
     )
   }
 
-  // splunk logging sidecar needs port map for 8089
-  private val splunkPort = Ports(Port("splunk", 8089, "tcp"), Nil)
+  // logging sidecar needs port map for 8089
+  // TIM: this is kind of a hack and should probally be factored
+  // to a config option in future.
+  private val loggingPort = Ports(Port("splunk", 8089, "tcp"), Nil)
 
-  def loggingSidecarJson(nomad: Nomad, vars: List[EnvironmentVariable], name: String, ns: NamespaceName): argonaut.Json = {
-    argonaut.Json(
-      "Name"      := "logging_sidecar",
-      "Driver"    := "docker",
-      "Config"    := dockerConfigJson(nomad, nomad.loggingImage, Some(splunkPort), BridgeMode, name, ns),
-      "Services"  := argonaut.Json.jNull,
-      "Env"       := envJson(vars),
-      "Resources" := resourcesJson(800, 2000, Some(splunkPort)),
-      "LogConfig" := logJson(10,10)
-    )
+  def loggingSidecarJson(nomad: Nomad, vars: List[EnvironmentVariable], name: String, ns: NamespaceName): Option[argonaut.Json] = {
+    nomad.loggingImage.map { image =>
+      argonaut.Json(
+        "Name"      := "logging_sidecar",
+        "Driver"    := "docker",
+        "Config"    := dockerConfigJson(nomad, image, Some(loggingPort), BridgeMode, name, ns),
+        "Services"  := argonaut.Json.jNull,
+        "Env"       := envJson(vars),
+        "Resources" := resourcesJson(800, 2000, Some(loggingPort)),
+        "LogConfig" := logJson(10,10)
+      )
+    }
   }
 
   def job(name: String, unitName: UnitName, plan: Plan, i: Image, dc: Datacenter, schedule: Option[Schedule], ports: Option[Ports], ns: NamespaceName, nomad: Nomad, tags: Set[String]): Json = {
@@ -444,8 +454,8 @@ object NomadJson {
             "Count"         := env.desiredInstances.getOrElse(1),
             "RestartPolicy" := env.retries.map(restartJson).getOrElse(Json.jNull),
             "EphemeralDisk" := ephemeralDiskJson(false,false,101),
-            "Tasks"         := List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags), 
-                                loggingSidecarJson(nomad, env.bindings, name, ns))
+            "Tasks"         := (List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags)) ++
+                               loggingSidecarJson(nomad, env.bindings, name, ns))
           )
         )
       )

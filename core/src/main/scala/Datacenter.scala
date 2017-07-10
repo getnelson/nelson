@@ -69,7 +69,7 @@ object Infrastructure {
     dockerRepoUser: String,
     dockerRepoPassword: String,
     dockerRepoServerAddress: String,
-    loggingImage: docker.Docker.Image,
+    loggingImage: Option[docker.Docker.Image],
     mhzPerCPU: Int,
     splunk: Option[SplunkConfig]
   )
