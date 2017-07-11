@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Nomad</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span></span>, <span name="dockerRepoUser">dockerRepoUser: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoPassword">dockerRepoPassword: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoServerAddress">dockerRepoServerAddress: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loggingImage">loggingImage: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="mhzPerCPU">mhzPerCPU: <span class="extype" name="scala.Int">Int</span></span>, <span name="splunk">splunk: <span class="extype" name="scala.Option">Option</span>[<a href="Infrastructure$$SplunkConfig.html" class="extype" name="nelson.Infrastructure.SplunkConfig">SplunkConfig</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Nomad</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span></span>, <span name="dockerRepoUser">dockerRepoUser: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoPassword">dockerRepoPassword: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoServerAddress">dockerRepoServerAddress: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loggingImage">loggingImage: <span class="extype" name="scala.Option">Option</span>[<a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>, <span name="mhzPerCPU">mhzPerCPU: <span class="extype" name="scala.Int">Int</span></span>, <span name="splunk">splunk: <span class="extype" name="scala.Option">Option</span>[<a href="Infrastructure$$SplunkConfig.html" class="extype" name="nelson.Infrastructure.SplunkConfig">SplunkConfig</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Infrastructure.Nomad#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration,dockerRepoUser:String,dockerRepoPassword:String,dockerRepoServerAddress:String,loggingImage:nelson.docker.Docker.Image,mhzPerCPU:Int,splunk:Option[nelson.Infrastructure.SplunkConfig]):nelson.Infrastructure.Nomad"></a>
+      <a id="&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration,dockerRepoUser:String,dockerRepoPassword:String,dockerRepoServerAddress:String,loggingImage:Option[nelson.docker.Docker.Image],mhzPerCPU:Int,splunk:Option[nelson.Infrastructure.SplunkConfig]):nelson.Infrastructure.Nomad"></a>
       <a id="&lt;init&gt;:Nomad"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Nomad</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span></span>, <span name="dockerRepoUser">dockerRepoUser: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoPassword">dockerRepoPassword: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoServerAddress">dockerRepoServerAddress: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loggingImage">loggingImage: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="mhzPerCPU">mhzPerCPU: <span class="extype" name="scala.Int">Int</span></span>, <span name="splunk">splunk: <span class="extype" name="scala.Option">Option</span>[<a href="Infrastructure$$SplunkConfig.html" class="extype" name="nelson.Infrastructure.SplunkConfig">SplunkConfig</a>]</span>)</span>
+        <span class="name">Nomad</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span></span>, <span name="dockerRepoUser">dockerRepoUser: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoPassword">dockerRepoPassword: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoServerAddress">dockerRepoServerAddress: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loggingImage">loggingImage: <span class="extype" name="scala.Option">Option</span>[<a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>, <span name="mhzPerCPU">mhzPerCPU: <span class="extype" name="scala.Int">Int</span></span>, <span name="splunk">splunk: <span class="extype" name="scala.Option">Option</span>[<a href="Infrastructure$$SplunkConfig.html" class="extype" name="nelson.Infrastructure.SplunkConfig">SplunkConfig</a>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Nomad@&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration,dockerRepoUser:String,dockerRepoPassword:String,dockerRepoServerAddress:String,loggingImage:nelson.docker.Docker.Image,mhzPerCPU:Int,splunk:Option[nelson.Infrastructure.SplunkConfig]):nelson.Infrastructure.Nomad" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Infrastructure$$Nomad@&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration,dockerRepoUser:String,dockerRepoPassword:String,dockerRepoServerAddress:String,loggingImage:Option[nelson.docker.Docker.Image],mhzPerCPU:Int,splunk:Option[nelson.Infrastructure.SplunkConfig]):nelson.Infrastructure.Nomad" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -348,18 +348,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.Infrastructure.Nomad#loggingImage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="loggingImage:nelson.docker.Docker.Image"></a>
-      <a id="loggingImage:Image"></a>
+      <a id="loggingImage:Option[nelson.docker.Docker.Image]"></a>
+      <a id="loggingImage:Option[Image]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">loggingImage</span><span class="result">: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>
+        <span class="name">loggingImage</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Nomad@loggingImage:nelson.docker.Docker.Image" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Infrastructure$$Nomad@loggingImage:Option[nelson.docker.Docker.Image]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
