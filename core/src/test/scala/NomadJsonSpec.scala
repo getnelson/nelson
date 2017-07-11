@@ -30,10 +30,9 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
   import nelson.docker.Docker.Image
   import nelson.Manifest._
 
-
   val nomad = Infrastructure.Nomad(org.http4s.Uri.uri("http://endpoint:8080"),
-    1.second, "user", "pass", "addy", 
-    docker.Docker.Image("logging-sidcar", "0.0.1"), 2300, 
+    1.second, "user", "pass", "addy",
+    Some(docker.Docker.Image("logging-sidecar", "0.0.1")), 2300,
     Some(Infrastructure.SplunkConfig("splunkUrl", "splunkToken")))
 
   val image = Image("image", None, None)
@@ -46,7 +45,7 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
   val ports = Ports(Port("http",8080,"http"), Nil)
 
   it should "generate docker config json with ports and logging" in {
-    val name="myjobname"
+    val name = "myjobname"
     val json = NomadJson.dockerConfigJson(nomad, image, Some(ports), NomadJson.BridgeMode, name, NamespaceName("dev"))
 
     json should equal (Json(
@@ -69,6 +68,14 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
         ))
       ))
     ))
+  }
+
+  it should "not generate logging sidecar if ommited" in {
+    val nomad2 = nomad.copy(loggingImage = None)
+    val ns = NamespaceName("qa")
+    val json = NomadJson.loggingSidecarJson(nomad2, env.bindings, "logging-sidecar", ns)
+
+    json should be (None)
   }
 
   it should "generate docker config json without ports and logging" in {

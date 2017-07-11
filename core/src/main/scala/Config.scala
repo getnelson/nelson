@@ -522,20 +522,23 @@ object Config {
     def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
       def readSplunk: Option[Infrastructure.SplunkConfig] =
         (kfg.lookup[String]("docker.splunk-url") |@| kfg.lookup[String]("docker.splunk-token")
-        )((a,b) => Infrastructure.SplunkConfig(a,b))
+          )((x,y) => Infrastructure.SplunkConfig(x,y))
+
+      def readLoggingImage: Option[Docker.Image] =
+        kfg.lookup[String]("logging-sidecar")
+          .flatMap(a => docker.Docker.Image.fromString(a).toOption)
 
       (kfg.lookup[String]("endpoint") |@|
        kfg.lookup[Duration]("timeout") |@|
        kfg.lookup[String]("docker.user") |@|
        kfg.lookup[String]("docker.password") |@|
        kfg.lookup[String]("docker.host") |@|
-       kfg.lookup[String]("docker.logging-image") |@|
        kfg.lookup[Int]("mhz-per-cpu")
-        )((a,b,c,d,e,f,g) => {
+        )((a,b,c,d,e,g) => {
           val splunk = readSplunk
+          val loggingSidecar = readLoggingImage
           val uri = org.http4s.Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
-          val image = docker.Docker.Image.fromString(f).toOption.yolo(s"nomad.logging-image -- $f -- is an invalid docker image")
-          Infrastructure.Nomad(uri,b,c,d,e,image,g,splunk)
+          Infrastructure.Nomad(uri,b,c,d,e,loggingSidecar,g,splunk)
         })
     }
 
@@ -543,7 +546,8 @@ object Config {
      * Datacenters currently only support one scheduler
      */
     def readScheduler(kfg: KConfig, proxy: Option[Infrastructure.ProxyCredentials]): Option[SchedulerOp ~> Task] =
-      readNomadInfrastructure(kfg.subconfig("nomad")).map(n => new scheduler.NomadHttp(nomadcfg, n, http4sClient(n.timeout)))
+      readNomadInfrastructure(kfg.subconfig("nomad"))
+        .map(n => new scheduler.NomadHttp(nomadcfg, n, http4sClient(n.timeout)))
 
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
     def readDatacenter(id: String, kfg: KConfig): Datacenter = {
