@@ -122,7 +122,7 @@ object Actionable {
 
         def launch(id: ID, sn: StackName, rs: Vector[Route], nsid: ID)(t: LoadbalancerOp ~> Task): Task[Unit] =
           for {
-            _   <- helm.run(dc.consul, loadbalancers.writeLoadbalancerConfigToConsul(sn, rs))
+            _   <- helm.run(dc.consul, loadbalancers.writeLoadbalancerV2ConfigToConsul(sn, rs))
             dns <- loadbalancers.run(t, loadbalancers.launch(lb, major, dc, ns.name, plan, hash))
             _   <- runs(dc.storage, StoreOp.insertLoadbalancerDeployment(id, nsid, hash, dns))
           } yield ()

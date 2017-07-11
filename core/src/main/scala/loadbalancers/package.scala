@@ -27,17 +27,45 @@ import routing._
 package object loadbalancers {
   import LoadbalancerOp._
 
-  def loadbalancerKey(name: String): String =
+  def loadbalancerKeyV1(name: String): String =
     s"nelson/loadbalancers/v1/${name}"
 
-  def writeLoadbalancerConfigToConsul(sn: StackName, routes: Vector[Route]): ConsulOp.ConsulOpF[Unit] = {
-    import Json._
+  def loadbalancerKeyV2(name: String): String =
+    s"nelson/loadbalancers/v2/${name}"
+
+  def writeLoadbalancerV1ConfigToConsul(sn: StackName, ins: Vector[Inbound]): ConsulOp.ConsulOpF[Unit] = {
+    import Json.V1InboundEncode
+    ConsulOp.setJson(loadbalancerKeyV1(sn.toString), ins)
+  }
+
+  def writeLoadbalancerV2ConfigToConsul(sn: StackName, routes: Vector[Route]): ConsulOp.ConsulOpF[Unit] = {
+    import Json.V2RouteEncode
     val mv = sn.version.toMajorVersion
-    ConsulOp.setJson(loadbalancerKey(sn.toString), routes.map((mv, _)))
+    ConsulOp.setJson(loadbalancerKeyV2(sn.toString), routes.map((mv, _)))
   }
 
   def deleteLoadbalancerConfigFromConsul(lb: LoadbalancerDeployment): ConsulOp.ConsulOpF[Unit] =
-    ConsulOp.delete(loadbalancerKey(lb.stackName.toString))
+    for {
+      _ <- ConsulOp.delete(loadbalancerKeyV1(lb.stackName.toString))
+      _ <- ConsulOp.delete(loadbalancerKeyV2(lb.stackName.toString))
+    } yield ()
+
+  def loadbalancerV1Configs(graph: RoutingGraph): Vector[(StackName, Vector[Inbound])] = {
+
+    def findPort(rs: Vector[Route], d: RoutePath, mv: MajorVersion): Option[Port] =
+      rs.find(r =>
+        r.destination.name == d.stack.unit.name &&
+        r.destination.portReference == d.portName &&
+        mv == d.stack.unit.version.toMajorVersion
+      ).map(_.port)
+
+    graph.nodes.flatMap(_.loadbalancer).map { lb =>
+      val routes: Vector[Inbound] = graph.outs(RoutingNode(lb)).flatMap { case (d, n) =>
+        findPort(lb.loadbalancer.routes, d, lb.loadbalancer.version).map(p => Inbound(d.stack.stackName, d.portName, p.port))
+      }
+      (lb.stackName, routes)
+    }
+  }
 
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Datacenter, ns: NamespaceName, pl: Plan, hash: String): LoadbalancerF[String] =
     LoadbalancerOp.launch(lb, v, dc, ns, pl, hash)
@@ -54,7 +82,16 @@ package object loadbalancers {
   object Json {
     import argonaut._, Argonaut._
 
-    implicit lazy val RouteEncode: EncodeJson[(MajorVersion, Route)] =
+    implicit lazy val V1InboundEncode: EncodeJson[Inbound] =
+      EncodeJson { a: Inbound =>
+        ("frontend_name" := s"${a.label}-${a.stackName.toString}") ->:
+        ("frontend_port" := a.port) ->:
+        ("backend_stack" := a.stackName.toString) ->:
+        ("port_label"    := a.label) ->:
+        jEmptyObject
+      }
+
+    implicit lazy val V2RouteEncode: EncodeJson[(MajorVersion, Route)] =
       EncodeJson { case (mv, r) =>
         ("frontend_port" := r.port.port) ->:
         ("port_label"    := r.destination.portReference) ->:
