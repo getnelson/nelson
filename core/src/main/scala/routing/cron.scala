@@ -48,7 +48,14 @@ object cron {
             dc -> Discovery.writeDiscoveryInfoToConsul(ns, d.stackName, dc.domain.name, dts)
         }
 
-      } yield dtout
+        lbout = rts.flatMap { case (_ , gr) =>
+          loadbalancers.loadbalancerV1Configs(gr).map { case ((lb, ins)) =>
+            log.debug(s"cron: refreshing proxy configuration for ${lb}")
+            dc -> loadbalancers.writeLoadbalancerV1ConfigToConsul(lb, ins)
+          }
+        }
+
+      } yield dtout ++ lbout
     }
   }
 

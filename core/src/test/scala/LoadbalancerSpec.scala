@@ -23,6 +23,7 @@ import routing._
 import Datacenter._
 import Manifest.{Route,BackendDestination}
 import scala.concurrent.duration._
+import loadbalancers.Inbound
 
 class LoadbalancerSpec extends FlatSpec with Matchers with RoutingFixtures {
 
@@ -42,5 +43,23 @@ class LoadbalancerSpec extends FlatSpec with Matchers with RoutingFixtures {
   private def makeRoute(ref: String, port: Int, d: Deployment, portName: String): Route = {
     Route(Manifest.Port(ref,port,""),
       BackendDestination(d.unit.name, portName))
+  }
+
+  val emptyG = quiver.empty[RoutingNode,Unit,RoutePath]
+
+  it should "generate v1 loadbalancer config" in {
+    val ports = Set(Port(1, "one", ""), Port(2, "two", ""), Port(3, "three", ""))
+    val d = makeDeployment(0L, "foo", Version(0,0,1), ports)
+    val l = makeLoadbalancer(0L, "lb", MajorVersion(0),
+      Vector(makeRoute("front-one",81,d,"one"), makeRoute("front-two",82,d,"two")))
+
+    val g = emptyG &
+      Context(Vector(), RoutingNode(l), (), Vector((RoutePath(d,"one","http",9000,0), RoutingNode(l)),(RoutePath(d,"two","http",9001,0), RoutingNode(l)))) &
+      Context(Vector((RoutePath(d,"one","http",9000,0), RoutingNode(l)),(RoutePath(d,"two","http",9001,0), RoutingNode(l))), RoutingNode(d), (), Vector())
+
+    val config = loadbalancers.loadbalancerV1Configs(g)
+    config.head._2 should contain(Inbound(d.stackName, "one", 81))
+    config.head._2 should contain(Inbound(d.stackName, "two", 82))
+    config.head._2.map(_.label) should not contain("three")
   }
 }
