@@ -122,6 +122,25 @@
       </a>
     </span>
       
+    </li><li name="nelson.loadbalancers.Inbound" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="InboundextendsProductwithSerializable"></a>
+      <a id="Inbound:Inbound"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Inbound.html"><span class="name">Inbound</span></a><span class="params">(<span name="stackName">stackName: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="label">label: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="port">port: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@InboundextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents an incomming loadbalancer.</p><div class="fullcomment"><div class="comment cmt"><p>Represents an incomming loadbalancer. The port exposes the backend service (i.e. stackName)
+to the outside world.
+</p></div></div>
     </li><li name="nelson.loadbalancers.LoadbalancerOp" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="LoadbalancerOp[A]extendsProductwithSerializable"></a>
       <a id="LoadbalancerOp[A]:LoadbalancerOp[A]"></a>
@@ -231,19 +250,53 @@
       </a>
     </span>
       
-    </li><li name="nelson.loadbalancers#loadbalancerKey" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="loadbalancerKey(name:String):String"></a>
-      <a id="loadbalancerKey(String):String"></a>
+    </li><li name="nelson.loadbalancers#loadbalancerKeyV1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="loadbalancerKeyV1(name:String):String"></a>
+      <a id="loadbalancerKeyV1(String):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">loadbalancerKey</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">loadbalancerKeyV1</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.loadbalancers.package@loadbalancerKey(name:String):String" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.loadbalancers.package@loadbalancerKeyV1(name:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#loadbalancerKeyV2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="loadbalancerKeyV2(name:String):String"></a>
+      <a id="loadbalancerKeyV2(String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadbalancerKeyV2</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@loadbalancerKeyV2(name:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#loadbalancerV1Configs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="loadbalancerV1Configs(graph:nelson.routing.RoutingGraph):Vector[(nelson.Datacenter.StackName,Vector[nelson.loadbalancers.Inbound])]"></a>
+      <a id="loadbalancerV1Configs(RoutingGraph):Vector[(StackName,Vector[Inbound])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadbalancerV1Configs</span><span class="params">(<span name="graph">graph: <a href="../routing/package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a></span>)</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[(<a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a>, <span class="extype" name="scala.Vector">Vector</span>[<a href="Inbound.html" class="extype" name="nelson.loadbalancers.Inbound">Inbound</a>])]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@loadbalancerV1Configs(graph:nelson.routing.RoutingGraph):Vector[(nelson.Datacenter.StackName,Vector[nelson.loadbalancers.Inbound])]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -282,19 +335,36 @@
       </a>
     </span>
       
-    </li><li name="nelson.loadbalancers#writeLoadbalancerConfigToConsul" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="writeLoadbalancerConfigToConsul(sn:nelson.Datacenter.StackName,routes:Vector[nelson.Manifest.Route]):helm.ConsulOp.ConsulOpF[Unit]"></a>
-      <a id="writeLoadbalancerConfigToConsul(StackName,Vector[Route]):ConsulOpF[Unit]"></a>
+    </li><li name="nelson.loadbalancers#writeLoadbalancerV1ConfigToConsul" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="writeLoadbalancerV1ConfigToConsul(sn:nelson.Datacenter.StackName,ins:Vector[nelson.loadbalancers.Inbound]):helm.ConsulOp.ConsulOpF[Unit]"></a>
+      <a id="writeLoadbalancerV1ConfigToConsul(StackName,Vector[Inbound]):ConsulOpF[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeLoadbalancerConfigToConsul</span><span class="params">(<span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="routes">routes: <span class="extype" name="scala.Vector">Vector</span>[<a href="../Manifest$$Route.html" class="extype" name="nelson.Manifest.Route">Route</a>]</span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+        <span class="name">writeLoadbalancerV1ConfigToConsul</span><span class="params">(<span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="ins">ins: <span class="extype" name="scala.Vector">Vector</span>[<a href="Inbound.html" class="extype" name="nelson.loadbalancers.Inbound">Inbound</a>]</span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.loadbalancers.package@writeLoadbalancerConfigToConsul(sn:nelson.Datacenter.StackName,routes:Vector[nelson.Manifest.Route]):helm.ConsulOp.ConsulOpF[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.loadbalancers.package@writeLoadbalancerV1ConfigToConsul(sn:nelson.Datacenter.StackName,ins:Vector[nelson.loadbalancers.Inbound]):helm.ConsulOp.ConsulOpF[Unit]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.loadbalancers#writeLoadbalancerV2ConfigToConsul" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="writeLoadbalancerV2ConfigToConsul(sn:nelson.Datacenter.StackName,routes:Vector[nelson.Manifest.Route]):helm.ConsulOp.ConsulOpF[Unit]"></a>
+      <a id="writeLoadbalancerV2ConfigToConsul(StackName,Vector[Route]):ConsulOpF[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeLoadbalancerV2ConfigToConsul</span><span class="params">(<span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="routes">routes: <span class="extype" name="scala.Vector">Vector</span>[<a href="../Manifest$$Route.html" class="extype" name="nelson.Manifest.Route">Route</a>]</span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.loadbalancers.package@writeLoadbalancerV2ConfigToConsul(sn:nelson.Datacenter.StackName,routes:Vector[nelson.Manifest.Route]):helm.ConsulOp.ConsulOpF[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
