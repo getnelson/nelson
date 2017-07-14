@@ -85,6 +85,8 @@ object Server {
           BadRequest(Map("message" -> msg).asJson)
         case ManualDeployFailed(msg) =>
           BadRequest(Map("message" -> msg).asJson)
+        case e@MissingDeployment(guid) =>
+          BadRequest(Map("message" -> e.getMessage).asJson)
         case t: Throwable =>
           log.error(s"Error handling request", t)
           InternalServerError(jSingleObject("message", "An internal error occurred".asJson))
