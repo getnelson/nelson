@@ -81,7 +81,7 @@ object Templates {
       val dcName = dc.name
       val dnsRoot = dc.domain.name
 
-      val ns = NamespaceName("dev")
+      val ns = cfg.defaultNamespace
       val sn = StackName(tv.unitRef, Version(0, 0, 0), s"test${randomAlphaNumeric(8)}")
 
       val env = Map(
