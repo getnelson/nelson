@@ -272,16 +272,6 @@ object Nelson {
     import Manifest.{Namespace,Plan,UnitDef,Loadbalancer,Action}
     import Actionable._
 
-    // convert loadbalancers in the manifest to actions.
-    // filter out all loadbalancer actions that are not in the provided namespace (ns)
-    def lbActions(m: Manifest @@ Versioned, ns: NamespaceName, dcs: Seq[Datacenter]): List[Action] = {
-
-      val lbFilter: (Datacenter,Namespace,Plan,Loadbalancer) => Boolean =
-        (_,namespace,_,_) => namespace.name == ns
-
-       Manifest.loadbalancerActions(m, dcs, lbFilter)
-    }
-
     // convert units in the manifest to action.
     // filter out all units that are not in the provided namespace (ns)
     def unitActions(m: Manifest @@ Versioned, ns: NamespaceName, dcs: Seq[Datacenter]): List[Action] = {
@@ -307,10 +297,7 @@ object Nelson {
         _  <- (storeManifest(hm, e.repositoryId).run(cfg)
               *> log("stored the release manifest in the database"))
 
-        uas = unitActions(hm, cfg.defaultNamespace, cfg.datacenters)
-        las = lbActions(hm, cfg.defaultNamespace, cfg.datacenters)
-
-        _ <- deploy(uas ::: las).run(cfg)
+        _ <- deploy(unitActions(hm, cfg.defaultNamespace, cfg.datacenters)).run(cfg)
       } yield ()
     }
   }
