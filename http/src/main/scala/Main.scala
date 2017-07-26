@@ -28,7 +28,7 @@ import scalaz.concurrent.Task
 import scalaz.stream.Process
 import nelson.monitoring.{DeploymentMonitor, Stoplight, registerJvmMetrics}
 import nelson.http.MonitoringServer
-import nelson.storage.StoreOp
+import nelson.storage.{StoreOp, Migrate, Hikari}
 import dispatch.Http
 
 object Main {
@@ -40,13 +40,12 @@ object Main {
     def readConfig =
       (knobs.loadImmutable(Required(ClassPathResource("nelson/defaults.cfg")) :: Nil) |@|
         knobs.loadImmutable(Optional(FileResource(file)) :: Nil))((a,b) =>
-        Config.readConfig(a ++ b, Http)
+        Config.readConfig(a ++ b, Http, Hikari.build _)
       )
 
-    val cfg = (for {
-      c <- readConfig
-      _ <- nelson.storage.run(c.interpreters.storage, StoreOp.migrate)
-    } yield c).run
+    val cfg = readConfig.run
+
+    Migrate.migrate(cfg.database).run
 
     log.info(Banner.text)
 

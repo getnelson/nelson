@@ -33,6 +33,7 @@ libraryDependencies ++= Seq(
   "io.prometheus"               % "simpleclient_hotspot"               % V.prometheus,
   "org.tpolecat"               %% "doobie-core"                        % V.doobie,
   "org.tpolecat"               %% "doobie-contrib-h2"                  % V.doobie,
+  "org.tpolecat"               %% "doobie-contrib-hikari"              % V.doobie,
   "org.spire-math"             %% "spire"                              % "0.11.0",
   "org.flywaydb"                % "flyway-core"                        % "3.2.1",
   "net.databinder.dispatch"    %% "dispatch-core"                      % "0.11.2",

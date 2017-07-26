@@ -87,7 +87,7 @@ class ConfigSpec extends FlatSpec with Matchers {
         Required(ClassPathResource("nelson/defaults.cfg")),
         Required(ClassPathResource("nelson/nelson-test.cfg")),
         Required(ClassPathResource("nelson/datacenters.cfg"))
-      )).map(Config.readConfig(_, NelsonSuite.testHttp)).run
+      )).map(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _)).run
     config.template.vaultAddress should equal (Some("https://vault.california.service"))
   }
 
@@ -96,7 +96,7 @@ class ConfigSpec extends FlatSpec with Matchers {
       List(
         Required(ClassPathResource("nelson/defaults.cfg")),
         Required(ClassPathResource("nelson/nelson-test.cfg"))
-      )).map(Config.readConfig(_, NelsonSuite.testHttp)).run
+      )).map(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _)).run
     config.template.vaultAddress should equal (None)
   }
 }

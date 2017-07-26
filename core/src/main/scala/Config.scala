@@ -125,7 +125,8 @@ final case class DatabaseConfig(
   driver: String,
   connection: String,
   username: Option[String],
-  password: Option[String]
+  password: Option[String],
+  maxConnections: Option[Int]
 )
 
 import crypto.{AuthEnv, TokenAuthenticator}
@@ -377,12 +378,13 @@ final case class NelsonConfig(
 }
 
 import knobs.{Config => KConfig}
+import doobie.imports._
 
 object Config {
 
   private[this] val log = Logger[Config.type]
 
-  def readConfig(cfg: KConfig, http: Http): NelsonConfig = {
+  def readConfig(cfg: KConfig, http: Http, xa: DatabaseConfig => Transactor[Task]): NelsonConfig = {
     // TIM: Don't turn this on for any deployed version; it will dump all the credentials
     // into the log, so be careful.
     // log.debug("configured with the following knobs:")
@@ -407,7 +409,7 @@ object Config {
       workflowConf.filePath)
 
     val databasecfg = readDatabase(cfg.subconfig("nelson.database"))
-    val storage = new nelson.storage.H2Storage(databasecfg)
+    val storage = new nelson.storage.H2Storage(xa(databasecfg))
 
     val slack = readSlack(cfg.subconfig("nelson.slack")).map(new SlackHttp(_, http))
 
@@ -669,7 +671,8 @@ object Config {
       driver     = cfg.require[String]("driver"),
       connection = cfg.require[String]("connection"),
       username = cfg.lookup[String]("username"),
-      password = cfg.lookup[String]("password")
+      password = cfg.lookup[String]("password"),
+      maxConnections = cfg.lookup[Int]("max-connections")
     )
 
   private def readSecurity(cfg: KConfig): SecurityConfig =

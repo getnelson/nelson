@@ -16,16 +16,16 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.storage.StoreOp
+import nelson.storage.{StoreOp, Migrate}
 
 object TestStorage {
   def dbConfig(testname: String): DatabaseConfig =
-    DatabaseConfig("org.h2.Driver", s"jdbc:h2:file:db/nelson.test.$testname.db;DATABASE_TO_UPPER=FALSE;", None, None)
+    DatabaseConfig("org.h2.Driver", s"jdbc:h2:file:db/nelson.test.$testname.db;DATABASE_TO_UPPER=FALSE;", None, None, None)
 
   def storage(testname: String) = {
-    val s = new nelson.storage.H2Storage(dbConfig(testname))
-    nelson.storage.run(s, StoreOp.migrate).run
-    s
+    val cfg = dbConfig(testname)
+    Migrate.migrate(cfg).run
+    new nelson.storage.H2Storage(xa(cfg))
   }
 
   import doobie.imports._

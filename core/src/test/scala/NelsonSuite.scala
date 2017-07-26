@@ -173,7 +173,7 @@ trait NelsonSuite
     Required(ClassPathResource("nelson/defaults.cfg")),
     Required(ClassPathResource("nelson/nelson-test.cfg")),
     Required(ClassPathResource("nelson/datacenters.cfg"))
-  )).map(Config.readConfig(_, NelsonSuite.testHttp))
+  )).map(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _))
     .run
     .copy( // Configure a minimal set of things in code. Otherwise, we want to test our config.
       database = dbConfig, // let each suite get its own h2

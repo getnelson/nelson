@@ -234,9 +234,6 @@ object StoreOp {
   def getLatestReleaseForLoadbalancer(name: String, mv: MajorVersion): StoreOpF[Option[Released]] =
     Free.liftFC(GetLatestReleaseForLoadbalancer(name, mv))
 
-  def migrate: StoreOpF[Unit] =
-    Free.liftFC(Migrate)
-
   final case class FindRepository(u: User, slug: Slug) extends StoreOp[Option[Repo]]
   final case class ListRepositories(u: User) extends StoreOp[List[Repo]]
   final case class ListRepositoriesWithOwner(u: User, owner: String) extends StoreOp[List[Repo]]
@@ -297,5 +294,4 @@ object StoreOp {
   final case class GetMostAndLeastDeployed(since: Long, number: Int, sortOrder: String) extends StoreOp[List[(String, Int)]]
   final case class FindLastReleaseDeploymentStatus(s: Slug, u: UnitName) extends StoreOp[Option[DeploymentStatus]]
   final case class GetLatestReleaseForLoadbalancer(name: String, mv: MajorVersion) extends StoreOp[Option[Released]]
-  case object Migrate extends StoreOp[Unit]
 }
