@@ -30,43 +30,13 @@ import journal._
 import java.time.Instant
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
-final case class H2Storage(cfg: DatabaseConfig) extends (StoreOp ~> Task) {
+final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
   import StoreOp._
   import Datacenter._
   import nelson.audit.{AuditLog,AuditEvent,AuditAction,AuditCategory}
   import Manifest.{Namespace => _, Port => _, TrafficShift => _, _}
 
   val log = Logger[this.type]
-
-  def migrate: Task[Unit] =
-    Task.delay {
-      val flyway = new Flyway
-      flyway.setDataSource(
-        cfg.connection,
-        cfg.username.getOrElse(""),
-        cfg.password.getOrElse(""))
-
-      try {
-        log.info("Conducting database schema migrations if needed.")
-        val completed = flyway.migrate()
-        log.info(s"Completed $completed succsessful migrations.")
-      } catch {
-        case e: Throwable => {
-          // attempt a repair (useful for local debugging)
-          log.error(s"Failed to migrate database. ${e.getMessage}")
-          log.info("Repairing database before retrying migration")
-          flyway.repair()
-          val completed = flyway.migrate()
-          log.info(s"After repair, completed $completed succsessful migrations.")
-        }
-      }
-    }
-
-  val xa = DriverManagerTransactor[Task](
-    cfg.driver,
-    cfg.connection,
-    cfg.username.getOrElse(""),
-    cfg.password.getOrElse(""))
 
   override def apply[A](s: StoreOp[A]): Task[A] = s match {
     case FindRepository(u, slug) => findRepository(u, slug).transact(xa)
@@ -129,7 +99,6 @@ final case class H2Storage(cfg: DatabaseConfig) extends (StoreOp ~> Task) {
     case GetMostAndLeastDeployed(since, number, sortOrder) => getMostAndLeastDeployed(since, number, sortOrder).transact(xa)
     case FindLastReleaseDeploymentStatus(s, u) => findLastReleaseDeploymentStatus(s, u).transact(xa)
     case GetLatestReleaseForLoadbalancer(n, mv) => getLatestReleaseForLoadbalancer(n, mv).transact(xa)
-    case Migrate => migrate
   }
 
   implicit val metaVersion: Meta[Version] =
