@@ -45,8 +45,8 @@ object RetainLatest extends ExpirationPolicy {
 
   def policy(d: DeploymentCtx, g: RoutingGraph)(ext: Duration): Option[Duration] = {
     val ds = ExpirationPolicy.filterDeploymentsByName(g.nodes, d.deployment)
-    val latest = Deployment.getLatestDeployment(ds.toSet)
-    if (latest.exists(_ == d.deployment) &&
+    val latest = Deployment.getLatestVersion(ds.toSet)
+    if (latest.exists(_ == d.deployment.unit.version) &&
         !ExpirationPolicy.isDeprecated(d))
       Some(ext)
     else
@@ -63,10 +63,10 @@ object RetainLatestTwoMajor extends ExpirationPolicy {
 
   def policy(d: DeploymentCtx, g: RoutingGraph)(ext: Duration): Option[Duration] = {
     val ds = ExpirationPolicy.filterDeploymentsByName(g.nodes, d.deployment)
-    val latest = Deployment.getLatestDeployment(ds.toSet)
-    val second = Deployment.getLatestDeployment(ds.filter(x =>
-      latest.exists(y => y.unit.version.major != x.unit.version.major)).toSet)
-    if ((latest.exists(_ == d.deployment) || second.exists(_ == d.deployment)) &&
+    val latest = Deployment.getLatestVersion(ds.toSet)
+    val second = Deployment.getLatestVersion(ds.filter(x =>
+      latest.exists(y => y.major != x.unit.version.major)).toSet)
+    if ((latest.exists(_ == d.deployment.unit.version) || second.exists(_ == d.deployment.unit.version)) &&
         !ExpirationPolicy.isDeprecated(d))
       Some(ext)
     else
@@ -83,11 +83,11 @@ object RetainLatestTwoFeature extends ExpirationPolicy {
 
   def policy(d: DeploymentCtx, g: RoutingGraph)(ext: Duration): Option[Duration] = {
     val ds = ExpirationPolicy.filterDeploymentsByName(g.nodes, d.deployment)
-    val latest = Deployment.getLatestDeployment(ds.toSet)
+    val latest = Deployment.getLatestVersion(ds.toSet)
     // same major different minor
-    val second = Deployment.getLatestDeployment(ds.filter(x => latest.exists(y =>
-        y.unit.version.major == x.unit.version.major && y.unit.version.minor != x.unit.version.minor)).toSet)
-    if ((latest.exists(_ == d.deployment) || second.exists(_ == d.deployment)) &&
+    val second = Deployment.getLatestVersion(ds.filter(x => latest.exists(y =>
+        y.major == x.unit.version.major && y.minor != x.unit.version.minor)).toSet)
+    if ((latest.exists(_ == d.deployment.unit.version) || second.exists(_ == d.deployment.unit.version)) &&
         !ExpirationPolicy.isDeprecated(d))
       Some(ext)
     else
