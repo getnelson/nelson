@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">DatabaseConfig</span><span class="params">(<span name="driver">driver: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="connection">connection: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="username">username: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="password">password: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">DatabaseConfig</span><span class="params">(<span name="driver">driver: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="connection">connection: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="username">username: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="password">password: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="maxConnections">maxConnections: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.DatabaseConfig#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(driver:String,connection:String,username:Option[String],password:Option[String]):nelson.DatabaseConfig"></a>
+      <a id="&lt;init&gt;(driver:String,connection:String,username:Option[String],password:Option[String],maxConnections:Option[Int]):nelson.DatabaseConfig"></a>
       <a id="&lt;init&gt;:DatabaseConfig"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DatabaseConfig</span><span class="params">(<span name="driver">driver: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="connection">connection: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="username">username: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="password">password: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
+        <span class="name">DatabaseConfig</span><span class="params">(<span name="driver">driver: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="connection">connection: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="username">username: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="password">password: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="maxConnections">maxConnections: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.DatabaseConfig@&lt;init&gt;(driver:String,connection:String,username:Option[String],password:Option[String]):nelson.DatabaseConfig" title="Permalink" target="_top">
+      <a href="../index.html#nelson.DatabaseConfig@&lt;init&gt;(driver:String,connection:String,username:Option[String],password:Option[String],maxConnections:Option[Int]):nelson.DatabaseConfig" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -313,6 +313,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.DatabaseConfig#maxConnections" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maxConnections:Option[Int]"></a>
+      <a id="maxConnections:Option[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maxConnections</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.DatabaseConfig@maxConnections:Option[Int]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

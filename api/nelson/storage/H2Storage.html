@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">H2Storage</span><span class="params">(<span name="cfg">cfg: <a href="../DatabaseConfig.html" class="extype" name="nelson.DatabaseConfig">DatabaseConfig</a></span>)</span><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">H2Storage</span><span class="params">(<span name="xa">xa: <span class="extype" name="doobie.imports.Transactor">Transactor</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>)</span><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.storage.H2Storage#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(cfg:nelson.DatabaseConfig):nelson.storage.H2Storage"></a>
+      <a id="&lt;init&gt;(xa:doobie.imports.Transactor[scalaz.concurrent.Task]):nelson.storage.H2Storage"></a>
       <a id="&lt;init&gt;:H2Storage"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">H2Storage</span><span class="params">(<span name="cfg">cfg: <a href="../DatabaseConfig.html" class="extype" name="nelson.DatabaseConfig">DatabaseConfig</a></span>)</span>
+        <span class="name">H2Storage</span><span class="params">(<span name="xa">xa: <span class="extype" name="doobie.imports.Transactor">Transactor</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.H2Storage@&lt;init&gt;(cfg:nelson.DatabaseConfig):nelson.storage.H2Storage" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.storage.H2Storage@&lt;init&gt;(xa:doobie.imports.Transactor[scalaz.concurrent.Task]):nelson.storage.H2Storage" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -385,23 +385,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.storage.H2Storage@auditLogFromRow(row:H2Storage.this.AuditRow):nelson.audit.AuditLog" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.storage.H2Storage#cfg" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cfg:nelson.DatabaseConfig"></a>
-      <a id="cfg:DatabaseConfig"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">cfg</span><span class="result">: <a href="../DatabaseConfig.html" class="extype" name="nelson.DatabaseConfig">DatabaseConfig</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.H2Storage@cfg:nelson.DatabaseConfig" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1770,23 +1753,6 @@ has access too.</p>
       </a>
     </span>
       
-    </li><li name="nelson.storage.H2Storage#migrate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="migrate:scalaz.concurrent.Task[Unit]"></a>
-      <a id="migrate:Task[Unit]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">migrate</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.H2Storage@migrate:scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.storage.H2Storage#namespaceName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="namespaceName:doobie.imports.Meta[nelson.NamespaceName]"></a>
       <a id="namespaceName:Meta[NamespaceName]"></a>
@@ -2044,7 +2010,7 @@ has access too.</p>
               
         </dd></dl></div>
     </li><li name="nelson.storage.H2Storage#xa" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="xa:doobie.util.transactor.Transactor[scalaz.concurrent.Task]"></a>
+      <a id="xa:doobie.imports.Transactor[scalaz.concurrent.Task]"></a>
       <a id="xa:Transactor[Task]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2052,10 +2018,10 @@ has access too.</p>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">xa</span><span class="result">: <span class="extype" name="doobie.util.transactor.Transactor">Transactor</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">xa</span><span class="result">: <span class="extype" name="doobie.imports.Transactor">Transactor</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.H2Storage@xa:doobie.util.transactor.Transactor[scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.storage.H2Storage@xa:doobie.imports.Transactor[scalaz.concurrent.Task]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
