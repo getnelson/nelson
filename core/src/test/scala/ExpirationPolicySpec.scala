@@ -176,7 +176,7 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
     RetainLatest.policy(dep411, g)(ext) should equal (None)
   }
 
-  it should "retain the latest by deploy time when version is the same" in {
+  it should "retain the latest with matrix deployment" in {
 
     val deploy = NOW
 
@@ -190,7 +190,7 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
       Context(Vector(), RoutingNode(dep411a.deployment), (), Vector()) &
       Context(Vector(), RoutingNode(dep411b.deployment), (), Vector())
 
-    RetainLatest.policy(dep411a, g)(ext) should equal (None)
+    RetainLatest.policy(dep411a, g)(ext) should equal (Some(ext))
     RetainLatest.policy(dep411b, g)(ext) should equal (Some(ext))
   }
 
@@ -244,6 +244,31 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
     RetainLatestTwoMajor.policy(dep411, g)(ext) should equal (None)
   }
 
+  it should "retain the latest two major versions with matrix deployment" in {
+    val job310 = makeDeployment(0L, "job", Version(3,1,0), RetainLatestTwoMajor)
+    val dep310 = DeploymentCtx(job310, Ready, Some(NOW))
+
+    val job311 = makeDeployment(1L, "job", Version(3,1,0), RetainLatestTwoMajor)
+    val dep311 = DeploymentCtx(job311, Ready, Some(NOW))
+
+    val job410 = makeDeployment(2L, "job", Version(4,1,0), RetainLatestTwoMajor)
+    val dep410 = DeploymentCtx(job410, Ready, Some(NOW))
+
+    val job411 = makeDeployment(3L,"job", Version(4,1,0), RetainLatestTwoMajor)
+    val dep411 = DeploymentCtx(job411, Ready, Some(NOW))
+
+    val g = emptyG &
+      Context(Vector(), RoutingNode(dep310.deployment), (), Vector()) &
+      Context(Vector(), RoutingNode(dep311.deployment), (), Vector()) &
+      Context(Vector(), RoutingNode(dep410.deployment), (), Vector()) &
+      Context(Vector(), RoutingNode(dep411.deployment), (), Vector())
+
+    RetainLatestTwoMajor.policy(dep310, g)(ext) should equal (Some(ext))
+    RetainLatestTwoMajor.policy(dep311, g)(ext) should equal (Some(ext))
+    RetainLatestTwoMajor.policy(dep410, g)(ext) should equal (Some(ext))
+    RetainLatestTwoMajor.policy(dep411, g)(ext) should equal (Some(ext))
+  }
+
   it should "retain the latest only when there is only one feature version" in {
 
     val job300 = makeDeployment(0L, "job", Version(3,0,0), RetainLatestTwoFeature)
@@ -288,6 +313,30 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
     RetainLatestTwoFeature.policy(dep310, g)(ext) should equal (None)
     RetainLatestTwoFeature.policy(dep311, g)(ext) should equal (Some(ext))
     RetainLatestTwoFeature.policy(dep300, g)(ext) should equal (Some(ext))
+  }
+
+  it should "retain the latest two feature versions with matrix deployment" in {
+    val job300 = makeDeployment(0L, "job", Version(3,0,0), RetainLatestTwoFeature)
+    val dep300 = DeploymentCtx(job300, Ready, Some(NOW))
+
+    val job310 = makeDeployment(1L, "job", Version(3,1,0), RetainLatestTwoFeature)
+    val dep310 = DeploymentCtx(job310, Ready, Some(NOW))
+
+    val job311 = makeDeployment(2L, "job", Version(3,1,1), RetainLatestTwoFeature)
+    val dep311 = DeploymentCtx(job311, Ready, Some(NOW))
+
+    val job311b = makeDeployment(3L, "job", Version(3,1,1), RetainLatestTwoFeature)
+    val dep311b = DeploymentCtx(job311b, Ready, Some(NOW))
+
+    val g = emptyG &
+      Context(Vector(), RoutingNode(dep300.deployment), (), Vector()) &
+      Context(Vector(), RoutingNode(dep310.deployment), (), Vector()) &
+      Context(Vector(), RoutingNode(dep311.deployment), (), Vector())
+
+    RetainLatestTwoFeature.policy(dep310, g)(ext) should equal (None)
+    RetainLatestTwoFeature.policy(dep300, g)(ext) should equal (Some(ext))
+    RetainLatestTwoFeature.policy(dep311, g)(ext) should equal (Some(ext))
+    RetainLatestTwoFeature.policy(dep311b, g)(ext) should equal (Some(ext))
   }
 
   it should "not retain the latest two feature versions if deployment is deprecated" in {
