@@ -291,7 +291,7 @@ object Github {
           val (repos,links) = task.run
           links.get(Next) match {
             case Some(u) => go(u)(accum ++ repos)
-            case None    => accum
+            case None    => accum ++ repos
           }
         }
         Task.delay(go(new URI(cfg.repoEndpoint(page = 1)))(Nil))
