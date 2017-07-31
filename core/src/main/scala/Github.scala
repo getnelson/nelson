@@ -351,8 +351,9 @@ object Github {
       def onCompleted(response: Response): (A,Map[Step,URI]) = {
         if (response.getStatusCode / 100 == 2) {
           val links: Map[Step,URI] =
-            response.getHeaders("Link").asScala.toList
-              .headOption
+            Option(response.getHeaders("Link"))
+              .map(_.asScala.toList)
+              .flatMap(_.headOption)
               .getOrElse("") // TIM: this is hacky, urgh.
               .split(",")
               .foldLeft(List.empty[(Step,URI)])((a,b) =>
