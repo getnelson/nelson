@@ -291,7 +291,7 @@ object Github {
           val (repos,links) = task.run
           links.get(Next) match {
             case Some(u) => go(u)(accum ++ repos)
-            case None    => accum
+            case None    => accum ++ repos
           }
         }
         Task.delay(go(new URI(cfg.repoEndpoint(page = 1)))(Nil))
@@ -351,8 +351,9 @@ object Github {
       def onCompleted(response: Response): (A,Map[Step,URI]) = {
         if (response.getStatusCode / 100 == 2) {
           val links: Map[Step,URI] =
-            response.getHeaders("Link").asScala.toList
-              .headOption
+            Option(response.getHeaders("Link"))
+              .map(_.asScala.toList)
+              .flatMap(_.headOption)
               .getOrElse("") // TIM: this is hacky, urgh.
               .split(",")
               .foldLeft(List.empty[(Step,URI)])((a,b) =>
