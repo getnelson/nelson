@@ -368,14 +368,16 @@ object Github {
       * for splitting the github links header output
       */
       private[nelson] def tuplize(in: String): Option[(Step, URI)] = {
-        val Array(uri,rel) = in.split(";")
-        val linkr = "<(.*)>".r
-        val relr  = "rel=\"(.*)\"".r
+        if (in != "") {
+          val Array(uri,rel) = in.split(";")
+          val linkr = "<(.*)>".r
+          val relr  = "rel=\"(.*)\"".r
 
-        val ouri = linkr.replaceFirstIn(uri, "$1").trim
-        val orel = relr.replaceFirstIn(rel, "$1").trim
+          val ouri = linkr.replaceFirstIn(uri, "$1").trim
+          val orel = relr.replaceFirstIn(rel, "$1").trim
 
-        Step.fromString(orel).map(_ -> new URI(ouri))
+          Step.fromString(orel).map(_ -> new URI(ouri))
+        } else None
       }
     }
 
