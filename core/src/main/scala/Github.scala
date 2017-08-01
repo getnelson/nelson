@@ -357,7 +357,8 @@ object Github {
               .getOrElse("") // TIM: this is hacky, urgh.
               .split(",")
               .foldLeft(List.empty[(Step,URI)])((a,b) =>
-                a ++ tuplize(b).toList).toMap
+                a ++ (if (b.isEmpty) List.empty else tuplize(b).toList)
+              ).toMap
 
           (f(response), links)
         } else {
