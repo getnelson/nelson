@@ -39,10 +39,10 @@ final case class WebHooks(config: NelsonConfig) extends Default {
     case req @ POST -> Root / "listener" =>
       decode[Github.Event](req){
         case Github.PingEvent(_) =>
-          log.info("recieved ping event from github, looks good!")
+          log.info("received ping event from github, looks good!")
           Ok()
         case r@Github.ReleaseEvent(_,_,_) =>
-          log.info(s"recieved release event from github: $r")
+          log.info(s"received release event from github: $r")
           json(Nelson.handleRelease(r))
       }
   }

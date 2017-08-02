@@ -96,7 +96,7 @@ object Nelson {
    * sure we have the latest set of repos and their associated access.
    */
   def syncRepos(session: Session): NelsonK[Unit] = {
-    // copy any known hooks into the list recieved from github
+    // copy any known hooks into the list received from github
     // to aovid them being overwritten during the persist phase
     def augment(known: List[Repo])(r: Repo): Repo =
       known.find(_.id == r.id)
@@ -288,7 +288,7 @@ object Nelson {
                 fetchRepoManifestAndValidateDeployable(e.slug, r.tagName).run(cfg))
         m  <-  v.fold(e => Task.fail(MultipleErrors(e)), m => Task.now(m))
 
-        hm <- (log(s"recieved manifest from github: $m")
+        hm <- (log(s"received manifest from github: $m")
               *> storage.run(cfg.storage, storage.StoreOp.createRelease(e.repositoryId, r))
               *> cfg.auditor.write(r, CreateAction, Option(r.id))
               *> log(s"created release in response to release ${r.id}")
