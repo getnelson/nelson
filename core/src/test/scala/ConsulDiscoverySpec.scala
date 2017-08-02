@@ -42,8 +42,8 @@ class ConsulDiscoverySpec extends NelsonSuite {
     val dts = Discovery.discoveryTables(rts)
 
     dts.toList.map {
-      case ((deployment, nsname), dt) =>
-        Discovery.writeDiscoveryInfoToConsul(nsname, deployment.stackName, "service.example.com", dt)
+      case ((sn, nsname), dt) =>
+        Discovery.writeDiscoveryInfoToConsul(nsname, sn, "service.example.com", dt)
     }
   }
 
