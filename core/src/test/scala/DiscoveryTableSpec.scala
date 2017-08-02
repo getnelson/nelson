@@ -41,14 +41,14 @@ class DiscoveryTableSpec extends NelsonSuite {
     var lbTable: Option[DiscoveryTables] = None
     val dts = Discovery.discoveryTables(rts)
     dts.toList.foreach {
-      case ((rn,y),z) =>
-        if(rn.deployment.exists(_.unit.serviceName.serviceType == "conductor"))
+      case ((sn,y),z) =>
+        if(sn.serviceType == "conductor")
           conductorTable = Some(z)
-        else if (rn.deployment.exists(_.unit.serviceName.serviceType == "service-b"))
+        else if (sn.serviceType == "service-b")
          serviceBTable = Some(z)
-        else if (rn.deployment.exists(_.stackName == StackName("service-c", Version(6,2,1), "bbbb")))
+        else if (sn == StackName("service-c", Version(6,2,1), "bbbb"))
          serviceCTable = Some(z)
-        else if (rn.loadbalancer.exists(_.loadbalancer.name == "lb"))
+        else if (sn.serviceType == "lb")
           lbTable = Some(z)
     }
 
@@ -92,8 +92,8 @@ class DiscoveryTableSpec extends NelsonSuite {
     var suTable: Option[DiscoveryTables] = None
     val dts = Discovery.discoveryTables(rts)
     dts.toList.foreach {
-      case ((rn,y),z) =>
-        if(rn.deployment.exists(_.unit.serviceName.serviceType == "ab"))
+      case ((sn,y),z) =>
+        if(sn.serviceType == "ab")
           suTable = Some(z)
     }
 

@@ -77,11 +77,11 @@ object Discovery {
     ("weight" := rp.weight)                   ->: jEmptyObject
   }
 
-  def discoveryTables[F[_]: Foldable](graphs: F[(Namespace, RoutingGraph)]): (RoutingNode,NamespaceName) ==>> DiscoveryTables = {
-    graphs.foldLeft[(RoutingNode,NamespaceName) ==>> DiscoveryTables](==>>.empty){(smap,g) =>
+  def discoveryTables[F[_]: Foldable](graphs: F[(Namespace, RoutingGraph)]): (StackName,NamespaceName) ==>> DiscoveryTables = {
+    graphs.foldLeft[(StackName,NamespaceName) ==>> DiscoveryTables](==>>.empty){(smap,g) =>
       val (ns, rg) = g
       rg.nodes.filter(_.nsid == ns.id).foldLeft(smap){(s,rn) =>
-        s.updateAppend((rn, ns.name), discoveryTable(rn, rg))
+        s.insert((rn.stackName, ns.name), discoveryTable(rn, rg))
       }
     }
   }

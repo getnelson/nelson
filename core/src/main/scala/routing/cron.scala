@@ -43,9 +43,9 @@ object cron {
         dts = Discovery.discoveryTables(rts).toList
 
         dtout = dts.map {
-          case ((d,ns),dts) =>
-            log.debug(s"cron: refressing lighthouse table for ${d}")
-            dc -> Discovery.writeDiscoveryInfoToConsul(ns, d.stackName, dc.domain.name, dts)
+          case ((sn,ns),dts) =>
+            log.debug(s"cron: refressing lighthouse table for ${sn}")
+            dc -> Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dts)
         }
 
         lbout = rts.flatMap { case (_ , gr) =>
