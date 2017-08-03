@@ -1117,6 +1117,8 @@ GET /v1/units
   Commit Units
 </h3>
 
+Commits a unit@version combination to a target namespace. See [Committing](#manifest-namespace-sequencing) for more.
+
 ```
 POST /v1/units/commit
 
@@ -1299,6 +1301,31 @@ These options can be combined or committed in a variety of ways:
 # show the units that have been terminated by nelson in a given namespace
 λ nelson units list --namespaces dev --statues terminated
 ```
+
+<h3 id="cli-unit-commit" class="linkable">
+  Commit
+</h3>
+
+Commit a unit@version combination to a specific target namespace. The unit must be associated with the target namespace in the `namespaces` section of the manifest.
+
+```
+namespaces:
+  - name: dev
+    units:
+      - ref: howdy-http
+  - name: qa
+    units:
+      - ref: howdy-http
+```
+
+To promote version 0.38.145 of howdy-batch to qa, issue the following command:
+
+```
+# Commits unit howdy, version 0.38.145 to the qa namespace
+λ nelson unit commit --unit howdy-http --version 0.38.145 --target qa
+```
+
+See [Committing](#manifest-namespace-sequencing) for more.
 
 <h3 id="cli-unit-inspection" class="linkable">
   Inspection
@@ -1571,7 +1598,7 @@ Namespaces represent virtual "worlds" within the shared computing cluster. From 
   Committing
 </h3>
 
-During a release event each unit will only be deployed into the default namespace (this is usually `dev`). After the initial release the unit can be deployed into other namespaces by "committing" it. This is done via the Nelson API which is documented above, or using the `nelson unit commit`.
+During a release event each unit will only be deployed into the default namespace (this is usually `dev`). After the initial release the unit can be deployed into other namespaces by "committing" it. This can be done via the [commit endpoint of the API](#api-units-commit), or [`nelson unit commit` in the CLI](#cli-unit-commit).
 
 In an ideal world, whatever system you use for testing or validation, the user would integrate with the Nelson API so that applications can be automatically committed from namespace to namespace.
 
