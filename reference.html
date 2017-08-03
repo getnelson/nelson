@@ -1146,6 +1146,8 @@ This API is only available to Nelson administrators.
   Commit Units
 </h3>
 
+<p>Commits a unit@version combination to a target namespace. See <a href="#manifest-namespace-sequencing">Committing</a> for more.</p>
+
 <pre><code>POST /v1/units/commit
 
 {
@@ -1318,6 +1320,29 @@ $ nelson login nelson.yourdomain.com
 # show the units that have been terminated by nelson in a given namespace
 λ nelson units list --namespaces dev --statues terminated
 </code></pre>
+
+<h3 id="cli-unit-commit" class="linkable">
+  Commit
+</h3>
+
+<p>Commit a unit@version combination to a specific target namespace. The unit must be associated with the target namespace in the <code>namespaces</code> section of the manifest.</p>
+
+<pre><code>namespaces:
+  - name: dev
+    units:
+      - ref: howdy-http
+  - name: qa
+    units:
+      - ref: howdy-http
+</code></pre>
+
+<p>To promote version 0.38.145 of howdy-batch to qa, issue the following command:</p>
+
+<pre><code># Commits unit howdy, version 0.38.145 to the qa namespace
+λ nelson unit commit --unit howdy-http --version 0.38.145 --target qa
+</code></pre>
+
+<p>See <a href="#manifest-namespace-sequencing">Committing</a> for more.</p>
 
 <h3 id="cli-unit-inspection" class="linkable">
   Inspection
@@ -1577,7 +1602,7 @@ $ nelson login nelson.yourdomain.com
   Committing
 </h3>
 
-<p>During a release event each unit will only be deployed into the default namespace (this is usually <code>dev</code>). After the initial release the unit can be deployed into other namespaces by &ldquo;committing&rdquo; it. This is done via the Nelson API which is documented above, or using the <code>nelson unit commit</code>.</p>
+<p>During a release event each unit will only be deployed into the default namespace (this is usually <code>dev</code>). After the initial release the unit can be deployed into other namespaces by &ldquo;committing&rdquo; it. This can be done via the <a href="#api-units-commit">commit endpoint of the API</a>, or <a href="#cli-unit-commit"><code>nelson unit commit</code> in the CLI</a>.</p>
 
 <p>In an ideal world, whatever system you use for testing or validation, the user would integrate with the Nelson API so that applications can be automatically committed from namespace to namespace.</p>
 
@@ -2254,7 +2279,7 @@ namespaces:
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.9.51</li>
+      <li>Currently v0.9.52</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/verizon/nelson">GitHub</a></li>
