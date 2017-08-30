@@ -180,9 +180,8 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
       EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
       EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.getOrElse(512D).toInt.toString),
       EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
-      EnvironmentVariable("NELSON_LOGGING_IMAGE", nomad.loggingImage.toString),
       EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name))
-    )
+    ) ++ nomad.loggingImage.map(x => EnvironmentVariable("NELSON_LOGGING_IMAGE", x.toString)).toList
     val p = plan.copy(environment = plan.environment.copy(bindings = vars))
     val json = getJson(u,name,img,dc,ns,p)
     call(name,json)
