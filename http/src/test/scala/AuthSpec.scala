@@ -52,8 +52,7 @@ class AuthSpec extends NelsonSuite {
   it should "Clear the cookie" in {
     val req = Request(GET, uri("/auth/logout"))
     val resp = service.orNotFound(req).run
-    val setCookie = resp.headers.get(`Set-Cookie`)
-    val cookie = setCookie.map(_.cookie)
+    val cookie = resp.cookies.headOption
     cookie.map(_.name) should be (Some("nelson.session"))
     cookie.flatMap(_.maxAge) should be (Some(0L))
   }
@@ -102,8 +101,7 @@ class AuthSpec extends NelsonSuite {
   "/auth/exchange" should "create a session from oauth code" in {
     val req = Request(GET, uri("/auth/exchange?code=goodcode"))
     val resp = service.orNotFound(req).run
-    val setCookie = resp.headers.get(`Set-Cookie`)
-    val cookie = setCookie.map(_.cookie)
+    val cookie = resp.cookies.headOption
     cookie.map(_.name) should be (Some("nelson.session"))
     cookie.map(_.content.isEmpty) should equal (Some(false))
     cookie.flatMap(_.maxAge).map(_ > 0) should equal (Some(true))
