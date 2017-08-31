@@ -40,9 +40,12 @@ class Auditor(queue: Queue[AuditEvent[_]], defaultLogin: String) {
         Task.delay(logger.info(s"[info] audit event ${a.event} action ${a.action} by user ${a.userLogin}"))
     }
 
-  private def persist(stg: (StoreOp ~> Task)): Sink[Task, AuditEvent[_]] =
-    sink.lift[Task,AuditEvent[_]](a =>
-      nelson.storage.run(stg, nelson.storage.StoreOp.audit(a).void))
+  private def persist(stg: StoreOp ~> Task): Sink[Task, AuditEvent[_]] =
+    sink.lift[Task,AuditEvent[_]]{ a =>
+      storage.run(stg, storage.StoreOp.audit(a).void).handleWith {
+        case t => Task.delay(logger.error(s"[fatal] audit error while persisting event ${t.getMessage}"))
+      }
+    }
 
   def auditSink[A](action: AuditAction)(implicit au: Auditable[A]): Sink[Task, A] =
     sink.lift(a => write(a, action)(au))
@@ -54,5 +57,5 @@ class Auditor(queue: Queue[AuditEvent[_]], defaultLogin: String) {
     queue.enqueueOne(AuditEvent(a, action, releaseId, login))
 
   def process(stg: (StoreOp ~> Task)): Process[Task, Unit] =
-    queue.dequeue observe persist(stg) to logSink
+    (queue.dequeue.observe(persist(stg))).attempt().stripW.to(logSink)
 }
