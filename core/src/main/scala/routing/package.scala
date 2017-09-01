@@ -18,7 +18,8 @@ package nelson
 
 package object routing {
   import storage._
-  import scalaz.{==>>, ~>, Monad,Monoid,NonEmptyList,RWST,Traverse,\/}
+  import scalaz.{==>>, ~>, Monad,Monoid,NonEmptyList,RWST,Traverse,\/, Id}
+  import scalaz.Id._
   import scalaz.std.list._
   import scalaz.std.option._
   import scalaz.std.anyVal._
@@ -56,12 +57,12 @@ package object routing {
   type DiscoveryTables = NamespaceName ==>> DiscoveryTable
 
   // this just gets our monad in the the expected * → * shape
-  type GraphBuild[A] = RWST[StoreOpF,RoutingTables,List[String],RoutingGraph,A]
+  type GraphBuild[A] = RWST[Id,RoutingTables,List[String],RoutingGraph,A]
 
   // this is the type we pass to liftM to lift a task into our RWST
   type GraphBuildT[F[_],A] = RWST[F,RoutingTables,List[String],RoutingGraph,A]
 
   // this is a value which has all of the MonadReader (ask),
   // MonadState (get,put,modify) syntax for our RWST
-  val graphBuild = RWST.rwstMonad[StoreOpF,RoutingTables,List[String],RoutingGraph]
+  val graphBuild = RWST.rwstMonad[Id,RoutingTables,List[String],RoutingGraph]
 }

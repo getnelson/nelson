@@ -22,7 +22,6 @@ import nelson.Nelson.StorageK
 import quiver.{Graph,Context,LNode,LEdge}
 import scalaz._
 import Scalaz._
-import scalaz.concurrent.Task
 import journal._
 import java.time.Instant
 
@@ -69,8 +68,7 @@ object RoutingTable {
   private def addLoadbalancerDependency(from: LoadbalancerDeployment)(r: Manifest.Route): GraphBuild[Unit] =
     for {
       rts <- graphBuild.ask
-      ns  <- StoreOp.getNamespaceByID(from.nsid).liftM[GraphBuildT]
-      d   <- rts.lookup(ns.name).flatMap(_.lookup((r.destination.name, from.loadbalancer.version))).point[StoreOpF].liftM[GraphBuildT]
+      d   <- rts.lookup(from.namespace.name).flatMap(_.lookup((r.destination.name, from.loadbalancer.version))).point[Id].liftM[GraphBuildT]
       _   <- d.fold(graphBuild.tell(List(s"missing ${r.destination.name} dependency for ${from.stackName}")))(t => addTarget(RoutingNode(from))(t))
     } yield ()
 
@@ -89,7 +87,7 @@ object RoutingTable {
     def addDefault(ns: Namespace): GraphBuild[Unit] =
       for {
         rt <- graphBuild.ask
-        d  <- resolveDefault(ns.name, rt).point[StoreOpF].liftM[GraphBuildT]
+        d  <- resolveDefault(ns.name, rt).point[Id].liftM[GraphBuildT]
         _  <- d.fold(graphBuild.tell(List(s"missing $sn dependency for ${from.stackName}")))(t => addTarget(RoutingNode(from))(t))
       } yield ()
 
@@ -102,7 +100,7 @@ object RoutingTable {
     def addDownstream(ns: Namespace): GraphBuild[Unit] =
       for {
         rt <- graphBuild.ask
-        ds <- resolveDownstream(ns, rt).point[StoreOpF].liftM[GraphBuildT]
+        ds <- resolveDownstream(ns, rt).point[Id].liftM[GraphBuildT]
         _  <- ds.traverse(t => addTarget(RoutingNode(from))(t))
       } yield ()
 
@@ -186,8 +184,8 @@ object RoutingTable {
       rts  <- generateRoutingTables(ds)
       nodes = ds.map(RoutingNode(_)) ::: lb.map(RoutingNode(_))
       seed  = nodes.foldLeft[RoutingGraph](quiver.empty)((g,d) => g.addNode(LNode(d, ())))
-      gr   <- addEdges.run(rts, seed)
     } yield {
+      val gr = addEdges.run(rts, seed)
       gr._1.foreach(e => log.error("ERROR calculating dependency graph: "+ e))
       gr._3
     }
