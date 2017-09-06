@@ -934,11 +934,10 @@ object Nelson {
       for {
         a  <- storage.run(cfg.storage, StoreOp.getLoadbalancerDeploymentByGUID(guid))
         lb <- a.tfold(LoadbalancerNotFound(guid))(identity)
-        ns <- storage.run(cfg.storage, StoreOp.getNamespaceByID(lb.nsid))
-        dc <- cfg.datacenters.find(_.name == ns.datacenter)
-                .fold[Task[Datacenter]](Task.fail(MisconfiguredDatacenter(ns.datacenter, "couldn't be found")))(Task.now)
+        dc <- cfg.datacenters.find(_.name == lb.namespace.datacenter)
+                .fold[Task[Datacenter]](Task.fail(MisconfiguredDatacenter(lb.namespace.datacenter, "couldn't be found")))(Task.now)
         _  <- dc.loadbalancer.traverse(trans =>
-                loadbalancers.run(trans,  loadbalancers.delete(lb,dc,ns)))
+                loadbalancers.run(trans,  loadbalancers.delete(lb,dc,lb.namespace)))
         _  <- storage.run(cfg.storage, StoreOp.deleteLoadbalancerDeployment(lb.id))
         _  <- helm.run(dc.consul, loadbalancers.deleteLoadbalancerConfigFromConsul(lb))
       } yield ()
@@ -986,10 +985,9 @@ object Nelson {
     Kleisli { cfg =>
       storage.run( cfg.storage, (for {
         lb <- OptionT(storage.StoreOp.getLoadbalancerDeploymentByGUID(guid))
-        ns <- OptionT(storage.StoreOp.getNamespaceByID(lb.nsid).map(Option(_)))
-        od <- OptionT(RoutingTable.routingGraph(ns).map(Option(_)))
+        od <- OptionT(RoutingTable.routingGraph(lb.namespace).map(Option(_)))
       } yield {
-        LoadbalancerSummary(ns, lb, getOuts(od, lb))
+        LoadbalancerSummary(lb.namespace, lb, getOuts(od, lb))
       }).run)
     }
   }

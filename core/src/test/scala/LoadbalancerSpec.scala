@@ -31,14 +31,15 @@ class LoadbalancerSpec extends FlatSpec with Matchers with RoutingFixtures {
 
   val dc = datacenter("name")
 
+  val namespace = Datacenter.Namespace(1L, NamespaceName("devel"), "dc")
+
   private def makeDeployment(id: ID, name: String, version: Version, ps: Set[Port]) = {
-    val namespace = Datacenter.Namespace(1L, NamespaceName("devel"), "dc")
     val dc = DCUnit(id,name,version,"",Set.empty,Set.empty,ps)
     Deployment(id,dc,"foo",namespace,NOW,"quasar","plan","guid","retain-latest")
   }
 
   private def makeLoadbalancer(id: ID, name: String, version: MajorVersion, routes: Vector[Manifest.Route]) =
-    LoadbalancerDeployment(id, 0L, "hash", DCLoadbalancer(id, name, version, routes), NOW, "guid", "dns")
+    LoadbalancerDeployment(id, namespace, "hash", DCLoadbalancer(id, name, version, routes), NOW, "guid", "dns")
 
   private def makeRoute(ref: String, port: Int, d: Deployment, portName: String): Route = {
     Route(Manifest.Port(ref,port,""),

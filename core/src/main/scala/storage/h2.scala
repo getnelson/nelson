@@ -1464,11 +1464,11 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
     } yield DCLoadbalancer(lb._1, lb._2, lb._3, rt)).run
   }
 
-  private def loadbalancerRowToDeployment(lb: LoadbalancerRow): ConnectionIO[LoadbalancerDeployment] = {
-    getLoadbalancerRoutes(lb._4).map(rt =>
-      LoadbalancerDeployment(lb._1, lb._2, lb._3,
-        DCLoadbalancer(lb._4, lb._5, lb._6, rt), lb._7, lb._8, lb._9))
-  }
+  private def loadbalancerRowToDeployment(lb: LoadbalancerRow): ConnectionIO[LoadbalancerDeployment] =
+    for {
+      ns <- getNamespaceByID(lb._2)
+      rt <- getLoadbalancerRoutes(lb._4)
+    } yield LoadbalancerDeployment(lb._1, ns, lb._3, DCLoadbalancer(lb._4, lb._5, lb._6, rt), lb._7, lb._8, lb._9)
 
   def findLoadbalancerDeployment(name: String, v: MajorVersion, nsid: ID): ConnectionIO[Option[LoadbalancerDeployment]] = {
     val query: ConnectionIO[Option[LoadbalancerRow]] = sql"""

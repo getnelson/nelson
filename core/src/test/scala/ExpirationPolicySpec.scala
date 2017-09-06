@@ -402,7 +402,7 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
 
   it should "retain all active versions when a loadbalancer depends on deployment" in {
 
-    val lb = LoadbalancerDeployment(0L, 0L, "hash",
+    val lb = LoadbalancerDeployment(0L, Datacenter.Namespace(0L, NamespaceName("dev"), "dc"), "hash",
       DCLoadbalancer(0L,"lb",MajorVersion(1),Vector()), Instant.now(), "guid", "dns")
 
     val job310 = makeDeployment(1L, "job", Version(3,1,0), RetainActive)

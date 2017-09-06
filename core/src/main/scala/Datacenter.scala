@@ -259,13 +259,15 @@ object Datacenter {
 
   final case class LoadbalancerDeployment(
     id: ID,
-    nsid: ID,
+    namespace: Namespace,
     hash: String,
     loadbalancer: DCLoadbalancer,
     deployTime: Instant,
     guid: GUID,
     address: String
   ) {
+
+    def nsid: ID = namespace.id
 
     // because loadbalancers are bound by major version, the version portion of a
     // loadbalancer StackName is always the min version, i.e. 1.0.0 or 2.0.0
