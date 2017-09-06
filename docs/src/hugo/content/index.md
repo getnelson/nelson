@@ -1038,7 +1038,7 @@ The engineering staff who originally created Nelson are listed below (in order o
 
 Finally, the engineering team would like to shout out to the following teams at Verizon who helped make this project happen:
 
-* Verizon executive management for believing in us, and affording the time for Nelson to be built.
+* Verizon executive management - specifically Suri Medapati - for believing in us, and affording the time for Nelson to be built.
 * Verizon Legal for providing us the opportunity to release Nelson into the open.
 * Verizon DevOps for handling all the storage and database systems.
 * Verizon Network engineering for always connecting us.
