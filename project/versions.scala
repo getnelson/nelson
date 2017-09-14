@@ -18,7 +18,7 @@
 object V {
   val dispatch     = "0.11.2"
   val doobie       = "0.2.4"
-  val http4s       = "0.16.0-RC3"
+  val http4s       = "0.16.0"
   val journal      = "3.0.18"
   val knobs        = "4.0.30-scalaz-7.1"
   val prometheus   = "0.0.21"
