@@ -147,7 +147,7 @@ object ManifestV1Parser {
      parseAlphaNumHyphen(raw.name, "plan.name"),
      Option(raw.cpu).filter(_ > 0).traverse(d => validateCPU(d)),
      Option(raw.memory).filter(_ > 0).traverse(d => validateMemory(d)),
-     Option(raw.instances.desired).filter(_ > 0).traverse(d => validateInstances(d)),
+     Option(raw.instances).flatMap(x => Option(x.desired).filter(_ > 0)).traverse(d => validateInstances(d)),
      Validation.success(Option(raw.retries).filter(_ > 0)),
      Validation.success(raw.constraints.asScala.toList.flatMap(toConstraint)),
      Validation.success(raw.alert_opt_outs.asScala.toList.map(AlertOptOut)), // opt out -> unit resolution is validated later
