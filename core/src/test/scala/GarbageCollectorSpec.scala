@@ -44,6 +44,8 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
 
   val dc = config.datacenters.head
 
+  val gr = quiver.empty[RoutingNode,Unit,RoutePath]
+
   it should "should identify expired deployments" in {
     val st = StackName("search", Version(1,1,0), "foo")
     val su = runs(config.storage, StoreOp.findDeployment(st)).run.get
@@ -66,7 +68,7 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
     val ctx = DeploymentCtx(su, Ready, Some(Instant.now().minusSeconds(1000)))
 
     val ns = runs(config.storage, StoreOp.listNamespacesForDatacenter(testName)).run.head
-    Process.eval(Task.now(((dc,ns,ctx)))).through(GarbageCollector.mark(config)).runLog.run
+    Process.eval(Task.now(((dc,ns,ctx,gr)))).through(GarbageCollector.mark(config)).runLog.run
 
     val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).run
     status should equal(Some(DeploymentStatus.Garbage))
@@ -89,7 +91,7 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
       Context(Vector(), RoutingNode(ind), (), Vector()) &
       Context(Vector((RoutePath(ind,"","",80,80),RoutingNode(su))), RoutingNode(su), (), Vector())
 
-    Process.eval(Task.now(((dc,ns,ctx,g))))
+    Process.eval(Task.now((dc,ns,ctx,g)))
       .through(ExpirationPolicyProcess.expirationProcess(config))
       .filter(d => GarbageCollector.expired(d._3))
       .through(GarbageCollector.mark(config)).runLog.run

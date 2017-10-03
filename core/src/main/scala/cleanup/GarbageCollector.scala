@@ -51,11 +51,11 @@ object GarbageCollector {
    * against the case where the ExpirationPolicy process fails
    * and GC eagerly marks deployments that it shouldn't.
    */
-  def mark(cfg: NelsonConfig): Channel[Task,(Datacenter,Namespace,DeploymentCtx),(Datacenter,Namespace,Deployment)] = {
+  def mark(cfg: NelsonConfig): Channel[Task, CleanupRow, CleanupRow] = {
     import Json._
     import audit.AuditableInstances._
-    channel.lift { case (dc, ns, d) =>
-      runs(cfg.storage, markAsGarbage(d.deployment).map(d => (dc, ns, d))) <*
+    channel.lift { case (dc, ns, d, gr) =>
+      runs(cfg.storage, markAsGarbage(d.deployment).map(_ => (dc, ns, d, gr))) <*
         cfg.auditor.write(d.deployment, audit.GarbageAction)
     }
   }

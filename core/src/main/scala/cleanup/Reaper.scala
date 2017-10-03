@@ -40,9 +40,9 @@ object Reaper {
    * scheduler was used to initially place the deployment
    * to delete the running job.
    */
-  def reap(cfg: NelsonConfig): Sink[Task, (Datacenter,Namespace,Deployment)] =
-    sink.lift { case (dc, ns, d) =>
-      destroy(dc,ns,d)(dc.workflow)(cfg)
+  def reap(cfg: NelsonConfig): Sink[Task, CleanupRow] =
+    sink.lift { case (dc, ns, d, gr) =>
+      destroy(dc,ns,d.deployment)(dc.workflow)(cfg)
         .map { _ => destroySuccessCounter.labels(ns.name.asString).inc() }
         .handleWith {
           // this is a Sink and the end of the world, so we need to handle NonFatal to keep Processes running

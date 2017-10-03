@@ -209,11 +209,11 @@ object ExpirationPolicyProcess {
       .map(_ => d.copy(exp = Some(i)))
   }
 
-  def expirationProcess(cfg: NelsonConfig): Channel[Task,(Datacenter,Namespace,DeploymentCtx,RoutingGraph),(Datacenter,Namespace,DeploymentCtx)] =
+  def expirationProcess(cfg: NelsonConfig): Channel[Task, CleanupRow, CleanupRow] =
     channel.lift { case (dc, ns, d, graph) =>
       applyPolicyToDeployment(d, graph)(cfg.cleanup.extendTTL)
-        .map(ext => runs(cfg.storage, updateExpiration(d,ext)).map(d => (dc,ns,d)))
-        .getOrElse(Task.now((dc,ns,d)))
+        .map(ext => runs(cfg.storage, updateExpiration(d,ext)).map(d => (dc,ns,d,graph)))
+        .getOrElse(Task.now((dc,ns,d,graph)))
     }
 }
 

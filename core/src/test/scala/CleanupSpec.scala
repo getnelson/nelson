@@ -60,4 +60,23 @@ class CleanupSpec extends NelsonSuite  {
     val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).run
     status should equal(Some(DeploymentStatus.Ready))
   }
+
+  it should "run the entire cleanup pipeline and not apply an expiration policy to non routable deployments" in {
+    import cleanup._
+    val st = StackName("search", Version(2,2,2), "aaaa")
+    val su = runs(config.storage, StoreOp.findDeployment(st)).run.get
+
+    runs(config.storage, StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Warming, None)).run
+    val statusBefore = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).run
+    statusBefore should equal(Some(DeploymentStatus.Warming))
+
+    val exp = java.time.Instant.now().plusSeconds(1000)
+
+    runs(config.storage, StoreOp.createDeploymentExpiration(su.id, exp)).run
+
+    CleanupCron.process(config).runLog.run
+
+    val expAfter = runs(config.storage, StoreOp.findDeploymentExpiration(su.id)).run
+    expAfter should equal(Some(exp))
+  }
 }
