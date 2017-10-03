@@ -16,14 +16,15 @@
 //: ----------------------------------------------------------------------------
 
 object V {
-  val dispatch     = "0.11.2"
-  val doobie       = "0.2.4"
-  val http4s       = "0.16.3"
-  val journal      = "3.0.18"
-  val knobs        = "4.0.30-scalaz-7.1"
-  val prometheus   = "0.0.21"
-  val scalaz       = "7.1.11"
-  val scalazStream = "0.8.6"
-  val scodec       = "1.9.0"
-  val dockerit     = "0.9.0-RC1"
+  val dispatch         = "0.11.2"
+  val doobie           = "0.2.4"
+  val http4sArgonaut61 = "0.16.0"
+  val http4s           = "0.16.3"
+  val journal          = "3.0.18"
+  val knobs            = "4.0.30-scalaz-7.1"
+  val prometheus       = "0.0.21"
+  val scalaz           = "7.1.11"
+  val scalazStream     = "0.8.6"
+  val scodec           = "1.9.0"
+  val dockerit         = "0.9.0-RC1"
 }
