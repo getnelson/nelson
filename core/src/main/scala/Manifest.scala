@@ -77,13 +77,13 @@ object Manifest {
     retries: Option[Int] = None,
     constraints: List[Constraint] = Nil,
     alertOptOuts: List[AlertOptOut] = Nil,
-    volumes: List[Volume] = Nil,
     bindings: List[EnvironmentVariable] = Nil,
     healthChecks: List[HealthCheck] = Nil,
     resources: Map[String, URI] = Map.empty,
     schedule: Option[Schedule] = None,
     policy: Option[ExpirationPolicy] = None,
-    trafficShift: Option[TrafficShift] = None
+    trafficShift: Option[TrafficShift] = None,
+    ephemeralDisk: Option[Int] = None
   )
 
   final case class Namespace(

@@ -85,9 +85,6 @@ object ManifestV1Parser {
     else
       Validation.failure(invalidAlphaNumHyphen(str,fieldName)).toValidationNel
 
-  def toVolume(v: VolumeYaml): Volume =
-    Volume(v.mount, v.source, v.mode)
-
   val noDefaultPortError: YamlError =
     invalidPortSpecification(s"a ${Port.defaultRef} port must be specified")
 
@@ -126,6 +123,12 @@ object ManifestV1Parser {
   def validateInstances(i:Int): YamlValidation[Int] =
     validatePlanConstraints(i, invalidInstances)(i => i > 0 && i < 500)
 
+  def validateEphemeral(i: Int): YamlValidation[Int] =
+    if (i < 101 || i > 10000)
+      Validation.failure(invalidEphemeralDisk(101, 10000, i)).toValidationNel
+    else
+      Validation.success(i).toValidationNel
+
   def parseDuration(d: String): YamlError \/ FiniteDuration =
     \/.fromTryCatchNonFatal {
       val dur = Duration(d)
@@ -151,13 +154,13 @@ object ManifestV1Parser {
      Validation.success(Option(raw.retries).filter(_ > 0)),
      Validation.success(raw.constraints.asScala.toList.flatMap(toConstraint)),
      Validation.success(raw.alert_opt_outs.asScala.toList.map(AlertOptOut)), // opt out -> unit resolution is validated later
-     Validation.success(raw.volumes.asScala.toList.map(toVolume)),
      Validation.success(raw.environment.asScala.toList.flatMap(toEnvironmentVariable)),
      raw.health_checks.asScala.toList.traverse(toHealthCheck),
      raw.resources.asScala.toList.traverse(toPlanResource).map(_.toMap),
      Option(raw.schedule).traverse(s => parseSchedule(s)),
      Option(raw.expiration_policy).traverse(resolvePolicy),
-     Option(raw.traffic_shift).traverse(validateTrafficShift)
+     Option(raw.traffic_shift).traverse(validateTrafficShift),
+     Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i))
     )((a,b,c,d,e,f,g,h,i,j,k,l,m,n) => Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n)))
 
   def toHealthCheck(raw: HealthCheckYaml): YamlValidation[HealthCheck] = {
@@ -454,12 +457,12 @@ class PlanYaml {
   @BeanProperty var environment: JList[String] = new java.util.ArrayList
   @BeanProperty var alert_opt_outs: JList[String] = new java.util.ArrayList
   @BeanProperty var instances: InstancesYaml = new InstancesYaml
-  @BeanProperty var volumes: JList[VolumeYaml] = new java.util.ArrayList
   @BeanProperty var health_checks: JList[HealthCheckYaml] = new java.util.ArrayList
   @BeanProperty var resources: JList[PlanResourceYaml] = new java.util.ArrayList
   @BeanProperty var schedule: String = _
   @BeanProperty var expiration_policy: String = _
   @BeanProperty var traffic_shift: TrafficShiftYaml = _
+  @BeanProperty var ephemeral_disk: Int = -1
 }
 
 class TrafficShiftYaml {
@@ -486,12 +489,6 @@ class RouteYaml {
   @BeanProperty var name: String = ""
   @BeanProperty var expose: String = _
   @BeanProperty var destination: String = _
-}
-
-class VolumeYaml {
-  @BeanProperty var mount: String = _
-  @BeanProperty var source: String = _
-  @BeanProperty var mode: String = _
 }
 
 class DependencyYaml {
