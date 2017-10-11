@@ -46,6 +46,8 @@ object CleanupCron {
   private val status =
     DeploymentStatus.all.toList.filter(_ != DeploymentStatus.Terminated).toNel.yolo("can't be empty")
 
+  private val routables = DeploymentStatus.routable.toList
+
   /* Gets all deployments (exluding terminated) and routing graph for a namespace */
   def getDeploymentsForNamespace(ns: Namespace): StoreOpF[Vector[(Namespace,DeploymentCtx)]] =
     for {
@@ -56,7 +58,7 @@ object CleanupCron {
     } yield dcx.map(d => (ns,d))
 
   /* Gets all deployment (excluding terminated) and routing graph for each namespace within a Datacenter. */
-  def getDeploymentsForDatacenter(dc: Datacenter): StoreOpF[Vector[(Datacenter,Namespace,DeploymentCtx,RoutingGraph)]] =
+  def getDeploymentsForDatacenter(dc: Datacenter): StoreOpF[Vector[CleanupRow]] =
     for {
       _  <- log.debug(s"cleanup cron running for ${dc.name}").point[StoreOpF]
       ns <- StoreOp.listNamespacesForDatacenter(dc.name)
@@ -65,12 +67,17 @@ object CleanupCron {
     } yield ds.flatMap { case (ns, dcx) => gr.find(_._1 == ns).map(x => (dc,ns,dcx,x._2)) }
 
   /* Gets all deployments (excluding terminated) for all datacenters and namespaces */
-  def getDeployments(cfg: NelsonConfig): Task[Vector[(Datacenter,Namespace,DeploymentCtx,RoutingGraph)]] =
+  def getDeployments(cfg: NelsonConfig): Task[Vector[CleanupRow]] =
     runs(cfg.storage, cfg.datacenters.toVector.traverseM(dc => getDeploymentsForDatacenter(dc)))
 
-  def process(cfg: NelsonConfig): Process[Task, (Datacenter,Namespace,Deployment)] =
-    Process.eval(getDeployments(cfg)).flatMap(Process.emitAll)
-      .through(ExpirationPolicyProcess.expirationProcess(cfg))
+  def routable(d: DeploymentCtx): Boolean =
+    routables.exists(_ == d.status)
+
+  def process(cfg: NelsonConfig): Process[Task, CleanupRow] =
+     Process.eval(getDeployments(cfg)).flatMap(Process.emitAll)
+      .map(a => if (routable(a._3)) \/.right(a) else \/.left(a))
+      .throughO(ExpirationPolicyProcess.expirationProcess(cfg)) // only apply expiration policy to the rhs
+      .map(_.fold(identity, identity))
       .filter(x => GarbageCollector.expired(x._3)) // mark only expired deployments
       .through(GarbageCollector.mark(cfg))
 

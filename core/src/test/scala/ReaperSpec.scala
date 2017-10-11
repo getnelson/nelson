@@ -36,16 +36,18 @@ class ReaperSpec extends NelsonSuite with BeforeAndAfterEach {
 
   val dc = config.datacenters.head
 
+  val gr = quiver.empty[routing.RoutingNode,Unit,routing.RoutePath]
+
   it should "mark deployment as terminated" in {
     val st = StackName("search", Version(1,1,0), "foo")
     val sn = ServiceName("search", st.version.toFeatureVersion)
-    val su = runs(config.storage, StoreOp.findDeployment(st)).run.get
+    val dep = runs(config.storage, StoreOp.findDeployment(st)).run.get
 
-    runs(config.storage, StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Garbage, None)).run
-    val ns = runs(config.storage, StoreOp.listNamespacesForDatacenter(testName)).run.head
-    Process.emit((dc,ns,su)).to(Reaper.reap(config)).take(1).runLog.run
+    val ctx = DeploymentCtx(dep, DeploymentStatus.Garbage, Some(java.time.Instant.now))
 
-    val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).run
+    Process.eval(Task.now((dc,dep.namespace,ctx,gr))).to(Reaper.reap(config)).take(1).runLog.run
+
+    val status = runs(config.storage, StoreOp.getDeploymentStatus(dep.id)).run
     status should equal(Some(DeploymentStatus.Terminated))
   }
 }
