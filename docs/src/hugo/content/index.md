@@ -193,7 +193,7 @@ In order to understand the rest of this user guide, there are a set of terms tha
 
 <h2 id="user-guide-cleanup" data-subheading-of="user-guide">Lifecycle</h2>
 
-Every stack that gets deployed using Nelson is living on borrowed time. Everything will be removed at some point in the future, as the deployment environment "churns" with new versions, and older versions are phased out over time. This principal is baked into Nelson, as every single stack has an associated expiry time. With this in mind, each and every stack moves through a variety of states during its lifetime. The figure below details these states:
+Every stack that gets deployed using Nelson is living on borrowed time. Everything will be removed at some point in the future, as the deployment environment "churns" with new versions, and older versions are phased out over time. This principle is baked into Nelson, as every single stack has an associated expiry time. With this in mind, each and every stack moves through a variety of states during its lifetime. The figure below details these states:
 
 <div class="clearing">
   <img src="images/stack-states.png" />
