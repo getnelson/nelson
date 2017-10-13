@@ -22,18 +22,17 @@ import java.nio.file.{Path, Paths}
 import java.security.SecureRandom
 import java.security.cert.{CertificateFactory, X509Certificate}
 import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService, ThreadFactory}
-
 import journal.Logger
 import nelson.BannedClientsConfig.HttpUserAgent
 import nelson.cleanup.ExpirationPolicy
+import nelson.Github.GithubOp
 import org.http4s.Uri
 import org.http4s.client.Client
 import org.http4s.client.blaze._
 import storage.StoreOp
-import logging.{WorkflowLogger,LoggingOp}
-import audit.{Auditor,AuditEvent}
-import notifications.{SlackHttp,SlackOp,EmailOp,EmailServer}
-
+import logging.{LoggingOp, WorkflowLogger}
+import audit.{AuditEvent, Auditor}
+import notifications.{EmailOp, EmailServer, SlackHttp, SlackOp}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
@@ -45,57 +44,139 @@ import scheduler.SchedulerOp
 import vault._
 import vault.http4s._
 
-/**
- *
- */
-final case class GithubConfig(
-  domain: Option[String],
-  clientId: String,
-  clientSecret: String,
-  redirectUri: String,
-  scope: String,
-  systemAccessToken: AccessToken,
-  systemUsername: String,
-  organizationBlacklist: List[String],
-  organizationAdminList: List[String]
-){
+sealed abstract class ScmConfig extends Product with Serializable {
+  def domain: Option[String]
+  def clientId: String
+  def clientSecret: String
+  def redirectUri: String
+  def scope: String
+  def systemAccessToken: AccessToken
+  def systemUsername: String
+  def organizationBlacklist: List[String]
+  def organizationAdminList: List[String]
   def isEnterprise: Boolean = domain.nonEmpty
+  def base: String
+  def oauth: String
+  def api: String
+  def tokenEndpoint: String
+  def loginEndpoint: String
+  def userEndpoint: String
+  def userOrgsEndpoint: String
+  def orgEndpoint(login: String): String
+  def repoEndpoint(page: Int = 1): String
+  def webhookEndpoint(slug: Slug): String
+  def contentsEndpoint(slug: Slug, path: String): String
+  def releaseEndpoint(slug: Slug, releaseId: String): String
 
-  val oauth =
-    "https://"+ domain.fold("github.com")(identity)
-
-  val api =
-    "https://"+ domain.fold("api.github.com")(_+"/api/v3")
-
-  val tokenEndpoint =
-    s"${oauth}/login/oauth/access_token"
-
-  val loginEndpoint =
-    s"${oauth}/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURI(redirectUri)}&scope=${scope}"
-
-  val userEndpoint =
-    s"${api}/user"
-
-  val userOrgsEndpoint =
-    s"${userEndpoint}/orgs"
-
-  def orgEndpoint(login: String) =
-    s"${api}/orgs/${login}"
-
-  def repoEndpoint(page: Int = 1) =
-    s"${api}/user/repos?affiliation=owner,organization_member&visibility=all&direction=asc&page=${page}"
-
-  def webhookEndpoint(slug: Slug) =
-    s"${api}/repos/${slug}/hooks"
-
-  def contentsEndpoint(slug: Slug, path: String) =
-    s"${api}/repos/${slug}/contents/${path}"
-
-  def releaseEndpoint(slug: Slug, releaseId: Long) =
-    s"${api}/repos/${slug}/releases/${releaseId}"
+  def withOrganizationAdminList(l: List[String]): ScmConfig
 
   private [nelson] def encodeURI(uri: String): String =
     java.net.URLEncoder.encode(uri, "UTF-8")
+}
+object ScmConfig {
+  final case class GithubConfig(
+      domain: Option[String],
+      clientId: String,
+      clientSecret: String,
+      redirectUri: String,
+      scope: String,
+      systemAccessToken: AccessToken,
+      systemUsername: String,
+      organizationBlacklist: List[String],
+      organizationAdminList: List[String]) extends ScmConfig {
+
+    val base: String =
+      "https://"+ domain.fold("github.com")(identity)
+
+    val oauth: String =
+      base
+
+    val api: String =
+      "https://"+ domain.fold("api.github.com")(_+"/api/v3")
+
+    val tokenEndpoint: String =
+      s"$oauth/login/oauth/access_token"
+
+    val loginEndpoint: String =
+      s"$oauth/login/oauth/authorize?client_id=$clientId&redirect_uri=${encodeURI(redirectUri)}&scope=$scope"
+
+    val userEndpoint: String =
+      s"$api/user"
+
+    val userOrgsEndpoint: String =
+      s"$userEndpoint/orgs"
+
+    def orgEndpoint(login: String): String =
+      s"$api/orgs/$login"
+
+    def repoEndpoint(page: Int = 1): String =
+      s"$api/user/repos?affiliation=owner,organization_member&visibility=all&direction=asc&page=$page"
+
+    def webhookEndpoint(slug: Slug): String =
+      s"$api/repos/$slug/hooks"
+
+    def contentsEndpoint(slug: Slug, path: String): String =
+      s"$api/repos/$slug/contents/$path"
+
+    def releaseEndpoint(slug: Slug, releaseId: String): String =
+      s"$api/repos/$slug/releases/$releaseId"
+
+    def withOrganizationAdminList(l: List[String]): ScmConfig =
+      this.copy(organizationAdminList = l)
+  }
+
+  final case class GitlabConfig(
+      domain: Option[String],
+      clientId: String,
+      clientSecret: String,
+      redirectUri: String,
+      scope: String,
+      systemAccessToken: AccessToken,
+      systemUsername: String,
+      organizationBlacklist: List[String],
+      organizationAdminList: List[String]) extends ScmConfig {
+
+    val base: String =
+      "https://" + domain.fold("gitlab.com")(identity)
+
+    val oauth: String =
+      base + "/oauth"
+
+    val api: String =
+      base + "/api/v4"
+
+    val tokenEndpoint: String =
+      s"$oauth/token"
+
+    val loginEndpoint: String =
+      s"$oauth/authorize?client_id=$clientId&redirect_uri=${encodeURI(redirectUri)}&response_type=code"
+
+    val userEndpoint: String =
+      s"$api/user"
+
+    val userOrgsEndpoint: String =
+      s"$api/groups"
+
+    def orgEndpoint(login: String): String =
+      s"$api/groups/$login"
+
+    def repoEndpoint(page: Int = 1): String =
+      s"$api/projects?page=$page"
+
+    def webhookEndpoint(slug: Slug): String =
+      s"$api/projects/${ urlEncode(slug.toString) }/hooks"
+
+    def contentsEndpoint(slug: Slug, path: String): String =
+      s"$api/projects/${ urlEncode(slug.toString) }/repository/files/$path"
+
+    def releaseEndpoint(slug: Slug, releaseId: String): String =
+      s"$api/projects/${ urlEncode(slug.toString) }/repository/tags/$releaseId"
+
+    def withOrganizationAdminList(l: List[String]): ScmConfig =
+      this.copy(organizationAdminList = l)
+
+    private[this] def urlEncode(s: String) = java.net.URLEncoder.encode(s, "UTF-8")
+  }
 }
 
 /**
@@ -316,7 +397,7 @@ final case class PolicyConfig(
  * actually cares about.
  */
 final case class NelsonConfig(
-  git: GithubConfig,
+  git: ScmConfig,
   network: NetworkConfig,
   security: SecurityConfig,
   database: DatabaseConfig,
@@ -400,7 +481,12 @@ object Config {
     val nomadcfg = readNomad(cfg.subconfig("nelson.nomad"))
 
     val gitcfg = readGithub(cfg.subconfig("nelson.github"))
-    val git = new Github.GithubHttp(gitcfg, http0)
+    val git: GithubOp ~> Task = gitcfg match {
+      case _: ScmConfig.GithubConfig =>
+        new Github.GithubHttp(gitcfg, http0)
+      case _ =>
+        new Gitlab.GitlabHttp(gitcfg, http4sClient(timeout))
+    }
 
     val workflowConf = readWorkflowLogger(cfg.subconfig("nelson.workflow-logger"))
     val workflowlogger = new WorkflowLogger(
@@ -754,18 +840,24 @@ object Config {
       monitoringPort = cfg.require[Int]("monitoring-port")
     )
 
-  private def readGithub(cfg: KConfig): GithubConfig =
-    GithubConfig(
-      domain = cfg.lookup[String]("domain"),
-      clientId = cfg.require[String]("client-id"),
-      clientSecret = cfg.require[String]("client-secret"),
-      redirectUri = cfg.require[String]("redirect-uri"),
-      scope = cfg.require[String]("scope"),
-      systemAccessToken = AccessToken(cfg.require[String]("access-token")),
-      systemUsername = cfg.require[String]("system-username"),
-      organizationBlacklist = cfg.lookup[List[String]]("organization-blacklist").getOrElse(Nil),
-      organizationAdminList = cfg.lookup[List[String]]("organization-admins").getOrElse(Nil)
+  private def readGithub(cfg: KConfig): ScmConfig = {
+    val service = cfg.lookup[String]("service").getOrElse("github")
+    val attrs = (
+      cfg.lookup[String]("domain"),
+      cfg.require[String]("client-id"),
+      cfg.require[String]("client-secret"),
+      cfg.require[String]("redirect-uri"),
+      cfg.require[String]("scope"),
+      AccessToken(cfg.require[String]("access-token"), isPrivate = true),
+      cfg.require[String]("system-username"),
+      cfg.lookup[List[String]]("organization-blacklist").getOrElse(Nil),
+      cfg.lookup[List[String]]("organization-admins").getOrElse(Nil)
     )
+    import ScmConfig._
+    val confBuilder =
+      if (service == "github") GithubConfig else GitlabConfig
+    confBuilder.tupled(attrs)
+  }
 
   private def readSlack(cfg: KConfig): Option[SlackConfig] = {
     for {

@@ -133,7 +133,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
         avatar = new java.net.URI("uri"),
         name = "user",
         email = Some("user@example.com"),
-        orgs = List(Organization(0L, Some("scalatest"), "slug", new java.net.URI("uri")))
+        orgs = List(Organization(0L, Some("scalatest"), "slug", Option(new java.net.URI("uri"))))
       )
     )
     val md = Datacenter.ManualDeployment(testName, "dev", "manual-deployment", "1.1.1", "hash", "description", 9000)

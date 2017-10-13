@@ -53,7 +53,7 @@ class DatacentersSpec extends ServiceSpec {
   }
 
   it should "not allow any user to create manual deployments" in {
-    val config0 = config.copy(git = config.git.copy(organizationAdminList = Nil))
+    val config0 = config.copy(config.git.withOrganizationAdminList(Nil))
     val service = Datacenters(config0).service
     val req = Request(POST, uri("/v1/deployments")).authed
       .withBody(manual.asJson)

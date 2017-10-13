@@ -98,7 +98,7 @@ object Fixtures {
     id      <- choose(1000,10000)
     name   <- alphaNumStr
     avatar <- arbitrary[URI]
-  } yield Organization(id.toLong,Option(name), name, avatar)
+  } yield Organization(id.toLong,Option(name), name, Option(avatar))
 
   def genUser: Gen[User] = for {
     login  <- alphaNumStr
@@ -364,7 +364,7 @@ object Fixtures {
       a <- choose(1,10000)
       b <- genVersion
     } yield Github.Release(
-      id = a.toLong,
+      id = a.toString,
       url = "",
       htmlUrl = "",
       assets = Nil,

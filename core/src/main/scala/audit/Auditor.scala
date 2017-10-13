@@ -51,7 +51,7 @@ class Auditor(queue: Queue[AuditEvent[_]], defaultLogin: String) {
   def errorSink: Sink[Task, Throwable] =
     sink.lift[Task,Throwable](t => Task.delay(logger.error(t.getMessage))) // possibly truncate
 
-  def write[A](a: A, action: AuditAction, releaseId: Option[Long] = None, login: String = defaultLogin)(implicit au: Auditable[A]): Task[Unit] =
+  def write[A](a: A, action: AuditAction, releaseId: Option[String] = None, login: String = defaultLogin)(implicit au: Auditable[A]): Task[Unit] =
     queue.enqueueOne(AuditEvent(a, action, releaseId, login))
 
   def process(stg: (StoreOp ~> Task)): Process[Task, Unit] =

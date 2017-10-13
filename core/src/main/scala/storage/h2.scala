@@ -117,7 +117,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
   implicit val namespaceName: Meta[NamespaceName] =
     Meta[String].xmap({name => NamespaceName.fromString(name).toOption.yolo(s"metaNamespaceName: could not extract namespace name from $name")}, _.asString)
 
-  type AuditRow = (ID, Instant, Option[Long], String, String, String, Option[String])
+  type AuditRow = (ID, Instant, Option[String], String, String, String, Option[String])
 
   def listAuditLog(
     limit: Long, offset: Long, action: Option[String], category: Option[String]
@@ -635,7 +635,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
     slug: Slug,
     version: Version,
     timestamp: Instant,
-    releaseId: Long,
+    releaseId: String,
     releaseHtmlUrl: URI,
     unitName: String,
     namespace: String,
@@ -782,7 +782,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
        """.update.run.void
   }
 
-  def rowToReleased(row: (String,String,Instant,Long,String)): Option[Released] =
+  def rowToReleased(row: (String,String,Instant,String,String)): Option[Released] =
     (Slug.fromString(row._1).toOption |@| Version.fromString(row._2)
     )((a,b) => Released(a,b,row._3, row._4, new URI(row._5)))
 
@@ -803,7 +803,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
         ON rr.id = r.repository_id
       WHERE u.name = $un AND u.version = ${v.toString}
       LIMIT 1
-    """.query[(String,String,Instant,Long,String)]
+    """.query[(String,String,Instant,String,String)]
 
     query.map(rowToReleased).option.map(_.flatten)
   }
@@ -821,12 +821,12 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
       WHERE lb.name = $name AND lb.major_version = ${mv.toString}
       ORDER BY r.release_id DESC
       LIMIT 1
-    """.query[(String,String,Instant,Long,String)]
+    """.query[(String,String,Instant,String,String)]
 
     query.map(rowToReleased).option.map(_.flatten)
   }
 
-  type ReleaseTuple = (String,String,Instant,Option[Long],Option[String],Option[String],String,String,Long,Instant,Option[String],GUID)
+  type ReleaseTuple = (String,String,Instant,Option[String],Option[String],Option[String],String,String,Long,Instant,Option[String],GUID)
 
   // TIM: major, major hack. tpolecat could not suggest better though,
   // so for now, we go with this to avoid duplicating the query. Essentially

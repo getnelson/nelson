@@ -100,7 +100,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
     val audit = new Auditor(config.auditQueue,defaultSystemLogin)
     val foo = Foo(1)
 
-    val releaseId = Option(10L)
+    val releaseId = Option("10")
 
     audit.write(foo, CreateAction, releaseId = releaseId).run
     audit.process(storage).take(1).run.run

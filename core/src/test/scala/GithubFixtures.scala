@@ -40,7 +40,7 @@ object GitFixtures {
     OrgKey(1L, "slug 1")
   )
 
-  val orgs = List(Organization(0L, Some("name"),"slug",new java.net.URI("avatar")))
+  val orgs = List(Organization(0L, Some("name"),"slug",Option(new java.net.URI("avatar"))))
 
   val asset = Asset(0, "manifest.deployable.v1.b.yml", "", "", Some("content"))
 
@@ -50,7 +50,7 @@ object GitFixtures {
       Some(Contents(encoded,"manifest.deployable.v1.b.yml",encoded.length.toLong))
     }
 
-  def release(id: ID) = Release(id,
+  def release(id: String) = Release(id,
     "https://github.example.com/api/v3/repos/tim/howdy/releases/250",
     "https://github.example.com/tim/howdy/releases/tag/0.13.17",
     Seq(Asset(119,
@@ -88,7 +88,7 @@ object GitFixtures {
 
       case GetUser(token: AccessToken) =>
         token match {
-          case AccessToken("crash") =>
+          case AccessToken("crash", _) =>
             Task.fail(new Exception("Crash!"))
           case _ =>
             loadResourceAsString("/nelson/github.user.json")
@@ -106,7 +106,7 @@ object GitFixtures {
       case GetReleaseAssetContent(asset: Github.Asset, t: AccessToken) =>
         Task.now(asset)
 
-      case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
+      case GetRelease(slug: Slug, releaseId: String, t: AccessToken) =>
         loadResourceAsString("/nelson/github.release.json")
           .flatMap(fromJson[Github.Release])
 

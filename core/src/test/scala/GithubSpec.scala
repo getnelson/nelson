@@ -53,8 +53,8 @@ class GithubSpec extends FlatSpec with Matchers with BeforeAndAfterEach with Pro
   }
 
   it should "return release" in {
-    val r = release(250L)
-    val req = Github.Request.fetchRelease(slug, 0L)(token).runWith(interpreter).attemptRun
+    val r = release("250")
+    val req = Github.Request.fetchRelease(slug, "0")(token).runWith(interpreter).attemptRun
     req should equal(\/-(r))
   }
 

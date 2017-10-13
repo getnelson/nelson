@@ -59,6 +59,6 @@ class ReleaseDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "find latest release for loadbalancer" in {
     val r = storage.run(config.storage, StoreOp.getLatestReleaseForLoadbalancer("lb", MajorVersion(1))).run
     r.map(_.version) should equal (Some(Version(1,2,3)))
-    r.map(_.releaseId) should equal (Some(123L))
+    r.map(_.releaseId) should equal (Some("123"))
   }
 }

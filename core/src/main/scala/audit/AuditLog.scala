@@ -21,7 +21,7 @@ package audit
 final case class AuditLog(
   id: ID, 
   timestamp: java.time.Instant,
-  releaseId: Option[Long], 
+  releaseId: Option[String],
   event: Option[argonaut.Json], 
   category: String, 
   action: String,

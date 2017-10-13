@@ -30,7 +30,7 @@ final case class Released(
   /* when was this release created */
   timestamp: Instant,
   /* reference id from github */
-  releaseId: Long,
+  releaseId: String,
   /* informational URIs on github, to be used in a UI */
   releaseHtmlUrl: URI
 )
@@ -52,8 +52,8 @@ final case class ReleasedDeployment(
 
 object Released {
   import scalaz.Order
-  import scalaz.std.anyVal._
+  import scalaz.std.string._
 
   implicit def releasedOrder: Order[Released] =
-    Order[Long].contramap[Released](_.releaseId)
+    Order[String].contramap[Released](_.releaseId)
 }
