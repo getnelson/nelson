@@ -16,28 +16,29 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{Order, ValidationNel, ~>}
-import scalaz.std.string._
-import scalaz.syntax.monoid._
-import scalaz.std.set._
-import scalaz.syntax.std.option._
-import scalaz.syntax.foldable._
-import scalaz.concurrent.Task
 import java.net.URI
 import java.time.Instant
 import scala.concurrent.duration.FiniteDuration
 
-import concurrent.duration._
-import helm.ConsulOp
-import health.HealthCheckOp
-import storage.StoreOp
-import scheduler.SchedulerOp
-import Workflow.WorkflowOp
-import docker.DockerOp
-import logging.LoggingOp
-import vault.Vault
-import loadbalancers.LoadbalancerOp
 import com.amazonaws.regions.Region
+import concurrent.duration._
+import health.HealthCheckOp
+import docker.DockerOp
+import helm.ConsulOp
+import loadbalancers.LoadbalancerOp
+import logging.LoggingOp
+import org.http4s.Uri
+import scalaz.concurrent.Task
+import scalaz.std.set._
+import scalaz.std.string._
+import scalaz.syntax.foldable._
+import scalaz.syntax.monoid._
+import scalaz.syntax.std.option._
+import scalaz.{Order, ValidationNel, ~>}
+import scheduler.SchedulerOp
+import storage.StoreOp
+import vault.Vault
+import Workflow.WorkflowOp
 
 
 object Infrastructure {
@@ -61,7 +62,7 @@ object Infrastructure {
   )
 
   final case class Nomad(
-    endpoint: org.http4s.Uri,
+    endpoint: Uri,
     timeout: Duration,
     dockerRepoUser: String,
     dockerRepoPassword: String,
@@ -69,6 +70,11 @@ object Infrastructure {
     loggingImage: Option[docker.Docker.Image],
     mhzPerCPU: Int,
     splunk: Option[SplunkConfig]
+  )
+
+  final case class Kubernetes(
+    endpoint: Uri,
+    timeout: Duration
   )
 
   final case class SplunkConfig(

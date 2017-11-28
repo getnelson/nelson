@@ -51,7 +51,7 @@ trait Workflow[O] {
 object Workflow {
 
   // There's currently only one workflow implementation.
-  val workflows = List(Magnetar)
+  val workflows = List(Magnetar, Canopus)
 
   def fromString(s: String): Option[Workflow[Unit]] =
     workflows.find(_.name == s)
