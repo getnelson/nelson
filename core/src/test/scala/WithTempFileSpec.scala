@@ -37,6 +37,6 @@ class WithTempFileSpec extends NelsonSuite with Checkers {
   it should "delete file when done" in {
     withTempFile("foo") { f =>
       Process.eval(Task.delay(f))
-    }.runLog.run.map(_.exists) == Vector(false)
+    }.runLog.run.map(_.exists) should === (Vector(false))
   }
 }

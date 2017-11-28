@@ -17,16 +17,11 @@
 package nelson
 package routing
 
-import nelson.Nelson.StorageK
-import quiver.{Graph,Context,LNode,LEdge}
 import scalaz._, Scalaz._
-import scalaz.concurrent.Task
-
 
 object deprecated {
 
   import nelson.storage._
-  import nelson.Datacenter._
 
   /**
    * Given a deployment write out all incomming paths

@@ -90,15 +90,11 @@ import doobie.imports._
   import Manifest._
   import nelson.Datacenter.Namespace
   import nelson.Manifest.Deployable.Container
-  import nelson.Nelson.StorageK
-  import nelson.storage.{run => runs, StoreOp, StoreOpF}
+  import nelson.storage.{StoreOp, StoreOpF}
   import scalaz._
   import Scalaz._
-  import scalaz.concurrent.Task
   import Workflow.WorkflowF
-  import ScalazHelpers._
   import Deployment._
-  import Schedule._
   import java.time.Instant
   import scala.concurrent.duration._
   import cleanup._

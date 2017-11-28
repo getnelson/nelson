@@ -17,8 +17,7 @@
 package nelson
 package yaml
 
-import scalaz.{ EitherT, NonEmptyList, \/ }
-import scalaz.concurrent.Task
+import scalaz.{ NonEmptyList, \/ }
 
 object ManifestParser extends YamlParser[Manifest] {
 

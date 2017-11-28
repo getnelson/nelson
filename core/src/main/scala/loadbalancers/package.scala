@@ -17,10 +17,9 @@
 package nelson
 
 import Manifest._
-import Datacenter.{StackName,LoadbalancerDeployment,Namespace}
-import scalaz._,Scalaz._
+import Datacenter.{StackName,LoadbalancerDeployment}
+import scalaz._
 import helm.ConsulOp
-import storage.{StoreOp,StoreOpF}
 import routing._
 
 

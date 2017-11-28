@@ -16,15 +16,14 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.nio.file.{Files, Path, Paths}
-import java.util.concurrent.{ScheduledExecutorService, TimeoutException}
-import io.prometheus.client.{Counter, Gauge, Histogram}
+import java.nio.file.{Files, Path}
+import java.util.concurrent.TimeoutException
 import journal._
 import scala.sys.process.{Process => _, _}
 import scala.concurrent.duration._
 import scalaz.{\/-, -\/}
 import scalaz.Kleisli
-import scalaz.concurrent.{Strategy, Task}
+import scalaz.concurrent.Task
 import scalaz.stream.Process
 import scalaz.stream.time
 import scalaz.syntax.monad._

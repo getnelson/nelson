@@ -17,7 +17,6 @@
 package nelson
 package cleanup
 
-import Manifest.{UnitDef}
 import Datacenter.Deployment
 import routing.{RoutingNode,RoutingGraph}
 import ca.mrvisser.sealerate

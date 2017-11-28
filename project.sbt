@@ -17,7 +17,7 @@
 
 organization in Global := "io.verizon.nelson"
 
-scalaVersion in Global := "2.11.8"
+scalaVersion in Global := "2.11.11"
 
 lazy val nelson = project.in(file(".")).aggregate(docs, core, http)
 
@@ -28,8 +28,5 @@ lazy val http = project.dependsOn(core % "test->test;compile->compile")
 lazy val docs = project
 
 enablePlugins(DisablePublishingPlugin)
-
-// by adding this to the root project, we make ensime happy
-addCompilerPlugin(dependencies.si2712fix.plugin)
 
 addCommandAlias("ci", ";test;coverageReport;coverageAggregate;tut;unidoc")

@@ -16,13 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
 import scalaz.concurrent.Task
-import scalaz.syntax.monad._
-import scalaz.std.list._
 import scalaz.stream._
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll,BeforeAndAfterEach}
-import scala.concurrent.duration._
+import org.scalatest.BeforeAndAfterEach
 import storage.{run=>runs, StoreOp}
 import Datacenter._
 import cleanup._
@@ -32,6 +28,7 @@ class ReaperSpec extends NelsonSuite with BeforeAndAfterEach {
   override def beforeAll(): Unit = {
     super.beforeAll()
     storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   val dc = config.datacenters.head

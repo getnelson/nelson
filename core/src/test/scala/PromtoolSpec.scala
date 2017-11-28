@@ -17,18 +17,11 @@
 package nelson
 
 import alerts.Promtool._
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import nelson.Manifest.{ PrometheusAlert, PrometheusConfig, PrometheusRule }
 
 import org.scalatest.prop.Checkers
-import scalaz.concurrent.Task
-import scalaz.stream.Process
-
 
 class PromtoolSpec extends NelsonSuite with Checkers {
-  import Task.delay
-
   "validateRules" should "return Valid for valid rules" in {
     val alerting = PrometheusConfig(
       List(PrometheusAlert("InstanceDown", "IF up == 0 FOR 1m")),

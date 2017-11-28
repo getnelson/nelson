@@ -16,23 +16,18 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import storage.{StoreOp, StoreOpF, run => runs}
-import doobie.imports._
+import storage.{StoreOp, run => runs}
 
 import scalaz.NonEmptyList
-import scalaz.concurrent.Task
-import scalaz.syntax.monad._
-import scalaz.std.list._
 import org.scalactic.TypeCheckedTripleEquals
 
 class DeploymentTableSpec extends NelsonSuite with TypeCheckedTripleEquals {
   import Datacenter._
-  import routing.RoutingTable._
-
 
   override def beforeAll(): Unit = {
     super.beforeAll()
     runs(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   val nsName = NamespaceName("dev")
@@ -163,7 +158,7 @@ class DeploymentTableSpec extends NelsonSuite with TypeCheckedTripleEquals {
     val dep = runs(config.storage, StoreOp.findDeployment(StackName("conductor", Version(1,1,1), "abcd"))).run.get
     runs(config.storage, StoreOp.createDeploymentResource(dep.id, "s3", new java.net.URI("s3://foo"))).run
     val res = runs(config.storage, StoreOp.getDeploymentResources(dep.id)).run
-    res contains (("s3", new java.net.URI("s3://foo")))
+    res should contain (("s3", new java.net.URI("s3://foo")))
   }
 
 }

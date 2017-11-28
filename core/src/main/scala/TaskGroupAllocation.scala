@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{==>>, @@, Order, Tag}
+import scalaz.{@@, Tag}
 
 final case class TaskGroupAllocation(
   id: String,

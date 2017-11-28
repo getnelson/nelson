@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz._,Scalaz._
+import scalaz._
 
 
 package object scheduler {

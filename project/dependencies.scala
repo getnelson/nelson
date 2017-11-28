@@ -18,20 +18,14 @@
 import sbt._, Keys._
 
 object dependencies {
-  object si2712fix {
-    val version = "1.1.0"
-
-    val plugin = "com.milessabin" % "si2712fix-plugin" % version cross CrossVersion.full
-  }
-
   object kindprojector {
-    val version = "0.9.0"
+    val version = "0.9.4"
 
     val plugin = "org.spire-math" % "kind-projector" % version cross CrossVersion.binary
   }
 
   object simulacrum {
-    val version = "0.7.0"
+    val version = "0.11.0"
 
     val core = "com.github.mpilquist" %% "simulacrum" % version
   }

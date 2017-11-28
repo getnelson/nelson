@@ -19,7 +19,6 @@ package nelson
 import java.nio.file.{Path, Paths}
 import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService, ThreadFactory}
 
-import helm.ConsulOp
 import journal.Logger
 import nelson.BannedClientsConfig.HttpUserAgent
 import nelson.cleanup.ExpirationPolicy
@@ -35,7 +34,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scalaz.Scalaz._
 import scalaz.concurrent.Strategy
-import scalaz.{@@, ~>, _}
+import scalaz.~>
 import docker.Docker
 import scheduler.SchedulerOp
 import vault._

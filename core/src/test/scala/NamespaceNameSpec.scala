@@ -16,8 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
-import Gen.{ alphaNumChar, listOf, listOfN, oneOf, choose }
+import org.scalacheck._, Prop._
 import scalaz.\/-
 
 object NamespaceNameSpec extends Properties("NamespaceNameSpec") {

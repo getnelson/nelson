@@ -16,13 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.plans.Datacenters
-import Datacenter._
-import argonaut._, Argonaut._
-import org.http4s._, headers._, Method._, Status._, Uri.uri
-import org.http4s.argonaut._
-import Json._
-import scalaz.concurrent.Task
+import org.http4s._
 
 trait ServiceSpec extends NelsonSuite {
   lazy val session = Session(
@@ -43,7 +37,7 @@ trait ServiceSpec extends NelsonSuite {
     path   = Some("/"),
     domain = Some(config.network.externalHost),
     secure = config.network.tls,
-    maxAge = Some(config.security.expireLoginAfter.toSeconds.toInt),
+    maxAge = Some(config.security.expireLoginAfter.toSeconds.toLong),
     httpOnly = false
   )
 

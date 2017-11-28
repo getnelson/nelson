@@ -35,7 +35,6 @@ object Discovery {
   import argonaut._
   import Argonaut._
   import NamedService._
-  import RoutePath._
 
   final case class DeploymentDiscovery(defaultNamespace: NamespaceName,
                                  domain: String,

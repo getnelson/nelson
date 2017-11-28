@@ -17,9 +17,7 @@
 package nelson
 
 import org.scalatest._, Matchers._
-import scala.xml.{NodeSeq, XML}
-import scalaz.{\/,\/-,-\/}
-import scalaz.concurrent.Task
+import scalaz.{\/,\/-}
 import nelson.plans.UI
 
 class UISpec extends FlatSpec {
@@ -40,6 +38,6 @@ class UISpec extends FlatSpec {
         }
       }
 
-    results.forall(_ == true)
+    results should contain only (true)
   }
 }

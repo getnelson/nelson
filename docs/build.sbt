@@ -22,8 +22,6 @@ libraryDependencies += dependencies.simulacrum.core
 
 addCompilerPlugin(dependencies.macroparadise.plugin)
 
-addCompilerPlugin(dependencies.si2712fix.plugin)
-
 addCompilerPlugin(dependencies.kindprojector.plugin)
 
 baseURL in Hugo := new URI(s"https://verizon.github.io/${githubRepoName.value}/")
@@ -40,7 +38,7 @@ hugoGenerateData := {
   dest
 }
 
-makeSite <<= makeSite.dependsOn(hugoGenerateData)
+makeSite := makeSite.dependsOn(hugoGenerateData).value
 
 import com.typesafe.sbt.SbtGit.GitKeys.{gitBranch, gitRemoteRepo}
 // TIM: GITHUB_TOKEN is read from the .travis.yml environment

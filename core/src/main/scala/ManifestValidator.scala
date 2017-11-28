@@ -16,11 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Manifest.{UnitDef,Plan,Resource,Namespace,AlertOptOut,Loadbalancer,HealthCheck,Route}
-import storage.{StoreOp,StoreOpF}
-import Datacenter.{StackName,DCLoadbalancer}
-import yaml.ManifestParser
-import scala.io.Source
+import Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck,Route}
+import storage.StoreOp
+import Datacenter.StackName
 import scalaz._, Scalaz._
 import scalaz.concurrent.Task
 

@@ -18,7 +18,6 @@ package nelson
 
 import org.http4s._
 import org.http4s.dsl._
-import Server._
 import nelson.plans.Misc
 
 class MiscSpec extends ServiceSpec {

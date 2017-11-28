@@ -17,10 +17,8 @@
 package nelson
 package yaml
 
-import scalaz._, Scalaz._
-import scalaz.concurrent.Task
+import scalaz._
 import org.scalatest.{FlatSpec,Matchers}
-import scala.collection.JavaConverters._
 
 class DeployableYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   import Manifest._, Util._

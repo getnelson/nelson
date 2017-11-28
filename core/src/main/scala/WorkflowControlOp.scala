@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{Monad,Free,\/,~>}
+import scalaz.{Free,~>}
 import scalaz.concurrent.Task
 
 
@@ -26,8 +26,6 @@ import scalaz.concurrent.Task
 sealed abstract class WorkflowControlOp[+A]
 
 object WorkflowControlOp {
-  import Workflow.WorkflowF
-
   final case class Pure[A](a: () => A) extends WorkflowControlOp[A]
 
   final case class Failure(t: Throwable) extends WorkflowControlOp[Nothing]

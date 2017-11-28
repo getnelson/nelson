@@ -17,8 +17,7 @@
 package nelson
 
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll,BeforeAndAfterEach}
-import scalaz.concurrent.Task
-import java.nio.file.{Path,Paths,Files}
+import java.nio.file.Files
 import scalaz.stream.async.boundedQueue
 import scalaz.concurrent.Strategy
 import scalaz.stream.nio.file._
@@ -37,10 +36,12 @@ class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll w
 
   override def beforeEach: Unit = {
     delete()
+    ()
   }
 
   override def afterAll: Unit = {
     delete()
+    ()
   }
 
   private def delete() = {

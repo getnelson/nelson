@@ -18,10 +18,8 @@ package nelson
 package scheduler
 
 import scalaz.{@@, Free, NonEmptyList}
-import Free.FreeC
 import docker.Docker.Image
 import Manifest.{Plan, UnitDef, Versioned}
-
 
 sealed abstract class SchedulerOp[A] extends Product with Serializable
 

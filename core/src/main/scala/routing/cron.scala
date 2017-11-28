@@ -17,19 +17,12 @@
 package nelson
 package routing
 
-import scala.concurrent.duration.{Duration, DurationInt, TimeUnit}
-import scala.concurrent.duration._
-
 import scalaz._
 import Scalaz._
-import scalaz.concurrent.{Strategy, Task}
+import scalaz.concurrent.Task
 import scalaz.stream._
 import journal.Logger
 import helm.ConsulOp
-import ConsulOp.ConsulOpF
-import Nelson._
-
-import scala.util.Random
 
 object cron {
   private[cron] val log = Logger[cron.type]

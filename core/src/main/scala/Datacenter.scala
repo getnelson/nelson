@@ -16,17 +16,13 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import spire.math._
-import scalaz.{Free, Order, ValidationNel, \/, ~>}
+import scalaz.{Order, ValidationNel, ~>}
 import scalaz.std.string._
-import scalaz.std.anyVal._
 import scalaz.syntax.monoid._
-import scalaz.syntax.contravariant._
 import scalaz.std.set._
 import scalaz.syntax.std.option._
 import scalaz.syntax.foldable._
 import scalaz.concurrent.Task
-import ca.mrvisser.sealerate
 import java.net.URI
 import java.time.Instant
 import scala.concurrent.duration.FiniteDuration
@@ -149,8 +145,6 @@ final case class Datacenter(
   loadbalancer: Option[LoadbalancerOp ~> Task],
   policy: PolicyConfig
 ) {
-
-  import Datacenter._
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf"))
   override def equals(other: Any): Boolean = {

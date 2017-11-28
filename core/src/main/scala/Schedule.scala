@@ -62,7 +62,6 @@ object Schedule {
 
   private def parseCron(str: String): String \/ Cron = {
     import com.cronutils.model.definition.CronDefinitionBuilder
-    import com.cronutils.model.definition.CronDefinition
     import com.cronutils.parser.CronParser
     import com.cronutils.model.CronType.UNIX
     \/.fromTryCatchNonFatal {

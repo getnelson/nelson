@@ -17,11 +17,6 @@
 package nelson
 package alerts
 
-import java.io.File
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import nelson.Manifest.{ AlertOptOut, Alerting, PrometheusConfig }
-import scalaz.Applicative
 import scalaz.concurrent.Task
 import scala.sys.process.{Process => _, _}
 import scalaz.stream.Process

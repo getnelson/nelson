@@ -16,15 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
 import scalaz.~>
 import scalaz.Id
-import scalaz.concurrent.Task
 import scalaz.std.list._
-import scalaz.syntax.traverse._
-import scala.concurrent.duration.DurationInt
 import helm.ConsulOp
-import org.scalatest.{FlatSpec,Matchers}
 
 class ConsulDiscoverySpec extends NelsonSuite {
   import Datacenter._
@@ -34,6 +29,7 @@ class ConsulDiscoverySpec extends NelsonSuite {
   override def beforeAll(): Unit = {
     super.beforeAll()
     nelson.storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   def consulOps: List[ConsulOp.ConsulOpF[Unit]] = {

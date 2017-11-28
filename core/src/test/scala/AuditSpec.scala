@@ -16,15 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scala.concurrent.duration.DurationInt
 import org.scalatest._
 import scalaz.stream.Process
-import scalaz.stream.async.mutable.{Queue}
-import scalaz.stream.async
-import scalaz.concurrent.{Task, Strategy}
-import scala.concurrent.SyncVar
+import scalaz.concurrent.Task
 import argonaut._, Argonaut._
-import Fixtures._
 import doobie.imports._
 import scalaz._, Scalaz._
 
@@ -33,7 +28,6 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
   import Json._
   import audit._
-  import AuditableInstances._
 
   case class Foo(n: Int)
   val encoder: EncodeJson[Foo] = casecodec1(Foo.apply, Foo.unapply)("n")

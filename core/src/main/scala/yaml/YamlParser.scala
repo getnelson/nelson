@@ -16,10 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{ EitherT, NonEmptyList, \/ }
+import scalaz.{ NonEmptyList, \/ }
 import scala.reflect.ClassTag
 import scalaz.concurrent.Task
-import scalaz.syntax.monad._
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 

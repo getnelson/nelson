@@ -18,20 +18,15 @@ package nelson
 package crypto
 package autharbitrary
 
-import java.security.spec.ECGenParameterSpec
-import java.security.{KeyPair, KeyPairGenerator, SecureRandom, Signature}
-
 import ArbFunction0._
 
 import scalaz.Apply
 import scalaz.concurrent.Task
-import scalaz.syntax.functor._
 import scodec.bits.ByteVector
 import org.scalacheck._
 import Arbitrary.arbitrary
 
 import scalaz.scalacheck.ScalaCheckBinding._
-import javax.crypto.{Cipher, Mac}
 
 object AuthArbitrary {
 

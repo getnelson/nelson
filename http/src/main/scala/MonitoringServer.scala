@@ -120,7 +120,7 @@ class MonitoringServer private (
     val responseLength = emptyResponse.length
     log.debug("setting response code to: " + responseCode)
     log.debug("setting response length to: " + responseLength)
-    req.sendResponseHeaders(responseCode, responseLength)
+    req.sendResponseHeaders(responseCode, responseLength.toLong)
 
     log.debug("writing body: " + emptyResponse)
     req.getResponseBody.write(emptyResponse)

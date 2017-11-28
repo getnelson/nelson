@@ -16,18 +16,18 @@
 //: ----------------------------------------------------------------------------
 
 import sbt._, Keys._
-import spray.revolver.RevolverPlugin._
+import spray.revolver.RevolverPlugin.autoImport._
 
 object custom {
 
   def resources = Seq(
-    unmanagedResourceDirectories in Test <+= baseDirectory(_ / ".." / "etc" / "classpath" / "test")
+    unmanagedResourceDirectories in Test += baseDirectory.value / ".." / "etc" / "classpath" / "test"
   )
 
   def revolver = Seq(
     javaOptions += s"-Dlogback.configurationFile=${baseDirectory.value}/../etc/classpath/revolver/logback.xml",
-    Revolver.reStartArgs :=
+    reStartArgs :=
       (baseDirectory.value / ".." / "etc" / "development" / name.value / s"${name.value}.dev.cfg").getCanonicalPath :: Nil,
-    mainClass in Revolver.reStart := (mainClass in run).value
+    mainClass in reStart := (mainClass in run).value
   )
 }

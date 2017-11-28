@@ -18,11 +18,8 @@ package nelson
 
 package object routing {
   import storage._
-  import scalaz.{==>>, ~>, Monad,Monoid,NonEmptyList,RWST,Traverse,\/}
+  import scalaz.{==>>,NonEmptyList,RWST}
   import scalaz.std.list._
-  import scalaz.std.option._
-  import scalaz.std.anyVal._
-  import scalaz.concurrent.Task
   import quiver.Graph
 
   import Datacenter._

@@ -116,7 +116,7 @@ class AuthSpec extends NelsonSuite {
     resp.headers.get(Location).map(_.uri) should equal (Some(uri("/")))
   }
 
-  it should "Fail with a 401 for a bad code" in pending
+  it should "Fail with a 401 for a bad code" is (pending)
 
   it should "Fail with a 500 for a system failure" in {
     val req = Request(GET, uri("/auth/exchange?code=crash"))

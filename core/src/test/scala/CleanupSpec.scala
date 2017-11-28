@@ -18,13 +18,13 @@ package nelson
 
 
 class CleanupSpec extends NelsonSuite  {
-  import scheduler._
   import Datacenter._
   import storage.{run=>runs, StoreOp}
 
   override def beforeAll(): Unit = {
     super.beforeAll()
     nelson.storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   it should "run the entire cleanup pipeline and mark expired services as terminated" in {

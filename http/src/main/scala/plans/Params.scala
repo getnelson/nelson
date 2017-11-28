@@ -17,7 +17,6 @@
 package nelson
 package plans
 
-import org.http4s._
 import org.http4s.dsl._
 import scalaz.\/
 

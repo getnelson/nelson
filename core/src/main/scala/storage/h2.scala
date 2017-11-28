@@ -19,13 +19,10 @@ package storage
 
 import argonaut._
 import java.net.URI
-import java.text.SimpleDateFormat
-import scala.Ordering
 import scalaz._
 import Scalaz._
 import scalaz.concurrent.Task
 import doobie.imports._
-import org.flywaydb.core.Flyway
 import journal._
 import java.time.Instant
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
@@ -883,14 +880,14 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
         WHERE rr.slug IS ?
         ORDER BY r.release_id DESC
         LIMIT ?
-        """, None).toQuery0((s.toString, limit))
+        """, None).toQuery0((s.toString, limit.toLong))
       case (None, Some(id), None, None) =>
         Query[(Long,Long), ReleaseTuple](s"""
         $base
         WHERE r.release_id IS ?
         ORDER BY r.release_id DESC
         LIMIT ?
-        """, None).toQuery0((id, limit))
+        """, None).toQuery0((id, limit.toLong))
       case (None, None, Some(id), None) =>
         Query[GUID, ReleaseTuple](s"""
         $base
@@ -908,7 +905,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
       case _ =>
         Query[Long, ReleaseTuple](
           s"$base ORDER BY r.release_id DESC LIMIT ?"
-        ).toQuery0(limit)
+        ).toQuery0(limit.toLong)
     }
 
     val result = constraint.process.map {

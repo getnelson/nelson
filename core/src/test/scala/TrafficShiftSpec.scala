@@ -16,11 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
-import scalaz.{@@,\/,NonEmptyList}
-import scalaz.syntax.either._
-import scalaz.syntax.validation._
-import scalaz.concurrent.Task
+import org.scalacheck._, Prop._
 import concurrent.duration._
 import java.time.Instant
 
@@ -43,7 +39,7 @@ object TrafficShiftPropertySpec extends Properties("TrafficShift") {
   }
 }
 
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
+import org.scalatest.{FlatSpec,Matchers}
 import java.time.Instant
 import scala.concurrent.duration._
 
@@ -120,7 +116,7 @@ class TrafficShiftSpec extends FlatSpec with Matchers {
   it should "not be in progress after reverse is finished" in {
     val start = Instant.now.minusSeconds(100)
     val ts = TrafficShift(d1,d2,LinearShiftPolicy,start,1.hour,None)
-    val reverseDuration = (ts.duration.toSeconds/2).toInt // reverse halfway
+    val reverseDuration = (ts.duration.toSeconds/2).toLong // reverse halfway
     val reverse = ts.start.plusSeconds(reverseDuration)
     val ts2 = ts.copy(reverse = Some(reverse))
 

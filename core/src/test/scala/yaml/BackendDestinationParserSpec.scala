@@ -17,7 +17,7 @@
 package nelson
 package yaml
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
+import org.scalacheck._, Prop._
 
 object BackendDestinationParserSpec extends Properties("BackendDestinationParser.parse"){
   import Fixtures._

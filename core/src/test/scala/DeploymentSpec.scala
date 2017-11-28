@@ -18,7 +18,7 @@ package nelson
 
 import Datacenter._
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
+import org.scalacheck._, Prop._
 
 object DeploymentSpec extends Properties("deployment") {
   import Deployment._
@@ -35,8 +35,7 @@ object DeploymentSpec extends Properties("deployment") {
   }
 }
 
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll,BeforeAndAfterEach}
-import scalaz.concurrent.Task
+import org.scalatest.{FlatSpec,Matchers}
 
 class DeploymentFlatSpec extends FlatSpec with Matchers {
 

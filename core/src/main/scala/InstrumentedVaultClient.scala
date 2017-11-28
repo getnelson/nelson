@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{-\/, Kleisli, \/-, ~>}
+import scalaz.{Kleisli, ~>}
 import scalaz.concurrent.Task
 import vault.Vault
 import vault.Vault._

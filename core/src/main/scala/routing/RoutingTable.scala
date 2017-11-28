@@ -18,19 +18,13 @@ package nelson
 package routing
 
 import storage._
-import nelson.Nelson.StorageK
-import quiver.{Graph,Context,LNode,LEdge}
+import quiver.{LNode,LEdge}
 import scalaz._
 import Scalaz._
-import scalaz.concurrent.Task
 import journal._
-import java.time.Instant
 
 object RoutingTable {
-  import scalaz.Tree
   import Datacenter._
-  import Deployment._
-  import Namespace._
 
   private val log = Logger[RoutingTable.type]
 

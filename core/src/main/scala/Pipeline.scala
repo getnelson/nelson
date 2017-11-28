@@ -20,7 +20,6 @@ import journal.Logger
 import scalaz.concurrent.Task
 import scala.util.control.NonFatal
 import scalaz.stream.{Process,Sink,sink}
-import scalaz.stream.async.mutable.{Queue}
 
 object Pipeline {
   import Manifest.Action

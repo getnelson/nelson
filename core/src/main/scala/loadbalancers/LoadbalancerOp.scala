@@ -18,8 +18,7 @@ package nelson
 package loadbalancers
 
 
-import scalaz.{Free, @@, Monad, ~>}
-import Free.FreeC
+import scalaz.Free
 
 sealed abstract class LoadbalancerOp[A] extends Product with Serializable
 

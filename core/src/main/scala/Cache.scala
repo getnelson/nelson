@@ -95,7 +95,7 @@ class GuavaCacheBuilder[K, V] extends CacheBuilder[K, V] {
   def build(): Cache[K, V] = new GuavaCache[K, V](builder.build[K, V]())
 
   def maximumSize(n: Int) = new GuavaCacheBuilder[K, V] {
-    override val builder = GuavaCacheBuilder.this.builder.maximumSize(n)
+    override val builder = GuavaCacheBuilder.this.builder.maximumSize(n.toLong)
   }
 
   def concurrencyLevel(n: Int) = new GuavaCacheBuilder[K, V] {

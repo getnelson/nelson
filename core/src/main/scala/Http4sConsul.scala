@@ -16,12 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Datacenter._
-import scala.concurrent.ExecutionContext
-import scalaz.{==>>,~>}
-import scalaz.std.string._
-import scalaz.concurrent.{Strategy, Task}
-import scalaz.stream.{Process,Process1,Sink}
+import scalaz.~>
+import scalaz.concurrent.Task
+import scalaz.stream.{Process, Sink}
 import helm.ConsulOp
 import helm.ConsulOp.ConsulOpF
 import nelson.helmhttp4s.Http4sConsulClient
