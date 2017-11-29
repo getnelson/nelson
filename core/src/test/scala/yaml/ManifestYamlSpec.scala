@@ -90,13 +90,13 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
           memory = Some(1024.0),
           retries = Some(2),
           desiredInstances = Some(1),
-          volumes = List(Volume("/tmp/bar","/some/host/location","rw")),
           schedule = Some(Schedule(Once)),
           policy = Some(RetainLatest),
           bindings = List(
             EnvironmentVariable("FOO","foo-1"),
             EnvironmentVariable("QUX","qux-1")
-          )
+          ),
+          ephemeralDisk = Some(200)
         )
       ),
       Plan(
