@@ -16,16 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz.concurrent.Task
-import scalaz.{\/-,Success,Failure,NonEmptyList}
-import scalaz.syntax.monad._
-import scalaz.std.list._
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
+import scalaz.{Success,NonEmptyList}
 
 class VerifyDeployableSpec extends NelsonSuite {
   import Datacenter._
-  import routing.RoutingTable._
 
   var ns: Manifest.Namespace = _
 

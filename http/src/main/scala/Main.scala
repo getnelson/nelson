@@ -21,14 +21,13 @@ import java.io.File
 
 import journal.Logger
 
-import concurrent.duration._
 import scalaz.{Optional => _, _}
 import Scalaz._
 import scalaz.concurrent.Task
 import scalaz.stream.Process
 import nelson.monitoring.{DeploymentMonitor, Stoplight, registerJvmMetrics}
 import nelson.http.MonitoringServer
-import nelson.storage.{StoreOp, Migrate, Hikari}
+import nelson.storage.{Migrate, Hikari}
 import dispatch.Http
 
 object Main {
@@ -90,6 +89,7 @@ object Main {
 
       log.info("starting the nelson server...")
       Server.start(cfg).run
+      ()
     } else {
       log.error("zero datacenters defined, which makes nelson useless. Exiting, to avoid you trying to do something pointless.")
       System.exit(1)

@@ -18,7 +18,7 @@ package nelson
 package crypto
 package autharbitrary
 
-import org.scalacheck._, Arbitrary.arbitrary
+import org.scalacheck._
 import scalaz.scalacheck.ScalaCheckBinding._
 import scalaz.syntax.functor._
 

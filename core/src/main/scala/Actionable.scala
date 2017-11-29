@@ -94,7 +94,7 @@ object Actionable {
         ))
 
         storage.run(cfg.storage, create(unit, dc, ns, plan, hash, exp, policy)).flatMap(_.cata(
-          some = id => deploy(id)(dc.workflow).map(_.toOption),
+          some = id => deploy(id)(dc.workflow).map(_ => ()),
           none = incCounter(deployFailureCounter)
         ))
       }

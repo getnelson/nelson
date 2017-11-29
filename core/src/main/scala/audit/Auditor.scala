@@ -21,10 +21,8 @@ import journal.Logger
 import scalaz.concurrent.Task
 import scalaz.stream.{Process,Sink,sink}
 import scalaz.stream.async.mutable.{Queue}
-import scalaz.{\/, -\/, \/-, ~>, Kleisli}
+import scalaz.~>
 import scalaz.syntax.functor._
-import Nelson._
-import argonaut._
 import storage.StoreOp
 
 class Auditor(queue: Queue[AuditEvent[_]], defaultLogin: String) {

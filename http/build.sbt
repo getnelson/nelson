@@ -19,9 +19,9 @@ import verizon.build._
 import com.typesafe.sbt.packager.archetypes._
 import com.typesafe.sbt.packager.docker._
 
-Revolver.settings
-
 enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin)
+
+addCompilerPlugin(dependencies.kindprojector.plugin)
 
 packageName in Docker := "verizon/nelson"
 
@@ -85,15 +85,6 @@ dockerCommands ++= {
     ExecCmd("RUN", "rm", "-rf", s"/tmp/${prometheusBase}", s"/tmp/${prometheusBase}.tar.gz")
   )
 }
-
-wartremoverErrors in (Compile, compile) ++= Warts.allBut(
-  Wart.Any,
-  Wart.DefaultArguments,
-  Wart.NonUnitStatements,
-  Wart.Nothing,
-  Wart.Throw,
-  Wart.ToString
-)
 
 scalaTestVersion := "2.2.6"
 

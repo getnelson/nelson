@@ -16,9 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz._,Scalaz._
-import scalaz.concurrent.Task
 import storage.StoreOp
 import org.scalatest.{BeforeAndAfterEach}
 
@@ -27,6 +24,7 @@ class ReleaseDBSpec extends NelsonSuite with BeforeAndAfterEach {
   override def beforeAll(): Unit = {
     super.beforeAll()
     storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   val un = "conductor"

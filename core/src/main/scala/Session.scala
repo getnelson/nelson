@@ -59,7 +59,7 @@ object Session { session =>
     ).as[User]
 
   val instantCodec: Codec[Instant] = (int64 ~ int32).xmap(
-    { case second ~ nano => Instant.ofEpochSecond(second, nano) },
+    { case second ~ nano => Instant.ofEpochSecond(second, nano.toLong) },
     instant => (instant.getEpochSecond, instant.getNano))
 
   val accessTokenCodec: Codec[AccessToken] =

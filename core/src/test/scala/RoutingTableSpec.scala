@@ -17,12 +17,9 @@
 package nelson
 
 import doobie.imports._
-import scalaz.concurrent.Task
-import scalaz.std.list._
 import scalaz.syntax.functor._
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll, BeforeAndAfterEach}
-import storage.{run => runs, StoreOp, StoreOpF}
-import scalaz.\/-
+import org.scalatest.BeforeAndAfterEach
+import storage.{run => runs, StoreOp}
 import java.time.Instant
 
 class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
@@ -33,6 +30,7 @@ class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
   override def beforeAll(): Unit = {
     super.beforeAll()
     nelson.storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   override def beforeEach: Unit =

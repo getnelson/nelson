@@ -18,22 +18,16 @@ package nelson
 
 import doobie.imports._
 import scalaz._, Scalaz._
-import scalaz.concurrent.Task
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 import org.scalatest.concurrent.TimeLimitedTests
 import org.scalatest.time.SpanSugar._
 import scala.collection.JavaConverters._
-import Manifest.{Port => MPort,Ports,Route,BackendDestination}
+import Manifest.{Port => MPort,Route,BackendDestination}
 import ManifestValidator.{ManifestValidation}
 import ManifestValidator.Json._
 import argonaut.Argonaut._
-import scala.concurrent.duration._
-import Util._
 import journal.Logger
 
 class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
-  import Datacenter._
-
   // This spec has been hanging in Travis, and now it's not, but we
   // never identified the root cause.  In case we fail, let's expedite
   // the cycle.
@@ -59,6 +53,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   override def beforeAll(): Unit = {
     super.beforeAll()
     nelson.storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   behavior of "manifest validator:"

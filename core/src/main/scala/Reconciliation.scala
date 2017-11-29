@@ -22,7 +22,7 @@ import nelson.Datacenter.{Deployment, StackName}
 import nelson.scheduler._
 import nelson.storage.StoreOp
 
-import scalaz.{-\/, ==>>, Coproduct, Failure, Foldable, Monad, Monoid, NonEmptyList, Order, Success, ValidationNel, \/, \/-, ~>}
+import scalaz.{-\/, ==>>, Coproduct, Failure, Monad, NonEmptyList, Order, Success, ValidationNel, \/, \/-, ~>}
 import scalaz.Coproduct._
 import scalaz.concurrent.Task
 import scalaz.std.list._

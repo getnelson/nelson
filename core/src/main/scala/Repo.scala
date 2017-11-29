@@ -16,7 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.net.URI
 import scalaz.\/
 import ca.mrvisser.sealerate
 import scalaz._, Scalaz._

@@ -31,3 +31,4 @@ deploy_rsa.pub
 trebuchet
 *.orig
 docs/src/hugo/public
+.ensime*

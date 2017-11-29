@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
+import org.scalacheck._, Prop._
 
 class DeploymentStatusSpec extends Properties("DeploymentStatus") {
   import DeploymentStatusSpec._

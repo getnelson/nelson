@@ -16,13 +16,11 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalatest._, Matchers._
-import scala.collection.immutable.SortedSet
+import org.scalatest._
 import quiver._
 import routing._
 import Datacenter._
 import Manifest.{Route,BackendDestination}
-import scala.concurrent.duration._
 import loadbalancers.Inbound
 
 class LoadbalancerSpec extends FlatSpec with Matchers with RoutingFixtures {

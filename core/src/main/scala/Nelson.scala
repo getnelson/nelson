@@ -16,19 +16,12 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.net.URI
-
 import journal.Logger
 import java.time.Instant
 
-import scala.util.control.NonFatal
-import scalaz.concurrent.{Strategy, Task}
-import scalaz.stream.{Sink, Process}
+import scalaz.concurrent.Task
 import scalaz._
 import Scalaz._
-import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService, ThreadFactory}
-
-import alerts.{Overhaul, Promtool, rewriteRules}
 
 object Nelson {
   import Datacenter._
@@ -269,8 +262,7 @@ object Nelson {
    * that a new deployment needs to take place.
    */
   def handleRelease(e: Github.ReleaseEvent): NelsonK[Unit] = {
-    import Manifest.{Namespace,Plan,UnitDef,Loadbalancer,Action}
-    import Actionable._
+    import Manifest.{Namespace,Plan,UnitDef,Action}
 
     // convert units in the manifest to action.
     // filter out all units that are not in the provided namespace (ns)
@@ -536,7 +528,6 @@ object Nelson {
    * Get all the information we know about a specific deployment
    */
   def fetchDeployment(guid: GUID): NelsonK[Option[StackSummary]] = {
-    import Scalaz._
     import routing.{RoutingNode,RoutingGraph,RoutePath,RoutingTable}
 
     def getDplWithNs: OptionT[StoreOpF,(Namespace,Datacenter.Deployment,RoutingGraph)] =
@@ -611,7 +602,7 @@ object Nelson {
    * Commit unit to namespace given a github release event by deploying it into the given datacenters
    */
   def commit(un: UnitName, ns: NamespaceName, dcs: List[Datacenter], m: Manifest @@ Versioned): NelsonK[Unit] = {
-    import Manifest.{Namespace,Plan,UnitDef,Action}
+    import Manifest.{Namespace,Plan,UnitDef}
 
     // fiter out everything that doesn't belong to this unit / namespace / datacenter
     val unitFilter: (Datacenter,Namespace,Plan,UnitDef) => Boolean =

@@ -16,12 +16,8 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
-import scalaz.{@@,\/,NonEmptyList}
-import scalaz.syntax.either._
-import scalaz.syntax.validation._
-import scalaz.concurrent.Task
-import concurrent.duration._
+import org.scalacheck._, Prop._
+import scalaz.\/
 
 object ManifestSpec extends Properties("manifest") with RoutingFixtures {
   import Fixtures._
@@ -100,8 +96,6 @@ object ManifestSpec extends Properties("manifest") with RoutingFixtures {
     }
   }
 }
-
-import org.scalatest._
 
 class ManifestManualSpec extends NelsonSuite {
   import Manifest._

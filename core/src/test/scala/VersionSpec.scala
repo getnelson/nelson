@@ -16,12 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalacheck.Gen.Choose
 import org.scalatest.prop.Checkers
-import scalaz.{ Order, Ordering }
-import scalaz.std.string._
 
 class VersionSpec extends NelsonSuite with Checkers {
   def nonNegInt(implicit c: Choose[Int]): Gen[Int] =

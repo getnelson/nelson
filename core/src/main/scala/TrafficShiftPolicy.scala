@@ -16,7 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Datacenter.Deployment
 import scala.concurrent.duration.FiniteDuration
 import java.time.Instant
 import spire.math.Rational

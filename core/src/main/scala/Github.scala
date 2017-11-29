@@ -17,7 +17,6 @@
 package nelson
 
 import java.net.URI
-import dispatch.Http
 import scalaz.concurrent.Task
 import delorean._
 import ca.mrvisser.sealerate

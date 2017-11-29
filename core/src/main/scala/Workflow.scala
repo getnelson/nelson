@@ -16,15 +16,13 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.time.Instant
 import scala.concurrent.duration.FiniteDuration
 import scalaz.concurrent.Task
 import scalaz._, Scalaz._
-import Free.FreeC
-import Manifest.{UnitDef,Versioned,Plan,AlertOptOut,Resource}
+import Manifest.{UnitDef,Versioned,Plan,AlertOptOut}
 import Datacenter.{Deployment}
 import docker.Docker.Image
-import storage.{StoreOp,StoreOpF}
+import storage.{StoreOp}
 import docker.DockerOp
 import helm.ConsulOp
 import logging.LoggingOp
@@ -85,8 +83,6 @@ object Workflow {
     import Datacenter.ServiceName
     import Docker.RegistryURI
     import ScalazHelpers._
-    import UnitDef._
-    import alerts._
     import routing.{RoutingTable,Discovery}
 
     def pure[A](a: => A): WorkflowF[A] =

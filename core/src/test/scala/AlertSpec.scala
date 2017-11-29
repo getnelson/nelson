@@ -17,17 +17,13 @@
 package nelson
 
 import alerts._
-import argonaut._, Argonaut._
 import helm.ConsulOp
 import nelson.Datacenter.StackName
 import nelson.test._
 import org.scalatest.prop.Checkers
-import scalaz.Equal
 import scalaz.concurrent.Task
-import scalaz.concurrent.Task.{delay, now}
-import scalaz.syntax.either._
+import scalaz.concurrent.Task.now
 import Manifest._
-import Manifest.Deployable.Container
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 
 class AlertSpec extends FlatSpec

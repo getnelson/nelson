@@ -53,7 +53,6 @@ final case class ReleasedDeployment(
 object Released {
   import scalaz.Order
   import scalaz.std.anyVal._
-  import scalaz.syntax.contravariant._
 
   implicit def releasedOrder: Order[Released] =
     Order[Long].contramap[Released](_.releaseId)

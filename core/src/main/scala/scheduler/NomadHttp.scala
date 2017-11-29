@@ -20,15 +20,14 @@ package scheduler
 
 import nelson.Json._
 
-import scalaz.{@@, NonEmptyList, \/, ~>}
+import scalaz.{NonEmptyList, ~>}
 import scalaz.concurrent.Task
 import scalaz.syntax.std.option._
 import scalaz.syntax.traverse._
 import scalaz.syntax.applicative._
 import scalaz.std.list._
-import scalaz.syntax.std.boolean._
 import journal.Logger
-import Manifest.{Deployable, Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef, Versioned}
+import Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
 import Datacenter.{Deployment, StackName}
 import docker.Docker
 import Docker.Image
@@ -64,7 +63,6 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
   import NomadJson._
   import NomadHttp.log
   import SchedulerOp._
-  import UnitDef._
   import argonaut._, Argonaut._
   import org.http4s._
   import org.http4s.client._
@@ -191,7 +189,6 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
 object NomadJson {
   import argonaut._, Argonaut._
   import Infrastructure.Nomad
-  import Schedule._
   import scala.concurrent.duration._
 
   sealed abstract class NetworkMode(val asString: String)

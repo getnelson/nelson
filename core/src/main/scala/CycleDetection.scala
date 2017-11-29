@@ -16,11 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Nelson.NelsonK
 import nelson.storage.{StoreOp, StoreOpF, run => runs}
 import Manifest.{apply => _, _}
 import nelson.Datacenter.DCUnit
-import quiver._
 import routing._
 
 import scalaz._

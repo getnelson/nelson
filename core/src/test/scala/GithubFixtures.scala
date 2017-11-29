@@ -19,7 +19,6 @@ package nelson
 object GitFixtures {
   import scalaz.concurrent.Task
   import Github._
-  import Request._
   import nelson.Json._
   import argonaut._, Argonaut._
   import Util._
@@ -48,7 +47,7 @@ object GitFixtures {
   val contents:Task[Option[Contents]] =
     loadResourceAsString("/nelson/dependencies.bar_2.0.0.yml").map { c =>
       val encoded = java.util.Base64.getMimeEncoder.encodeToString(c.getBytes("utf-8"))
-      Some(Contents(encoded,"manifest.deployable.v1.b.yml",encoded.length))
+      Some(Contents(encoded,"manifest.deployable.v1.b.yml",encoded.length.toLong))
     }
 
   def release(id: ID) = Release(id,

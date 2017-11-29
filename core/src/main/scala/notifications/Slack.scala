@@ -17,7 +17,7 @@
 package nelson
 package notifications
 
-import scalaz.{~>, Free, Coyoneda,@@}
+import scalaz.{~>, Free, Coyoneda}
 import scalaz.syntax.traverse._
 import scalaz.std.list._
 import scalaz.concurrent.Task

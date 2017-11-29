@@ -24,12 +24,11 @@ package nelson
  * only support Prometheus.
  */
 package object alerts {
-  import argonaut._, Argonaut._
   import helm.ConsulOp
-  import nelson.Datacenter.{ Deployment, StackName }
+  import nelson.Datacenter.StackName
   import nelson.Manifest._
   import Manifest.AlertOptOut
-  import scalaz.{-\/, \/-, \/, Free}
+  import scalaz.{\/, Free}
   import scalaz.concurrent.Task
   import scalaz.syntax.either._
   import scalaz.syntax.functor._

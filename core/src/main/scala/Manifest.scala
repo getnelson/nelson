@@ -18,10 +18,8 @@ package nelson
 
 import scalaz._, Scalaz._
 import scalaz.concurrent.Task
-import scala.language.existentials
 import scala.concurrent.duration._
-import java.time.Instant
-import nelson.storage.{StoreOp,StoreOpF}
+import nelson.storage.StoreOp
 import nelson.notifications.NotificationSubscriptions
 import Manifest._
 import cleanup.ExpirationPolicy

@@ -18,10 +18,8 @@ package nelson
 
 import io.prometheus.client.CollectorRegistry
 import org.scalatest.FlatSpec
-import docker._
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp
-import nelson.scheduler.SchedulerOp._
 import nelson.Datacenter._
 
 class InstrumentedNomadClientSpec extends FlatSpec with NelsonSuite {

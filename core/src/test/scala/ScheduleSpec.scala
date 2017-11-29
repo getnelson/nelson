@@ -16,8 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
-import java.time.{Instant,Duration,ZonedDateTime,ZoneId}
+import org.scalacheck._, Prop._
 
 object ScheduleSpec extends Properties("Schedule"){
   import Fixtures._

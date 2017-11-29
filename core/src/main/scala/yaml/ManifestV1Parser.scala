@@ -19,12 +19,10 @@ package yaml
 
 import java.net.URI
 import scala.concurrent.duration.{Duration,FiniteDuration,MILLISECONDS}
-import scalaz.{ Applicative, Apply, EitherT, Success, Failure }
-import java.util.{Map => JMap}
+import scalaz.Apply
 import scala.beans.BeanProperty
 import java.util.{ArrayList => JList}
 import scalaz.{\/,NonEmptyList,ValidationNel,Validation,State}
-import alerts.Promtool
 import cleanup.{ExpirationPolicy}
 import notifications._
 import BiggerApplies._
@@ -32,7 +30,6 @@ import BiggerApplies._
 object ManifestV1Parser {
   // putting implicits in module scope
   import scalaz.std.list._
-  import scalaz.std.map._
   import scalaz.std.vector._
   import YamlParser.fromYaml
   import scalaz.std.string._

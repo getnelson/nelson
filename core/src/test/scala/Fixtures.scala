@@ -17,7 +17,7 @@
 package nelson
 
 import java.net.URI
-import java.time.{Instant,Duration,ZonedDateTime,ZoneId}
+import java.time.{Instant,ZonedDateTime,ZoneId}
 import scala.util.matching.Regex
 import scala.concurrent.duration._
 
@@ -98,7 +98,7 @@ object Fixtures {
     id      <- choose(1000,10000)
     name   <- alphaNumStr
     avatar <- arbitrary[URI]
-  } yield Organization(id,Option(name), name, avatar)
+  } yield Organization(id.toLong,Option(name), name, avatar)
 
   def genUser: Gen[User] = for {
     login  <- alphaNumStr
@@ -110,7 +110,7 @@ object Fixtures {
 
   def genInstant: Gen[Instant] =
     for(a <- choose(2000,100000) // make it choose between 2 second and 100 seconds
-      ) yield Instant.now.plusMillis(a)
+      ) yield Instant.now.plusMillis(a.toLong)
 
 
   def genAccessToken: Gen[AccessToken] =
@@ -357,14 +357,14 @@ object Fixtures {
       a <- choose(1,10000)
       b <- genSlug
       c <- genRepoAccess
-    } yield Repo(a, b, c, None)
+    } yield Repo(a.toLong, b, c, None)
 
   val genGithubRelease: Gen[Github.Release] =
     for {
       a <- choose(1,10000)
       b <- genVersion
     } yield Github.Release(
-      id = a,
+      id = a.toLong,
       url = "",
       htmlUrl = "",
       assets = Nil,
@@ -401,7 +401,7 @@ object Fixtures {
       e <- Gen.listOfN(0, genServiceName)
       f <- Gen.listOfN(0, alphaNumStr)
       g <- Gen.listOfN(0, genDatacenterPort)
-    } yield Datacenter.DCUnit(a,b,c,d,e.toSet,f.toSet,g.toSet)
+    } yield Datacenter.DCUnit(a.toLong,b,c,d,e.toSet,f.toSet,g.toSet)
 
   val genDeployment: Gen[Datacenter.Deployment] =
     for {
@@ -411,21 +411,21 @@ object Fixtures {
       d <- choose(1,10000)
       e <- genInstant
       f <- alphaNumStr
-    } yield Datacenter.Deployment(a,b,c,Datacenter.Namespace(1, NamespaceName("dev"), "dc"),e,"manual","default",f,"retain-always")
+    } yield Datacenter.Deployment(a.toLong,b,c,Datacenter.Namespace(1, NamespaceName("dev"), "dc"),e,"manual","default",f,"retain-always")
 
   val genTrafficShiftPolicy: Gen[TrafficShiftPolicy] =
     Gen.oneOf(TrafficShiftPolicy.policies.toSeq)
 
   def genPastInstant(lower: Int, upper: Int): Gen[Instant] =
-    for(a <- choose(lower,upper)) yield Instant.now.minusSeconds(a)
+    for(a <- choose(lower,upper)) yield Instant.now.minusSeconds(a.toLong)
 
   def genFutureInstant(lower: Int, upper: Int): Gen[Instant] =
-    for(a <- choose(lower,upper)) yield Instant.now.plusSeconds(a)
+    for(a <- choose(lower,upper)) yield Instant.now.plusSeconds(a.toLong)
 
   def genFiniteDuration: Gen[FiniteDuration] =
     for {
       a <- choose(60, 86400) // between 1 minute and 1 day
-    } yield FiniteDuration(a, SECONDS)
+    } yield FiniteDuration(a.toLong, SECONDS)
 
   val genTrafficShift: Gen[Datacenter.TrafficShift] =
     for {

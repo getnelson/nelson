@@ -73,7 +73,7 @@ object SignedCodec {
   val defaultSignatureLengthBytes: Int = 16
   val defaultSignatureLengthBits: Int = defaultSignatureLengthBytes * 8
 
-  val defaultSignatureCodec: Codec[BitVector] = codecs.bits(defaultSignatureLengthBits)
+  val defaultSignatureCodec: Codec[BitVector] = codecs.bits(defaultSignatureLengthBits.toLong)
 
   def signingKey(env: AuthEnv): SignatureKey =
     env.signingKey

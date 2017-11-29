@@ -55,32 +55,15 @@ libraryDependencies ++= Seq(
 
 addCompilerPlugin(dependencies.kindprojector.plugin)
 
-ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
+scalaModuleInfo := scalaModuleInfo.value map { _.withOverrideScalaVersion(true) }
 
 addCompilerPlugin(dependencies.macroparadise.plugin)
-
-addCompilerPlugin(dependencies.si2712fix.plugin)
 
 initialCommands in console := """
 import nelson._
 val storage = new nelson.storage.H2Storage(DatabaseConfig("org.h2.Driver", s"jdbc:h2:file:/tmp/nelson.console.db;DATABASE_TO_UPPER=FALSE", None, None))
 storage.setup.run
 """
-
-wartremoverErrors in (Compile, compile) ++= Warts.allBut(
-  Wart.Any,
-  Wart.AsInstanceOf,
-  Wart.DefaultArguments,
-  Wart.ExplicitImplicitTypes,
-  Wart.MutableDataStructures,
-  Wart.NoNeedForMonad,
-  Wart.NonUnitStatements,
-  Wart.Nothing,
-  Wart.Option2Iterable,
-  Wart.Throw,
-  Wart.ToString,
-  Wart.Var
-)
 
 buildInfoPackage := "nelson"
 

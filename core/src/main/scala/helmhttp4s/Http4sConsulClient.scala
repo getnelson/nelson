@@ -24,12 +24,11 @@ import org.http4s._
 import org.http4s.client._
 import org.http4s.argonaut.jsonOf
 import org.http4s.headers.Authorization
-import org.http4s.Status.{Ok, NotFound}
+import org.http4s.Status.NotFound
 import scalaz.~>
 import scalaz.concurrent.Task
 import scalaz.stream.Process
 import scodec.bits.ByteVector
-import scala.collection.immutable.{Set => SSet}
 
 final class Http4sConsulClient(baseUri: Uri,
                                client: Client,

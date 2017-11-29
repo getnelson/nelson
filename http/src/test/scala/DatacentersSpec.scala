@@ -16,23 +16,22 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.plans.{Auth, Datacenters}
+import nelson.plans.Datacenters
 import Datacenter._
 import argonaut._
 import Argonaut._
 import org.http4s._
 import org.http4s.argonaut._
 import org.http4s.dsl._
-import org.http4s.headers._
 import org.http4s.Uri.uri
 import Json._
-import nelson.Server.resources
 
 class DatacentersSpec extends ServiceSpec {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
     nelson.storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   val manual = ManualDeployment(config.datacenters.head.name,"dev","foo","1.1.1","hash","description",80)

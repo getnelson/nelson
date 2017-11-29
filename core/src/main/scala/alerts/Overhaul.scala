@@ -16,15 +16,12 @@
 //: ----------------------------------------------------------------------------
 package nelson.alerts
 
-import java.io.{BufferedWriter, File, OutputStreamWriter}
+import java.io.{BufferedWriter, OutputStreamWriter}
 import java.nio.charset.StandardCharsets.UTF_8
-import java.nio.file.Files
-import java.util.regex.Pattern
-import nelson.{NamespaceName, PlanRef, Pools, UnitName, Version}
+import nelson.{NamespaceName, PlanRef, Pools}
 import nelson.Datacenter.StackName
-import nelson.Manifest.{ AlertOptOut, Alerting, PrometheusConfig }
+import nelson.Manifest.PrometheusConfig
 import scala.io.Source
-import scalaz.stream.Process
 import scalaz.concurrent.Task
 
 object Overhaul extends RuleRewriter {

@@ -18,9 +18,7 @@ package nelson
 
 import doobie.imports._
 import scalaz._,Scalaz._
-import scalaz.concurrent.Task
 import storage.StoreOp
-import scala.concurrent.duration._
 
 class DatacenterDBSpec extends NelsonSuite {
 

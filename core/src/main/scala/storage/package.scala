@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{~>, Coyoneda, Free, Monad}
+import scalaz.{~>, Free, Monad}
 
 package object storage {
   def run[F[_]:Monad, A](interpreter: StoreOp ~> F, op: StoreOpF[A]): F[A] =

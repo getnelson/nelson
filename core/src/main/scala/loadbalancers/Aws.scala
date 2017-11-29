@@ -17,18 +17,14 @@
 package nelson
 package loadbalancers
 
-import Manifest.{Port,Versioned,Plan}
-import Datacenter.{Namespace}
-import scalaz.{@@,~>}
+import Manifest.{Port,Plan}
+import scalaz.{~>}
 import scalaz.syntax.apply._
-import scalaz.syntax.std.option._
 import scalaz.concurrent.Task
-import com.amazonaws.services.elasticloadbalancing.model.{Listener,CreateLoadBalancerRequest,DeleteLoadBalancerRequest,DescribeLoadBalancersRequest,LoadBalancerNotFoundException,DescribeLoadBalancersResult}
-import com.amazonaws.services.autoscaling.model.{Tag,AttachLoadBalancersRequest,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest}
+import com.amazonaws.services.elasticloadbalancing.model.{Listener,CreateLoadBalancerRequest,DeleteLoadBalancerRequest}
+import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest}
 import com.amazonaws.services.autoscaling.model.AmazonAutoScalingException
-import scheduler.SchedulerOp
 import journal.Logger
-import Manifest.UnitDef
 
 
 final case class ASGSize(desired: Int, min: Int, max: Int)

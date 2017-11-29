@@ -16,9 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.nio.file.Paths
-
-import dispatch.{Http, Req}
 import nelson.Datacenter.{DCUnit, Deployment, Namespace, StackName}
 import nelson.Reconciliation._
 import nelson.storage.StoreOp
@@ -26,13 +23,8 @@ import nelson.storage.StoreOp._
 import nelson.scheduler.{NomadHttp, RunningUnit, SchedulerOp}
 import nelson.scheduler.SchedulerOp._
 
-import scala.concurrent.duration._
-import org.scalatest.{FlatSpec, Matchers}
-
 import scalaz.concurrent.Task
-import scalaz.{-\/, NonEmptyList, Order, Tag, \/-, ~>}
-import scala.language.postfixOps
-import scalaz.stream.{Process, Sink}
+import scalaz.{NonEmptyList, Order, Tag, ~>}
 
 class ReconciliationSpec extends NelsonSuite {
 

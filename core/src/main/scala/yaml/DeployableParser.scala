@@ -17,8 +17,7 @@
 package nelson
 package yaml
 
-import scalaz.{ EitherT, NonEmptyList, \/ }
-import scalaz.concurrent.Task
+import scalaz.{ NonEmptyList, \/ }
 import java.util.{Map => JMap}
 import scala.beans.BeanProperty
 

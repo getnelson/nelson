@@ -18,7 +18,7 @@ package nelson
 
 import io.prometheus.client._
 
-import scalaz.{-\/, Kleisli, \/-, ~>}
+import scalaz.{Kleisli, ~>}
 import scalaz.syntax.std.option._
 import scalaz.concurrent.Task
 

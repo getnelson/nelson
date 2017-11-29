@@ -22,7 +22,6 @@ import org.http4s._
 import org.http4s.argonaut._
 import org.http4s.dsl._
 import journal.Logger
-import nelson.BannedClientsConfig.HttpUserAgent
 
 import scalaz.Order
 import scalaz.concurrent.Task
@@ -30,8 +29,7 @@ import scalaz.syntax.monad._
 import scalaz.syntax.std.option._
 
 abstract class Default extends Product with Serializable { self =>
-  import Nelson.{NelsonK,StorageK}
-  import audit.AuditableInstances._
+  import Nelson.NelsonK
 
   protected val log = Logger[this.type]
   protected val CookieName = "nelson.session"

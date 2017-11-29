@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import _root_.argonaut._, Argonaut._
+import _root_.argonaut._
 import java.nio.charset.StandardCharsets
 
 final case class Base64(decoded: String) extends AnyVal

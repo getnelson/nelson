@@ -17,8 +17,7 @@
 package nelson
 package logging
 
-import scalaz.{Free, Inject}
-import Free.FreeC
+import scalaz.Free
 
 sealed abstract class LoggingOp[A] extends Product with Serializable
 

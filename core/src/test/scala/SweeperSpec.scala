@@ -16,23 +16,16 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.util.concurrent.{ExecutorService, Executors}
-
 import helm.ConsulOp
 import nelson.Datacenter.{DCUnit, Deployment, Namespace}
 import nelson.DeploymentStatus.Ready
 import nelson.cleanup.Sweeper
 import nelson.cleanup.Sweeper.UnclaimedResources
-import nelson.cleanup.SweeperDefaults.NumberWithinDC
 import nelson.storage.StoreOp
 import nelson.storage.StoreOp.{ListDeploymentsForNamespaceByStatus, ListNamespacesForDatacenter}
 
-import scala.concurrent.duration._
-import scala.concurrent.duration.Duration
 import scalaz.concurrent.Task
-import scalaz.{-\/, Kleisli, \/-, ~>}
-import scalaz.stream.{Process, time}
-import scala.language.postfixOps
+import scalaz.{-\/, \/-, ~>}
 
 class SweeperSpec extends NelsonSuite {
 

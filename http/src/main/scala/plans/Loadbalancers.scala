@@ -19,7 +19,6 @@ package plans
 
 import org.http4s._
 import org.http4s.dsl._
-import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
 import scalaz._, Scalaz._
 

@@ -18,10 +18,8 @@ package nelson
 
 import doobie.imports._
 import scalaz._,Scalaz._
-import scalaz.concurrent.Task
 import storage.StoreOp
 import org.scalatest.{BeforeAndAfterEach}
-import scala.concurrent.duration._
 
 class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
 

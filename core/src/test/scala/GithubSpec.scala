@@ -16,13 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.net.URI
 import org.scalatest._
-import scalaz.concurrent.{Task}
-import argonaut._, Argonaut._
-import Fixtures._
 import Github.Interpreter.Step
-import scalaz._, Scalaz._
+import scalaz._
 import org.scalacheck._
 import org.scalatest.prop.PropertyChecks
 

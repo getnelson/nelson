@@ -28,7 +28,7 @@ import org.http4s.{BuildInfo => _, _}
 import org.http4s.dsl._
 import org.http4s.argonaut._
 
-import scalaz.{-\/, ==>>, Failure, Success, \/, \/-}
+import scalaz.{-\/, ==>>, Failure, Success, \/-}
 import scalaz.syntax.applicative._
 import scalaz.concurrent.Task
 

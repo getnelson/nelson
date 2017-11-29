@@ -16,11 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
+import org.scalacheck._, Prop._
 
 object DockerSpec extends Properties("Docker"){
   import Fixtures._
-  import concurrent.duration._
   import docker.Docker.Image
 
   case class DockerHost(value: String)

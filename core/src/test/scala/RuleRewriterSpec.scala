@@ -17,18 +17,12 @@
 package nelson
 
 import alerts.RuleRewriter, RuleRewriter._
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import nelson.Datacenter.StackName
 import nelson.Manifest.{ PrometheusAlert, PrometheusConfig, PrometheusRule }
 
 import org.scalatest.prop.Checkers
-import scalaz.concurrent.Task
-import scalaz.stream.Process
 
 class RuleRewriterSpec extends NelsonSuite with Checkers {
-  import Task.delay
-
   "toSerializedRules" should "serialize rules" in {
     // serialization of rules happens before rewrite, so no prefixes
     toSerializedRules(PrometheusConfig(
