@@ -23,6 +23,8 @@ enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin)
 
 addCompilerPlugin(dependencies.kindprojector.plugin)
 
+scalacOptions += "-Ypartial-unification"
+
 packageName in Docker := "verizon/nelson"
 
 version in Docker := version.value

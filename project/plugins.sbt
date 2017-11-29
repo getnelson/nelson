@@ -20,6 +20,6 @@ addSbtPlugin("io.get-coursier"   % "sbt-coursier"         % "1.0.0-RC13")
 
 addSbtPlugin("io.spray"          % "sbt-revolver"         % "0.9.1")
 
-addSbtPlugin("io.verizon.build"  % "sbt-rig"              % "5.0.39")
+addSbtPlugin("io.verizon.build"  % "sbt-rig"              % "4.0.36")
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
