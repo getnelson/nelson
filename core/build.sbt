@@ -55,7 +55,7 @@ libraryDependencies ++= Seq(
 
 addCompilerPlugin(dependencies.kindprojector.plugin)
 
-scalaModuleInfo := scalaModuleInfo.value map { _.withOverrideScalaVersion(true) }
+ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 
 addCompilerPlugin(dependencies.macroparadise.plugin)
 
@@ -66,6 +66,8 @@ storage.setup.run
 """
 
 buildInfoPackage := "nelson"
+
+scalacOptions += "-Ypartial-unification"
 
 scalacOptions in (Compile, doc) ++= Seq(
   "-no-link-warnings" // Suppresses problems with Scaladoc @throws links
