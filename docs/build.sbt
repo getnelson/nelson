@@ -24,6 +24,8 @@ addCompilerPlugin(dependencies.macroparadise.plugin)
 
 addCompilerPlugin(dependencies.kindprojector.plugin)
 
+scalacOptions += "-Ypartial-unification"
+
 baseURL in Hugo := new URI(s"https://verizon.github.io/${githubRepoName.value}/")
 
 // dynamically generate a file here that can be automatically
