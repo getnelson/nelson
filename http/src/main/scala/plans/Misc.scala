@@ -23,7 +23,6 @@ import cleanup.ExpirationPolicy.Json._
 import argonaut._
 import Argonaut._
 import nelson.Datacenter.Deployment
-import nelson.Reconciliation.{Conflict, ConflictEntry, DCDConflictLabeledMap}
 import org.http4s.{BuildInfo => _, _}
 import org.http4s.dsl._
 import org.http4s.argonaut._
@@ -64,56 +63,7 @@ final case class Misc(config: NelsonConfig) extends Default {
       ) ->: jEmptyObject)
     }
 
-  implicit val conflictEntryEncoder: EncodeJson[ConflictEntry[Deployment]] =
-    EncodeJson((c: ConflictEntry[Deployment]) =>
-      c.run match {
-        case -\/(nelsonAware) => nelsonAware.run match {
-          case -\/(nelsonOnly) =>
-            ("deployment" := nelsonOnly.a) ->:
-            ("status" := nelsonOnly.status.map(_.toString) getOrElse "<empty>") ->:
-            jEmptyObject
-          case \/-(stateConflict) =>
-            ("deployment" := stateConflict.a) ->:
-            ("status" := stateConflict.status.map(_.toString) getOrElse "<empty>") ->:
-            ("running_unit" := stateConflict.u) ->:
-            ("task_group_allocation" := stateConflict.alloc) ->:
-            jEmptyObject
-        }
-        case \/-(orphaned) => orphaned.run match {
-          case -\/(nelsonExpected) =>
-            ("running_unit" := nelsonExpected.u) ->:
-              jEmptyObject
-          case \/-(nelsonNotExpected) =>
-            ("running_unit" := nelsonNotExpected.u) ->:
-              jEmptyObject
-        }
-      }
-    )
-
-  implicit val conflictEncoder: EncodeJson[Conflict[Deployment]] =
-    EncodeJson((c: Conflict[Deployment]) =>
-      c.run match {
-        case -\/(malformedConflict) => malformedConflict.conflict match {
-          case Some(c) =>
-            ("problem" := malformedConflict.problem) ->:
-            ("conflict" := c) ->:
-            jEmptyObject
-          case None =>
-            ("problem" := malformedConflict.problem) ->: jEmptyObject
-        }
-        case \/-(conflictEntry) => conflictEntry.asJson
-        }
-    )
-
-  implicit val conflictMapEncoder: EncodeJson[String ==>> Set[Conflict[Deployment]]] = EncodeJson { m =>
-    jObjectAssocList(m.toList.toMap.mapValues(_.toList.asJson).toList)
-  }
-
   implicit val datacenterEncoder: EncodeJson[Datacenter] = EncodeJson { dc => dc.name.asJson }
-
-  implicit val dCDConflictLabeledMapEncoder: EncodeJson[DCDConflictLabeledMap] =
-    encodeTransposeZMap[Datacenter, String ==>> Set[Conflict[Deployment]]]('datacenter, 'conflicts)
-
 
   def handleLintRequest(str: String, units: List[ManifestValidator.NelsonUnit]): Task[Response] =
     ManifestValidator.validate(str, units).run(config).attempt.flatMap {
@@ -246,12 +196,6 @@ final case class Misc(config: NelsonConfig) extends Default {
      */
     case GET -> Root / "v1" / "statistics" & IsAuthenticated(_) =>
       json(Nelson.recentActivityStatistics)
-
-    /*
-     * Get /v1/reconciliation (a snapshot of conflicts from the most recent reconciliation operation).
-     */
-    case GET -> Root / "v1" / "reconciliation" & IsAuthenticated(_) =>
-      Ok(Reconciliation.latest.map(_.asJson))
 
     /*
      * Get /v1/build-info

@@ -824,10 +824,6 @@ The following table gives an explanation of the configuration file sections and 
     <td>Some static configuration properties for using Nomad. For example, `required-service-tags` are additional identifiers that Nelson will attach to the Consul service catalog entry, allowing you identify workloads from any other records in the service catalog (typically exceedingly useful for monitoring or migration auditing)</td>
   </tr>
     <tr>
-    <td><code>nelson.reconciliation-cadence</code></td>
-    <td>How frequently shall Nelson reconcile the stacks Nelson knows about, versus the stacks the scheduler knows about. This value should be cautiously set, as if it executes too low Nelson will hammer the currently scheduler cluster leader when it requests for metadata about the runtime.</td>
-  </tr>
-    <tr>
     <td><code>nelson.readiness-delay</code></td>
     <td>When a unit exposing ports is deployed, how frequently should Nelson check if the consul health checks have transitioned to "healthy". Nelson requires a majority of container instances to be reporting healthy in consul before transitioning the stack state from <code>Warming</code> to <code>Ready </code></td>
   </tr>

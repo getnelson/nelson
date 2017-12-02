@@ -75,7 +75,6 @@ object Main {
       runBackgroundJob("routing_cron", routing.cron.consulRefresh(cfg) to Http4sConsul.consulSink)
       runBackgroundJob("cleanup_pipeline", cleanup.CleanupCron.pipeline(cfg))
       runBackgroundJob("sweeper", cleanup.Sweeper.process(cfg))
-      runBackgroundJob("reconciliation", Reconciliation.loop(cfg))
       runBackgroundJob("deployment_monitor", DeploymentMonitor.loop(cfg))
 
       registerJvmMetrics()

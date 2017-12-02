@@ -14,6 +14,8 @@
 //:   limitations under the License.
 //:
 //: ----------------------------------------------------------------------------
+resolvers += "bintray sbt" at "https://dl.bintray.com/sbt/sbt-plugin-releases/"
+
 addSbtPlugin("com.typesafe.sbt"  % "sbt-native-packager"  % "1.3.1")
 
 addSbtPlugin("io.get-coursier"   % "sbt-coursier"         % "1.0.0-RC13")
