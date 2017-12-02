@@ -464,7 +464,6 @@ This API is only available to Nelson administrators.
   <li><a href="#api-misc-lint-manifest">Lint Manifest</a></li>
   <li><a href="#api-misc-lint-template">Lint Template</a></li>
   <li><a href="#api-misc-cleanup-policies">List Cleanup Policies</a></li>
-  <li><a href="#api-misc-reconciliation">List Reconciliation Conflicts</a></li>
 </ol>
 
 <h3 id="api-misc-sync" class="linkable">
@@ -605,139 +604,6 @@ This API is only available to Nelson administrators.
   {
     &quot;description&quot;: &quot;retains forever, or until someone manually decommissions&quot;,
     &quot;policy&quot;: &quot;retain-always&quot;
-  },
-  ...
-]
-</code></pre>
-
-<h3 id="api-misc-reconciliation" class="linkable">List Reconciliation Conflicts</h3>
-
-<p>Services for comparing the list of routable services that are registered in Nelson with those that are actively running within the runtime environment for all data centers, managed by the scheduler.  For running units that aren&rsquo;t registered in Nelson, we also track such services that are either manual deployments or otherwise not expected to be nelson-aware.</p>
-
-<p>Reconciliation runs as an asynchronous background task which executes at a cadence specified by the <code>reconciliation.cadence</code> key in the Nelson configuration.  When reconciliation occurs, conflicts are gathered and stored in memory, for later reference with no further action being taken.  As such, this functionality is currently provided for monitoring/troubleshooting.  Once programmatically-actionable classes of conflicts have been identified, the automating reconciliation for these cases will be considered.</p>
-
-<pre><code>GET /v1/reconciliation
-</code></pre>
-
-<h5>Format of Response</h5>
-
-<ul>
-<li>List of datacenters
-
-<ul>
-<li>datacenter name</li>
-<li>datacenter conflicts (see table below)</li>
-</ul></li>
-</ul>
-
-<h5>Conflict Types</h5>
-
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <td width="15%"><strong>Datacenter Conflict Type</strong></td>
-      <td><strong>Description</strong></td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><em>cant_be_in_nelson</em></td>
-      <td>Running Units within the datacenter that couldn't possibly be known by Nelson</td>
-    </tr>
-    <tr>
-      <td><em>should_be_in_nelson</em></td>
-      <td>Running Units within the datacenter that should be known by Nelson, but aren't</td>
-    </tr>
-    <tr>
-      <td><em>only_in_nelson</em></td>
-      <td>Deployment Units that aren't running in the datacenter but registered in Nelson</td>
-    </tr>
-    <tr>
-      <td><em>inconsistent_state</em></td>
-      <td>Running Units within the datacenter that are also present in Nelson but with conflicting states</td>
-    </tr>
-    <tr>
-  </tbody>
-</table>
-
-<h5>Example Response</h5>
-
-<pre><code>[
-  {
-    &quot;datacenter&quot;: &quot;texas&quot;,
-    &quot;conflicts&quot;:
-      {
-        &quot;cant_be_in_nelson&quot;:
-          [
-            {
-              &quot;running_unit&quot;:
-                {
-                  &quot;status&quot;: &quot;running&quot;,
-                  &quot;name&quot;: &quot;qa-monitor-starboard-MON0&quot;
-                }
-            },
-            {
-              &quot;running_unit&quot;:
-                {
-                  &quot;status&quot;: &quot;running&quot;,
-                  &quot;name&quot;:&quot;qa-monitor-aft-MON1&quot;
-                }
-            },
-          ],
-        &quot;only_in_nelson&quot;:
-          [
-            {
-              &quot;status&quot;: &quot;ready&quot;,
-              &quot;deployment&quot;:
-                {
-                  &quot;workflow&quot;: &quot;magnetar&quot;,
-                  &quot;guid&quot;: &quot;7be780744972&quot;,
-                  &quot;stack_name&quot;: &quot;hull-integritysensor--1-1-000--9lvoo7a3&quot;,
-                  &quot;resources&quot;: [&quot;hull-sensor-mesh&quot;],
-                  &quot;deployed_at&quot;: 1485382206845,
-                  &quot;unit&quot;: &quot;hull-integritysensor&quot;,
-                  &quot;plan&quot;: &quot;def-plan-qa&quot;
-                }
-            }
-          ],
-        &quot;inconsistent_state&quot;:
-          [
-            {
-              &quot;running_unit&quot;:
-                {
-                  &quot;status&quot;: &quot;running&quot;,
-                  &quot;name&quot;: &quot;mast-controller--1-5-200--iv3s5gqs&quot;
-                },
-              &quot;status&quot;: &quot;ready&quot;,
-              &quot;deployment&quot;:
-                {
-                  &quot;workflow&quot;: &quot;magnetar&quot;,
-                  &quot;guid&quot;: &quot;4aa424f65063&quot;,
-                  &quot;stack_name&quot;: &quot;mast-controller--1-5-200--v3s5gqsi&quot;,
-                  &quot;resources&quot;: [&quot;navigation-controller&quot;],
-                  &quot;deployed_at&quot;:1488243720492,
-                  &quot;unit&quot;: &quot;mast-control&quot;,
-                  &quot;plan&quot;: &quot;dev-plan&quot;
-                }
-            }
-          ],
-        &quot;should_be_in_nelson&quot;:
-          [
-            {
-        	  &quot;running_unit&quot;:
-        	    {
-        		  &quot;status&quot;: &quot;dead&quot;,
-        		  &quot;name&quot;: &quot;subaqueous-icebergdetection--1-0-500--eiode4a5/periodic-1488243600&quot;
-        		},
-            {
-              &quot;running_unit&quot;:
-                {
-                  &quot;status&quot;: &quot;running&quot;,
-                  &quot;name&quot;: &quot;deckchair-arrangement--2-0-400--oaf4nngo&quot;
-                }
-            }
-          ]
-      }
   },
   ...
 ]
@@ -2279,7 +2145,7 @@ namespaces:
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.9.63</li>
+      <li>Currently v0.9.64</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/verizon/nelson">GitHub</a></li>
