@@ -118,36 +118,6 @@ class Metrics(registry: CollectorRegistry) {
     .labelNames("nomad_op", "nomad_instance")
     .register(registry)
 
-  val reconciliationMalformedConflictCounter = Counter.build
-    .name("reconciliation_malformed_conflicts")
-    .help("Conflicts that are missing important information or ambiguously defined")
-    .labelNames("datacenter")
-    .register(registry)
-
-  val reconciliationInNelsonOnlyCounter = Counter.build
-    .name("reconciliation_units_in_nelson_only")
-    .help("Units that are registered by Nelson but not found running in the scheduler")
-    .labelNames("datacenter")
-    .register(registry)
-
-  val reconciliationStateConflictCounter = Counter.build
-    .name("reconciliation_unit_state_conflict")
-    .help("Units that are registered by Nelson, running in the scheduler but with conflicting states")
-    .labelNames("datacenter")
-    .register(registry)
-
-  val reconciliationNelsonExpectedCounter = Counter.build
-    .name("reconciliation_units_expected_in_nelson")
-    .help("Units that are found running in the scheduler and while they are expected to be known by Nelson, they are not")
-    .labelNames("datacenter")
-    .register(registry)
-
-  val reconciliationNelsonNotExpectedCounter = Counter.build
-    .name("reconciliation_units_not_expected_in_nelson")
-    .help("Units that are found running in the scheduler but not known by Nelson and aren't expected to")
-    .labelNames("datacenter")
-    .register(registry)
-
   val vaultRequestsFailuresTotal = (new Counter.Builder)
     .name(s"vault_requests_failures_total")
     .help(s"Vault requests that failed")

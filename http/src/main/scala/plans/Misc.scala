@@ -23,7 +23,6 @@ import cleanup.ExpirationPolicy.Json._
 import argonaut._
 import Argonaut._
 import nelson.Datacenter.Deployment
-import nelson.Reconciliation.{Conflict, ConflictEntry, DCDConflictLabeledMap}
 import org.http4s.{BuildInfo => _, _}
 import org.http4s.dsl._
 import org.http4s.argonaut._
@@ -246,12 +245,6 @@ final case class Misc(config: NelsonConfig) extends Default {
      */
     case GET -> Root / "v1" / "statistics" & IsAuthenticated(_) =>
       json(Nelson.recentActivityStatistics)
-
-    /*
-     * Get /v1/reconciliation (a snapshot of conflicts from the most recent reconciliation operation).
-     */
-    case GET -> Root / "v1" / "reconciliation" & IsAuthenticated(_) =>
-      Ok(Reconciliation.latest.map(_.asJson))
 
     /*
      * Get /v1/build-info

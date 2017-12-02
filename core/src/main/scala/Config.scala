@@ -286,10 +286,6 @@ final case class CleanupConfig(
   sweeperDelay: Duration
 )
 
-final case class ReconciliationConfig(
-  cadence: Duration
-)
-
 final case class DeploymentMonitorConfig(
   delay: Duration
 )
@@ -324,7 +320,6 @@ final case class NelsonConfig(
   manifest: ManifestConfig,
   timeout: Duration,
   cleanup: CleanupConfig,
-  reconciliation: ReconciliationConfig,
   deploymentMonitor: DeploymentMonitorConfig,
   datacenters: List[Datacenter],
   pipeline: PipelineConfig,
@@ -416,8 +411,6 @@ object Config {
 
     val cleanup = readCleanup(cfg.subconfig("nelson.cleanup"))
 
-    val reconciliationCadence = cfg.require[Duration]("nelson.reconciliation-cadence")
-
     val deploymentMonitor = cfg.require[Duration]("nelson.readiness-delay")
 
     val discoveryDelay = cfg.require[Duration]("nelson.discovery-delay")
@@ -443,7 +436,6 @@ object Config {
       manifest          = ManifestConfig(manifestcfg),
       timeout           = timeout,
       cleanup           = cleanup,
-      reconciliation    = ReconciliationConfig(reconciliationCadence),
       deploymentMonitor = DeploymentMonitorConfig(deploymentMonitor),
       datacenters       = readDatacenters(
         cfg = cfg.subconfig("nelson.datacenters"),
