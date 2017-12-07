@@ -141,7 +141,7 @@ CREATE CACHED TABLE PUBLIC."deployment_statuses"(
 );      
 ALTER TABLE PUBLIC."deployment_statuses" ADD CONSTRAINT PUBLIC.CONSTRAINT_C PRIMARY KEY("id"); 
 -- 0 +/- SELECT COUNT(*) FROM PUBLIC."deployment_statuses";    
-CREATE CACHED TABLE PUBLIC."datacenters"(
+CREATE CACHED TABLE PUBLIC."domains"(
     "name" VARCHAR(25) NOT NULL,
     "registry_location" VARCHAR(255),
     "consul_location" VARCHAR(255),
@@ -150,12 +150,12 @@ CREATE CACHED TABLE PUBLIC."datacenters"(
     "chronos_location" VARCHAR(255),
     "guid" VARCHAR(32) DEFAULT LEFT(CONVERT(SECURE_RAND(64),VARCHAR(32)), 12) NOT NULL
 );   
-ALTER TABLE PUBLIC."datacenters" ADD CONSTRAINT PUBLIC."datacenters_pk" PRIMARY KEY("name");   
--- 1 +/- SELECT COUNT(*) FROM PUBLIC."datacenters";            
-CREATE INDEX PUBLIC."datacenters_guid_idx" ON PUBLIC."datacenters"("guid");    
+ALTER TABLE PUBLIC."domains" ADD CONSTRAINT PUBLIC."domains_pk" PRIMARY KEY("name");   
+-- 1 +/- SELECT COUNT(*) FROM PUBLIC."domains";            
+CREATE INDEX PUBLIC."domains_guid_idx" ON PUBLIC."domains"("guid");    
 CREATE CACHED TABLE PUBLIC."namespaces"(
     "id" BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_058F9373_F2CF_4FBD_A3C7_292A3061A95A) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_058F9373_F2CF_4FBD_A3C7_292A3061A95A,
-    "datacenter" VARCHAR(25) NOT NULL,
+    "domain" VARCHAR(25) NOT NULL,
     "name" VARCHAR(64) NOT NULL,
     "guid" VARCHAR(32) DEFAULT LEFT(CONVERT(SECURE_RAND(64),VARCHAR(32)), 12) NOT NULL
 ); 
@@ -233,7 +233,7 @@ ALTER TABLE PUBLIC."loadbalancer_deployments" ADD CONSTRAINT PUBLIC."loadbalance
 ALTER TABLE PUBLIC."loadbalancer_routes" ADD CONSTRAINT PUBLIC."loadbalancer_routes_loadbalancers_fk" FOREIGN KEY("loadbalancer_id") REFERENCES PUBLIC."loadbalancers"("id") NOCHECK;          
 ALTER TABLE PUBLIC."loadbalancer_deployments" ADD CONSTRAINT PUBLIC."loadbalancer_deployments_namespaces_fk" FOREIGN KEY("namespace_id") REFERENCES PUBLIC."namespaces"("id") NOCHECK;         
 ALTER TABLE PUBLIC."unit_resources" ADD CONSTRAINT PUBLIC."unit_resources_have_unit" FOREIGN KEY("unit_id") REFERENCES PUBLIC."units"("id") NOCHECK;           
-ALTER TABLE PUBLIC."namespaces" ADD CONSTRAINT PUBLIC."datacenter_fk" FOREIGN KEY("datacenter") REFERENCES PUBLIC."datacenters"("name") ON DELETE CASCADE NOCHECK;             
+ALTER TABLE PUBLIC."namespaces" ADD CONSTRAINT PUBLIC."domain_fk" FOREIGN KEY("domain") REFERENCES PUBLIC."domains"("name") ON DELETE CASCADE NOCHECK;             
 ALTER TABLE PUBLIC."traffic_shifts" ADD CONSTRAINT PUBLIC."traffic_shift_to_deployment_fk" FOREIGN KEY("to_deployment") REFERENCES PUBLIC."deployments"("id") NOCHECK;         
 ALTER TABLE PUBLIC."deployments" ADD CONSTRAINT PUBLIC."deployment_namespace_fk" FOREIGN KEY("namespace_id") REFERENCES PUBLIC."namespaces"("id") NOCHECK;     
 ALTER TABLE PUBLIC."service_ports" ADD CONSTRAINT PUBLIC."service_units_fk" FOREIGN KEY("unit") REFERENCES PUBLIC."units"("id") ON DELETE CASCADE NOCHECK;     

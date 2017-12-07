@@ -23,7 +23,7 @@ import storage.{run => runs, StoreOp}
 import java.time.Instant
 
 class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
-  import Datacenter._
+  import Domain._
   import routing._
   import routing.RoutingTable._
 

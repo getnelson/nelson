@@ -18,7 +18,7 @@ package nelson
 
 
 class CleanupSpec extends NelsonSuite  {
-  import Datacenter._
+  import Domain._
   import storage.{run=>runs, StoreOp}
 
   override def beforeAll(): Unit = {

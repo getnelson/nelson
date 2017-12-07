@@ -25,7 +25,7 @@ package nelson
  */
 package object alerts {
   import helm.ConsulOp
-  import nelson.Datacenter.StackName
+  import nelson.Domain.StackName
   import nelson.Manifest._
   import Manifest.AlertOptOut
   import scalaz.{\/, Free}

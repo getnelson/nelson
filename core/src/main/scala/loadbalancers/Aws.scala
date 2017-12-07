@@ -50,12 +50,12 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> Task) {
       resizeASG(name, asgSize(p))
   }
 
-  def delete(lb: Datacenter.LoadbalancerDeployment, dc: Datacenter): Task[Unit] = {
+  def delete(lb: Domain.LoadbalancerDeployment, dc: Domain): Task[Unit] = {
     val name = loadbalancerName(lb.loadbalancer.name, lb.loadbalancer.version, lb.hash)
     deleteELB(name) *> deleteASG(name)
   }
 
-  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Datacenter, ns: NamespaceName, p: Plan, hash: String): Task[DNSName] = {
+  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Domain, ns: NamespaceName, p: Plan, hash: String): Task[DNSName] = {
     val name = loadbalancerName(lb.name, v, hash)
     log.debug(s"caling aws client to launch $name")
     val size = asgSize(p)

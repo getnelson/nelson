@@ -26,7 +26,7 @@ import java.time.Instant
 class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
   import cleanup._
   import storage.{run=>runs, StoreOp}
-  import Datacenter._
+  import Domain._
   import routing._
   import quiver._
   import DeploymentStatus.Ready
@@ -41,7 +41,7 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
     sql"DELETE FROM deployment_expiration".update.run.void.transact(stg.xa).run
   }
 
-  val dc = config.datacenters.head
+  val dc = config.domains.head
 
   val gr = quiver.empty[RoutingNode,Unit,RoutePath]
 
@@ -66,7 +66,7 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
     val su = runs(config.storage, StoreOp.findDeployment(st)).run.get
     val ctx = DeploymentCtx(su, Ready, Some(Instant.now().minusSeconds(1000)))
 
-    val ns = runs(config.storage, StoreOp.listNamespacesForDatacenter(testName)).run.head
+    val ns = runs(config.storage, StoreOp.listNamespacesForDomain(testName)).run.head
     Process.eval(Task.now(((dc,ns,ctx,gr)))).through(GarbageCollector.mark(config)).runLog.run
 
     val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).run
@@ -84,7 +84,7 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
 
     val emptyG = quiver.empty[RoutingNode,Unit,RoutePath]
 
-    val ns = runs(config.storage, StoreOp.listNamespacesForDatacenter(testName)).run.head
+    val ns = runs(config.storage, StoreOp.listNamespacesForDomain(testName)).run.head
 
     val g = emptyG &
       Context(Vector(), RoutingNode(ind), (), Vector()) &

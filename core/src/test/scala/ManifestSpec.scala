@@ -25,13 +25,13 @@ object ManifestSpec extends Properties("manifest") with RoutingFixtures {
 
 
   property("toAction") = forAll { (m: Manifest) =>
-    val dcs = m.targets.values.map(datacenter(_))
+    val dcs = m.targets.values.map(domain(_))
     val units = Manifest.units(m, dcs)
     val lbs = Manifest.loadbalancers(m, dcs)
     val uas = units.map { case (dc,ns,pl,u) => Manifest.toAction(Versioned(u), dc, ns, pl, m.notifications) }
     val las = lbs.map { case (dc,ns,pl,lb) => Manifest.toAction(Versioned(lb), dc, ns, pl, m.notifications) }
     val as = uas ::: las
-    val names = as.map(_.config.datacenter.name)
+    val names = as.map(_.config.domain.name)
 
     ("verify blacklist vs whitelist functionaltiy" |: {
       m.targets match {
@@ -52,7 +52,7 @@ object ManifestSpec extends Properties("manifest") with RoutingFixtures {
   }
 
   property("unitActions") = forAll { (m: Manifest) =>
-    val dcs = m.targets.values.map(datacenter(_))
+    val dcs = m.targets.values.map(domain(_))
 
     ("verify units are empty") |: {
       val empty = Manifest.unitActions(Versioned(m), dcs, (dc,ns,p,u) => false)
@@ -67,7 +67,7 @@ object ManifestSpec extends Properties("manifest") with RoutingFixtures {
   }
 
   property("lbActions") = forAll { (m: Manifest) =>
-    val dcs = m.targets.values.map(datacenter(_))
+    val dcs = m.targets.values.map(domain(_))
 
     ("verify loadbalancers are empty") |: {
       val empty = Manifest.loadbalancerActions(Versioned(m), dcs, (dc,ns,pl,lb) => false)
@@ -82,7 +82,7 @@ object ManifestSpec extends Properties("manifest") with RoutingFixtures {
   }
 
   property("units") = forAll { (m: Manifest) =>
-    val dcs = m.targets.values.map(datacenter(_))
+    val dcs = m.targets.values.map(domain(_))
 
     // remove plans from manifest, and plan reference from namespaces
     val m2: Manifest = m.copy(
@@ -126,8 +126,8 @@ class ManifestManualSpec extends NelsonSuite {
 
   // TIM: so evil!
   implicit class DcList(in: List[String]){
-    def asDatacenters: List[Datacenter] =
-      in.map(datacenter(_))
+    def asDomains: List[Domain] =
+      in.map(domain(_))
   }
 
   behavior of "loading from YAML"
@@ -140,22 +140,22 @@ class ManifestManualSpec extends NelsonSuite {
     load("/nelson/manifest.deployable.v1.d.yml") should equal (\/.right(List(Version(0,6,10))))
   }
 
-  behavior of "filterDatacenters"
+  behavior of "filterDomains"
 
   it should "make an exclusive subset when using whitelist" in {
-    filterDatacenters(List("foo","bar").asDatacenters)(Only("foo" :: Nil)
-      ) should equal (List("foo").asDatacenters)
+    filterDomains(List("foo","bar").asDomains)(Only("foo" :: Nil)
+      ) should equal (List("foo").asDomains)
   }
 
   it should "make an inclusive subset when using blacklist" in {
-    filterDatacenters(List("foo","bar","baz").asDatacenters)(Except("foo" :: Nil)
-      ) should equal (List("bar","baz").asDatacenters)
+    filterDomains(List("foo","bar","baz").asDomains)(Except("foo" :: Nil)
+      ) should equal (List("bar","baz").asDomains)
   }
 
-  // this is essentially what happens when users do not specify a datacenters
+  // this is essentially what happens when users do not specify a domains
   // section in their manifest yaml.
   it should "make use of all known dcs when blacklisting nothing" in {
-    filterDatacenters(List("foo","bar","baz").asDatacenters)(Except(Nil)
-      ) should equal (List("foo","bar","baz").asDatacenters)
+    filterDomains(List("foo","bar","baz").asDomains)(Except(Nil)
+      ) should equal (List("foo","bar","baz").asDomains)
   }
 }

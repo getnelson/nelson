@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Datacenter.StackName
+import Domain.StackName
 
 import scalaz.~>
 import scalaz.concurrent.Task

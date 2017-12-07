@@ -20,7 +20,7 @@ import scalaz.concurrent.Task
 import scalaz.stream._
 import org.scalatest.BeforeAndAfterEach
 import storage.{run=>runs, StoreOp}
-import Datacenter._
+import Domain._
 import cleanup._
 
 class ReaperSpec extends NelsonSuite with BeforeAndAfterEach {
@@ -31,7 +31,7 @@ class ReaperSpec extends NelsonSuite with BeforeAndAfterEach {
     ()
   }
 
-  val dc = config.datacenters.head
+  val dc = config.domains.head
 
   val gr = quiver.empty[routing.RoutingNode,Unit,routing.RoutePath]
 

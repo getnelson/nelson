@@ -17,12 +17,12 @@
 package nelson
 
 import helm.ConsulOp
-import nelson.Datacenter.{DCUnit, Deployment, Namespace}
+import nelson.Domain.{DCUnit, Deployment, Namespace}
 import nelson.DeploymentStatus.Ready
 import nelson.cleanup.Sweeper
 import nelson.cleanup.Sweeper.UnclaimedResources
 import nelson.storage.StoreOp
-import nelson.storage.StoreOp.{ListDeploymentsForNamespaceByStatus, ListNamespacesForDatacenter}
+import nelson.storage.StoreOp.{ListDeploymentsForNamespaceByStatus, ListNamespacesForDomain}
 
 import scalaz.concurrent.Task
 import scalaz.{-\/, \/-, ~>}
@@ -30,7 +30,7 @@ import scalaz.{-\/, \/-, ~>}
 class SweeperSpec extends NelsonSuite {
 
   def cfg(dcs: List[String], sto: StoreOp ~> Task, csl: ConsulOp ~> Task) = config.copy(
-    datacenters = dcs.map(name => Datacenter(name, null, null, null, None,
+    domains = dcs.map(name => Domain(name, null, null, null, None,
       Infrastructure.Interpreters(null, csl, null, null, null, null, null), None, null)),
     interpreters = config.interpreters.copy(storage = sto)
   )
@@ -61,7 +61,7 @@ class SweeperSpec extends NelsonSuite {
 
     val sto = new (StoreOp ~> Task) {
       def apply[A](fa: StoreOp[A]) : Task[A] = fa match {
-        case ListNamespacesForDatacenter(dcName) => Task.delay(namespaces.toSet)
+        case ListNamespacesForDomain(dcName) => Task.delay(namespaces.toSet)
         case ListDeploymentsForNamespaceByStatus(nsId, deploymentStatuses, None) => Task.delay(deps.toSet.map((d : Deployment) => d -> Ready))
         case _ => Task.fail(new Exception("Unexpected Store Operation Executed"))
       }

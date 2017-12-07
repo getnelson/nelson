@@ -27,8 +27,8 @@ import helm.ConsulOp
 object cron {
   private[cron] val log = Logger[cron.type]
 
-  def refresh(cfg: NelsonConfig): Task[List[(Datacenter,ConsulOp.ConsulOpF[Unit])]] = {
-    cfg.datacenters.traverseM { dc =>
+  def refresh(cfg: NelsonConfig): Task[List[(Domain,ConsulOp.ConsulOpF[Unit])]] = {
+    cfg.domains.traverseM { dc =>
       log.info(s"cron: refreshing ${dc.name}")
       for {
         rts <- nelson.storage.run(cfg.storage, RoutingTable.generateRoutingTables(dc.name))
@@ -52,7 +52,7 @@ object cron {
     }
   }
 
-  def consulRefresh(cfg: NelsonConfig): Process[Task,(Datacenter,ConsulOp.ConsulOpF[Unit])] =
+  def consulRefresh(cfg: NelsonConfig): Process[Task,(Domain,ConsulOp.ConsulOpF[Unit])] =
     Process.repeatEval(Task.delay(cfg.discoveryDelay)).flatMap(d =>
       time.awakeEvery(d)(cfg.pools.schedulingExecutor, cfg.pools.schedulingPool).once)
       .flatMap(_ =>

@@ -19,7 +19,7 @@ package notifications
 
 import scalaz._, Scalaz._
 import scalaz.concurrent.Task
-import Datacenter.{Namespace, StackName, Deployment}
+import Domain.{Namespace, StackName, Deployment}
 import storage.StoreOp
 import Manifest.{UnitDef,Versioned}
 import journal._
@@ -27,13 +27,13 @@ import journal._
 
 object Notify {
 
-  def deployedTemplate(dc: DatacenterRef, ns: NamespaceName, sn: StackName): String =
+  def deployedTemplate(dc: DomainRef, ns: NamespaceName, sn: StackName): String =
     s"""
     |Nelson finished deploying ${sn.serviceType} version ${sn.version} ($sn)
     |to ${ns.asString} $dc
     """.stripMargin
 
-  def decommissionTemplate(dc: DatacenterRef, ns: NamespaceName, sn: StackName): String =
+  def decommissionTemplate(dc: DomainRef, ns: NamespaceName, sn: StackName): String =
     s"""
     |Nelson finished decommissioning ${sn.serviceType} version ${sn.version} ($sn)
     |in ${ns.asString} $dc
@@ -42,13 +42,13 @@ object Notify {
   def sendDeployedNotifications(unit: UnitDef @@ Versioned, actionConfig: Manifest.ActionConfig)(cfg: NelsonConfig): Task[Unit] = {
     val name = Versioned.unwrap(unit).name
     val sn = StackName(name, unit.version, actionConfig.hash)
-    val msg = deployedTemplate(actionConfig.datacenter.name,actionConfig.namespace.name,sn)
-    val sub = s"Deployed $sn in ${actionConfig.datacenter.name} ${actionConfig.namespace.name.asString}"
+    val msg = deployedTemplate(actionConfig.domain.name,actionConfig.namespace.name,sn)
+    val sub = s"Deployed $sn in ${actionConfig.domain.name} ${actionConfig.namespace.name.asString}"
     sendSlack(actionConfig.notifications.slack.map(_.channel), msg)(cfg.slack) >>
     sendEmail(actionConfig.notifications.email.map(_.recipient), sub, msg)(cfg.email)
   }
 
-  def sendDecommissionedNotifications(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(cfg: NelsonConfig): Task[Unit] = {
+  def sendDecommissionedNotifications(dc: Domain, ns: Namespace, d: Domain.Deployment)(cfg: NelsonConfig): Task[Unit] = {
 
     def fetchNotifications(d: Deployment): Task[NotificationSubscriptions] = {
       def fetchManifest(slug: Slug) = Github.Request.fetchFileFromRepository(slug,

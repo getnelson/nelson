@@ -86,9 +86,9 @@ package nelson
 
 trait RoutingFixtures {
 import doobie.imports._
-  import Datacenter.{Port=>_, _}
+  import Domain.{Port=>_, _}
   import Manifest._
-  import nelson.Datacenter.Namespace
+  import nelson.Domain.Namespace
   import nelson.Manifest.Deployable.Container
   import nelson.storage.{StoreOp, StoreOpF}
   import scalaz._
@@ -120,12 +120,12 @@ import doobie.imports._
                                   units = Set(),
                                   loadbalancers = Set())
 
-    val dc = datacenter(name)
+    val dc = domain(name)
 
     for {
       repoids <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get))
       _ <- ingestReleases
-      _  <- StoreOp.createDatacenter(dc)
+      _  <- StoreOp.createDomain(dc)
       id <- StoreOp.createNamespace(name, devNs)
       id2 <- StoreOp.createNamespace(name, sandboxNs)
       id3 <- StoreOp.createNamespace(name, rodrigoNs)
@@ -143,14 +143,14 @@ import doobie.imports._
     pkiPath = Some("pki/%env%")
   )
 
-  def datacenter(name: String) = Datacenter(name,
+  def domain(name: String) = Domain(name,
     Infrastructure.Docker(""), Infrastructure.Domain(""), Infrastructure.TrafficShift(LinearShiftPolicy, 1.minutes), None, Infrastructure.Interpreters(null, null, null, null, null, null, null), None, testPolicyConfig)
 
   val emptyWorkflow = new Workflow[Unit] {
     override val name = "empty"
-    def deploy(id: ID, hash: String, unit: Manifest.UnitDef @@ Manifest.Versioned, e: Manifest.Plan, dc: Datacenter, ns: Manifest.Namespace): WorkflowF[Unit] =
+    def deploy(id: ID, hash: String, unit: Manifest.UnitDef @@ Manifest.Versioned, e: Manifest.Plan, dc: Domain, ns: Manifest.Namespace): WorkflowF[Unit] =
       ().point[WorkflowF]
-    def destroy(d: Deployment, dc: Datacenter, ns: Namespace): WorkflowF[Unit] =
+    def destroy(d: Deployment, dc: Domain, ns: Namespace): WorkflowF[Unit] =
       ().point[WorkflowF]
   }
 
@@ -598,7 +598,7 @@ import doobie.imports._
     ingestServiceC2(ns3,9999)
 
 
-  def deploy(ns: Datacenter.Namespace, service: String,
+  def deploy(ns: Domain.Namespace, service: String,
     version: Version, hash: String, status: DeploymentStatus,
     policy: ExpirationPolicy): StoreOpF[ID] =
     for {
@@ -608,36 +608,36 @@ import doobie.imports._
       _   <- StoreOp.createDeploymentStatus(did, status, None)
     } yield did
 
-  def deployLoadbalancer(ns: Datacenter.Namespace, name: String, v: Version, hash: String): StoreOpF[ID] = {
+  def deployLoadbalancer(ns: Domain.Namespace, name: String, v: Version, hash: String): StoreOpF[ID] = {
     for {
       lb <- StoreOp.getLoadbalancer(name, v.toMajorVersion).map(_.get)
       id <- StoreOp.insertLoadbalancerDeployment(lb.id, ns.id, hash, "dns")
     } yield id
   }
 
-  def deployLb(ns: Datacenter.Namespace) = deployLoadbalancer(ns, "lb", Version(1,0,0), "hash")
-  def deployConductor(ns: Datacenter.Namespace) = deploy(ns, "conductor", Version(1,1,1), "abcd",DeploymentStatus.Ready, RetainActive)
-  def deployAB1(ns: Datacenter.Namespace) = deploy(ns, "ab", Version(2,2,2), "abcd",DeploymentStatus.Ready, RetainActive)
-  def deployAB2(ns: Datacenter.Namespace) = deploy(ns, "ab", Version(2,2,1), "abcd",DeploymentStatus.Ready, RetainActive)
-  def deployFoo1(ns: Datacenter.Namespace) = deploy(ns, "foo", Version(1,10,100), "aaaa",DeploymentStatus.Ready, RetainActive)
-  def deployFoo2(ns: Datacenter.Namespace) = deploy(ns, "foo", Version(2,0,0), "bbbb",DeploymentStatus.Ready, RetainActive)
-  def deployInventory1(ns: Datacenter.Namespace) = deploy(ns, "inventory", Version(1,2,2), "ffff",DeploymentStatus.Ready, RetainActive)
-  def deployInventory2(ns: Datacenter.Namespace) = deploy(ns, "inventory", Version(1,2,3), "ffff",DeploymentStatus.Ready, RetainActive)
-  def deploySearch1(ns: Datacenter.Namespace) = deploy(ns, "search", Version(2,2,2), "bbbb",DeploymentStatus.Ready, RetainActive)
-  def deploySearch2(ns: Datacenter.Namespace) = { Thread.sleep(1); deploy(ns, "search", Version(2,2,2), "aaaa",DeploymentStatus.Ready, RetainActive) }
-  def deployDeprecated(ns: Datacenter.Namespace) = deploy(ns, "search", Version(1,1,0),"foo",DeploymentStatus.Deprecated, RetainActive)
-  def deployJob300(ns: Datacenter.Namespace) = deploy(ns, "job", Version(3,0,0),"zzzz4",DeploymentStatus.Ready, RetainLatest)
-  def deployJob310(ns: Datacenter.Namespace) = deploy(ns, "job", Version(3,1,0),"zzzz",DeploymentStatus.Ready, RetainLatest)
-  def deployJob311(ns: Datacenter.Namespace) = deploy(ns, "job", Version(3,1,1),"zzzz1",DeploymentStatus.Ready, RetainLatestTwoMajor)
-  def deployJob410(ns: Datacenter.Namespace) = deploy(ns, "job", Version(4,1,0),"zzzz2",DeploymentStatus.Ready, RetainLatest)
-  def deployCrawler(ns: Datacenter.Namespace) = deploy(ns, "crawler", Version(5,1,0),"zzzz3",DeploymentStatus.Ready, RetainLatest)
-  def deployServiceA(ns: Datacenter.Namespace) = deploy(ns, "service-a", Version(6,0,0),"aaaa",DeploymentStatus.Ready, RetainLatest)
-  def deployServiceB(ns: Datacenter.Namespace) = deploy(ns, "service-b", Version(6,1,0),"aaaa",DeploymentStatus.Ready, RetainLatest)
-  def deployServiceC(ns: Datacenter.Namespace) = deploy(ns, "service-c", Version(6,2,0),"aaaa",DeploymentStatus.Ready, RetainLatest)
-  def deployServiceC2(ns: Datacenter.Namespace) = deploy(ns, "service-c", Version(6,2,1),"bbbb",DeploymentStatus.Ready, RetainLatest)
+  def deployLb(ns: Domain.Namespace) = deployLoadbalancer(ns, "lb", Version(1,0,0), "hash")
+  def deployConductor(ns: Domain.Namespace) = deploy(ns, "conductor", Version(1,1,1), "abcd",DeploymentStatus.Ready, RetainActive)
+  def deployAB1(ns: Domain.Namespace) = deploy(ns, "ab", Version(2,2,2), "abcd",DeploymentStatus.Ready, RetainActive)
+  def deployAB2(ns: Domain.Namespace) = deploy(ns, "ab", Version(2,2,1), "abcd",DeploymentStatus.Ready, RetainActive)
+  def deployFoo1(ns: Domain.Namespace) = deploy(ns, "foo", Version(1,10,100), "aaaa",DeploymentStatus.Ready, RetainActive)
+  def deployFoo2(ns: Domain.Namespace) = deploy(ns, "foo", Version(2,0,0), "bbbb",DeploymentStatus.Ready, RetainActive)
+  def deployInventory1(ns: Domain.Namespace) = deploy(ns, "inventory", Version(1,2,2), "ffff",DeploymentStatus.Ready, RetainActive)
+  def deployInventory2(ns: Domain.Namespace) = deploy(ns, "inventory", Version(1,2,3), "ffff",DeploymentStatus.Ready, RetainActive)
+  def deploySearch1(ns: Domain.Namespace) = deploy(ns, "search", Version(2,2,2), "bbbb",DeploymentStatus.Ready, RetainActive)
+  def deploySearch2(ns: Domain.Namespace) = { Thread.sleep(1); deploy(ns, "search", Version(2,2,2), "aaaa",DeploymentStatus.Ready, RetainActive) }
+  def deployDeprecated(ns: Domain.Namespace) = deploy(ns, "search", Version(1,1,0),"foo",DeploymentStatus.Deprecated, RetainActive)
+  def deployJob300(ns: Domain.Namespace) = deploy(ns, "job", Version(3,0,0),"zzzz4",DeploymentStatus.Ready, RetainLatest)
+  def deployJob310(ns: Domain.Namespace) = deploy(ns, "job", Version(3,1,0),"zzzz",DeploymentStatus.Ready, RetainLatest)
+  def deployJob311(ns: Domain.Namespace) = deploy(ns, "job", Version(3,1,1),"zzzz1",DeploymentStatus.Ready, RetainLatestTwoMajor)
+  def deployJob410(ns: Domain.Namespace) = deploy(ns, "job", Version(4,1,0),"zzzz2",DeploymentStatus.Ready, RetainLatest)
+  def deployCrawler(ns: Domain.Namespace) = deploy(ns, "crawler", Version(5,1,0),"zzzz3",DeploymentStatus.Ready, RetainLatest)
+  def deployServiceA(ns: Domain.Namespace) = deploy(ns, "service-a", Version(6,0,0),"aaaa",DeploymentStatus.Ready, RetainLatest)
+  def deployServiceB(ns: Domain.Namespace) = deploy(ns, "service-b", Version(6,1,0),"aaaa",DeploymentStatus.Ready, RetainLatest)
+  def deployServiceC(ns: Domain.Namespace) = deploy(ns, "service-c", Version(6,2,0),"aaaa",DeploymentStatus.Ready, RetainLatest)
+  def deployServiceC2(ns: Domain.Namespace) = deploy(ns, "service-c", Version(6,2,1),"bbbb",DeploymentStatus.Ready, RetainLatest)
 
 
-  def deploydb(dc: Datacenter, ns: Datacenter.Namespace): StoreOpF[Unit] =
+  def deploydb(dc: Domain, ns: Domain.Namespace): StoreOpF[Unit] =
       StoreOp.createManualDeployment(
         dc,
         ns.name,
@@ -649,7 +649,7 @@ import doobie.imports._
         Instant.now.plusSeconds(1.day.toSeconds)
       ).map(_ => ())
 
-  def deployAll(dc: Datacenter, ns: Datacenter.Namespace, ns2: Datacenter.Namespace, ns3: Datacenter.Namespace) =
+  def deployAll(dc: Domain, ns: Domain.Namespace, ns2: Domain.Namespace, ns3: Domain.Namespace) =
     (
       deployLb(ns) >>
       deploySearch1(ns) >>

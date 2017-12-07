@@ -29,8 +29,8 @@ import io.prometheus.client.Counter
 
 /**
  * An Actionable is something that can be "acted" upon in the context
- * of a datacenter and namespace. In Nelson this typically means deploying
- * into a datacenter using a scheduler such as Nomad, or interacting with
+ * of a domain and namespace. In Nelson this typically means deploying
+ * into a domain using a scheduler such as Nomad, or interacting with
  * Aws to launch some infrastructure.
  */
 trait Actionable[A] {
@@ -43,13 +43,13 @@ object Actionable {
 
   /*
    * A Versioned UnitDef Actionable runs a prescribed Workflow, which will
-   * launch the unit into a given datacenter using a scheduler such as
+   * launch the unit into a given domain using a scheduler such as
    * Nomad.
    */
   implicit val UnitDefActionable = new Actionable[UnitDef @@ Versioned] {
     import Manifest.{Namespace,Plan}
 
-    def create(u: UnitDef @@ Versioned, dc: Datacenter, ns: Namespace, plan: Plan, hash: String, exp: Instant, fallback: ExpirationPolicy): StoreOpF[Option[ID]] = {
+    def create(u: UnitDef @@ Versioned, dc: Domain, ns: Namespace, plan: Plan, hash: String, exp: Instant, fallback: ExpirationPolicy): StoreOpF[Option[ID]] = {
       val unit = Manifest.Versioned.unwrap(u)
       val version = u.version
       val policy = Manifest.getExpirationPolicy(unit, plan) getOrElse fallback
@@ -70,7 +70,7 @@ object Actionable {
         val ttl = cfg.cleanup.initialTTL.toSeconds
         val exp = Instant.now.plusSeconds(ttl)
         val plan = actionConfig.plan
-        val dc = actionConfig.datacenter
+        val dc = actionConfig.domain
         val ns = actionConfig.namespace
         val hash = actionConfig.hash
         val policy =
@@ -102,12 +102,12 @@ object Actionable {
 
   /*
    * A Versioned Loadbalancer Actionable interacts with Aws to launch all the
-   * infrastructure needed to loadbalance / proxy outbound traffic into a datacenter.
+   * infrastructure needed to loadbalance / proxy outbound traffic into a domain.
    */
   implicit val LoadbalancerActionable = new Actionable[Loadbalancer @@ Versioned] {
 
     import loadbalancers.LoadbalancerOp
-    import Datacenter.StackName
+    import Domain.StackName
     import Manifest.Route
 
     def action(lbv: Loadbalancer @@ Versioned): Kleisli[Task, (NelsonConfig,ActionConfig), Unit] =
@@ -115,7 +115,7 @@ object Actionable {
         val lb = Manifest.Versioned.unwrap(lbv)
         val major = lbv.version.toMajorVersion
         val plan = actionConfig.plan
-        val dc = actionConfig.datacenter
+        val dc = actionConfig.domain
         val ns = actionConfig.namespace
         val hash = actionConfig.hash
         val sn = StackName(lb.name, major.minVersion, hash)
@@ -127,11 +127,11 @@ object Actionable {
             _   <- runs(dc.storage, StoreOp.insertLoadbalancerDeployment(id, nsid, hash, dns))
           } yield ()
 
-        def resize(lbd: Datacenter.LoadbalancerDeployment)(t: LoadbalancerOp ~> Task): Task[Unit] =
+        def resize(lbd: Domain.LoadbalancerDeployment)(t: LoadbalancerOp ~> Task): Task[Unit] =
           loadbalancers.run(t, loadbalancers.resize(lbd, plan))
 
         for {
-          t   <- dc.loadbalancer.tfold(FailedLoadbalancerDeploy(lb.name, s"datacenter ${dc.name} is not configured to deploy loadbalancers"))(identity)
+          t   <- dc.loadbalancer.tfold(FailedLoadbalancerDeploy(lb.name, s"domain ${dc.name} is not configured to deploy loadbalancers"))(identity)
           n   <- runs(cfg.storage, StoreOp.getNamespace(dc.name, ns.name))
           nsd <- n.tfold(FailedLoadbalancerDeploy(lb.name, s"namespace ${ns.name.asString} was not found for ${dc.name}"))(identity)
           i   <- runs(cfg.storage, StoreOp.getLoadbalancer(lb.name, major)).map(_.map(_.id))

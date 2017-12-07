@@ -20,7 +20,7 @@ import scala.concurrent.duration.FiniteDuration
 import scalaz.concurrent.Task
 import scalaz._, Scalaz._
 import Manifest.{UnitDef,Versioned,Plan,AlertOptOut}
-import Datacenter.{Deployment}
+import Domain.{Deployment}
 import docker.Docker.Image
 import storage.{StoreOp}
 import docker.DockerOp
@@ -44,8 +44,8 @@ import vault.Vault
  */
 trait Workflow[O] {
   def name: WorkflowRef
-  def deploy(id: ID, hash: String, unit: UnitDef @@ Versioned, p: Plan, dc: Datacenter, ns: Manifest.Namespace): Workflow.WorkflowF[O]
-  def destroy(d: Deployment, dc: Datacenter, ns: Datacenter.Namespace): Workflow.WorkflowF[O]
+  def deploy(id: ID, hash: String, unit: UnitDef @@ Versioned, p: Plan, dc: Domain, ns: Manifest.Namespace): Workflow.WorkflowF[O]
+  def destroy(d: Deployment, dc: Domain, ns: Domain.Namespace): Workflow.WorkflowF[O]
 }
 
 object Workflow {
@@ -79,8 +79,8 @@ object Workflow {
 
   object syntax {
     import docker.Docker
-    import Datacenter.StackName
-    import Datacenter.ServiceName
+    import Domain.StackName
+    import Domain.ServiceName
     import Docker.RegistryURI
     import ScalazHelpers._
     import routing.{RoutingTable,Discovery}
@@ -88,10 +88,10 @@ object Workflow {
     def pure[A](a: => A): WorkflowF[A] =
       WorkflowControlOp.pure(a).inject
 
-    def launch(i: Image, dc: Datacenter, ns: NamespaceName, u: UnitDef @@ Versioned, p: Plan, hash: String): WorkflowF[String] =
+    def launch(i: Image, dc: Domain, ns: NamespaceName, u: UnitDef @@ Versioned, p: Plan, hash: String): WorkflowF[String] =
       SchedulerOp.launch(i, dc, ns, u, p, hash).inject
 
-    def delete(dc: Datacenter, d: Deployment): WorkflowF[Unit] =
+    def delete(dc: Domain, d: Deployment): WorkflowF[Unit] =
       SchedulerOp.delete(dc,d).inject
 
     def logToFile(id: ID, msg: String): WorkflowF[Unit] =
@@ -130,7 +130,7 @@ object Workflow {
     def deletePolicyFromVault(sn: StackName, ns: NamespaceName): WorkflowF[Unit] =
       policies.deletePolicy(sn, ns).inject
 
-    def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Datacenter): WorkflowF[Unit] =
+    def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Domain): WorkflowF[Unit] =
       for {
         d  <- StoreOp.getDeployment(id).inject
         rg <- RoutingTable.outgoingRoutingGraph(d).inject
@@ -138,7 +138,7 @@ object Workflow {
         _  <- Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dt).inject
       } yield ()
 
-    def createTrafficShift(id: ID, nsRef: NamespaceName, dc: Datacenter, p: TrafficShiftPolicy, dur: FiniteDuration): WorkflowF[Unit] = {
+    def createTrafficShift(id: ID, nsRef: NamespaceName, dc: Domain, p: TrafficShiftPolicy, dur: FiniteDuration): WorkflowF[Unit] = {
 
       val prog = for {
         ns   <- OptionT(StoreOp.getNamespace(dc.name, nsRef))

@@ -24,20 +24,20 @@ sealed abstract class LoadbalancerOp[A] extends Product with Serializable
 
 object LoadbalancerOp {
 
-  final case class LaunchLoadbalancer(lb: Manifest.Loadbalancer, version: MajorVersion, dc: Datacenter, ns: NamespaceName, pl: Manifest.Plan, hash: String) extends LoadbalancerOp[String]
+  final case class LaunchLoadbalancer(lb: Manifest.Loadbalancer, version: MajorVersion, dc: Domain, ns: NamespaceName, pl: Manifest.Plan, hash: String) extends LoadbalancerOp[String]
 
-  final case class DeleteLoadbalancer(lb: Datacenter.LoadbalancerDeployment, dc: Datacenter, ns: Datacenter.Namespace) extends LoadbalancerOp[Unit]
+  final case class DeleteLoadbalancer(lb: Domain.LoadbalancerDeployment, dc: Domain, ns: Domain.Namespace) extends LoadbalancerOp[Unit]
 
-  final case class ResizeLoadbalancer(lb: Datacenter.LoadbalancerDeployment, p: Manifest.Plan) extends LoadbalancerOp[Unit]
+  final case class ResizeLoadbalancer(lb: Domain.LoadbalancerDeployment, p: Manifest.Plan) extends LoadbalancerOp[Unit]
 
   type LoadbalancerF[A] = Free.FreeC[LoadbalancerOp,A]
 
-  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Datacenter, ns: NamespaceName, pl: Manifest.Plan, hash: String): LoadbalancerF[String] =
+  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Domain, ns: NamespaceName, pl: Manifest.Plan, hash: String): LoadbalancerF[String] =
     Free.liftFC(LaunchLoadbalancer(lb, v, dc, ns, pl, hash))
 
-  def delete(lb: Datacenter.LoadbalancerDeployment, dc: Datacenter, ns: Datacenter.Namespace): LoadbalancerF[Unit] =
+  def delete(lb: Domain.LoadbalancerDeployment, dc: Domain, ns: Domain.Namespace): LoadbalancerF[Unit] =
     Free.liftFC(DeleteLoadbalancer(lb, dc, ns))
 
-  def resize(lb: Datacenter.LoadbalancerDeployment, p: Manifest.Plan): LoadbalancerF[Unit] =
+  def resize(lb: Domain.LoadbalancerDeployment, p: Manifest.Plan): LoadbalancerF[Unit] =
     Free.liftFC(ResizeLoadbalancer(lb, p))
 }

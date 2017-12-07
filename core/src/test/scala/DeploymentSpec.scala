@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Datacenter._
+import Domain._
 
 import org.scalacheck._, Prop._
 
@@ -39,7 +39,7 @@ import org.scalatest.{FlatSpec,Matchers}
 
 class DeploymentFlatSpec extends FlatSpec with Matchers {
 
-  val ns = Datacenter.Namespace(1L, NamespaceName("devel"), "dc")
+  val ns = Domain.Namespace(1L, NamespaceName("devel"), "dc")
   val now = java.time.Instant.now
   val d = Deployment(4L, DCUnit(4L,"foo",Version(2,1,0),"",Set.empty,Set.empty,Set.empty),"e",ns,now,"pulsar","plan","guid","retain-active")
   val ds = Set(

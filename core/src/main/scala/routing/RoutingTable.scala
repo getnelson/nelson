@@ -24,7 +24,7 @@ import Scalaz._
 import journal._
 
 object RoutingTable {
-  import Datacenter._
+  import Domain._
 
   private val log = Logger[RoutingTable.type]
 
@@ -70,7 +70,7 @@ object RoutingTable {
 
   private def addDependencies(from: Deployment, sn: ServiceName): GraphBuild[Unit] = {
 
-    val dc = from.namespace.datacenter
+    val dc = from.namespace.domain
 
     def lookup(ns: NamespaceName, rts: RoutingTables): Option[Target] =
       rts.lookup(ns).flatMap(_.lookup((sn.serviceType, sn.version.toMajorVersion)))
@@ -132,7 +132,7 @@ object RoutingTable {
 
   // given a namespace, return all upstream and downstream namespaces
   private def upDownNamespaces(ns: Namespace): StoreOpF[Set[Namespace]] =
-    StoreOp.listNamespacesForDatacenter(ns.datacenter).map(_.filter(n =>
+    StoreOp.listNamespacesForDomain(ns.domain).map(_.filter(n =>
       ns.name.isSubordinate(n.name) || // downstream
       n.name.isSubordinate(ns.name)    // upstream
     ))
@@ -222,7 +222,7 @@ object RoutingTable {
 
   def generateRoutingTables(dc: String): StoreOpF[List[(Namespace, RoutingGraph)]] =
     for {
-      ns  <- StoreOp.listNamespacesForDatacenter(dc)
+      ns  <- StoreOp.listNamespacesForDomain(dc)
       ds  <- getDeployments(ns)
       ls  <- getLoadbalancers(ns)
       gr  <- generateGraph(ds, ls)

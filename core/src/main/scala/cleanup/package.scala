@@ -17,8 +17,8 @@
 package nelson
 
 package object cleanup {
-  import Datacenter.Namespace
+  import Domain.Namespace
   import routing.RoutingGraph
 
-  type CleanupRow = (Datacenter, Namespace, DeploymentCtx, RoutingGraph) 
+  type CleanupRow = (Domain, Namespace, DeploymentCtx, RoutingGraph) 
 }

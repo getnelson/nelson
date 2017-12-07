@@ -18,7 +18,7 @@ package nelson
 
 import helm.ConsulOp
 import helm.ConsulOp.HealthCheck
-import Datacenter.{DCUnit, Deployment, Namespace, TrafficShift}
+import Domain.{DCUnit, Deployment, Namespace, TrafficShift}
 import DeploymentStatus.Warming
 import monitoring.DeploymentMonitor
 import monitoring.DeploymentMonitor.{PromoteToReady, RetainAsWarming}
@@ -39,17 +39,17 @@ import java.time.Instant
 
 class DeploymentMonitorSpec extends NelsonSuite {
 
-  def mkDatacenterWithStorage(name: String)(implicit consul: ConsulOp ~> Task, op: StoreOp ~> Task) : Datacenter = {
-    val dc = datacenter(name)
+  def mkDomainWithStorage(name: String)(implicit consul: ConsulOp ~> Task, op: StoreOp ~> Task) : Domain = {
+    val dc = domain(name)
     dc.copy(interpreters = dc.interpreters.copy(
       consul = consul,
       storage = op
     ))
   }
   
-  def mkNelsonConfig(dcs: List[Datacenter])(implicit sto: StoreOp ~> Task) =
+  def mkNelsonConfig(dcs: List[Domain])(implicit sto: StoreOp ~> Task) =
     config.copy(
-      datacenters = dcs,
+      domains = dcs,
       interpreters = config.interpreters.copy(storage = sto)
     )
 
@@ -63,7 +63,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
                 h: Map[UnitName, List[Deployment]] = Map.empty,
                 i: Map[String, TrafficShift] = Map.empty) = new (StoreOp ~> Task) {
     override def apply[A](s: StoreOp[A]): Task[A] = s match {
-      case ListNamespacesForDatacenter(dc) => Task.now(f(dc))
+      case ListNamespacesForDomain(dc) => Task.now(f(dc))
       case ListDeploymentsForNamespaceByStatus(nsId, statuses, _) => Task.now(g(nsId -> statuses))
       case GetDeploymentsForServiceNameByStatus(sn, ns, s) => Task.now(h.get(sn.serviceType).getOrElse(Nil))
       case GetTrafficShiftForServiceName(nsid, sn) => Task.now(i.get(sn.serviceType))
@@ -71,7 +71,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
     }
   }
 
-  val namespace = Datacenter.Namespace(1L, NamespaceName("dev"), "dev")
+  val namespace = Domain.Namespace(1L, NamespaceName("dev"), "dev")
 
   def mkConsulOpWithMajorityHealthy(f: Map[UnitName, String]) = new (ConsulOp ~> Task) {
     override def apply[A](c: ConsulOp[A]): Task[A] = c match {
@@ -90,8 +90,8 @@ class DeploymentMonitorSpec extends NelsonSuite {
   def mkDcUnit(id: ID, unitName: String, version: Version) : DCUnit =
     DCUnit(id, unitName, version, "", Set.empty, Set.empty, Set.empty)
 
-  def mkNamespace(nsId : nelson.ID, name : NamespaceName, datacenter : String) : Namespace =
-    Namespace(nsId, name, datacenter)
+  def mkNamespace(nsId : nelson.ID, name : NamespaceName, domain : String) : Namespace =
+    Namespace(nsId, name, domain)
 
 
   "DeploymentMonitor" should "should properly generate monitor action items" in {
@@ -109,7 +109,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
       Map("s0" -> List(dep1))
     )
 
-    val dc = mkDatacenterWithStorage("dc0")(consulInterp, storeInterp)
+    val dc = mkDomainWithStorage("dc0")(consulInterp, storeInterp)
 
     val cfg = mkNelsonConfig(List(dc))(storeInterp)
 
@@ -118,12 +118,12 @@ class DeploymentMonitorSpec extends NelsonSuite {
     list.size should equal(2)
 
     list.exists(_ match {
-      case PromoteToReady(datacenter, dep) => datacenter.name == dc.name && dep.stackName == dep1.stackName
+      case PromoteToReady(domain, dep) => domain.name == dc.name && dep.stackName == dep1.stackName
       case _ => false
     }) should be(true)
 
     list.exists(_ match {
-      case RetainAsWarming(datacenter, dep, _) => datacenter.name == dc.name && dep.stackName == dep2.stackName
+      case RetainAsWarming(domain, dep, _) => domain.name == dc.name && dep.stackName == dep2.stackName
       case _ => false
     }) should be(true)
   }
@@ -155,7 +155,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
       Map((1L, NonEmptyList(Warming)) -> Set(dep100 -> Warming)),
       Map("service" -> List(dep100))
     )
-    val dc = mkDatacenterWithStorage("dc0")(consul, stg)
+    val dc = mkDomainWithStorage("dc0")(consul, stg)
     val res = DeploymentMonitor.monitorActionItem(dc,dep100).run
     res should equal(PromoteToReady(dc,dep100))
   }
@@ -180,7 +180,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
       Map(dep101.unit.name -> ts)
     )
 
-    val dc = mkDatacenterWithStorage("dc0")(consul, stg)
+    val dc = mkDomainWithStorage("dc0")(consul, stg)
 
     val i102 = DeploymentMonitor.monitorActionItem(dc, dep102).run
     val i103 = DeploymentMonitor.monitorActionItem(dc, dep103).run
@@ -207,7 +207,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
       Map(dep101.unit.name -> ts)
     )
 
-    val dc = mkDatacenterWithStorage("dc0")(consul, stg)
+    val dc = mkDomainWithStorage("dc0")(consul, stg)
 
     val i102 = DeploymentMonitor.monitorActionItem(dc, dep102).run
     val i103 = DeploymentMonitor.monitorActionItem(dc, dep103).run

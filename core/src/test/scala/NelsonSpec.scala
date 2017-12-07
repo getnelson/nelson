@@ -22,7 +22,7 @@ import storage.{run => runs, StoreOp}
 import org.scalacheck._
 
 class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
-  import Datacenter._
+  import Domain._
   import routing.RoutingNode
 
   override def beforeAll(): Unit = {
@@ -32,7 +32,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
 
-  it should "deprecate all services accross datacenters and namespaces" in {
+  it should "deprecate all services accross domains and namespaces" in {
     val st = StackName("ab", Version(2,2,1), "abcd")
     val sn = ServiceName("ab", st.version.toFeatureVersion)
 
@@ -136,7 +136,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
         orgs = List(Organization(0L, Some("scalatest"), "slug", new java.net.URI("uri")))
       )
     )
-    val md = Datacenter.ManualDeployment(testName, "dev", "manual-deployment", "1.1.1", "hash", "description", 9000)
+    val md = Domain.ManualDeployment(testName, "dev", "manual-deployment", "1.1.1", "hash", "description", 9000)
     Nelson.createManualDeployment(session,md).run(config).run
     val st = StackName("manual-deployment", Version(1,1,1), "hash")
 
@@ -165,10 +165,10 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     res.forall(_.isDefined) should equal (true)
   }
 
-  it should "not create namespaces if datacenter does not exist" in {
+  it should "not create namespaces if domain does not exist" in {
     val ns = NamespaceName("foo", List("bar"))
     val res = Nelson.recursiveCreateNamespace("does-not-exists", ns).run(config).attemptRun
-    res should equal (-\/(UnknownDatacenter("does-not-exists")))
+    res should equal (-\/(UnknownDomain("does-not-exists")))
   }
 
   it should "create subordinate namespaces if root exists" in {
@@ -207,13 +207,13 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     ma.outboundDependencies.map(_._2.stackName.toString).toSet should equal (Set("db--1-2-3--aaaa", "foo--1-10-100--aaaa", "search--2-2-2--aaaa", "ab--2-2-2--abcd"))
   }
 
-  it should "fetch datacenter by name" in {
-    val dc = Nelson.fetchDatacenterByName(testName).run(config).run
+  it should "fetch domain by name" in {
+    val dc = Nelson.fetchDomainByName(testName).run(config).run
     dc.map(_._1.name) should equal (Some(testName))
   }
 
-  it should "list datacenters" in {
-    val dcs = Nelson.listDatacenters.run(config).run
+  it should "list domains" in {
+    val dcs = Nelson.listDomains.run(config).run
     dcs.keys.map(_.name).toSet should equal (Set(testName))
   }
 
@@ -223,21 +223,21 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     val ns1 = runs(cfg.storage, StoreOp.getNamespace(testName, ns)).run
     ns1 should equal (None)
 
-    Nelson.createDefaultNamespaceIfAbsent(cfg.datacenters, cfg.defaultNamespace).run(cfg).run
+    Nelson.createDefaultNamespaceIfAbsent(cfg.domains, cfg.defaultNamespace).run(cfg).run
 
     val ns2 = runs(cfg.storage, StoreOp.getNamespace(testName, ns)).run
     ns2.map(_.name) should equal (Some(ns))
   }
 
   it should "list deployments" in {
-    val deps = Nelson.listDeployments(config.datacenters.map(_.name),
+    val deps = Nelson.listDeployments(config.domains.map(_.name),
       NonEmptyList(NamespaceName("dev")), NonEmptyList(DeploymentStatus.Ready), Some("conductor")).run(config).run
 
     deps.map(_._3.stackName.toString).toSet should equal (Set("conductor--1-1-1--abcd"))
   }
 
   it should "list units by status" in {
-    val units = Nelson.listUnitsByStatus(config.datacenters.map(_.name),
+    val units = Nelson.listUnitsByStatus(config.domains.map(_.name),
       NonEmptyList(NamespaceName("dev", List("sandbox"))), NonEmptyList(DeploymentStatus.Ready)).run(config).run
 
     units.map(_._4).toSet should equal (Set(

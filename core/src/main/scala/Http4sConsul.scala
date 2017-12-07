@@ -47,7 +47,7 @@ object Http4sConsul {
   def client(consul: Infrastructure.Consul, http4sClient: Client): ConsulOp ~> Task =
     new Http4sConsulClient(baseUri(consul), http4sClient, token(consul), creds(consul))
 
-  def consulSink: Sink[Task,(Datacenter,ConsulOpF[Unit])] =
+  def consulSink: Sink[Task,(Domain,ConsulOpF[Unit])] =
     Process.constant {
       case (dc, op) => helm.run(dc.consul,op) handle {
         case NonFatal(e) => log.error(s"error while attempting to perform consul operation", e)

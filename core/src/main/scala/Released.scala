@@ -37,7 +37,7 @@ final case class Released(
 
 final case class ReleasedDeployment(
   id: Long,
-  unit: Datacenter.DCUnit,
+  unit: Domain.DCUnit,
   /* the name of the namespace this instance was released too */
   namespace: String,
   /* the unique hash that represents this released-deployment */

@@ -27,7 +27,7 @@ import cleanup._
 class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with PropertyChecks {
   import ExpirationPolicySpec._
   import nelson.routing.{RoutingNode,RoutingTable}
-  import Datacenter._
+  import Domain._
   import DeploymentStatus._
   import scala.concurrent.duration._
   import quiver._
@@ -41,7 +41,7 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
     ()
   }
 
-  val dc = config.datacenters.head
+  val dc = config.domains.head
 
   val emptyG = quiver.empty[RoutingNode,Unit,RoutePath]
 
@@ -59,7 +59,7 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
 
   private def makeDeployment(id: ID,name: String, version: Version, policy: ExpirationPolicy,
     hash: String = "hash", deployTime: Instant = NOW) = {
-    val namespace = Datacenter.Namespace(1L, NamespaceName("dev"), "dc")
+    val namespace = Domain.Namespace(1L, NamespaceName("dev"), "dc")
     val dc = DCUnit(id,name,version,"",Set.empty,Set.empty,Set.empty)
     Deployment(id,dc,hash,namespace,deployTime,"quasar","plan","guid",policy.name)
   }

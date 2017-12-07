@@ -22,7 +22,7 @@ package object routing {
   import scalaz.std.list._
   import quiver.Graph
 
-  import Datacenter._
+  import Domain._
 
   /**
    * the quiver graph which we will build that contains the current

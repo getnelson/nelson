@@ -21,7 +21,7 @@ import scalaz._,Scalaz._
 import storage.{run => runs, StoreOp}
 import org.scalatest.{BeforeAndAfterEach}
 import scala.concurrent.duration._
-import Datacenter.{StackName}
+import Domain.{StackName}
 import java.time.Instant
 
 class TrafficShiftDBSpec extends NelsonSuite with BeforeAndAfterEach {

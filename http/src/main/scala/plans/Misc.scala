@@ -22,7 +22,7 @@ import ManifestValidator.Json._
 import cleanup.ExpirationPolicy.Json._
 import argonaut._
 import Argonaut._
-import nelson.Datacenter.Deployment
+import nelson.Domain.Deployment
 import org.http4s.{BuildInfo => _, _}
 import org.http4s.dsl._
 import org.http4s.argonaut._
@@ -63,7 +63,7 @@ final case class Misc(config: NelsonConfig) extends Default {
       ) ->: jEmptyObject)
     }
 
-  implicit val datacenterEncoder: EncodeJson[Datacenter] = EncodeJson { dc => dc.name.asJson }
+  implicit val domainEncoder: EncodeJson[Domain] = EncodeJson { dc => dc.name.asJson }
 
   def handleLintRequest(str: String, units: List[ManifestValidator.NelsonUnit]): Task[Response] =
     ManifestValidator.validate(str, units).run(config).attempt.flatMap {

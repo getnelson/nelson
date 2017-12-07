@@ -23,7 +23,7 @@ import nelson.scheduler._
 
 object Json {
   import argonaut._, Argonaut._
-  import Datacenter._
+  import Domain._
   import concurrent.duration._
   import scalaz._, Scalaz._
 
@@ -555,9 +555,9 @@ object Json {
   implicit val auditLogEncoder: CodecJson[audit.AuditLog] =
     casecodec7(audit.AuditLog.apply, audit.AuditLog.unapply)("id", "timestamp", "releaseId", "event", "category", "action", "login")
 
-  implicit val manualDeployEncoder: CodecJson[Datacenter.ManualDeployment] =
-    casecodec7(Datacenter.ManualDeployment.apply, Datacenter.ManualDeployment.unapply)(
-      "datacenter", "namespace", "service_type", "version", "hash", "description", "port"
+  implicit val manualDeployEncoder: CodecJson[Domain.ManualDeployment] =
+    casecodec7(Domain.ManualDeployment.apply, Domain.ManualDeployment.unapply)(
+      "domain", "namespace", "service_type", "version", "hash", "description", "port"
     )
 
   implicit val NamspaceRoutingGraphEncoder: EncodeJson[(Namespace,routing.RoutingGraph)] =
@@ -629,8 +629,8 @@ object Json {
               .getOrElse(DecodeResult.fail(s"unable to parse $v into a version", c.history))
     } yield Nelson.CommitUnit(u,vv,t))
 
-  implicit lazy val TrafficShiftEncoder: EncodeJson[Datacenter.TrafficShift] =
-    EncodeJson((ts: Datacenter.TrafficShift) =>
+  implicit lazy val TrafficShiftEncoder: EncodeJson[Domain.TrafficShift] =
+    EncodeJson((ts: Domain.TrafficShift) =>
       ("from" := ts.from) ->:
       ("to" := ts.to) ->:
       ("start" := ts.start) ->:

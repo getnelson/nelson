@@ -33,7 +33,7 @@ final case class Repos(config: NelsonConfig) extends Default {
 
   object Limit extends QueryParamDecoderMatcher[Int]("limit")
 
-  private implicit val ServiceNameEncoder: EncodeJson[Datacenter.ServiceName] =
+  private implicit val ServiceNameEncoder: EncodeJson[Domain.ServiceName] =
     implicitly[EncodeJson[String]].contramap(_.toString)
 
   private implicit val DeploymentStatusEncoder: EncodeJson[DeploymentStatus] =

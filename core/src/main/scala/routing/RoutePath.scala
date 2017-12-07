@@ -17,7 +17,7 @@
 package nelson
 package routing
 
-import Datacenter._
+import Domain._
 
 import scalaz.Order
 import scalaz.std.string._

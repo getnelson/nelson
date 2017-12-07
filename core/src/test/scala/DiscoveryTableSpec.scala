@@ -19,7 +19,7 @@ package nelson
 import scalaz.std.list._
 
 class DiscoveryTableSpec extends NelsonSuite {
-  import Datacenter._
+  import Domain._
   import routing._
   import routing.RoutingTable._
 

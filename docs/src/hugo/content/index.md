@@ -26,7 +26,7 @@ Nelson is a fully automated deployment orchestration tool intended to work with 
 * Developer-driven, automated build & release workflow revisioned as code.
 * Support for multiple cluster managers, including [Hashicorp Nomad](https://www.nomadproject.io/).
 * Compatible with any [Docker](https://www.docker.com) container.
-* Can deploy applications to any number of datacenters.
+* Can deploy applications to any number of domains.
 * State of the art runtime routing via [Envoy](https://lyft.github.io/envoy/).
 * Integrated support for alert definition and propagation via [Prometheus](https://prometheus.io/).
 * Utilizes secure introduction for safe distribution of credentials from [Vault](https://www.vaultproject.io/).
@@ -101,7 +101,7 @@ When you deploy applications with Nelson, there's no SSH access. Period. Your ap
 
 <h2 id="quickstart-consistency" data-subheading-of="quickstart">Consistency</h2>
 
-By virtue of the fact that *Nelson* is orchestrating application deployments over potentially many target datacenters, it is important to realize that there is a subsequent lack of transactionality in the operations *Nelson* takes. This is most apparent when deploying a new revision of a particular system: application code can never assume it is a "singleton" or in some way special, as the minimum number of versions running - even if it's for a very short time - will be greater than one. *Nelson* will eventually deliver on its promise and make one revision the primary revision of a system by cleaning up the others, depending on the particular circumstances, that process might not be immediate.
+By virtue of the fact that *Nelson* is orchestrating application deployments over potentially many target domains, it is important to realize that there is a subsequent lack of transactionality in the operations *Nelson* takes. This is most apparent when deploying a new revision of a particular system: application code can never assume it is a "singleton" or in some way special, as the minimum number of versions running - even if it's for a very short time - will be greater than one. *Nelson* will eventually deliver on its promise and make one revision the primary revision of a system by cleaning up the others, depending on the particular circumstances, that process might not be immediate.
 
 This means that application builders have the following constraints:
 
@@ -165,8 +165,8 @@ In order to understand the rest of this user guide, there are a set of terms tha
       <td>The element within the datacenter that actually makes work placement decisioning, based upon the available resources (e.g. CPU, RAM etc).</td>
     </tr>
     <tr>
-      <td><em>Datacenter</em></td>
-      <td>Represents a single failure domain - it is a <em>logical</em> ascription of some computing resources to which work can be assigned. In practice, a "datacenter" from Nelson's perspective may either be a single <code>scheduler</code> endpoint that directly maps to a single physical datacenter (which internally has redundant power domains), or it could be multiple virtual datacenters within a geographic region (e.g. AWS Availability Zone). The key thing is that Nelson's concept of datacenter is all about scheduling failure modes.</td>
+      <td><em>Domain</em></td>
+      <td>Represents a single failure domain - it is a <em>logical</em> ascription of some computing resources to which work can be assigned. In practice, a "datacenter" from Nelson's perspective may either be a single <code>scheduler</code> endpoint that directly maps to a single physical datacenter (which internally has redundant power domains), or it could be multiple virtual domains within a geographic region (e.g. AWS Availability Zone). The key thing is that Nelson's concept of datacenter is all about scheduling failure modes.</td>
     </tr>
     <tr>
       <td><em>Namespace</em></td>
@@ -525,13 +525,13 @@ At the time of writing only the AWS load balancers were natively supported. Supp
 
 <h2 id="user-guide-troubleshooting" data-subheading-of="user-guide">Troubleshooting</h2>
 
-If you added your `.nelson.yml` file to your repository `master` branch, and manifest validation is passing and you're chugging along making GitHub releases, then you will want to know what Nelson is doing with your repo, right? Well, the Nelson CLI has a set of useful utilities into what happened with your project deployments. First, you would want to list the datacenters available on your instance of Nelson:
+If you added your `.nelson.yml` file to your repository `master` branch, and manifest validation is passing and you're chugging along making GitHub releases, then you will want to know what Nelson is doing with your repo, right? Well, the Nelson CLI has a set of useful utilities into what happened with your project deployments. First, you would want to list the domains available on your instance of Nelson:
 
 ```
-nelson datacenters list
+nelson domains list
 ```
 
-This will give you the list of datacenters that Nelson knows about and the namespaces available in each. For the sake of this document, lets assume the name of the datacenter is `texas`. Now we know *where* our deployment might be, we can ask Nelson to display all the things it deployed into that location:
+This will give you the list of domains that Nelson knows about and the namespaces available in each. For the sake of this document, lets assume the name of the datacenter is `texas`. Now we know *where* our deployment might be, we can ask Nelson to display all the things it deployed into that location:
 
 ```
 nelson stacks list -d texas -ns dev
@@ -661,11 +661,11 @@ nelson {
     # connection = "tcp://0.0.0.0:12345"
   }
 
-  datacenters {
+  domains {
     # The name of this key must be a DNS value name. Typically you want to call your
-    # datacenters something logical, but keep it short. AWS for example, uses
+    # domains something logical, but keep it short. AWS for example, uses
     # us-east-1, us-west-1 etc.
-    # Datacenter names must be lowercase, and not include specical characters.
+    # Domain names must be lowercase, and not include specical characters.
     texas {
 
       docker-registry = "sxxxx.net/bar"
@@ -812,7 +812,7 @@ The following table gives an explanation of the configuration file sections and 
     <td>Nelson can notify you about deployment actions via Slack. For this integration to work a slack team admin must generate a Slack webhook URL and have Nelson configured to use this value.</td>
   </tr>
     <tr>
-    <td><code>nelson.datacenters.YOURDC</code></td>
+    <td><code>nelson.domains.YOURDC</code></td>
     <td>Various subsections that configure the credentials and endpoints for your scheduler implementation, consul, vault etc.</td>
   </tr>
     <tr>
@@ -921,16 +921,16 @@ With this frame, Nelson supports an auditing API that can inform you about every
 
 <h2 id="install-failure-domains" data-subheading-of="operator-guide">Failure Domains</h2>
 
-To run Nelson you will need access to a target datacenter. One can consider this logical datacenter - in practice - to be a [failure domain](https://en.wikipedia.org/wiki/Failure_domain). Every system should be redundant within the domain, but isolated from other datacenters. Typically Nelson requires the datacenter to be setup with a few key services before it can effectively be used. Imagine the setup with the following components:
+To run Nelson you will need access to a target datacenter. One can consider this logical datacenter - in practice - to be a [failure domain](https://en.wikipedia.org/wiki/Failure_domain). Every system should be redundant within the domain, but isolated from other domains. Typically Nelson requires the datacenter to be setup with a few key services before it can effectively be used. Imagine the setup with the following components:
 
 <div class="clearing">
   <img src="images/atomic-datacenter.png" />
   <small><em>Figure 4.0: failure domain</em></small>
 </div>
 
-Logically, Nelson sits outside one of its target datacenters. This could mean it lives at your office next to your Github, or it might actually reside in one of the target datacenters itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to `pull` images whilst deploying containers to the cluster, whilst the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.
+Logically, Nelson sits outside one of its target domains. This could mean it lives at your office next to your Github, or it might actually reside in one of the target domains itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to `pull` images whilst deploying containers to the cluster, whilst the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.
 
-Whatever you choose, the rest of this operators guide will assume that you have configured one or more logical datacenters. If you don't want to setup a *real* datacenter, [see the authors Github](https://github.com/timperrett/hashpi) about how to setup a [Raspberry PI](https://www.raspberrypi.org/) cluster which can serve as your datacenter.
+Whatever you choose, the rest of this operators guide will assume that you have configured one or more logical domains. If you don't want to setup a *real* datacenter, [see the authors Github](https://github.com/timperrett/hashpi) about how to setup a [Raspberry PI](https://www.raspberrypi.org/) cluster which can serve as your datacenter.
 
 <h2 id="install-dc-dns" data-subheading-of="operator-guide">Name Resolution</h2>
 
@@ -994,7 +994,7 @@ The following are examples of **invalid** `mount` paths:
 
 + `acmeco/prod/s3-prod-somebucket` - including the namespace name as part of the resource identifier makes it impossible for users to generically write consul-templates against the Vault path.
 
-+ `acmeco/prod/s3-prod-somebucket-california` - in addition to the namespace, including a datacenter specific identifier again makes templating problematic, as it breaks Nelson's deploy target transparency... instead, user a generic path that can have a valid value in all datacenters.
++ `acmeco/prod/s3-prod-somebucket-california` - in addition to the namespace, including a datacenter specific identifier again makes templating problematic, as it breaks Nelson's deploy target transparency... instead, user a generic path that can have a valid value in all domains.
 
 + `foobar/dev/accounts-db /` - the trailing slash causes issues both in Vault and Nelson
 

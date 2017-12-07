@@ -27,7 +27,7 @@ sealed trait StoreOp[A]
 
 object StoreOp {
   import nelson.Manifest.{UnitDef,Versioned}
-  import Datacenter._
+  import Domain._
   import scala.concurrent.duration.FiniteDuration
   import nelson.audit.{AuditLog,AuditEvent}
 
@@ -70,14 +70,14 @@ object StoreOp {
   def findRelease(id: Long): StoreOpF[Released ==>> List[ReleasedDeployment]] =
     Free.liftFC(FindRelease(id))
 
-  def createDatacenter(dc: Datacenter): StoreOpF[Unit] =
-    Free.liftFC(CreateDatacenter(dc))
+  def createDomain(dc: Domain): StoreOpF[Unit] =
+    Free.liftFC(CreateDomain(dc))
 
-  def listDatacenters: StoreOpF[Set[String]] =
-    Free.liftFC(ListDatacenters)
+  def listDomains: StoreOpF[Set[String]] =
+    Free.liftFC(ListDomains)
 
-  def listNamespacesForDatacenter(dc: String): StoreOpF[Set[Namespace]] =
-    Free.liftFC(ListNamespacesForDatacenter(dc))
+  def listNamespacesForDomain(dc: String): StoreOpF[Set[Namespace]] =
+    Free.liftFC(ListNamespacesForDomain(dc))
 
   def listDeploymentsForNamespaceByStatus(ns: ID, statuses: NonEmptyList[DeploymentStatus], unit: Option[UnitName] = None): StoreOpF[Set[(Deployment, DeploymentStatus)]] =
     Free.liftFC(ListDeploymentsForNamespaceByStatus(ns, statuses, unit))
@@ -112,9 +112,9 @@ object StoreOp {
   def getDeploymentResources(id: ID): StoreOpF[Set[(String, java.net.URI)]] =
     Free.liftFC(GetDeploymentResources(id))
 
-  def getRoutableDeploymentsByDatacenter(dc: Datacenter): StoreOpF[Set[Deployment]] =
+  def getRoutableDeploymentsByDomain(dc: Domain): StoreOpF[Set[Deployment]] =
     (for {
-      ns <- listNamespacesForDatacenter(dc.name)
+      ns <- listNamespacesForDomain(dc.name)
       ds <- ns.toList.traverseM { n =>
         listDeploymentsForNamespaceByStatus(n.id, DeploymentStatus.routable).map(_.toList.map(_._1))
       }
@@ -126,7 +126,7 @@ object StoreOp {
   def getDeployment(id: ID): StoreOpF[Deployment] =
     Free.liftFC(GetDeployment(id))
 
-  def createDeployment(unitId: ID, hash: String, ns: Datacenter.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef): StoreOpF[ID] =
+  def createDeployment(unitId: ID, hash: String, ns: Domain.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef): StoreOpF[ID] =
     Free.liftFC(CreateDeployment(unitId, hash, ns, wf, plan, policy))
 
   def getDeploymentByGuid(guid: GUID): StoreOpF[Option[Deployment]] =
@@ -138,8 +138,8 @@ object StoreOp {
   def listUnitsByStatus(nsid: ID, statuses: NonEmptyList[DeploymentStatus]): StoreOpF[Vector[(GUID,ServiceName)]] =
     Free.liftFC(ListUnitsByStatus(nsid, statuses))
 
-  def createManualDeployment(datacenter: Datacenter, namespace: NamespaceName, serviceType: String, version: String, hash: String, description: String, port: Int, exp: Instant): StoreOpF[GUID] =
-    Free.liftFC(CreateManualDeployment(datacenter, namespace, serviceType, version, hash, description, port, exp))
+  def createManualDeployment(domain: Domain, namespace: NamespaceName, serviceType: String, version: String, hash: String, description: String, port: Int, exp: Instant): StoreOpF[GUID] =
+    Free.liftFC(CreateManualDeployment(domain, namespace, serviceType, version, hash, description, port, exp))
 
   def findReleaseByDeploymentGuid(guid: GUID): StoreOpF[Option[(Released, ReleasedDeployment)]] =
     Free.liftFC(FindReleaseByDeploymentGuid(guid: GUID))
@@ -183,7 +183,7 @@ object StoreOp {
   def reverseTrafficShift(id: ID, rev: Instant): StoreOpF[Option[ID]] =
     Free.liftFC(ReverseTrafficShift(id, rev))
 
-  def getTrafficShiftForServiceName(nsid: ID, sn: ServiceName): StoreOpF[Option[Datacenter.TrafficShift]] =
+  def getTrafficShiftForServiceName(nsid: ID, sn: ServiceName): StoreOpF[Option[Domain.TrafficShift]] =
     Free.liftFC(GetTrafficShiftForServiceName(nsid, sn))
 
   def verifyDeployable(dcName: String, nsName: NamespaceName, unit: Manifest.UnitDef): StoreOpF[ValidationNel[NelsonError, Unit]] =
@@ -198,19 +198,19 @@ object StoreOp {
   def listAuditLogByReleaseId(limit: Long, offset: Long, releaseId: Long): StoreOpF[List[AuditLog]] =
     Free.liftFC(ListAuditLogByReleaseId(limit, offset, releaseId))
 
-  def getLoadbalancer(name: String, v: MajorVersion): StoreOpF[Option[Datacenter.DCLoadbalancer]] =
+  def getLoadbalancer(name: String, v: MajorVersion): StoreOpF[Option[Domain.DCLoadbalancer]] =
     Free.liftFC(GetLoadbalancer(name, v))
 
-  def getLoadbalancerDeployment(id: ID): StoreOpF[Option[Datacenter.LoadbalancerDeployment]] =
+  def getLoadbalancerDeployment(id: ID): StoreOpF[Option[Domain.LoadbalancerDeployment]] =
     Free.liftFC(GetLoadbalancerDeployment(id))
 
-  def getLoadbalancerDeploymentByGUID(guid: GUID): StoreOpF[Option[Datacenter.LoadbalancerDeployment]] =
+  def getLoadbalancerDeploymentByGUID(guid: GUID): StoreOpF[Option[Domain.LoadbalancerDeployment]] =
     Free.liftFC(GetLoadbalancerDeploymentByGUID(guid))
 
-  def findLoadbalancerDeployment(name: String, v: MajorVersion, nsid: ID): StoreOpF[Option[Datacenter.LoadbalancerDeployment]] =
+  def findLoadbalancerDeployment(name: String, v: MajorVersion, nsid: ID): StoreOpF[Option[Domain.LoadbalancerDeployment]] =
     Free.liftFC(FindLoadbalancerDeployment(name, v, nsid))
 
-  def listLoadbalancerDeploymentsForNamespace(id: ID): StoreOpF[Vector[Datacenter.LoadbalancerDeployment]] =
+  def listLoadbalancerDeploymentsForNamespace(id: ID): StoreOpF[Vector[Domain.LoadbalancerDeployment]] =
     Free.liftFC(ListLoadbalancerDeploymentsForNamespace(id))
 
   def insertLoadbalancerDeployment(lbid: ID, nsid: ID, hash: String, address: String): StoreOpF[ID] =
@@ -247,9 +247,9 @@ object StoreOp {
   final case class ListRecentReleasesForRepository(slug: Slug) extends StoreOp[Released ==>> List[ReleasedDeployment]]
   final case class ListReleases(limit: Int) extends StoreOp[Released ==>> List[ReleasedDeployment]]
   final case class FindRelease(id: Long) extends StoreOp[Released ==>> List[ReleasedDeployment]]
-  final case class CreateDatacenter(dc: Datacenter) extends StoreOp[Unit]
-  case object ListDatacenters extends StoreOp[Set[String]]
-  final case class ListNamespacesForDatacenter(dc: String) extends StoreOp[Set[Namespace]]
+  final case class CreateDomain(dc: Domain) extends StoreOp[Unit]
+  case object ListDomains extends StoreOp[Set[String]]
+  final case class ListNamespacesForDomain(dc: String) extends StoreOp[Set[Namespace]]
   final case class ListDeploymentsForNamespaceByStatus(ns: ID, statuses: NonEmptyList[DeploymentStatus], unit: Option[UnitName]) extends StoreOp[Set[(Deployment,DeploymentStatus)]]
   final case class GetNamespace(dc: String, nsName: NamespaceName) extends StoreOp[Option[Namespace]]
   final case class GetNamespaceByID(ns: ID) extends StoreOp[Namespace]
@@ -261,11 +261,11 @@ object StoreOp {
   final case class GetDeploymentResources(id: ID) extends StoreOp[Set[(String, java.net.URI)]]
   final case class FindDeployment(stackName: StackName) extends StoreOp[Option[Deployment]]
   final case class GetDeployment(id: ID) extends StoreOp[Deployment]
-  final case class CreateDeployment(unitId: ID, hash: String, nn: Datacenter.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef) extends StoreOp[ID]
+  final case class CreateDeployment(unitId: ID, hash: String, nn: Domain.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef) extends StoreOp[ID]
   final case class GetDeploymentByGuid(guid: GUID) extends StoreOp[Option[Deployment]]
   final case class CreateDeploymentStatus(id: ID, status: DeploymentStatus, msg: Option[String]) extends StoreOp[Unit]
   final case class ListUnitsByStatus(nsid: ID, statuses: NonEmptyList[DeploymentStatus]) extends StoreOp[Vector[(GUID,ServiceName)]]
-  final case class CreateManualDeployment(datacenter: Datacenter, namespace: NamespaceName, serviceType: String, version: String, hash: String, description: String, port: Int, ext: Instant) extends StoreOp[GUID]
+  final case class CreateManualDeployment(domain: Domain, namespace: NamespaceName, serviceType: String, version: String, hash: String, description: String, port: Int, ext: Instant) extends StoreOp[GUID]
   final case class FindReleaseByDeploymentGuid(guid: GUID) extends StoreOp[Option[(Released, ReleasedDeployment)]]
   final case class FindReleasedByUnitNameAndVersion(u: UnitName, v: Version) extends StoreOp[Option[Released]]
   final case class GetDeploymentsForServiceNameByStatus(sn: ServiceName, ns: ID, s: NonEmptyList[DeploymentStatus]) extends StoreOp[List[Deployment]]
@@ -277,16 +277,16 @@ object StoreOp {
   final case class CreateTrafficShift(nsid: ID, to: Deployment,  poliy: TrafficShiftPolicy, dur: FiniteDuration) extends StoreOp[ID]
   final case class StartTrafficShift(to: ID, from: ID, start: Instant) extends StoreOp[Option[ID]]
   final case class ReverseTrafficShift(id: ID, rev: Instant) extends StoreOp[Option[ID]]
-  final case class GetTrafficShiftForServiceName(nsid: ID, sn: ServiceName) extends StoreOp[Option[Datacenter.TrafficShift]]
+  final case class GetTrafficShiftForServiceName(nsid: ID, sn: ServiceName) extends StoreOp[Option[Domain.TrafficShift]]
   final case class VerifyDeployable(dcName: String, nsName: NamespaceName, unit: Manifest.UnitDef) extends StoreOp[ValidationNel[NelsonError, Unit]]
   final case class Audit[A](a: AuditEvent[A]) extends StoreOp[ID]
   final case class ListAuditLog(limit: Long, offset: Long, action: Option[String], category: Option[String]) extends StoreOp[List[AuditLog]]
   final case class ListAuditLogByReleaseId(limit: Long, offset: Long, releaseId: Long) extends StoreOp[List[AuditLog]]
-  final case class ListLoadbalancerDeploymentsForNamespace(nsid: ID) extends StoreOp[Vector[Datacenter.LoadbalancerDeployment]]
-  final case class FindLoadbalancerDeployment(name: String, v: MajorVersion, nsid: ID) extends StoreOp[Option[Datacenter.LoadbalancerDeployment]]
-  final case class GetLoadbalancerDeployment(id: ID) extends StoreOp[Option[Datacenter.LoadbalancerDeployment]]
-  final case class GetLoadbalancerDeploymentByGUID(guid: String) extends StoreOp[Option[Datacenter.LoadbalancerDeployment]]
-  final case class GetLoadbalancer(name: String, v: MajorVersion) extends StoreOp[Option[Datacenter.DCLoadbalancer]]
+  final case class ListLoadbalancerDeploymentsForNamespace(nsid: ID) extends StoreOp[Vector[Domain.LoadbalancerDeployment]]
+  final case class FindLoadbalancerDeployment(name: String, v: MajorVersion, nsid: ID) extends StoreOp[Option[Domain.LoadbalancerDeployment]]
+  final case class GetLoadbalancerDeployment(id: ID) extends StoreOp[Option[Domain.LoadbalancerDeployment]]
+  final case class GetLoadbalancerDeploymentByGUID(guid: String) extends StoreOp[Option[Domain.LoadbalancerDeployment]]
+  final case class GetLoadbalancer(name: String, v: MajorVersion) extends StoreOp[Option[Domain.DCLoadbalancer]]
   final case class InsertLoadbalancerDeployment(lbid: ID, nsid: ID, hash: String, address: String) extends StoreOp[ID]
   final case class DeleteLoadbalancerDeployment(lbid: ID) extends StoreOp[Int]
   final case class InsertLoadbalancerIfAbsent(lb: Manifest.Loadbalancer @@ Versioned, repoId: ID) extends StoreOp[ID]

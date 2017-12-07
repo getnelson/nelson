@@ -29,7 +29,7 @@ import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
 final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
   import StoreOp._
-  import Datacenter._
+  import Domain._
   import nelson.audit.{AuditLog,AuditEvent,AuditAction,AuditCategory}
   import Manifest.{Namespace => _, Port => _, TrafficShift => _, _}
 
@@ -49,9 +49,9 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
     case ListRecentReleasesForRepository(slug) => listRecentReleasesForRepository(slug).transact(xa)
     case ListReleases(limit) => listReleases(limit).transact(xa)
     case FindRelease(id) => findRelease(id).transact(xa)
-    case CreateDatacenter(dc) => createDatacenter(dc).transact(xa)
-    case ListDatacenters => listDatacenters.transact(xa)
-    case ListNamespacesForDatacenter(dc) => listNamespacesForDatacenter(dc).transact(xa)
+    case CreateDomain(dc) => createDomain(dc).transact(xa)
+    case ListDomains => listDomains.transact(xa)
+    case ListNamespacesForDomain(dc) => listNamespacesForDomain(dc).transact(xa)
     case ListDeploymentsForNamespaceByStatus(ns, stats, unit) => listDeploymentsForNamespaceByStatus(ns, stats, unit).transact(xa)
     case GetNamespace(dc, nsName) => getNamespace(dc, nsName).transact(xa)
     case GetNamespaceByID(ns) => getNamespaceByID(ns).transact(xa)
@@ -174,17 +174,17 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
       .withUniqueGeneratedKeys[ID]("id")
   }
 
-  def createDatacenter(dc: Datacenter): ConnectionIO[Unit] =
-    sql"""MERGE INTO PUBLIC.datacenters (name)
+  def createDomain(dc: Domain): ConnectionIO[Unit] =
+    sql"""MERGE INTO PUBLIC.domains (name)
           VALUES (${dc.name})
       """.update.run.map {
-      case 0 => log.info(s"[createDatacenter] adding ${dc.name} to datacenters (0)")
-      case x => log.debug(s"[createDatacenter] adding ${dc.name} to datacenters ($x)")
+      case 0 => log.info(s"[createDomain] adding ${dc.name} to domains (0)")
+      case x => log.debug(s"[createDomain] adding ${dc.name} to domains ($x)")
     }
 
-  def listDatacenters: ConnectionIO[Set[String]] =
+  def listDomains: ConnectionIO[Set[String]] =
     sql"""SELECT name
-           FROM PUBLIC.datacenters
+           FROM PUBLIC.domains
            ORDER BY name"""
       .query[String]
       .list.map(_.toSet)
@@ -253,7 +253,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
   /**
    *
    */
-  def listDeploymentsForDatacenter(dc: String): ConnectionIO[Set[Deployment]] = {
+  def listDeploymentsForDomain(dc: String): ConnectionIO[Set[Deployment]] = {
     val cio: ConnectionIO[List[Deployment]] = for {
         dep <- sql"""SELECT id,
                             unit_id,
@@ -265,13 +265,13 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
                             guid,
                             expiration_policy
                      FROM PUBLIC.deployments
-                     WHERE datacenter=${dc}
+                     WHERE domain=${dc}
                   """.query[DeploymentRow].process.list
 
         dep2 <- dep.traverse(deploymentFromRow)
       } yield dep2
 
-    cio.map(_.toSet).map(_ <| (d => log.debug(s"[listDeploymentsForDatacenter] returning ${d.size} deployments for datacenter: ${dc}")))
+    cio.map(_.toSet).map(_ <| (d => log.debug(s"[listDeploymentsForDomain] returning ${d.size} deployments for domain: ${dc}")))
   }
 
   def createDeploymentResource(deploymentId: ID, name: String, uri: java.net.URI): ConnectionIO[ID] =
@@ -482,7 +482,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
     }.vector.map(_.groupBy(_._2).values.map(_.head).toVector) // distinct by ServiceName
   }
 
-  def createManualDeployment(datacenter: Datacenter,
+  def createManualDeployment(domain: Domain,
                              namespace: NamespaceName,
                              serviceType: String,
                              version: String,
@@ -532,7 +532,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
 
 
     for {
-      nsopt <- getNamespace(datacenter.name, namespace)
+      nsopt <- getNamespace(domain.name, namespace)
       Some(ns) = nsopt // YOLO
       _    <- insertRelease(version)
       unit <- insertUnitIfAbsent
@@ -593,23 +593,23 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
     listDeployments(unit.name, "%", ns, DeploymentStatus.routable)
   }
 
-  def listNamespacesForDatacenter(dc: String): ConnectionIO[Set[Namespace]] = {
+  def listNamespacesForDomain(dc: String): ConnectionIO[Set[Namespace]] = {
     (for {
-      nsids <- sql"SELECT id, name FROM PUBLIC.namespaces WHERE datacenter=${dc}".query[(ID, NamespaceName)].list
+      nsids <- sql"SELECT id, name FROM PUBLIC.namespaces WHERE domain=${dc}".query[(ID, NamespaceName)].list
       nss = nsids.map {
         case (nsid,nsname) => Namespace(nsid, nsname, dc)
       }
-    } yield nss.toSet).map(_ <| (s => log.debug(s"""[listNamespacesForDatacenter] found namespaces: ${s.map(_.name).mkString("<",",",">")} in datacenter: $dc""")))
+    } yield nss.toSet).map(_ <| (s => log.debug(s"""[listNamespacesForDomain] found namespaces: ${s.map(_.name).mkString("<",",",">")} in domain: $dc""")))
   }
 
   /**
-   * `datacenter` is the primary key and here acts as a forigen key
-   * for namespaces. We never want two datacenters with the same name.
+   * `domain` is the primary key and here acts as a forigen key
+   * for namespaces. We never want two domains with the same name.
    */
   def createNamespace(dc: String, name: NamespaceName): ConnectionIO[ID] =
-    sql"""INSERT INTO PUBLIC.namespaces (datacenter, name)
+    sql"""INSERT INTO PUBLIC.namespaces (domain, name)
           VALUES (${dc}, ${name.asString})
-       """.update.withUniqueGeneratedKeys[ID]("id").map(_ <| (id => log.info(s"[createNamespace] created namespace ${name.asString} with id ${id} in datacenter ${dc}")))
+       """.update.withUniqueGeneratedKeys[ID]("id").map(_ <| (id => log.info(s"[createNamespace] created namespace ${name.asString} with id ${id} in domain ${dc}")))
 
   def getNamespace(dc: String, nsName: NamespaceName): ConnectionIO[Option[Namespace]] =
     (for {
@@ -617,14 +617,14 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
         sql"""SELECT id, name
               FROM PUBLIC.namespaces
               WHERE name = ${nsName.asString}
-                   AND datacenter = ${dc}""".query[(ID,NamespaceName)].option)
+                   AND domain = ${dc}""".query[(ID,NamespaceName)].option)
       (id,name) = nsids
     } yield Namespace(id, name, dc)).run.map(_ <| (ns => log.debug(s"[getNamespace] found ${ns.map(_.id)} as ${nsName.asString} namespace in dc: $dc")))
 
   def getNamespaceByID(id: ID): ConnectionIO[Namespace] =
     for {
       nsids <- sql"""
-        SELECT id, name, datacenter
+        SELECT id, name, domain
         FROM PUBLIC.namespaces
         WHERE id=${id}""".query[(ID,NamespaceName,String)].unique
       (id,name,dc) = nsids
@@ -1001,7 +1001,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
      ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef,
      ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef)
 
-  private def trafficShiftFromRow(row: TrafficShiftRow): ConnectionIO[Datacenter.TrafficShift] = {
+  private def trafficShiftFromRow(row: TrafficShiftRow): ConnectionIO[Domain.TrafficShift] = {
     val (ref,st,dur,rev,
          fid,fuid,fns,fhash,fdt,fwf,fp,fguid,fexp,
          tid,tuid,tns,thash,tdt,twf,tp,tguid,texp) = row
@@ -1212,7 +1212,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
      * If not resolved then move up namespace ancestory unil
      * depedency is found or root namespace it hit.
      */
-     def resolveDependency(sn: ServiceName, ns: Datacenter.Namespace): ConnectionIO[ValidationNel[NelsonError, Unit]] = {
+     def resolveDependency(sn: ServiceName, ns: Domain.Namespace): ConnectionIO[ValidationNel[NelsonError, Unit]] = {
 
         def hasDefaultPort(d: Deployment, sn: ServiceName): ConnectionIO[ValidationNel[NelsonError, Unit]] =
            if (d.unit.ports.exists(_.name == "default"))
@@ -1431,7 +1431,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
     """.update.withUniqueGeneratedKeys[ID]("id")
   }
 
-  import Datacenter.{LoadbalancerDeployment, DCLoadbalancer}
+  import Domain.{LoadbalancerDeployment, DCLoadbalancer}
   import Manifest.{Route,BackendDestination,Port}
 
   type RouteRow = (Int,String,String,String,String)

@@ -24,7 +24,7 @@ import scalaz._
 import Scalaz._
 
 object Nelson {
-  import Datacenter._
+  import Domain._
   import scala.concurrent.duration._
   import Json._
   import audit._
@@ -266,8 +266,8 @@ object Nelson {
 
     // convert units in the manifest to action.
     // filter out all units that are not in the provided namespace (ns)
-    def unitActions(m: Manifest @@ Versioned, ns: NamespaceName, dcs: Seq[Datacenter]): List[Action] = {
-      val unitFilter: (Datacenter,Namespace,Plan,UnitDef) => Boolean =
+    def unitActions(m: Manifest @@ Versioned, ns: NamespaceName, dcs: Seq[Domain]): List[Action] = {
+      val unitFilter: (Domain,Namespace,Plan,UnitDef) => Boolean =
         (_,namespace,_,_) => namespace.name == ns
 
        Manifest.unitActions(m, dcs, unitFilter)
@@ -289,7 +289,7 @@ object Nelson {
         _  <- (storeManifest(hm, e.repositoryId).run(cfg)
               *> log("stored the release manifest in the database"))
 
-        _ <- deploy(unitActions(hm, cfg.defaultNamespace, cfg.datacenters)).run(cfg)
+        _ <- deploy(unitActions(hm, cfg.defaultNamespace, cfg.domains)).run(cfg)
       } yield ()
     }
   }
@@ -368,71 +368,71 @@ object Nelson {
   }
 
   /**
-   * This is a bootstrapping function - definitions of datacenters come
+   * This is a bootstrapping function - definitions of domains come
    * from the Nelson configuration, and the database is a read-only reference
    * of that, simply so we can provide forigen key constraints when doing
    * queries.
    *
    * This function should only ever be called at bootup.
    */
-  def createDatacenters(list: List[Datacenter]): NelsonK[Unit] = Kleisli { cfg =>
-    list.traverse_(dc => storage.run(cfg.storage, storage.StoreOp.createDatacenter(dc)))
+  def createDomains(list: List[Domain]): NelsonK[Unit] = Kleisli { cfg =>
+    list.traverse_(dc => storage.run(cfg.storage, storage.StoreOp.createDomain(dc)))
   }
 
   /*
    * This is a bootstrapping function - each instance of Nelson has a default
    * namespace defined in the Nelson configuration. This function creates
-   * the default namespace for each datacenter if it doesn't already exist
+   * the default namespace for each domain if it doesn't already exist
    *
    * This function should only ever be called at bootup
    */
-  def createDefaultNamespaceIfAbsent(dcs: List[Datacenter], ns: NamespaceName): NelsonK[Unit] =
+  def createDefaultNamespaceIfAbsent(dcs: List[Domain], ns: NamespaceName): NelsonK[Unit] =
     Kleisli(cfg =>
       storage.run(cfg.storage,
         dcs.traverse(dc => getOrCreateNamespace(dc.name, ns))).map(_ => ()))
 
   /**
-   * List all the datacenters Nelson is currently aware of, and return
-   * the namespaces associated with that datacenter.
+   * List all the domains Nelson is currently aware of, and return
+   * the namespaces associated with that domain.
    */
-  def listDatacenters: NelsonK[Map[Datacenter, Set[Namespace]]] = Kleisli { cfg =>
+  def listDomains: NelsonK[Map[Domain, Set[Namespace]]] = Kleisli { cfg =>
     Nondeterminism[Task].gatherUnordered(
-      cfg.datacenters.map(d =>
+      cfg.domains.map(d =>
         storage.run(cfg.storage,
-                    storage.StoreOp.listNamespacesForDatacenter(d.name).map(d -> _)))).map(_.toMap)
+                    storage.StoreOp.listNamespacesForDomain(d.name).map(d -> _)))).map(_.toMap)
   }
 
   /**
-   * Fetch a specific datacenter based on its name, along with the namespaces
-   * that are avalible in that specific datacenter (if any).
+   * Fetch a specific domain based on its name, along with the namespaces
+   * that are avalible in that specific domain (if any).
    */
-  def fetchDatacenterByName(name: String): NelsonK[Option[(Datacenter, Set[Namespace])]] =
+  def fetchDomainByName(name: String): NelsonK[Option[(Domain, Set[Namespace])]] =
     Kleisli { cfg =>
-      cfg.datacenters.find(_.name.trim.toLowerCase == name.trim.toLowerCase).traverse(dc =>
-        storage.run(cfg.storage, storage.StoreOp.listNamespacesForDatacenter(dc.name).map(dc -> _))
+      cfg.domains.find(_.name.trim.toLowerCase == name.trim.toLowerCase).traverse(dc =>
+        storage.run(cfg.storage, storage.StoreOp.listNamespacesForDomain(dc.name).map(dc -> _))
       )
     }
 
   /*
-   * Given a list of datacenters and namespaces figure out deployments by DeploymentStatus
+   * Given a list of domains and namespaces figure out deployments by DeploymentStatus
    */
   def listDeployments(
     dcs: List[String],
     ns: NonEmptyList[NamespaceName],
     status: NonEmptyList[DeploymentStatus],
     unit: Option[UnitName]
-  ): NelsonK[List[(DatacenterRef,Namespace,Deployment,DeploymentStatus)]] = {
+  ): NelsonK[List[(DomainRef,Namespace,Deployment,DeploymentStatus)]] = {
     Kleisli { cfg =>
-      val datacenters = if (dcs.isEmpty) cfg.datacenters.map(_.name) else dcs
-      datacenters.traverseM(dc => listDatacenterDeployments(dc,ns,status,unit).run(cfg).map(_.map(x => (dc,x._1,x._2, x._3))))
+      val domains = if (dcs.isEmpty) cfg.domains.map(_.name) else dcs
+      domains.traverseM(dc => listDomainDeployments(dc,ns,status,unit).run(cfg).map(_.map(x => (dc,x._1,x._2, x._3))))
     }
   }
 
   /**
-   * Given a specific datacenter and a list of namespaces figure out deployments by DeploymentStatus.
+   * Given a specific domain and a list of namespaces figure out deployments by DeploymentStatus.
    * TIM: this probally wont scale, but its likley ok for the moment.
    */
-  def listDatacenterDeployments(
+  def listDomainDeployments(
     dcName: String,
     ns: NonEmptyList[NamespaceName],
     status: NonEmptyList[DeploymentStatus],
@@ -449,14 +449,14 @@ object Nelson {
     }
 
     for {
-      a <- fetchDatacenterByName(dcName)
+      a <- fetchDomainByName(dcName)
       b <- a.fold[NelsonK[List[(Namespace,Deployment,DeploymentStatus)]]](Kleisli(_ => empty)){
         case (dc,set) => findNsByName(set)
       }
     } yield b
   }
 
-  def getOrCreateNamespace(dc: DatacenterRef, ns: NamespaceName): StoreOpF[ID] =
+  def getOrCreateNamespace(dc: DomainRef, ns: NamespaceName): StoreOpF[ID] =
     StoreOp.getNamespace(dc, ns).flatMap(_.cata(
       some = n => n.id.point[StoreOpF],
       none = StoreOp.createNamespace(dc, ns)))
@@ -466,11 +466,11 @@ object Nelson {
    * If a namespace already exists, it's a noop and continues to the next
    * in hierarchy.
    */
-  def recursiveCreateNamespace(dc: DatacenterRef, ns: NamespaceName): NelsonK[Unit] =
+  def recursiveCreateNamespace(dc: DomainRef, ns: NamespaceName): NelsonK[Unit] =
     Kleisli { cfg =>
       for {
-         opt <- cfg.datacenters.find(_.name.trim.toLowerCase == dc.trim.toLowerCase).point[Task]
-         _   <- opt.tfold(UnknownDatacenter(dc))(identity)
+         opt <- cfg.domains.find(_.name.trim.toLowerCase == dc.trim.toLowerCase).point[Task]
+         _   <- opt.tfold(UnknownDomain(dc))(identity)
          _   <- storage.run(cfg.storage, ns.hierarchy.traverse(n => getOrCreateNamespace(dc, n)))
       } yield ()
     }
@@ -478,7 +478,7 @@ object Nelson {
   /*
    * Creates namespace hierarchy only if root namespace already exists.
    */
-  def recursiveCreateSubordinateNamespace(dc: DatacenterRef, ns: NamespaceName): NelsonK[Unit] =
+  def recursiveCreateSubordinateNamespace(dc: DomainRef, ns: NamespaceName): NelsonK[Unit] =
     Kleisli { cfg =>
       for {
         root <- storage.run(cfg.storage, StoreOp.getNamespace(dc, ns.root))
@@ -488,10 +488,10 @@ object Nelson {
     }
 
   /**
-   * Gets routing graphs for a given datacenter and list of namespaces. If namespaces is not provided then
+   * Gets routing graphs for a given domain and list of namespaces. If namespaces is not provided then
    * default to all namespaces
    */
-  def getRoutingGraphs(dc: DatacenterRef, ns: List[NamespaceName]): NelsonK[List[(Namespace,routing.RoutingGraph)]] = {
+  def getRoutingGraphs(dc: DomainRef, ns: List[NamespaceName]): NelsonK[List[(Namespace,routing.RoutingGraph)]] = {
     import routing.{RoutingTable,RoutingGraph}
 
     def getRoutingGraphByNamespaces(namespaces: List[Namespace]): StoreOpF[List[(Namespace,RoutingGraph)]] =
@@ -499,7 +499,7 @@ object Nelson {
 
     val empty: Task[List[(Namespace,RoutingGraph)]] = List.empty.point[Task]
     for {
-      a <- fetchDatacenterByName(dc)
+      a <- fetchDomainByName(dc)
       b <- a.fold[NelsonK[List[(Namespace, RoutingGraph)]]](Kleisli(_ => empty)){
         case (dc,set) =>
 
@@ -516,8 +516,8 @@ object Nelson {
 
 
   final case class StackSummary(
-    namespace: Datacenter.Namespace,
-    deployment: Datacenter.Deployment,
+    namespace: Domain.Namespace,
+    deployment: Domain.Deployment,
     statuses: List[(DeploymentStatus, Option[String], Instant)],
     expiration: Instant,
     inboundDependencies: Vector[(routing.RoutePath, routing.RoutingNode)],
@@ -530,7 +530,7 @@ object Nelson {
   def fetchDeployment(guid: GUID): NelsonK[Option[StackSummary]] = {
     import routing.{RoutingNode,RoutingGraph,RoutePath,RoutingTable}
 
-    def getDplWithNs: OptionT[StoreOpF,(Namespace,Datacenter.Deployment,RoutingGraph)] =
+    def getDplWithNs: OptionT[StoreOpF,(Namespace,Domain.Deployment,RoutingGraph)] =
       for {
         a <- OptionT(StoreOp.getDeploymentByGuid(guid))
         b <- OptionT(RoutingTable.routingGraph(a.namespace).map(Option(_)))
@@ -540,7 +540,7 @@ object Nelson {
     def filterDefault(rp: RoutePath): Boolean =
       rp.portName == "default"
 
-    def getInsAndOuts(g: RoutingGraph, d: Datacenter.Deployment) =
+    def getInsAndOuts(g: RoutingGraph, d: Domain.Deployment) =
       if (g.contains(RoutingNode(d))) {
         val ins = g.ins(RoutingNode(d)).filter(x => filterDefault(x._1))
         val outs = g.outs(RoutingNode(d)).filter(x => filterDefault(x._1))
@@ -551,7 +551,7 @@ object Nelson {
     for {
       s <- fetchDeploymentStatuses(guid)
       e <- findDeploymentExpiration(guid)
-      t <- Kleisli[Task, NelsonConfig, Option[(Namespace,Datacenter.Deployment,RoutingGraph)]]{ config =>
+      t <- Kleisli[Task, NelsonConfig, Option[(Namespace,Domain.Deployment,RoutingGraph)]]{ config =>
         storage.run(config.storage, getDplWithNs.run)
       }
     } yield for {
@@ -588,7 +588,7 @@ object Nelson {
       (for {
         a   <- OptionT(storage.run(cfg.storage, query))
         (dep, exp, status, ns) = a
-        dc  <- OptionT(Task.now(cfg.datacenters.find(_.name == ns.datacenter)))
+        dc  <- OptionT(Task.now(cfg.domains.find(_.name == ns.domain)))
         sum <- OptionT(scheduler.run(dc.interpreters.scheduler, scheduler.SchedulerOp.summary(dc, dep.stackName)))
         h   <- OptionT(helm.run(dc.consul,
                   helm.ConsulOp.healthCheckJson[ConsulHealthStatus](dep.stackName.toString)).map(_.toOption))
@@ -599,13 +599,13 @@ object Nelson {
   final case class CommitUnit(unitName: UnitName, version: Version, target: NamespaceName)
 
   /*
-   * Commit unit to namespace given a github release event by deploying it into the given datacenters
+   * Commit unit to namespace given a github release event by deploying it into the given domains
    */
-  def commit(un: UnitName, ns: NamespaceName, dcs: List[Datacenter], m: Manifest @@ Versioned): NelsonK[Unit] = {
+  def commit(un: UnitName, ns: NamespaceName, dcs: List[Domain], m: Manifest @@ Versioned): NelsonK[Unit] = {
     import Manifest.{Namespace,Plan,UnitDef}
 
-    // fiter out everything that doesn't belong to this unit / namespace / datacenter
-    val unitFilter: (Datacenter,Namespace,Plan,UnitDef) => Boolean =
+    // fiter out everything that doesn't belong to this unit / namespace / domain
+    val unitFilter: (Domain,Namespace,Plan,UnitDef) => Boolean =
       (dc,namespace,_,unit) => dcs.exists(_ == dc) && namespace.name == ns && unit.name == un
 
     Kleisli { cfg =>
@@ -619,7 +619,7 @@ object Nelson {
   }
 
   /*
-   * Commit a unit / version to a namespace by deploying it into the datacenter
+   * Commit a unit / version to a namespace by deploying it into the domain
    */
   def commit(un: UnitName, v: Version, ns: NamespaceName): NelsonK[Unit] = {
     Kleisli { cfg =>
@@ -628,7 +628,7 @@ object Nelson {
         b  <- a.tfold(DeploymentCommitFailed(
                 s"could not find release by unit name: $un and version: $v"))(identity)
         m  <- getVersionedManifestForRelease(b).run(cfg)
-        _  <- commit(un, ns, cfg.datacenters, m).run(cfg)
+        _  <- commit(un, ns, cfg.domains, m).run(cfg)
       } yield ()
     }
   }
@@ -649,8 +649,8 @@ object Nelson {
         d   <- a.tfold(MissingDeployment(deploymentGuid))(identity)
         _   <- validateDeployment(d)
         ns   = d.namespace
-        dct <- cfg.datacenters.find(_.name == ns.datacenter).point[Task]
-        dc  <- dct.tfold(MisconfiguredDatacenter(ns.datacenter, s"couldn't be found"))(identity)
+        dct <- cfg.domains.find(_.name == ns.domain).point[Task]
+        dc  <- dct.tfold(MisconfiguredDomain(ns.domain, s"couldn't be found"))(identity)
         rm  <- runs(cfg.storage, storage.StoreOp.findReleaseByDeploymentGuid(d.guid))
         r   <- rm.tfold(MissingReleaseForDeployment(deploymentGuid))(identity)
         m   <- getVersionedManifestForRelease(r._1).run(cfg)
@@ -668,29 +668,29 @@ object Nelson {
         a <- storage.run(config.storage, storage.StoreOp.getDeploymentByGuid(guid))
         d <- a.tfold(MissingDeployment(guid))(identity(_))
         ns = d.namespace
-        dc <- config.datacenters.find(_.name == ns.datacenter).fold[Task[Datacenter]](Task.fail(MisconfiguredDatacenter(ns.datacenter, "couldn't be found")))(Task.now)
+        dc <- config.domains.find(_.name == ns.domain).fold[Task[Domain]](Task.fail(MisconfiguredDomain(ns.domain, "couldn't be found")))(Task.now)
         status <- storage.run(config.storage, storage.StoreOp.listDeploymentStatuses(d.id))
       } yield status
     }
 
   /*
-   * Given a list of datacenters and namespaces figure out units by DeploymentStatus
+   * Given a list of domains and namespaces figure out units by DeploymentStatus
    */
   def listUnitsByStatus(
-    dcs: List[DatacenterRef],
+    dcs: List[DomainRef],
     ns: NonEmptyList[NamespaceName],
     status: NonEmptyList[DeploymentStatus]
-  ): NelsonK[List[(DatacenterRef,Namespace,GUID,ServiceName)]] =
+  ): NelsonK[List[(DomainRef,Namespace,GUID,ServiceName)]] =
     Kleisli { cfg =>
-      val datacenters = if (dcs.isEmpty) cfg.datacenters.map(_.name) else dcs
-      datacenters.traverseM(dc => listDatacenterUnitsByStatus(dc,ns,status).run(cfg)
+      val domains = if (dcs.isEmpty) cfg.domains.map(_.name) else dcs
+      domains.traverseM(dc => listDomainUnitsByStatus(dc,ns,status).run(cfg)
         .map(_.map(x => (dc,x._1,x._2,x._3))))
     }
 
   /*
-   * Given a specific datacenter and a list of namespaces figure out units by DeploymentStatus.
+   * Given a specific domain and a list of namespaces figure out units by DeploymentStatus.
    */
-  def listDatacenterUnitsByStatus(
+  def listDomainUnitsByStatus(
     dc: String,
     ns: NonEmptyList[NamespaceName],
     status: NonEmptyList[DeploymentStatus]
@@ -706,7 +706,7 @@ object Nelson {
     val empty: Task[List[(Namespace,GUID,ServiceName)]] = List.empty.point[Task]
 
     for {
-      a <- fetchDatacenterByName(dc)
+      a <- fetchDomainByName(dc)
       b <- a.fold[NelsonK[List[(Namespace, GUID, ServiceName)]]](Kleisli(_ => empty)){
         case (dc,set) => findNsByName(set)
       }
@@ -723,7 +723,7 @@ object Nelson {
    * Create a manual deployment. That is to say, let Nelson know about something
    * that was not deployed via Nelson (e.g. databases and other ops-infrastructure)
    */
-  def createManualDeployment(s: Session, m: Datacenter.ManualDeployment): NelsonK[GUID] = Kleisli { cfg =>
+  def createManualDeployment(s: Session, m: Domain.ManualDeployment): NelsonK[GUID] = Kleisli { cfg =>
 
     def validateNamespace(ns: String): Task[NamespaceName] =
        NamespaceName.fromString(ns).fold(
@@ -737,8 +737,8 @@ object Nelson {
     val exp = Instant.now.plusSeconds(ttl)
 
     for {
-      dc   <- cfg.datacenters.find(_.name == m.datacenter)
-                 .fold[Task[Datacenter]](Task.fail(ManualDeployFailed(s"datacenter ${m.datacenter} couldn't be found")))(Task.now)
+      dc   <- cfg.domains.find(_.name == m.domain)
+                 .fold[Task[Domain]](Task.fail(ManualDeployFailed(s"domain ${m.domain} couldn't be found")))(Task.now)
        ns   <- validateNamespace(m.namespace)
        guid <- storage.run(cfg.storage, StoreOp.createManualDeployment(
                dc,
@@ -752,17 +752,17 @@ object Nelson {
      } yield guid
   }
 
-  def getDeploymentsByDatacenter(dc: Datacenter, f: Namespace => StoreOpF[List[Deployment]]): StoreOpF[Set[Deployment]] = {
+  def getDeploymentsByDomain(dc: Domain, f: Namespace => StoreOpF[List[Deployment]]): StoreOpF[Set[Deployment]] = {
     for {
-      ns <- StoreOp.listNamespacesForDatacenter(dc.name).map(_.toList)
+      ns <- StoreOp.listNamespacesForDomain(dc.name).map(_.toList)
       ds <- ns.traverseM(ns => f(ns))
     } yield ds.toSet
   }
 
   /**
-   * Deprecates all deloyments for a service / feature version accross all datacenters and namepaces
+   * Deprecates all deloyments for a service / feature version accross all domains and namepaces
    */
-  def deprecateService(sn: Datacenter.ServiceName): NelsonK[Unit] = Kleisli { cfg =>
+  def deprecateService(sn: Domain.ServiceName): NelsonK[Unit] = Kleisli { cfg =>
 
     val ready = NonEmptyList(DeploymentStatus.Ready) // only deprecate deployments in the ready state
 
@@ -770,48 +770,48 @@ object Nelson {
       storage.StoreOp.createDeploymentStatus(d.id, DeploymentStatus.Deprecated, None)
 
     // gets all deployments for a given unit name / feature version which are ready
-    val getDeployments: (Datacenter.Namespace) => StoreOpF[List[Deployment]] =
+    val getDeployments: (Domain.Namespace) => StoreOpF[List[Deployment]] =
       (ns) => StoreOp.listDeploymentsForUnitByStatus(ns.id, sn.serviceType, ready)
         .map(_.toList.filter(_.unit.version.toFeatureVersion == sn.version))
 
-    def deprecateByDatacenter(dc: Datacenter): StoreOpF[Unit] =
+    def deprecateByDomain(dc: Domain): StoreOpF[Unit] =
      for {
-        ds <- getDeploymentsByDatacenter(dc, getDeployments)
+        ds <- getDeploymentsByDomain(dc, getDeployments)
         _  <- ds.toList.traverse(d => deprecateDeployment(d))
       } yield ()
 
-    val prog = cfg.datacenters.traverse_(dc => deprecateByDatacenter(dc))
+    val prog = cfg.domains.traverse_(dc => deprecateByDomain(dc))
     storage.run(cfg.storage, prog)
   }
 
   /**
-   * Expires all deloyments for a service accross all datacenters and namepaces
+   * Expires all deloyments for a service accross all domains and namepaces
    */
-  def expireService(sn: Datacenter.ServiceName): NelsonK[Unit] = Kleisli { cfg =>
+  def expireService(sn: Domain.ServiceName): NelsonK[Unit] = Kleisli { cfg =>
     def expireDeployment(d: Deployment): storage.StoreOpF[Unit] = {
       val exp = Instant.now()
       storage.StoreOp.createDeploymentExpiration(d.id, exp).void
     }
 
     // gets all deployments for a given unit name / feature version
-    val getDeployments: (Datacenter.Namespace) => StoreOpF[List[Deployment]] =
+    val getDeployments: (Domain.Namespace) => StoreOpF[List[Deployment]] =
       (ns) => StoreOp.listDeploymentsForUnitByStatus(ns.id, sn.serviceType, DeploymentStatus.nel)
         .map(_.toList.filter(_.unit.version.toFeatureVersion == sn.version))
 
-    def expireByDatacenter(dc: Datacenter): StoreOpF[Unit] =
+    def expireByDomain(dc: Domain): StoreOpF[Unit] =
      for {
-        ds <- getDeploymentsByDatacenter(dc, getDeployments)
+        ds <- getDeploymentsByDomain(dc, getDeployments)
         _  <- ds.toList.traverse(d => expireDeployment(d))
       } yield ()
 
-    val prog = cfg.datacenters.traverse_(dc => expireByDatacenter(dc))
+    val prog = cfg.domains.traverse_(dc => expireByDomain(dc))
     storage.run(cfg.storage, prog)
   }
 
   /*
    * Starts to reverse an in progress traffic shift given the to deployment's guid
    */
-  def reverseTrafficShift(guid: GUID): NelsonK[Datacenter.TrafficShift] = {
+  def reverseTrafficShift(guid: GUID): NelsonK[Domain.TrafficShift] = {
 
     def validate(ts: TrafficShift): String \/ TrafficShift =
       if (ts.to.guid != guid) -\/(s"deployment ($guid) is not the target for latest traffic shift")
@@ -845,20 +845,20 @@ object Nelson {
   }
 
   /**
-   * Lists all deployments accross datacenters and namspaces that depend on
+   * Lists all deployments accross domains and namspaces that depend on
    * a deployment that is deprecated.
    */
   def listDeploymentsWithDeprecatedDependencies: NelsonK[Vector[DependencyEdge]] = {
     for {
       cfg <- config
-      dcs <- cfg.datacenters.toVector.traverse(dc => listDeploymentsWithDeprecatedDependencies(dc))
+      dcs <- cfg.domains.toVector.traverse(dc => listDeploymentsWithDeprecatedDependencies(dc))
     } yield dcs.flatten
   }
 
   /**
-   * Like listDeploymentsWithDeprecatedDependencies but for a single Datacenter
+   * Like listDeploymentsWithDeprecatedDependencies but for a single Domain
    */
-  def listDeploymentsWithDeprecatedDependencies(dc: Datacenter): NelsonK[Vector[DependencyEdge]] = {
+  def listDeploymentsWithDeprecatedDependencies(dc: Domain): NelsonK[Vector[DependencyEdge]] = {
     import nelson.routing.deprecated
     Kleisli(cfg => runs(cfg.storage, deprecated.deploymentsWithDeprecatedDependencies(dc)))
   }
@@ -882,19 +882,19 @@ object Nelson {
   }
 
   //////////////////////// LOADBALANCERS /////////////////////////////
-  import Datacenter.LoadbalancerDeployment
+  import Domain.LoadbalancerDeployment
 
   def getLoadbalancerByGUID(guid: GUID): NelsonK[Option[LoadbalancerDeployment]] =
     Kleisli(cfg => storage.run(cfg.storage, StoreOp.getLoadbalancerDeploymentByGUID(guid)))
 
-  // Launches loadbalancer with name and major version into the given datacenter and namespace
-  def commitLoadbalancer(name: String, v: Int, dcName: DatacenterRef, ns: NamespaceName): NelsonK[Unit] = {
+  // Launches loadbalancer with name and major version into the given domain and namespace
+  def commitLoadbalancer(name: String, v: Int, dcName: DomainRef, ns: NamespaceName): NelsonK[Unit] = {
     import Manifest.{Loadbalancer,Plan,Namespace,Action}
 
     val mv = MajorVersion(v)
 
-    // fiter out everything that doesn't belong to this loadbalancer / namespace / datacenter
-    val lbFilter: (Datacenter,Namespace,Plan,Loadbalancer) => Boolean =
+    // fiter out everything that doesn't belong to this loadbalancer / namespace / domain
+    val lbFilter: (Domain,Namespace,Plan,Loadbalancer) => Boolean =
       (dc,namespace,_,lb) => dcName == dc.name && namespace.name == ns && lb.name == name
 
     def validateAndDeployActions(acts: List[Action], m: Manifest @@ Versioned, cfg: NelsonConfig): Task[Unit] = {
@@ -912,13 +912,13 @@ object Nelson {
         rr  <- storage.run(cfg.storage, StoreOp.getLatestReleaseForLoadbalancer(name, mv))
         r   <- rr.tfold(DeploymentCommitFailed(s"couldn't find latest release for loadblancer $name $mv"))(identity)
         ms  <- getVersionedManifestForRelease(r).run(cfg)
-        act  = Manifest.loadbalancerActions(ms, cfg.datacenters, lbFilter)
+        act  = Manifest.loadbalancerActions(ms, cfg.domains, lbFilter)
         _ <- validateAndDeployActions(act, ms, cfg)
       } yield ()
     }
   }
 
-  // Delete loadbalancer deployment: First delete loadbalancer in the datacenter, next
+  // Delete loadbalancer deployment: First delete loadbalancer in the domain, next
   // delete loadbalancer from nelson's internal h2 tables
   def deleteLoadbalancerDeployment(guid: GUID): NelsonK[Unit] = {
     Kleisli { cfg =>
@@ -926,8 +926,8 @@ object Nelson {
         a  <- storage.run(cfg.storage, StoreOp.getLoadbalancerDeploymentByGUID(guid))
         lb <- a.tfold(LoadbalancerNotFound(guid))(identity)
         ns <- storage.run(cfg.storage, StoreOp.getNamespaceByID(lb.nsid))
-        dc <- cfg.datacenters.find(_.name == ns.datacenter)
-                .fold[Task[Datacenter]](Task.fail(MisconfiguredDatacenter(ns.datacenter, "couldn't be found")))(Task.now)
+        dc <- cfg.domains.find(_.name == ns.domain)
+                .fold[Task[Domain]](Task.fail(MisconfiguredDomain(ns.domain, "couldn't be found")))(Task.now)
         _  <- dc.loadbalancer.traverse(trans =>
                 loadbalancers.run(trans,  loadbalancers.delete(lb,dc,ns)))
         _  <- storage.run(cfg.storage, StoreOp.deleteLoadbalancerDeployment(lb.id))
@@ -936,15 +936,15 @@ object Nelson {
     }
   }
 
-  // Lists all loadbalancer deployments in a given set of datacenters and namespaces
-  def listLoadbalancers(dcs: List[String], ns: NonEmptyList[NamespaceName]): NelsonK[List[(DatacenterRef,Namespace,LoadbalancerDeployment)]] = {
+  // Lists all loadbalancer deployments in a given set of domains and namespaces
+  def listLoadbalancers(dcs: List[String], ns: NonEmptyList[NamespaceName]): NelsonK[List[(DomainRef,Namespace,LoadbalancerDeployment)]] = {
     Kleisli { cfg =>
-      val datacenters = if (dcs.isEmpty) cfg.datacenters.map(_.name) else dcs
-      datacenters.traverseM(dc => listLoadbalancerDeployments(dc,ns).run(cfg).map(_.map(x => (dc,x._1,x._2))))
+      val domains = if (dcs.isEmpty) cfg.domains.map(_.name) else dcs
+      domains.traverseM(dc => listLoadbalancerDeployments(dc,ns).run(cfg).map(_.map(x => (dc,x._1,x._2))))
     }
   }
 
-  def listLoadbalancerDeployments(dc: DatacenterRef, ns: NonEmptyList[NamespaceName]): NelsonK[List[(Namespace,LoadbalancerDeployment)]] = {
+  def listLoadbalancerDeployments(dc: DomainRef, ns: NonEmptyList[NamespaceName]): NelsonK[List[(Namespace,LoadbalancerDeployment)]] = {
     val empty: Task[List[(Namespace,LoadbalancerDeployment)]] = List.empty.point[Task]
 
     def findNsByName(set: Set[Namespace]): NelsonK[List[(Namespace,LoadbalancerDeployment)]] = Kleisli { cfg =>
@@ -955,7 +955,7 @@ object Nelson {
     }
 
     for {
-      a <- fetchDatacenterByName(dc)
+      a <- fetchDomainByName(dc)
       b <- a.fold[NelsonK[List[(Namespace, LoadbalancerDeployment)]]](Kleisli(_ => empty)){
         case (dc,set) => findNsByName(set)
       }
@@ -963,15 +963,15 @@ object Nelson {
   }
 
   final case class LoadbalancerSummary(
-    namespace: Datacenter.Namespace,
-    loadbalancer: Datacenter.LoadbalancerDeployment,
+    namespace: Domain.Namespace,
+    loadbalancer: Domain.LoadbalancerDeployment,
     outboundDependencies: Vector[routing.RoutingNode]
   )
 
   def fetchLoadbalancerDeployment(guid: GUID): NelsonK[Option[LoadbalancerSummary]] = {
     import routing.{RoutingNode,RoutingGraph,RoutingTable}
 
-    def getOuts(g: RoutingGraph, lb: Datacenter.LoadbalancerDeployment): Vector[routing.RoutingNode] =
+    def getOuts(g: RoutingGraph, lb: Domain.LoadbalancerDeployment): Vector[routing.RoutingNode] =
       if (g.contains(RoutingNode(lb))) g.outs(RoutingNode(lb)).map(_._2) else Vector.empty[routing.RoutingNode]
 
     Kleisli { cfg =>

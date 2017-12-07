@@ -34,7 +34,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
     sql"TRUNCATE TABLE loadbalancers".update.run >>
     sql"TRUNCATE TABLE releases".update.run >>
     sql"TRUNCATE TABLE namespaces".update.run >>
-    sql"TRUNCATE TABLE datacenters".update.run >>
+    sql"TRUNCATE TABLE domains".update.run >>
     sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run
   ).void.transact(stg.xa).run
   }
@@ -44,14 +44,14 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
 
   val lb2 = lb.copy(name = "lb2")
 
-  val dc = datacenter(testName)
+  val dc = domain(testName)
 
   val namespace = NamespaceName(testName.toLowerCase)
 
   it should "be able to create loadbalancer then find it" in {
     (for {
       _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
+      dc <- nelson.storage.run(config.storage, StoreOp.createDomain(dc))
       ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
@@ -62,7 +62,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to create loadbalancer then get it by id" in {
     (for {
       _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
+      dc <- nelson.storage.run(config.storage, StoreOp.createDomain(dc))
       ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
@@ -73,7 +73,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to create loadbalancer then get it by guid" in {
     (for {
       _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
+      dc <- nelson.storage.run(config.storage, StoreOp.createDomain(dc))
       ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
@@ -85,7 +85,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "not create a new loadbalancer if it already exists" in {
     val (id1, id2) = (for {
       _   <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc  <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
+      dc  <- nelson.storage.run(config.storage, StoreOp.createDomain(dc))
       ns  <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
       id  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
       id2 <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
@@ -96,7 +96,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to create loadbalancers, make deploy, and then find them by namespace" in {
     (for {
       _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
+      dc <- nelson.storage.run(config.storage, StoreOp.createDomain(dc))
       ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb2),9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
@@ -107,7 +107,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to delete loadbalancer by id" in {
     val before = (for {
       _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
+      dc <- nelson.storage.run(config.storage, StoreOp.createDomain(dc))
       ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))

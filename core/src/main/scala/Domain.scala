@@ -135,7 +135,7 @@ object Infrastructure {
   }
 }
 
-final case class Datacenter(
+final case class Domain(
   name: String,
   docker: Infrastructure.Docker,
   domain: Infrastructure.Domain,
@@ -148,8 +148,8 @@ final case class Datacenter(
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf"))
   override def equals(other: Any): Boolean = {
-    other.isInstanceOf[Datacenter] &&
-    (other.asInstanceOf[Datacenter].name == this.name)
+    other.isInstanceOf[Domain] &&
+    (other.asInstanceOf[Domain].name == this.name)
   }
 
   lazy val workflow: WorkflowOp ~> Task = interpreters.workflow
@@ -161,7 +161,7 @@ final case class Datacenter(
   override def hashCode: Int = name.hashCode
 }
 
-object Datacenter {
+object Domain {
 
   /**
    * A named list of Seed ServiceNames coupled to an environment
@@ -169,11 +169,11 @@ object Datacenter {
   final case class Namespace(
     id: ID,
     name: NamespaceName,
-    datacenter: String)
+    domain: String)
 
   object Namespace {
     implicit def namespaceOrder: Order[Namespace] =
-      Order[String].contramap[Namespace](_.datacenter) |+|
+      Order[String].contramap[Namespace](_.domain) |+|
       Order[String].contramap[Namespace](_.name.asString)
   }
 
@@ -349,7 +349,7 @@ object Datacenter {
    * Represents the information needed to create a manual deployment.
    */
   final case class ManualDeployment(
-    datacenter: String,
+    domain: String,
     namespace: String,
     serviceType: String,
     version: String,
@@ -358,8 +358,8 @@ object Datacenter {
     port: Int
   )
 
-  implicit val datacenterOrder: Order[Datacenter] =
-    Order[String].contramap[Datacenter](_.name)
+  implicit val domainOrder: Order[Domain] =
+    Order[String].contramap[Domain](_.name)
 
   final case class StatusUpdate(stack: StackName,
                                 status: DeploymentStatus,

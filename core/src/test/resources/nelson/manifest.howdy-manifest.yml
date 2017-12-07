@@ -27,7 +27,7 @@ units:
 plans:
   - name: default
 
-datacenters:
+domains:
   except:
     - rockridge
     - arlington

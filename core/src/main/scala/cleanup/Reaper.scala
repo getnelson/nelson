@@ -17,7 +17,7 @@
 package nelson
 package cleanup
 
-import nelson.Datacenter.{Deployment, Namespace}
+import nelson.Domain.{Deployment, Namespace}
 import nelson.Workflow.WorkflowOp
 import notifications.Notify
 import Metrics.default.{destroyFailureCounter,destroySuccessCounter}
@@ -51,12 +51,12 @@ object Reaper {
         }
     }
 
-  private def destroy(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(t: WorkflowOp ~> Task)(cfg: NelsonConfig): Task[Unit] = {
+  private def destroy(dc: Domain, ns: Namespace, d: Domain.Deployment)(t: WorkflowOp ~> Task)(cfg: NelsonConfig): Task[Unit] = {
     import Json._
     import audit.AuditableInstances._
     Workflow.run(resolve(d).destroy(d,dc,ns))(t) <*
       cfg.auditor.write(d, audit.DeleteAction) <*
-      Task.delay(log.debug((s"finished cleaning up $d in datacenter $dc"))) <*
+      Task.delay(log.debug((s"finished cleaning up $d in domain $dc"))) <*
       Notify.sendDecommissionedNotifications(dc,ns,d)(cfg)
   }
 

@@ -29,7 +29,7 @@ class ReleaseDBSpec extends NelsonSuite with BeforeAndAfterEach {
 
   val un = "conductor"
   val uv = Version(1,1,1)
-  val sn = Datacenter.StackName(un,uv,"abcd")
+  val sn = Domain.StackName(un,uv,"abcd")
 
   it should "find release by unit name and version" in {
     val release = storage.run(config.storage, StoreOp.findReleasedByUnitNameAndVersion(un,uv))
