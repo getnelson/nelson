@@ -47,7 +47,7 @@ libraryDependencies ++= Seq(
   "com.google.code.findbugs"    % "jsr305"                             % "3.0.1", // needed to provide class javax.annotation.Nullable
   "com.cronutils"               % "cron-utils"                         % "5.0.5",
   "org.scodec"                 %% "scodec-core"                        % V.scodec,
-  "org.http4s"                 %% "http4s-argonaut61"                  % V.http4s,
+  "org.http4s"                 %% "http4s-argonaut61"                  % V.http4sArgonaut61,
   "org.http4s"                 %% "http4s-blaze-client"                % V.http4s,
   "com.whisk"                  %% "docker-testkit-scalatest"           % V.dockerit % "test",
   "com.whisk"                  %% "docker-testkit-impl-docker-java"    % V.dockerit % "test"
