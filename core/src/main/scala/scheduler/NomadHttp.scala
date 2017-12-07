@@ -36,27 +36,6 @@ import nelson.DeploymentStatus
 
 object NomadHttp {
   private val log = Logger[NomadHttp.type]
-
-  def equivalentStatus(nelson: DeploymentStatus, reverseChrono: NonEmptyList[Set[TaskStatus]]) : Boolean = {
-    import DeploymentStatus._
-
-    val latest = reverseChrono.head // we only observe latest statuses
-
-    nelson match {
-      case Ready => latest.forall(_ == TaskStatus.Running)
-      case Garbage => latest.forall(_ == TaskStatus.Running)
-      case Deprecated => latest.forall(_ == TaskStatus.Running)
-      case Terminated => latest.forall(_ == TaskStatus.Dead)
-      case Unknown => false // one unknown can never equal a known or another unknown
-
-      //// there is no equivalency in Nomad for these, so we consider all of these as mismatches
-      case Pending => false
-      case Deploying => false
-      case Failed => false
-      case Warming => false
-    }
-  }
-
 }
 
 final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org.http4s.client.Client) extends (SchedulerOp ~> Task) {
@@ -81,10 +60,6 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
         summary(dc,sn)
       case RunningUnits(dc, prefix) =>
         runningUnits(dc, prefix)
-      case Allocations(dc, prefix) =>
-        allocations(dc, prefix)
-      case EquivalentStatus(nelson, reverseChrono) =>
-        equivalentStatus(nelson, reverseChrono)
     }
 
   private def summary(dc: Datacenter, sn: Datacenter.StackName): Task[Option[DeploymentSummary]] = {
@@ -102,18 +77,6 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
     val req = addCreds(dc, Request(Method.GET, uri))
 
     client.expect[List[RunningUnit]](req)(jsonOf[List[RunningUnit]]).map(_.toSet)
-  }
-
-  private def allocations(dc: Datacenter, prefix: Option[String]): Task[List[TaskGroupAllocation]] = {
-    val baseUri = nomad.endpoint / "v1" / "allocations"
-    val uri = prefix.cata(p => baseUri.withQueryParam("prefix", p), baseUri)
-    val req = addCreds(dc, Request(Method.GET, uri))
-
-    client.expect[List[TaskGroupAllocation]](req)(jsonOf[List[TaskGroupAllocation]])
-  }
-
-  def equivalentStatus(nelson: DeploymentStatus, reverseChrono: NonEmptyList[Set[TaskStatus]]): Task[Boolean] = Task.now {
-    NomadHttp.equivalentStatus(nelson, reverseChrono)
   }
 
   /*
