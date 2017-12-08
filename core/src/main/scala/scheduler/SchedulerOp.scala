@@ -33,10 +33,6 @@ object SchedulerOp {
 
   final case class RunningUnits(dc: Domain, prefix: Option[String]) extends SchedulerOp[Set[RunningUnit]]
 
-  final case class Allocations(dc: Domain, prefix: Option[String]) extends SchedulerOp[List[TaskGroupAllocation]]
-
-  final case class EquivalentStatus(nelson: DeploymentStatus, reverseChrono: NonEmptyList[Set[TaskStatus]]) extends SchedulerOp[Boolean]
-
   type SchedulerF[A] = Free.FreeC[SchedulerOp, A]
 
   def launch(i: Image, dc: Domain, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String): SchedulerF[String] =
@@ -50,11 +46,4 @@ object SchedulerOp {
 
   def runningUnits(dc: Domain, prefix: Option[String] = None): SchedulerF[Set[RunningUnit]] =
     Free.liftFC(RunningUnits(dc, prefix))
-
-  def equivalentStatus(nelson: DeploymentStatus, reverseChrono: NonEmptyList[Set[TaskStatus]]): SchedulerF[Boolean] =
-    Free.liftFC(EquivalentStatus(nelson, reverseChrono))
-
-  def allocations(dc: Domain, prefix: Option[String] = None): SchedulerF[List[TaskGroupAllocation]] =
-    Free.liftFC(Allocations(dc, prefix))
 }
-

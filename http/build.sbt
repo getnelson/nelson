@@ -55,7 +55,7 @@ resolvers += "splunk-releases" at "http://splunk.artifactoryonline.com/splunk/ex
 
 libraryDependencies ++= Seq(
   "com.splunk.logging"         % "splunk-library-javalogging" % "1.5.2",
-  "org.http4s"                %% "http4s-argonaut61"          % V.http4s,
+  "org.http4s"                %% "http4s-argonaut61"          % V.http4sArgonaut61,
   "org.http4s"                %% "http4s-dsl"                 % V.http4s,
   "org.http4s"                %% "http4s-blaze-server"        % V.http4s,
   "io.prometheus"              % "simpleclient_common"        % V.prometheus

@@ -139,10 +139,6 @@ trait NelsonSuite
         Task.delay(None)
       case RunningUnits(dc, prefix) =>
         Task.now(Set.empty)
-      case Allocations(dc, prefix) =>
-        Task.now(nil)
-      case EquivalentStatus(s, l) =>
-        Task.now(false)
     }
   }
 
