@@ -17,9 +17,6 @@
 package nelson
 package scheduler
 
-
-import nelson.Json._
-
 import scalaz.{NonEmptyList, ~>}
 import scalaz.concurrent.Task
 import scalaz.syntax.std.option._
@@ -28,11 +25,10 @@ import scalaz.syntax.applicative._
 import scalaz.std.list._
 import journal.Logger
 import Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
-import Datacenter.{Deployment, StackName}
+import Domain.{Deployment, StackName}
 import docker.Docker
 import Docker.Image
 import nelson.DeploymentStatus
-
 
 object NomadHttp {
   private val log = Logger[NomadHttp.type]
