@@ -17,7 +17,7 @@
 package nelson
 
 import alerts.RuleRewriter, RuleRewriter._
-import nelson.Datacenter.StackName
+import nelson.Domain.StackName
 import nelson.Manifest.{ PrometheusAlert, PrometheusConfig, PrometheusRule }
 
 import org.scalatest.prop.Checkers

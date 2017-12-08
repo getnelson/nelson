@@ -65,7 +65,7 @@ Do be aware that you could also run these dependencies as containers but it can 
 Install Consul with `brew install consul`, or by downloading and installing [here](https://www.consul.io/downloads.html). Next, modify the Nelson config at `<project-dir>/etc/development/http/http.dev.cfg`: in the `consul` config, update `endpoint` to be:
 
 ```
-datacenters.<yourdc>.consul.endpoint = "http://127.0.0.1:8500"
+domains.<yourdc>.consul.endpoint = "http://127.0.0.1:8500"
 ```
 
 Then, run the Consul binary with `consul agent -dev`.

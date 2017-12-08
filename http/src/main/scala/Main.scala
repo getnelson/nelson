@@ -48,12 +48,12 @@ object Main {
 
     log.info(Banner.text)
 
-    if(cfg.datacenters.nonEmpty){
-      log.info("bootstrapping the datacenter definitions known by nelson...")
-      Nelson.createDatacenters(cfg.datacenters)(cfg).run
+    if(cfg.domains.nonEmpty){
+      log.info("bootstrapping the domain definitions known by nelson...")
+      Nelson.createDomains(cfg.domains)(cfg).run
 
       log.info(s"bootstrapping the namespaces to ensure the default '${cfg.defaultNamespace}' namespace is present...")
-      Nelson.createDefaultNamespaceIfAbsent(cfg.datacenters, cfg.defaultNamespace).run(cfg).run
+      Nelson.createDefaultNamespaceIfAbsent(cfg.domains, cfg.defaultNamespace).run(cfg).run
 
       log.info("setting up the workflow logger on the filesystem...")
       cfg.workflowLogger.setup().run
@@ -90,7 +90,7 @@ object Main {
       Server.start(cfg).run
       ()
     } else {
-      log.error("zero datacenters defined, which makes nelson useless. Exiting, to avoid you trying to do something pointless.")
+      log.error("zero domains defined, which makes nelson useless. Exiting, to avoid you trying to do something pointless.")
       System.exit(1)
     }
   }

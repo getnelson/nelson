@@ -16,8 +16,8 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.plans.Datacenters
-import Datacenter._
+import nelson.plans.Domains
+import Domain._
 import argonaut._
 import Argonaut._
 import org.http4s._
@@ -26,7 +26,7 @@ import org.http4s.dsl._
 import org.http4s.Uri.uri
 import Json._
 
-class DatacentersSpec extends ServiceSpec {
+class DomainsSpec extends ServiceSpec {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
@@ -34,18 +34,18 @@ class DatacentersSpec extends ServiceSpec {
     ()
   }
 
-  val manual = ManualDeployment(config.datacenters.head.name,"dev","foo","1.1.1","hash","description",80)
+  val manual = ManualDeployment(config.domains.head.name,"dev","foo","1.1.1","hash","description",80)
 
-  "Datacenters Object" should "allow us to query for all data centers" in {
-    val service = Server.json500(Datacenters(config).service)
+  "Domains Object" should "allow us to query for all data centers" in {
+    val service = Server.json500(Domains(config).service)
 
-    val req = Request(GET, uri("/v1/datacenters")).authed
+    val req = Request(GET, uri("/v1/domains")).authed
     val resp = service.orNotFound(req).run
     resp.status should equal (Ok)
   }
 
   it should "allow users of admin github orgs to create manual deployments" in {
-    val service = Datacenters(config).service
+    val service = Domains(config).service
     val req = Request(POST, uri("/v1/deployments")).authed
       .withBody(manual.asJson)
     val resp = req.flatMap(service.orNotFound).run
@@ -54,7 +54,7 @@ class DatacentersSpec extends ServiceSpec {
 
   it should "not allow any user to create manual deployments" in {
     val config0 = config.copy(git = config.git.copy(organizationAdminList = Nil))
-    val service = Datacenters(config0).service
+    val service = Domains(config0).service
     val req = Request(POST, uri("/v1/deployments")).authed
       .withBody(manual.asJson)
     val resp = req.flatMap(service.orNotFound).run

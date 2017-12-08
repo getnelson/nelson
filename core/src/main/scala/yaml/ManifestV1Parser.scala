@@ -223,7 +223,7 @@ object ManifestV1Parser {
     )(UnitDef.apply)
   }
 
-  def toDeploymentTarget(dcs: DatacenterTargetYaml): DeploymentTarget = {
+  def toDeploymentTarget(dcs: DomainTargetYaml): DeploymentTarget = {
     val only = Option(dcs).toList.flatMap(_.except.asScala.toList)
     val except = Option(dcs).toList.flatMap(_.except.asScala.toList)
     (only, except) match {
@@ -403,7 +403,7 @@ object ManifestV1Parser {
       ps <- toPlans(mf.plans.asScala.toList)
       lb <- toLoadbalancers(mf.loadbalancers.asScala.toList)
       ns <- toNamespaces(mf.namespaces.asScala.toList, us, ps, lb)
-      ts  = toDeploymentTarget(mf.datacenters)
+      ts  = toDeploymentTarget(mf.domains)
       no <- parseNotifications(mf.notifications).disjunction
     } yield Manifest(us, ps, lb, ns, ts, no)
   }
@@ -413,7 +413,7 @@ object ManifestV1Parser {
 class ManifestYaml {
   @BeanProperty var units: JList[UnitYaml] = _
   @BeanProperty var plans: JList[PlanYaml] = new java.util.ArrayList
-  @BeanProperty var datacenters: DatacenterTargetYaml = _
+  @BeanProperty var domains: DomainTargetYaml = _
   @BeanProperty var namespaces: JList[NamespaceYaml] = _
   @BeanProperty var loadbalancers: JList[LoadbalancerYaml] = new java.util.ArrayList
   @BeanProperty var notifications: NotificationYaml = new NotificationYaml
@@ -498,7 +498,7 @@ class ResourceYaml {
 }
 /////// DATACENTERS
 
-class DatacenterTargetYaml {
+class DomainTargetYaml {
   @BeanProperty var only: JList[String] = new java.util.ArrayList
   @BeanProperty var except: JList[String] = new java.util.ArrayList
 }

@@ -17,9 +17,6 @@
 package nelson
 package scheduler
 
-
-import nelson.Json._
-
 import scalaz.{NonEmptyList, ~>}
 import scalaz.concurrent.Task
 import scalaz.syntax.std.option._
@@ -28,11 +25,10 @@ import scalaz.syntax.applicative._
 import scalaz.std.list._
 import journal.Logger
 import Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
-import Datacenter.{Deployment, StackName}
+import Domain.{Deployment, StackName}
 import docker.Docker
 import Docker.Image
 import nelson.DeploymentStatus
-
 
 object NomadHttp {
   private val log = Logger[NomadHttp.type]
@@ -62,7 +58,7 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
         runningUnits(dc, prefix)
     }
 
-  private def summary(dc: Datacenter, sn: Datacenter.StackName): Task[Option[DeploymentSummary]] = {
+  private def summary(dc: Domain, sn: Domain.StackName): Task[Option[DeploymentSummary]] = {
     val name = buildName(sn)
     val req = addCreds(dc, Request(Method.GET, nomad.endpoint / "v1" / "job" / name / "summary"))
     implicit val decoder = deploymentSummaryDecoder(name)
@@ -71,7 +67,7 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
     }
   }
 
-  private def runningUnits(dc: Datacenter, prefix: Option[String]): Task[Set[RunningUnit]] = {
+  private def runningUnits(dc: Domain, prefix: Option[String]): Task[Set[RunningUnit]] = {
     val baseUri = nomad.endpoint / "v1" / "jobs"
     val uri = prefix.cata(p => baseUri.withQueryParam("prefix", p), baseUri)
     val req = addCreds(dc, Request(Method.GET, uri))
@@ -80,9 +76,9 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
   }
 
   /*
-   * Calls Nomad to delete a unit in a given datacenter
+   * Calls Nomad to delete a unit in a given domain
    */
-  private def deleteUnit(dc: Datacenter, name: String): Task[Unit] = {
+  private def deleteUnit(dc: Domain, name: String): Task[Unit] = {
     val req = addCreds(dc,Request(Method.DELETE, nomad.endpoint / "v1" / "job" / name))
     client.expect[String](req).map(_ => ())handleWith {
       // swallow 404, as we're being asked to delete something that does not exist
@@ -94,7 +90,7 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
   /*
    * Calls Nomad to delete the given unit and all child jobs
    */
-  private def deleteUnitAndChildren(dc: Datacenter, d: Deployment): Task[Unit] = {
+  private def deleteUnitAndChildren(dc: Domain, d: Deployment): Task[Unit] = {
     val name = buildName(d.stackName)
     for {
       cs <- listChildren(dc, name).map(_.toList)
@@ -103,17 +99,17 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
     } yield ()
   }
 
-  private def listChildren(dc: Datacenter, parentID: String): Task[Set[RunningUnit]] = {
+  private def listChildren(dc: Domain, parentID: String): Task[Set[RunningUnit]] = {
     val prefix = parentID + "/periodic"
     runningUnits(dc, Some(prefix)).map(_.filter(_.parentID.exists(_ == parentID)))
   }
 
-  private def addCreds(dc: Datacenter, req: Request): Request =
+  private def addCreds(dc: Domain, req: Request): Request =
     dc.proxyCredentials.fold(req){ creds =>
       req.putHeaders(Authorization(BasicCredentials(creds.username,creds.password)))
     }
 
-  private def getJson(u: UnitDef, name: String, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): Json = {
+  private def getJson(u: UnitDef, name: String, img: Image, dc: Domain, ns: NamespaceName, plan: Plan): Json = {
     val tags = cfg.requiredServiceTags.getOrElse(List()).toSet.union(u.meta)
     val schedule =  Manifest.getSchedule(u, plan)
     NomadJson.job(name, u.name, plan, img, dc, schedule, u.ports, ns, nomad, tags)
@@ -122,7 +118,7 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
-  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): Task[String] = {
+  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Domain, ns: NamespaceName, plan: Plan): Task[String] = {
     def call(name: String, json: Json): Task[String] = {
       log.debug(s"sending nomad the following payload: ${json.nospaces}")
       val req = addCreds(dc, Request(Method.POST, nomad.endpoint / "v1" / "job" / name))
@@ -393,7 +389,7 @@ object NomadJson {
     }
   }
 
-  def job(name: String, unitName: UnitName, plan: Plan, i: Image, dc: Datacenter, schedule: Option[Schedule], ports: Option[Ports], ns: NamespaceName, nomad: Nomad, tags: Set[String]): Json = {
+  def job(name: String, unitName: UnitName, plan: Plan, i: Image, dc: Domain, schedule: Option[Schedule], ports: Option[Ports], ns: NamespaceName, nomad: Nomad, tags: Set[String]): Json = {
     val env = plan.environment
     val periodic = schedule.flatMap(_.toCron().map(periodicJson))
     val scheduler = if (schedule.isDefined) "batch" else "service"
@@ -401,7 +397,7 @@ object NomadJson {
       "Job" :=
         ("Periodic"   :=? periodic) ->?: argonaut.Json(
         "Region"      := dc.name,
-        "Datacenters" := List(dc.name), // regions each have a single eponymous datacenter
+        "Domains" := List(dc.name), // regions each have a single eponymous domain
         "ID"          := name,
         "Name"        := name,
         "Type"        := scheduler,

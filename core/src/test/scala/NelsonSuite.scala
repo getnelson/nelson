@@ -50,7 +50,7 @@ trait NelsonSuite
     sql"TRUNCATE TABLE loadbalancers".update.run >>
     sql"TRUNCATE TABLE releases".update.run >>
     sql"TRUNCATE TABLE namespaces".update.run >>
-    sql"TRUNCATE TABLE datacenters".update.run >>
+    sql"TRUNCATE TABLE domains".update.run >>
     sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run
   ).void
 
@@ -131,7 +131,7 @@ trait NelsonSuite
     def apply[A](op: SchedulerOp[A]) = op match {
       case Launch(i,dc,ns,unit,e,hash) =>
         val name = Manifest.Versioned.unwrap(unit).name
-        val sn = Datacenter.StackName(name, unit.version,hash)
+        val sn = Domain.StackName(name, unit.version,hash)
         Task.delay(sn.toString)
       case Delete(dc,d) =>
         Task.delay(())
@@ -163,13 +163,13 @@ trait NelsonSuite
   lazy val config = knobs.loadImmutable(List(
     Required(ClassPathResource("nelson/defaults.cfg")),
     Required(ClassPathResource("nelson/nelson-test.cfg")),
-    Required(ClassPathResource("nelson/datacenters.cfg"))
+    Required(ClassPathResource("nelson/domains.cfg"))
   )).map(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _))
     .run
     .copy( // Configure a minimal set of things in code. Otherwise, we want to test our config.
       database = dbConfig, // let each suite get its own h2
       dockercfg = DockerConfig(sys.env.getOrElse("DOCKER_HOST", "unix:///var/run/docker.sock"), true),
-      datacenters = List(datacenter(testName).copy(interpreters = testInterpreters)),
+      domains = List(domain(testName).copy(interpreters = testInterpreters)),
       interpreters = Interpreters(GitFixtures.interpreter,stg,Some(testSlack),Some(testEmail))
     )
 }

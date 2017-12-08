@@ -49,13 +49,13 @@ class Metrics(registry: CollectorRegistry) {
   val deploymentMonitorAwaitingHealth = Counter.build
     .name("deployment_monitor_awaiting_health")
     .help("Deployments shown as not passing in helm, and can't be promoted to ready.")
-    .labelNames("datacenter")
+    .labelNames("domain")
     .register(registry)
 
   val deploymentMonitorReadyToPromote = Counter.build
     .name("deployment_monitor_ready_to_promote")
     .help("Deployments shown as passing in helm, and can be promoted to ready.")
-    .labelNames("datacenter")
+    .labelNames("domain")
     .register(registry)
 
   val deployFailureCounter = Counter.build
@@ -143,7 +143,7 @@ class Metrics(registry: CollectorRegistry) {
   val sweeperUnclaimedResourcesDetected = (new Histogram.Builder)
     .name(s"sweeper_unclaimed_resource_count")
     .help(s"Number of Unclaimed Resources (items that have no clear owner, possibly garbage) detected but not deleted.")
-    .labelNames("datacenter")
+    .labelNames("domain")
     .register(registry)
 }
 

@@ -20,18 +20,18 @@ import doobie.imports._
 import scalaz._,Scalaz._
 import storage.StoreOp
 
-class DatacenterDBSpec extends NelsonSuite {
+class DomainDBSpec extends NelsonSuite {
 
-  "storage" should "be able to create datacenters then find it" in {
+  "storage" should "be able to create domains then find it" in {
     nelson.storage.run(config.storage,
-      StoreOp.createDatacenter(datacenter(testName))
-      >> StoreOp.listDatacenters
+      StoreOp.createDomain(domain(testName))
+      >> StoreOp.listDomains
     ).run should contain (testName)
   }
 
   "storage" should "be able to create namespaces" in {
     nelson.storage.run(config.storage,
-      StoreOp.createNamespace(testName, NamespaceName("namespace")) >> StoreOp.listNamespacesForDatacenter(testName)
+      StoreOp.createNamespace(testName, NamespaceName("namespace")) >> StoreOp.listNamespacesForDomain(testName)
     ).run.map(_.name) should contain (NamespaceName("namespace"))
   }
 }

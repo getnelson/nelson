@@ -23,7 +23,7 @@ import _root_.argonaut._, Argonaut._
 import scalaz._, Scalaz._
 
 final case class Loadbalancers(config: NelsonConfig) extends Default {
-  import Datacenter.{Namespace, LoadbalancerDeployment}
+  import Domain.{Namespace, LoadbalancerDeployment}
   import Loadbalancers._
   import Params._
 
@@ -46,16 +46,16 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
       jEmptyObject
     )
 
-  private implicit val DatacenterNamespaceLoadbalancerEncoder: EncodeJson[(DatacenterRef, Namespace, LoadbalancerDeployment)] =
-    EncodeJson { case ((d: DatacenterRef, n: Namespace, lb: LoadbalancerDeployment)) =>
-      (("datacenter" := d) ->: ("namespace" := n.name.asString) ->: jEmptyObject).deepmerge(lb.asJson)
+  private implicit val DomainNamespaceLoadbalancerEncoder: EncodeJson[(DomainRef, Namespace, LoadbalancerDeployment)] =
+    EncodeJson { case ((d: DomainRef, n: Namespace, lb: LoadbalancerDeployment)) =>
+      (("domain" := d) ->: ("namespace" := n.name.asString) ->: jEmptyObject).deepmerge(lb.asJson)
     }
 
   import nelson.Json._
   private implicit val LoadbalancerSummaryEncoder: EncodeJson[Nelson.LoadbalancerSummary] =
     EncodeJson((ls: Nelson.LoadbalancerSummary) =>
       (("namespace"    := ls.namespace.name.asString) ->:
-       ("datacenter"    := ls.namespace.datacenter) ->:
+       ("domain"    := ls.namespace.domain) ->:
         ("dependencies" :=
           ("outbound"  := ls.outboundDependencies) ->:
           jEmptyObject
@@ -70,13 +70,13 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
      * {
      *   "name": "howdy-lb",
      *   "major_version": 1,
-     *   "datacenter": "texas",
+     *   "domain": "texas",
      *   "namespace": "dev"
      * }
      */
     case req @ POST -> Root / "v1" / "loadbalancers" & IsAuthenticated(session) =>
       decode[LoadbalancerLaunch](req) { lb =>
-        json(Nelson.commitLoadbalancer(lb.name, lb.version, lb.datacenter, lb.namespace))
+        json(Nelson.commitLoadbalancer(lb.name, lb.version, lb.domain, lb.namespace))
       }
 
     /*
@@ -98,19 +98,19 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
     /*
      * GET /v1/loadbalancers?dc=texas&ns=dev,prod
      *
-     * List all the loadbalancer deployments given a list of datacenters and namespaces.
+     * List all the loadbalancer deployments given a list of domains and namespaces.
      * ns is required
-     * dc is optional and if empty will query all datacenters
+     * dc is optional and if empty will query all domains
      */
     case req @ GET -> Root / "v1" / "loadbalancers" :? Ns(ns) +& Dc(dc) & IsAuthenticated(session) =>
       val namespace = commaSeparatedStringToNamespace(ns)
-      val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
+      val domains = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
           ns => ns.sequenceU.fold(
             e => BadRequest(e.getMessage),
-            n => json(Nelson.listLoadbalancers(datacenters, n)))
+            n => json(Nelson.listLoadbalancers(domains, n)))
         )
 
   }
@@ -119,13 +119,13 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
 object Loadbalancers {
   import _root_.argonaut._, Argonaut._
 
-  final case class LoadbalancerLaunch(name: String, version: Int, datacenter: String, namespace: NamespaceName)
+  final case class LoadbalancerLaunch(name: String, version: Int, domain: String, namespace: NamespaceName)
 
   implicit val LoadbalancerLaunchCodecJson: DecodeJson[LoadbalancerLaunch] =
     DecodeJson(c => for {
       a <- (c --\ "name").as[String]
       b <- (c --\ "major_version").as[Int]
-      d <- (c --\ "datacenter").as[String]
+      d <- (c --\ "domain").as[String]
       n <- (c --\ "namespace").as[String]
       nn <- NamespaceName.fromString(n).toOption.map(DecodeResult.ok)
               .getOrElse(DecodeResult.fail(s"unable to parse $n into a namespace", c.history))

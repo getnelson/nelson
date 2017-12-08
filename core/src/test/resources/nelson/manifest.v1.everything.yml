@@ -172,7 +172,7 @@ namespaces:
         plans:
           - prod-crawler
 
-datacenters:
+domains:
   only:
     - arlington
     - rockridge

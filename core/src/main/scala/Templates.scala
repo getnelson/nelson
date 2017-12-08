@@ -28,7 +28,7 @@ import scalaz.stream.Process
 import scalaz.stream.time
 import scalaz.syntax.monad._
 
-import Datacenter.StackName
+import Domain.StackName
 import Nelson.NelsonK
 import Metrics.default.{consulTemplateContainerCleanupFailuresTotal, consulTemplateContainersRunning, consulTemplateRunsDurationSeconds, consulTemplateRunsFailuresTotal}
 
@@ -70,9 +70,9 @@ object Templates {
   /** Validate a template according to a template validation request */
   def validateTemplate(tv: TemplateValidation): NelsonK[ConsulTemplateResult] =
     Kleisli.kleisli { cfg =>
-      val dc = cfg.datacenters.headOption.getOrElse {
-        // We should never see this. Nelson doesn't start without a datacenter.
-        sys.error("Can't validate a template without a datacenter")
+      val dc = cfg.domains.headOption.getOrElse {
+        // We should never see this. Nelson doesn't start without a domain.
+        sys.error("Can't validate a template without a domain")
       }
 
       val vault = dc.interpreters.vault

@@ -48,15 +48,15 @@ object Sweeper {
   final case class UnclaimedResources(n: Int)
   final case object SingleUnclaimedResource
 
-  type SweeperHelmOp = (Datacenter, UnclaimedResources \/ ConsulOp.ConsulOpF[Unit])
+  type SweeperHelmOp = (Domain, UnclaimedResources \/ ConsulOp.ConsulOpF[Unit])
   type SweeperHelmOps = List[SweeperHelmOp]
 
   def cleanupLeakedConsulDiscoveryKeys(cfg: NelsonConfig): Task[SweeperHelmOps] =
-    cfg.datacenters.traverseM[Task, SweeperHelmOp] { dc =>
+    cfg.domains.traverseM[Task, SweeperHelmOp] { dc =>
       for {
         keys <- helm.run(dc.interpreters.consul, Discovery.listDiscoveryKeys).map(_.toList)
 
-        stackNames <- storage.run(cfg.storage, storage.StoreOp.getRoutableDeploymentsByDatacenter(dc))
+        stackNames <- storage.run(cfg.storage, storage.StoreOp.getRoutableDeploymentsByDomain(dc))
           .map(_.map(_.stackName.toString)).map(_.toList)
 
         items = for {
@@ -72,7 +72,7 @@ object Sweeper {
       } yield deleteOps :+ unclaimedResource
     }
 
-  def process(cfg: NelsonConfig)(implicit unclaimedResourceTracker: Kleisli[Task, (Datacenter, Int), Unit]): Process[Task, Unit] =
+  def process(cfg: NelsonConfig)(implicit unclaimedResourceTracker: Kleisli[Task, (Domain, Int), Unit]): Process[Task, Unit] =
     Process.repeatEval(Task.delay(cfg.cleanup.sweeperDelay)).flatMap(d =>
       time.awakeEvery(d)(cfg.pools.schedulingExecutor, cfg.pools.schedulingPool).once)
       .flatMap(_ =>
@@ -82,7 +82,7 @@ object Sweeper {
       )
       .flatMap(Process.emitAll) to sweeperSink
 
-  def sweeperSink(implicit unclaimedResourceTracker: Kleisli[Task, (Datacenter, Int), Unit]): Sink[Task, SweeperHelmOp] =
+  def sweeperSink(implicit unclaimedResourceTracker: Kleisli[Task, (Domain, Int), Unit]): Sink[Task, SweeperHelmOp] =
     Process.constant {
       case (dc, -\/(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) handle {
         case NonFatal(e) => log.error(s"error while attempting to track unclaimed resources", e)
@@ -106,7 +106,7 @@ object Sweeper {
 }
 
 object SweeperDefaults {
-  type NumberWithinDC = (Datacenter, Int)
+  type NumberWithinDC = (Domain, Int)
 
   implicit val unclaimedResourceTracker : Kleisli[Task, NumberWithinDC, Unit] = Kleisli { case (dc, n) =>
     Task.delay(Metrics.default.sweeperUnclaimedResourcesDetected.labels(dc.toString).observe(n.toDouble))

@@ -17,7 +17,7 @@
 package nelson
 
 import Manifest._
-import Datacenter.{StackName,LoadbalancerDeployment}
+import Domain.{StackName,LoadbalancerDeployment}
 import scalaz._
 import helm.ConsulOp
 import routing._
@@ -66,13 +66,13 @@ package object loadbalancers {
     }
   }
 
-  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Datacenter, ns: NamespaceName, pl: Plan, hash: String): LoadbalancerF[String] =
+  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Domain, ns: NamespaceName, pl: Plan, hash: String): LoadbalancerF[String] =
     LoadbalancerOp.launch(lb, v, dc, ns, pl, hash)
 
-  def delete(lb: Datacenter.LoadbalancerDeployment, dc: Datacenter, ns: Datacenter.Namespace): LoadbalancerF[Unit] =
+  def delete(lb: Domain.LoadbalancerDeployment, dc: Domain, ns: Domain.Namespace): LoadbalancerF[Unit] =
     LoadbalancerOp.delete(lb, dc, ns)
 
-  def resize(lb: Datacenter.LoadbalancerDeployment, p: Manifest.Plan): LoadbalancerF[Unit] =
+  def resize(lb: Domain.LoadbalancerDeployment, p: Manifest.Plan): LoadbalancerF[Unit] =
     LoadbalancerOp.resize(lb, p)
 
   def run[F[_]:Monad,A](interpreter: LoadbalancerOp ~> F , op: LoadbalancerF[A]): F[A] =

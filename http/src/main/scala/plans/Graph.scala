@@ -26,17 +26,17 @@ final case class Graph(config: NelsonConfig) extends Default {
   import nelson.Json._
   import routing.RoutingGraph
 
-  def getRoutingGraph(ns: Datacenter.Namespace): storage.StoreOpF[Option[RoutingGraph]] =
+  def getRoutingGraph(ns: Domain.Namespace): storage.StoreOpF[Option[RoutingGraph]] =
      routing.RoutingTable.routingGraph(ns).map(x => Option(x))
 
   val service: HttpService = HttpService {
-    case GET -> Root / "v1" / "datacenters" / datacenter / namespace / "graph" =>
+    case GET -> Root / "v1" / "domains" / domain / namespace / "graph" =>
       type CoyoStoreOp[A] = Coyoneda[storage.StoreOp, A]
       type FreeCoyoStoreOp[A] = Free[CoyoStoreOp, A]
       implicit val stgMonad: Monad[FreeCoyoStoreOp] = Free.freeMonad[CoyoStoreOp]
       storage.run(config.storage, (for {
         name <- OptionT(NamespaceName.fromString(namespace).toOption.point[FreeCoyoStoreOp])
-        ns  <- OptionT(storage.StoreOp.getNamespace(datacenter, name))
+        ns  <- OptionT(storage.StoreOp.getNamespace(domain, name))
         gr  <- OptionT(getRoutingGraph(ns))
          graph = DependencyGraph(gr)
        } yield graph.svg).run).attempt.flatMap {

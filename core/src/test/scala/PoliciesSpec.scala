@@ -25,7 +25,7 @@ import vault._
 class PoliciesSpec extends FlatSpec with Matchers with Inspectors with RoutingFixtures {
   val nsRef = "qa"
   val ns = NamespaceName(nsRef)
-  val sn = Datacenter.StackName("howdy-http", Version(2, 0, 38), "abcdef12")
+  val sn = Domain.StackName("howdy-http", Version(2, 0, 38), "abcdef12")
 
   val I = Interpreter.prepare[Vault, Task]
   "createPolicy" should "create the policy" in {

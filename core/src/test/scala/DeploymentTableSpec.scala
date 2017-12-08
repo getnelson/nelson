@@ -22,7 +22,7 @@ import scalaz.NonEmptyList
 import org.scalactic.TypeCheckedTripleEquals
 
 class DeploymentTableSpec extends NelsonSuite with TypeCheckedTripleEquals {
-  import Datacenter._
+  import Domain._
 
   override def beforeAll(): Unit = {
     super.beforeAll()

@@ -43,10 +43,10 @@ object Fixtures {
   implicit lazy val arbSlackSub: Arbitrary[notifications.SlackSubscription] = Arbitrary(genSlackSubscription)
   implicit lazy val arbEmailSub: Arbitrary[notifications.EmailSubscription] = Arbitrary(genEmailSubscription)
   implicit lazy val arbRegex: Arbitrary[Regex] = Arbitrary(genRegex)
-  implicit lazy val arbDeployment: Arbitrary[Datacenter.Deployment] = Arbitrary(genDeployment)
+  implicit lazy val arbDeployment: Arbitrary[Domain.Deployment] = Arbitrary(genDeployment)
   implicit lazy val arbTrafficShiftPolicy: Arbitrary[TrafficShiftPolicy] = Arbitrary(genTrafficShiftPolicy)
   implicit lazy val arbFiniteDuration: Arbitrary[FiniteDuration] = Arbitrary(genFiniteDuration)
-  implicit lazy val arbTrafficShift: Arbitrary[Datacenter.TrafficShift] = Arbitrary(genTrafficShift)
+  implicit lazy val arbTrafficShift: Arbitrary[Domain.TrafficShift] = Arbitrary(genTrafficShift)
 
   def alphaStr: Gen[String] =
     listOfN(10, alphaNumChar).map(_.mkString)
@@ -136,13 +136,13 @@ object Fixtures {
 
   def stringOf(gen: Gen[Char]): Gen[String] = Gen.containerOf[Array,Char](gen).map(new String(_))
 
-  val genStackName: Gen[Datacenter.StackName] =
+  val genStackName: Gen[Domain.StackName] =
     for {
       sn1 <- Gen.alphaNumChar
       sn <- Gen.resize(22, stringOf(Gen.alphaNumChar))
       version <- genVersion
       hash <- genHash
-    } yield Datacenter.StackName(sn1 + sn, version, hash)
+    } yield Domain.StackName(sn1 + sn, version, hash)
 
   val genManifestPort: Gen[Manifest.Port] =
     for {
@@ -379,20 +379,20 @@ object Fixtures {
       .map(_.yolo("bug"))
   }
 
-  val genDatacenterPort: Gen[Datacenter.Port] =
+  val genDomainPort: Gen[Domain.Port] =
     for {
       a <- choose(1000,65000)
       b <- alphaNumStr
       c <- Gen.oneOf(Seq("http", "https", "tcp"))
-    } yield Datacenter.Port(a,b,c)
+    } yield Domain.Port(a,b,c)
 
-  val genServiceName: Gen[Datacenter.ServiceName] =
+  val genServiceName: Gen[Domain.ServiceName] =
     for {
       name <- alphaNumStr
       version <- genVersion
-    } yield Datacenter.ServiceName(name, version.toFeatureVersion)
+    } yield Domain.ServiceName(name, version.toFeatureVersion)
 
-  val genDCUnit: Gen[Datacenter.DCUnit] =
+  val genDCUnit: Gen[Domain.DCUnit] =
     for {
       a <- choose(1,10000)
       b <- alphaNumStr
@@ -400,10 +400,10 @@ object Fixtures {
       d <- alphaNumStr
       e <- Gen.listOfN(0, genServiceName)
       f <- Gen.listOfN(0, alphaNumStr)
-      g <- Gen.listOfN(0, genDatacenterPort)
-    } yield Datacenter.DCUnit(a.toLong,b,c,d,e.toSet,f.toSet,g.toSet)
+      g <- Gen.listOfN(0, genDomainPort)
+    } yield Domain.DCUnit(a.toLong,b,c,d,e.toSet,f.toSet,g.toSet)
 
-  val genDeployment: Gen[Datacenter.Deployment] =
+  val genDeployment: Gen[Domain.Deployment] =
     for {
       a <- choose(1,10000)
       b <- genDCUnit
@@ -411,7 +411,7 @@ object Fixtures {
       d <- choose(1,10000)
       e <- genInstant
       f <- alphaNumStr
-    } yield Datacenter.Deployment(a.toLong,b,c,Datacenter.Namespace(1, NamespaceName("dev"), "dc"),e,"manual","default",f,"retain-always")
+    } yield Domain.Deployment(a.toLong,b,c,Domain.Namespace(1, NamespaceName("dev"), "dc"),e,"manual","default",f,"retain-always")
 
   val genTrafficShiftPolicy: Gen[TrafficShiftPolicy] =
     Gen.oneOf(TrafficShiftPolicy.policies.toSeq)
@@ -427,7 +427,7 @@ object Fixtures {
       a <- choose(60, 86400) // between 1 minute and 1 day
     } yield FiniteDuration(a.toLong, SECONDS)
 
-  val genTrafficShift: Gen[Datacenter.TrafficShift] =
+  val genTrafficShift: Gen[Domain.TrafficShift] =
     for {
       a <- genDeployment
       b <- genDeployment
@@ -436,6 +436,6 @@ object Fixtures {
       e <- genFiniteDuration
       f <- genFutureInstant(1, 3600)
     } yield {
-      Datacenter.TrafficShift(a,b,c,d,e,Some(f))
+      Domain.TrafficShift(a,b,c,d,e,Some(f))
     }
 }

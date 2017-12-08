@@ -97,8 +97,8 @@ object Manifest {
 
   /*
    * Loadbalancers represent the end of the world for nelson. The allow the outside world
-   * to connect to services deployed by nelson inside a private datacenter. A loadbalancer
-   * defines a list of routes which it is repsonsible for proxying into the datacenter.
+   * to connect to services deployed by nelson inside a private domain. A loadbalancer
+   * defines a list of routes which it is repsonsible for proxying into the domain.
    */
   final case class Loadbalancer(
     name: String,
@@ -243,7 +243,7 @@ object Manifest {
   )
 
   final case class ActionConfig(
-    datacenter: Datacenter,
+    domain: Domain,
     namespace: Namespace,
     plan: Plan,
     hash: String,
@@ -259,7 +259,7 @@ object Manifest {
   def getExpirationPolicy(unit: UnitDef, plan: Plan): Option[cleanup.ExpirationPolicy] =
     plan.environment.policy orElse unit.policy
 
-  def toAction[A](a: A, dc: Datacenter, ns: Namespace, p: Plan, n: NotificationSubscriptions)(implicit A: Actionable[A]): Action = {
+  def toAction[A](a: A, dc: Domain, ns: Namespace, p: Plan, n: NotificationSubscriptions)(implicit A: Actionable[A]): Action = {
     val hash = randomAlphaNumeric(desiredLength = 8) // create a unique hash for this deployment
     val config = ActionConfig(dc, ns, p, hash, n)
     val action = A.action(a)
@@ -278,7 +278,7 @@ object Manifest {
   /*
    * convert units in the manifest to actions, filtered by f
    */
-  def unitActions(m: Manifest @@ Versioned, dcs: Seq[Datacenter], f: (Datacenter,Namespace,Plan,UnitDef) => Boolean): List[Action] = {
+  def unitActions(m: Manifest @@ Versioned, dcs: Seq[Domain], f: (Domain,Namespace,Plan,UnitDef) => Boolean): List[Action] = {
     val mnf = Versioned.unwrap(m)
     val us = units(mnf, dcs)
     val uf = us.filter { case (dc,ns,pl,unit) => f(dc,ns,pl,unit) }
@@ -290,7 +290,7 @@ object Manifest {
   /*
    * convert loadbalancers in the manifest to actions, filtered by f
    */
-  def loadbalancerActions(m: Manifest @@ Versioned, dcs: Seq[Datacenter], f: (Datacenter,Namespace,Plan,Loadbalancer) => Boolean): List[Action] = {
+  def loadbalancerActions(m: Manifest @@ Versioned, dcs: Seq[Domain], f: (Domain,Namespace,Plan,Loadbalancer) => Boolean): List[Action] = {
     val mnf = Versioned.unwrap(m)
     val lbs = loadbalancers(mnf, dcs)
     val lf = lbs.filter { case (dc,ns,pl,lb) => f(dc,ns,pl,lb) }
@@ -300,41 +300,41 @@ object Manifest {
   }
 
   /*
-   * Enumerates all the combinations of Datacenter/Namespace/Plan/UnitDef as dictated
+   * Enumerates all the combinations of Domain/Namespace/Plan/UnitDef as dictated
    * by the manifest. If a unit reference in the namespace plan does't reference a
    * specific plan use the default
    */
-  def units(m: Manifest, dcs: Seq[Datacenter]): List[(Datacenter,Namespace,Plan,UnitDef)] = {
-    type Res = (Datacenter,Namespace,Plan,UnitDef)
-    val unitFolder: (Datacenter,Namespace,Plan,UnitDef,List[Res]) => List[Res] =
+  def units(m: Manifest, dcs: Seq[Domain]): List[(Domain,Namespace,Plan,UnitDef)] = {
+    type Res = (Domain,Namespace,Plan,UnitDef)
+    val unitFolder: (Domain,Namespace,Plan,UnitDef,List[Res]) => List[Res] =
       (dc, ns, p, u, res) => (dc, ns, p, u) :: res
 
     foldUnits(m, dcs, unitFolder, Nil)
   }
 
   /*
-   * Enumerates all the combinations of Datacenter/Namespace/Loadbalancer as dictated
+   * Enumerates all the combinations of Domain/Namespace/Loadbalancer as dictated
    * by the manifest.
    */
-  def loadbalancers(m: Manifest, dcs: Seq[Datacenter]): List[(Datacenter,Namespace,Plan,Loadbalancer)] = {
-    type Res = (Datacenter,Namespace,Plan,Loadbalancer)
-    val lbFolder: (Datacenter,Namespace,Plan,Loadbalancer,List[Res]) => List[Res] =
+  def loadbalancers(m: Manifest, dcs: Seq[Domain]): List[(Domain,Namespace,Plan,Loadbalancer)] = {
+    type Res = (Domain,Namespace,Plan,Loadbalancer)
+    val lbFolder: (Domain,Namespace,Plan,Loadbalancer,List[Res]) => List[Res] =
       (dc, ns, pl, lb, res) => (dc,ns,pl,lb) :: res
 
     foldLoadbalancers(m, dcs, lbFolder, Nil)
   }
 
   /*
-   * folds over all the datacenters, and namespaces
+   * folds over all the domains, and namespaces
    */
-  def foldNamespaces[A](m: Manifest, dcs: Seq[Datacenter], f: (Datacenter,Namespace,A) => A, a: A): A =
-    filterDatacenters(dcs)(m.targets).foldLeft(a)((a,d) => m.namespaces.foldLeft(a)((a,ns) => f(d,ns,a)))
+  def foldNamespaces[A](m: Manifest, dcs: Seq[Domain], f: (Domain,Namespace,A) => A, a: A): A =
+    filterDomains(dcs)(m.targets).foldLeft(a)((a,d) => m.namespaces.foldLeft(a)((a,ns) => f(d,ns,a)))
 
   /*
-   * folds over all the datacenters, namespaces, and loadbalancers specified by the Manifest
+   * folds over all the domains, namespaces, and loadbalancers specified by the Manifest
    */
-  def foldLoadbalancers[A](m: Manifest, dcs: Seq[Datacenter], f: (Datacenter,Namespace,Plan,Loadbalancer,A) => A, a: A): A = {
-    val folder: (Datacenter,Namespace,A) => A  =
+  def foldLoadbalancers[A](m: Manifest, dcs: Seq[Domain], f: (Domain,Namespace,Plan,Loadbalancer,A) => A, a: A): A = {
+    val folder: (Domain,Namespace,A) => A  =
       (dc,ns,a) => ns.loadbalancers.foldLeft(a){ (a,ref) =>
         val (lbRef, plRef) = ref
         val loadbalancer = m.loadbalancers.find(_.name == lbRef)
@@ -346,10 +346,10 @@ object Manifest {
   }
 
   /**
-   * fold over all the datacenters, namespaces, (unit, plans) combinations specified by the Manifest.
+   * fold over all the domains, namespaces, (unit, plans) combinations specified by the Manifest.
    */
-  def foldUnits[A](m: Manifest, dcs: Seq[Datacenter], f: (Datacenter,Namespace,Plan,UnitDef,A) => A, a: A): A = {
-    val folder: (Datacenter,Namespace,A) => A  =
+  def foldUnits[A](m: Manifest, dcs: Seq[Domain], f: (Domain,Namespace,Plan,UnitDef,A) => A, a: A): A = {
+    val folder: (Domain,Namespace,A) => A  =
       (dc,ns,a) => ns.units.foldLeft(a){ (a,u) =>
         val (unitRef, planRefs) = u
         val unit: Option[UnitDef] = m.units.find(_.name == unitRef)
@@ -361,8 +361,8 @@ object Manifest {
     foldNamespaces(m,dcs,folder,a)
   }
 
-  def verifyDeployable(m: Manifest, dcs: Seq[Datacenter], storage: StoreOp ~> Task): Task[ValidationNel[NelsonError,Unit]] = {
-    val folder: (Datacenter,Namespace,Plan,UnitDef,List[Task[ValidationNel[NelsonError,Unit]]]) => List[Task[ValidationNel[NelsonError,Unit]]] =
+  def verifyDeployable(m: Manifest, dcs: Seq[Domain], storage: StoreOp ~> Task): Task[ValidationNel[NelsonError,Unit]] = {
+    val folder: (Domain,Namespace,Plan,UnitDef,List[Task[ValidationNel[NelsonError,Unit]]]) => List[Task[ValidationNel[NelsonError,Unit]]] =
       (dc,ns,p,u,res) => nelson.storage.run(storage, StoreOp.verifyDeployable(dc.name, ns.name, u)) ::  res
 
     implicit val monoid: Monoid[ValidationNel[NelsonError, Unit]] =
@@ -392,13 +392,13 @@ object Manifest {
     }
   }
 
-  private[nelson] def filterDatacenters(dcs: Seq[Datacenter])(targets: DeploymentTarget): Seq[Datacenter] =
+  private[nelson] def filterDomains(dcs: Seq[Domain])(targets: DeploymentTarget): Seq[Domain] =
     targets match {
       case DeploymentTarget.Only(what)   =>
         what.flatMap(d => dcs.find(_.name == d))
 
       case DeploymentTarget.Except(what) =>
-        dcs.foldLeft(List.empty[Datacenter])((a,b) =>
+        dcs.foldLeft(List.empty[Domain])((a,b) =>
           if(what.exists(_.trim.toLowerCase == b.name.trim.toLowerCase)){ a }
           else { a :+ b }
         )

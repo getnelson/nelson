@@ -18,7 +18,7 @@ package nelson
 
 import nelson.storage.{StoreOp, StoreOpF, run => runs}
 import Manifest.{apply => _, _}
-import nelson.Datacenter.DCUnit
+import nelson.Domain.DCUnit
 import routing._
 
 import scalaz._
@@ -52,7 +52,7 @@ object CycleDetection {
     m: Manifest,
     cfg: NelsonConfig): StoreOpF[Valid[Unit]] = {
     for {
-      ns <- getNamespaces(cfg.datacenters, m.namespaces)
+      ns <- getNamespaces(cfg.domains, m.namespaces)
       ngs <- getNamespaceGraphs(ns)
       result <- ngs.traverse[StoreOpF, Valid[Unit]] {
         case (namespace, reachabilityGraph) =>
@@ -63,7 +63,7 @@ object CycleDetection {
 
   def validateUnitsInNamespace(
     m: Manifest,
-    namespace: Datacenter.Namespace,
+    namespace: Domain.Namespace,
     reachabilityGraph: ReverseRoutingGraph
   ): StoreOpF[Valid[Unit]] = {
     m.units.traverse[StoreOpF, Valid[Unit]](
@@ -71,19 +71,19 @@ object CycleDetection {
     ).map(_.sequence_)
   }
 
-  def getNamespaceGraphs(ns: List[Datacenter.Namespace])
-  : StoreOpF[List[(Datacenter.Namespace, ReverseRoutingGraph)]] = {
-    ns.traverse[StoreOpF, (Datacenter.Namespace, ReverseRoutingGraph)](n =>
+  def getNamespaceGraphs(ns: List[Domain.Namespace])
+  : StoreOpF[List[(Domain.Namespace, ReverseRoutingGraph)]] = {
+    ns.traverse[StoreOpF, (Domain.Namespace, ReverseRoutingGraph)](n =>
       RoutingTable.routingGraph(n).map(g => (n, g.reverse)))
   }
 
   def getNamespaces(
-    datacenters: List[Datacenter],
-    namespaces: List[Manifest.Namespace]): StoreOpF[List[Datacenter.Namespace]] = {
+    domains: List[Domain],
+    namespaces: List[Manifest.Namespace]): StoreOpF[List[Domain.Namespace]] = {
     // These namespaces have been validated by the validations this validation depends on.
     // We effectively ignore the optionality of the storage with _.flatten.
-    datacenters.traverseM[StoreOpF, Datacenter.Namespace] { dc =>
-      namespaces.traverse[StoreOpF, Option[Datacenter.Namespace]] { n =>
+    domains.traverseM[StoreOpF, Domain.Namespace] { dc =>
+      namespaces.traverse[StoreOpF, Option[Domain.Namespace]] { n =>
         StoreOp.getNamespace(dc.name, n.name)
       }.map(_.flatten)
     }
@@ -91,19 +91,19 @@ object CycleDetection {
 
   def err(
     u: UnitDef,
-    namespace: Datacenter.Namespace,
+    namespace: Domain.Namespace,
     dcu: DCUnit): NelsonError = CyclicDependency(
-    s"Dependency cycle detected for unit '${u.name}' in namespace '${namespace.name.asString}' in datacenter '${namespace.datacenter}': ${dcu.name}@${dcu.version}"
+    s"Dependency cycle detected for unit '${u.name}' in namespace '${namespace.name.asString}' in domain '${namespace.domain}': ${dcu.name}@${dcu.version}"
   )
 
   def dependants(g: ReverseRoutingGraph)
-    (d: Datacenter.Deployment): List[DCUnit] =
+    (d: Domain.Deployment): List[DCUnit] =
     g.reachable(RoutingNode(d)).map(_.deployment).collect {
       case Some(d) => d.unit
     }.toList
 
   def validateUnitDeps(
-    namespace: Datacenter.Namespace,
+    namespace: Domain.Namespace,
     reachabilityGraph: ReverseRoutingGraph)
     (u: UnitDef): StoreOpF[Valid[Unit]] = {
 
@@ -122,7 +122,7 @@ object CycleDetection {
   def collectViolations(
     u: UnitDef,
     reachables: List[DCUnit],
-    namespace: Datacenter.Namespace
+    namespace: Domain.Namespace
   ): Valid[Unit] = {
     u.dependencies.toList.traverse_[Valid] {
       case (dep, depVersion) =>

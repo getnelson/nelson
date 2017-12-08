@@ -22,7 +22,7 @@ import java.time.Instant
 
 object TrafficShiftPropertySpec extends Properties("TrafficShift") {
   import Fixtures._
-  import Datacenter.TrafficShift
+  import Domain.TrafficShift
 
   property("fromValue") = forAll { (ts: TrafficShift) =>
     val ts2 = ts.copy(reverse = None) // remove reverse
@@ -69,9 +69,9 @@ class TrafficShiftSpec extends FlatSpec with Matchers {
     (value >= 0.0) should be(true)
   }
 
-  import Datacenter._
+  import Domain._
 
-  val ns = Datacenter.Namespace(0L, NamespaceName("dev"), "dev")
+  val ns = Domain.Namespace(0L, NamespaceName("dev"), "dev")
 
   val d1 = Deployment(0L, DCUnit(0L, "foo", Version(1,1,1),"",Set.empty,Set.empty,Set.empty),
             "hash", ns, Instant.now, "magnetar", "default", "guid", "retain-latest")

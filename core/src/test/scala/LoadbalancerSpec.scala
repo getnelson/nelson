@@ -19,7 +19,7 @@ package nelson
 import org.scalatest._
 import quiver._
 import routing._
-import Datacenter._
+import Domain._
 import Manifest.{Route,BackendDestination}
 import loadbalancers.Inbound
 
@@ -27,10 +27,10 @@ class LoadbalancerSpec extends FlatSpec with Matchers with RoutingFixtures {
 
   private def NOW = java.time.Instant.now
 
-  val dc = datacenter("name")
+  val dc = domain("name")
 
   private def makeDeployment(id: ID, name: String, version: Version, ps: Set[Port]) = {
-    val namespace = Datacenter.Namespace(1L, NamespaceName("devel"), "dc")
+    val namespace = Domain.Namespace(1L, NamespaceName("devel"), "dc")
     val dc = DCUnit(id,name,version,"",Set.empty,Set.empty,ps)
     Deployment(id,dc,"foo",namespace,NOW,"quasar","plan","guid","retain-latest")
   }

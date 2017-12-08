@@ -49,8 +49,8 @@ final case class ProblematicDeployable(str: String, url: String)
 final case class MissingReleaseAssets(r: Github.ReleaseEvent)
  extends NelsonError(s"fetching the release assets from github returned no results; this is likely a critical error. release event was: $r")
 
-final case class MisconfiguredDatacenter(name: String, problem: String)
-    extends NelsonError(s"The datacenter named $name is misconfigured: $problem")
+final case class MisconfiguredDomain(name: String, problem: String)
+    extends NelsonError(s"The domain named $name is misconfigured: $problem")
 
 final case class MissingDeployment(guid: String)
   extends NelsonError(s"deployment ${guid} could not be found; please check you have the right GUID")
@@ -58,14 +58,14 @@ final case class MissingDeployment(guid: String)
 final case class MissingReleaseForDeployment(guid: String)
   extends NelsonError(s"release could not be found for deployment guid ${guid}")
 
-final case class UnknownDatacenter(name: String)
-  extends NelsonError(s"a datacenter called '$name' is not known by nelson.")
+final case class UnknownDomain(name: String)
+  extends NelsonError(s"a domain called '$name' is not known by nelson.")
 
 final case class UnknownNamespace(dcName: String, nsName: String)
-  extends NelsonError(s"there is no namespace named '$nsName' in datacenter '$dcName'")
+  extends NelsonError(s"there is no namespace named '$nsName' in domain '$dcName'")
 
-case object NoTargetDatacenters
-  extends NelsonError("there must be at least one datacenter defined before deployments can be conducted.")
+case object NoTargetDomains
+  extends NelsonError("there must be at least one domain defined before deployments can be conducted.")
 
 final case class FailedDockerOperation(err: String)
   extends NelsonError(s"unexpected error executing docker operation: $err")
@@ -91,15 +91,15 @@ final case class UnexpectedConsulResponse(resp: String)
 final case class MissingDependency(unit: String,
                              dc: String,
                              ns: String,
-                             dependency: Datacenter.ServiceName)
+                             dependency: Domain.ServiceName)
   extends NelsonError(s"There is no deployment in datacetner $dc namespace $ns satisfying the dependency $dependency for unit $unit")
 
 final case class DeprecatedDependency(unit: String,
                                 dc: String,
                                 ns: String,
-                                dependency: Datacenter.ServiceName
+                                dependency: Domain.ServiceName
                                 )
-  extends NelsonError(s"Dependency $dependency is deprecated in datacenter $dc namespace $ns for unit $unit")
+  extends NelsonError(s"Dependency $dependency is deprecated in domain $dc namespace $ns for unit $unit")
 
 final case class CyclicDependency(message: String)
   extends NelsonError(message)

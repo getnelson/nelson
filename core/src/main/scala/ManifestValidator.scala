@@ -18,7 +18,7 @@ package nelson
 
 import Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck,Route}
 import storage.StoreOp
-import Datacenter.StackName
+import Domain.StackName
 import scalaz._, Scalaz._
 import scalaz.concurrent.Task
 
@@ -203,8 +203,8 @@ object ManifestValidator {
 
   def parseManifestAndValidate(str: String, cfg: NelsonConfig): Task[Valid[Manifest]] = {
 
-    def validateUnits(m: Manifest, dcs: Seq[Datacenter]): Task[Valid[Unit]] = {
-      val folder: (Datacenter,Namespace,Plan,UnitDef,List[Task[Valid[Unit]]]) => List[Task[Valid[Unit]]] =
+    def validateUnits(m: Manifest, dcs: Seq[Domain]): Task[Valid[Unit]] = {
+      val folder: (Domain,Namespace,Plan,UnitDef,List[Task[Valid[Unit]]]) => List[Task[Valid[Unit]]] =
         (dc,ns,p,u,res) =>
           validateUnit(u,p) :: res
 
@@ -227,7 +227,7 @@ object ManifestValidator {
     )
 
 
-    def validateLoadbalancers(m: Manifest, dcs: Seq[Datacenter]): Task[Valid[Unit]] = {
+    def validateLoadbalancers(m: Manifest, dcs: Seq[Domain]): Task[Valid[Unit]] = {
       Task.delay {
         m.loadbalancers.foldLeft(Nil : List[Valid[Unit]])((res,lb) =>
           validateLoadbalancer(lb, m.units, cfg.proxyPortWhitelist)(cfg.storage) :: res)
@@ -238,9 +238,9 @@ object ManifestValidator {
 
     def validate(m: Manifest): Task[Valid[Manifest]] = {
       val x: Task[Valid[Manifest]] = for {
-        a <- Manifest.verifyDeployable(m, cfg.datacenters, cfg.storage)
-        b <- validateUnits(m, cfg.datacenters)
-        c <- validateLoadbalancers(m, cfg.datacenters)
+        a <- Manifest.verifyDeployable(m, cfg.domains, cfg.storage)
+        b <- validateUnits(m, cfg.domains)
+        c <- validateLoadbalancers(m, cfg.domains)
         d <- validateReferencesDefaultNamespace(m, cfg.defaultNamespace)
       } yield (a +++ b +++ c +++ d).map(_ => m)
 

@@ -17,7 +17,7 @@
 package nelson
 
 import Manifest.{UnitDef,Versioned,Plan,TrafficShift}
-import Datacenter.{Namespace,Deployment}
+import Domain.{Namespace,Deployment}
 import Workflow.WorkflowF
 import scalaz._, Scalaz._
 
@@ -27,9 +27,9 @@ object Magnetar extends Workflow[Unit] {
 
   val name: WorkflowRef = "magnetar"
 
-  def deploy(id: ID, hash: String, vunit: UnitDef @@ Versioned, p: Plan, dc: Datacenter, ns: Manifest.Namespace): WorkflowF[Unit] = {
+  def deploy(id: ID, hash: String, vunit: UnitDef @@ Versioned, p: Plan, dc: Domain, ns: Manifest.Namespace): WorkflowF[Unit] = {
     val unit = Manifest.Versioned.unwrap(vunit)
-    val sn = Datacenter.StackName(unit.name, vunit.version, hash)
+    val sn = Domain.StackName(unit.name, vunit.version, hash)
     val rs = unit.dependencies.keys.toSet ++ unit.resources.map(_.name)
 
     // When the workflow is completed, we typically want to set the deployment to "Warming", so that once
@@ -67,7 +67,7 @@ object Magnetar extends Workflow[Unit] {
     } yield ()
   }
 
-  def destroy(d: Deployment, dc: Datacenter, ns: Namespace): WorkflowF[Unit] = {
+  def destroy(d: Deployment, dc: Domain, ns: Namespace): WorkflowF[Unit] = {
     val sn = d.stackName
     logToFile(d.id, s"removing policy from vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}") >>
     deletePolicyFromVault(d.stackName, ns.name) >>
@@ -80,6 +80,6 @@ object Magnetar extends Workflow[Unit] {
     status(d.id, Terminated, s"Decommissioning deployment ${sn} in ${dc.name}")
   }
 
-  private def vaultLoggingFields(sn: Datacenter.StackName, ns: NamespaceName, dcName: String): String =
-    s"namespace=${ns} unit=${sn.serviceType} policy=${policies.policyName(sn, ns)} datacenter=${dcName}"
+  private def vaultLoggingFields(sn: Domain.StackName, ns: NamespaceName, dcName: String): String =
+    s"namespace=${ns} unit=${sn.serviceType} policy=${policies.policyName(sn, ns)} domain=${dcName}"
 }

@@ -40,7 +40,7 @@ package object nelson {
   type DeploymentHash = String
   type TempoaryAccessCode = String
   type WorkflowRef = String
-  type DatacenterRef = String
+  type DomainRef = String
   type StatusMessage = String
   type DependencyEdge = (routing.RoutingNode, routing.RoutingNode)
   type ExpirationPolicyRef = String

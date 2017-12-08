@@ -17,7 +17,7 @@
 package nelson
 package cleanup
 
-import Datacenter.Deployment
+import Domain.Deployment
 import routing.{RoutingNode,RoutingGraph}
 import ca.mrvisser.sealerate
 import scala.concurrent.duration._
@@ -165,7 +165,7 @@ object ExpirationPolicyProcess {
   import scalaz.concurrent.Task
   import scalaz.stream._
   import storage.{run => runs,StoreOp, StoreOpF}
-  import Datacenter.{Namespace,Deployment}
+  import Domain.{Namespace,Deployment}
 
   private val logger = journal.Logger[ExpirationPolicyProcess.type]
 

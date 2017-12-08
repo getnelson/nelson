@@ -18,7 +18,7 @@ package nelson
 
 import alerts._
 import helm.ConsulOp
-import nelson.Datacenter.StackName
+import nelson.Domain.StackName
 import nelson.test._
 import org.scalatest.prop.Checkers
 import scalaz.concurrent.Task

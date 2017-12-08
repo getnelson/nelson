@@ -38,7 +38,7 @@ object Server {
     plans.Misc(config),
     plans.WebHooks(config),
     plans.Graph(config),
-    plans.Datacenters(config),
+    plans.Domains(config),
     plans.Audit(config),
     plans.Loadbalancers(config)
   ).foldLeft(HttpService.empty)(_ orElse _.service)

@@ -321,7 +321,7 @@ final case class NelsonConfig(
   timeout: Duration,
   cleanup: CleanupConfig,
   deploymentMonitor: DeploymentMonitorConfig,
-  datacenters: List[Datacenter],
+  domains: List[Domain],
   pipeline: PipelineConfig,
   audit: AuditConfig,
   template: TemplateConfig,
@@ -367,8 +367,8 @@ final case class NelsonConfig(
 
   //////////////////////// THREADING ////////////////////////////
 
-  def datacenter(dc: String): Task[Datacenter] =
-    datacenters.find(_.name == dc).fold[Task[Datacenter]](Task.fail(MisconfiguredDatacenter(dc, s"Datacenter not configured.")))(Task.now)
+  def domain(dc: String): Task[Domain] =
+    domains.find(_.name == dc).fold[Task[Domain]](Task.fail(MisconfiguredDomain(dc, s"Domain not configured.")))(Task.now)
 }
 
 import knobs.{Config => KConfig}
@@ -437,8 +437,8 @@ object Config {
       timeout           = timeout,
       cleanup           = cleanup,
       deploymentMonitor = DeploymentMonitorConfig(deploymentMonitor),
-      datacenters       = readDatacenters(
-        cfg = cfg.subconfig("nelson.datacenters"),
+      domains       = readDomains(
+        cfg = cfg.subconfig("nelson.domains"),
         nomadcfg = nomadcfg,
         dockercfg = dockercfg,
         ec = pools.defaultEC,
@@ -476,7 +476,7 @@ object Config {
     )
 
   private[nelson] def readTemplate(cfg: KConfig): TemplateConfig = {
-    val dcCfg = cfg.subconfig("nelson.datacenters")
+    val dcCfg = cfg.subconfig("nelson.domains")
     val firstDcId = dcCfg.env.keys.toVector.sorted.headOption.flatMap(_.toString.split('.').headOption)
     val vaultAddress = firstDcId.flatMap(dcCfg.subconfig(_).lookup[String]("infrastructure.vault.endpoint"))
 
@@ -504,13 +504,13 @@ object Config {
       bufferLimit = cfg.require[Int]("inbound-buffer-limit")
     )
 
-  private[nelson] def readDatacenters(cfg: KConfig,
+  private[nelson] def readDomains(cfg: KConfig,
                                       nomadcfg: NomadConfig,
                                       dockercfg: DockerConfig,
                                       ec: ExecutionContext,
                                       exec: Strategy,
                                       stg: StoreOp ~> Task,
-                                      logger: LoggingOp ~> Task): List[Datacenter] = {
+                                      logger: LoggingOp ~> Task): List[Domain] = {
 
     def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
       def readSplunk: Option[Infrastructure.SplunkConfig] =
@@ -536,14 +536,14 @@ object Config {
     }
 
     /*
-     * Datacenters currently only support one scheduler
+     * Domains currently only support one scheduler
      */
     def readScheduler(kfg: KConfig, proxy: Option[Infrastructure.ProxyCredentials]): Option[SchedulerOp ~> Task] =
       readNomadInfrastructure(kfg.subconfig("nomad"))
         .map(n => new scheduler.NomadHttp(nomadcfg, n, http4sClient(n.timeout)))
 
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
-    def readDatacenter(id: String, kfg: KConfig): Datacenter = {
+    def readDomain(id: String, kfg: KConfig): Domain = {
       val proxyCreds =
         (kfg.lookup[String](s"proxy-credentials.username") |@|
           kfg.lookup[String](s"proxy-credentials.password")
@@ -561,7 +561,7 @@ object Config {
           case (Some(u),Some(pw)) => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c,
             Some(Infrastructure.Credentials(u,pw))), client)
           case _ =>
-            log.error("If you configure the datacenter to have a consul username, or consul password, it must have both.")
+            log.error("If you configure the domain to have a consul username, or consul password, it must have both.")
             Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), client)
         }
         PrometheusConsul(a, http4sConsul)
@@ -584,7 +584,7 @@ object Config {
         }).yolo("We really really need vault.  Seriously vault must be configured")
 
       val sched = readScheduler(kfg.subconfig("infrastructure.scheduler"), proxyCreds)
-        .yolo("At least one scheduler must be defined per datacenter")
+        .yolo("At least one scheduler must be defined per domain")
 
       val interpreters = Infrastructure.Interpreters(
         scheduler = sched,
@@ -597,7 +597,7 @@ object Config {
 
       val trafficShift = readTrafficShift(kfg.subconfig("traffic-shift"))
 
-      Datacenter(
+      Domain(
         name = id,
         docker = Infrastructure.Docker(kfg.require[String]("docker-registry")),
         domain = Infrastructure.Domain(kfg.require[String]("domain")),
@@ -610,7 +610,7 @@ object Config {
     }
 
     val ids: Vector[String] = cfg.env.keys.map(_.toString.split('.')(0)).toVector
-    ids.map { id => readDatacenter(id, cfg.subconfig(id)) }.toList
+    ids.map { id => readDomain(id, cfg.subconfig(id)) }.toList
   }
 
   def readAwsInfrastructure(kfg: KConfig): Option[Infrastructure.Aws] = {

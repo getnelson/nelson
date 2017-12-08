@@ -30,7 +30,7 @@ object Discovery {
   val discoveryKeyPrefix = "lighthouse/discovery/v1/"
   val DiscoveryKeyPattern = s"""$discoveryKeyPrefix(.*)""".r
 
-  import Datacenter._
+  import Domain._
   import NamespaceName._
   import argonaut._
   import Argonaut._

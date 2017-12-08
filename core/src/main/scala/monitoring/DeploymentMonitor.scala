@@ -19,7 +19,7 @@ package monitoring
 
 import helm.{ConsulOp, HealthStatus}
 import journal.Logger
-import Datacenter.{Deployment, TrafficShift}
+import Domain.{Deployment, TrafficShift}
 import DeploymentStatus.{Ready, Warming}
 import storage.{StoreOp, StoreOpF}
 import java.time.Instant
@@ -52,8 +52,8 @@ object DeploymentMonitor {
     def deployment: Deployment
   }
 
-  final case class PromoteToReady(dc: Datacenter, deployment: Deployment) extends MonitorActionItem
-  final case class RetainAsWarming(dc: Datacenter, deployment: Deployment, reason: String) extends MonitorActionItem
+  final case class PromoteToReady(dc: Domain, deployment: Deployment) extends MonitorActionItem
+  final case class RetainAsWarming(dc: Domain, deployment: Deployment, reason: String) extends MonitorActionItem
 
   def heartbeat(cfg: NelsonConfig): Process[Task, Duration] =
     (Process.eval(Task.now(1 seconds)) ++ Process.repeatEval(Task.delay(cfg.deploymentMonitor.delay))).flatMap(d =>
@@ -81,15 +81,15 @@ object DeploymentMonitor {
    * Build a list of MonitorActionItems based on the health of deployments that are presently in the Warming state.
    */
   def monitorActionItems(cfg: NelsonConfig): Task[List[MonitorActionItem]] =
-    cfg.datacenters.traverseM(dc => monitorActionItemsByDatacenter(dc))
+    cfg.domains.traverseM(dc => monitorActionItemsByDomain(dc))
 
-  def monitorActionItemsByDatacenter(dc: Datacenter): Task[List[MonitorActionItem]] =
+  def monitorActionItemsByDomain(dc: Domain): Task[List[MonitorActionItem]] =
     for {
-      ns <- storage.run(dc.storage, StoreOp.listNamespacesForDatacenter(dc.name)).map(_.toList)
+      ns <- storage.run(dc.storage, StoreOp.listNamespacesForDomain(dc.name)).map(_.toList)
       d  <- ns.traverseM(n => monitorActionItemsByNamespace(dc,n))
     } yield d
 
-  def monitorActionItemsByNamespace(dc: Datacenter, ns: Datacenter.Namespace): Task[List[MonitorActionItem]] =
+  def monitorActionItemsByNamespace(dc: Domain, ns: Domain.Namespace): Task[List[MonitorActionItem]] =
     for {
       d  <- storage.run(dc.storage, StoreOp.listDeploymentsForNamespaceByStatus(ns.id, NonEmptyList(Warming)))
              .map(_.toList.map(_._1))
@@ -103,7 +103,7 @@ object DeploymentMonitor {
    *
    * Ask Helm that will for the list of all the health statuses, and determine if a majority of the jobs are passing.
    */
-  def monitorActionItem(dc: Datacenter, d: Deployment): Task[MonitorActionItem] =
+  def monitorActionItem(dc: Domain, d: Deployment): Task[MonitorActionItem] =
     for {
       health <- helm.run(dc.consul, health(d))
       shift  <- storage.run(dc.storage, trafficShift(d))

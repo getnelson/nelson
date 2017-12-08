@@ -19,7 +19,7 @@ package nelson.alerts
 import java.io.{BufferedWriter, OutputStreamWriter}
 import java.nio.charset.StandardCharsets.UTF_8
 import nelson.{NamespaceName, PlanRef, Pools}
-import nelson.Datacenter.StackName
+import nelson.Domain.StackName
 import nelson.Manifest.PrometheusConfig
 import scala.io.Source
 import scalaz.concurrent.Task

@@ -25,25 +25,25 @@ sealed abstract class SchedulerOp[A] extends Product with Serializable
 
 object SchedulerOp {
 
-  final case class Delete(dc: Datacenter, d: Datacenter.Deployment) extends SchedulerOp[Unit]
+  final case class Delete(dc: Domain, d: Domain.Deployment) extends SchedulerOp[Unit]
 
-  final case class Launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String) extends SchedulerOp[String]
+  final case class Launch(i: Image, dc: Domain, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String) extends SchedulerOp[String]
 
-  final case class Summary(dc: Datacenter, sn: Datacenter.StackName) extends SchedulerOp[Option[DeploymentSummary]]
+  final case class Summary(dc: Domain, sn: Domain.StackName) extends SchedulerOp[Option[DeploymentSummary]]
 
-  final case class RunningUnits(dc: Datacenter, prefix: Option[String]) extends SchedulerOp[Set[RunningUnit]]
+  final case class RunningUnits(dc: Domain, prefix: Option[String]) extends SchedulerOp[Set[RunningUnit]]
 
   type SchedulerF[A] = Free.FreeC[SchedulerOp, A]
 
-  def launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String): SchedulerF[String] =
+  def launch(i: Image, dc: Domain, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String): SchedulerF[String] =
     Free.liftFC(Launch(i, dc, ns, a, p, hash))
 
-  def delete(dc: Datacenter, d: Datacenter.Deployment): SchedulerF[Unit] =
+  def delete(dc: Domain, d: Domain.Deployment): SchedulerF[Unit] =
     Free.liftFC(Delete(dc,d))
 
-  def summary(dc: Datacenter, sn: Datacenter.StackName): SchedulerF[Option[DeploymentSummary]] =
+  def summary(dc: Domain, sn: Domain.StackName): SchedulerF[Option[DeploymentSummary]] =
     Free.liftFC(Summary(dc,sn))
 
-  def runningUnits(dc: Datacenter, prefix: Option[String] = None): SchedulerF[Set[RunningUnit]] =
+  def runningUnits(dc: Domain, prefix: Option[String] = None): SchedulerF[Set[RunningUnit]] =
     Free.liftFC(RunningUnits(dc, prefix))
 }

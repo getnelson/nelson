@@ -25,9 +25,9 @@ import scalaz.{Applicative, \/}
 import scalaz.Scalaz._
 import java.time.Instant
 
-final case class Datacenters(config: NelsonConfig) extends Default {
+final case class Domains(config: NelsonConfig) extends Default {
   import nelson.Json._
-  import Datacenter._
+  import Domain._
   import Params._
 
   private implicit val StackSummaryEncoder: EncodeJson[Nelson.StackSummary] =
@@ -43,24 +43,24 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       ).deepmerge(s.deployment.asJson)
     }
 
-  private implicit val NamespaceRefServiceNameEncoder: EncodeJson[(DatacenterRef, Namespace, GUID, ServiceName)] =
-    EncodeJson { case (d: DatacenterRef, n: Namespace, i: GUID, s: ServiceName) =>
-      (("datacenter" := d) ->:
+  private implicit val NamespaceRefServiceNameEncoder: EncodeJson[(DomainRef, Namespace, GUID, ServiceName)] =
+    EncodeJson { case (d: DomainRef, n: Namespace, i: GUID, s: ServiceName) =>
+      (("domain" := d) ->:
        ("namespace" := n.name.asString) ->:
        ("guid" := i) ->:
        jEmptyObject).deepmerge(s.asJson)
     }
 
-  private implicit val NamespaceDeploymentEncoder: EncodeJson[(DatacenterRef, Namespace, Deployment)] =
-    EncodeJson { case ((d: DatacenterRef, n: Namespace, s: Deployment)) =>
-      (("datacenter" := d) ->:
+  private implicit val NamespaceDeploymentEncoder: EncodeJson[(DomainRef, Namespace, Deployment)] =
+    EncodeJson { case ((d: DomainRef, n: Namespace, s: Deployment)) =>
+      (("domain" := d) ->:
        ("namespace" := n.name.asString) ->:
        jEmptyObject).deepmerge(s.asJson)
     }
 
-  private implicit val NamespaceDeploymentWithStatusEncoder: EncodeJson[(DatacenterRef, Namespace, Deployment, DeploymentStatus)] =
-    EncodeJson { case ((d: DatacenterRef, n: Namespace, s: Deployment, ds: DeploymentStatus)) =>
-      (("datacenter" := d) ->:
+  private implicit val NamespaceDeploymentWithStatusEncoder: EncodeJson[(DomainRef, Namespace, Deployment, DeploymentStatus)] =
+    EncodeJson { case ((d: DomainRef, n: Namespace, s: Deployment, ds: DeploymentStatus)) =>
+      (("domain" := d) ->:
         ("namespace" := n.name.asString) ->:
         ("status" := ds.toString) ->:
         jEmptyObject
@@ -74,10 +74,10 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       jEmptyObject
     }
 
-  private implicit val DatacenterEncoder: EncodeJson[(Datacenter, Set[Namespace])] =
-    EncodeJson { case (d: Datacenter, ns: Set[Namespace]) =>
+  private implicit val DomainEncoder: EncodeJson[(Domain, Set[Namespace])] =
+    EncodeJson { case (d: Domain, ns: Set[Namespace]) =>
       ("name"           := d.name) ->:
-      ("datacenter_url" := linkTo(s"/v1/datacenters/${d.name}")(config.network)) ->:
+      ("domain_url" := linkTo(s"/v1/domains/${d.name}")(config.network)) ->:
       ("namespaces"     := ns.map(n =>
         ("deployments_url" := linkTo(s"/v1/deployments?dc=${d.name}&ns=${n.name.asString}")(config.network)) ->:
         ("units_url"       := linkTo(s"/v1/units?dc=${d.name}&status=active,manual,deprecated")(config.network)) ->:
@@ -95,7 +95,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
 
   private implicit val ManualDeploymentDecoder: DecodeJson[ManualDeployment] =
     casecodec7(ManualDeployment.apply, ManualDeployment.unapply)(
-      "datacenter",
+      "domain",
       "namespace",
       "service_type",
       "version",
@@ -107,8 +107,8 @@ final case class Datacenters(config: NelsonConfig) extends Default {
   implicit lazy val FeatureVersionCodec: CodecJson[FeatureVersion] =
     CodecJson.casecodec2(FeatureVersion.apply, FeatureVersion.unapply)("major", "minor")
 
-  implicit lazy val ServiceNameCodec: CodecJson[Datacenter.ServiceName] =
-    CodecJson.casecodec2(Datacenter.ServiceName.apply, Datacenter.ServiceName.unapply)("service_type", "version")
+  implicit lazy val ServiceNameCodec: CodecJson[Domain.ServiceName] =
+    CodecJson.casecodec2(Domain.ServiceName.apply, Domain.ServiceName.unapply)("service_type", "version")
 
   implicit val logFileEncoder: EncodeJson[(Int, List[String])] = EncodeJson[(Int,List[String])](
     (r: (Int,List[String])) =>
@@ -120,32 +120,32 @@ final case class Datacenters(config: NelsonConfig) extends Default {
   val service: HttpService = HttpService {
 
     /*
-     * GET /v1/datacenters
+     * GET /v1/domains
      *
-     * List all the datacenters and their subordinate namespaces
+     * List all the domains and their subordinate namespaces
      */
-   case GET -> Root / "v1" / "datacenters" & IsAuthenticated(session) =>
-      json(Nelson.listDatacenters.map(_.toList))
+   case GET -> Root / "v1" / "domains" & IsAuthenticated(session) =>
+      json(Nelson.listDomains.map(_.toList))
 
     /*
-     * GET /v1/datacenters/portland
+     * GET /v1/domains/portland
      *
-     * Show details for a single datacenter
+     * Show details for a single domain
      */
-   case GET -> Root / "v1" / "datacenters" / dcname & IsAuthenticated(session) =>
-      jsonF(Nelson.fetchDatacenterByName(dcname)){ option =>
+   case GET -> Root / "v1" / "domains" / dcname & IsAuthenticated(session) =>
+      jsonF(Nelson.fetchDomainByName(dcname)){ option =>
         option match {
           case Some(dc) => Ok(dc.asJson)
-          case None     => NotFound(s"datacenter '$dcname' does not exist")
+          case None     => NotFound(s"domain '$dcname' does not exist")
         }
       }
 
     /*
-     * GET /v1/datacenters/portland/graph?ns=devel,prod
+     * GET /v1/domains/portland/graph?ns=devel,prod
      *
-     * Returns a list of Namespaces with corresponding RoutingGraph within this datacenter
+     * Returns a list of Namespaces with corresponding RoutingGraph within this domain
      */
-   case req @ GET -> Root /"v1" / "datacenters" / dcname / "graph" :? NsO(ns) & IsAuthenticated(_) =>
+   case req @ GET -> Root /"v1" / "domains" / dcname / "graph" :? NsO(ns) & IsAuthenticated(_) =>
      ns.map(commaSeparatedStringToNamespace) match {
        case Some(ns) =>
          Applicative[\/[InvalidNamespaceName, ?]].sequence(ns).fold(
@@ -158,14 +158,14 @@ final case class Datacenters(config: NelsonConfig) extends Default {
     /*
      * GET /v1/deployments?dc=texas,california&status=active,deploying&ns=devel
      *
-     * List all the deployments given a list of datacenters and namespaces. Filter by deployment status
+     * List all the deployments given a list of domains and namespaces. Filter by deployment status
      * ns is required
-     * dc is optional and if empty will query all datacenters
+     * dc is optional and if empty will query all domains
      * status is optional and if empty will filter by all DeploymentStatus
      */
    case req @ GET -> Root / "v1" / "deployments" :? Ns(ns) +& Status(s) +& Dc(dc) +& U(u) & IsAuthenticated(session) =>
       val namespace = commaSeparatedStringToNamespace(ns)
-      val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
+      val domains = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
       val units = u
       namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
@@ -173,24 +173,24 @@ final case class Datacenters(config: NelsonConfig) extends Default {
           e => BadRequest(e),
           ns => ns.sequenceU.fold(
             e => BadRequest(e.getMessage),
-            n => json(Nelson.listDeployments(datacenters, n, statuses, units)))
+            n => json(Nelson.listDeployments(domains, n, statuses, units)))
         )
 
-     /* POST /v1/datacenters/<dc>/namespaces
+     /* POST /v1/domains/<dc>/namespaces
       *
-      * Create namespace(s) (including roots) in the specified datacenter, must be an admin
+      * Create namespace(s) (including roots) in the specified domain, must be an admin
       */
-    case req @ POST -> Root / "v1" / "datacenters" / dcname / "namespaces" & IsAuthenticated(session) if IsAuthorized(session) =>
+    case req @ POST -> Root / "v1" / "domains" / dcname / "namespaces" & IsAuthenticated(session) if IsAuthorized(session) =>
        decode[NamespaceNameJson](req){ ns =>
          json(Nelson.recursiveCreateNamespace(dcname.trim.toLowerCase, ns.namespace))
        }
 
     /*
-     * POST /v1/datacenters/<dc>/namespaces
+     * POST /v1/domains/<dc>/namespaces
      *
-     * Create subordinate namespace(s) in the specified datacenter.
+     * Create subordinate namespace(s) in the specified domain.
      */
-    case req @ POST -> Root / "v1" / "datacenters" / dcname / "namespaces" & IsAuthenticated(session) =>
+    case req @ POST -> Root / "v1" / "domains" / dcname / "namespaces" & IsAuthenticated(session) =>
       decode[NamespaceNameJson](req){ ns =>
         if (ns.namespace.isRoot) BadRequest("creating root namespace is not allowed")
         else json(Nelson.recursiveCreateSubordinateNamespace(dcname.trim.toLowerCase, ns.namespace))
@@ -270,31 +270,31 @@ final case class Datacenters(config: NelsonConfig) extends Default {
     /*
      * GET /v1/units?dc=texas,california&status=active,deploying&ns=devel
      *
-     * List all the units given a list of datacenters and namespaces. Filter by deployment status
+     * List all the units given a list of domains and namespaces. Filter by deployment status
      * ns is required
-     * dc is optional and if empty will query all datacenters
+     * dc is optional and if empty will query all domains
      * status is optional and if empty will filter by all DeploymentStatus
      */
     case req @ GET -> Root / "v1" / "units" :? Ns(ns) +& Status(s) +& Dc(dc) & IsAuthenticated(session) =>
       val namespace = commaSeparatedStringToNamespace(ns)
-      val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
+      val domains = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
       namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
           ns => ns.sequenceU.fold(
             e => BadRequest(e.getMessage),
-            n => json(Nelson.listUnitsByStatus(datacenters, n, statuses)))
+            n => json(Nelson.listUnitsByStatus(domains, n, statuses)))
         )
 
     /*
      * POST /v1/units/deprecate
      *
      * Deprecates all of the deployments given a service and feature version
-     * accross all datacenters and namespaces
+     * accross all domains and namespaces
      */
     case req @ POST -> Root / "v1" / "units" / "deprecate" & IsAuthenticated(session) =>
-      decode[Datacenter.ServiceName](req) { service =>
+      decode[Domain.ServiceName](req) { service =>
         json(Nelson.deprecateService(service))
       }
 
@@ -302,12 +302,12 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      * POST /v1/units/expire
      *
      * Expires all of the deployments given a service and feature version
-     * accross all datacenters and namespaces.
+     * accross all domains and namespaces.
      * Note this does not guarurtee a deployment will be cleaned up as the
      * expiration policy for the deployment will still run.
      */
     case req @ POST -> Root / "v1" / "units" / "expire" & IsAuthenticated(session) =>
-      decode[Datacenter.ServiceName](req) { service =>
+      decode[Domain.ServiceName](req) { service =>
         json(Nelson.expireService(service))
       }
 

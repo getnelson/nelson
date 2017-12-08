@@ -171,20 +171,20 @@ GET /v1/audit
 </table>
 
 
-<h2 id="api-datacenters" data-subheading-of="api">Datacenters</h2>
+<h2 id="api-domains" data-subheading-of="api">Domains</h2>
 
 <ol>
-  <li><a href="#api-datacenters-list">List Datacenters</a></li>
-  <li><a href="#api-datacenters-inspect">Inspect Datacenter</a></li>
-  <li><a href="#api-datacenters-list-ns">Create Namespaces</a></li>
+  <li><a href="#api-domains-list">List Domains</a></li>
+  <li><a href="#api-domains-inspect">Inspect Domain</a></li>
+  <li><a href="#api-domains-list-ns">Create Namespaces</a></li>
 </ol>
 
-<h3 id="api-datacenters-list" class="linkable">
-  List Datacenters
+<h3 id="api-domains-list" class="linkable">
+  List Domains
 </h3>
 
 ```
-GET /v1/datacenters
+GET /v1/domains
 ```
 
 <h5>Response</h5>
@@ -200,7 +200,7 @@ GET /v1/datacenters
         "deployments_url": "https://nelson.domain.com/v1/deployments?dc=massachusetts&ns=dev",
       }
     ],
-    "datacenter_url": "https://nelson.domain.com/v1/datacenters/massachusetts",
+    "datacenter_url": "https://nelson.domain.com/v1/domains/massachusetts",
     "name": "massachusetts"
   },
   {
@@ -212,18 +212,18 @@ GET /v1/datacenters
         "deployments_url": "https://nelson.domain.com/v1/deployments?dc=texas&ns=dev",
       }
     ],
-    "datacenter_url": "https://nelson.domain.com/v1/datacenters/texas",
+    "datacenter_url": "https://nelson.domain.com/v1/domains/texas",
     "name": "texas"
   }
 ]
 ```
 
-<h3 id="api-datacenters-inspect" class="linkable">
-  Inspect Datacenter
+<h3 id="api-domains-inspect" class="linkable">
+  Inspect Domain
 </h3>
 
 ```
-GET /v1/datacenters/:dcname
+GET /v1/domains/:dcname
 ```
 
 <h5>Response</h5>
@@ -238,17 +238,17 @@ GET /v1/datacenters/:dcname
       "deployments_url": "https://nelson.domain.com/v1/deployments?dc=texas&ns=dev",
     }
   ],
-  "datacenter_url": "https://nelson.domain.com/v1/datacenters/texas",
+  "datacenter_url": "https://nelson.domain.com/v1/domains/texas",
   "name": "texas"
 }
 ```
 
-<h3 id="api-datacenters-list-ns" class="linkable">
+<h3 id="api-domains-list-ns" class="linkable">
   Create Namespaces
 </h3>
 
 ```
-POST /v1/datacenters/:dcname/namespaces
+POST /v1/domains/:dcname/namespaces
 ```
 
 <h5>Input</h5>
@@ -1079,13 +1079,13 @@ But the following additional options are also availabe. Note that the `--disable
 λ nelson login --disable-tls --token 1f3f3f3f3 nelson.local:9000
 ```
 
-<h2 id="cli-datacenter" data-subheading-of="cli">Datacenter Operations</h2>
+<h2 id="cli-datacenter" data-subheading-of="cli">Domain Operations</h2>
 
-The Nelson service would have been configured by your system administrator for use with one or more datacenters. These datacenters are your deployment targets.
+The Nelson service would have been configured by your system administrator for use with one or more domains. These domains are your deployment targets.
 
 ```
-# list the available nelson datacenters
-λ nelson datacenters list
+# list the available nelson domains
+λ nelson domains list
   DATACENTER      NAMESPACES
   massachusetts   dev
   texas           dev
@@ -1107,7 +1107,7 @@ As a `unit` in Nelson parlance is a logical concept, the client allows you to qu
 This is typically very useful when building out (or upgrading) your own unit that depends on another unit, and you need to know what versions are currently available, or in a given state. The following is an example:
 
 ```
-λ nelson units list --namespaces dev --datacenters massachusetts
+λ nelson units list --namespaces dev --domains massachusetts
   GUID          NAMESPACE  UNIT              VERSION
   a0d3e7843856  dev      heydiddlyho-http  0.33
   c0e4281e9c9d  dev      howdy-http        0.38
@@ -1134,11 +1134,11 @@ The `unit list` subcommand comes with a variety of switches and options, for you
       <td>Specify the one or more namespaces that you wish to query. Accepts a command delimited list, for example: `dev,qa,prod`. Note that the comma-delimited list must not contain any spaces</td>
     </tr>
     <tr>
-      <td><code>--datacenters</code></td>
+      <td><code>--domains</code></td>
       <td><code>-d</code></td>
       <td>No</td>
       <td><code>*</code></td>
-      <td>Specify the one or more datacenters you're interested. It is excepted that users would typically not have to specify this switch, as usually users care about overall availability, not the presence of a given datacenter.</td>
+      <td>Specify the one or more domains you're interested. It is excepted that users would typically not have to specify this switch, as usually users care about overall availability, not the presence of a given datacenter.</td>
     </tr>
     <tr>
       <td><code>--statuses</code></td>
@@ -1156,15 +1156,15 @@ These options can be combined or committed in a variety of ways:
 
 ```
 # show the units deployed in a given datacenter
-λ nelson units list --namespaces dev --datacenters massachusetts
+λ nelson units list --namespaces dev --domains massachusetts
 
-# show the units available in several datacenters
-λ nelson units list -ns dev --datacenters massachusetts,california
+# show the units available in several domains
+λ nelson units list -ns dev --domains massachusetts,california
 
-# show the units available in all datacenters for a given namespace
+# show the units available in all domains for a given namespace
 λ nelson units list --namespaces dev
 
-# show the units available in all datacenters for a given namespace and status
+# show the units available in all domains for a given namespace and status
 λ nelson units list --namespaces dev --statuses deploying,active,deprecated
 
 # show the units that have been terminated by nelson in a given namespace
@@ -1217,7 +1217,7 @@ The primary operation most users will want the CLI for is to find a stack that w
 Just like listing units, listing stacks is super easy:
 
 ```
-λ nelson stacks list --namespaces dev --datacenters massachusetts
+λ nelson stacks list --namespaces dev --domains massachusetts
   GUID          NAMESPACE  PLAN     STACK                            WORKFLOW  DEPLOYED AT
   d655dc6a5799  dev        dev-plan howdy-batch--0-38-145--eov7446m  default   2016-07-15T11:37:08-07:00
 ```
@@ -1243,11 +1243,11 @@ The `stack list` subcommand also comes with a variety of switches and options, f
       <td>Specify the one or more namespaces that you wish to query. Accepts a command delimited list, for example: `dev,qa,prod`. Note that the comma-delimited list must not contain any spaces</td>
     </tr>
     <tr>
-      <td><code>--datacenters</code></td>
+      <td><code>--domains</code></td>
       <td><code>-d</code></td>
       <td>No</td>
       <td><code>*</code></td>
-      <td>Specify the one or more datacenters you're interested in. It is expected that users would typically not have to specify this switch, as usually users care about overall availability, not the presence of a given datacenter.</td>
+      <td>Specify the one or more domains you're interested in. It is expected that users would typically not have to specify this switch, as usually users care about overall availability, not the presence of a given datacenter.</td>
     </tr>
     <tr>
       <td><code>--statuses</code></td>
@@ -1265,15 +1265,15 @@ These options can be combined or committed in a variety of ways:
 
 ```
 # show the stacks deployed in a given datacenter
-λ nelson stacks list --namespaces dev --datacenters massachusetts
+λ nelson stacks list --namespaces dev --domains massachusetts
 
-# show the stacks availabe in several datacenters
-λ nelson stacks list --namespaces dev --datacenters massachusetts,california
+# show the stacks availabe in several domains
+λ nelson stacks list --namespaces dev --domains massachusetts,california
 
-# show the stacks available in all datacenters for a given namespace
+# show the stacks available in all domains for a given namespace
 λ nelson stacks list --namespaces dev
 
-# show the stacks available in all datacenters for a given namespace and status
+# show the stacks available in all domains for a given namespace and status
 λ nelson stacks list --namespaces dev --statuses deploying,ready,deprecated
 
 # show the stacks that have been terminated by nelson in a given namespace
@@ -1386,7 +1386,7 @@ Generally speaking the command line client is just like any other CLI tool, and 
 It is possible to sort the resulting tables from the command line client by using the built-in `sort` command of bash:
 
 ```
-λ nelson units list --namespaces dev --datacenters massachusetts | sort -k4
+λ nelson units list --namespaces dev --domains massachusetts | sort -k4
   GUID          NAMESPACE  UNIT              VERSION
   c0e4281e9c9d  dev      howdy-http        0.38
   44b17835fe41  dev      howdy-batch       0.38
@@ -1412,21 +1412,21 @@ Sometimes you might want to just find a specific line in a larger table (perhaps
 
 The manifest is the primary method to control parameters about your deployment: what it should be called, how big it should be, where it should be deployed too etc etc.
 
-<h2 id="datacenters" data-subheading-of="manifest">Datacenters</h2>
+<h2 id="domains" data-subheading-of="manifest">Domains</h2>
 
-Given that not all resources may be available in all datacenters, *Nelson* understands that you may at times want to be picky about which particular datacenters you deploy your *units* into. With this in mind, *Nelson* supplies the ability to whitelist and blacklist certain datacenters.
+Given that not all resources may be available in all domains, *Nelson* understands that you may at times want to be picky about which particular domains you deploy your *units* into. With this in mind, *Nelson* supplies the ability to whitelist and blacklist certain domains.
 
 ```
-datacenters:
+domains:
   only:
     - portland
     - redding
 ```
 
-In this example, using `only` forms a whitelist. This would only deploy to our fictitious `portland` and `redding` datacenters.
+In this example, using `only` forms a whitelist. This would only deploy to our fictitious `portland` and `redding` domains.
 
 ```
-datacenters:
+domains:
   except:
     - seattle
 ```
@@ -1831,7 +1831,7 @@ Having multiple dependencies is common: typically a service or job might depend 
   Resources
 </h3>
 
-In addition to depending on internal elements like databases and message queues, any given units can also depend on external services (such as Amazon S3, Google search etc) and are declared under the resources stanza. What makes `resources` different to `dependencies` is that they are explicitly global to the caller. Regardless of where you visit [google.com](https://www.google.com) from, you always access the same service from the callers perspective - the fact that [google.com](https://www.google.com) is globally distributed and co-located in many edge datacenters is entirely opaque.
+In addition to depending on internal elements like databases and message queues, any given units can also depend on external services (such as Amazon S3, Google search etc) and are declared under the resources stanza. What makes `resources` different to `dependencies` is that they are explicitly global to the caller. Regardless of where you visit [google.com](https://www.google.com) from, you always access the same service from the callers perspective - the fact that [google.com](https://www.google.com) is globally distributed and co-located in many edge domains is entirely opaque.
 
 <div class="alert alert-warning" role="alert">
   It is critical that as a user, you only leverage the <code>resources</code> block for external services. If the feature is abused for internal runtime systems, multi-region and data-locality will simply not work, and system QoS cannot be ensured.
@@ -1924,7 +1924,7 @@ The more powerful cron expression is typically useful when you require a job to 
   Workflows
 </h3>
 
-Workflows are a core concept in *Nelson*: they represent the sequence of actions that should be conducted for a single deployment `unit`. Whilst users cannot define their own workflows in an arbitrary fashion, each and every `unit` has the chance to reference an alternative workflow by its name. However, at the time of this writing there is only a single workflow (referenced as `magnetar`) for all `units`. The `magnetar` workflow first replicates the the required container to the target datacenter, and then attempts to launch the `unit` using the datacenters pre-configured scheduler. Broadly speaking this should be sufficient for the majority of deployable units.
+Workflows are a core concept in *Nelson*: they represent the sequence of actions that should be conducted for a single deployment `unit`. Whilst users cannot define their own workflows in an arbitrary fashion, each and every `unit` has the chance to reference an alternative workflow by its name. However, at the time of this writing there is only a single workflow (referenced as `magnetar`) for all `units`. The `magnetar` workflow first replicates the the required container to the target datacenter, and then attempts to launch the `unit` using the domains pre-configured scheduler. Broadly speaking this should be sufficient for the majority of deployable units.
 
 If users require a specialized workflow, please contact the *Nelson* team to discuss your requirements.
 

@@ -65,10 +65,10 @@ final case class UI(config: NelsonConfig) extends Default {
     case GET -> Root / "deployments" / _ & IsAuthenticated(_) =>
       serveStaticFile(path = "index.html")
 
-    case GET -> Root / "datacenters" & IsAuthenticated(_) =>
+    case GET -> Root / "domains" & IsAuthenticated(_) =>
       serveStaticFile(path = "index.html")
 
-    case GET -> Root / "datacenters" / _ & IsAuthenticated(_) =>
+    case GET -> Root / "domains" / _ & IsAuthenticated(_) =>
       serveStaticFile(path = "index.html")
 
     case GET -> Root / "dashboard" & IsAuthenticated(_) =>

@@ -45,11 +45,11 @@ object deprecated {
   }
 
   /**
-   * Given a datacenter, traverse all namepaces and write out all
+   * Given a domain, traverse all namepaces and write out all
    * deployment paths that terminate in a deprecated service. Duplicates
    * accross namespaces can happen so make unique at the end.
    */
-  def deploymentsWithDeprecatedDependencies(dc: Datacenter): StoreOpF[Vector[DependencyEdge]] =
+  def deploymentsWithDeprecatedDependencies(dc: Domain): StoreOpF[Vector[DependencyEdge]] =
     for {
       graph   <- RoutingTable.generateRoutingTables(dc.name)
       deps    <- graph.toVector.traverseM(rg => traverseGraph(rg._2))

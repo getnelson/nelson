@@ -25,7 +25,7 @@ import scalaz._
 import Scalaz._
 import java.time.Instant
 
-import Datacenter.Deployment
+import Domain.Deployment
 import journal.Logger
 
 import scala.concurrent.duration.Duration
@@ -35,7 +35,7 @@ final case class DeploymentCtx(deployment: Deployment, status: DeploymentStatus,
 
 object CleanupCron {
   import nelson.storage.{run => runs, StoreOp,StoreOpF}
-  import nelson.Datacenter.Namespace
+  import nelson.Domain.Namespace
 
   private val log = Logger[CleanupCron.type]
 
@@ -54,18 +54,18 @@ object CleanupCron {
       }
     } yield dcx.map(d => (ns,d))
 
-  /* Gets all deployment (excluding terminated) and routing graph for each namespace within a Datacenter. */
-  def getDeploymentsForDatacenter(dc: Datacenter): StoreOpF[Vector[CleanupRow]] =
+  /* Gets all deployment (excluding terminated) and routing graph for each namespace within a Domain. */
+  def getDeploymentsForDomain(dc: Domain): StoreOpF[Vector[CleanupRow]] =
     for {
       _  <- log.debug(s"cleanup cron running for ${dc.name}").point[StoreOpF]
-      ns <- StoreOp.listNamespacesForDatacenter(dc.name)
+      ns <- StoreOp.listNamespacesForDomain(dc.name)
       gr <- RoutingTable.generateRoutingTables(dc.name)
       ds <- ns.toVector.traverseM(ns => getDeploymentsForNamespace(ns))
     } yield ds.flatMap { case (ns, dcx) => gr.find(_._1 == ns).map(x => (dc,ns,dcx,x._2)) }
 
-  /* Gets all deployments (excluding terminated) for all datacenters and namespaces */
+  /* Gets all deployments (excluding terminated) for all domains and namespaces */
   def getDeployments(cfg: NelsonConfig): Task[Vector[CleanupRow]] =
-    runs(cfg.storage, cfg.datacenters.toVector.traverseM(dc => getDeploymentsForDatacenter(dc)))
+    runs(cfg.storage, cfg.domains.toVector.traverseM(dc => getDeploymentsForDomain(dc)))
 
   def routable(d: DeploymentCtx): Boolean =
     routables.exists(_ == d.status)

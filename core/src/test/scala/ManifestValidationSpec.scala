@@ -111,7 +111,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
       val mv = json.decodeEither[ManifestValidation].toOption.get // YOLO
       val \/-(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
 
-      e should equal (NonEmptyList(DeprecatedDependency("howdy", testName, "dev", Datacenter.ServiceName("search",FeatureVersion(1,1)))))
+      e should equal (NonEmptyList(DeprecatedDependency("howdy", testName, "dev", Domain.ServiceName("search",FeatureVersion(1,1)))))
      }.run
   }
 
@@ -329,7 +329,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
       val e = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun.toOption.get.swap.toOption.get
       val expectedErrors = NonEmptyList(
         CyclicDependency(
-          "Dependency cycle detected for unit 'conductor' in namespace 'dev' in datacenter 'ManifestValidationSpec': conductor@1.1.1"
+          "Dependency cycle detected for unit 'conductor' in namespace 'dev' in domain 'ManifestValidationSpec': conductor@1.1.1"
         )
       )
       e.toSet should === (expectedErrors.toSet)
@@ -352,16 +352,16 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
       val e = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun.toOption.get.swap.toOption.get
       val expectedErrors = NonEmptyList(
         CyclicDependency(
-          "Dependency cycle detected for unit 'inventory' in namespace 'dev' in datacenter 'ManifestValidationSpec': conductor@1.1.1"
+          "Dependency cycle detected for unit 'inventory' in namespace 'dev' in domain 'ManifestValidationSpec': conductor@1.1.1"
         ),
         CyclicDependency(
-          "Dependency cycle detected for unit 'inventory' in namespace 'dev' in datacenter 'ManifestValidationSpec': ab@2.2.1"
+          "Dependency cycle detected for unit 'inventory' in namespace 'dev' in domain 'ManifestValidationSpec': ab@2.2.1"
         ),
         CyclicDependency(
-          "Dependency cycle detected for unit 'inventory' in namespace 'dev' in datacenter 'ManifestValidationSpec': ab@2.2.2"
+          "Dependency cycle detected for unit 'inventory' in namespace 'dev' in domain 'ManifestValidationSpec': ab@2.2.2"
         ),
         CyclicDependency(
-          "Dependency cycle detected for unit 'conductor' in namespace 'dev' in datacenter 'ManifestValidationSpec': conductor@1.1.1"
+          "Dependency cycle detected for unit 'conductor' in namespace 'dev' in domain 'ManifestValidationSpec': conductor@1.1.1"
         )
       )
       e.toSet should === (expectedErrors.toSet)

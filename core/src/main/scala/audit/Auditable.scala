@@ -18,7 +18,7 @@ package nelson
 package audit
 
 import argonaut.{EncodeJson}
-import Datacenter.Deployment
+import Domain.Deployment
 
 
 /** Enumerates all the known Auditable categories and is used to provides context about the Auditable. */
@@ -96,9 +96,9 @@ object AuditableInstances {
       def category = GithubReleaseCategory
     }
 
-  implicit def manualDeploymentAuditable(implicit e: EncodeJson[Datacenter.ManualDeployment]): Auditable[Datacenter.ManualDeployment] =
-    new Auditable[Datacenter.ManualDeployment] {
-      def encode(a: Datacenter.ManualDeployment) = e.encode(a)
+  implicit def manualDeploymentAuditable(implicit e: EncodeJson[Domain.ManualDeployment]): Auditable[Domain.ManualDeployment] =
+    new Auditable[Domain.ManualDeployment] {
+      def encode(a: Domain.ManualDeployment) = e.encode(a)
       def category = ManualDeploymentCategory
     }
 
