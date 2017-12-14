@@ -26,7 +26,7 @@ addCompilerPlugin(dependencies.kindprojector.plugin)
 
 scalacOptions += "-Ypartial-unification"
 
-baseURL in Hugo := new URI(s"https://verizon.github.io/${githubRepoName.value}/")
+baseURL in Hugo := new URI(s"https://getnelson.github.io/${githubRepoName.value}/")
 
 // dynamically generate a file here that can be automatically
 // imported by hugo as "site data". Doing this here so we don't
@@ -44,4 +44,4 @@ makeSite := makeSite.dependsOn(hugoGenerateData).value
 
 import com.typesafe.sbt.SbtGit.GitKeys.{gitBranch, gitRemoteRepo}
 // TIM: GITHUB_TOKEN is read from the .travis.yml environment
-gitRemoteRepo := "https://"+sys.env.get("GITHUB_TOKEN").getOrElse("anonymous")+"@github.com/Verizon/nelson.git"
+gitRemoteRepo := "https://"+sys.env.get("GITHUB_TOKEN").getOrElse("anonymous")+"@github.com/getnelson/nelson.git"
