@@ -18,8 +18,8 @@ package nelson
 
 import java.nio.file.Paths
 
-import helm.{ConsulOp, Err, HealthStatus}
-import helm.ConsulOp.HealthCheck
+import health._
+import HealthCheckOp._
 import Datacenter.{DCUnit, Deployment, Namespace, TrafficShift}
 import DeploymentStatus.{Ready, Warming}
 import monitoring.DeploymentMonitor
@@ -42,11 +42,11 @@ import java.time.Instant
 
 class DeploymentMonitorSpec extends NelsonSuite {
 
-  def mkDatacenterWithStorage(name: String)(implicit consul: ConsulOp ~> Task, op: StoreOp ~> Task) : Datacenter = {
+  def mkDatacenterWithStorage(name: String)(implicit h: HealthCheckOp ~> Task, op: StoreOp ~> Task) : Datacenter = {
     val dc = datacenter(name)
     dc.copy(interpreters = dc.interpreters.copy(
-      consul = consul,
-      storage = op
+      storage = op,
+      health = h
     ))
   }
   
@@ -76,16 +76,16 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
   val namespace = Datacenter.Namespace(1L, NamespaceName("dev"), "dev")
 
-  def mkConsulOpWithMajorityHealthy(f: Map[UnitName, String]) = new (ConsulOp ~> Task) {
-    override def apply[A](c: ConsulOp[A]): Task[A] = c match {
-      case HealthCheck(service) => Task.now(s"""[{"Status":"${f(service)}"},{"Status":"warning"}, {"Status":"passing"}, {"Status":"passing"}, {"Status":"passing"}]""")
+  def mkHealthOpWithMajorityHealthy(f: Map[UnitName, HealthCheck]) = new (HealthCheckOp ~> Task) {
+    override def apply[A](c: HealthCheckOp[A]): Task[A] = c match {
+      case Health(dc, ns, service) => Task.now(List(f(service.toString),Passing,Passing,Passing,Failing))
       case _ => Task.fail(new Exception("Unexpected Store Operation Executed"))
     }
   }
 
-  def mkConsulOp(f: Map[UnitName, String]) = new (ConsulOp ~> Task) {
-    override def apply[A](c: ConsulOp[A]): Task[A] = c match {
-      case HealthCheck(service) => Task.now(s"""[{"Status":"${f(service)}"}]""")
+  def mkHealthOp(f: Map[UnitName, HealthCheck]) = new (HealthCheckOp ~> Task) {
+    override def apply[A](c: HealthCheckOp[A]): Task[A] = c match {
+      case Health(dc,ns,service) => Task.now(List(f(service.toString)))
       case _ => Task.fail(new Exception("Unexpected Store Operation Executed"))
     }
   }
@@ -102,7 +102,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
     val dep1 = Deployment(1L, mkDcUnit(1L, "s0", Version(1, 0, 0)), "a", namespace, null, null, "plan-1", "guid-1", "retain-latest")
     val dep2 = Deployment(1L, mkDcUnit(1L, "s1", Version(1, 0, 1)), "a", namespace, null, null, "plan-1", "guid-1", "retain-latest")
 
-    val consulInterp = mkConsulOpWithMajorityHealthy(Map(dep1.stackName.toString -> "passing", dep2.stackName.toString -> "dead"))
+    val consulInterp = mkHealthOpWithMajorityHealthy(Map(dep1.stackName.toString -> Passing, dep2.stackName.toString -> Unknown))
 
     val storeInterp = mkStoreOp(
       Map("dc0" -> Set(mkNamespace(1L, NamespaceName("dev"), "dc0"), mkNamespace(2L, NamespaceName("qa"), "dc0"), mkNamespace(3L, NamespaceName("prod"), "dc0"))),
@@ -152,7 +152,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
   // the first time a service is deployed there will be no preceeding traffic shift
   it should "bootstrap promotion"  in {
-    val consul = mkConsulOpWithMajorityHealthy(Map(dep100.stackName.toString -> "passing", dep101.stackName.toString -> "passing", dep102.stackName.toString -> "passing"))
+    val consul = mkHealthOpWithMajorityHealthy(Map(dep100.stackName.toString -> Passing, dep101.stackName.toString -> Passing, dep102.stackName.toString -> Passing))
     val stg = mkStoreOp(
       Map("dc0" -> Set(mkNamespace(1L, NamespaceName("dev"), "dc0"))),
       Map((1L, NonEmptyList(Warming)) -> Set(dep100 -> Warming)),
@@ -169,11 +169,11 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     ts.inProgress(Instant.now) should equal(true)
 
-    val consul = mkConsulOp(Map(
-      dep100.stackName.toString -> "passing",
-      dep101.stackName.toString -> "passing",
-      dep102.stackName.toString -> "passing",
-      dep103.stackName.toString -> "passing"
+    val consul = mkHealthOp(Map(
+      dep100.stackName.toString -> Passing,
+      dep101.stackName.toString -> Passing,
+      dep102.stackName.toString -> Passing,
+      dep103.stackName.toString -> Passing 
     ))
 
     val stg = mkStoreOp(
@@ -196,11 +196,11 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     val ts = mkTrafficShift(10.minutes, Instant.now.minusSeconds(10), Some(Instant.now.plusSeconds(120)))
 
-    val consul = mkConsulOpWithMajorityHealthy(Map(
-      dep100.stackName.toString -> "failing",
-      dep101.stackName.toString -> "failing",
-      dep102.stackName.toString -> "passing",
-      dep103.stackName.toString -> "passing"
+    val consul = mkHealthOpWithMajorityHealthy(Map(
+      dep100.stackName.toString -> Failing,
+      dep101.stackName.toString -> Failing,
+      dep102.stackName.toString -> Passing,
+      dep103.stackName.toString -> Passing 
     ))
 
     val stg = mkStoreOp(
