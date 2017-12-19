@@ -155,10 +155,18 @@ trait NelsonSuite
     }
   }
 
+  import health._
+  lazy val healthI = new (HealthCheckOp ~> Task) {
+    import HealthCheckOp._
+    def apply[A](op: HealthCheckOp[A]): Task[A] = op match {
+      case Health(dc,ns,sn) => Task.now(Nil)
+    }
+  }
+
   lazy val stg = TestStorage.storage(testName)
 
   lazy val testInterpreters = Infrastructure.Interpreters(
-    nomad,testConsul,testVault,stg,logger,testDocker,WorkflowControlOp.trans)
+    nomad,testConsul,testVault,stg,logger,testDocker,WorkflowControlOp.trans,healthI)
 
   lazy val config = knobs.loadImmutable(List(
     Required(ClassPathResource("nelson/defaults.cfg")),

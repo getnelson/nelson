@@ -31,7 +31,7 @@ class SweeperSpec extends NelsonSuite {
 
   def cfg(dcs: List[String], sto: StoreOp ~> Task, csl: ConsulOp ~> Task) = config.copy(
     datacenters = dcs.map(name => Datacenter(name, null, null, null, None,
-      Infrastructure.Interpreters(null, csl, null, null, null, null, null), None, null)),
+      Infrastructure.Interpreters(null, csl, null, null, null, null, null, null), None, null)),
     interpreters = config.interpreters.copy(storage = sto)
   )
 

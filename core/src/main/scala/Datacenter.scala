@@ -29,6 +29,7 @@ import scala.concurrent.duration.FiniteDuration
 
 import concurrent.duration._
 import helm.ConsulOp
+import health.HealthCheckOp
 import storage.StoreOp
 import scheduler.SchedulerOp
 import Workflow.WorkflowOp
@@ -127,7 +128,8 @@ object Infrastructure {
     storage: StoreOp ~> Task,
     logger: LoggingOp ~> Task,
     docker: DockerOp ~> Task,
-    control: WorkflowControlOp ~> Task
+    control: WorkflowControlOp ~> Task,
+    health: HealthCheckOp ~> Task
   ) {
     import ScalazHelpers._
     val workflow: WorkflowOp ~> Task =
@@ -157,6 +159,8 @@ final case class Datacenter(
   lazy val consul: ConsulOp ~> Task = interpreters.consul
 
   lazy val storage: StoreOp ~> Task = interpreters.storage
+
+  lazy val health: HealthCheckOp ~> Task = interpreters.health
 
   override def hashCode: Int = name.hashCode
 }

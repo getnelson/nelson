@@ -593,7 +593,9 @@ object Config {
         storage = stg,
         logger = logger,
         docker = dockerClient,
-        control = WorkflowControlOp.trans)
+        control = WorkflowControlOp.trans,
+        health = health.Http4sConsulHealthClient(consul)
+      )
 
       val trafficShift = readTrafficShift(kfg.subconfig("traffic-shift"))
 

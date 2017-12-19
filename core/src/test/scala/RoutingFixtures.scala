@@ -144,7 +144,7 @@ import doobie.imports._
   )
 
   def datacenter(name: String) = Datacenter(name,
-    Infrastructure.Docker(""), Infrastructure.Domain(""), Infrastructure.TrafficShift(LinearShiftPolicy, 1.minutes), None, Infrastructure.Interpreters(null, null, null, null, null, null, null), None, testPolicyConfig)
+    Infrastructure.Docker(""), Infrastructure.Domain(""), Infrastructure.TrafficShift(LinearShiftPolicy, 1.minutes), None, Infrastructure.Interpreters(null, null, null, null, null, null, null, null), None, testPolicyConfig)
 
   val emptyWorkflow = new Workflow[Unit] {
     override val name = "empty"
