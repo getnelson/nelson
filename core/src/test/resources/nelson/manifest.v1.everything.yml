@@ -114,10 +114,7 @@ plans:
     retries: 2
     instances:
       desired: 1
-    volumes:
-      - mount: /tmp/bar
-        source: /some/host/location
-        mode: rw
+    ephemeral_disk: 200
     environment:
       - FOO=foo-1
       - QUX=qux-1

@@ -17,28 +17,25 @@
 package nelson
 package cleanup
 
-import nelson.routing.{RoutePath, RoutingGraph, RoutingTable}
+import nelson.routing.RoutingTable
 
 import scalaz.concurrent.Task
-import scalaz.stream.{Channel, Process, channel, time}
+import scalaz.stream.{Process, time}
 import scalaz._
 import Scalaz._
-import quiver._
 import java.time.Instant
 
-import Datacenter.{Deployment, Namespace}
+import Datacenter.Deployment
 import journal.Logger
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration._
-import scala.util.Random
-import scalaz.stream.async.immutable.Signal
 
 final case class DeploymentCtx(deployment: Deployment, status: DeploymentStatus, exp: Option[Instant])
 
 object CleanupCron {
   import nelson.storage.{run => runs, StoreOp,StoreOpF}
-  import nelson.Datacenter.{Namespace,Deployment}
+  import nelson.Datacenter.Namespace
 
   private val log = Logger[CleanupCron.type]
 

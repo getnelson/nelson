@@ -17,9 +17,8 @@
 package nelson
 
 import doobie.imports._
-import scalaz.concurrent.Task
 import scalaz._, Scalaz._
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll,BeforeAndAfterEach}
+import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterEach}
 import storage.{run => runs, StoreOp}
 
 

@@ -18,17 +18,14 @@ package nelson
 package cleanup
 
 import helm.ConsulOp
-import helm.ConsulOp._
 import journal.Logger
 import nelson.routing.Discovery
 
 import scala.util.control.NonFatal
 import scalaz.{-\/, Kleisli, \/, \/-, ~>}
 import scalaz.concurrent.Task
-import scalaz.syntax.bind._
 import scalaz.stream._
 import scalaz.std.list._
-import scalaz.std.list.listSyntax._
 import scalaz.std.option.optionSyntax._
 import scalaz.syntax.traverse._
 

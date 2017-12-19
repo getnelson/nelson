@@ -20,8 +20,6 @@ package crypto
 import autharbitrary.AuthArbitrary._
 import autharbitrary.ArbFunction0._
 
-import org.scalacheck._, Arbitrary.arbitrary
-
 class SafeHolderSpec extends AuthSpec {
   property("get on an empty holder is None"){
     forAll { (holder: SafeHolder[Int]) =>

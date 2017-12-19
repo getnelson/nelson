@@ -21,9 +21,6 @@ import AuthFailure._
 import scodec.bits.ByteVector
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import java.util.Arrays
-import java.security.{InvalidKeyException, KeyFactory, MessageDigest, Signature}
-import java.security.spec.{PKCS8EncodedKeySpec, X509EncodedKeySpec}
 
 
 import scalaz.\/
@@ -38,7 +35,7 @@ object SignatureKey {
 
   def apply(bytes: ByteVector): InsufficientSignatureKeyLength \/ SignatureKey =
     if (bytes.length >= minBytes) \/.right(new SignatureKey(bytes))
-    else \/.left(InsufficientSignatureKeyLength(actual = bytes.length, required = minBytes))
+    else \/.left(InsufficientSignatureKeyLength(actual = bytes.length, required = minBytes.toLong))
 
   def unsafe(bytes: ByteVector): SignatureKey =
     apply(bytes).valueOr(e => throw new IllegalArgumentException(e.toString))
@@ -83,11 +80,11 @@ final class SafeHolderHmac(holder: SafeHolder[Mac]) extends Signer[AuthResult] {
       val sig = hmac.doFinal
       val actualLength = sig.size
       // this might be able to be slightly optimized
-      if (actualLength >= signatureLengthBytes) \/.right(ByteVector.view(sig).take(signatureLengthBytes))
-      else \/.left(InsufficientSignatureLength(signatureLengthBytes, actualLength))
+      if (actualLength >= signatureLengthBytes) \/.right(ByteVector.view(sig).take(signatureLengthBytes.toLong))
+      else \/.left(InsufficientSignatureLength(signatureLengthBytes.toLong, actualLength.toLong))
     } catch {
       case e: Exception =>
-        \/.left(SigningError(key.bytes.length, data.length, signatureLengthBytes, e))
+        \/.left(SigningError(key.bytes.length, data.length, signatureLengthBytes.toLong, e))
     }
   }
 }

@@ -21,8 +21,6 @@ package http4s
 import scalaz.{==>>,~>}
 import scalaz.syntax.functor._
 import scalaz.concurrent.Task
-import scalaz.stream.Process
-import scodec.bits.ByteVector
 import argonaut._, Argonaut._
 import org.http4s.{argonaut => _, _}
 import org.http4s.argonaut._

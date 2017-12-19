@@ -20,8 +20,6 @@ import Manifest.{UnitDef,Versioned,Plan,TrafficShift}
 import Datacenter.{Namespace,Deployment}
 import Workflow.WorkflowF
 import scalaz._, Scalaz._
-import java.time.Instant
-import scala.concurrent.duration._
 
 object Magnetar extends Workflow[Unit] {
   import Workflow.syntax._

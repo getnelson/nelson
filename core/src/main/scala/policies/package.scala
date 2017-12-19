@@ -20,7 +20,6 @@ import Datacenter.StackName
 
 import scalaz.~>
 import scalaz.concurrent.Task
-import scalaz.Free
 import scalaz.stream.Process
 import vault._
 

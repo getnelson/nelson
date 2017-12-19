@@ -19,13 +19,6 @@ package plans
 
 import org.http4s._
 import org.http4s.dsl._
-import scalaz.concurrent.Task
-import scalaz.stream.Process
-import scalaz.{\/,-\/,\/-}
-import journal.Logger
-import concurrent.duration._
-
-
 
 final case class Audit(config: NelsonConfig) extends Default {
   import Json._

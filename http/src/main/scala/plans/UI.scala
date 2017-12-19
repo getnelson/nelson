@@ -18,13 +18,10 @@ package nelson
 package plans
 
 import java.net.URLConnection
-import org.http4s.Header.Raw
 import org.http4s._
 import org.http4s.dsl._
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
-import java.io.OutputStream
-import scalaz.stream.io.resource
 import scala.xml.NodeSeq
 
 final case class UI(config: NelsonConfig) extends Default {

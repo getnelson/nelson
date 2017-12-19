@@ -16,10 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalatest._, Matchers._
+import org.scalatest._
 
 class JsonSpec extends FlatSpec with Matchers {
-  import Fixtures._, Util._
+  import Util._
   import Json._
   import argonaut._, Argonaut._
   import scalaz.\/

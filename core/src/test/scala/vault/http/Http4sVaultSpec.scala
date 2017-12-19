@@ -20,15 +20,11 @@ package http4s
 
 import argonaut._, Argonaut._
 import com.whisk.docker.scalatest._
-import java.lang.management.ManagementFactory
 import org.http4s.Uri
 import org.http4s.client.blaze._
 import org.scalatest.{FlatSpec, Matchers}
-import scala.concurrent.Await
 import scala.concurrent.duration._
 import scalaz.std.string._
-import scalaz.syntax.either._
-import scalaz.syntax.monad._
 
 class Http4sVaultSpec extends FlatSpec
     with DockerTestKit

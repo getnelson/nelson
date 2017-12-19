@@ -17,7 +17,6 @@
 package nelson
 package cleanup
 
-import io.prometheus.client.Counter
 import nelson.Datacenter.{Deployment, Namespace}
 import nelson.Workflow.WorkflowOp
 import notifications.Notify

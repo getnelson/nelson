@@ -17,13 +17,10 @@
 package nelson
 
 import org.scalatest._
-import monocle.function.{ each, index, filterIndex }, monocle.std.list._
 
 class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
-  import Fixtures._, Util._
   import Json._
   import argonaut._, Argonaut._
-  import scalaz.\/
   import Manifest.{Ports,Port}
   import scala.concurrent.duration._
   import nelson.scheduler.NomadJson

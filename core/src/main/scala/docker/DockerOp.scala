@@ -17,10 +17,8 @@
 package nelson
 package docker
 
-import scalaz.{Free,Inject}
-import Free.FreeC
+import scalaz.Free
 import Docker.{Image,RegistryURI}
-import Docker.{Push,Pull}
 import Manifest.UnitDef
 
 sealed abstract class DockerOp[A] extends Product with Serializable

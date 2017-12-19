@@ -16,9 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.net.URLConnection
-
-import org.http4s.{Headers, _}
+import org.http4s._
 import org.http4s.argonaut._
 import org.http4s.dsl._
 import org.http4s.server.staticcontent.{FileService, fileService, ResourceService, resourceService}
@@ -28,11 +26,8 @@ import _root_.argonaut._
 import Argonaut._
 
 import scalaz.concurrent.Task
-import scalaz.{-\/, \/, \/-}
 import journal.Logger
 import nelson.plans.ClientValidation
-
-import concurrent.duration._
 
 object Server {
   private val log = Logger[Server.type]

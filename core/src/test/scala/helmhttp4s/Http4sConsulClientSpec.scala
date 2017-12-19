@@ -23,7 +23,7 @@ import scalaz.stream.Process
 import scodec.bits.ByteVector
 import org.http4s.{EntityBody, Request, Response, Status, Uri}
 import org.http4s.client._
-import org.scalatest._, Matchers._
+import org.scalatest._
 import org.scalactic.TypeCheckedTripleEquals
 import helm._
 

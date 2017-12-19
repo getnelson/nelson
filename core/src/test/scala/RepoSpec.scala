@@ -17,7 +17,7 @@
 package nelson
 
 import scalaz.\/
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
+import org.scalacheck._, Prop._
 
 class RepoSpec extends Properties("Repo") {
   import RepoSpec._

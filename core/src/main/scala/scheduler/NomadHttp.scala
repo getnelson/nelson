@@ -20,15 +20,14 @@ package scheduler
 
 import nelson.Json._
 
-import scalaz.{@@, NonEmptyList, \/, ~>}
+import scalaz.{NonEmptyList, ~>}
 import scalaz.concurrent.Task
 import scalaz.syntax.std.option._
 import scalaz.syntax.traverse._
 import scalaz.syntax.applicative._
 import scalaz.std.list._
-import scalaz.syntax.std.boolean._
 import journal.Logger
-import Manifest.{Deployable, Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef, Versioned}
+import Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
 import Datacenter.{Deployment, StackName}
 import docker.Docker
 import Docker.Image
@@ -37,34 +36,12 @@ import nelson.DeploymentStatus
 
 object NomadHttp {
   private val log = Logger[NomadHttp.type]
-
-  def equivalentStatus(nelson: DeploymentStatus, reverseChrono: NonEmptyList[Set[TaskStatus]]) : Boolean = {
-    import DeploymentStatus._
-
-    val latest = reverseChrono.head // we only observe latest statuses
-
-    nelson match {
-      case Ready => latest.forall(_ == TaskStatus.Running)
-      case Garbage => latest.forall(_ == TaskStatus.Running)
-      case Deprecated => latest.forall(_ == TaskStatus.Running)
-      case Terminated => latest.forall(_ == TaskStatus.Dead)
-      case Unknown => false // one unknown can never equal a known or another unknown
-
-      //// there is no equivalency in Nomad for these, so we consider all of these as mismatches
-      case Pending => false
-      case Deploying => false
-      case Failed => false
-      case Warming => false
-    }
-  }
-
 }
 
 final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org.http4s.client.Client) extends (SchedulerOp ~> Task) {
   import NomadJson._
   import NomadHttp.log
   import SchedulerOp._
-  import UnitDef._
   import argonaut._, Argonaut._
   import org.http4s._
   import org.http4s.client._
@@ -83,10 +60,6 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
         summary(dc,sn)
       case RunningUnits(dc, prefix) =>
         runningUnits(dc, prefix)
-      case Allocations(dc, prefix) =>
-        allocations(dc, prefix)
-      case EquivalentStatus(nelson, reverseChrono) =>
-        equivalentStatus(nelson, reverseChrono)
     }
 
   private def summary(dc: Datacenter, sn: Datacenter.StackName): Task[Option[DeploymentSummary]] = {
@@ -104,18 +77,6 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
     val req = addCreds(dc, Request(Method.GET, uri))
 
     client.expect[List[RunningUnit]](req)(jsonOf[List[RunningUnit]]).map(_.toSet)
-  }
-
-  private def allocations(dc: Datacenter, prefix: Option[String]): Task[List[TaskGroupAllocation]] = {
-    val baseUri = nomad.endpoint / "v1" / "allocations"
-    val uri = prefix.cata(p => baseUri.withQueryParam("prefix", p), baseUri)
-    val req = addCreds(dc, Request(Method.GET, uri))
-
-    client.expect[List[TaskGroupAllocation]](req)(jsonOf[List[TaskGroupAllocation]])
-  }
-
-  def equivalentStatus(nelson: DeploymentStatus, reverseChrono: NonEmptyList[Set[TaskStatus]]): Task[Boolean] = Task.now {
-    NomadHttp.equivalentStatus(nelson, reverseChrono)
   }
 
   /*
@@ -191,7 +152,6 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
 object NomadJson {
   import argonaut._, Argonaut._
   import Infrastructure.Nomad
-  import Schedule._
   import scala.concurrent.duration._
 
   sealed abstract class NetworkMode(val asString: String)
@@ -452,7 +412,7 @@ object NomadJson {
             "Name"          := name,
             "Count"         := env.desiredInstances.getOrElse(1),
             "RestartPolicy" := env.retries.map(restartJson).getOrElse(restartJson(3)), // if no retry specified, only try 3 times rather than 15.
-            "EphemeralDisk" := ephemeralDiskJson(false,false,101),
+            "EphemeralDisk" := ephemeralDiskJson(false,false,plan.environment.ephemeralDisk.getOrElse(101)),
             "Tasks"         := (List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags)) ++
                                loggingSidecarJson(nomad, env.bindings, name, ns))
           )

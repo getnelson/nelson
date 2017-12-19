@@ -21,12 +21,11 @@ import java.nio.file.Paths
 import health._
 import HealthCheckOp._
 import Datacenter.{DCUnit, Deployment, Namespace, TrafficShift}
-import DeploymentStatus.{Ready, Warming}
+import DeploymentStatus.Warming
 import monitoring.DeploymentMonitor
 import monitoring.DeploymentMonitor.{PromoteToReady, RetainAsWarming}
 import storage.StoreOp
 import storage.StoreOp._
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.collection.immutable.Set
 import scala.collection.mutable.Map
@@ -35,7 +34,7 @@ import scala.concurrent.duration._
 import scalaz.stream._
 import scalaz.stream.{Process, Sink}
 import scalaz.concurrent.Task
-import scalaz.{NonEmptyList, \/, ~>}
+import scalaz.{NonEmptyList, ~>}
 import scala.language.postfixOps
 import scala.concurrent.duration._
 import java.time.Instant
@@ -236,12 +235,12 @@ class DeploymentMonitorSpec extends NelsonSuite {
     }
 
     val throughSink = sink.lift[Task, Int] { i =>
-      Task.delay(throughSinkBuffer += i)
+      Task.delay { throughSinkBuffer += i; () }
     }
 
     val toSink = lift[Sink, Int] { _ =>
       sink.lift { i =>
-        Task.delay(finalSinkBuffer += i)
+        Task.delay { finalSinkBuffer += i; () }
       }
     }
 

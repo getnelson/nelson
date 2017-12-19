@@ -21,7 +21,6 @@ import journal.Logger
 import scalaz.concurrent.Task
 import scalaz._, Scalaz._
 import scalaz.stream.{Process,Sink,sink}
-import scalaz.stream.io._
 import scalaz.stream.async.mutable.{Queue}
 import java.nio.file.{Path,Files,StandardOpenOption}
 import java.time.Instant

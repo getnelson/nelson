@@ -23,10 +23,6 @@ import org.http4s.headers.`Set-Cookie`
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
 import scalaz.concurrent.Task
-import scalaz.stream.Process
-import scalaz.{\/,-\/,\/-}
-import journal.Logger
-import concurrent.duration._
 
 final case class Auth(config: NelsonConfig) extends Default {
   import nelson.Json._
@@ -81,7 +77,7 @@ final case class Auth(config: NelsonConfig) extends Default {
             path   = Some("/"),
             domain = Some(cfg.network.externalHost),
             secure = cfg.network.tls,
-            maxAge = Some(cfg.security.expireLoginAfter.toSeconds.toInt),
+            maxAge = Some(cfg.security.expireLoginAfter.toSeconds.toLong),
             httpOnly = false // determines if js can read this cookie
           )
           Found(uri("/")).putHeaders(`Set-Cookie`(cookie))

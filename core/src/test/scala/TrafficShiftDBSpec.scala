@@ -18,7 +18,6 @@ package nelson
 
 import doobie.imports._
 import scalaz._,Scalaz._
-import scalaz.concurrent.Task
 import storage.{run => runs, StoreOp}
 import org.scalatest.{BeforeAndAfterEach}
 import scala.concurrent.duration._
@@ -30,6 +29,7 @@ class TrafficShiftDBSpec extends NelsonSuite with BeforeAndAfterEach {
   override def beforeAll(): Unit = {
     super.beforeAll()
     runs(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   override def beforeEach: Unit = {

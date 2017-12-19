@@ -19,7 +19,6 @@ package yaml
 
 import scalaz.\/
 import scalaz.concurrent.Task
-import scalaz.syntax.monad._
 
 trait SnakeCharmer {
 

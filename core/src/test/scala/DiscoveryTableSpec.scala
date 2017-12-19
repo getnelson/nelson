@@ -16,11 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz.concurrent.Task
 import scalaz.std.list._
-import scalaz.std.string._
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 
 class DiscoveryTableSpec extends NelsonSuite {
   import Datacenter._
@@ -30,6 +26,7 @@ class DiscoveryTableSpec extends NelsonSuite {
   override def beforeAll(): Unit = {
     super.beforeAll()
     nelson.storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   "discoveryTables" should "be built from database" in {

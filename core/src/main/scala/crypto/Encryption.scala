@@ -36,7 +36,7 @@ object EncryptionKey {
 
   def apply(bytes: ByteVector): InsufficientEncryptionKeyLength \/ EncryptionKey =
     if (bytes.length >= minBytes) \/.right(new EncryptionKey(bytes))
-    else \/.left(InsufficientEncryptionKeyLength(actual = bytes.length, required = minBytes))
+    else \/.left(InsufficientEncryptionKeyLength(actual = bytes.length, required = minBytes.toLong))
 
   def unsafe(bytes: ByteVector): EncryptionKey =
     apply(bytes).valueOr(e => throw new IllegalArgumentException(e.toString))

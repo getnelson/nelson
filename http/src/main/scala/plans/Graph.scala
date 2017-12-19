@@ -20,19 +20,11 @@ package plans
 import org.http4s._
 import org.http4s.dsl._
 import _root_.argonaut._, Argonaut._
-import scalaz.concurrent.Task
-import scalaz.stream.Process
 import scalaz._, Scalaz._
-import journal.Logger
-import scala.concurrent.duration._
-
 
 final case class Graph(config: NelsonConfig) extends Default {
-  import yaml._
-  import Datacenter._
   import nelson.Json._
   import routing.RoutingGraph
-  import storage.StoreOpF
 
   def getRoutingGraph(ns: Datacenter.Namespace): storage.StoreOpF[Option[RoutingGraph]] =
      routing.RoutingTable.routingGraph(ns).map(x => Option(x))

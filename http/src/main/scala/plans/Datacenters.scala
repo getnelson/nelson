@@ -21,15 +21,8 @@ import org.http4s._
 import org.http4s.dsl._
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
-import scalaz.concurrent.Task
-import scalaz.stream.Process
-import scalaz.std.list._
-import scalaz.syntax.traverse._
-import scalaz.syntax.std.list._
-import scalaz.syntax.std.option._
-import scalaz.{\/,-\/,\/-}
-import journal.Logger
-import concurrent.duration._
+import scalaz.{Applicative, \/}
+import scalaz.Scalaz._
 import java.time.Instant
 
 final case class Datacenters(config: NelsonConfig) extends Default {
@@ -155,7 +148,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
    case req @ GET -> Root /"v1" / "datacenters" / dcname / "graph" :? NsO(ns) & IsAuthenticated(_) =>
      ns.map(commaSeparatedStringToNamespace) match {
        case Some(ns) =>
-         ns.sequenceU.fold(
+         Applicative[\/[InvalidNamespaceName, ?]].sequence(ns).fold(
            e => BadRequest(e.getMessage),
            n => json(Nelson.getRoutingGraphs(dcname, n)))
        case None =>

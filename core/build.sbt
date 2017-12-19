@@ -47,7 +47,7 @@ libraryDependencies ++= Seq(
   "com.google.code.findbugs"    % "jsr305"                             % "3.0.1", // needed to provide class javax.annotation.Nullable
   "com.cronutils"               % "cron-utils"                         % "5.0.5",
   "org.scodec"                 %% "scodec-core"                        % V.scodec,
-  "org.http4s"                 %% "http4s-argonaut61"                  % V.http4s,
+  "org.http4s"                 %% "http4s-argonaut61"                  % V.http4sArgonaut61,
   "org.http4s"                 %% "http4s-blaze-client"                % V.http4s,
   "com.whisk"                  %% "docker-testkit-scalatest"           % V.dockerit % "test",
   "com.whisk"                  %% "docker-testkit-impl-docker-java"    % V.dockerit % "test"
@@ -59,30 +59,15 @@ ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 
 addCompilerPlugin(dependencies.macroparadise.plugin)
 
-addCompilerPlugin(dependencies.si2712fix.plugin)
-
 initialCommands in console := """
 import nelson._
 val storage = new nelson.storage.H2Storage(DatabaseConfig("org.h2.Driver", s"jdbc:h2:file:/tmp/nelson.console.db;DATABASE_TO_UPPER=FALSE", None, None))
 storage.setup.run
 """
 
-wartremoverErrors in (Compile, compile) ++= Warts.allBut(
-  Wart.Any,
-  Wart.AsInstanceOf,
-  Wart.DefaultArguments,
-  Wart.ExplicitImplicitTypes,
-  Wart.MutableDataStructures,
-  Wart.NoNeedForMonad,
-  Wart.NonUnitStatements,
-  Wart.Nothing,
-  Wart.Option2Iterable,
-  Wart.Throw,
-  Wart.ToString,
-  Wart.Var
-)
-
 buildInfoPackage := "nelson"
+
+scalacOptions += "-Ypartial-unification"
 
 scalacOptions in (Compile, doc) ++= Seq(
   "-no-link-warnings" // Suppresses problems with Scaladoc @throws links

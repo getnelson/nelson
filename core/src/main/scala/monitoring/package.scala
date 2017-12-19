@@ -16,10 +16,8 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import io.prometheus.client.{Collector, CollectorRegistry, Histogram}
+import io.prometheus.client.{Collector, CollectorRegistry}
 import io.prometheus.client.hotspot._
-import scalaz.\/
-import scalaz.concurrent.Task
 
 package object monitoring {
   def registerJvmMetrics(registry: CollectorRegistry = CollectorRegistry.defaultRegistry): Unit = {

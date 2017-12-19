@@ -16,12 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalatest.{Matchers,BeforeAndAfterAll,FlatSpec,Inspectors}
+import org.scalatest.{Matchers,FlatSpec,Inspectors}
 import policies._
 import nelson.test._
-import scalaz.==>>
 import scalaz.concurrent.Task
-import scalaz.std.string._
 import vault._
 
 class PoliciesSpec extends FlatSpec with Matchers with Inspectors with RoutingFixtures {

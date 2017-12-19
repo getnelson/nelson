@@ -17,15 +17,9 @@
 package nelson
 
 import knobs._
-import java.io.File
-import java.net.URI
-import concurrent.duration._
 import org.scalatest.{FlatSpec,Matchers}
 import org.scalatest.{FlatSpec,Matchers}
-import helm.ConsulOp
-import scalaz.~>
 import scalaz.concurrent.Task
-import scalaz.syntax.monad._
 
 class ConfigSpec extends FlatSpec with Matchers {
 

@@ -22,18 +22,16 @@ import scalaz.@@
 package object nelson {
 
   import argonaut.{Parse,DecodeJson}
-  import concurrent.{Future,ExecutionContext,duration}, duration.Duration
+  import concurrent.duration, duration.Duration
   import java.io.File
   import java.nio.file.{Files, Path, Paths}
   import java.nio.charset.StandardCharsets
-  import java.time.Instant
   import java.util.Locale
   import scala.concurrent.duration._
   import scalaz.concurrent.Task
   import scalaz.stream.Process
   import scalaz.syntax.kleisli._
-  import scalaz.{\/,~>,Free,Monad,Order,Inject,Coproduct,-\/,\/-}
-  import shapeless.{HNil,:: => :+:}
+  import scalaz.{~>,Monad,Order}
 
   type ID = Long
   type GUID = String
@@ -90,7 +88,7 @@ package object nelson {
   implicit class BedazzledTask[A](in: Task[A]){
     def retryExponentially(seed: Duration = 15.seconds, limit: Int = 5): Task[A] = {
       val periods = List.fill(limit)(seed).zipWithIndex.map {
-        case (d,i) => d * i
+        case (d,i) => d * i.toDouble
       }
       in.retry(periods)
     }

@@ -19,15 +19,10 @@ package nelson
 import helm.ConsulOp
 import notifications.{SlackOp,EmailOp}
 import doobie.imports._
-import nelson.scheduler._
 import scalaz._, Scalaz._
-import scala.concurrent.duration._
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 import scalaz.IMap
 import scalaz.concurrent.Task
-import Datacenter._
-import docker._
-import java.nio.file.Paths
 import knobs._
 import java.util.concurrent.{Executors, ThreadFactory}
 import dispatch.Http
@@ -144,10 +139,6 @@ trait NelsonSuite
         Task.delay(None)
       case RunningUnits(dc, prefix) =>
         Task.now(Set.empty)
-      case Allocations(dc, prefix) =>
-        Task.now(nil)
-      case EquivalentStatus(s, l) =>
-        Task.now(false)
     }
   }
 

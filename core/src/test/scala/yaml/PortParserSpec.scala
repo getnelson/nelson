@@ -17,7 +17,7 @@
 package nelson
 package yaml
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
+import org.scalacheck._, Prop._
 
 object PortParserSpec extends Properties("PortParser.parse"){
   import Fixtures._

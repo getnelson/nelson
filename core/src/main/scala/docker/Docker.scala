@@ -20,9 +20,7 @@ package docker
 import journal.Logger
 import scalaz.concurrent.Task
 import scala.collection.mutable.MutableList
-import scalaz._,Scalaz._
-import helm.ConsulOp
-import argonaut._, Argonaut._
+import scalaz._
 import scalaz.{~>,Free,Monad}
 
 

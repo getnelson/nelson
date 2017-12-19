@@ -16,14 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import storage.{run=>runs, StoreOp, StoreOpF}
-import doobie.imports._
+import storage.{run=>runs, StoreOp}
 import scalaz.concurrent.Task
-import scalaz.syntax.monad._
 import scalaz.~>
-import scalaz.std.list._
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll,BeforeAndAfterEach}
-import scala.concurrent.duration._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck._
 import cleanup._
@@ -33,16 +29,16 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
   import nelson.routing.{RoutingNode,RoutingTable}
   import Datacenter._
   import DeploymentStatus._
-  import ExpirationPolicyProcess._
   import scala.concurrent.duration._
   import quiver._
   import nelson.cleanup._
-  import nelson.routing.{RoutingGraph,RoutePath,RoutingTable}
+  import nelson.routing.{RoutePath,RoutingTable}
   import java.time.Instant
 
   override def beforeAll(): Unit = {
     super.beforeAll()
     runs(config.storage, insertFixtures(testName)).run
+    ()
   }
 
   val dc = config.datacenters.head

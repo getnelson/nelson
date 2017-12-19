@@ -30,8 +30,7 @@ import journal.Logger
  * is marked as `garbage` becomes a candidate for cleanup.
  */
 object GarbageCollector {
-  import nelson.Datacenter.{Namespace,Deployment}
-  import nelson.routing.{RoutingTable}
+  import nelson.Datacenter.Deployment
   import nelson.storage.{run => runs, StoreOp,StoreOpF}
 
   private val log = Logger[GarbageCollector.type]

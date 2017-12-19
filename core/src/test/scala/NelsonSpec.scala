@@ -16,26 +16,19 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz.concurrent.Task
-import scalaz.syntax.monad._
-import scalaz.std.list._
 import scalaz.{-\/,\/-,NonEmptyList}
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll,BeforeAndAfterEach}
+import org.scalatest.BeforeAndAfterEach
 import storage.{run => runs, StoreOp}
 import org.scalacheck._
-import java.time.Instant
-
-import scala.concurrent.duration._
 
 class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
   import Datacenter._
-  import routing.{RoutingNode,RoutingTable}
-  import RoutingTable._
+  import routing.RoutingNode
 
   override def beforeAll(): Unit = {
     super.beforeAll()
     nelson.storage.run(config.storage, insertFixtures(testName)).run
+    ()
   }
 
 

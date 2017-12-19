@@ -19,26 +19,21 @@ package monitoring
 
 import journal.Logger
 import Datacenter.{Deployment, TrafficShift,StackName}
-import DeploymentStatus.{Garbage, Ready, Warming}
+import DeploymentStatus.{Ready, Warming}
 import storage.{StoreOp, StoreOpF}
 import health.{HealthCheckOp, HealthCheck, Passing}
 import HealthCheckOp.HealthCheckF
 import java.time.Instant
 
-import PartialFunction.{apply => partial}
-import scalaz.{Coproduct, Kleisli, NonEmptyList, OptionT, ~>}
-import scalaz.Coproduct._
+import scalaz.{NonEmptyList, OptionT}
 import scalaz.concurrent.Task
 import scalaz.syntax.bind._
 import scalaz.syntax.std.option._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
-import scalaz.std.list.listSyntax._
-import scalaz.syntax.applicative._
-import scalaz.syntax.std.string._
-import scalaz.std.option._
-import scalaz.stream.{Channel, Process, Sink, Writer, channel, sink, time}
-import scalaz.Id._
+import scalaz.stream.{Process, Sink, sink, time}
+import helm.HealthStatus._
+import helm.HealthStatus
 import nelson.Json.DeploymentEncoder
 import nelson.audit.AuditableInstances.deploymentAuditable
 import nelson.Nelson._

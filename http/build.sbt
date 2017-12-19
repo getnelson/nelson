@@ -19,9 +19,11 @@ import verizon.build._
 import com.typesafe.sbt.packager.archetypes._
 import com.typesafe.sbt.packager.docker._
 
-Revolver.settings
-
 enablePlugins(AshScriptPlugin, JavaAppPackaging, DockerPlugin)
+
+addCompilerPlugin(dependencies.kindprojector.plugin)
+
+scalacOptions += "-Ypartial-unification"
 
 packageName in Docker := "verizon/nelson"
 
@@ -53,7 +55,7 @@ resolvers += "splunk-releases" at "http://splunk.artifactoryonline.com/splunk/ex
 
 libraryDependencies ++= Seq(
   "com.splunk.logging"         % "splunk-library-javalogging" % "1.5.2",
-  "org.http4s"                %% "http4s-argonaut61"          % V.http4s,
+  "org.http4s"                %% "http4s-argonaut61"          % V.http4sArgonaut61,
   "org.http4s"                %% "http4s-dsl"                 % V.http4s,
   "org.http4s"                %% "http4s-blaze-server"        % V.http4s,
   "io.prometheus"              % "simpleclient_common"        % V.prometheus
@@ -85,15 +87,6 @@ dockerCommands ++= {
     ExecCmd("RUN", "rm", "-rf", s"/tmp/${prometheusBase}", s"/tmp/${prometheusBase}.tar.gz")
   )
 }
-
-wartremoverErrors in (Compile, compile) ++= Warts.allBut(
-  Wart.Any,
-  Wart.DefaultArguments,
-  Wart.NonUnitStatements,
-  Wart.Nothing,
-  Wart.Throw,
-  Wart.ToString
-)
 
 scalaTestVersion := "2.2.6"
 

@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.storage.{StoreOp, Migrate}
+import nelson.storage.Migrate
 
 object TestStorage {
   def dbConfig(testname: String): DatabaseConfig =

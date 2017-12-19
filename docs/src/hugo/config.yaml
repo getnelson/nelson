@@ -5,8 +5,8 @@ params:
   project_name: Nelson
   project_tagline: Automated, multi-region container deployment
   github_host: github.com
-  github_repository: Verizon/nelson
-  travis_url: https://travis-ci.org/Verizon/nelson
+  github_repository: getnelson/nelson
+  travis_url: https://travis-ci.org/getnelson/nelson
   license: Apache 2.0
   license_url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 0.9.x # can be overriden by site data `global.json`
@@ -17,11 +17,11 @@ params:
     trianglify: true
   header_links:
     - title: GitHub
-      url: https://github.com/verizon/nelson
+      url: https://github.com/getnelson/nelson
     - title: API Docs
-      url: https://verizon.github.io/nelson/api/
+      url: https://getnelson.github.io/nelson/api/
   footer_links:
     - title: GitHub
-      url: https://github.com/verizon/nelson
+      url: https://github.com/getnelson/nelson
     - title: Issues
-      url: https://verizon.github.io/nelson/issues
+      url: https://getnelson.github.io/nelson/issues

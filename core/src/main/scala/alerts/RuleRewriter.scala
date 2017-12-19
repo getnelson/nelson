@@ -19,7 +19,7 @@ package nelson.alerts
 import java.util.regex.Pattern
 
 import nelson.Datacenter.StackName
-import nelson.{NamespaceName, PlanRef, UnitName, Version}
+import nelson.{NamespaceName, PlanRef}
 import nelson.Manifest.PrometheusConfig
 import scalaz.concurrent.Task
 
