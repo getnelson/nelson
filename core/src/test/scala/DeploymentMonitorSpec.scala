@@ -20,7 +20,7 @@ import java.nio.file.Paths
 
 import health._
 import HealthCheckOp._
-import Datacenter.{DCUnit, Deployment, Namespace, TrafficShift}
+import Datacenter.{DCUnit, Deployment, Namespace, StackName, TrafficShift}
 import DeploymentStatus.Warming
 import monitoring.DeploymentMonitor
 import monitoring.DeploymentMonitor.{PromoteToReady, RetainAsWarming}
@@ -75,17 +75,9 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
   val namespace = Datacenter.Namespace(1L, NamespaceName("dev"), "dev")
 
-  def mkHealthOpWithMajorityHealthy(f: Map[UnitName, HealthCheck]) = new (HealthCheckOp ~> Task) {
+  def mkHealthOp(f: Map[StackName, Boolean]) = new (HealthCheckOp ~> Task) {
     override def apply[A](c: HealthCheckOp[A]): Task[A] = c match {
-      case Health(dc, ns, service) => Task.now(List(f(service.toString),Passing,Passing,Passing,Failing))
-      case _ => Task.fail(new Exception("Unexpected Store Operation Executed"))
-    }
-  }
-
-  def mkHealthOp(f: Map[UnitName, HealthCheck]) = new (HealthCheckOp ~> Task) {
-    override def apply[A](c: HealthCheckOp[A]): Task[A] = c match {
-      case Health(dc,ns,service) => Task.now(List(f(service.toString)))
-      case _ => Task.fail(new Exception("Unexpected Store Operation Executed"))
+      case Healthy(dc,ns,service) => Task.now(f(service))
     }
   }
 
@@ -101,7 +93,8 @@ class DeploymentMonitorSpec extends NelsonSuite {
     val dep1 = Deployment(1L, mkDcUnit(1L, "s0", Version(1, 0, 0)), "a", namespace, null, null, "plan-1", "guid-1", "retain-latest")
     val dep2 = Deployment(1L, mkDcUnit(1L, "s1", Version(1, 0, 1)), "a", namespace, null, null, "plan-1", "guid-1", "retain-latest")
 
-    val consulInterp = mkHealthOpWithMajorityHealthy(Map(dep1.stackName.toString -> Passing, dep2.stackName.toString -> Unknown))
+
+    val consulInterp = mkHealthOp(Map(dep1.stackName -> true, dep2.stackName -> false))
 
     val storeInterp = mkStoreOp(
       Map("dc0" -> Set(mkNamespace(1L, NamespaceName("dev"), "dc0"), mkNamespace(2L, NamespaceName("qa"), "dc0"), mkNamespace(3L, NamespaceName("prod"), "dc0"))),
@@ -151,7 +144,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
   // the first time a service is deployed there will be no preceeding traffic shift
   it should "bootstrap promotion"  in {
-    val consul = mkHealthOpWithMajorityHealthy(Map(dep100.stackName.toString -> Passing, dep101.stackName.toString -> Passing, dep102.stackName.toString -> Passing))
+    val consul = mkHealthOp(Map(dep100.stackName -> true, dep101.stackName -> true, dep102.stackName -> true))
     val stg = mkStoreOp(
       Map("dc0" -> Set(mkNamespace(1L, NamespaceName("dev"), "dc0"))),
       Map((1L, NonEmptyList(Warming)) -> Set(dep100 -> Warming)),
@@ -169,10 +162,10 @@ class DeploymentMonitorSpec extends NelsonSuite {
     ts.inProgress(Instant.now) should equal(true)
 
     val consul = mkHealthOp(Map(
-      dep100.stackName.toString -> Passing,
-      dep101.stackName.toString -> Passing,
-      dep102.stackName.toString -> Passing,
-      dep103.stackName.toString -> Passing 
+      dep100.stackName -> true,
+      dep101.stackName -> true,
+      dep102.stackName -> true,
+      dep103.stackName -> true 
     ))
 
     val stg = mkStoreOp(
@@ -195,11 +188,11 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     val ts = mkTrafficShift(10.minutes, Instant.now.minusSeconds(10), Some(Instant.now.plusSeconds(120)))
 
-    val consul = mkHealthOpWithMajorityHealthy(Map(
-      dep100.stackName.toString -> Failing,
-      dep101.stackName.toString -> Failing,
-      dep102.stackName.toString -> Passing,
-      dep103.stackName.toString -> Passing 
+    val consul = mkHealthOp(Map(
+      dep100.stackName -> false,
+      dep101.stackName -> false,
+      dep102.stackName -> true,
+      dep103.stackName -> true 
     ))
 
     val stg = mkStoreOp(

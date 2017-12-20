@@ -21,7 +21,7 @@ import journal.Logger
 import Datacenter.{Deployment, TrafficShift,StackName}
 import DeploymentStatus.{Ready, Warming}
 import storage.{StoreOp, StoreOpF}
-import health.{HealthCheckOp, HealthCheck, Passing}
+import health.HealthCheckOp
 import HealthCheckOp.HealthCheckF
 import java.time.Instant
 
@@ -106,11 +106,11 @@ object DeploymentMonitor {
    */
   def monitorActionItem(dc: Datacenter, d: Deployment): Task[MonitorActionItem] =
     for {
-      hcs    <- health.run(dc.health, getHealth(dc, d.namespace.name, d.stackName))
-      shift  <- storage.run(dc.storage, trafficShift(d))
-      next   <- storage.run(dc.storage, next(d))
+      healthy <- health.run(dc.health, getHealth(dc, d.namespace.name, d.stackName))
+      shift   <- storage.run(dc.storage, trafficShift(d))
+      next    <- storage.run(dc.storage, next(d))
     } yield {
-      if (!majorityPassing(hcs))
+      if (!healthy)
         RetainAsWarming(dc, d, "The majority of all health status checks must be passing.")
       else if (shift.exists(_.inProgress(Instant.now)))
         RetainAsWarming(dc, d, "Traffic shift in progress, can not promote at this time.")
@@ -125,11 +125,8 @@ object DeploymentMonitor {
       // i.e. periodic jobs or bootstrapping a service
     }
 
-  def majorityPassing(statuses: List[HealthCheck]) : Boolean =
-    statuses.count(_ == Passing) > statuses.count(_ != Passing)
-
-  def getHealth(dc: Datacenter, ns: NamespaceName, sn: StackName): HealthCheckOp.HealthCheckF[List[HealthCheck]] =
-    HealthCheckOp.health(dc, ns, sn)
+  def getHealth(dc: Datacenter, ns: NamespaceName, sn: StackName): HealthCheckOp.HealthCheckF[Boolean] =
+    HealthCheckOp.healthy(dc, ns, sn)
 
   def trafficShift(d: Deployment): StoreOpF[Option[TrafficShift]] =
     StoreOp.getTrafficShiftForServiceName(d.nsid, d.unit.serviceName)

@@ -580,9 +580,6 @@ object Json {
       jEmptyObject
     )
 
-  implicit val HealthCheckEncoder: EncodeJson[health.HealthCheck] =
-    EncodeJson[health.HealthCheck] { hs => jString(health.HealthCheck.toString(hs)) }
-
   implicit lazy val HealthStatusEncoder: EncodeJson[ConsulHealthStatus] =
     EncodeJson((h: ConsulHealthStatus) =>
       ("name"    := h.name) ->:

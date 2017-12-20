@@ -159,7 +159,7 @@ trait NelsonSuite
   lazy val healthI = new (HealthCheckOp ~> Task) {
     import HealthCheckOp._
     def apply[A](op: HealthCheckOp[A]): Task[A] = op match {
-      case Health(dc,ns,sn) => Task.now(Nil)
+      case Healthy(dc,ns,sn) => Task.now(false)
     }
   }
 
