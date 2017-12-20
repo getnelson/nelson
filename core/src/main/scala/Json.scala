@@ -599,7 +599,7 @@ object Json {
   implicit lazy val RuntimeSummaryEncoder: EncodeJson[Nelson.RuntimeSummary] =
     EncodeJson((rs: Nelson.RuntimeSummary) =>
       ("scheduler" := rs.deployment) ->:
-      ("consul_health" := rs.health) ->:
+      ("healthy" := rs.healthy) ->:
       ("current_status" := rs.currentStatus.toString) ->:
       ("expires_at" := rs.expiresAt) ->:
       jEmptyObject
