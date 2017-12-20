@@ -31,6 +31,7 @@ object Nelson {
   import AuditableInstances._
   import nelson.storage.{run => runs, StoreOp, StoreOpF}
   import Manifest.Versioned
+  import nelson.health.HealthCheckOp
 
   /**
    * NelsonK[U] provides us with a context that accepts a configuration and gives us a scalaz Task[U]
@@ -568,7 +569,7 @@ object Nelson {
 
   final case class RuntimeSummary(
     deployment: scheduler.DeploymentSummary,
-    health: List[ConsulHealthStatus],
+    healthy: Boolean,
     currentStatus: DeploymentStatus,
     expiresAt: Instant
   )
@@ -590,8 +591,7 @@ object Nelson {
         (dep, exp, status, ns) = a
         dc  <- OptionT(Task.now(cfg.datacenters.find(_.name == ns.datacenter)))
         sum <- OptionT(scheduler.run(dc.interpreters.scheduler, scheduler.SchedulerOp.summary(dc, dep.stackName)))
-        h   <- OptionT(helm.run(dc.consul,
-                  helm.ConsulOp.healthCheckJson[ConsulHealthStatus](dep.stackName.toString)).map(_.toOption))
+        h   <- OptionT(health.run(dc.health, HealthCheckOp.healthy(dc, ns.name, dep.stackName)).map(h => Some(h): Option[Boolean]))
       } yield RuntimeSummary(sum, h, status, exp)).run
     }
   }

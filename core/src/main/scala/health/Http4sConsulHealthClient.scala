@@ -25,19 +25,26 @@ import argonaut._, Argonaut._
 
 
 final case class Http4sConsulHealthClient(client: ConsulOp ~> Task) extends (HealthCheckOp ~> Task) {
-
   import HealthCheckOp._
+  import Http4sConsulHealthClient._
 
   def apply[A](a: HealthCheckOp[A]): Task[A] = a match {
-    case Health(dc, ns, sn) =>
+    case Healthy(dc, ns, sn) =>
       val op = ConsulOp.healthCheckJson[HealthCheck](sn.toString).map(_.fold(_ => Nil, x => x))
-      helm.run(client, op) 
+      val checks = helm.run(client, op)
+      checks.map { cs =>
+        val (passing, notPassing) = cs.foldLeft((0, 0)) {
+          case ((p, np), Passing)    => (p + 1, np)
+          case ((p, np), NotPassing) => (p, np + 1)
+        }
+
+        passing > notPassing
+      }
   }
 
   private def fromConsulString(s: String): HealthCheck = s match {
     case "passing"  => Passing
-    case "critical" => Failing
-    case _          => Unknown
+    case _          => NotPassing
   }
 
   implicit val healthCheckDecoder: DecodeJson[HealthCheck] =
@@ -46,4 +53,10 @@ final case class Http4sConsulHealthClient(client: ConsulOp ~> Task) extends (Hea
         DecodeResult.ok(fromConsulString(s))
       }
     }
+}
+
+object Http4sConsulHealthClient {
+  sealed abstract class HealthCheck extends Product with Serializable
+  final case object Passing extends HealthCheck
+  final case object NotPassing extends HealthCheck
 }

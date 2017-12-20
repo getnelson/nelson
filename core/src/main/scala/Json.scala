@@ -580,9 +580,6 @@ object Json {
       jEmptyObject
     )
 
-  implicit val HealthCheckEncoder: EncodeJson[health.HealthCheck] =
-    EncodeJson[health.HealthCheck] { hs => jString(health.HealthCheck.toString(hs)) }
-
   implicit lazy val HealthStatusEncoder: EncodeJson[ConsulHealthStatus] =
     EncodeJson((h: ConsulHealthStatus) =>
       ("name"    := h.name) ->:
@@ -602,7 +599,7 @@ object Json {
   implicit lazy val RuntimeSummaryEncoder: EncodeJson[Nelson.RuntimeSummary] =
     EncodeJson((rs: Nelson.RuntimeSummary) =>
       ("scheduler" := rs.deployment) ->:
-      ("consul_health" := rs.health) ->:
+      ("healthy" := rs.healthy) ->:
       ("current_status" := rs.currentStatus.toString) ->:
       ("expires_at" := rs.expiresAt) ->:
       jEmptyObject

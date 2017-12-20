@@ -25,10 +25,10 @@ sealed abstract class HealthCheckOp[A] extends Product with Serializable
 
 object HealthCheckOp {
 
-  final case class Health(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends HealthCheckOp[List[HealthCheck]]
+  final case class Healthy(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends HealthCheckOp[Boolean]
 
   type HealthCheckF[A] = Free.FreeC[HealthCheckOp, A]
 
-  def health(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName): HealthCheckF[List[HealthCheck]] =
-    Free.liftFC(Health(dc, ns, sn))
+  def healthy(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName): HealthCheckF[Boolean] =
+    Free.liftFC(Healthy(dc, ns, sn))
 }
