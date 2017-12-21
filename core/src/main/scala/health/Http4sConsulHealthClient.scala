@@ -30,7 +30,7 @@ final case class Http4sConsulHealthClient(client: ConsulOp ~> Task) extends (Hea
 
   def apply[A](a: HealthCheckOp[A]): Task[A] = a match {
     case Health(dc, ns, sn) =>
-      val op = ConsulOp.healthCheckJson[HealthCheck](sn.toString).map(_.fold(_ => Nil, x => x))
+      val op = ConsulOp.healthCheckJson[HealthStatus](sn.toString).map(_.fold(_ => Nil, x => x))
       helm.run(client, op) 
   }
 
@@ -40,10 +40,11 @@ final case class Http4sConsulHealthClient(client: ConsulOp ~> Task) extends (Hea
     case _          => Unknown
   }
 
-  implicit val healthCheckDecoder: DecodeJson[HealthCheck] =
-    DecodeJson[HealthCheck] { c =>
-      c.as[String].flatMap { s =>
-        DecodeResult.ok(fromConsulString(s))
-      }
-    }
+  implicit val healthStatusDecoder: DecodeJson[HealthStatus] =
+    DecodeJson(c => for {
+      id     <- (c --\ "CheckID").as[String]
+      status <- (c --\ "Status").as[String].map(fromConsulString)
+      node   <- (c --\ "Node").as[String]
+      name   <- (c --\ "Name").as[String]
+    } yield HealthStatus(id, status, node, Some(name)))
 }

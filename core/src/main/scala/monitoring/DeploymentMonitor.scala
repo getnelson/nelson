@@ -125,10 +125,12 @@ object DeploymentMonitor {
       // i.e. periodic jobs or bootstrapping a service
     }
 
-  def majorityPassing(statuses: List[HealthCheck]) : Boolean =
-    statuses.count(_ == Passing) > statuses.count(_ != Passing)
+  def majorityPassing(statuses: List[health.HealthStatus]) : Boolean = {
+    val healths = statuses.map(_.status)
+    healths.count(_ == Passing) > healths.count(_ != Passing)
+  }
 
-  def getHealth(dc: Datacenter, ns: NamespaceName, sn: StackName): HealthCheckOp.HealthCheckF[List[HealthCheck]] =
+  def getHealth(dc: Datacenter, ns: NamespaceName, sn: StackName): HealthCheckOp.HealthCheckF[List[health.HealthStatus]] =
     HealthCheckOp.health(dc, ns, sn)
 
   def trafficShift(d: Deployment): StoreOpF[Option[TrafficShift]] =
