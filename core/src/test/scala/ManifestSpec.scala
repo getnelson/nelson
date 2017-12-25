@@ -132,6 +132,30 @@ class ManifestManualSpec extends NelsonSuite {
 
   behavior of "loading from YAML"
 
+  it should "be OK with *.yaml" in {
+    val manifest = for {
+      resource <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attemptRun
+      manifest <- yaml.ManifestParser.parse(resource)
+      contents <- loadResourceAsString("/nelson/manifest.deployable.v1.c.yml").attemptRun
+      asset = Github.Asset(
+        id = 45,
+        name = "example-howdy.deployable.yaml", // this is what is being tested - note .yaml instead of .yml
+        url = "",
+        state = "",
+        content = Some(contents)
+      )
+      release = Github.Release(
+        id = 123,
+        url = "",
+        htmlUrl = "",
+        assets = List(asset),
+        tagName = "master"
+      )
+    } yield Manifest.versionedUnits((Manifest.saturateManifest(manifest)(release)).run).map(_.version)
+
+    manifest should equal (\/.right(List(Version(0, 6, 10))))
+  }
+
   it should "augment the manifest with a release in the happy case" in {
     load("/nelson/manifest.deployable.v1.c.yml") should equal (\/.right(List(Version(0,6,10))))
   }
