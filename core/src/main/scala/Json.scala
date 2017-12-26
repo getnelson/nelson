@@ -585,7 +585,7 @@ object Json {
 
   implicit lazy val HealthStatusEncoder: EncodeJson[HealthStatus] =
     EncodeJson((h: HealthStatus) =>
-      ("name"    := h.details.getOrElse("")) ->:
+      ("name"    := h.details.getOrElse("unspecified")) ->:
       ("status"  := h.status) ->:
       ("node"    := h.node) ->:
       ("check_id" := h.id) ->:
