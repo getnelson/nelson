@@ -20,15 +20,21 @@ package health
 import scalaz.Free
 import Free.FreeC
 
+final case class HealthStatus(
+  id: String,
+  status: HealthCheck,
+  node: String,
+  details: Option[String]
+)
 
 sealed abstract class HealthCheckOp[A] extends Product with Serializable
 
 object HealthCheckOp {
 
-  final case class Health(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends HealthCheckOp[List[HealthCheck]]
+  final case class Health(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends HealthCheckOp[List[HealthStatus]]
 
   type HealthCheckF[A] = Free.FreeC[HealthCheckOp, A]
 
-  def health(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName): HealthCheckF[List[HealthCheck]] =
+  def health(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName): HealthCheckF[List[HealthStatus]] =
     Free.liftFC(Health(dc, ns, sn))
 }

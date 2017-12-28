@@ -20,11 +20,11 @@ import java.net.URI
 
 import nelson.scheduler._
 
-
 object Json {
   import argonaut._, Argonaut._
   import Datacenter._
   import concurrent.duration._
+  import health.HealthStatus
   import scalaz._, Scalaz._
 
   implicit lazy val UriToJson: EncodeJson[URI] =
@@ -583,21 +583,14 @@ object Json {
   implicit val HealthCheckEncoder: EncodeJson[health.HealthCheck] =
     EncodeJson[health.HealthCheck] { hs => jString(health.HealthCheck.toString(hs)) }
 
-  implicit lazy val HealthStatusEncoder: EncodeJson[ConsulHealthStatus] =
-    EncodeJson((h: ConsulHealthStatus) =>
-      ("name"    := h.name) ->:
+  implicit lazy val HealthStatusEncoder: EncodeJson[HealthStatus] =
+    EncodeJson((h: HealthStatus) =>
+      ("name"    := h.details.getOrElse("unspecified")) ->:
       ("status"  := h.status) ->:
       ("node"    := h.node) ->:
-      ("check_id" := h.checkID) ->:
+      ("check_id" := h.id) ->:
       jEmptyObject
     )
-  implicit lazy val HealthStatusDecoder: DecodeJson[ConsulHealthStatus] =
-    DecodeJson(c => for {
-      name   <- (c --\ "Name").as[String]
-      status <- (c --\ "Status").as[String]
-      node   <- (c --\ "Node").as[String]
-      check  <- (c --\ "CheckID").as[String]
-    } yield ConsulHealthStatus(name,status,node,check))
 
   implicit lazy val RuntimeSummaryEncoder: EncodeJson[Nelson.RuntimeSummary] =
     EncodeJson((rs: Nelson.RuntimeSummary) =>
