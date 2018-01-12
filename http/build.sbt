@@ -72,8 +72,7 @@ dockerCommands ++= Seq(
   ExecCmd("RUN", "ln", "-s", s"${(defaultLinuxInstallLocation in Docker).value}/bin/${normalizedName.value}", "/usr/local/bin/sbt"),
   ExecCmd("RUN", "chmod", "555", s"${(defaultLinuxInstallLocation in Docker).value}/bin/${normalizedName.value}"),
   ExecCmd("RUN", "chown", "-R", "nelson:nelson", s"${(defaultLinuxInstallLocation in Docker).value}"),
-  ExecCmd("RUN", "apk", "add", "--update-cache", "bash", "graphviz", "wget", "libc6-compat"),
-  ExecCmd("RUN", "apk", "add", "docker=1.9.1-r2", "--update-cache", "--repository", "http://dl-3.alpinelinux.org/alpine/v3.3/community/")
+  ExecCmd("RUN", "apk", "add", "--update-cache", "bash", "graphviz", "wget", "libc6-compat", "docker")
 )
 
 // Install promtool.  It needs to be on the PATH for validation.
