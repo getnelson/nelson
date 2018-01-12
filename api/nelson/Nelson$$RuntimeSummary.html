@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">RuntimeSummary</span><span class="params">(<span name="deployment">deployment: <a href="scheduler/DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a></span>, <span name="health">health: <span class="extype" name="scala.List">List</span>[<a href="ConsulHealthStatus.html" class="extype" name="nelson.ConsulHealthStatus">ConsulHealthStatus</a>]</span>, <span name="currentStatus">currentStatus: <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a></span>, <span name="expiresAt">expiresAt: <span class="extype" name="java.time.Instant">Instant</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">RuntimeSummary</span><span class="params">(<span name="deployment">deployment: <a href="scheduler/DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a></span>, <span name="health">health: <span class="extype" name="scala.List">List</span>[<a href="health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]</span>, <span name="currentStatus">currentStatus: <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a></span>, <span name="expiresAt">expiresAt: <span class="extype" name="java.time.Instant">Instant</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Nelson.RuntimeSummary#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(deployment:nelson.scheduler.DeploymentSummary,health:List[nelson.ConsulHealthStatus],currentStatus:nelson.DeploymentStatus,expiresAt:java.time.Instant):nelson.Nelson.RuntimeSummary"></a>
+      <a id="&lt;init&gt;(deployment:nelson.scheduler.DeploymentSummary,health:List[nelson.health.HealthStatus],currentStatus:nelson.DeploymentStatus,expiresAt:java.time.Instant):nelson.Nelson.RuntimeSummary"></a>
       <a id="&lt;init&gt;:RuntimeSummary"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">RuntimeSummary</span><span class="params">(<span name="deployment">deployment: <a href="scheduler/DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a></span>, <span name="health">health: <span class="extype" name="scala.List">List</span>[<a href="ConsulHealthStatus.html" class="extype" name="nelson.ConsulHealthStatus">ConsulHealthStatus</a>]</span>, <span name="currentStatus">currentStatus: <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a></span>, <span name="expiresAt">expiresAt: <span class="extype" name="java.time.Instant">Instant</span></span>)</span>
+        <span class="name">RuntimeSummary</span><span class="params">(<span name="deployment">deployment: <a href="scheduler/DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a></span>, <span name="health">health: <span class="extype" name="scala.List">List</span>[<a href="health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]</span>, <span name="currentStatus">currentStatus: <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a></span>, <span name="expiresAt">expiresAt: <span class="extype" name="java.time.Instant">Instant</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$$RuntimeSummary@&lt;init&gt;(deployment:nelson.scheduler.DeploymentSummary,health:List[nelson.ConsulHealthStatus],currentStatus:nelson.DeploymentStatus,expiresAt:java.time.Instant):nelson.Nelson.RuntimeSummary" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$$RuntimeSummary@&lt;init&gt;(deployment:nelson.scheduler.DeploymentSummary,health:List[nelson.health.HealthStatus],currentStatus:nelson.DeploymentStatus,expiresAt:java.time.Instant):nelson.Nelson.RuntimeSummary" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -314,18 +314,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.Nelson.RuntimeSummary#health" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="health:List[nelson.ConsulHealthStatus]"></a>
-      <a id="health:List[ConsulHealthStatus]"></a>
+      <a id="health:List[nelson.health.HealthStatus]"></a>
+      <a id="health:List[HealthStatus]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">health</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="ConsulHealthStatus.html" class="extype" name="nelson.ConsulHealthStatus">ConsulHealthStatus</a>]</span>
+        <span class="name">health</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$$RuntimeSummary@health:List[nelson.ConsulHealthStatus]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$$RuntimeSummary@health:List[nelson.health.HealthStatus]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

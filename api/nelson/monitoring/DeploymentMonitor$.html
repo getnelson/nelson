@@ -364,6 +364,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.monitoring.DeploymentMonitor#getHealth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getHealth(dc:nelson.Datacenter,ns:nelson.NamespaceName,sn:nelson.Datacenter.StackName):nelson.health.HealthCheckOp.HealthCheckF[List[nelson.health.HealthStatus]]"></a>
+      <a id="getHealth(Datacenter,NamespaceName,StackName):HealthCheckF[List[HealthStatus]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getHealth</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <a href="../health/HealthCheckOp$.html#HealthCheckF[A]=scalaz.Free.FreeC[nelson.health.HealthCheckOp,A]" class="extmbr" name="nelson.health.HealthCheckOp.HealthCheckF">HealthCheckF</a>[<span class="extype" name="scala.List">List</span>[<a href="../health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@getHealth(dc:nelson.Datacenter,ns:nelson.NamespaceName,sn:nelson.Datacenter.StackName):nelson.health.HealthCheckOp.HealthCheckF[List[nelson.health.HealthStatus]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -381,23 +398,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="nelson.monitoring.DeploymentMonitor#health" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="health(d:nelson.Datacenter.Deployment):helm.ConsulOp.ConsulOpF[Option[List[helm.HealthStatus]]]"></a>
-      <a id="health(Deployment):ConsulOpF[Option[List[HealthStatus]]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">health</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="helm.HealthStatus">HealthStatus</span>]]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@health(d:nelson.Datacenter.Deployment):helm.ConsulOp.ConsulOpF[Option[List[helm.HealthStatus]]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.monitoring.DeploymentMonitor#heartbeat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="heartbeat(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,scala.concurrent.duration.Duration]"></a>
       <a id="heartbeat(NelsonConfig):Process[Task,Duration]"></a>
@@ -467,18 +467,18 @@
     </span>
       
     </li><li name="nelson.monitoring.DeploymentMonitor#majorityPassing" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="majorityPassing(statuses:Option[List[helm.HealthStatus]]):Boolean"></a>
-      <a id="majorityPassing(Option[List[HealthStatus]]):Boolean"></a>
+      <a id="majorityPassing(statuses:List[nelson.health.HealthStatus]):Boolean"></a>
+      <a id="majorityPassing(List[HealthStatus]):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">majorityPassing</span><span class="params">(<span name="statuses">statuses: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="helm.HealthStatus">HealthStatus</span>]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">majorityPassing</span><span class="params">(<span name="statuses">statuses: <span class="extype" name="scala.List">List</span>[<a href="../health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@majorityPassing(statuses:Option[List[helm.HealthStatus]]):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@majorityPassing(statuses:List[nelson.health.HealthStatus]):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
