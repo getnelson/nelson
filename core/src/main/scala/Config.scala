@@ -16,7 +16,11 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import java.io.FileInputStream
+import javax.net.ssl.{SSLContext, X509TrustManager}
 import java.nio.file.{Path, Paths}
+import java.security.SecureRandom
+import java.security.cert.{CertificateFactory, X509Certificate}
 import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService, ThreadFactory}
 
 import journal.Logger
@@ -32,6 +36,7 @@ import notifications.{SlackHttp,SlackOp,EmailOp,EmailServer}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
+import scala.util.control.NonFatal
 import scalaz.Scalaz._
 import scalaz.concurrent.Strategy
 import scalaz.~>
@@ -530,17 +535,69 @@ object Config {
         )((a,b,c,d,e,g) => {
           val splunk = readSplunk
           val loggingSidecar = readLoggingImage
-          val uri = org.http4s.Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
+          val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
           Infrastructure.Nomad(uri,b,c,d,e,loggingSidecar,g,splunk)
         })
     }
 
-    /*
-     * Datacenters currently only support one scheduler
-     */
-    def readScheduler(kfg: KConfig, proxy: Option[Infrastructure.ProxyCredentials]): Option[SchedulerOp ~> Task] =
-      readNomadInfrastructure(kfg.subconfig("nomad"))
+    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] = {
+      (kfg.lookup[String]("endpoint") |@| kfg.lookup[Duration]("timeout")) { (endpoint, timeout) =>
+        val uri = Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
+        Infrastructure.Kubernetes(uri, timeout)
+      }
+    }
+
+    def readNomadScheduler(kfg: KConfig): Option[SchedulerOp ~> Task] =
+      readNomadInfrastructure(kfg)
         .map(n => new scheduler.NomadHttp(nomadcfg, n, http4sClient(n.timeout)))
+
+    // Create a X509TrustManager that trusts a whitelist of certificates, similar to `curl --cacert`
+    def cacert(certs: Array[X509Certificate]): X509TrustManager =
+      new X509TrustManager {
+        def getAcceptedIssuers(): Array[X509Certificate] = certs
+        def checkClientTrusted(certs: Array[X509Certificate], authType: String): Unit = ()
+        def checkServerTrusted(certs: Array[X509Certificate], authType: String): Unit = ()
+      }
+
+    def getKubernetesPodCert(): Option[SSLContext] = {
+      // Auto-mounted at this path for pods
+      // https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
+      val certBundle = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+
+      val is = new FileInputStream(certBundle)
+      val x509Cert: Option[X509Certificate] = try {
+        val cf = CertificateFactory.getInstance("X.509")
+        cf.generateCertificate(is) match {
+          case c: X509Certificate => Some(c)
+          case _                  => None
+        }
+      } catch {
+        case NonFatal(_) => None
+      } finally {
+        is.close()
+      }
+
+      x509Cert.map { cert =>
+        val trustManager = cacert(Array(cert))
+        val sslContext = SSLContext.getInstance("TLS")
+        sslContext.init(null, Array(trustManager), new SecureRandom())
+        sslContext
+      }
+    }
+
+    def readKubernetesClient(kfg: KConfig): Option[KubernetesClient] =
+      (readKubernetesInfrastructure(kfg) |@| getKubernetesPodCert()) {
+        case (kubernetes, sslContext) =>
+          // Auto-mounted at this path for pods
+          // https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
+          val path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+          val serviceAccountToken = scala.io.Source.fromFile(path).getLines.toList.head
+          new KubernetesClient(
+            kubernetes.endpoint,
+            http4sClient(kubernetes.timeout, sslContext = Some(sslContext)),
+            serviceAccountToken
+          )
+      }
 
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
     def readDatacenter(id: String, kfg: KConfig): Datacenter = {
@@ -583,8 +640,19 @@ object Config {
           InstrumentedVaultClient(endpoint, rawClient)
         }).yolo("We really really need vault.  Seriously vault must be configured")
 
-      val sched = readScheduler(kfg.subconfig("infrastructure.scheduler"), proxyCreds)
-        .yolo("At least one scheduler must be defined per datacenter")
+      val schedConfig = kfg.subconfig("infrastructure.scheduler")
+
+      val (sched, healthChecker) = (schedConfig.lookup[String]("scheduler") match {
+        case Some("nomad") =>
+          val s = readNomadScheduler(schedConfig.subconfig("nomad"))
+          val h = health.Http4sConsulHealthClient(consul)
+          s.map((_, h))
+        case Some("kubernetes") =>
+          readKubernetesClient(schedConfig.subconfig("kubernetes")).map { client =>
+            (new scheduler.KubernetesHttp(client), health.KubernetesHealthClient(client))
+          }
+        case _ => None
+      }).yolo("At least one scheduler must be defined per datacenter")
 
       val interpreters = Infrastructure.Interpreters(
         scheduler = sched,
@@ -594,7 +662,7 @@ object Config {
         logger = logger,
         docker = dockerClient,
         control = WorkflowControlOp.trans,
-        health = health.Http4sConsulHealthClient(consul)
+        health = healthChecker
       )
 
       val trafficShift = readTrafficShift(kfg.subconfig("traffic-shift"))
@@ -775,9 +843,11 @@ object Config {
       pkiPath = cfg.lookup[String]("pki-path")
     )
 
-  private def http4sClient(timeout: Duration, maxTotalConnections: Int = 10): Client = {
+  private def http4sClient(timeout: Duration, maxTotalConnections: Int = 10, sslContext: Option[SSLContext] = None): Client = {
     val config = BlazeClientConfig.defaultConfig.copy(
-      requestTimeout = timeout)
+      requestTimeout = timeout,
+      sslContext = sslContext
+    )
     PooledHttp1Client(maxTotalConnections = maxTotalConnections, config = config)
   }
 }

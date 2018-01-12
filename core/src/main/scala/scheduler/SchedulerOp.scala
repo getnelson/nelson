@@ -29,7 +29,7 @@ object SchedulerOp {
 
   final case class Launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String) extends SchedulerOp[String]
 
-  final case class Summary(dc: Datacenter, sn: Datacenter.StackName) extends SchedulerOp[Option[DeploymentSummary]]
+  final case class Summary(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends SchedulerOp[Option[DeploymentSummary]]
 
   final case class RunningUnits(dc: Datacenter, prefix: Option[String]) extends SchedulerOp[Set[RunningUnit]]
 
@@ -41,8 +41,8 @@ object SchedulerOp {
   def delete(dc: Datacenter, d: Datacenter.Deployment): SchedulerF[Unit] =
     Free.liftFC(Delete(dc,d))
 
-  def summary(dc: Datacenter, sn: Datacenter.StackName): SchedulerF[Option[DeploymentSummary]] =
-    Free.liftFC(Summary(dc,sn))
+  def summary(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName): SchedulerF[Option[DeploymentSummary]] =
+    Free.liftFC(Summary(dc,ns,sn))
 
   def runningUnits(dc: Datacenter, prefix: Option[String] = None): SchedulerF[Set[RunningUnit]] =
     Free.liftFC(RunningUnits(dc, prefix))

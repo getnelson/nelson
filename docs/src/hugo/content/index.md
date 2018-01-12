@@ -686,6 +686,7 @@ nelson {
 
       infrastructure {
         scheduler {
+          scheduler = "nomad"
           nomad {
             # Where can Nelson access the Nomad leader cluster
             endpoint  = "https://nomad.service"

@@ -135,7 +135,7 @@ trait NelsonSuite
         Task.delay(sn.toString)
       case Delete(dc,d) =>
         Task.delay(())
-      case Summary(dc,ns) =>
+      case Summary(dc,ns,sn) =>
         Task.delay(None)
       case RunningUnits(dc, prefix) =>
         Task.now(Set.empty)

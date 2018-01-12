@@ -590,7 +590,7 @@ object Nelson {
         a   <- OptionT(storage.run(cfg.storage, query))
         (dep, exp, status, ns) = a
         dc  <- OptionT(Task.now(cfg.datacenters.find(_.name == ns.datacenter)))
-        sum <- OptionT(scheduler.run(dc.interpreters.scheduler, scheduler.SchedulerOp.summary(dc, dep.stackName)))
+        sum <- OptionT(scheduler.run(dc.interpreters.scheduler, scheduler.SchedulerOp.summary(dc, ns.name, dep.stackName)))
         h   <- OptionT(health.run(dc.health, HealthCheckOp.health(dc, ns.name, dep.stackName)).map(h => Some(h): Option[List[HealthStatus]]))
       } yield RuntimeSummary(sum, h, status, exp)).run
     }

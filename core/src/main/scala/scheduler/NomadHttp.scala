@@ -56,7 +56,7 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
       case Launch(i, dc, ns, u, p, hash) =>
         val unit = Manifest.Versioned.unwrap(u)
         launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()
-      case Summary(dc,sn) =>
+      case Summary(dc,_,sn) =>
         summary(dc,sn)
       case RunningUnits(dc, prefix) =>
         runningUnits(dc, prefix)
