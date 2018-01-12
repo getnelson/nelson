@@ -387,7 +387,9 @@ object Manifest {
    * place i could find to put it.
    */
   private def parseDeployable(release: Github.Release, name: String): Task[Deployable] = {
-    release.findAssetContent(s"${name}.deployable.yml").flatMap { a =>
+    release.findAssetContent(s"${name}.deployable.yml").handleWith {
+      case ProblematicDeployable(_, _) => release.findAssetContent(s"${name}.deployable.yaml")
+    }.flatMap { a =>
       yaml.DeployableParser.parse(a).fold(e => Task.fail(MultipleErrors(e)), Task.now)
     }
   }
