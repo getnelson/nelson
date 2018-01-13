@@ -1133,6 +1133,26 @@ API is subset of what Google's Guava libraries is providing
       </a>
     </span>
       
+    </li><li name="nelson.KubernetesClient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="KubernetesClientextendsAnyRef"></a>
+      <a id="KubernetesClient:KubernetesClient"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="KubernetesClient.html"><span class="name">KubernetesClient</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@KubernetesClientextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A bare bones Kubernetes client used for impelementing a Kubernetes
+<a href="scheduler/SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">nelson.scheduler.SchedulerOp</a> and <span class="extype" name="nelson.loadbalancers.LoadBalancerOp">nelson.loadbalancers.LoadBalancerOp</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A bare bones Kubernetes client used for impelementing a Kubernetes
+<a href="scheduler/SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">nelson.scheduler.SchedulerOp</a> and <span class="extype" name="nelson.loadbalancers.LoadBalancerOp">nelson.loadbalancers.LoadBalancerOp</span>.</p><p>This should really be a proper library.. at some point.</p><p>See: https://kubernetes.io/docs/api-reference/v1.8/
+</p></div></div>
     </li><li name="nelson.LoadbalancerNotFound" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LoadbalancerNotFoundextendsNelsonErrorwithProductwithSerializable"></a>
       <a id="LoadbalancerNotFound:LoadbalancerNotFound"></a>
@@ -2624,6 +2644,28 @@ Default value is 4 (for guava 13.0)</p><p>From Guava docs:
   at a time, but since read operations and cache loading computations can proceed concurrently, this still yields
   higher concurrency than full synchronization.
 </p></div></div>
+    </li><li name="nelson.Canopus" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Canopus"></a>
+      <a id="Canopus:Canopus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Canopus$.html"><span class="name">Canopus</span></a><span class="result"> extends <a href="Workflow.html" class="extype" name="nelson.Workflow">Workflow</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@Canopus" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Kubernetes deployment workflow that just deploys and deletes units.</p><div class="fullcomment"><div class="comment cmt"><p>Kubernetes deployment workflow that just deploys and deletes units. No Vault policy
+or traffic shifting (yet!).</p><p>This workflow is named after the Canopus star which represents King Menelaus's helmsman in Greek
+mythology. Canopus is a star in the Carina constellation, which in turn was once part of the
+Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>The name here is inspired by the existing use of astronomical names (see the Magnetar workflow),
+&quot;kubernetes&quot; which is Greek for helmsman, and Nelson's usage of the Argonaut library for J(a)SON parsing.
+</p></div></div>
     </li><li name="nelson.Config" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Config"></a>
       <a id="Config:Config"></a>
@@ -2824,6 +2866,40 @@ Default value is 4 (for guava 13.0)</p><p>From Guava docs:
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@Json" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.KubernetesClient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KubernetesClient"></a>
+      <a id="KubernetesClient:KubernetesClient"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KubernetesClient$.html"><span class="name">KubernetesClient</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@KubernetesClient" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.KubernetesJson" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KubernetesJson"></a>
+      <a id="KubernetesJson:KubernetesJson"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KubernetesJson$.html"><span class="name">KubernetesJson</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@KubernetesJson" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

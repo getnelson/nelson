@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Summary</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result"> extends <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a>]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Summary</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result"> extends <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a>]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.scheduler.SchedulerOp.Summary#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(dc:nelson.Datacenter,sn:nelson.Datacenter.StackName):nelson.scheduler.SchedulerOp.Summary"></a>
+      <a id="&lt;init&gt;(dc:nelson.Datacenter,ns:nelson.NamespaceName,sn:nelson.Datacenter.StackName):nelson.scheduler.SchedulerOp.Summary"></a>
       <a id="&lt;init&gt;:Summary"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Summary</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span>
+        <span class="name">Summary</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.SchedulerOp$$Summary@&lt;init&gt;(dc:nelson.Datacenter,sn:nelson.Datacenter.StackName):nelson.scheduler.SchedulerOp.Summary" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.SchedulerOp$$Summary@&lt;init&gt;(dc:nelson.Datacenter,ns:nelson.NamespaceName,sn:nelson.Datacenter.StackName):nelson.scheduler.SchedulerOp.Summary" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -347,6 +347,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="nelson.scheduler.SchedulerOp.Summary#ns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ns:nelson.NamespaceName"></a>
+      <a id="ns:NamespaceName"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ns</span><span class="result">: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.scheduler.SchedulerOp$$Summary@ns:nelson.NamespaceName" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.scheduler.SchedulerOp.Summary#sn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="sn:nelson.Datacenter.StackName"></a>
       <a id="sn:StackName"></a>

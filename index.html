@@ -71,7 +71,7 @@
         <a href="//github.com/getnelson/nelson" class="btn btn-outline-inverse btn-lg">Source Code</a>
       </p>
       <p class="version">
-        Currently v0.9.70<br />
+        Currently v0.9.71<br />
       </p>
     </div>
     <a href="https://travis-ci.org/getnelson/nelson">
@@ -777,6 +777,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
 
       infrastructure {
         scheduler {
+          scheduler = &quot;nomad&quot;
           nomad {
             # Where can Nelson access the Nomad leader cluster
             endpoint  = &quot;https://nomad.service&quot;
@@ -1173,7 +1174,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.9.70</li>
+      <li>Currently v0.9.71</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/getnelson/nelson">GitHub</a></li>
