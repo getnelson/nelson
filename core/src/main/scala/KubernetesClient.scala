@@ -15,7 +15,7 @@ import scalaz.concurrent.Task
 import scalaz.Scalaz._
 
 import nelson.Datacenter.StackName
-import nelson.Manifest.{EnvironmentVariable, Plan, Ports, Port}
+import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, Plan, Ports, Port}
 import nelson.docker.Docker.Image
 import nelson.health._
 
@@ -172,11 +172,19 @@ object KubernetesJson {
           ),
           "spec" := argonaut.Json(
             "containers" := List(
-              argonaut.Json(
-                "name"  := stackName.toString,
-                "image" := image.toString,
-                "ports" := containerPortsJson(ports.toList.flatMap(_.nel.list))
-              )
+
+              argonaut.Json.jObject(combineJsonObject(JsonObject.from(List(
+                "name"      := stackName.toString,
+                "image"     := image.toString,
+                "env"       := plan.environment.bindings,
+                "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.list)),
+                "resources" := argonaut.Json(
+                  "limits" := argonaut.Json(
+                    "cpu"    := plan.environment.cpu.getOrElse(0.5),
+                    "memory" := s"${plan.environment.memory.getOrElse(512.0)}M"
+                  )
+                )
+              )), livenessProbe(plan.environment.healthChecks)))
             )
           )
         )
@@ -256,9 +264,7 @@ object KubernetesJson {
     image:     Image,
     plan:      Plan
   ): JsonObject = {
-    val backoffLimit = plan.environment.retries.fold(JsonObject.empty) { retries =>
-      JsonObject.single("backoffLimit", retries.asJson)
-    }
+    val backoffLimit = JsonObject.single("backoffLimit", plan.environment.retries.getOrElse(3).asJson)
 
     JsonObject.from(List(
       "spec" := argonaut.Json.jObject(combineJsonObject(JsonObject.from(List(
@@ -277,15 +283,43 @@ object KubernetesJson {
             "containers" := List(
               argonaut.Json(
                 "name"  := stackName.toString,
-                "image" := image.toString
+                "image" := image.toString,
+                "env"   := plan.environment.bindings,
+                "resources" := argonaut.Json(
+                  "limits" := argonaut.Json(
+                    "cpu"    := plan.environment.cpu.getOrElse(0.5),
+                    "memory" := s"${plan.environment.memory.getOrElse(512.0)}M"
+                  )
+                )
               )
             ),
-            "restartPolicy" := "OnFailure"
+            // See: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#pod-backoff-failure-policy
+            // This should be "OnFailure" but at the time of this writing this section said:
+            // Note: Due to a known issue #54870, when the spec.template.spec.restartPolicy field is set to “OnFailure”,
+            // the back-off limit may be ineffective. As a short-term workaround, set the restart policy for the embedded template to “Never”
+            // https://github.com/kubernetes/kubernetes/issues/54870
+            "restartPolicy" := "Never"
           )
         )
       )), backoffLimit))
     ))
   }
+
+  // HealthChecks in Nelson seem to correspond to Kubernetes liveness probes
+  // Kubernetes seems to only support one one liveness probe, so take the first one..
+  private def livenessProbe(healthChecks: List[HealthProbe]): JsonObject =
+    healthChecks.headOption match {
+      case None => JsonObject.empty
+      case Some(HealthProbe(_, portRef, _, path, interval, timeout)) =>
+        JsonObject.single("livenessProbe", argonaut.Json(
+          "httpGet" := argonaut.Json(
+            "path" := path.getOrElse("/"),
+            "port" := portRef
+          ),
+          "periodSeconds"  := interval.toSeconds,
+          "timeoutSeconds" := timeout.toSeconds
+        ))
+    }
 
   // Status seems to be largely undocumented in the K8s docs, so your best bet is to stare at
   // https://github.com/kubernetes/kubernetes/tree/master/api/openapi-spec
@@ -359,17 +393,27 @@ object KubernetesJson {
   val healthStatusDecoder: DecodeJson[HealthStatus] =
     DecodeJson(c =>
       for {
-        name    <- (c --\ "metadata" --\ "name").as[String]
-        status  <- (c --\ "status"   --\ "phase").as[String].map(parsePodHealthCheck)
-        node    <- (c --\ "spec"     --\ "nodeName").as[String]
-        details <- (c --\ "status"   --\ "message").as[Option[String]]
+        name        <- (c --\ "metadata" --\ "name").as[String]
+        conditions  =  (c --\ "status" --\ "conditions").downAt(readyCondition)
+        status      <- (conditions --\ "status").as[String].map(parseReadyCondition)
+        details     <- (conditions --\ "message").as[Option[String]]
+        node        <- (c --\ "spec" --\ "nodeName").as[String]
       } yield HealthStatus(name, status, node, details)
     )
 
-  // https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
-  private def parsePodHealthCheck(s: String): HealthCheck = s match {
-    case "Running" => Passing
-    case "Failed"  => Failing
-    case _         => Unknown
+  private def readyCondition(json: Json): Boolean =
+    json.acursor.downField("type").as[String].map(_ == "Ready").toOption.getOrElse(false)
+
+  private def parseReadyCondition(s: String): HealthCheck = s match {
+    case "True"  => Passing
+    case "False" => Failing
+    case _       => Unknown
   }
+
+  private implicit val envVarEncoder: EncodeJson[EnvironmentVariable] =
+    EncodeJson { (ev: EnvironmentVariable) =>
+      ("name"  := ev.name)  ->:
+      ("value" := ev.value) ->:
+      jEmptyObject
+    }
 }
