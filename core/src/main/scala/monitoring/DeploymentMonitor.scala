@@ -21,19 +21,16 @@ import journal.Logger
 import Datacenter.{Deployment, TrafficShift,StackName}
 import DeploymentStatus.{Ready, Warming}
 import storage.{StoreOp, StoreOpF}
-import health.{HealthCheckOp, HealthCheck, Passing}
-import HealthCheckOp.HealthCheckF
+import health.{HealthCheckOp, Passing}
 import java.time.Instant
 
 import scalaz.{NonEmptyList, OptionT}
 import scalaz.concurrent.Task
 import scalaz.syntax.bind._
-import scalaz.syntax.std.option._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
 import scalaz.stream.{Process, Sink, sink, time}
 import helm.HealthStatus._
-import helm.HealthStatus
 import nelson.Json.DeploymentEncoder
 import nelson.audit.AuditableInstances.deploymentAuditable
 import nelson.Nelson._

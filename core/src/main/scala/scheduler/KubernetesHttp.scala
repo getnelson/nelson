@@ -6,13 +6,13 @@ import argonaut.Argonaut._
 import journal.Logger
 import org.http4s.Status.NotFound
 import org.http4s.client.UnexpectedStatus
-import scalaz.{~>, Foldable}
+import scalaz.~>
 import scalaz.Scalaz._
 import scalaz.concurrent.Task
 
 import nelson.KubernetesJson.{DeploymentStatus, JobStatus}
 import nelson.Datacenter.{Deployment, StackName}
-import nelson.Manifest.{EnvironmentVariable, Plan, Ports, Port, UnitDef, Versioned}
+import nelson.Manifest.{EnvironmentVariable, Plan, UnitDef, Versioned}
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
 

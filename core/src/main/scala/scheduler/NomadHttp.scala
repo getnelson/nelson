@@ -20,7 +20,7 @@ package scheduler
 
 import nelson.Json._
 
-import scalaz.{NonEmptyList, ~>}
+import scalaz.~>
 import scalaz.concurrent.Task
 import scalaz.syntax.std.option._
 import scalaz.syntax.traverse._
@@ -31,7 +31,6 @@ import Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Port
 import Datacenter.{Deployment, StackName}
 import docker.Docker
 import Docker.Image
-import nelson.DeploymentStatus
 
 
 object NomadHttp {

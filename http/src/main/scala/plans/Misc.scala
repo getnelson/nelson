@@ -22,12 +22,11 @@ import ManifestValidator.Json._
 import cleanup.ExpirationPolicy.Json._
 import argonaut._
 import Argonaut._
-import nelson.Datacenter.Deployment
 import org.http4s.{BuildInfo => _, _}
 import org.http4s.dsl._
 import org.http4s.argonaut._
 
-import scalaz.{-\/, ==>>, Failure, Success, \/-}
+import scalaz.{-\/, Failure, Success, \/-}
 import scalaz.syntax.applicative._
 import scalaz.concurrent.Task
 

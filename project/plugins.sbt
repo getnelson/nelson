@@ -16,12 +16,12 @@
 //: ----------------------------------------------------------------------------
 resolvers += "bintray sbt" at "https://dl.bintray.com/sbt/sbt-plugin-releases/"
 
-addSbtPlugin("com.typesafe.sbt"  % "sbt-native-packager"  % "1.3.1")
+addSbtPlugin("com.typesafe.sbt"  % "sbt-native-packager"  % "1.3.2")
 
-addSbtPlugin("io.get-coursier"   % "sbt-coursier"         % "1.0.0-RC13")
+addSbtPlugin("io.get-coursier"   % "sbt-coursier"         % "1.0.0")
 
 addSbtPlugin("io.spray"          % "sbt-revolver"         % "0.9.1")
 
-addSbtPlugin("io.verizon.build"  % "sbt-rig"              % "4.0.36")
+addSbtPlugin("io.verizon.build"  % "sbt-rig"              % "5.0.39")
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"

@@ -17,7 +17,7 @@
 package nelson
 package scheduler
 
-import scalaz.{@@, Free, NonEmptyList}
+import scalaz.{@@, Free}
 import docker.Docker.Image
 import Manifest.{Plan, UnitDef, Versioned}
 

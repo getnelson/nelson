@@ -18,7 +18,6 @@ package nelson
 package health
 
 import scalaz.Free
-import Free.FreeC
 
 final case class HealthStatus(
   id: String,

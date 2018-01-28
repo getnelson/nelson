@@ -4,8 +4,6 @@ package health
 import scalaz.~>
 import scalaz.concurrent.Task
 
-import nelson.Datacenter.StackName
-import nelson.KubernetesJson.DeploymentStatus
 import nelson.health.HealthCheckOp.Health
 
 final case class KubernetesHealthClient(client: KubernetesClient) extends (HealthCheckOp ~> Task) {
