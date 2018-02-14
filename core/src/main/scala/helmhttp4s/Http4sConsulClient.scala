@@ -17,29 +17,36 @@
 package nelson
 package helmhttp4s
 
-import journal.Logger
+import cats.effect.IO
+import cats.syntax.applicativeError._
+
+import fs2.Stream
+import fs2.interop.scodec.ByteVectorChunk
 
 import helm.{ConsulOp, Key}
-import org.http4s._
-import org.http4s.client._
-import org.http4s.argonaut.jsonOf
-import org.http4s.headers.Authorization
+
+import journal.Logger
+
 import org.http4s.Status.NotFound
+import org.http4s._
+import org.http4s.argonaut.jsonOf
+import org.http4s.client._
+import org.http4s.headers.Authorization
+
 import scalaz.~>
-import scalaz.concurrent.Task
-import scalaz.stream.Process
+
 import scodec.bits.ByteVector
 
 final class Http4sConsulClient(baseUri: Uri,
-                               client: Client,
+                               client: Client[IO],
                                accessToken: Option[String] = None,
-                               credentials: Option[(String,String)] = None) extends (ConsulOp ~> Task) {
+                               credentials: Option[(String,String)] = None) extends (ConsulOp ~> IO) {
 
-  private implicit val keysDecoder: EntityDecoder[List[String]] = jsonOf[List[String]]
+  private implicit val keysDecoder: EntityDecoder[IO, List[String]] = jsonOf[IO, List[String]]
 
   private val log = Logger[this.type]
 
-  def apply[A](op: ConsulOp[A]): Task[A] = op match {
+  def apply[A](op: ConsulOp[A]): IO[A] = op match {
     case ConsulOp.Get(key)             => get(key)
     case ConsulOp.Set(key, value)      => set(key, value)
     case ConsulOp.ListKeys(prefix)     => list(prefix)
@@ -47,18 +54,18 @@ final class Http4sConsulClient(baseUri: Uri,
     case ConsulOp.HealthCheck(service) => healthCheck(service)
   }
 
-  def addConsulToken(req: Request): Request =
+  def addConsulToken(req: Request[IO]): Request[IO] =
     accessToken.fold(req)(tok => req.putHeaders(Header("X-Consul-Token", tok)))
 
-  def addCreds(req: Request): Request =
+  def addCreds(req: Request[IO]): Request[IO] =
     credentials.fold(req){case (un,pw) => req.putHeaders(Authorization(BasicCredentials(un,pw)))}
 
-  def get(key: Key): Task[Option[String]] = {
+  def get(key: Key): IO[Option[String]] = {
     for {
-      _ <- Task.delay(log.debug(s"fetching consul key $key"))
-      req = addCreds(addConsulToken(Request(uri = (baseUri / "v1" / "kv" / key).+?("raw"))))
-      value <- client.expect[String](req).map(Some.apply).handleWith {
-        case UnexpectedStatus(NotFound) => Task.now(None)
+      _     <- IO(log.debug(s"fetching consul key $key"))
+      req   = addCreds(addConsulToken(Request(uri = (baseUri / "v1" / "kv" / key).+?("raw"))))
+      value <- client.expect[String](req).map(r => Some(r): Option[String]).recoverWith {
+        case UnexpectedStatus(NotFound) => IO.pure(None)
       }
     } yield {
       log.debug(s"consul value for key $key is $value")
@@ -66,21 +73,21 @@ final class Http4sConsulClient(baseUri: Uri,
     }
   }
 
-  def set(key: Key, value: String): Task[Unit] =
+  def set(key: Key, value: String): IO[Unit] =
     for {
-      _ <- Task.delay(log.debug(s"setting consul key $key to $value"))
+      _ <- IO(log.debug(s"setting consul key $key to $value"))
       response <- client.expect[String](
         addCreds(addConsulToken(
           Request(Method.PUT,
             uri = baseUri / "v1" / "kv" / key,
-            body = Process.emit(ByteVector.view(value.getBytes("UTF-8")))))))
+            body = Stream.chunk(ByteVectorChunk(ByteVector.view(value.getBytes("UTF-8"))))))))
     } yield log.debug(s"setting consul key $key resulted in response $response")
 
-  def list(prefix: Key): Task[Set[Key]] = {
+  def list(prefix: Key): IO[Set[Key]] = {
     val req = addCreds(addConsulToken(Request(uri = (baseUri / "v1" / "kv" / prefix).withQueryParam(QueryParam.fromKey("keys")))))
 
     for {
-      _ <- Task.delay(log.debug(s"listing key consul with the prefix: $prefix"))
+      _ <- IO(log.debug(s"listing key consul with the prefix: $prefix"))
       response <- client.expect[List[String]](req)
     } yield {
       log.debug(s"listing of keys: " + response)
@@ -88,18 +95,18 @@ final class Http4sConsulClient(baseUri: Uri,
     }
   }
 
-  def delete(key: Key): Task[Unit] = {
+  def delete(key: Key): IO[Unit] = {
     val req = addCreds(addConsulToken(Request(Method.DELETE, uri = (baseUri / "v1" / "kv" / key))))
 
     for {
-      _ <- Task.delay(log.debug(s"deleting $key from the consul KV store"))
+      _ <- IO(log.debug(s"deleting $key from the consul KV store"))
       response <- client.expect[String](req)
     } yield log.debug(s"response from delete: " + response)
   }
 
-  def healthCheck(service: String): Task[String] = {
+  def healthCheck(service: String): IO[String] = {
     for {
-      _ <- Task.delay(log.debug(s"fetching health status for $service"))
+      _ <- IO(log.debug(s"fetching health status for $service"))
       req = addCreds(addConsulToken(Request(uri = (baseUri / "v1" / "health" / "checks" / service))))
       response <- client.expect[String](req)
     } yield {

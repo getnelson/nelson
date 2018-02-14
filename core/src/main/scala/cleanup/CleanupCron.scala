@@ -17,19 +17,24 @@
 package nelson
 package cleanup
 
+import nelson.Datacenter.Deployment
 import nelson.routing.RoutingTable
 
-import scalaz.concurrent.Task
-import scalaz.stream.{Process, time}
-import scalaz._
-import Scalaz._
+import cats.effect.{Effect, IO}
+import nelson.CatsHelpers._
+
+import fs2.{Scheduler, Stream}
+
 import java.time.Instant
 
-import Datacenter.Deployment
 import journal.Logger
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration._
+
+import scalaz._
+import Scalaz._
 
 final case class DeploymentCtx(deployment: Deployment, status: DeploymentStatus, exp: Option[Instant])
 
@@ -64,23 +69,23 @@ object CleanupCron {
     } yield ds.flatMap { case (ns, dcx) => gr.find(_._1 == ns).map(x => (dc,ns,dcx,x._2)) }
 
   /* Gets all deployments (excluding terminated) for all datacenters and namespaces */
-  def getDeployments(cfg: NelsonConfig): Task[Vector[CleanupRow]] =
+  def getDeployments(cfg: NelsonConfig): IO[Vector[CleanupRow]] =
     runs(cfg.storage, cfg.datacenters.toVector.traverseM(dc => getDeploymentsForDatacenter(dc)))
 
   def routable(d: DeploymentCtx): Boolean =
     routables.exists(_ == d.status)
 
-  def process(cfg: NelsonConfig): Process[Task, CleanupRow] =
-     Process.eval(getDeployments(cfg)).flatMap(Process.emitAll)
-      .map(a => if (routable(a._3)) \/.right(a) else \/.left(a))
-      .throughO(ExpirationPolicyProcess.expirationProcess(cfg)) // only apply expiration policy to the rhs
-      .map(_.fold(identity, identity))
-      .filter(x => GarbageCollector.expired(x._3)) // mark only expired deployments
-      .through(GarbageCollector.mark(cfg))
+  def process(cfg: NelsonConfig): Stream[IO, CleanupRow] =
+     Stream.eval(getDeployments(cfg)).flatMap(rs => Stream.emits(rs).covary[IO])
+       .map(a => if (routable(a._3)) Right(a) else Left(a))
+       .throughO(ExpirationPolicyProcess.expirationProcess(cfg)) // only apply expiration policy to the rhs
+       .map(_.fold(identity, identity))
+       .filter(x => GarbageCollector.expired(x._3)) // mark only expired deployments
+       .through(GarbageCollector.mark(cfg))
 
-  def refresh(cfg: NelsonConfig): Process[Task,Duration] =
-    Process.repeatEval(Task.delay(cfg.cleanup.cleanupDelay)).flatMap(d =>
-      time.awakeEvery(d)(cfg.pools.schedulingExecutor, cfg.pools.schedulingPool).once)
+  def refresh(cfg: NelsonConfig): Stream[IO,Duration] =
+    Stream.repeatEval(IO(cfg.cleanup.cleanupDelay)).flatMap(d =>
+      Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery[IO](d)(Effect[IO], cfg.pools.schedulingExecutor)).head
 
   /*
    * This is the entry point for the cleanup pipeline. The pipeline is run at
@@ -88,6 +93,8 @@ object CleanupCron {
    * marking deploymnets as garbage and running the destroy workflow
    * to decommission deployments.
    */
-  def pipeline(cfg: NelsonConfig): Process[Task, Unit] =
-    (refresh(cfg) >> process(cfg).attempt()).observeW(cfg.auditor.errorSink).stripW.to(Reaper.reap(cfg))
+  def pipeline(cfg: NelsonConfig)(implicit ec: ExecutionContext): Stream[IO, Unit] =
+    Stream.force {
+      cfg.auditor.map(auditor => refresh(cfg).flatMap(_ => process(cfg).attempt).observeW(auditor.errorSink).stripW.to(Reaper.reap(cfg)))
+    }
 }

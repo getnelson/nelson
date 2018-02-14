@@ -20,23 +20,24 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 
 import org.scalatest.prop.Checkers
-import scalaz.concurrent.Task
-import scalaz.stream.Process
+
+import cats.effect.IO
+import fs2.Stream
 
 class WithTempFileSpec extends NelsonSuite with Checkers {
   "withTempFile" should "create a file with the specified contents" in {
     check { s: String =>
       withTempFile(s) { f =>
-        Process.eval(Task.delay {
+        Stream.eval(IO {
           new String(Files.readAllBytes(f.toPath), StandardCharsets.UTF_8)
         })
-      }.runLog.run == Vector(s)
+      }.compile.toVector.unsafeRunSync() == Vector(s)
     }
   }
 
   it should "delete file when done" in {
     withTempFile("foo") { f =>
-      Process.eval(Task.delay(f))
-    }.runLog.run.map(_.exists) should === (Vector(false))
+      Stream.eval(IO(f))
+    }.compile.toVector.unsafeRunSync().map(_.exists) should === (Vector(false))
   }
 }

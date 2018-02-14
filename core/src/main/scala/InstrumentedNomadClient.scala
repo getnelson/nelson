@@ -16,26 +16,27 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.IO
+
 import scalaz.{\/-, -\/, ~>}
-import scalaz.concurrent.Task
 import nelson.scheduler.SchedulerOp
 import nelson.scheduler.SchedulerOp._
 
-class InstrumentedNomadClient private (instance: String, interp: SchedulerOp ~> Task, metrics: Metrics)
-    extends (SchedulerOp ~> Task) {
+class InstrumentedNomadClient private (instance: String, interp: SchedulerOp ~> IO, metrics: Metrics)
+    extends (SchedulerOp ~> IO) {
 
-  def apply[A](op: SchedulerOp[A]): Task[A] =
-    Task.delay(System.nanoTime).flatMap { startNanos =>
+  def apply[A](op: SchedulerOp[A]): IO[A] =
+    IO(System.nanoTime).flatMap { startNanos =>
       interp(op).attempt.flatMap { att =>
         val elapsed = System.nanoTime - startNanos
         val label = toLabel(op)
         metrics.nomadRequestsLatencySeconds.labels(label, instance).observe(elapsed / 1.0e9)
         att match {
-          case \/-(a) =>
-            Task.now(a)
-          case -\/(e) =>
+          case Right(a) =>
+            IO.pure(a)
+          case Left(e) =>
             metrics.nomadRequestsFailuresTotal.labels(label, instance).inc()
-            Task.fail(e)
+            IO.raiseError(e)
         }
       }
     }
@@ -50,6 +51,6 @@ class InstrumentedNomadClient private (instance: String, interp: SchedulerOp ~> 
 
 object InstrumentedNomadClient {
 
-  def apply(dockerInstance: String, interp: SchedulerOp ~> Task, metrics: Metrics = Metrics.default): SchedulerOp ~> Task =
+  def apply(dockerInstance: String, interp: SchedulerOp ~> IO, metrics: Metrics = Metrics.default): SchedulerOp ~> IO =
     new InstrumentedNomadClient(dockerInstance, interp, metrics)
 }

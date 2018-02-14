@@ -18,20 +18,23 @@ package nelson
 
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll,BeforeAndAfterEach}
 import java.nio.file.Files
-import scalaz.stream.async.boundedQueue
-import scalaz.concurrent.Strategy
-import scalaz.stream.nio.file._
+
+import cats.effect.{Effect, IO}
+import scala.concurrent.ExecutionContext
+
+import fs2.async.boundedQueue
+import fs2.{io, text}
 
 class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll with BeforeAndAfterEach {
 
   val queue =
-    boundedQueue[(ID,String)](10)(Strategy.DefaultStrategy)
+    boundedQueue[IO, (ID,String)](10)(Effect[IO], ExecutionContext.global).unsafeRunSync()
 
   val base = Files.createTempDirectory("nelson")
   val logger = new logging.WorkflowLogger(queue, base)
 
   override def beforeAll: Unit = {
-    logger.setup().run
+    logger.setup().unsafeRunSync()
   }
 
   override def beforeEach: Unit = {
@@ -56,51 +59,51 @@ class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll w
     line.split("Z:")(1).trim
 
   it should "generate a file with the correct name" in {
-    logger.log(1L, "foo").run
-    logger.process.take(1).run.run
+    logger.log(1L, "foo").unsafeRunSync()
+    logger.process.take(1).compile.drain.unsafeRunSync()
     assert(Files.exists((base.resolve("1.log"))))
   }
 
   it should "log to the correct file base on id" in {
     val path = base.resolve("1.log")
-    logger.log(1L, "foo").run
-    logger.process.take(1).run.run
-    val line = linesR(path).runLog.run
+    logger.log(1L, "foo").unsafeRunSync()
+    logger.process.take(1).compile.drain.unsafeRunSync()
+    val line = io.file.readAll[IO](path, 4096).through(text.utf8Decode).through(text.lines).compile.toVector.unsafeRunSync()
     line.map(removeTimestamp) should equal (Vector("foo"))
   }
 
   it should "log with newlines to the file" in {
     val path = base.resolve("1.log")
-    logger.log(1L, "foo").run
-    logger.log(1L, "bar").run
-    logger.process.take(2).run.run
-    val lines = linesR(path).runLog.run
+    logger.log(1L, "foo").unsafeRunSync()
+    logger.log(1L, "bar").unsafeRunSync()
+    logger.process.take(2).compile.drain.unsafeRunSync()
+    val lines = io.file.readAll[IO](path, 4096).through(text.utf8Decode).through(text.lines).compile.toVector.unsafeRunSync()
     lines.map(removeTimestamp) should equal (Vector("foo","bar"))
   }
 
   it should "not add an extra newline" in {
     val path = base.resolve("1.log")
-    logger.log(1L, "foo\n").run
-    logger.log(1L, "bar").run
-    logger.process.take(2).run.run
-    val lines = linesR(path).runLog.run
+    logger.log(1L, "foo\n").unsafeRunSync()
+    logger.log(1L, "bar").unsafeRunSync()
+    logger.process.take(2).compile.drain.unsafeRunSync()
+    val lines = io.file.readAll[IO](path, 4096).through(text.utf8Decode).through(text.lines).compile.toVector.unsafeRunSync()
     lines.map(removeTimestamp) should equal (Vector("foo","bar"))
   }
 
   it should "read the file entirely" in {
-    logger.log(1L, "foo\n").run
-    logger.log(1L, "bar\n").run
-    logger.log(1L, "baz\n").run
-    logger.process.take(3).run.run
-    val lines = logger.read(1L,0).run
+    logger.log(1L, "foo\n").unsafeRunSync()
+    logger.log(1L, "bar\n").unsafeRunSync()
+    logger.log(1L, "baz\n").unsafeRunSync()
+    logger.process.take(3).compile.drain.unsafeRunSync()
+    val lines = logger.read(1L,0).unsafeRunSync()
     lines.map(removeTimestamp) should equal (Vector("foo","bar","baz"))
   }
   it should "read the file from offset" in {
-    logger.log(1L, "foo\n").run
-    logger.log(1L, "bar\n").run
-    logger.log(1L, "baz\n").run
-    logger.process.take(3).run.run
-    val lines = logger.read(1L,2).run
+    logger.log(1L, "foo\n").unsafeRunSync()
+    logger.log(1L, "bar\n").unsafeRunSync()
+    logger.log(1L, "baz\n").unsafeRunSync()
+    logger.process.take(3).compile.drain.unsafeRunSync()
+    val lines = logger.read(1L,2).unsafeRunSync()
     lines.map(removeTimestamp) should equal (Vector("baz"))
   }
 }

@@ -53,7 +53,7 @@ object Discovery {
     EncodeJson(rt =>
       rt.fold(jEmptyArray){(k,v,a) =>
         val routes = v.fold(jEmptyArray){(k,v,a) =>
-          val r = ("service" := k.serviceType) ->: ("targets" := v) ->: ("port" := v.head.j.portName)->: jEmptyObject
+          val r = ("service" := k.serviceType) ->: ("targets" := v.toList) ->: ("port" := v.head.j.portName)->: jEmptyObject
           r -->>: a
         }
         val ns = ("name" := k.asString) ->: ("routes" := routes) ->: jEmptyObject

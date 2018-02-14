@@ -42,23 +42,23 @@ class TemplatesSpec extends FlatSpec with NelsonSuite {
   behavior of "runTemplates"
 
   it should "return Rendered if it can be rendered" in {
-    render("valid").run should be (Rendered)
+    render("valid").unsafeRunSync() should be (Rendered)
   }
 
   it should "return InvalidTemplate with error message if it can't be rendered" in {
-    render("invalid").run should matchPattern {
+    render("invalid").unsafeRunSync() should matchPattern {
       case InvalidTemplate(msg) =>
     }
   }
 
   it should "not leak valid output when reporting errors" in {
-    render("leak").run should matchPattern {
+    render("leak").unsafeRunSync() should matchPattern {
       case InvalidTemplate(msg) if !msg.contains("[leak]") =>
     }
   }
 
   it should "expose custom environment variables" in {
-    render("custom-token").run shouldBe (Rendered)
+    render("custom-token").unsafeRunSync() shouldBe (Rendered)
   }
 
   it should "kill slow templates after timeout" in {
@@ -66,6 +66,6 @@ class TemplatesSpec extends FlatSpec with NelsonSuite {
     // 1 - We don't want to wait long for something we know we'll kill
     // 2 - We probably get to kill it before it's registered in docker, which fails,
     //     which exercises our cleanup loop.
-    render("evil", 1.millisecond).run shouldBe a [TemplateTimeout]
+    render("evil", 1.millisecond).unsafeRunSync() shouldBe a [TemplateTimeout]
   }
 }

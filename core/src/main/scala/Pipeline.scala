@@ -16,10 +16,14 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.IO
+import nelson.CatsHelpers._
+import cats.syntax.applicativeError._
+import fs2.{Sink, Stream}
+
 import journal.Logger
-import scalaz.concurrent.Task
+
 import scala.util.control.NonFatal
-import scalaz.stream.{Process,Sink,sink}
 
 object Pipeline {
   import Manifest.Action
@@ -31,12 +35,12 @@ object Pipeline {
     /**
      * Actually execute the workflow specified by the actionable on the stream.
      */
-    def runAction(cfg: NelsonConfig): Sink[Task, Action] = {
-      sink.lift { action =>
-        action.run((cfg, action.config)).handleWith {
+    def runAction(cfg: NelsonConfig): Sink[IO, Action] = {
+      _.map { action =>
+        action.run((cfg, action.config)).recoverWith {
           case NonFatal(e) =>
             e.printStackTrace
-            Task.delay(log.warn(s"unexpected error occoured whilst running the workflow: ${e.getMessage}, cause: ${e.getCause}"))
+            IO(log.warn(s"unexpected error occoured whilst running the workflow: ${e.getMessage}, cause: ${e.getCause}"))
         }
       }
     }
@@ -46,18 +50,22 @@ object Pipeline {
    * Wire the stream of actionable instances to the
    * effect generating sinks and observations.
    */
-  def task(config: NelsonConfig)(effects: Sink[Task, Action]): Task[Unit] = {
+  def task(config: NelsonConfig)(effects: Sink[IO, Action]): IO[Unit] = {
+    def par[A](ps: Stream[IO, Stream[IO, A]]) = {
+      implicit val ec = config.pools.defaultExecutor
 
-    /* needed for parallel consumption of the pipeline */
-    import scalaz.stream.nondeterminism.njoin
+      val withErrors = ps.join(config.pipeline.concurrencyLimit).attempt
 
-    def par[A](ps: Process[Task, Process[Task, A]]) =
-      njoin(maxOpen = config.pipeline.concurrencyLimit, maxQueued = 1)(ps)(config.pools.defaultExecutor)
-        .attempt().observeW(config.auditor.errorSink).stripW
+      config.auditor.map(auditor => withErrors.observeW(auditor.errorSink).stripW)
+    }
 
-    val p: Process[Task, Process[Task, Unit]] =
-      config.queue.dequeue.map(a => Process.emit[Action](a).to(effects))
+    val p: IO[Stream[IO, Stream[IO, Unit]]] =
+      config.queue.map(_.dequeue.map(a => Stream.emit(a).covary[IO].to(effects)))
 
-    par(p).run
+    for {
+      stream <- p
+      values <- par(stream)
+      _      <- values.compile.drain
+    } yield ()
   }
 }

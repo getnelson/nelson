@@ -19,12 +19,14 @@ package vault
 package http4s
 
 import argonaut._, Argonaut._
+import argonaut.DecodeResultCats._
+
+import cats.instances.stream._
+import cats.syntax.foldable._
 
 import scalaz.{==>>}
 import scalaz.syntax.std.option._
-import scalaz.std.stream._
 import scalaz.std.string._
-import scalaz.syntax.foldable._
 
 trait Json {
   import Vault._

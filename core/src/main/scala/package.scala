@@ -22,14 +22,20 @@ import scalaz.@@
 package object nelson {
 
   import argonaut.{Parse,DecodeJson}
-  import concurrent.duration, duration.Duration
+
+  import cats.effect.IO
+
+  import fs2.{Scheduler, Stream}
+
   import java.io.File
   import java.nio.file.{Files, Path, Paths}
   import java.nio.charset.StandardCharsets
   import java.util.Locale
+  import java.util.concurrent.ScheduledExecutorService
+
+  import scala.concurrent.ExecutionContext
   import scala.concurrent.duration._
-  import scalaz.concurrent.Task
-  import scalaz.stream.Process
+
   import scalaz.syntax.kleisli._
   import scalaz.{~>,Monad,Order}
 
@@ -55,9 +61,9 @@ package object nelson {
    * Given we're mostly parsing string results to task, make a simple decoder
    * utility function for it.
    */
-  def fromJson[A : DecodeJson](in: String): Task[A] =
+  def fromJson[A : DecodeJson](in: String): IO[A] =
     Parse.decodeEither[A](in)
-         .fold(s => Task.fail(new RuntimeException(s)), Task.delay(_))
+         .fold(s => IO.raiseError(new RuntimeException(s)), IO(_))
 
   implicit def versionableOps[A: Versionable](a: A): AllOps[A] = Versionable.ops.toAllVersionableOps[A](a)
 
@@ -75,22 +81,30 @@ package object nelson {
 
   implicit class BedazzledOpt[A](in: Option[A]){
 
-    private def fail[B](err: NelsonError): Task[B] =
-      Task.fail(err)
+    private def fail[B](err: NelsonError): IO[B] =
+      IO.raiseError(err)
 
     def nfold[B](e: NelsonError)(f: A => B): NelsonK[B] =
       tfold(e)(f).liftKleisli
 
-    def tfold[B](e: NelsonError)(f: A => B): Task[B] =
-      in.fold(fail[B](e))(a => Task.delay(f(a)))
+    def tfold[B](e: NelsonError)(f: A => B): IO[B] =
+      in.fold(fail[B](e))(a => IO(f(a)))
   }
 
-  implicit class BedazzledTask[A](in: Task[A]){
-    def retryExponentially(seed: Duration = 15.seconds, limit: Int = 5): Task[A] = {
-      val periods = List.fill(limit)(seed).zipWithIndex.map {
-        case (d,i) => d * i.toDouble
+  implicit class BedazzledIO[A](in: IO[A]){
+    def retryExponentially(seed: FiniteDuration = 15.seconds, limit: Int = 5)(scheduler: ScheduledExecutorService, ec: ExecutionContext): IO[A] = {
+      implicit val eci: ExecutionContext = ec
+      val retryStream = Scheduler.fromScheduledExecutorService(scheduler).retry(
+        in,
+        seed,
+        _ + seed,
+        limit
+      )
+      retryStream.attempt.compile.last.flatMap {
+        case None => IO.raiseError[A](new RuntimeException("Failed to retry IO action!")) // this should never happen ??
+        case Some(Left(e)) =>  IO.raiseError(e)
+        case Some(Right(a)) => IO.pure(a)
       }
-      in.retry(periods)
     }
   }
 
@@ -157,11 +171,11 @@ package object nelson {
   private val DefaultTempDir =
     Paths.get(Option(System.getProperty("java.io.tmpdir")).getOrElse("/tmp"))
 
-  def withTempFile[A](s: String, prefix: String = "nelson-", suffix: String = ".tmp", dir: Path = DefaultTempDir)(f: File => Process[Task, A]): Process[Task, A] =
-    Process.bracket(writeTempFile(dir, s, prefix, suffix))(file => Process.eval_(Task.delay(file.delete())))(f)
+  def withTempFile[A](s: String, prefix: String = "nelson-", suffix: String = ".tmp", dir: Path = DefaultTempDir)(f: File => Stream[IO, A]): Stream[IO, A] =
+    Stream.bracket(writeTempFile(dir, s, prefix, suffix))(f, file => IO(file.delete()))
 
-  private def writeTempFile(dir: Path, s: String, prefix: String, suffix: String): Task[File] =
-    Task.delay {
+  private def writeTempFile(dir: Path, s: String, prefix: String, suffix: String): IO[File] =
+    IO {
       val path = Files.createTempFile(dir, prefix, suffix)
       val file = path.toFile
       Files.write(path, s.getBytes(StandardCharsets.UTF_8))

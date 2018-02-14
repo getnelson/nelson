@@ -16,19 +16,27 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.~>
-import scalaz.concurrent.Task
-import scalaz.stream.{Process, Sink}
+import nelson.helmhttp4s.Http4sConsulClient
+
+import cats.effect.IO
+import cats.syntax.either._
+import cats.syntax.applicativeError._
+import nelson.CatsHelpers._
+import fs2.{Sink, Stream}
+
 import helm.ConsulOp
 import helm.ConsulOp.ConsulOpF
-import nelson.helmhttp4s.Http4sConsulClient
+
+import journal._
+
 import org.http4s._
 import org.http4s.client._
-import journal._
+
 import scala.util.control.NonFatal
 
-object Http4sConsul {
+import scalaz.~>
 
+object Http4sConsul {
   val log = Logger[Http4sConsul.type]
 
   def baseUri(consul: Infrastructure.Consul): Uri = {
@@ -44,12 +52,12 @@ object Http4sConsul {
   def creds(consul: Infrastructure.Consul): Option[(String,String)] =
     consul.creds.map(x => x.username -> x.password)
 
-  def client(consul: Infrastructure.Consul, http4sClient: Client): ConsulOp ~> Task =
+  def client(consul: Infrastructure.Consul, http4sClient: Client[IO]): ConsulOp ~> IO =
     new Http4sConsulClient(baseUri(consul), http4sClient, token(consul), creds(consul))
 
-  def consulSink: Sink[Task,(Datacenter,ConsulOpF[Unit])] =
-    Process.constant {
-      case (dc, op) => helm.run(dc.consul,op) handle {
+  def consulSink: Sink[IO, (Datacenter,ConsulOpF[Unit])] =
+    _.map {
+      case (dc, op) => helm.run(dc.consul,op) recover {
         case NonFatal(e) => log.error(s"error while attempting to perform consul operation", e)
       }
     }

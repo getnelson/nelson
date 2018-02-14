@@ -17,9 +17,12 @@
 package nelson
 package helmhttp4s
 
-import scalaz.{\/, ~>, Kleisli}
-import scalaz.concurrent.Task
-import scalaz.stream.Process
+import scalaz.{\/, ~>}
+import cats.data.Kleisli
+import cats.effect.IO
+import nelson.CatsHelpers._
+import fs2.Stream
+import fs2.interop.scodec.ByteVectorChunk
 import scodec.bits.ByteVector
 import org.http4s.{EntityBody, Request, Response, Status, Uri}
 import org.http4s.client._
@@ -33,62 +36,62 @@ class Http4sConsulClientSpec extends FlatSpec with Matchers with TypeCheckedTrip
   "get" should "succeed with some when the response is 200" in {
     val response = consulResponse(Status.Ok, "yay")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.get("foo")).attemptRun should ===(
-      \/.right(Some("yay")))
+    helm.run(csl, ConsulOp.get("foo")).attempt.unsafeRunSync() should ===(
+      Right(Some("yay")))
   }
 
   "get" should "succeed with none when the response is 404" in {
     val response = consulResponse(Status.NotFound, "nope")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.get("foo")).attemptRun should ===(
-      \/.right(None))
+    helm.run(csl, ConsulOp.get("foo")).attempt.unsafeRunSync() should ===(
+      Right(None))
   }
 
   it should "fail when the response is 500" in {
     val response = consulResponse(Status.InternalServerError, "boo")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.get("foo")).attemptRun should ===(
-      \/.left(UnexpectedStatus(Status.InternalServerError)))
+    helm.run(csl, ConsulOp.get("foo")).attempt.unsafeRunSync() should ===(
+      Left(UnexpectedStatus(Status.InternalServerError)))
   }
 
   "set" should "succeed when the response is 200" in {
     val response = consulResponse(Status.Ok, "yay")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.set("foo", "bar")).attemptRun should ===(
-      \/.right(()))
+    helm.run(csl, ConsulOp.set("foo", "bar")).attempt.unsafeRunSync() should ===(
+      Right(()))
   }
 
   it should "fail when the response is 500" in {
     val response = consulResponse(Status.InternalServerError, "boo")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.set("foo", "bar")).attemptRun should ===(
-      \/.left(UnexpectedStatus(Status.InternalServerError)))
+    helm.run(csl, ConsulOp.set("foo", "bar")).attempt.unsafeRunSync() should ===(
+      Left(UnexpectedStatus(Status.InternalServerError)))
   }
 }
 
 object Http4sConsulTests {
   private val base64Encoder = java.util.Base64.getEncoder
 
-  def constantConsul(response: Response): ConsulOp ~> Task = {
+  def constantConsul(response: Response[IO]): ConsulOp ~> IO = {
     new Http4sConsulClient(
       Uri.uri("http://localhost:8500/v1/kv/v1"),
       constantResponseClient(response),
       None)
   }
 
-  def consulResponse(status: Status, s: String): Response = {
+  def consulResponse(status: Status, s: String): Response[IO] = {
     val base64 = new String(base64Encoder.encode(s.getBytes("utf-8")), "utf-8")
     val responseBody = body(s)
     Response(status = status, body = responseBody)
   }
 
-  def constantResponseClient(response: Response): Client = {
-    val dispResponse = DisposableResponse(response, Task.now(()))
-    Client(Kleisli{req => Task.now(dispResponse)}, Task.now(()))
+  def constantResponseClient(response: Response[IO]): Client[IO] = {
+    val dispResponse = DisposableResponse(response, IO.unit)
+    Client[IO](Kleisli{(req: Request[IO]) => IO.pure(dispResponse)}, IO.unit)
   }
 
-  def body(s: String): EntityBody =
-    Process.emit(ByteVector.encodeUtf8(s).right.get) // YOLO
+  def body(s: String): EntityBody[IO] =
+    Stream.chunk(ByteVectorChunk(ByteVector.encodeUtf8(s).right.get)) // YOLO
 
-  val dummyRequest: Request = Request()
+  val dummyRequest: Request[IO] = Request()
 }

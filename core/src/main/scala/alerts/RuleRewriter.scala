@@ -16,15 +16,16 @@
 //: ----------------------------------------------------------------------------
 package nelson.alerts
 
-import java.util.regex.Pattern
-
 import nelson.Datacenter.StackName
 import nelson.{NamespaceName, PlanRef}
 import nelson.Manifest.PrometheusConfig
-import scalaz.concurrent.Task
+
+import cats.effect.IO
+
+import java.util.regex.Pattern
 
 trait RuleRewriter {
-  def rewriteRules(stackName: StackName, ns: NamespaceName, plan: PlanRef, prometheus: PrometheusConfig): Task[RuleRewriter.Result]
+  def rewriteRules(stackName: StackName, ns: NamespaceName, plan: PlanRef, prometheus: PrometheusConfig): IO[RuleRewriter.Result]
 }
 
 object RuleRewriter {
@@ -60,15 +61,15 @@ object RuleRewriter {
   /** A rule rewriter that passes through rules verbatim */
   val identity: RuleRewriter =
     new RuleRewriter {
-      def rewriteRules(stackName: StackName, ns: NamespaceName, plan: PlanRef, prometheus: PrometheusConfig): Task[Result] = {
+      def rewriteRules(stackName: StackName, ns: NamespaceName, plan: PlanRef, prometheus: PrometheusConfig): IO[Result] = {
         val rules = toSerializedRules(prometheus)
-        Task.now(Rewritten(rules))
+        IO.pure(Rewritten(rules))
       }
     }
 
-  val autoDetect: Task[RuleRewriter] =
+  val autoDetect: IO[RuleRewriter] =
     nelson.process.isOnPath("overhaul").map {
-      case true => Overhaul
+      case true  => Overhaul
       case false => identity
     }
 }

@@ -16,15 +16,21 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz._, Scalaz._
-import scalaz.concurrent.Task
-import scala.concurrent.duration._
-import nelson.storage.StoreOp
+import nelson.Manifest._
+import nelson.cleanup.ExpirationPolicy
 import nelson.notifications.NotificationSubscriptions
-import Manifest._
-import cleanup.ExpirationPolicy
+import nelson.storage.StoreOp
+
+import cats.effect.IO
+import cats.syntax.applicativeError._
+import nelson.CatsHelpers._
+
 import java.net.URI
 
+import scala.concurrent.duration._
+
+import scalaz._
+import scalaz.Scalaz._
 
 final case class Manifest(
   units: List[UnitDef],
@@ -239,7 +245,7 @@ object Manifest {
 
   final case class Action(
     config: ActionConfig,
-    run: Kleisli[Task, (NelsonConfig, ActionConfig), Unit]
+    run: Kleisli[IO, (NelsonConfig, ActionConfig), Unit]
   )
 
   final case class ActionConfig(
@@ -269,7 +275,7 @@ object Manifest {
   /*
    * Saturates the manifest with all the bits that a unit or loadbalancer needs for deployment.
    */
-  def saturateManifest(m: Manifest)(r: Github.Release): Task[Manifest @@ Versioned] = {
+  def saturateManifest(m: Manifest)(r: Github.Release): IO[Manifest @@ Versioned] = {
     val units = addDeployable(m)(r)
     val lbs = addVersionToLoadbalancers(m)(r)
     units.map(u => Versioned(m.copy(units = u, loadbalancers = lbs)))
@@ -361,8 +367,8 @@ object Manifest {
     foldNamespaces(m,dcs,folder,a)
   }
 
-  def verifyDeployable(m: Manifest, dcs: Seq[Datacenter], storage: StoreOp ~> Task): Task[ValidationNel[NelsonError,Unit]] = {
-    val folder: (Datacenter,Namespace,Plan,UnitDef,List[Task[ValidationNel[NelsonError,Unit]]]) => List[Task[ValidationNel[NelsonError,Unit]]] =
+  def verifyDeployable(m: Manifest, dcs: Seq[Datacenter], storage: StoreOp ~> IO): IO[ValidationNel[NelsonError,Unit]] = {
+    val folder: (Datacenter,Namespace,Plan,UnitDef,List[IO[ValidationNel[NelsonError,Unit]]]) => List[IO[ValidationNel[NelsonError,Unit]]] =
       (dc,ns,p,u,res) => nelson.storage.run(storage, StoreOp.verifyDeployable(dc.name, ns.name, u)) ::  res
 
     implicit val monoid: Monoid[ValidationNel[NelsonError, Unit]] =
@@ -378,7 +384,7 @@ object Manifest {
     m.loadbalancers.map(lb => lb.copy(majorVersion = major))
   }
 
-  private def addDeployable(m: Manifest)(r: Github.Release): Task[List[UnitDef]] =
+  private def addDeployable(m: Manifest)(r: Github.Release): IO[List[UnitDef]] =
     m.units.traverse(u => parseDeployable(r, u.name).map(d => u.copy(deployable = Some(d))))
 
   /**
@@ -386,11 +392,11 @@ object Manifest {
    * this function, but right now its the most obvious
    * place i could find to put it.
    */
-  private def parseDeployable(release: Github.Release, name: String): Task[Deployable] = {
-    release.findAssetContent(s"${name}.deployable.yml").handleWith {
+  private def parseDeployable(release: Github.Release, name: String): IO[Deployable] = {
+    release.findAssetContent(s"${name}.deployable.yml").recoverWith {
       case ProblematicDeployable(_, _) => release.findAssetContent(s"${name}.deployable.yaml")
     }.flatMap { a =>
-      yaml.DeployableParser.parse(a).fold(e => Task.fail(MultipleErrors(e)), Task.now)
+      yaml.DeployableParser.parse(a).fold(e => IO.raiseError(MultipleErrors(e)), IO.pure)
     }
   }
 

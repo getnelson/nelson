@@ -20,6 +20,7 @@ import scalaz.~>
 import scalaz.Id
 import scalaz.std.list._
 import helm.ConsulOp
+import nelson.CatsHelpers._
 
 class ConsulDiscoverySpec extends NelsonSuite {
   import Datacenter._
@@ -28,13 +29,13 @@ class ConsulDiscoverySpec extends NelsonSuite {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).run
+    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
     ()
   }
 
   def consulOps: List[ConsulOp.ConsulOpF[Unit]] = {
     val rts: List[(Namespace, RoutingGraph)] =
-      nelson.storage.run(config.storage, generateRoutingTables("ConsulDiscoverySpec")).run
+      nelson.storage.run(config.storage, generateRoutingTables("ConsulDiscoverySpec")).unsafeRunSync()
     val dts = Discovery.discoveryTables(rts)
 
     dts.toList.map {

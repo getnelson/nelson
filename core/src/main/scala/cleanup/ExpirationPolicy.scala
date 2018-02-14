@@ -17,13 +17,18 @@
 package nelson
 package cleanup
 
-import Datacenter.Deployment
-import routing.{RoutingNode,RoutingGraph}
+import nelson.Datacenter.Deployment
+import nelson.routing.{RoutingNode,RoutingGraph}
+
+import nelson.CatsHelpers._
+
 import ca.mrvisser.sealerate
-import scala.concurrent.duration._
-import scalaz._,Scalaz._
+
 import java.time.Instant
 
+import scala.concurrent.duration._
+
+import scalaz._,Scalaz._
 
 /*
  * An EpxirationPolicy defines a policy that given
@@ -162,10 +167,10 @@ object ExpirationPolicy {
 
 
 object ExpirationPolicyProcess {
-  import scalaz.concurrent.Task
-  import scalaz.stream._
-  import storage.{run => runs,StoreOp, StoreOpF}
-  import Datacenter.{Namespace,Deployment}
+  import nelson.Datacenter.{Namespace,Deployment}
+  import nelson.storage.{run => runs,StoreOp, StoreOpF}
+  import cats.effect.IO
+  import fs2.{Pipe, Stream}
 
   private val logger = journal.Logger[ExpirationPolicyProcess.type]
 
@@ -208,11 +213,11 @@ object ExpirationPolicyProcess {
       .map(_ => d.copy(exp = Some(i)))
   }
 
-  def expirationProcess(cfg: NelsonConfig): Channel[Task, CleanupRow, CleanupRow] =
-    channel.lift { case (dc, ns, d, graph) =>
+  def expirationProcess(cfg: NelsonConfig): Pipe[IO, CleanupRow, CleanupRow] =
+    _.flatMap { case (dc, ns, d, graph) =>
       applyPolicyToDeployment(d, graph)(cfg.cleanup.extendTTL)
-        .map(ext => runs(cfg.storage, updateExpiration(d,ext)).map(d => (dc,ns,d,graph)))
-        .getOrElse(Task.now((dc,ns,d,graph)))
+        .map(ext => Stream.eval(runs(cfg.storage, updateExpiration(d,ext)).map(d => (dc,ns,d,graph))))
+        .getOrElse(Stream.emit((dc,ns,d,graph)))
     }
 }
 

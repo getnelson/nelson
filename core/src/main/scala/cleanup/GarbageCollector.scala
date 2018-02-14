@@ -17,12 +17,15 @@
 package nelson
 package cleanup
 
-import scalaz.concurrent.Task
-import scalaz._, Scalaz._
-import scalaz.stream.{Channel,channel}
+import cats.effect.IO
+import nelson.CatsHelpers._
+
+import fs2.{Pipe, Stream}
+
 import java.time.Instant
 import journal.Logger
 
+import scalaz._, Scalaz._
 
 /**
  * The GarbageCollector is a process that periodically traverses the
@@ -45,17 +48,19 @@ object GarbageCollector {
       (log.debug(s"marking deployment ${d.stackName} as garbage").point[StoreOpF])
 
   /**
-   * A Channel that captures the output of the ExpirationPolicy process.
+   * A Pipe that captures the output of the ExpirationPolicy process.
    * This should be run after the ExpirationPolicy process to guard
    * against the case where the ExpirationPolicy process fails
    * and GC eagerly marks deployments that it shouldn't.
    */
-  def mark(cfg: NelsonConfig): Channel[Task, CleanupRow, CleanupRow] = {
+  def mark(cfg: NelsonConfig): Pipe[IO, CleanupRow, CleanupRow] = {
     import Json._
     import audit.AuditableInstances._
-    channel.lift { case (dc, ns, d, gr) =>
-      runs(cfg.storage, markAsGarbage(d.deployment).map(_ => (dc, ns, d, gr))) <*
-        cfg.auditor.write(d.deployment, audit.GarbageAction)
+    _.flatMap { case (dc, ns, d, gr) =>
+      Stream.eval {
+        runs(cfg.storage, markAsGarbage(d.deployment).map(_ => (dc, ns, d, gr))) <*
+        cfg.auditor.flatMap(_.write(d.deployment, audit.GarbageAction))
+      }
     }
   }
 }

@@ -24,12 +24,12 @@ import nelson.cleanup.Sweeper.UnclaimedResources
 import nelson.storage.StoreOp
 import nelson.storage.StoreOp.{ListDeploymentsForNamespaceByStatus, ListNamespacesForDatacenter}
 
-import scalaz.concurrent.Task
+import cats.effect.IO
 import scalaz.{-\/, \/-, ~>}
 
 class SweeperSpec extends NelsonSuite {
 
-  def cfg(dcs: List[String], sto: StoreOp ~> Task, csl: ConsulOp ~> Task) = config.copy(
+  def cfg(dcs: List[String], sto: StoreOp ~> IO, csl: ConsulOp ~> IO) = config.copy(
     datacenters = dcs.map(name => Datacenter(name, null, null, null, None,
       Infrastructure.Interpreters(null, csl, null, null, null, null, null, null), None, null)),
     interpreters = config.interpreters.copy(storage = sto)
@@ -59,24 +59,24 @@ class SweeperSpec extends NelsonSuite {
     val (consulKeyInNelson1, consulKeyUnclaimedResource1, consulKeyInNelson2, consulKeyNotInNelson1, consulKeyUnclaimedResource2, consulKeyNotInNelson2) =
       (consulKeys(0), consulKeys(1), consulKeys(2), consulKeys(3), consulKeys(4), consulKeys(5))
 
-    val sto = new (StoreOp ~> Task) {
-      def apply[A](fa: StoreOp[A]) : Task[A] = fa match {
-        case ListNamespacesForDatacenter(dcName) => Task.delay(namespaces.toSet)
-        case ListDeploymentsForNamespaceByStatus(nsId, deploymentStatuses, None) => Task.delay(deps.toSet.map((d : Deployment) => d -> Ready))
-        case _ => Task.fail(new Exception("Unexpected Store Operation Executed"))
+    val sto = new (StoreOp ~> IO) {
+      def apply[A](fa: StoreOp[A]) : IO[A] = fa match {
+        case ListNamespacesForDatacenter(dcName) => IO(namespaces.toSet)
+        case ListDeploymentsForNamespaceByStatus(nsId, deploymentStatuses, None) => IO(deps.toSet.map((d : Deployment) => d -> Ready))
+        case _ => IO.raiseError(new Exception("Unexpected Store Operation Executed"))
       }
     }
 
-    val csl = new (ConsulOp ~> Task) {
-      def apply[A](fa: ConsulOp[A]) : Task[A] = fa match {
-        case ConsulOp.ListKeys("lighthouse/discovery/v1/") => Task.now(consulKeys.toSet)
-        case _ => Task.fail(new Exception("Unexpected Store Operation Executed"))
+    val csl = new (ConsulOp ~> IO) {
+      def apply[A](fa: ConsulOp[A]) : IO[A] = fa match {
+        case ConsulOp.ListKeys("lighthouse/discovery/v1/") => IO.pure(consulKeys.toSet)
+        case _ => IO.raiseError(new Exception("Unexpected Store Operation Executed"))
       }
     }
 
     //////////// Run And verification
 
-    val results = Sweeper.cleanupLeakedConsulDiscoveryKeys(cfg(dcs, sto, csl)).run
+    val results = Sweeper.cleanupLeakedConsulDiscoveryKeys(cfg(dcs, sto, csl)).unsafeRunSync()
 
     var deleteKeys = List.empty[(String, String)]
     var unclaimedResource = List.empty[(String, Int)]

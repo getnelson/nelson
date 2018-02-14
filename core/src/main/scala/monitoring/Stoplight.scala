@@ -16,17 +16,18 @@
 //: ----------------------------------------------------------------------------
 package nelson.monitoring
 
+import cats.effect.{Effect, IO}
+
+import fs2.Stream
+
 import io.prometheus.client.Gauge
-import scalaz.concurrent.Task
-import scalaz.stream.Cause
-import scalaz.stream.Process
 
 object Stoplight {
   val Stopped = 0.0
   val Running = 1.0
   val Failed = -1.0
 
-  def apply[A](name: String)(p: Process[Task, A]): Process[Task, A] = {
+  def apply[A](name: String)(p: Stream[IO, A]): Stream[IO, A] = {
     val gauge = (new Gauge.Builder)
       .name(name)
       .help(s"Status of ${name} process: 0=stopped, 1=running, -1=failed")
@@ -34,11 +35,6 @@ object Stoplight {
     apply(gauge)(p)
   }
 
-  def apply[A](gauge: Gauge)(p: Process[Task, A]): Process[Task, A] =
-    Process.await(Task.delay(gauge.set(Running))) { _ =>
-      p.onHalt {
-        case Cause.End => Process.eval_(Task.delay(gauge.set(Stopped)))
-        case _ => Process.eval_(Task.delay(gauge.set(Failed)))
-      }
-    }
+  def apply[A](gauge: Gauge)(p: Stream[IO, A]): Stream[IO, A] =
+    (Stream.eval_(IO(gauge.set(Running))) ++ p ++ Stream.eval_(IO(gauge.set(Stopped)))).handleErrorWith(_ => Stream.eval_(IO(gauge.set(Failed))))
 }

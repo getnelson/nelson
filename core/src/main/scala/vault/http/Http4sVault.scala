@@ -18,21 +18,27 @@ package nelson
 package vault
 package http4s
 
-import scalaz.{==>>,~>}
-import scalaz.syntax.functor._
-import scalaz.concurrent.Task
 import argonaut._, Argonaut._
+
+import cats.FlatMap
+import cats.effect.IO
+import cats.syntax.functor._
+
+import journal._
+
 import org.http4s.{argonaut => _, _}
 import org.http4s.argonaut._
 import org.http4s.client._
-import journal._
+
+import scalaz.{==>>,~>}
+import scalaz.syntax.functor._
 
 final case class Initialized(init: Boolean)
 
 
 final class Http4sVaultClient(authToken: Token,
                               baseUri: Uri,
-                              client: Client) extends (Vault ~> Task) with Json {
+                              client: Client[IO]) extends (Vault ~> IO) with Json {
 
   import Vault._
   import Method._
@@ -40,7 +46,7 @@ final class Http4sVaultClient(authToken: Token,
 
   val v1BaseUri = baseUri / "v1"
 
-  def apply[A](v: Vault[A]): Task[A] = v match {
+  def apply[A](v: Vault[A]): IO[A] = v match {
     case IsInitialized          => isInitialized
     case Initialize(init)       => initialize(init)
     case GetSealStatus          => sealStatus
@@ -56,76 +62,76 @@ final class Http4sVaultClient(authToken: Token,
 
   val log = Logger[this.type]
 
-  val addCreds: Request => Request = _.putHeaders(Header("X-Vault-Token", authToken.value))
+  val addCreds: Request[IO] => Request[IO] = _.putHeaders(Header("X-Vault-Token", authToken.value))
 
-  def req[T: DecodeJson](req: Task[Request]): Task[T] =
+  def req[T: DecodeJson](req: IO[Request[IO]]): IO[T] =
     client.fetch(req.map(addCreds)){
-      case Ok(resp) => resp.as(jsonOf[T])
+      case Ok(resp) => resp.as(FlatMap[IO], jsonOf[IO, T])
       case resp =>
         (for {
           r <- req
           body <- resp.as[String]
         } yield {
           val msg = s"unexpected status: ${resp.status} from request: ${r.pathInfo}, msg: ${body}"
-          Task.fail(new RuntimeException(msg))
+          IO.raiseError(new RuntimeException(msg))
         }).flatMap(identity)
     }
 
-  def reqVoid(req: Task[Request]): Task[Unit] =
+  def reqVoid(req: IO[Request[IO]]): IO[Unit] =
     client.fetch(req.map(addCreds)) {
-      case NoContent(resp) => Task.now(())
+      case NoContent(resp) => IO.pure(())
       case resp =>
         (for {
           r <- req
           body <- resp.as[String]
         } yield {
           val msg = s"unexpected status: ${resp.status} from request: ${r.pathInfo}, msg: ${body}"
-          Task.fail(new RuntimeException(msg))
+          IO.raiseError(new RuntimeException(msg))
         }).flatMap(identity)
     }
 
-  def isInitialized: Task[Boolean] =
-    req[Initialized](GET(v1BaseUri / "sys" / "init")).map(_.init)
+  def isInitialized: IO[Boolean] =
+    req[Initialized](IO.pure(Request(GET, v1BaseUri / "sys" / "init"))).map(_.init)
 
-  def initialize(init: Initialization): Task[InitialCreds] =
-    req[InitialCreds](PUT(v1BaseUri / "sys" / "init", init.asJson))
+  def initialize(init: Initialization): IO[InitialCreds] =
+    req[InitialCreds](Request(PUT, v1BaseUri / "sys" / "init").withBody(init.asJson))
 
-  def unseal(key: MasterKey): Task[SealStatus] =
-    req[SealStatus](PUT(v1BaseUri / "sys" / "unseal", jsonUnseal(key)))
+  def unseal(key: MasterKey): IO[SealStatus] =
+    req[SealStatus](Request(PUT, v1BaseUri / "sys" / "unseal").withBody(jsonUnseal(key)))
 
-  def sealStatus: Task[SealStatus] =
-    req[SealStatus](GET(v1BaseUri / "sys" / "seal-status"))
+  def sealStatus: IO[SealStatus] =
+    req[SealStatus](IO.pure(Request(GET, v1BaseUri / "sys" / "seal-status")))
 
-  def seal: Task[Unit] =
-    req[String](PUT(v1BaseUri / "sys" / "init")).void
+  def seal: IO[Unit] =
+    req[String](IO.pure(Request(GET, v1BaseUri / "sys" / "init"))).void
 
-  def get(path: String): Task[String] =
-    req[String](GET(v1BaseUri / path))
+  def get(path: String): IO[String] =
+    req[String](IO.pure(Request(GET, v1BaseUri / path)))
 
-  def put(path: String, value: String): Task[Unit] =
-    req[String](POST(v1BaseUri / path, value)).void
+  def put(path: String, value: String): IO[Unit] =
+    req[String](Request(POST,v1BaseUri / path).withBody(value)).void
 
-  def createPolicy(cp: CreatePolicy): Task[Unit] =
-    reqVoid(POST(v1BaseUri / "sys" / "policy" / cp.name, cp.asJson))
+  def createPolicy(cp: CreatePolicy): IO[Unit] =
+    reqVoid(Request(POST, v1BaseUri / "sys" / "policy" / cp.name).withBody(cp.asJson))
 
-  def deletePolicy(name: String): Task[Unit] =
-    reqVoid(DELETE(v1BaseUri / "sys" / "policy" / name))
+  def deletePolicy(name: String): IO[Unit] =
+    reqVoid(IO.pure(Request(DELETE, v1BaseUri / "sys" / "policy" / name)))
 
-  def getMounts: Task[String ==>> Mount] =
-    req[String ==>> Mount](GET(uri = v1BaseUri / "sys" / "mounts"))
+  def getMounts: IO[String ==>> Mount] =
+    req[String ==>> Mount](IO.pure(Request(GET, uri = v1BaseUri / "sys" / "mounts")))
 
-  def createToken(ct: CreateToken): Task[Token] =
-    req[argonaut.Json](POST(v1BaseUri / "auth" / "token" / "create", ct.asJson)).flatMap { json =>
-      val clientToken = {
-        jObjectPL >=>
-        jsonObjectPL("auth") >=>
-        jObjectPL >=>
-        jsonObjectPL("client_token") >=>
-        jStringPL
-      }
-      clientToken.get(json) match {
-        case Some(token) => Task.now(Token(token))
-        case None => Task.fail(new RuntimeException("No auth/client_token in create token response"))
+  def createToken(ct: CreateToken): IO[Token] =
+    req[argonaut.Json](Request(POST, v1BaseUri / "auth" / "token" / "create").withBody(ct.asJson)).flatMap { json =>
+      val clientToken = for {
+        cursor <- Some(json.cursor): Option[Cursor]
+        auth   <- cursor.downField("auth")
+        token  <- auth.downField("client_token")
+        str    <- token.focus.string
+      } yield str
+
+      clientToken  match {
+        case Some(token) => IO.pure(Token(token))
+        case None => IO.raiseError(new RuntimeException("No auth/client_token in create token response"))
       }
     }
 }

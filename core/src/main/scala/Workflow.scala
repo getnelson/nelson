@@ -16,18 +16,25 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scala.concurrent.duration.FiniteDuration
-import scalaz.concurrent.Task
-import scalaz._, Scalaz._
-import Manifest.{UnitDef,Versioned,Plan,AlertOptOut}
-import Datacenter.{Deployment}
-import docker.Docker.Image
-import storage.{StoreOp}
-import docker.DockerOp
+import nelson.Datacenter.{Deployment}
+import nelson.Manifest.{UnitDef,Versioned,Plan,AlertOptOut}
+import nelson.docker.Docker.Image
+import nelson.docker.DockerOp
+import nelson.logging.LoggingOp
+import nelson.scheduler.SchedulerOp
+import nelson.storage.{StoreOp}
+import nelson.vault.Vault
+
+import cats.effect.IO
+import nelson.CatsHelpers._
+
 import helm.ConsulOp
-import logging.LoggingOp
-import scheduler.SchedulerOp
-import vault.Vault
+
+import scala.concurrent.duration.FiniteDuration
+
+import scalaz._
+import scalaz.Scalaz._
+
 
 /**
  * Workflows must be defined in terms of a particular type of UnitDef
@@ -74,7 +81,7 @@ object Workflow {
 
   type WorkflowF[A] = Free.FreeC[WorkflowOp, A]
 
-  def run[A](wf: WorkflowF[A])(trans: WorkflowOp ~> Task): Task[A] =
+  def run[A](wf: WorkflowF[A])(trans: WorkflowOp ~> IO): IO[A] =
     Free.runFC(wf)(trans)
 
   object syntax {

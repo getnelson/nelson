@@ -24,14 +24,18 @@ package nelson
  * only support Prometheus.
  */
 package object alerts {
-  import helm.ConsulOp
   import nelson.Datacenter.StackName
   import nelson.Manifest._
-  import Manifest.AlertOptOut
+  import nelson.Manifest.AlertOptOut
+
+  import cats.effect.IO
+
+  import helm.ConsulOp
+
   import scalaz.{\/, Free}
-  import scalaz.concurrent.Task
   import scalaz.syntax.either._
   import scalaz.syntax.functor._
+
   import journal.Logger
 
   private[this] val logger = Logger("nelson.alerts")
@@ -51,7 +55,7 @@ package object alerts {
       val key = alertingKey(sn)
       // TODO a run not at the end of the world and a throw.  The horror.
       // ConsulOp doesn't represent other tasks well, nor does it represent failure
-      val rules = rewriteRules(u, sn, plan, ns, outs).run.valueOr(throw _)
+      val rules = rewriteRules(u, sn, plan, ns, outs).unsafeRunSync().fold(throw _, identity)
       ConsulOp.set(key, rules) as Some(rules)
     }
   }
@@ -62,7 +66,7 @@ package object alerts {
     pc.copy(alerts = pc.alerts.filterNot(a => optedOut(a.alert)))
   }
 
-  def rewriteRules(unit: UnitDef, stackName: StackName, plan: PlanRef, ns: NamespaceName, outs: List[AlertOptOut]): Task[NelsonError \/ String] = {
+  def rewriteRules(unit: UnitDef, stackName: StackName, plan: PlanRef, ns: NamespaceName, outs: List[AlertOptOut]): IO[NelsonError \/ String] = {
     val pc = optedOutPrometheusConfig(unit, outs)
     for {
       rewriter <- RuleRewriter.autoDetect

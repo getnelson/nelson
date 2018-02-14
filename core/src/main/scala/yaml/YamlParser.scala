@@ -16,9 +16,11 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.IO
+
 import scalaz.{ NonEmptyList, \/ }
 import scala.reflect.ClassTag
-import scalaz.concurrent.Task
+
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 
@@ -31,8 +33,8 @@ object YamlParser {
     } leftMap (t => YamlError.loadError(t.getMessage))
 }
 abstract class YamlParser[A] {
-  def parseTask(input: String): Task[A] =
-    Task.fromDisjunction(parse(input).leftMap(e => LoadError(e.list.map(_.getMessage).mkString(","))))
+  def parseIO(input: String): IO[A] =
+    IO.fromEither(parse(input).leftMap(e => LoadError(e.list.map(_.getMessage).mkString(","))).toEither)
 
   def parse(input: String): NonEmptyList[NelsonError] \/ A
 }

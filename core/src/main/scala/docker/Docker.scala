@@ -17,50 +17,53 @@
 package nelson
 package docker
 
+import cats.effect.IO
+
+import java.util.concurrent.ScheduledExecutorService
+
 import journal.Logger
-import scalaz.concurrent.Task
+
 import scala.collection.mutable.MutableList
+import scala.concurrent.ExecutionContext
+
 import scalaz._
-import scalaz.{~>,Free,Monad}
-
-
 
 /**
  * The fugiest docker client around.
  * Extreamly crude. Barely works.
  */
-class Docker(cfg: DockerConfig) extends (DockerOp ~> Task) {
+class Docker(cfg: DockerConfig, scheduler: ScheduledExecutorService, ec: ExecutionContext) extends (DockerOp ~> IO) {
   import Docker._
   import sys.process._
 
   private[this] val log = Logger[Docker]
 
-  def apply[A](op: DockerOp[A]): Task[A] =
+  def apply[A](op: DockerOp[A]): IO[A] =
     op match {
-      case DockerOp.Tag(i, r)     => tag(i, i.to(r)).retryExponentially()
-      case DockerOp.Push(i)       => push(i).retryExponentially()
-      case DockerOp.Pull(i)       => pull(i).retryExponentially()
+      case DockerOp.Tag(i, r)     => tag(i, i.to(r)).retryExponentially()(scheduler, ec)
+      case DockerOp.Push(i)       => push(i).retryExponentially()(scheduler, ec)
+      case DockerOp.Pull(i)       => pull(i).retryExponentially()(scheduler, ec)
       case DockerOp.Extract(unit) => extract(unit)
     }
 
-  def extract(unit: Manifest.UnitDef): Task[Image] =
+  def extract(unit: Manifest.UnitDef): IO[Image] =
     unit.deployable.map(_.output).map {
       case Manifest.Deployable.Container(name) =>
         Docker.Image.fromString(name).fold(
-          a => Task.fail(FailedDockerExtraction(s"$name could not be converted to Docker.Image due to '$a'")),
-          b => Task.now(b)
+          a => IO.raiseError(FailedDockerExtraction(s"$name could not be converted to Docker.Image due to '$a'")),
+          b => IO.pure(b)
         )
-    }.getOrElse(Task.fail(new FailedDockerExtraction(s"input unit '${unit.name}' has no specified deployable.")))
+    }.getOrElse(IO.raiseError(new FailedDockerExtraction(s"input unit '${unit.name}' has no specified deployable.")))
 
 
   //////////////////////// TAG ////////////////////////
 
-  def tag(src: Image, tagged: Image): Task[(Int, Image)] =
+  def tag(src: Image, tagged: Image): IO[(Int, Image)] =
     exec(s"docker -H ${cfg.connection} tag ${src.toString} ${tagged.toString}").map(r => (r._1, tagged))
 
   //////////////////////// PUSH ////////////////////////
 
-  def push(image: Image): Task[(Int, List[Push.Output])] =
+  def push(image: Image): IO[(Int, List[Push.Output])] =
     exec(pushCommand(image)).map(r => (r._1, r._2.flatMap(Push.parseLine)))
 
   def pushCommand[A](image: Image): String =
@@ -68,7 +71,7 @@ class Docker(cfg: DockerConfig) extends (DockerOp ~> Task) {
 
   //////////////////////// PULL ////////////////////////
 
-  def pull(image: Image): Task[(Int, List[Pull.Output])] =
+  def pull(image: Image): IO[(Int, List[Pull.Output])] =
     exec(pullCommand(image)).map(r => (r._1, r._2.flatMap(Pull.parseLine)))
 
   def pullCommand(image: Image): String =
@@ -76,8 +79,8 @@ class Docker(cfg: DockerConfig) extends (DockerOp ~> Task) {
 
   //////////////////////// INTERNALS ////////////////////////
 
-  protected def exec(command: String): Task[(Int, List[String])] =
-    Task.delay {
+  protected def exec(command: String): IO[(Int, List[String])] =
+    IO {
       var err: MutableList[String] = MutableList()
       var win: MutableList[String] = MutableList()
       log.debug(s"executing: $command")

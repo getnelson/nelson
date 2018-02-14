@@ -25,6 +25,9 @@ import org.http4s.client.blaze._
 import org.scalatest.{FlatSpec, Matchers}
 import scala.concurrent.duration._
 import scalaz.std.string._
+import cats.effect.IO
+import cats.syntax.either._
+import nelson.CatsHelpers._
 
 class Http4sVaultSpec extends FlatSpec
     with DockerTestKit
@@ -49,7 +52,7 @@ class Http4sVaultSpec extends FlatSpec
 
   val baseUrl: Uri = vaultHost getOrElse Uri.uri("http://127.0.0.1:8200")
 
-  val client = PooledHttp1Client()
+  val client = Http1Client[IO]().unsafeRunSync()
   val token = Token("asdf")
   var interp = new Http4sVaultClient(token, baseUrl, client)
 
@@ -59,11 +62,11 @@ class Http4sVaultSpec extends FlatSpec
   behavior of "vault"
 
   it should "not be initialized" in {
-    Vault.isInitialized.runWith(interp).run should be (false)
+    Vault.isInitialized.runWith(interp).unsafeRunSync() should be (false)
   }
 
   it should "initialize" in {
-    val result = Vault.initialize(1,1).runWith(interp).run
+    val result = Vault.initialize(1,1).runWith(interp).unsafeRunSync()
     result.keys.size should be (1)
     this.masterKey = result.keys(0)
     this.rootToken = result.rootToken
@@ -71,11 +74,11 @@ class Http4sVaultSpec extends FlatSpec
   }
 
   it should "be initialized now" in {
-    Vault.isInitialized.runWith(interp).run should be (true)
+    Vault.isInitialized.runWith(interp).unsafeRunSync() should be (true)
   }
 
   it should "be sealed at startup" in {
-    val sealStatus = Vault.sealStatus.runWith(interp).run
+    val sealStatus = Vault.sealStatus.runWith(interp).unsafeRunSync()
     sealStatus.`sealed` should be (true)
     sealStatus.total should be (1)
     sealStatus.progress should be (0)
@@ -83,7 +86,7 @@ class Http4sVaultSpec extends FlatSpec
   }
 
   it should "be unsealable" in {
-    val sealStatus = Vault.unseal(this.masterKey).runWith(interp).run
+    val sealStatus = Vault.unseal(this.masterKey).runWith(interp).unsafeRunSync()
     sealStatus.`sealed` should be (false)
     sealStatus.total should be (1)
     sealStatus.progress should be (0)
@@ -91,7 +94,7 @@ class Http4sVaultSpec extends FlatSpec
   }
 
   it should "be unsealed after unseal" in {
-    val sealStatus = Vault.sealStatus.runWith(interp).run
+    val sealStatus = Vault.sealStatus.runWith(interp).unsafeRunSync()
     sealStatus.`sealed` should be (false)
     sealStatus.total should be (1)
     sealStatus.progress should be (0)
@@ -99,11 +102,11 @@ class Http4sVaultSpec extends FlatSpec
   }
 
   it should "be awesome" in {
-    Vault.get("key").runWith(interp).attemptRun.fold(_ => true, _ => false) should be (true)
+    Vault.get("key").runWith(interp).attempt.unsafeRunSync().fold(_ => true, _ => false) should be (true)
   }
 
   it should "have cubbyhole, secret, sys mounted" in {
-    val mounts = Vault.getMounts.runWith(interp).attemptRun
+    val mounts = Vault.getMounts.runWith(interp).attempt.unsafeRunSync()
     mounts.toOption.get.size should be (3)
     mounts.toOption.get.member("cubbyhole/") should be (true)
     mounts.toOption.get.member("secret/") should be (true)
@@ -129,11 +132,11 @@ class Http4sVaultSpec extends FlatSpec
     )
 
   it should "write policies" in {
-    Vault.createPolicy(cp.name, cp.rules).runWith(interp).run should be (())
+    Vault.createPolicy(cp.name, cp.rules).runWith(interp).unsafeRunSync() should be (())
   }
 
   it should "delete policies" in {
-    Vault.deletePolicy(cp.name).runWith(interp).run should be (())
+    Vault.deletePolicy(cp.name).runWith(interp).unsafeRunSync() should be (())
   }
 
   it should "encode policies correctly" in {
@@ -144,8 +147,8 @@ class Http4sVaultSpec extends FlatSpec
     val token2 = Vault.createToken(
       policies = Some(List("default")),
       ttl = Some(1.minute)
-    ).runWith(interp).run
+    ).runWith(interp).unsafeRunSync()
     val interp2 = new Http4sVaultClient(token2, baseUrl, client)
-    Vault.isInitialized.runWith(interp2).run should be (true)
+    Vault.isInitialized.runWith(interp2).unsafeRunSync() should be (true)
   }
 }

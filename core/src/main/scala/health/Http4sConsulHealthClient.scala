@@ -17,18 +17,21 @@
 package nelson
 package health
 
-import scalaz.~>
-import scalaz.syntax.std.option._
-import scalaz.concurrent.Task
-import helm.ConsulOp
 import argonaut._, Argonaut._
 
+import cats.effect.IO
+import nelson.CatsHelpers._
 
-final case class Http4sConsulHealthClient(client: ConsulOp ~> Task) extends (HealthCheckOp ~> Task) {
+import scalaz.~>
+import scalaz.syntax.std.option._
+
+import helm.ConsulOp
+
+final case class Http4sConsulHealthClient(client: ConsulOp ~> IO) extends (HealthCheckOp ~> IO) {
 
   import HealthCheckOp._
 
-  def apply[A](a: HealthCheckOp[A]): Task[A] = a match {
+  def apply[A](a: HealthCheckOp[A]): IO[A] = a match {
     case Health(dc, ns, sn) =>
       val op = ConsulOp.healthCheckJson[HealthStatus](sn.toString).map(_.fold(_ => Nil, x => x))
       helm.run(client, op) 

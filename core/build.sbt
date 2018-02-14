@@ -22,13 +22,20 @@ custom.resources
 
 libraryDependencies ++= Seq(
   dependencies.simulacrum.core,
+  "co.fs2"                     %% "fs2-core"                           % V.fs2,
+  "co.fs2"                     %% "fs2-io"                             % V.fs2,
+  "co.fs2"                     %% "fs2-scodec"                         % V.fs2,
+  "org.typelevel"              %% "cats-effect"                        % V.catsEffect,
+  "org.typelevel"              %% "cats-core"                          % V.cats,
+  "org.typelevel"              %% "cats-free"                          % V.cats,
   "io.verizon.helm"            %% "core"                               % "1.4.78-scalaz-7.1",
   "io.verizon.knobs"           %% "core"                               % V.knobs,
   "io.verizon.journal"         %% "core"                               % V.journal,
   "io.verizon.quiver"          %% "core"                               % "5.4.11",
   "io.verizon.delorean"        %% "core"                               % "1.1.37",
   "org.yaml"                    % "snakeyaml"                          % "1.16",
-  "io.argonaut"                %% "argonaut"                           % "6.1",
+  "io.argonaut"                %% "argonaut"                           % "6.2.1",
+  "io.argonaut"                %% "argonaut-cats"                      % "6.2.1",
   "io.prometheus"               % "simpleclient"                       % V.prometheus,
   "io.prometheus"               % "simpleclient_hotspot"               % V.prometheus,
   "org.tpolecat"               %% "doobie-core"                        % V.doobie,
@@ -47,7 +54,7 @@ libraryDependencies ++= Seq(
   "com.google.code.findbugs"    % "jsr305"                             % "3.0.1", // needed to provide class javax.annotation.Nullable
   "com.cronutils"               % "cron-utils"                         % "5.0.5",
   "org.scodec"                 %% "scodec-core"                        % V.scodec,
-  "org.http4s"                 %% "http4s-argonaut61"                  % V.http4sArgonaut61,
+  "org.http4s"                 %% "http4s-argonaut"                    % V.http4s,
   "org.http4s"                 %% "http4s-blaze-client"                % V.http4s,
   "com.whisk"                  %% "docker-testkit-scalatest"           % V.dockerit % "test",
   "com.whisk"                  %% "docker-testkit-impl-docker-java"    % V.dockerit % "test"

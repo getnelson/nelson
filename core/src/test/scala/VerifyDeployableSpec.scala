@@ -17,6 +17,7 @@
 package nelson
 
 import scalaz.{Success,NonEmptyList}
+import nelson.CatsHelpers._
 
 class VerifyDeployableSpec extends NelsonSuite {
   import Datacenter._
@@ -25,17 +26,17 @@ class VerifyDeployableSpec extends NelsonSuite {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    ns = nelson.storage.run(config.storage, insertFixtures(testName)).run
+    ns = nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
   }
 
   "verifyDeployable" should "think conductor is deployable" in {
     Manifest.verifyDeployable(conductorManifest(ns),
                               List(datacenter(testName)),
-                              config.storage).run should be (Success(()))
+                              config.storage).unsafeRunSync() should be (Success(()))
   }
 
   it should "think undeployable is undeployable" in {
-    val left = Manifest.verifyDeployable(undeployable(ns), List(datacenter(testName)), config.storage).run
+    val left = Manifest.verifyDeployable(undeployable(ns), List(datacenter(testName)), config.storage).unsafeRunSync()
     left.swap.toOption.get match {
       case n: NonEmptyList[NelsonError] =>
         n.list.map(_.asInstanceOf[MissingDependency].dependency) should contain theSameElementsAs List(ServiceName("nonexistant", FeatureVersion(1,0)), ServiceName("ab", FeatureVersion(10,0)))
@@ -43,7 +44,7 @@ class VerifyDeployableSpec extends NelsonSuite {
   }
 
   it should "not validate deployable if a dependency is deprecated" in {
-    val left = Manifest.verifyDeployable(undeployableDeprecatedDep(ns), List(datacenter(testName)), config.storage).run
+    val left = Manifest.verifyDeployable(undeployableDeprecatedDep(ns), List(datacenter(testName)), config.storage).unsafeRunSync()
     left.swap.toOption.get match {
       case n: NonEmptyList[NelsonError] =>
         n.list.map(_.asInstanceOf[DeprecatedDependency].dependency) should contain theSameElementsAs List(ServiceName("search", FeatureVersion(1,1)))
@@ -52,7 +53,7 @@ class VerifyDeployableSpec extends NelsonSuite {
 
   it should "resolve dependencies in upstream namespaces" in {
     val ns2 = Manifest.Namespace(name = NamespaceName("dev", List("sandbox", "rodrigo")), units = Set(), loadbalancers = Set())
-    val res = Manifest.verifyDeployable(serviceC2Manifest(ns2), List(datacenter(testName)), config.storage).run
+    val res = Manifest.verifyDeployable(serviceC2Manifest(ns2), List(datacenter(testName)), config.storage).unsafeRunSync()
     res should be (Success(()))
   }
 }

@@ -16,26 +16,28 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{\/-, -\/, ~>}
-import scalaz.concurrent.Task
+import cats.effect.IO
+
 import nelson.docker.DockerOp
 import nelson.docker.DockerOp._
 
-class InstrumentedDockerClient private (instance: String, interp: DockerOp ~> Task, metrics: Metrics)
-    extends (DockerOp ~> Task) {
+import scalaz.{\/-, -\/, ~>}
 
-  def apply[A](op: DockerOp[A]): Task[A] =
-    Task.delay(System.nanoTime).flatMap { startNanos =>
+class InstrumentedDockerClient private (instance: String, interp: DockerOp ~> IO, metrics: Metrics)
+    extends (DockerOp ~> IO) {
+
+  def apply[A](op: DockerOp[A]): IO[A] =
+    IO(System.nanoTime).flatMap { startNanos =>
       interp(op).attempt.flatMap { att =>
         val elapsed = System.nanoTime - startNanos
         val label = toLabel(op)
         metrics.dockerRequestsLatencySeconds.labels(label, instance).observe(elapsed / 1.0e9)
         att match {
-          case \/-(a) =>
-            Task.now(a)
-          case -\/(e) =>
+          case Right(a) =>
+            IO.pure(a)
+          case Left(e) =>
             metrics.dockerRequestsFailuresTotal.labels(label, instance).inc()
-            Task.fail(e)
+            IO.raiseError(e)
         }
       }
     }
@@ -55,6 +57,6 @@ object InstrumentedDockerClient {
    *  @param interp a helm interpreter to wrap
    *  @param registry the CollectorRegistry to record to; defaults to CollectorRegistry.default
    */
-  def apply(dockerInstance: String, interp: DockerOp ~> Task, metrics: Metrics = Metrics.default): DockerOp ~> Task =
+  def apply(dockerInstance: String, interp: DockerOp ~> IO, metrics: Metrics = Metrics.default): DockerOp ~> IO =
     new InstrumentedDockerClient(dockerInstance, interp, metrics)
 }

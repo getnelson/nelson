@@ -16,14 +16,16 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.storage.{StoreOp, StoreOpF, run => runs}
-import Manifest.{apply => _, _}
 import nelson.Datacenter.DCUnit
-import routing._
+import nelson.Manifest.{apply => _, _}
+import nelson.storage.{StoreOp, StoreOpF, run => runs}
+import nelson.routing._
+
+import cats.effect.IO
+import nelson.CatsHelpers._
 
 import scalaz._
 import Scalaz._
-import scalaz.concurrent.Task
 
 object CycleDetection {
   type Valid[A] = ValidationNel[NelsonError, A]
@@ -31,7 +33,7 @@ object CycleDetection {
 
   def validateNoCycles(
     m: Manifest,
-    cfg: NelsonConfig): DisjunctionT[Task, NonEmptyList[NelsonError], Unit] = {
+    cfg: NelsonConfig): DisjunctionT[IO, NonEmptyList[NelsonError], Unit] = {
     val op: StoreOpF[Valid[Unit]] = detect(m, cfg)
     DisjunctionT(runs(cfg.storage, op).map(_.disjunction))
   }

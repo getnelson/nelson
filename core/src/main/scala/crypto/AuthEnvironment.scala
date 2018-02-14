@@ -17,8 +17,8 @@
 package nelson
 package crypto
 
+import cats.effect.IO
 import scodec.bits.ByteVector
-import scalaz.concurrent.Task
 
 /**
  * An environment in which authentication is performed.
@@ -47,7 +47,7 @@ sealed abstract class AuthEnvironment[F[_]] {
 
   def decryptor: Decryptor[F]
 
-  def nextNonce: Task[Nonce]
+  def nextNonce: IO[Nonce]
 
   def encryptionKey: EncryptionKey
 
@@ -69,7 +69,7 @@ object AuthEnv {
   def instance(
     encryptKey: ByteVector,
     sigKey: ByteVector,
-    getNextNonce: Task[Nonce]
+    getNextNonce: IO[Nonce]
   ): AuthEnv = new AuthEnv {
     val encryption = new SafeHolderEncryption(new SafeHolder)
     val signer = new SafeHolderHmac(new SafeHolder)

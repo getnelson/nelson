@@ -20,10 +20,10 @@ class ProcessSpec extends NelsonSuite {
   behavior of "isOnPath"
 
   it should "return true if executable on the path" in {
-    process.isOnPath("ls").run should be (true)
+    process.isOnPath("ls").unsafeRunSync() should be (true)
   }
 
   it should "return false if executable is not on the path" in {
-    process.isOnPath("surely something this ridiculous isn't on the path").run should be (false)
+    process.isOnPath("surely something this ridiculous isn't on the path").unsafeRunSync() should be (false)
   }
 }
