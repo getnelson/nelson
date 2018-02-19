@@ -17,8 +17,9 @@
 package nelson
 package plans
 
+import cats.effect.IO
 import org.http4s._
-import org.http4s.dsl._
+import org.http4s.dsl.io._
 
 final case class Audit(config: NelsonConfig) extends Default {
   import Json._
@@ -34,7 +35,7 @@ final case class Audit(config: NelsonConfig) extends Default {
   object RId extends OptionalQueryParamDecoderMatcher[Long]("release_id")
 
 
-  val service: HttpService = HttpService {
+  val service: HttpService[IO] = HttpService[IO] {
     /*
      * GET /v1/audit
      * Returns the most recent audit events.

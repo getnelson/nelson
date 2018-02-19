@@ -17,9 +17,13 @@
 package nelson
 package plans
 
+import cats.effect.IO
+import fs2.io
 import java.net.URLConnection
+import java.nio.file.Paths
 import org.http4s._
-import org.http4s.dsl._
+import org.http4s.headers.{`Content-Type`, Location}
+import org.http4s.dsl.io._
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
 import scala.xml.NodeSeq
@@ -28,15 +32,15 @@ final case class UI(config: NelsonConfig) extends Default {
   import nelson.Json._
   import UI._
 
-  val service = HttpService {
+  val service = HttpService[IO] {
     case GET -> Root & IsAuthenticated(session) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "login" & IsAuthenticated(_) =>
-      Found(uri("/"))
+      Found(Location(uri("/")))
 
     case GET -> Root / "login" & NotAuthenticated() =>
-      serveStaticFile(path = "login.html")
+      IO.pure(serveStaticFile(path = "login.html"))
 
     // only used by the javascript ui as a convenience to not have
     // to re-request this common data on every page load. its all
@@ -53,47 +57,47 @@ final case class UI(config: NelsonConfig) extends Default {
     case GET -> Root / "profile" & IsAuthenticated(s) =>
       Uri.fromString(s"/profile/${s.user.login}").fold(
         e => InternalServerError(s"Bad redirect: ${e.details}"),
-        Found.apply
+        uri => Found(Location(uri))
       )
 
     case GET -> Root / "profile" / owner & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "deployments" & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "deployments" / _ & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "datacenters" & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "datacenters" / _ & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "dashboard" & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "dashboard" / _ & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "audit" / _ & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "audit" & IsAuthenticated(_) =>
-      serveStaticFile(path = "index.html")
+      IO.pure(serveStaticFile(path = "index.html"))
 
     ////////////////////// REPOSITORIES //////////////////////
 
     case GET -> Root / owner / repo / unit ~ "svg" =>
       Nelson.getStatusOfReleaseUnit(Slug(owner, repo), unit)(config)
         .flatMap { s =>
-          Ok(badge(s.getOrElse(DeploymentStatus.Unknown)).toString)
-            .withContentType(Some(MediaType.`image/svg+xml`))
+          Ok(badge(s.getOrElse(DeploymentStatus.Unknown)).toString).map(
+            _.withContentType(`Content-Type`(MediaType.`image/svg+xml`)))
         }
 
     case NotAuthenticated() =>
-      Found(uri("/login"))
+      Found(Location(uri("/login")))
   }
 
   /*
@@ -101,23 +105,23 @@ final case class UI(config: NelsonConfig) extends Default {
    * then we'll try to serve the file from that location, otherwise,
    * we'll use the built-in nelson-ui that comes from the classpath dependency.
    */
-  private def serveStaticFile(path: String) =
+  private def serveStaticFile(path: String): Response[IO] =
     config.ui.filePath
       .map(_.withTrailingSlash + path)
       .map(fileFromFilesystem)
       .getOrElse(fileFromClasspath(path = path))
 
-  private def fileFromClasspath(prefix: String = "nelson/www", path: String) = {
-    val resp = Ok(getClass.getClassLoader.getResourceAsStream(s"$prefix/$path"))
+  private def fileFromClasspath(prefix: String = "nelson/www", path: String): Response[IO] = {
+    val resp = Response(body = io.readInputStream(IO(getClass.getClassLoader.getResourceAsStream(s"$prefix/$path")), 4096))
+
     Option(URLConnection.guessContentTypeFromName(path)).fold(resp) { ct =>
       resp.putHeaders(Header("Content-Type", ct))
     }
   }
 
-  private def fileFromFilesystem(path: String) = {
-    val source = scala.io.Source.fromFile(path)
-    val lines = try source.getLines.mkString("\n") finally source.close()
-    val resp = Ok(lines)
+  private def fileFromFilesystem(path: String): Response[IO] = {
+    val p = Paths.get(path)
+    val resp = Response(body = io.file.readAll[IO](p, 4096))
     Option(URLConnection.guessContentTypeFromName(path)).fold(resp) { ct =>
       resp.putHeaders(Header("Content-Type", ct))
     }

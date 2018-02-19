@@ -18,8 +18,9 @@ package nelson
 package plans
 
 import org.http4s._
-import org.http4s.dsl._
+import org.http4s.dsl.io._
 import _root_.argonaut._, Argonaut._
+import cats.effect.IO
 import scalaz._, Scalaz._
 
 final case class Loadbalancers(config: NelsonConfig) extends Default {
@@ -62,7 +63,7 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
       ) ->: jEmptyObject).deepmerge(ls.loadbalancer.asJson)
     )
 
-  val service: HttpService = HttpService {
+  val service: HttpService[IO] = HttpService[IO] {
 
     /*
      * POST /v1/loadbalancers

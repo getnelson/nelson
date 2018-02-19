@@ -16,32 +16,33 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.IO
 import org.http4s._
 import org.http4s.headers._
 
 class AcceptsSpec extends NelsonSuite {
   "Accepts.unapply" should "match requests with no Accept header" in {
-    val req = Request()
+    val req = Request[IO]()
     AcceptsSvg.unapply(req) should equal (true)
   }
 
   it should "match requests with an Accept header of the media type" in {
-    val req = Request().putHeaders(Accept(MediaType.`image/svg+xml`))
+    val req = Request[IO]().putHeaders(Accept(MediaType.`image/svg+xml`))
     AcceptsSvg.unapply(req) should equal (true)
   }
 
   it should "match requests with an Accept header of the media range" in {
-    val req = Request().putHeaders(Accept(MediaRange.`image/*`))
+    val req = Request[IO]().putHeaders(Accept(MediaRange.`image/*`))
     AcceptsSvg.unapply(req) should equal (true)
   }
 
   it should "not match requests without an Accept header" in {
-    val req = Request().putHeaders(Accept(MediaType.`image/png`))
+    val req = Request[IO]().putHeaders(Accept(MediaType.`image/png`))
     AcceptsSvg.unapply(req) should equal (false)
   }
 
   it should "not match requests that declare the media type unacceptable" in {
-    val req = Request().putHeaders(Accept(MediaType.`image/png`.withQValue(QValue.Zero)))
+    val req = Request[IO]().putHeaders(Accept(MediaType.`image/png`.withQValue(QValue.Zero)))
     AcceptsSvg.unapply(req) should equal (false)
   }
 }

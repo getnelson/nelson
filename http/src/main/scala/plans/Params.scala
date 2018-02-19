@@ -17,7 +17,7 @@
 package nelson
 package plans
 
-import org.http4s.dsl._
+import org.http4s.dsl.io._
 import scalaz.\/
 
 object Params {
