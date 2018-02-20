@@ -89,7 +89,7 @@ object Sweeper {
     })
 
   def sweeperSink(implicit unclaimedResourceTracker: Kleisli[IO, (Datacenter, Int), Unit]): Sink[IO, SweeperHelmOp] =
-    _.map {
+    Sink {
       case (dc, -\/(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to track unclaimed resources", e))
       }

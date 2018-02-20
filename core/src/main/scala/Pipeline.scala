@@ -36,7 +36,7 @@ object Pipeline {
      * Actually execute the workflow specified by the actionable on the stream.
      */
     def runAction(cfg: NelsonConfig): Sink[IO, Action] = {
-      _.map { action =>
+      Sink { action =>
         action.run((cfg, action.config)).recoverWith {
           case NonFatal(e) =>
             e.printStackTrace

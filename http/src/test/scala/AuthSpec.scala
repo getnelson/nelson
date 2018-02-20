@@ -86,7 +86,7 @@ class AuthSpec extends NelsonSuite {
   }
 
   "/auth/github" should "return a 415 for bad media types" in {
-    val req = Request[IO](POST, uri("/auth/github"))    
+    val req = Request[IO](POST, uri("/auth/github"))
     val resp = service.orNotFound(req).unsafeRunSync()
     resp.status should equal (UnsupportedMediaType)
   }

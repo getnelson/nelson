@@ -74,7 +74,7 @@ storage.setup.run
 
 buildInfoPackage := "nelson"
 
-scalacOptions += "-Ypartial-unification"
+scalacOptions ++= List("-Ypartial-unification", "-Ywarn-value-discard")
 
 scalacOptions in (Compile, doc) ++= Seq(
   "-no-link-warnings" // Suppresses problems with Scaladoc @throws links

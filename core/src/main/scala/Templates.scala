@@ -115,7 +115,7 @@ object Templates {
           dir => withTempFile(tv.template, "nelson", ".template", dir) { file =>
             Stream.eval(renderTemplate(cfg.pools.schedulingPool, templateConfig, cfg.dockercfg, file.toPath, token.value, env))
           },
-          dir => IO(dir.toFile.delete())
+          dir => IO { dir.toFile.delete(); () }
         )
       }.compile.last.map(_.getOrElse(sys.error("Expected a ConsulTemplateResult")))
     }

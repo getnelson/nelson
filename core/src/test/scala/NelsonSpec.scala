@@ -22,8 +22,6 @@ import storage.{run => runs, StoreOp}
 import org.scalacheck._
 import nelson.CatsHelpers._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
   import Datacenter._
   import routing.RoutingNode
@@ -216,7 +214,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   it should "list datacenters" in {
-    val dcs = Nelson.listDatacenters.run(config).unsafeRunSync()
+    val dcs = Nelson.listDatacenters(config.pools.defaultExecutor).run(config).unsafeRunSync()
     dcs.keys.map(_.name).toSet should equal (Set(testName))
   }
 

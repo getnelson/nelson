@@ -134,7 +134,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
 
       val mv = json.decodeEither[ManifestValidation].toOption.get // YOLO
       ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync() should equal (
-        \/.right(Failure(NonEmptyList(ManifestUnitKindMismatch("notright", List("howdy"))))))
+        Right(Failure(NonEmptyList(ManifestUnitKindMismatch("notright", List("howdy"))))))
     }.unsafeRunSync()
   }
 

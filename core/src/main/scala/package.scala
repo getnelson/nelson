@@ -172,7 +172,7 @@ package object nelson {
     Paths.get(Option(System.getProperty("java.io.tmpdir")).getOrElse("/tmp"))
 
   def withTempFile[A](s: String, prefix: String = "nelson-", suffix: String = ".tmp", dir: Path = DefaultTempDir)(f: File => Stream[IO, A]): Stream[IO, A] =
-    Stream.bracket(writeTempFile(dir, s, prefix, suffix))(f, file => IO(file.delete()))
+    Stream.bracket(writeTempFile(dir, s, prefix, suffix))(f, file => IO { file.delete(); () })
 
   private def writeTempFile(dir: Path, s: String, prefix: String, suffix: String): IO[File] =
     IO {

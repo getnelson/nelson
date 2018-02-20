@@ -89,7 +89,7 @@ object Server {
           BadRequest(Map("message" -> e.getMessage).asJson)
         case t: Throwable =>
           log.error(s"Error handling request", t)
-          IO.pure(Response(InternalServerError))
+          InternalServerError(Map("message" -> "An internal error occurred").asJson)
       }))
     }
 

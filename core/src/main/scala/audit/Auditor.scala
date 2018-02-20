@@ -39,7 +39,7 @@ class Auditor(queue: Queue[IO, AuditEvent[_]], defaultLogin: String) {
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf"))
   private def logSink: Sink[IO, AuditEvent[_]] =
-    _.map {
+    Sink {
       case AuditEvent(t: Throwable, _, _, _, login, _)  =>
         IO(logger.error(s"[fatal] audit error event ${t.getMessage} by user ${login}"))
       case a =>
@@ -47,17 +47,17 @@ class Auditor(queue: Queue[IO, AuditEvent[_]], defaultLogin: String) {
     }
 
   private def persist(stg: StoreOp ~> IO): Sink[IO, AuditEvent[_]] =
-    _.map { a =>
+    Sink { a =>
       storage.run(stg, storage.StoreOp.audit(a).void).recoverWith {
         case t => IO(logger.error(s"[fatal] audit error while persisting event ${t.getMessage}"))
       }
     }
 
   def auditSink[A](action: AuditAction)(implicit au: Auditable[A]): Sink[IO, A] =
-    _.map(a => write(a, action)(au))
+    Sink(a => write(a, action)(au))
 
   def errorSink: Sink[IO, Throwable] =
-    _.map(t => IO(logger.error(t.getMessage))) // possibly truncate
+    Sink(t => IO(logger.error(t.getMessage))) // possibly truncate
 
   def write[A](a: A, action: AuditAction, releaseId: Option[Long] = None, login: String = defaultLogin)(implicit au: Auditable[A]): IO[Unit] =
     queue.enqueue1(AuditEvent(a, action, releaseId, login))

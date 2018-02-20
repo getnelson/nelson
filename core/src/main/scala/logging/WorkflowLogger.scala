@@ -66,7 +66,7 @@ class WorkflowLogger(queue: Queue[IO, (ID, String)], base: Path) extends (Loggin
     queue.enqueue1((id, line))
 
   def process: Stream[IO, Unit] =
-    appendToFile(queue.dequeue)
+    queue.dequeue.to(appendToFile)
 
   def read(id: ID, offset: Int): IO[List[String]] = {
     for {
@@ -81,7 +81,7 @@ class WorkflowLogger(queue: Queue[IO, (ID, String)], base: Path) extends (Loggin
   }
 
   private def appendToFile: Sink[IO,(ID,String)] =
-    _.map { case (id, line) =>
+    Sink { case (id, line) =>
       for {
         path <- getPath(id)
         _    <- createFile(path) *> append(path, line)

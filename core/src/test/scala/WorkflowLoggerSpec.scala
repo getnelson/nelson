@@ -69,7 +69,7 @@ class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll w
     logger.log(1L, "foo").unsafeRunSync()
     logger.process.take(1).compile.drain.unsafeRunSync()
     val line = io.file.readAll[IO](path, 4096).through(text.utf8Decode).through(text.lines).compile.toVector.unsafeRunSync()
-    line.map(removeTimestamp) should equal (Vector("foo"))
+    line.filter(_.nonEmpty).map(removeTimestamp) should equal (Vector("foo"))
   }
 
   it should "log with newlines to the file" in {
@@ -78,7 +78,7 @@ class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll w
     logger.log(1L, "bar").unsafeRunSync()
     logger.process.take(2).compile.drain.unsafeRunSync()
     val lines = io.file.readAll[IO](path, 4096).through(text.utf8Decode).through(text.lines).compile.toVector.unsafeRunSync()
-    lines.map(removeTimestamp) should equal (Vector("foo","bar"))
+    lines.filter(_.nonEmpty).map(removeTimestamp) should equal (Vector("foo","bar"))
   }
 
   it should "not add an extra newline" in {
@@ -87,7 +87,7 @@ class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll w
     logger.log(1L, "bar").unsafeRunSync()
     logger.process.take(2).compile.drain.unsafeRunSync()
     val lines = io.file.readAll[IO](path, 4096).through(text.utf8Decode).through(text.lines).compile.toVector.unsafeRunSync()
-    lines.map(removeTimestamp) should equal (Vector("foo","bar"))
+    lines.filter(_.nonEmpty).map(removeTimestamp) should equal (Vector("foo","bar"))
   }
 
   it should "read the file entirely" in {
@@ -96,7 +96,7 @@ class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll w
     logger.log(1L, "baz\n").unsafeRunSync()
     logger.process.take(3).compile.drain.unsafeRunSync()
     val lines = logger.read(1L,0).unsafeRunSync()
-    lines.map(removeTimestamp) should equal (Vector("foo","bar","baz"))
+    lines.filter(_.nonEmpty).map(removeTimestamp) should equal (Vector("foo","bar","baz"))
   }
   it should "read the file from offset" in {
     logger.log(1L, "foo\n").unsafeRunSync()
@@ -104,6 +104,6 @@ class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll w
     logger.log(1L, "baz\n").unsafeRunSync()
     logger.process.take(3).compile.drain.unsafeRunSync()
     val lines = logger.read(1L,2).unsafeRunSync()
-    lines.map(removeTimestamp) should equal (Vector("baz"))
+    lines.filter(_.nonEmpty).map(removeTimestamp) should equal (Vector("baz"))
   }
 }
