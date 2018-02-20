@@ -18,15 +18,16 @@ package nelson
 
 import knobs._
 import java.io.File
+import java.util.concurrent.Executors
 
 import journal.Logger
 
-import cats.effect.IO
+import cats.effect.{Effect, IO}
 import cats.syntax.apply._
 
 import fs2.Stream
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 import scalaz.{Optional => _, _}
 import Scalaz._
@@ -39,11 +40,13 @@ object Main {
   private val log = Logger[this.type]
 
   def main(args: Array[String]): Unit = {
+    val singleThreadPool = ExecutionContext.fromExecutorService(Executors.newSingleThreadExecutor())
+
     val file = new File(args.headOption.getOrElse("/opt/application/conf/nelson.cfg"))
 
     def readConfig = for {
       defaults  <- knobs.loadImmutable[IO](Required(ClassPathResource("nelson/defaults.cfg")) :: Nil)
-      overrides <- knobs.loadImmutable[IO](Optional(FileResource(file)) :: Nil)
+      overrides <- knobs.loadImmutable[IO](Optional(FileResource(file)(singleThreadPool)) :: Nil)
       config    <- Config.readConfig(defaults ++ overrides, Http, Hikari.build _)
     } yield config
 
@@ -74,11 +77,11 @@ object Main {
       import cleanup.SweeperDefaults._
 
       log.info("booting the background processes nelson needs to operate...")
-      runBackgroundJob("auditor", Stream.force(cfg.auditor.map(auditor => auditor.process(cfg.storage))))
+      runBackgroundJob("auditor", Stream.force(cfg.auditor.map(auditor => auditor.process(cfg.storage)(cfg.pools.defaultExecutor))))
       runBackgroundJob("pipeline_processor", Stream.eval(Pipeline.task(cfg)(Pipeline.sinks.runAction(cfg))))
       runBackgroundJob("workflow_logger", cfg.workflowLogger.process)
       runBackgroundJob("routing_cron", routing.cron.consulRefresh(cfg) to Http4sConsul.consulSink)
-      runBackgroundJob("cleanup_pipeline", cleanup.CleanupCron.pipeline(cfg))
+      runBackgroundJob("cleanup_pipeline", cleanup.CleanupCron.pipeline(cfg)(cfg.pools.defaultExecutor))
       runBackgroundJob("sweeper", cleanup.Sweeper.process(cfg))
       runBackgroundJob("deployment_monitor", DeploymentMonitor.loop(cfg))
 

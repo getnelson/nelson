@@ -37,7 +37,7 @@ class TemplatesSpec extends FlatSpec with NelsonSuite {
   )
 
   def render(file: String, timeout: FiniteDuration = 15.seconds) =
-    renderTemplate(config.pools.schedulingPool, config.template.copy(timeout = timeout), config.dockercfg,
+    renderTemplate(config.pools.defaultExecutor, config.pools.schedulingPool, config.template.copy(timeout = timeout), config.dockercfg,
       templatePath(file), DummyVaultToken, ExtraEnv)
   behavior of "runTemplates"
 

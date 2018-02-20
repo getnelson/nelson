@@ -60,7 +60,7 @@ script:
         sbt ++$TRAVIS_SCALA_VERSION 'release with-defaults'
       fi
     else
-      travis_wait 30 sbt ++$TRAVIS_SCALA_VERSION ci
+      sbt ++$TRAVIS_SCALA_VERSION ci
     fi
 
 after_success:

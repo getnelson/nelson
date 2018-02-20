@@ -113,7 +113,7 @@ object Templates {
           dir
         })(
           dir => withTempFile(tv.template, "nelson", ".template", dir) { file =>
-            Stream.eval(renderTemplate(cfg.pools.schedulingPool, templateConfig, cfg.dockercfg, file.toPath, token.value, env))
+            Stream.eval(renderTemplate(cfg.pools.defaultExecutor, cfg.pools.schedulingPool, templateConfig, cfg.dockercfg, file.toPath, token.value, env))
           },
           dir => IO { dir.toFile.delete(); () }
         )
@@ -122,6 +122,7 @@ object Templates {
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf")) // false wart
   def renderTemplate(
+    ec: ExecutionContext,
     scheduler: ScheduledExecutorService,
     templateConfig: TemplateConfig,
     dockerConfig: DockerConfig,
@@ -159,7 +160,9 @@ object Templates {
         consulTemplateContainersRunning.inc()
         val exitCode = cmd.!(pLogger)
         exitCode
-      }.timed(templateConfig.timeout)(ExecutionContext.fromExecutorService(scheduler)).attempt.flatMap {
+      }.unsafeTimed(templateConfig.timeout)(ec, scheduler).attempt.flatMap {
+        // ^ NOTE: This will return when the timeout is up but will not cancel
+        // the already running action - that is pending https://github.com/typelevel/cats-effect/pull/121
         case Right(0) =>
           consulTemplateContainersRunning.dec()
           IO.pure(Rendered)

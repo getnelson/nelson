@@ -53,7 +53,7 @@ final class SlackHttp(cfg: SlackConfig, http: Http) extends (SlackOp ~> IO) {
   def send(channel: String, msg: String): IO[Unit] = {
     val json = Json("channel" := "#"+channel, "text" := msg, "username" := cfg.username).asJson.nospaces
     val req = url(cfg.webhook).setContentType("application/json", "UTF-8") << json
-    http(req OK as.String).toIO.map(_ => ())
+    IO.fromFuture(IO(http(req OK as.String))).map(_ => ())
   }
 }
 

@@ -247,7 +247,7 @@ object Github {
             "client_id" -> cfg.clientId,
             "client_secret" -> cfg.clientSecret,
             "code" -> fromCode)).addHeader("Accept","application/json")
-          http(r OK as.String).toIO
+          IO.fromFuture(IO(http(r OK as.String)))
         }
         req.flatMap(fromJson[AccessToken])
 
@@ -272,8 +272,8 @@ object Github {
           .setFollowRedirects(false) // TIM: doing this deliberately, such that github.com's s3 storage works.
           .token(t)
         for {
-          a <- http(req > as.Response(x => x.getHeader("location"))).toIO
-          b <- http(url(a) OK as.String).toIO
+          a <- IO.fromFuture(IO(http(req > as.Response(x => x.getHeader("location")))))
+          b <- IO.fromFuture(IO(http(url(a) OK as.String)))
         } yield asset.copy(content = Option(b))
 
       case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
@@ -286,7 +286,7 @@ object Github {
         def go(uri: URI)(accum: List[Repo]): List[Repo] = {
           val r = url(uri.toString).token(t)
           val io = for {
-            a <- http(r OkWithPagination as.String).toIO
+            a <- IO.fromFuture(IO(http(r OkWithPagination as.String)))
             b <- fromJson[List[Repo]](a._1)
           } yield (b,a._2)
           // going to say this is ok, due to surrounding task...
@@ -304,7 +304,7 @@ object Github {
           .addQueryParameter("ref", java.net.URLEncoder.encode(tagOrBranch, "UTF-8"))
           .token(t)
         for {
-          resp <- http(r OkWithErrors as.String).option.toIO
+          resp <- IO.fromFuture(IO(http(r OkWithErrors as.String).option))
           cont <- resp.fold(
             IO.pure(Option.empty[Github.Contents]))(x => fromJson[Github.Contents](x).map(Option(_))
           )
@@ -313,7 +313,7 @@ object Github {
       case GetRepoWebHooks(slug: Slug, t: AccessToken) =>
         val r = url(cfg.webhookEndpoint(slug)).token(t)
         for {
-          resp <- http(r OkWithErrors as.String).option.toIO // returns 404 when repo has no webhooks
+          resp <- IO.fromFuture(IO(http(r OkWithErrors as.String).option)) // returns 404 when repo has no webhooks
           wk   <- resp.fold(
             IO.pure(List.empty[Github.WebHook]))(x => fromJson[List[Github.WebHook]](x))
         } yield wk
@@ -325,12 +325,12 @@ object Github {
           .token(t)
           .setContentType("application/json", "UTF-8") << json
         for {
-          resp <- http(req OK as.String).toIO
+          resp <- IO.fromFuture(IO(http(req OK as.String)))
           wh   <- fromJson[Github.WebHook](resp)
         } yield wh
 
       case DeleteRepoWebHook(slug: Slug, id: Long, t: AccessToken) =>
-        ApplicativeError[IO, Throwable].recover(http(url(s"${cfg.webhookEndpoint(slug)}/$id").DELETE.token(t) OK as.String).toIO.map(_ => ())) {
+        ApplicativeError[IO, Throwable].recover(IO.fromFuture(IO(http(url(s"${cfg.webhookEndpoint(slug)}/$id").DELETE.token(t) OK as.String))).map(_ => ())) {
           // swallow 404, as we're being asked to delete something that does not exist
           case StatusCode(404) => ()
         }
@@ -340,7 +340,7 @@ object Github {
     /////////////////////////// INTERNALS ///////////////////////////
 
     private def fetch(endpoint: String, t: AccessToken): IO[String] =
-      http(url(endpoint).token(t) OK as.String).toIO
+      IO.fromFuture(IO(http(url(endpoint).token(t) OK as.String)))
 
     case class GithubApiError(code: Int, body: String)
       extends Exception("Unexpected response status: %d".format(code))

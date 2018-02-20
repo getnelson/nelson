@@ -4,15 +4,17 @@ import cats.{Monad, StackSafeMonad}
 import cats.arrow.FunctionK
 import cats.free.Free
 import cats.effect.{Effect, IO}
+import cats.syntax.apply._
 
 import doobie.imports.Capture
 
-import fs2.{Pipe, Sink, Stream}
+import fs2.{Pipe, Scheduler, Sink, Stream}
+import fs2.async
 
-import java.util.concurrent.TimeoutException
+import java.util.concurrent.{ScheduledExecutorService, TimeoutException}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration.FiniteDuration
 import scala.util.{Failure, Success}
 
 object CatsHelpers {
@@ -62,17 +64,6 @@ object CatsHelpers {
     def asScalaz: scalaz.Free.FreeC[F, A] = free.foldMap(catsToScalazFreeC[F])
   }
 
-  // Adapted from https://github.com/Verizon/delorean/blob/master/core/src/main/scala/delorean/package.scala
-  implicit class NelsonEnrichedFuture[A](future: => Future[A]) {
-    def toIO(implicit ec: ExecutionContext): IO[A] =
-      IO.async { callback =>
-        future.onComplete {
-          case Success(a) => callback(Right(a))
-          case Failure(e) => callback(Left(e))
-        }
-      }
-  }
-
   implicit class NelsonEnrichedIO[A](val io: IO[A]) extends AnyVal {
     /** Run `other` if this IO fails */
     def or(other: IO[A]): IO[A] = io.attempt.flatMap {
@@ -87,11 +78,20 @@ object CatsHelpers {
     def ensure(failure: => Throwable)(f: A => Boolean): IO[A] =
       io.flatMap(a => if (f(a)) IO.pure(a) else IO.raiseError(failure))
 
-    def timed(timeout: Duration)(implicit ec: ExecutionContext): IO[A] = for {
-      _ <- IO.shift
-      o <- IO(io.unsafeRunTimed(timeout))
-      r <- o.fold[IO[A]](IO.raiseError(new TimeoutException(s"IO failed to complete within specified timeout of ${timeout.toMillis}ms.")))(IO.pure)
-    } yield r
+    /** NOTE: Unlike scalaz.concurrent.Task#timed this does not attempt to cancel the IO.
+      * IO cancellation is pending https://github.com/typelevel/cats-effect/pull/121
+      */
+    def unsafeTimed(timeout: FiniteDuration)(implicit ec: ExecutionContext, schedulerES: ScheduledExecutorService): IO[A] = {
+      val scheduler = Scheduler.fromScheduledExecutorService(schedulerES)
+      async.Promise.empty[IO, Either[Throwable, A]].flatMap { p =>
+        async.fork(io.attempt.flatMap(p.complete)) *>
+        p.timedGet(timeout, scheduler).flatMap {
+          case Some(Left(t))  => IO.raiseError(t)
+          case Some(Right(a)) => IO.pure(a)
+          case None           => IO.raiseError(new TimeoutException())
+        }
+      }
+    }
   }
 
   private def sinkW[F[_], W, O](actualSink: Sink[F, W]): Sink[F, Either[W, O]] =
