@@ -97,9 +97,9 @@ object Discovery {
   }
 
   def writeDiscoveryInfoToConsul(ns: NamespaceName, sn: StackName, domain: String, dt: DiscoveryTables): ConsulOp.ConsulOpF[Unit] =
-    ConsulOp.setJson(consulDiscoveryKey(sn), DeploymentDiscovery(ns, domain, dt))
+    ConsulOp.kvSetJson(consulDiscoveryKey(sn), DeploymentDiscovery(ns, domain, dt))
 
-  def listDiscoveryKeys: ConsulOp.ConsulOpF[Set[String]] = ConsulOp.listKeys(discoveryKeyPrefix)
+  def listDiscoveryKeys: ConsulOp.ConsulOpF[Set[String]] = ConsulOp.kvListKeys(discoveryKeyPrefix)
 
   def stackNameFrom(discoveryKey: String): Option[String] = discoveryKey match {
     case DiscoveryKeyPattern(s) if StackName.parsePublic(s).isDefined => Some(s)

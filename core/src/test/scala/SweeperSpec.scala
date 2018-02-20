@@ -24,6 +24,7 @@ import nelson.cleanup.Sweeper.UnclaimedResources
 import nelson.storage.StoreOp
 import nelson.storage.StoreOp.{ListDeploymentsForNamespaceByStatus, ListNamespacesForDatacenter}
 
+import cats.arrow.FunctionK
 import cats.effect.IO
 import scalaz.{-\/, \/-, ~>}
 
@@ -69,7 +70,7 @@ class SweeperSpec extends NelsonSuite {
 
     val csl = new (ConsulOp ~> IO) {
       def apply[A](fa: ConsulOp[A]) : IO[A] = fa match {
-        case ConsulOp.ListKeys("lighthouse/discovery/v1/") => IO.pure(consulKeys.toSet)
+        case ConsulOp.KVListKeys("lighthouse/discovery/v1/") => IO.pure(consulKeys.toSet)
         case _ => IO.raiseError(new Exception("Unexpected Store Operation Executed"))
       }
     }
@@ -81,13 +82,17 @@ class SweeperSpec extends NelsonSuite {
     var deleteKeys = List.empty[(String, String)]
     var unclaimedResource = List.empty[(String, Int)]
 
+    def interp(dc: Datacenter): FunctionK[ConsulOp, IO] = new FunctionK[ConsulOp, IO] {
+      def apply[A](fa: ConsulOp[A]): IO[A] = fa match {
+        case ConsulOp.KVDelete(key) => IO(deleteKeys = deleteKeys :+ (dc.name -> key))
+        case _ => IO.raiseError(new Exception("Unexpected Result."))
+      }
+    }
+
     results.foreach { r =>
       r match {
         case (dc, -\/(UnclaimedResources(n))) => unclaimedResource = unclaimedResource :+ (dc.name -> n)
-        case (dc, \/-(op)) => op.resume.leftMap(_.fi) match {
-          case -\/(c) => deleteKeys = deleteKeys :+ (dc.name -> c.asInstanceOf[ConsulOp.Delete].key)
-          case _ => throw new Exception("Unexpected Result.")
-        }
+        case (dc, \/-(op)) => helm.run(interp(dc), op).unsafeRunSync()
       }
     }
 

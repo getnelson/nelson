@@ -16,8 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.helmhttp4s.Http4sConsulClient
-
 import cats.effect.IO
 import cats.syntax.either._
 import cats.syntax.applicativeError._
@@ -26,6 +24,7 @@ import fs2.{Sink, Stream}
 
 import helm.ConsulOp
 import helm.ConsulOp.ConsulOpF
+import helm.http4s.Http4sConsulClient
 
 import journal._
 
@@ -53,11 +52,11 @@ object Http4sConsul {
     consul.creds.map(x => x.username -> x.password)
 
   def client(consul: Infrastructure.Consul, http4sClient: Client[IO]): ConsulOp ~> IO =
-    new Http4sConsulClient(baseUri(consul), http4sClient, token(consul), creds(consul))
+    new Http4sConsulClient(baseUri(consul), http4sClient, token(consul), creds(consul)).asScalaz
 
   def consulSink: Sink[IO, (Datacenter,ConsulOpF[Unit])] =
     Sink {
-      case (dc, op) => helm.run(dc.consul,op) recover {
+      case (dc, op) => helm.run(dc.consul.asCats,op) recover {
         case NonFatal(e) => log.error(s"error while attempting to perform consul operation", e)
       }
     }

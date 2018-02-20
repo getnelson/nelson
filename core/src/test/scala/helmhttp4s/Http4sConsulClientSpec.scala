@@ -29,6 +29,7 @@ import org.http4s.client._
 import org.scalatest._
 import org.scalactic.TypeCheckedTripleEquals
 import helm._
+import helm.http4s.Http4sConsulClient
 
 class Http4sConsulClientSpec extends FlatSpec with Matchers with TypeCheckedTripleEquals {
   import Http4sConsulTests._
@@ -36,35 +37,35 @@ class Http4sConsulClientSpec extends FlatSpec with Matchers with TypeCheckedTrip
   "get" should "succeed with some when the response is 200" in {
     val response = consulResponse(Status.Ok, "yay")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.get("foo")).attempt.unsafeRunSync() should ===(
+    helm.run(csl.asCats, ConsulOp.kvGet("foo")).attempt.unsafeRunSync() should ===(
       Right(Some("yay")))
   }
 
   "get" should "succeed with none when the response is 404" in {
     val response = consulResponse(Status.NotFound, "nope")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.get("foo")).attempt.unsafeRunSync() should ===(
+    helm.run(csl.asCats, ConsulOp.kvGet("foo")).attempt.unsafeRunSync() should ===(
       Right(None))
   }
 
   it should "fail when the response is 500" in {
     val response = consulResponse(Status.InternalServerError, "boo")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.get("foo")).attempt.unsafeRunSync() should ===(
+    helm.run(csl.asCats, ConsulOp.kvGet("foo")).attempt.unsafeRunSync() should ===(
       Left(UnexpectedStatus(Status.InternalServerError)))
   }
 
   "set" should "succeed when the response is 200" in {
     val response = consulResponse(Status.Ok, "yay")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.set("foo", "bar")).attempt.unsafeRunSync() should ===(
+    helm.run(csl.asCats, ConsulOp.kvSet("foo", "bar")).attempt.unsafeRunSync() should ===(
       Right(()))
   }
 
   it should "fail when the response is 500" in {
     val response = consulResponse(Status.InternalServerError, "boo")
     val csl = constantConsul(response)
-    helm.run(csl, ConsulOp.set("foo", "bar")).attempt.unsafeRunSync() should ===(
+    helm.run(csl.asCats, ConsulOp.kvSet("foo", "bar")).attempt.unsafeRunSync() should ===(
       Left(UnexpectedStatus(Status.InternalServerError)))
   }
 }
@@ -76,7 +77,7 @@ object Http4sConsulTests {
     new Http4sConsulClient(
       Uri.uri("http://localhost:8500/v1/kv/v1"),
       constantResponseClient(response),
-      None)
+      None).asScalaz
   }
 
   def consulResponse(status: Status, s: String): Response[IO] = {

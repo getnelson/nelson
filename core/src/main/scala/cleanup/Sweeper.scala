@@ -58,7 +58,7 @@ object Sweeper {
   def cleanupLeakedConsulDiscoveryKeys(cfg: NelsonConfig): IO[SweeperHelmOps] =
     cfg.datacenters.traverseM[IO, SweeperHelmOp] { dc =>
       for {
-        keys <- helm.run(dc.interpreters.consul, Discovery.listDiscoveryKeys).map(_.toList)
+        keys <- helm.run(dc.interpreters.consul.asCats, Discovery.listDiscoveryKeys).map(_.toList)
 
         stackNames <- storage.run(cfg.storage, storage.StoreOp.getRoutableDeploymentsByDatacenter(dc))
           .map(_.map(_.stackName.toString)).map(_.toList)
@@ -70,7 +70,7 @@ object Sweeper {
           )
         } yield deleteKey
 
-        deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.delete).map(op => dc -> \/-(op))
+        deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.kvDelete).map(op => dc -> \/-(op))
         unclaimedResource = dc -> -\/(UnclaimedResources(items.count(_.isLeft)))
 
       } yield deleteOps :+ unclaimedResource
@@ -93,7 +93,7 @@ object Sweeper {
       case (dc, -\/(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to track unclaimed resources", e))
       }
-      case (dc, \/-(op)) => helm.run(dc.consul, op) recoverWith {
+      case (dc, \/-(op)) => helm.run(dc.consul.asCats, op) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to perform consul operation", e))
       }
     }

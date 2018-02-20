@@ -28,11 +28,12 @@ package object alerts {
   import nelson.Manifest._
   import nelson.Manifest.AlertOptOut
 
+  import cats.free.Free
   import cats.effect.IO
 
   import helm.ConsulOp
 
-  import scalaz.{\/, Free}
+  import scalaz.{\/}
   import scalaz.syntax.either._
   import scalaz.syntax.functor._
 
@@ -47,8 +48,6 @@ package object alerts {
    * Writes alert configuration to consul, if not opted out.
    */
   def writeToConsul(sn: StackName, ns: NamespaceName, plan: PlanRef, u: UnitDef, outs: List[AlertOptOut]): ConsulOp.ConsulOpF[Option[String]] = {
-    import ConsulOp.ConsulOpFMonad
-
     if (outs.contains(ns.asString))
       Free.pure(None)
     else {
@@ -56,7 +55,7 @@ package object alerts {
       // TODO a run not at the end of the world and a throw.  The horror.
       // ConsulOp doesn't represent other tasks well, nor does it represent failure
       val rules = rewriteRules(u, sn, plan, ns, outs).unsafeRunSync().fold(throw _, identity)
-      ConsulOp.set(key, rules) as Some(rules)
+      ConsulOp.kvSet(key, rules).map(_ => Some(rules))
     }
   }
 
@@ -84,6 +83,6 @@ package object alerts {
    * definitions, recording rules, and per-namespace opt-outs.
    */
   def deleteFromConsul(stackName: StackName): ConsulOp.ConsulOpF[Unit] =
-    ConsulOp.delete(alertingKey(stackName))
+    ConsulOp.kvDelete(alertingKey(stackName))
 }
 

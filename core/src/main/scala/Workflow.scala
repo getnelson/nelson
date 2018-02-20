@@ -120,16 +120,16 @@ object Workflow {
       fail(new RuntimeException(reason))
 
     def deleteFromConsul(key: String): WorkflowF[Unit] =
-      ConsulOp.delete(key).inject
+      ConsulOp.kvDelete(key).asScalaz.inject
 
     def deleteDiscoveryInfoFromConsul(sn: StackName): WorkflowF[Unit] =
       deleteFromConsul(routing.Discovery.consulDiscoveryKey(sn))
 
     def deleteAlertsFromConsul(sn: StackName): WorkflowF[Unit] =
-      alerts.deleteFromConsul(sn).inject
+      alerts.deleteFromConsul(sn).asScalaz.inject
 
     def writeAlertsToConsul(sn: StackName, ns: NamespaceName, p: PlanRef, a: UnitDef, outs: List[AlertOptOut]): WorkflowF[Option[String]] =
-      alerts.writeToConsul(sn,ns,p,a,outs).inject
+      alerts.writeToConsul(sn,ns,p,a,outs).asScalaz.inject
 
     def writePolicyToVault(cfg: PolicyConfig, sn: StackName, ns: NamespaceName, rs: Set[String]): WorkflowF[Unit] =
       policies.createPolicy(cfg, sn, ns, rs).inject
@@ -142,7 +142,7 @@ object Workflow {
         d  <- StoreOp.getDeployment(id).inject
         rg <- RoutingTable.outgoingRoutingGraph(d).inject
         dt  = Discovery.discoveryTable(routing.RoutingNode(d), rg)
-        _  <- Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dt).inject
+        _  <- Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dt).asScalaz.inject
       } yield ()
 
     def createTrafficShift(id: ID, nsRef: NamespaceName, dc: Datacenter, p: TrafficShiftPolicy, dur: FiniteDuration): WorkflowF[Unit] = {

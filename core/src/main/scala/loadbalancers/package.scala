@@ -34,19 +34,19 @@ package object loadbalancers {
 
   def writeLoadbalancerV1ConfigToConsul(sn: StackName, ins: Vector[Inbound]): ConsulOp.ConsulOpF[Unit] = {
     import Json.V1InboundEncode
-    ConsulOp.setJson(loadbalancerKeyV1(sn.toString), ins)
+    ConsulOp.kvSetJson(loadbalancerKeyV1(sn.toString), ins)
   }
 
   def writeLoadbalancerV2ConfigToConsul(sn: StackName, routes: Vector[Route]): ConsulOp.ConsulOpF[Unit] = {
     import Json.V2RouteEncode
     val mv = sn.version.toMajorVersion
-    ConsulOp.setJson(loadbalancerKeyV2(sn.toString), routes.map((mv, _)))
+    ConsulOp.kvSetJson(loadbalancerKeyV2(sn.toString), routes.map((mv, _)))
   }
 
   def deleteLoadbalancerConfigFromConsul(lb: LoadbalancerDeployment): ConsulOp.ConsulOpF[Unit] =
     for {
-      _ <- ConsulOp.delete(loadbalancerKeyV1(lb.stackName.toString))
-      _ <- ConsulOp.delete(loadbalancerKeyV2(lb.stackName.toString))
+      _ <- ConsulOp.kvDelete(loadbalancerKeyV1(lb.stackName.toString))
+      _ <- ConsulOp.kvDelete(loadbalancerKeyV2(lb.stackName.toString))
     } yield ()
 
   def loadbalancerV1Configs(graph: RoutingGraph): Vector[(StackName, Vector[Inbound])] = {

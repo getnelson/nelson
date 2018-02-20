@@ -50,26 +50,28 @@ class ConsulDiscoverySpec extends NelsonSuite {
 
     val interp = new ~>[ConsulOp,Id.Id] {
       def apply[A](f: ConsulOp[A]): Id.Id[A] = f match {
-        case ConsulOp.Get(key) => gets = true
+        case ConsulOp.KVGet(key) => gets = true
           Some(key)
 
-        case ConsulOp.Set(key,_) =>
+        case ConsulOp.KVSet(key,_) =>
           stacks = stacks + key
           ()
 
-        case ConsulOp.ListKeys(prefix) =>
+        case ConsulOp.KVListKeys(prefix) =>
           Set.empty
 
-        case ConsulOp.Delete(key) => ()
+        case ConsulOp.KVDelete(key) => ()
           stacks = stacks - key
           ()
 
-        case ConsulOp.HealthCheck(service) =>
-          ""
+        case ConsulOp.HealthListChecksForService(_, _, _, _) =>
+          List.empty
+
+        case _ => throw new Exception("currently not used")
       }
     }
 
-    consulOps.foreach(helm.run(interp, _))
+    consulOps.foreach(helm.run(interp.asCats, _))
 
     val expected =
       Set("conductor--1-1-1--abcd",

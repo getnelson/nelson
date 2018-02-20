@@ -24,7 +24,7 @@ import nelson.notifications.{SlackOp,EmailOp}
 
 import doobie.imports._
 
-import helm.ConsulOp
+import helm.{ConsulOp, HealthCheckResponse}
 
 import java.util.concurrent.{Executors, ThreadFactory}
 
@@ -77,11 +77,13 @@ trait NelsonSuite
     @volatile var kvs: Map[String,String] = consulMap
     import helm.Key
     def apply[A](a: ConsulOp[A]): IO[A] = a match {
-      case ConsulOp.Get(key: Key) => IO(Some(kvs(key)))
-      case ConsulOp.Set(key: Key, value: String) => IO(kvs = kvs + (key -> value))
-      case ConsulOp.Delete(key: Key) => IO(kvs = kvs - key)
-      case ConsulOp.ListKeys(prefix: Key) => IO(kvs.keySet.filter(_.startsWith(prefix)))
-      case ConsulOp.HealthCheck(service: String) => IO(kvs(s"health/$service"))
+      case ConsulOp.KVGet(key: Key) => IO(Some(kvs(key)))
+      case ConsulOp.KVSet(key: Key, value: String) => IO(kvs = kvs + (key -> value))
+      case ConsulOp.KVDelete(key: Key) => IO(kvs = kvs - key)
+      case ConsulOp.KVListKeys(prefix: Key) => IO(kvs.keySet.filter(_.startsWith(prefix)))
+      case ConsulOp.HealthListChecksForService(service: String, _, _, _) =>
+        IO(List(HealthCheckResponse("", "", "", helm.HealthStatus.fromString(kvs(s"health/$service")).get, "", "", "", "", List.empty, 0L, 0L)))
+      case _ => throw new Exception("currently not used")
     }
   }
 

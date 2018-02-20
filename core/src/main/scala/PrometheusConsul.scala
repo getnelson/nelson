@@ -43,11 +43,18 @@ class PrometheusConsul private (instance: String, interp: ConsulOp ~> IO, metric
     }
 
   private def toLabel(op: ConsulOp[_]) = op match {
-    case _: Get => "get"
-    case _: Set => "set"
-    case _: Delete => "delete"
-    case _: ListKeys => "listKeys"
-    case _: HealthCheck => "healthCheck"
+    case _: KVGet => "kvGet"
+    case _: KVSet => "kvSet"
+    case _: KVDelete => "kvDelete"
+    case _: KVListKeys => "kvListKeys"
+    case _: HealthListChecksForService => "healthListChecksForService"
+    case _: AgentDeregisterService => "agentDeregisterService"
+    case _: AgentEnableMaintenanceMode => "agentEnableMaintenanceMode"
+    case _: AgentListServices.type => "agentListServices"
+    case _: AgentRegisterService => "agentRegisterService"
+    case _: HealthListChecksForNode => "healthListChecksForNode"
+    case _: HealthListChecksInState => "healthListChecksInState"
+    case _: HealthListNodesForService => "healthListNodesForService"
   }
 }
 

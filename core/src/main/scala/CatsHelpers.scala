@@ -1,5 +1,8 @@
 package nelson
 
+import cats.{Monad, StackSafeMonad}
+import cats.arrow.FunctionK
+import cats.free.Free
 import cats.effect.{Effect, IO}
 
 import doobie.imports.Capture
@@ -32,6 +35,31 @@ object CatsHelpers {
       case Left(a)  => scalaz.-\/(a)
       case Right(b) => scalaz.\/-(b)
     }
+  }
+
+  implicit class NelsonEnrichedScalazFunctionK[F[_], G[_]](val functionK: scalaz.~>[F, G]) extends AnyVal {
+    def asCats: FunctionK[F, G] = new FunctionK[F, G] {
+      def apply[A](fa: F[A]): G[A] = functionK(fa)
+    }
+  }
+
+  implicit class NelsonEnrichedCatsFunctionK[F[_], G[_]](val functionK: FunctionK[F, G]) extends AnyVal {
+    def asScalaz: scalaz.~>[F, G] = new scalaz.~>[F, G] {
+      def apply[A](fa: F[A]): G[A] = functionK(fa)
+    }
+  }
+
+  private implicit def scalazFreeCCatsInstances[F[_]]: Monad[scalaz.Free.FreeC[F, ?]] = new StackSafeMonad[scalaz.Free.FreeC[F, ?]] {
+    def flatMap[A, B](fa: scalaz.Free.FreeC[F, A])(f: A => scalaz.Free.FreeC[F, B]): scalaz.Free.FreeC[F, B] = fa.flatMap(f)
+    def pure[A](a: A): scalaz.Free.FreeC[F, A] = scalaz.Free.pure(a)
+  }
+
+  private def catsToScalazFreeC[F[_]]: FunctionK[F, scalaz.Free.FreeC[F, ?]] = new FunctionK[F, scalaz.Free.FreeC[F, ?]] {
+    def apply[A](fa: F[A]): scalaz.Free.FreeC[F, A] = scalaz.Free.liftFC(fa)
+  }
+
+  implicit class NelsonEnrichedCatsFree[F[_], A](val free: Free[F, A]) extends AnyVal {
+    def asScalaz: scalaz.Free.FreeC[F, A] = free.foldMap(catsToScalazFreeC[F])
   }
 
   // Adapted from https://github.com/Verizon/delorean/blob/master/core/src/main/scala/delorean/package.scala

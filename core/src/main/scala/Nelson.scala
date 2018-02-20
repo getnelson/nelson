@@ -942,7 +942,7 @@ object Nelson {
         _  <- dc.loadbalancer.traverse(trans =>
                 loadbalancers.run(trans,  loadbalancers.delete(lb,dc,ns)))
         _  <- storage.run(cfg.storage, StoreOp.deleteLoadbalancerDeployment(lb.id))
-        _  <- helm.run(dc.consul, loadbalancers.deleteLoadbalancerConfigFromConsul(lb))
+        _  <- helm.run(dc.consul.asCats, loadbalancers.deleteLoadbalancerConfigFromConsul(lb))
       } yield ()
     }
   }
