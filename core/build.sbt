@@ -55,7 +55,7 @@ libraryDependencies ++= Seq(
 
 addCompilerPlugin(dependencies.kindprojector.plugin)
 
-ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
+scalaModuleInfo := scalaModuleInfo.value map { _.withOverrideScalaVersion(true) }
 
 addCompilerPlugin(dependencies.macroparadise.plugin)
 

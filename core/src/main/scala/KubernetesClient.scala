@@ -2,7 +2,6 @@ package nelson
 
 import argonaut._
 import argonaut.Argonaut._
-import journal.Logger
 import org.http4s.AuthScheme
 import org.http4s.Credentials.Token
 import org.http4s.Uri

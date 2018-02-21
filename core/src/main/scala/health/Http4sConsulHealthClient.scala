@@ -18,7 +18,6 @@ package nelson
 package health
 
 import scalaz.~>
-import scalaz.syntax.std.option._
 import scalaz.concurrent.Task
 import helm.ConsulOp
 import argonaut._, Argonaut._
