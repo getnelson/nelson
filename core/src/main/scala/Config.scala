@@ -540,12 +540,16 @@ object Config {
         })
     }
 
-    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] = {
-      (kfg.lookup[String]("endpoint") |@| kfg.lookup[Duration]("timeout")) { (endpoint, timeout) =>
+    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] =
+      (kfg.lookup[String]("endpoint") |@|
+       kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString) |@|
+       kfg.lookup[String]("ca-cert").map(p => Paths.get(p)) |@|
+       kfg.lookup[String]("token") |@|
+       kfg.lookup[Duration]("timeout")
+      ) { (endpoint, version, caCert, token, timeout) =>
         val uri = Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
-        Infrastructure.Kubernetes(uri, timeout)
+        Infrastructure.Kubernetes(uri, version, caCert, token, timeout)
       }
-    }
 
     def readNomadScheduler(kfg: KConfig): Option[SchedulerOp ~> Task] =
       readNomadInfrastructure(kfg)
@@ -559,12 +563,8 @@ object Config {
         def checkServerTrusted(certs: Array[X509Certificate], authType: String): Unit = ()
       }
 
-    def getKubernetesPodCert(): Option[SSLContext] = {
-      // Auto-mounted at this path for pods
-      // https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
-      val certBundle = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-
-      val is = new FileInputStream(certBundle)
+    def getKubernetesCert(certPath: Path): Option[SSLContext] = {
+      val is = new FileInputStream(certPath.toString)
       val x509Cert: Option[X509Certificate] = try {
         val cf = CertificateFactory.getInstance("X.509")
         cf.generateCertificate(is) match {
@@ -585,19 +585,15 @@ object Config {
       }
     }
 
-    def readKubernetesClient(kfg: KConfig): Option[KubernetesClient] =
-      (readKubernetesInfrastructure(kfg) |@| getKubernetesPodCert()) {
-        case (kubernetes, sslContext) =>
-          // Auto-mounted at this path for pods
-          // https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
-          val path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
-          val serviceAccountToken = scala.io.Source.fromFile(path).getLines.toList.head
-          new KubernetesClient(
-            kubernetes.endpoint,
-            http4sClient(kubernetes.timeout, sslContext = Some(sslContext)),
-            serviceAccountToken
-          )
-      }
+    def readKubernetesClient(kfg: KConfig): Option[KubernetesClient] = for {
+      kubernetes <- readKubernetesInfrastructure(kfg)
+      sslContext <- getKubernetesCert(kubernetes.caCertPath)
+    } yield new KubernetesClient(
+      kubernetes.version,
+      kubernetes.endpoint,
+      http4sClient(kubernetes.timeout, sslContext = Some(sslContext)),
+      kubernetes.token
+    )
 
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
     def readDatacenter(id: String, kfg: KConfig): Datacenter = {

@@ -18,6 +18,21 @@ import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, Plan, P
 import nelson.docker.Docker.Image
 import nelson.health._
 
+sealed abstract class KubernetesVersion extends Product with Serializable
+
+object KubernetesVersion {
+  final case object `1.6` extends KubernetesVersion
+  final case object `1.7` extends KubernetesVersion
+  final case object `1.8` extends KubernetesVersion
+
+  def fromString(s: String): Option[KubernetesVersion] = s match {
+    case "1.6" => Some(`1.6`)
+    case "1.7" => Some(`1.7`)
+    case "1.8" => Some(`1.8`)
+    case _     => None
+  }
+}
+
 /**
  * A bare bones Kubernetes client used for impelementing a Kubernetes
  * [[nelson.scheduler.SchedulerOp]] and [[nelson.loadbalancers.LoadBalancerOp]].
@@ -26,9 +41,10 @@ import nelson.health._
  *
  * See: https://kubernetes.io/docs/api-reference/v1.8/
  */
-final class KubernetesClient(endpoint: Uri, client: Client, serviceAccountToken: String) {
+final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: Client, serviceAccountToken: String) {
   import KubernetesClient.cascadeDeletionPolicy
   import KubernetesJson._
+  import KubernetesVersion._
 
   def createDeployment(namespace: String, stackName: StackName, image: Image, plan: Plan, ports: Option[Ports]): Task[Json] = {
     val json = KubernetesJson.deployment(namespace,stackName, image, plan, ports)
@@ -109,16 +125,29 @@ final class KubernetesClient(endpoint: Uri, client: Client, serviceAccountToken:
     req.putHeaders(Authorization(Token(AuthScheme.Bearer, serviceAccountToken)))
 
   private def podUri(ns: String): Uri =
-    endpoint / "api"  /           "v1"      / "namespaces" / ns / "pods"
+    endpoint / "api" / "v1" / "namespaces" / ns / "pods"
 
-  private def deploymentUri(ns: String): Uri =
-    endpoint / "apis" / "apps"  / "v1beta2" / "namespaces" / ns / "deployments"
+  private def deploymentUri(ns: String): Uri = {
+    val apiVersion = version match {
+      case `1.6` => "v1beta1"
+      case `1.7` => "v1beta1"
+      case `1.8` => "v1beta2"
+    }
+    endpoint / "apis" / "apps"  / apiVersion / "namespaces" / ns / "deployments"
+  }
+
 
   private def serviceUri(ns: String): Uri =
-    endpoint / "api"  /           "v1"      / "namespaces" / ns / "services"
+    endpoint / "api"  / "v1" / "namespaces" / ns / "services"
 
-  private def cronJobUri(ns: String): Uri =
-    endpoint / "apis" / "batch" / "v1beta1" / "namespaces" / ns / "cronjobs"
+  private def cronJobUri(ns: String): Uri = {
+    val apiVersion = version match {
+      case `1.6` => "v2alpha1"
+      case `1.7` => "v2alpha1"
+      case `1.8` => "v1beta1"
+    }
+    endpoint / "apis" / "batch" / apiVersion / "namespaces" / ns / "cronjobs"
+  }
 
   private def jobUri(ns: String): Uri =
     endpoint / "apis" / "batch" / "v1"      / "namespaces" / ns / "jobs"
@@ -143,7 +172,6 @@ object KubernetesJson {
     ports:     Option[Ports]
   ): Json =
     argonaut.Json(
-      "apiVersion" := "apps/v1beta2",
       "kind"       := "Deployment",
       "metadata"   := argonaut.Json(
         "name"      := stackName.toString,
@@ -192,7 +220,6 @@ object KubernetesJson {
 
   def service(namespace: String, stackName: StackName, ports: Option[Ports]): Json =
     argonaut.Json(
-      "apiVersion" := "v1",
       "kind"       := "Service",
       "metadata"   := argonaut.Json(
         "name"      := stackName.toString,
@@ -219,7 +246,6 @@ object KubernetesJson {
     cronExpr:  String
   ): Json =
     argonaut.Json(
-      "apiVersion" := "batch/v1beta1",
       "kind"       := "CronJob",
       "metadata"   := argonaut.Json(
         "name"      := stackName.toString,
@@ -244,7 +270,6 @@ object KubernetesJson {
     plan:      Plan
   ): Json =
     argonaut.Json.jObject(combineJsonObject(JsonObject.from(List(
-      "apiVersion" := "batch/v1",
       "kind"       := "Job",
       "metadata"   := argonaut.Json(
         "name"      := stackName.toString,
