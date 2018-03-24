@@ -18,6 +18,7 @@ package nelson
 
 import java.net.URI
 import java.time.Instant
+import java.nio.file.Path
 import scala.concurrent.duration.FiniteDuration
 
 import com.amazonaws.regions.Region
@@ -74,6 +75,9 @@ object Infrastructure {
 
   final case class Kubernetes(
     endpoint: Uri,
+    version: KubernetesVersion,
+    caCertPath: Path,
+    token: String,
     timeout: Duration
   )
 
