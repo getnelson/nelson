@@ -23,13 +23,13 @@ final case class AuditEvent[A](
   event: A,
   timestamp: Instant,
   action: AuditAction,
-  releaseId: Option[Long],
+  releaseId: Option[String],
   userLogin: String,
   auditable: Auditable[A] 
 )
 
 object AuditEvent {
-  def apply[A](event: A, action: AuditAction, releaseId: Option[Long], userLogin: String)(implicit au: Auditable[A]): AuditEvent[A] =
+  def apply[A](event: A, action: AuditAction, releaseId: Option[String], userLogin: String)(implicit au: Auditable[A]): AuditEvent[A] =
     AuditEvent[A](event, Instant.now, action, releaseId, userLogin, au)
 }
 

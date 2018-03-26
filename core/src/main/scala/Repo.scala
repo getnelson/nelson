@@ -98,4 +98,14 @@ object RepoAccess {
       case Some(a) => \/.right(a)
       case _       => \/.left(InvalidRepoAccess(s))
     }
+
+  def fromInt(i: Int): RepoAccess =
+    if (i >= 40) // Gitlab: Master (40) or Owner (50)
+      Admin
+    else if (i >= 30) // Gitlab: Developer (30)
+      Push
+    else if (i >= 10) // Gitlab: Reporter (20) or Guest (10)
+      Pull // TODO `Guest` only if the project is public or internal
+    else
+      Forbidden
 }

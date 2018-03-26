@@ -47,7 +47,7 @@ object Session { session =>
     (uint32 ::
      optional(bool, nonGreedyString) ::
      nonGreedyString ::
-     uriCodec
+     optional(bool, uriCodec)
     ).as[Organization]
 
   val userCodec: Codec[User] =
@@ -63,7 +63,7 @@ object Session { session =>
     instant => (instant.getEpochSecond, instant.getNano))
 
   val accessTokenCodec: Codec[AccessToken] =
-    (nonGreedyString).as[AccessToken]
+    (nonGreedyString :: bool(1)).as[AccessToken]
 
   def sessionCodecV3(
     authEnv: AuthEnv,

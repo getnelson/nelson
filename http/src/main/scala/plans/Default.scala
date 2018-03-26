@@ -164,8 +164,12 @@ object ClientValidation {
 
   def filterUserAgent(service: HttpService)
     (config: NelsonConfig): HttpService = HttpService.lift { req =>
-    val maybeUserAgent = req.headers.get(headers.`User-Agent`)
-    if (isAllowedUserAgent(maybeUserAgent)(config.bannedClients)) service(req)
-    else BadRequest("User-Agent not allowed. Please upgrade your client to the latest version.")
+    config.git match {
+      case _: ScmConfig.GitlabConfig => service(req) // bypasses this check because of http://bit.ly/2lgKCzW
+      case _ =>
+        val maybeUserAgent = req.headers.get(headers.`User-Agent`)
+        if (isAllowedUserAgent(maybeUserAgent)(config.bannedClients)) service(req)
+        else BadRequest("User-Agent not allowed. Please upgrade your client to the latest version.")
+    }
   }
 }

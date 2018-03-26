@@ -57,7 +57,7 @@ final case class Auth(config: NelsonConfig) extends Default {
     case req @ POST -> Root / "auth" / "github" =>
       decode[AccessToken](req){ tk =>
         (for {
-          a <- Nelson.createSessionFromGithubToken(tk)(cfg).attemptRun
+          a <- Nelson.createSessionFromGithubToken(tk.copy(isPrivate = true))(cfg).attemptRun
           b <- cfg.security.authenticator.serialize(a)
         } yield (a.expiry, b)).fold(
           e => Task.fail(new RuntimeException(e.toString)),

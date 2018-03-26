@@ -76,13 +76,13 @@ object Github {
   ) extends Event
 
   final case class ReleaseEvent(
-    id: Long,
+    id: String,
     slug: Slug,
     repositoryId: Long
   ) extends Event
 
   final case class Release(
-    id: Long,
+    id: String,
     url: String,
     htmlUrl: String,
     assets: Seq[Asset],
@@ -129,7 +129,7 @@ object Github {
   final case class GetReleaseAssetContent(asset: Github.Asset, t: AccessToken)
     extends GithubOp[Github.Asset]
 
-  final case class GetRelease(slug: Slug, releaseId: ID, t: AccessToken)
+  final case class GetRelease(slug: Slug, releaseId: String, t: AccessToken)
     extends GithubOp[Github.Release]
 
   final case class GetUserRepositories(token: AccessToken)
@@ -178,7 +178,7 @@ object Github {
      * nelson gets notified of a release, as the payload we get does not contain
      * the assets that we need.
      */
-    def fetchRelease(slug: Slug, id: ID)(t: AccessToken): GithubOpF[Github.Release] =
+    def fetchRelease(slug: Slug, id: String)(t: AccessToken): GithubOpF[Github.Release] =
       for {
         r <- Free.liftFC(GetRelease(slug, id, t))
         a <- fetchReleaseAssets(r)(t)
@@ -226,7 +226,7 @@ object Github {
     }
   }
 
-  final class GithubHttp(cfg: GithubConfig, http: dispatch.Http) extends (GithubOp ~> Task) {
+  final class GithubHttp(cfg: ScmConfig, http: dispatch.Http) extends (GithubOp ~> Task) {
     import java.net.URI
     import dispatch._, Defaults._
     import nelson.Json._
@@ -272,7 +272,7 @@ object Github {
           b <- http(url(a) OK as.String).toTask
         } yield asset.copy(content = Option(b))
 
-      case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
+      case GetRelease(slug: Slug, releaseId: String, t: AccessToken) =>
         for {
           resp <- fetch(cfg.releaseEndpoint(slug, releaseId), t)
           rel  <- fromJson[Github.Release](resp)

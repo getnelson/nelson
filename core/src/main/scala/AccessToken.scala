@@ -17,5 +17,6 @@
 package nelson
 
 final case class AccessToken(
-  value: String
+  value: String,
+  isPrivate: Boolean = false
 )

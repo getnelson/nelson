@@ -115,7 +115,7 @@ class ManifestManualSpec extends NelsonSuite {
         content = Some(c)
       )
       e  = Github.Release(
-        id = 123,
+        id = "123",
         url = "",
         htmlUrl = "",
         assets = List(d),
@@ -145,7 +145,7 @@ class ManifestManualSpec extends NelsonSuite {
         content = Some(contents)
       )
       release = Github.Release(
-        id = 123,
+        id = "123",
         url = "",
         htmlUrl = "",
         assets = List(asset),

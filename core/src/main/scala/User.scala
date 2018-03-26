@@ -29,14 +29,14 @@ final case class User(
   orgs: List[Organization]
 ){
   val toOrganization: Organization =
-    Organization(0l, Option(name), login, avatar)
+    Organization(0l, Option(name), login, Some(avatar))
 }
 
 final case class Organization(
   id: Long,
   _name: Option[String],
   slug: String,
-  avatar: URI
+  avatar: Option[URI]
 ){
   val name: String =
     _name.getOrElse(slug)

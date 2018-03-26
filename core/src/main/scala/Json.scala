@@ -36,8 +36,11 @@ object Json {
   implicit lazy val DurationEncoder: EncodeJson[Duration] =
     implicitly[EncodeJson[Long]].contramap(_.toMillis)
 
-  implicit lazy val AccessTokenCodec: CodecJson[AccessToken] =
-    casecodec1(AccessToken.apply, AccessToken.unapply)("access_token")
+  implicit lazy val AccessTokenDecoder: DecodeJson[AccessToken] =
+    DecodeJson(c => (c --\ "access_token").as[String]).map(AccessToken.apply(_))
+
+  implicit lazy val AccessTokenEncoder: EncodeJson[AccessToken] =
+    jencode1L((t: AccessToken) => t.value)("access_token")
 
   implicit lazy val UserCodec: CodecJson[User] =
     casecodec5(User.apply, User.unapply)("login", "avatar_url", "name", "email", "organizations")
@@ -158,7 +161,7 @@ object Json {
       ((c --\ "id").as[Long] |@|
         (c --\ "name").as[Option[String]] |@|
         (c --\ "login").as[String] |@|
-        (c --\ "avatar_url").as[URI]
+        (c --\ "avatar_url").as[Option[URI]]
       )(Organization.apply)
     )
 
@@ -255,6 +258,7 @@ object Json {
    */
   implicit lazy val GithubEventDecoder: DecodeJson[Github.Event] =
     GithubReleaseEventDecoder.asInstanceOf[DecodeJson[Github.ReleaseEvent]] |||
+    GitlabReleaseEventDecoder.asInstanceOf[DecodeJson[Github.ReleaseEvent]] |||
     GithubPingEventDecoder.asInstanceOf[DecodeJson[Github.Event]]
 
   /**
@@ -376,7 +380,7 @@ object Json {
         (z --\ "tag_name").as[String]
         ) ((a, b, c, d, e) =>
         Github.Release(
-          id = a,
+          id = a.toString,
           url = b,
           htmlUrl = c,
           assets = d,
@@ -397,7 +401,7 @@ object Json {
 
   implicit val GithubReleaseEncoder: EncodeJson[Github.Release] =
     EncodeJson((release: Github.Release) =>
-      ("id" := release.id) ->:
+      ("id" := release.id.toLong) ->:
       ("url" := release.url) ->:
       ("html_url" := release.htmlUrl) ->:
       ("assets" := release.assets) ->:
@@ -498,7 +502,7 @@ object Json {
    */
   implicit val GithubReleaseEventDecoder: DecodeJson[Github.ReleaseEvent] =
     DecodeJson(z => for {
-      a <- (z --\ "release" --\ "id").as[Long]
+      a <- (z --\ "release" --\ "id").as[String]
       d <- (z --\ "repository" --\ "full_name").as[String]
       x <- Slug.fromString(d).map(DecodeResult.ok
            ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
@@ -510,6 +514,16 @@ object Json {
         repositoryId = e
       )
     })
+
+  implicit val GitlabReleaseEventDecoder: DecodeJson[Github.ReleaseEvent] =
+    DecodeJson(z => for {
+      a <- (z --\ "ref").as[String]
+      i = a.split('/').last
+      p <- (z --\ "project" --\ "path_with_namespace").as[String]
+      x <- Slug.fromString(p).map(DecodeResult.ok
+           ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
+      e <- (z --\ "project_id").as[Long]
+    } yield Github.ReleaseEvent(id = i, slug = x, repositoryId = e))
 
   /**
    * {

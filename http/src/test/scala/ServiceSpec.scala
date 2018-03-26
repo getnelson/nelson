@@ -27,7 +27,7 @@ trait ServiceSpec extends NelsonSuite {
       avatar = new java.net.URI("uri"),
       name = "user",
       email = Some("user@verizon.net"),
-      orgs = List(Organization(0L, Some("scalatest"), "slug", new java.net.URI("uri")))
+      orgs = List(Organization(0L, Some("scalatest"), "slug", Option(new java.net.URI("uri"))))
     )
   )
 
