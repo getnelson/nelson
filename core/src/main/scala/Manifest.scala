@@ -69,8 +69,8 @@ object Manifest {
   }
 
   final case class Environment(
-    cpu: Option[Double] = None,
-    memory: Option[Double] = None,
+    cpu: Option[(Double, Double)] = None,
+    memory: Option[(Double, Double)] = None,
     desiredInstances: Option[Int] = None,
     retries: Option[Int] = None,
     constraints: List[Constraint] = Nil,

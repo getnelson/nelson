@@ -135,6 +135,25 @@ object KubernetesClient {
 }
 
 object KubernetesJson {
+  val DEFAULT_CPU = 0.5
+  val DEFAULT_MEMORY = 512
+
+  def resources(cpu: Option[(Double, Double)], memory: Option[(Double, Double)]): JsonObject = {
+    val (cpuRequest, cpuLimit) = cpu.getOrElse((DEFAULT_CPU, DEFAULT_CPU))
+    val (memoryRequest, memoryLimit) = memory.map { case (r, l) => (s"${r}M", s"${l}M") }.getOrElse((s"${DEFAULT_MEMORY}M", s"${DEFAULT_MEMORY}M"))
+
+    JsonObject.single("resources", argonaut.Json(
+      "requests" := argonaut.Json(
+        "cpu"    := cpuRequest,
+        "memory" := memoryRequest
+      ),
+      "limits" := argonaut.Json(
+        "cpu"    := cpuLimit,
+        "memory" := memoryLimit
+      )
+    ))
+  }
+
   def deployment(
     namespace: String,
     stackName: StackName,
@@ -172,18 +191,12 @@ object KubernetesJson {
           "spec" := argonaut.Json(
             "containers" := List(
 
-              argonaut.Json.jObject(combineJsonObject(JsonObject.from(List(
+              argonaut.Json.jObject(combineJsonObject(combineJsonObject(JsonObject.from(List(
                 "name"      := stackName.toString,
                 "image"     := image.toString,
                 "env"       := plan.environment.bindings,
-                "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.list)),
-                "resources" := argonaut.Json(
-                  "limits" := argonaut.Json(
-                    "cpu"    := plan.environment.cpu.getOrElse(0.5),
-                    "memory" := s"${plan.environment.memory.getOrElse(512.0)}M"
-                  )
-                )
-              )), livenessProbe(plan.environment.healthChecks)))
+                "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.list))
+              )), resources(plan.environment.cpu, plan.environment.memory)), livenessProbe(plan.environment.healthChecks)))
             )
           )
         )
@@ -280,17 +293,11 @@ object KubernetesJson {
           ),
           "spec" := argonaut.Json(
             "containers" := List(
-              argonaut.Json(
+              argonaut.Json.jObject(combineJsonObject(JsonObject.from(List(
                 "name"  := stackName.toString,
                 "image" := image.toString,
-                "env"   := plan.environment.bindings,
-                "resources" := argonaut.Json(
-                  "limits" := argonaut.Json(
-                    "cpu"    := plan.environment.cpu.getOrElse(0.5),
-                    "memory" := s"${plan.environment.memory.getOrElse(512.0)}M"
-                  )
-                )
-              )
+                "env"   := plan.environment.bindings
+              )), resources(plan.environment.cpu, plan.environment.memory)))
             ),
             // See: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#pod-backoff-failure-policy
             // This should be "OnFailure" but at the time of this writing this section said:

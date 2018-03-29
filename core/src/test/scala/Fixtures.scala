@@ -223,8 +223,8 @@ object Fixtures {
 
   val genEnvironment: Gen[Manifest.Environment] = {
     for {
-      cpu <- arbitrary[Option[Double]]
-      mem <- arbitrary[Option[Double]]
+      cpu <- arbitrary[Option[(Double, Double)]]
+      mem <- arbitrary[Option[(Double, Double)]]
       bindings <- Gen.listOf(genManifestEnvVar)
       constraints <- Gen.listOf(genConstraint)
     } yield Manifest.Environment(bindings = bindings, cpu = cpu, memory = mem, constraints = constraints)

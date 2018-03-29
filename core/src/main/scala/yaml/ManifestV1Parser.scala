@@ -114,8 +114,22 @@ object ManifestV1Parser {
   def validateCPU(i:Double): YamlValidation[Double] =
     validatePlanConstraints(i, invalidCPU)(i => i > 0 && i < 100)
 
+  def validateCPURequest(request: Double, limit: Option[Double]): YamlValidation[(Double, Double)] = limit match {
+    case None => Validation.failureNel(missingCPULimit)
+    case Some(limit) =>
+      if (request <= limit) Validation.success((request, limit))
+      else Validation.failureNel(invalidCPUBound(request, limit))
+  }
+
   def validateMemory(i:Double): YamlValidation[Double] =
     validatePlanConstraints(i, invalidMemory)(i => i > 0 && i < 50000)
+
+  def validateMemoryRequest(request: Double, limit: Option[Double]): YamlValidation[(Double, Double)] = limit match {
+    case None => Validation.failureNel(missingMemoryLimit)
+    case Some(limit) =>
+      if (request <= limit) Validation.success((request, limit))
+      else Validation.failureNel(invalidMemoryBound(request, limit))
+  }
 
   def validateInstances(i:Int): YamlValidation[Int] =
     validatePlanConstraints(i, invalidInstances)(i => i > 0 && i < 500)
@@ -142,23 +156,39 @@ object ManifestV1Parser {
     (TrafficShiftPolicy.fromString(raw.policy).toSuccessNel(YamlError.invalidTrafficShiftPolicy(raw.policy)) |@|
      validateTrafficShiftDuration(raw.duration))(TrafficShift)
 
-  def toPlan(raw: PlanYaml): YamlValidation[Plan] =
+  def toPlan(raw: PlanYaml): YamlValidation[Plan] = {
+    import scalaz.Validation.FlatMap._
+
+    val validatedCPU = for {
+      cpuLimit  <- Option(raw.cpu).filter(_ > 0).traverse(validateCPU)
+      cpuBounds <- Option(raw.cpu_request).filter(_ > 0).traverse(validateCPURequest(_, cpuLimit))
+    } yield cpuBounds
+
+    val validatedMemory = for {
+      memoryLimit  <- Option(raw.memory).filter(_ > 0).traverse(validateMemory)
+      memoryBounds <- Option(raw.memory_request).filter(_ > 0).traverse(validateMemoryRequest(_, memoryLimit))
+    } yield memoryBounds
+
     Apply[YamlValidation].apply14(
-     parseAlphaNumHyphen(raw.name, "plan.name"),
-     Option(raw.cpu).filter(_ > 0).traverse(d => validateCPU(d)),
-     Option(raw.memory).filter(_ > 0).traverse(d => validateMemory(d)),
-     Option(raw.instances).flatMap(x => Option(x.desired).filter(_ > 0)).traverse(d => validateInstances(d)),
-     Validation.success(Option(raw.retries).filter(_ > 0)),
-     Validation.success(raw.constraints.asScala.toList.flatMap(toConstraint)),
-     Validation.success(raw.alert_opt_outs.asScala.toList.map(AlertOptOut)), // opt out -> unit resolution is validated later
-     Validation.success(raw.environment.asScala.toList.flatMap(toEnvironmentVariable)),
-     raw.health_checks.asScala.toList.traverse(toHealthCheck),
-     raw.resources.asScala.toList.traverse(toPlanResource).map(_.toMap),
-     Option(raw.schedule).traverse(s => parseSchedule(s)),
-     Option(raw.expiration_policy).traverse(resolvePolicy),
-     Option(raw.traffic_shift).traverse(validateTrafficShift),
-     Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i))
-    )((a,b,c,d,e,f,g,h,i,j,k,l,m,n) => Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n)))
+      parseAlphaNumHyphen(raw.name, "plan.name"),
+      validatedCPU,
+      validatedMemory,
+      Option(raw.instances).flatMap(x => Option(x.desired).filter(_ > 0)).traverse(d => validateInstances(d)),
+      Validation.success(Option(raw.retries).filter(_ > 0)),
+      Validation.success(raw.constraints.asScala.toList.flatMap(toConstraint)),
+      Validation.success(raw.alert_opt_outs.asScala.toList.map(AlertOptOut)), // opt out -> unit resolution is validated later
+      Validation.success(raw.environment.asScala.toList.flatMap(toEnvironmentVariable)),
+      raw.health_checks.asScala.toList.traverse(toHealthCheck),
+      raw.resources.asScala.toList.traverse(toPlanResource).map(_.toMap),
+      Option(raw.schedule).traverse(s => parseSchedule(s)),
+      Option(raw.expiration_policy).traverse(resolvePolicy),
+      Option(raw.traffic_shift).traverse(validateTrafficShift),
+      Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i))
+    ) {
+      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n) =>
+        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n))
+    }
+  }
 
   def toHealthCheck(raw: HealthCheckYaml): YamlValidation[HealthCheck] = {
     def parseProtocol(s: String): YamlValidation[String] =
@@ -448,7 +478,9 @@ class LoadbalancerYaml {
 class PlanYaml {
   @BeanProperty var name: String = _
   @BeanProperty var cpu: Double = -1
+  @BeanProperty var cpu_request: Double = -1
   @BeanProperty var memory: Double = -1
+  @BeanProperty var memory_request: Double = -1
   @BeanProperty var retries: Int = -1
   @BeanProperty var constraints: JList[ConstraintYaml] = new java.util.ArrayList
   @BeanProperty var environment: JList[String] = new java.util.ArrayList

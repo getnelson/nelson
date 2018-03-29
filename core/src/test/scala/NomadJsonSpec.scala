@@ -36,8 +36,8 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
 
   val env = Environment(
     bindings = List(EnvironmentVariable("NELSON_STACKNAME", "stackname"), EnvironmentVariable("NELSON_DATACENTER", "dc1")),
-    cpu = Some(2.0),
-    memory = Some(512.0))
+    cpu = Some((2.0, 2.0)),
+    memory = Some((512.0, 512.0)))
 
   val ports = Ports(Port("http",8080,"http"), Nil)
 

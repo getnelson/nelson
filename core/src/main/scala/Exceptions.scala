@@ -213,7 +213,11 @@ object YamlError {
   def invalidAlphaNumHyphen(s: String, field: String): YamlError = InvalidAlphaNumHyphen(s, field)
   def invalidURI(uri: String): YamlError = InvalidURI(uri)
   def invalidCPU(d: Double): YamlError = InvalidCPU(d)
+  def invalidCPUBound(request: Double, limit: Double): YamlError = InvalidCPUBound(request, limit)
+  val missingCPULimit: YamlError = MissingCPULimit
   def invalidMemory(d: Double): YamlError = InvalidMemory(d)
+  def invalidMemoryBound(request: Double, limit: Double): YamlError = InvalidMemoryBound(request, limit)
+  val missingMemoryLimit: YamlError = MissingMemoryLimit
   def invalidInstances(d: Int): YamlError = InvalidInstances(d)
   def invalidEphemeralDisk(min: Int, max: Int, request: Int): YamlError = InvalidEphemeralDisk(min, max, request)
   def invalidTrafficShiftPolicy(name: String): YamlError = InvalidTrafficShift(name)
@@ -298,8 +302,20 @@ private final case class InvalidURI(uri: String)
 private final case class InvalidCPU(d: Double)
     extends YamlError(s"$d is an invalid CPU request, must be between 0 and 100")
 
+private final case class InvalidCPUBound(request: Double, limit: Double)
+    extends YamlError(s"Invalid CPU request, request must be <= $limit but is $request")
+
+private final case object MissingCPULimit
+    extends YamlError(s"Cannot specify CPU request without CPU limit.")
+
 private final case class InvalidMemory(d: Double)
     extends YamlError(s"$d is an invalid memory request, must be between 0 and 50000")
+
+private final case class InvalidMemoryBound(request: Double, limit: Double)
+    extends YamlError(s"Invalid memory request, request must be <= $limit but is $request")
+
+private final case object MissingMemoryLimit
+    extends YamlError(s"Cannot specify memory request without memory limit.")
 
 private final case class InvalidInstances(d: Int)
     extends YamlError(s"$d is an invalid instances request, must be between 0 and 500")

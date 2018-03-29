@@ -89,7 +89,9 @@ loadbalancers:
 # plans define `how` we want to deploy a unit, basically the runtime
 plans:
   - name: default-foobar
+    cpu_request: 0.25
     cpu: 0.5
+    memory_request: 256
     memory: 512
     instances:
       desired: 1
@@ -109,7 +111,9 @@ plans:
 
   - name: qa-crawler-1
     schedule: once
+    cpu_request: 0.5
     cpu: 1.0
+    memory_request: 512
     memory: 1024
     retries: 2
     instances:
@@ -122,7 +126,9 @@ plans:
 
   - name: qa-crawler-2
     schedule: "*/30 * * * *"
+    cpu_request: 0.5
     cpu: 1.0
+    memory_request: 512
     memory: 1024
     retries: 3
     instances:
@@ -133,7 +139,9 @@ plans:
 
   - name: prod-crawler
     schedule: hourly
+    cpu_request: 1.0
     cpu: 2.0
+    memory_request: 512
     memory: 1024
     instances:
       desired: 4
