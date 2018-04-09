@@ -68,9 +68,38 @@ object Manifest {
     val default = Plan("default", Environment())
   }
 
+  sealed abstract class ResourceSpec extends Product with Serializable {
+    import ResourceSpec._
+
+    def fold[A](unspecified: A, limitOnly: Double => A, bounded: (Double, Double) => A): A = this match {
+      case Unspecified             => unspecified
+      case LimitOnly(limit)        => limitOnly(limit)
+      case Bounded(request, limit) => bounded(request, limit)
+    }
+
+    def limitOrElse(default: => Double): Double =
+      fold(default, identity, (_, limit) => limit)
+  }
+
+  object ResourceSpec {
+    private final case object Unspecified                                  extends ResourceSpec
+    private final case class  LimitOnly   (limit: Double)                  extends ResourceSpec
+    private final case class  Bounded     (request: Double, limit: Double) extends ResourceSpec
+
+    val unspecified: ResourceSpec = Unspecified
+
+    def limitOnly(limit: Double): Option[ResourceSpec] =
+      if (limit >= 0.0) Some(LimitOnly(limit))
+      else None
+
+    def bounded(request: Double, limit: Double): Option[ResourceSpec] =
+      if (request >= 0.0 && request <= limit) Some(Bounded(request, limit))
+      else None
+  }
+
   final case class Environment(
-    cpu: Option[(Double, Double)] = None,
-    memory: Option[(Double, Double)] = None,
+    cpu: ResourceSpec = ResourceSpec.unspecified,
+    memory: ResourceSpec = ResourceSpec.unspecified,
     desiredInstances: Option[Int] = None,
     retries: Option[Int] = None,
     constraints: List[Constraint] = Nil,

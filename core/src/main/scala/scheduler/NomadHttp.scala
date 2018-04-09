@@ -138,7 +138,7 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
       EnvironmentVariable("NELSON_DNS_ROOT", dc.domain.name),
       EnvironmentVariable("NELSON_PLAN", plan.name),
       EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
-      EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.map(_._2).getOrElse(512D).toInt.toString),
+      EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.limitOrElse(512D).toInt.toString),
       EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
       EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name))
     ) ++ nomad.loggingImage.map(x => EnvironmentVariable("NELSON_LOGGING_IMAGE", x.toString)).toList
@@ -353,8 +353,8 @@ object NomadJson {
 
   def leaderTaskJson(name: String, unitName: UnitName, i: Image, env: Environment, nm: NetworkMode, ports: Option[Ports], nomad: Nomad, ns: NamespaceName, plan: PlanRef, tags: Set[String]): argonaut.Json = {
     // Nomad does not support resource requests + limits so we just use limits here
-    val cpu = (nomad.mhzPerCPU * env.cpu.map(_._2).getOrElse(0.5)).toInt
-    val mem = (env.memory.map(_._2) getOrElse 512.0).toInt
+    val cpu = (nomad.mhzPerCPU * env.cpu.limitOrElse(0.5)).toInt
+    val mem = env.memory.limitOrElse(512.0).toInt
     val services = ports.map(_.nel.map(p => servicesJson(
       name,
       p,

@@ -14,7 +14,7 @@ import scalaz.concurrent.Task
 import scalaz.Scalaz._
 
 import nelson.Datacenter.StackName
-import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, Plan, Ports, Port}
+import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, ResourceSpec, Plan, Ports, Port}
 import nelson.docker.Docker.Image
 import nelson.health._
 
@@ -135,12 +135,20 @@ object KubernetesClient {
 }
 
 object KubernetesJson {
-  val DEFAULT_CPU = 0.5
-  val DEFAULT_MEMORY = 512
+  val defaultCPU = 0.5
+  val defaultMemory = 512
 
-  def resources(cpu: Option[(Double, Double)], memory: Option[(Double, Double)]): JsonObject = {
-    val (cpuRequest, cpuLimit) = cpu.getOrElse((DEFAULT_CPU, DEFAULT_CPU))
-    val (memoryRequest, memoryLimit) = memory.map { case (r, l) => (s"${r}M", s"${l}M") }.getOrElse((s"${DEFAULT_MEMORY}M", s"${DEFAULT_MEMORY}M"))
+  def resources(cpu: ResourceSpec, memory: ResourceSpec): JsonObject = {
+    val (cpuRequest, cpuLimit) = cpu.fold(
+      (defaultCPU, defaultCPU),
+      limit => (limit, limit),
+      (request, limit) => (request, limit)
+    )
+    val (memoryRequest, memoryLimit) = memory.fold(
+      (s"${defaultMemory}M", s"${defaultMemory}M"),
+      limit => (s"${limit}M", s"${limit}M"),
+      (request, limit) => (s"${request}M", s"${limit}M")
+    )
 
     JsonObject.single("resources", argonaut.Json(
       "requests" := argonaut.Json(

@@ -77,7 +77,7 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> Tas
       EnvironmentVariable("NELSON_DNS_ROOT",         dc.domain.name),
       EnvironmentVariable("NELSON_PLAN",             plan.name),
       EnvironmentVariable("NELSON_DOCKER_IMAGE",     image.toString),
-      EnvironmentVariable("NELSON_MEMORY_LIMIT",     plan.environment.memory.map(_._2).getOrElse(512D).toInt.toString),
+      EnvironmentVariable("NELSON_MEMORY_LIMIT",     plan.environment.memory.limitOrElse(512D).toInt.toString),
       EnvironmentVariable("NELSON_NODENAME",         s"$${node.unique.name}"),
       EnvironmentVariable("NELSON_VAULT_POLICYNAME", NomadJson.getPolicyName(ns, stackName.toString))
     )

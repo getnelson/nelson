@@ -27,7 +27,7 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   import cleanup._
   import notifications._
 
-  val env = Environment(cpu = Some((0.23, 0.23)), memory = Some((2048, 2048)), desiredInstances = Some(2))
+  val env = Environment(cpu = ResourceSpec.bounded(0.23, 0.23).get, memory = ResourceSpec.bounded(2048, 2048).get, desiredInstances = Some(2))
 
   val m1 = Manifest(
     units = List(UnitDef(
@@ -74,8 +74,8 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
       Plan(
         name = "default-foobar",
         environment = Environment(
-          cpu = Some((0.25, 0.5)),
-          memory = Some((256.0, 512.0)),
+          cpu = ResourceSpec.bounded(0.25, 0.5).get,
+          memory = ResourceSpec.bounded(256.0, 512.0).get,
           desiredInstances = Some(1),
           resources = Map("s3" -> new java.net.URI("http://s3.aws.com")),
           alertOptOuts = List(AlertOptOut("api_high_request_latency")),
@@ -86,8 +86,8 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
       Plan(
         name = "qa-crawler-1",
         environment = Environment(
-          cpu = Some((0.5, 1.0)),
-          memory = Some((512.0, 1024.0)),
+          cpu = ResourceSpec.bounded(0.5, 1.0).get,
+          memory = ResourceSpec.bounded(512.0, 1024.0).get,
           retries = Some(2),
           desiredInstances = Some(1),
           schedule = Some(Schedule(Once)),
@@ -102,8 +102,8 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
       Plan(
         name = "qa-crawler-2",
         environment = Environment(
-          cpu = Some((0.5, 1.0)),
-          memory = Some((512.0, 1024.0)),
+          cpu = ResourceSpec.bounded(0.5, 1.0).get,
+          memory = ResourceSpec.bounded(512.0, 1024.0).get,
           retries = Some(3),
           desiredInstances = Some(1),
           schedule = Some(Schedule(Cron("*/30 * * * *"))),
@@ -116,8 +116,8 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
       Plan(
         name = "prod-crawler",
         environment = Environment(
-          cpu = Some((1.0, 2.0)),
-          memory = Some((512.0, 1024.0)),
+          cpu = ResourceSpec.bounded(1.0, 2.0).get,
+          memory = ResourceSpec.bounded(512.0, 1024.0).get,
           retries = Some(2),
           desiredInstances = Some(4),
           schedule = Some(Schedule(Hourly)),

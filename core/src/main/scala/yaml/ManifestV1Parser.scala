@@ -114,21 +114,25 @@ object ManifestV1Parser {
   def validateCPU(i:Double): YamlValidation[Double] =
     validatePlanConstraints(i, invalidCPU)(i => i > 0 && i < 100)
 
-  def validateCPURequest(request: Double, limit: Option[Double]): YamlValidation[(Double, Double)] = limit match {
+  def validateCPURequest(request: Double, limit: Option[Double]): YamlValidation[ResourceSpec] = limit match {
     case None => Validation.failureNel(missingCPULimit)
     case Some(limit) =>
-      if (request <= limit) Validation.success((request, limit))
-      else Validation.failureNel(invalidCPUBound(request, limit))
+      ResourceSpec.bounded(request, limit) match {
+        case None       => Validation.failureNel(invalidCPUBound(request, limit))
+        case Some(spec) => Validation.success(spec)
+      }
   }
 
   def validateMemory(i:Double): YamlValidation[Double] =
     validatePlanConstraints(i, invalidMemory)(i => i > 0 && i < 50000)
 
-  def validateMemoryRequest(request: Double, limit: Option[Double]): YamlValidation[(Double, Double)] = limit match {
+  def validateMemoryRequest(request: Double, limit: Option[Double]): YamlValidation[ResourceSpec] = limit match {
     case None => Validation.failureNel(missingMemoryLimit)
     case Some(limit) =>
-      if (request <= limit) Validation.success((request, limit))
-      else Validation.failureNel(invalidMemoryBound(request, limit))
+      ResourceSpec.bounded(request, limit) match {
+        case None       => Validation.failureNel(invalidMemoryBound(request, limit))
+        case Some(spec) => Validation.success(spec)
+      }
   }
 
   def validateInstances(i:Int): YamlValidation[Int] =
@@ -162,12 +166,12 @@ object ManifestV1Parser {
     val validatedCPU = for {
       cpuLimit  <- Option(raw.cpu).filter(_ > 0).traverse(validateCPU)
       cpuBounds <- Option(raw.cpu_request).filter(_ > 0).traverse(validateCPURequest(_, cpuLimit))
-    } yield cpuBounds
+    } yield cpuBounds.orElse(cpuLimit.flatMap(ResourceSpec.limitOnly)).getOrElse(ResourceSpec.unspecified)
 
     val validatedMemory = for {
       memoryLimit  <- Option(raw.memory).filter(_ > 0).traverse(validateMemory)
       memoryBounds <- Option(raw.memory_request).filter(_ > 0).traverse(validateMemoryRequest(_, memoryLimit))
-    } yield memoryBounds
+    } yield memoryBounds.orElse(memoryLimit.flatMap(ResourceSpec.limitOnly)).getOrElse(ResourceSpec.unspecified)
 
     Apply[YamlValidation].apply14(
       parseAlphaNumHyphen(raw.name, "plan.name"),

@@ -24,6 +24,8 @@ import scala.concurrent.duration._
 import org.scalacheck.{ Arbitrary, Gen }
 import scalaz.\/
 
+import nelson.Manifest.ResourceSpec
+
 object Fixtures {
   import Arbitrary.arbitrary
   import Gen.{ alphaNumChar, listOf, listOfN, oneOf, choose }
@@ -221,10 +223,21 @@ object Fixtures {
     } yield op
   }
 
+  val genResourceSpec: Gen[ResourceSpec] = {
+    val limitOnly = Gen.posNum[Double].flatMap(d => ResourceSpec.limitOnly(d).fold(Gen.fail[ResourceSpec])(Gen.const))
+    val bounded = for {
+      upper <- Gen.posNum[Double]
+      lower <- Gen.chooseNum[Double](0.0, upper)
+      spec  <- ResourceSpec.bounded(lower, upper).fold(Gen.fail[ResourceSpec])(Gen.const)
+    } yield spec
+
+    Gen.oneOf(Gen.const(ResourceSpec.unspecified), limitOnly, bounded)
+  }
+
   val genEnvironment: Gen[Manifest.Environment] = {
     for {
-      cpu <- arbitrary[Option[(Double, Double)]]
-      mem <- arbitrary[Option[(Double, Double)]]
+      cpu <- genResourceSpec
+      mem <- genResourceSpec
       bindings <- Gen.listOf(genManifestEnvVar)
       constraints <- Gen.listOf(genConstraint)
     } yield Manifest.Environment(bindings = bindings, cpu = cpu, memory = mem, constraints = constraints)
