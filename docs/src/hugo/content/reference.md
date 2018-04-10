@@ -1509,7 +1509,22 @@ namespaces:
 
 This example defines two plans: `dev-plan` and `prod-plan`. The fact that the words `dev` and `prod` are in the name is inconsequential, they could have been `plan-a` and `plan-b`. Notice that under the namespace stanza each unit references a plan, this forms a contract between the unit, namespace, and plan. The example above can be expanded into the following deployments: the `foobar` unit deployed in the `dev` namespace using the `dev-plan`, and the `foobar` unit deployed in the `production` namespace using the `prod-plan`
 
-As a quick note the `memory` field is expressed in megabytes, and the `cpu` field is expressed in number of cores (where 1.0 would equate to full usage of one CPU core, and 2.0 would require full usage of two cores).
+As a quick note the `memory` field is expressed in megabytes, and the `cpu` field is expressed in number of cores (where 1.0 would equate to full usage of one CPU core, and 2.0 would require full usage of two cores). If no resources are specified Nelson will default to 0.5 CPU and 512 MB of memory.
+
+<h3 id="manifest-resource-requests-limits" class="linkable">
+  Resource Requests and Limits
+</h3>
+
+The resources specified by `cpu` and `memory` are generally treated as resource *limits*, or upper bounds on the amount of resources allocated per unit. Some schedulers, like Kubernetes, also support the notion of a resource *request*, or lower bound on the resources allocated. An example of this might be an application that requires some minimum amount of memory to avoid an out of memory error. For schedulers that support this feature, resource requests can be specified with a `cpu_request` and `memory_request` field in the same way `cpu` and `memory` are specified.
+
+```
+plans:
+  - name: dev-plan
+    memory_request: 256
+    memory: 512
+```
+
+In the event that a request is specified, a corresponding limit must be specified as well. For schedulers that support resource requests, if only a limit if specified then the request is set equal to the limit. For schedulers that do not support resource requests, requests are ignored and only the limits are used.
 
 <h3 id="manifest-matrix-specification" class="linkable">
   Deployment Matrix
