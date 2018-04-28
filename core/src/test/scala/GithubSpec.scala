@@ -18,7 +18,6 @@ package nelson
 
 import org.scalatest._
 import Github.Interpreter.Step
-import scalaz._
 import org.scalacheck._
 import org.scalatest.prop.PropertyChecks
 import nelson.CatsHelpers._

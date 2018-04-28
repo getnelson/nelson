@@ -23,7 +23,6 @@ import org.http4s.headers.{Location, `Set-Cookie`}
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
 import cats.effect.IO
-import cats.implicits._
 import nelson.CatsHelpers._
 
 final case class Auth(config: NelsonConfig) extends Default {

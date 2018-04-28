@@ -18,7 +18,7 @@ package nelson
 
 import cats.effect.IO
 
-import scalaz.{\/-, -\/, ~>}
+import scalaz.~>
 import nelson.scheduler.SchedulerOp
 import nelson.scheduler.SchedulerOp._
 

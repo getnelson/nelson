@@ -35,7 +35,6 @@ package object alerts {
 
   import scalaz.{\/}
   import scalaz.syntax.either._
-  import scalaz.syntax.functor._
 
   import journal.Logger
 

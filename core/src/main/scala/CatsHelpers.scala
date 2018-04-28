@@ -13,9 +13,8 @@ import fs2.async
 
 import java.util.concurrent.{ScheduledExecutorService, TimeoutException}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
-import scala.util.{Failure, Success}
 
 object CatsHelpers {
   implicit val catsIOScalazInstances: scalaz.Monad[IO] with scalaz.Catchable[IO] with Capture[IO] =

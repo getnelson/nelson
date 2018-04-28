@@ -23,15 +23,14 @@ import cleanup.ExpirationPolicy.Json._
 import argonaut._
 import Argonaut._
 import argonaut.DecodeResultCats._
-import nelson.Datacenter.Deployment
+
 import org.http4s.{BuildInfo => _, _}
 import org.http4s.dsl.io._
 import org.http4s.argonaut._
 
 import cats.effect.IO
 import cats.syntax.apply._
-import scalaz.{-\/, ==>>, Failure, Success, \/-}
-import scalaz.syntax.applicative._
+import scalaz.{Failure, Success}
 
 final case class Misc(config: NelsonConfig) extends Default {
   import Misc._

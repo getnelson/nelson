@@ -42,7 +42,6 @@ object SlackOp {
 
 final class SlackHttp(cfg: SlackConfig, http: Http) extends (SlackOp ~> IO) {
   import argonaut._, Argonaut._
-  import delorean._
   import SlackOp._
 
   def apply[A](op: SlackOp[A]): IO[A] = op match {

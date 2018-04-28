@@ -17,7 +17,6 @@
 package nelson
 
 import org.scalacheck._, Prop._
-import cats.implicits._
 import scalaz.\/
 
 object ManifestSpec extends Properties("manifest") with RoutingFixtures {

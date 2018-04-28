@@ -1,8 +1,6 @@
 package nelson
 package health
 
-import nelson.Datacenter.StackName
-import nelson.KubernetesJson.DeploymentStatus
 import nelson.health.HealthCheckOp.Health
 
 import cats.effect.IO

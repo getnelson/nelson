@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{-\/,\/-,NonEmptyList}
+import scalaz.NonEmptyList
 import org.scalatest.BeforeAndAfterEach
 import storage.{run => runs, StoreOp}
 import org.scalacheck._

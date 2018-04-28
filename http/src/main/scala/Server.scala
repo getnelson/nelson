@@ -20,7 +20,6 @@ import org.http4s._
 import org.http4s.argonaut._
 import org.http4s.dsl.io._
 import org.http4s.server.staticcontent.{FileService, fileService, ResourceService, resourceService}
-import org.http4s.server.syntax._
 import org.http4s.server.blaze._
 import _root_.argonaut._
 import Argonaut._

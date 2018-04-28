@@ -16,8 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.nio.file.Paths
-
 import health._
 import HealthCheckOp._
 import Datacenter.{DCUnit, Deployment, Namespace, TrafficShift}

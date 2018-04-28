@@ -22,8 +22,7 @@ import java.util.concurrent.Executors
 
 import journal.Logger
 
-import cats.effect.{Effect, IO}
-import cats.syntax.apply._
+import cats.effect.IO
 
 import fs2.Stream
 

@@ -21,7 +21,7 @@ import cats.effect.IO
 import nelson.docker.DockerOp
 import nelson.docker.DockerOp._
 
-import scalaz.{\/-, -\/, ~>}
+import scalaz.~>
 
 class InstrumentedDockerClient private (instance: String, interp: DockerOp ~> IO, metrics: Metrics)
     extends (DockerOp ~> IO) {

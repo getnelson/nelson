@@ -17,7 +17,7 @@
 package nelson
 package helmhttp4s
 
-import scalaz.{\/, ~>}
+import scalaz.~>
 import cats.data.Kleisli
 import cats.effect.IO
 import nelson.CatsHelpers._

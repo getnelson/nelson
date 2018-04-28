@@ -23,7 +23,6 @@ import nelson.scheduler._
 object Json {
   import argonaut._, Argonaut._
   import argonaut.DecodeResultCats._
-  import cats.instances.either._
   import cats.syntax.apply._
 
   import Datacenter._

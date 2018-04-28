@@ -20,7 +20,7 @@ import cats.effect.IO
 import cats.syntax.either._
 import cats.syntax.applicativeError._
 import nelson.CatsHelpers._
-import fs2.{Sink, Stream}
+import fs2.Sink
 
 import helm.ConsulOp
 import helm.ConsulOp.ConsulOpF

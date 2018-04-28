@@ -28,8 +28,6 @@ import nelson.vault._
 import nelson.vault.http4s._
 
 import cats.effect.{Effect, IO}
-import cats.instances.option._
-import cats.syntax.apply._
 import cats.syntax.either._
 import nelson.CatsHelpers._
 
@@ -549,12 +547,16 @@ object Config {
         })
     }
 
-    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] = {
-      (kfg.lookup[String]("endpoint") |@| kfg.lookup[Duration]("timeout")) { (endpoint, timeout) =>
+    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] =
+      (kfg.lookup[String]("endpoint") |@|
+       kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString) |@|
+       kfg.lookup[String]("ca-cert").map(p => Paths.get(p)) |@|
+       kfg.lookup[String]("token") |@|
+       kfg.lookup[Duration]("timeout")
+      ) { (endpoint, version, caCert, token, timeout) =>
         val uri = Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
-        Infrastructure.Kubernetes(uri, timeout)
+        Infrastructure.Kubernetes(uri, version, caCert, token, timeout)
       }
-    }
 
     def readNomadScheduler(kfg: KConfig): IO[SchedulerOp ~> IO] =
       readNomadInfrastructure(kfg) match {
@@ -570,12 +572,8 @@ object Config {
         def checkServerTrusted(certs: Array[X509Certificate], authType: String): Unit = ()
       }
 
-    def getKubernetesPodCert(): Option[SSLContext] = {
-      // Auto-mounted at this path for pods
-      // https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
-      val certBundle = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-
-      val is = new FileInputStream(certBundle)
+    def getKubernetesCert(certPath: Path): Option[SSLContext] = {
+      val is = new FileInputStream(certPath.toString)
       val x509Cert: Option[X509Certificate] = try {
         val cf = CertificateFactory.getInstance("X.509")
         cf.generateCertificate(is) match {
@@ -596,19 +594,20 @@ object Config {
       }
     }
 
-    def readKubernetesClient(kfg: KConfig): IO[KubernetesClient] =
-      (readKubernetesInfrastructure(kfg), getKubernetesPodCert()).tupled match {
-        case Some((kubernetes, sslContext)) =>
-          // Auto-mounted at this path for pods
-          // https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
-          val path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
-          val serviceAccountToken = scala.io.Source.fromFile(path).getLines.toList.head
+    def readKubernetesClient(kfg: KConfig): IO[KubernetesClient] = {
+      val infra = for {
+        kubernetes <- readKubernetesInfrastructure(kfg)
+        sslContext <- getKubernetesCert(kubernetes.caCertPath)
+      } yield (kubernetes, sslContext)
 
-          http4sClient(kubernetes.timeout, sslContext = Some(sslContext)).map { client =>
-            new KubernetesClient(kubernetes.endpoint, client, serviceAccountToken)
+      infra match {
+        case Some((kubernetes, sslContext)) =>
+          http4sClient(kubernetes.timeout, sslContext = Some(sslContext)).map { httpClient =>
+            new KubernetesClient(kubernetes.version, kubernetes.endpoint, httpClient, kubernetes.token)
           }
         case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
       }
+    }
 
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
     def readDatacenter(id: String, kfg: KConfig): IO[Datacenter] = {

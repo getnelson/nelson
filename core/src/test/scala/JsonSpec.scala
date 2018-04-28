@@ -21,9 +21,8 @@ import org.scalatest._
 class JsonSpec extends FlatSpec with Matchers {
   import Util._
   import Json._
-  import argonaut._, Argonaut._
+  import argonaut._
   import cats.implicits._
-  import scalaz.\/
 
   it should "parse the github release defined in the docs" in {
     val out = for {

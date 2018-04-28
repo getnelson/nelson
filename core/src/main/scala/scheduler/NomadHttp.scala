@@ -18,7 +18,6 @@ package nelson
 package scheduler
 
 import nelson.Datacenter.{Deployment, StackName}
-import nelson.DeploymentStatus
 import nelson.Json._
 import nelson.Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
 import nelson.docker.Docker
@@ -35,11 +34,10 @@ import journal.Logger
 
 import scala.concurrent.ExecutionContext
 
-import scalaz.{~>, NonEmptyList}
+import scalaz.~>
 import scalaz.std.list._
 import scalaz.syntax.std.option._
 import scalaz.syntax.traverse._
-import scalaz.syntax.applicative._
 
 object NomadHttp {
   private val log = Logger[NomadHttp.type]
@@ -56,7 +54,6 @@ final class NomadHttp(
   import NomadHttp.log
   import SchedulerOp._
   import argonaut._, Argonaut._
-  import argonaut.DecodeResultCats._
   import org.http4s._
   import org.http4s.client._
   import org.http4s.Status.NotFound

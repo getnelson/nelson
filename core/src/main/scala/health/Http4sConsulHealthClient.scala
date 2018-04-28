@@ -17,15 +17,12 @@
 package nelson
 package health
 
-import argonaut._, Argonaut._
-
 import cats.effect.IO
 import nelson.CatsHelpers._
 
-import scalaz.~>
-import scalaz.syntax.std.option._
-
 import helm.ConsulOp
+
+import scalaz.~>
 
 final case class Http4sConsulHealthClient(client: ConsulOp ~> IO) extends (HealthCheckOp ~> IO) {
 

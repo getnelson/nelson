@@ -17,7 +17,6 @@
 package nelson
 package yaml
 
-import scalaz._
 import org.scalatest.{FlatSpec,Matchers}
 
 class DeployableYamlSpec extends FlatSpec with Matchers with SnakeCharmer {

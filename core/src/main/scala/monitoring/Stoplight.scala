@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson.monitoring
 
-import cats.effect.{Effect, IO}
+import cats.effect.IO
 
 import fs2.Stream
 

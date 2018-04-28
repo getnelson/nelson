@@ -33,6 +33,7 @@ import helm.ConsulOp
 
 import java.net.URI
 import java.time.Instant
+import java.nio.file.Path
 
 import org.http4s.Uri
 
@@ -79,6 +80,9 @@ object Infrastructure {
 
   final case class Kubernetes(
     endpoint: Uri,
+    version: KubernetesVersion,
+    caCertPath: Path,
+    token: String,
     timeout: Duration
   )
 

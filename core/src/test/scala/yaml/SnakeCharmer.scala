@@ -18,7 +18,6 @@ package nelson
 package yaml
 
 import cats.effect.IO
-import cats.implicits._
 
 trait SnakeCharmer {
   def toEither[A, B](disj: scalaz.\/[A, B]): Either[A, B] = disj.fold[Either[A, B]](Left(_), Right(_))

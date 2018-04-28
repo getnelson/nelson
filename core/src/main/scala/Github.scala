@@ -18,11 +18,8 @@ package nelson
 
 import cats.ApplicativeError
 import cats.effect.IO
-import nelson.CatsHelpers._
 
 import ca.mrvisser.sealerate
-
-import delorean._
 
 import java.net.URI
 

@@ -74,7 +74,7 @@ class WorkflowLogger(queue: Queue[IO, (ID, String)], base: Path) extends (Loggin
       lines <- io.file.readAll[IO](file, 4096) // 4096 is a bit arbitrary..
                  .through(text.utf8Decode)
                  .through(text.lines)
-                 .drop(offset)
+                 .drop(offset.toLong)
                  .compile
                  .toList // yolo
     } yield lines

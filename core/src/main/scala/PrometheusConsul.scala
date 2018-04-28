@@ -21,7 +21,7 @@ import cats.effect.IO
 import helm.ConsulOp
 import helm.ConsulOp._
 
-import scalaz.{\/-, -\/, ~>}
+import scalaz.~>
 
 class PrometheusConsul private (instance: String, interp: ConsulOp ~> IO, metrics: Metrics)
     extends (ConsulOp ~> IO) {

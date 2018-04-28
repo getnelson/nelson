@@ -23,8 +23,7 @@ import nelson.Json.DeploymentEncoder
 import nelson.Nelson._
 import nelson.audit.AuditableInstances.deploymentAuditable
 import nelson.storage.{StoreOp, StoreOpF}
-import nelson.health.{HealthCheckOp, HealthCheck, Passing}
-import nelson.health.HealthCheckOp.HealthCheckF
+import nelson.health.{HealthCheckOp, Passing}
 
 import cats.effect.{Effect, IO}
 import cats.syntax.applicativeError._
@@ -32,7 +31,6 @@ import nelson.CatsHelpers._
 
 import fs2.{Scheduler, Sink, Stream}
 
-import helm.HealthStatus
 import helm.HealthStatus._
 
 import java.time.Instant
@@ -41,7 +39,6 @@ import journal.Logger
 
 import scalaz.{NonEmptyList, OptionT}
 import scalaz.syntax.bind._
-import scalaz.syntax.std.option._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
 
