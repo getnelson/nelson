@@ -61,7 +61,7 @@ object Reaper {
     import Json._
     import audit.AuditableInstances._
     Workflow.run(resolve(d).destroy(d,dc,ns))(t) <*
-      cfg.auditor.flatMap(_.write(d, audit.DeleteAction)) <*
+      cfg.auditor.write(d, audit.DeleteAction) <*
       IO(log.debug((s"finished cleaning up $d in datacenter $dc"))) <*
       Notify.sendDecommissionedNotifications(dc,ns,d)(cfg)
   }

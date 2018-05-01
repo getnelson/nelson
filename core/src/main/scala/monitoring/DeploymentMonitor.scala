@@ -75,14 +75,12 @@ object DeploymentMonitor {
    * Drain all actions from the writer (using an auditor error sink, observing it and routing to a final sink.
    */
   def drain[A](cfg: NelsonConfig)(h: Stream[IO, Duration], w: NelsonFK[Stream, Seq[A]], s: Sink[IO, A], k: NelsonFK[Sink, A]): Stream[IO, Unit] =
-    Stream.force(cfg.auditor.map { auditor =>
-      h >> w.run(cfg).flatMap(as => Stream.emits(as).covary[IO])
-        .observe(s)(Effect[IO], cfg.pools.defaultExecutor)
-        .attempt
-        .observeW(auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor)
-        .stripW
-        .to(k.run(cfg))
-    })
+    h >> w.run(cfg).flatMap(as => Stream.emits(as).covary[IO])
+      .observe(s)(Effect[IO], cfg.pools.defaultExecutor)
+      .attempt
+      .observeW(cfg.auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor)
+      .stripW
+      .to(k.run(cfg))
 
   /*
    * Build a list of MonitorActionItems based on the health of deployments that are presently in the Warming state.
@@ -168,9 +166,7 @@ object DeploymentMonitor {
   }
 
   def promotionSink(cfg: NelsonConfig): Sink[IO, MonitorActionItem] =
-    stream => Stream.force(cfg.auditor.map { auditor =>
-      stream.evalMap(item => promote(item)(auditor))
-    })
+    Sink(item => promote(item)(cfg.auditor))
 
   def promote(item: MonitorActionItem)(auditor: audit.Auditor): IO[Unit] = {
     val task = item match {

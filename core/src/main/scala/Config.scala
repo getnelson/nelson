@@ -340,7 +340,9 @@ final case class NelsonConfig(
   proxyPortWhitelist: Option[ProxyPortWhitelist],
   defaultNamespace: NamespaceName,
   expirationPolicy: ExpirationPolicyConfig,
-  discoveryDelay: FiniteDuration
+  discoveryDelay: FiniteDuration,
+  queue: Queue[IO, Manifest.Action],
+  auditQueue: Queue[IO, AuditEvent[_]]
 ){
 
   val log = Logger[NelsonConfig.type]
@@ -353,13 +355,7 @@ final case class NelsonConfig(
 
   lazy val email = interpreters.email
 
-  lazy val queue: IO[Queue[IO, Manifest.Action]] =
-    boundedQueue(pipeline.bufferLimit)(Effect[IO], pools.defaultExecutor)
-
-  lazy val auditQueue: IO[Queue[IO, AuditEvent[_]]] =
-    boundedQueue(audit.bufferLimit)(Effect[IO], pools.defaultExecutor)
-
-  lazy val auditor = auditQueue.map(new Auditor(_, git.systemUsername))
+  lazy val auditor = new Auditor(auditQueue, git.systemUsername)
 
   // i've currently assigned these pretty arbitrary values
   // but this should protect nelson from really hammering
@@ -443,6 +439,11 @@ object Config {
         stg = storage,
         logger = wflogger
       )
+      pipeline   =  readPipeline(cfg.subconfig("nelson.pipeline"))
+      queue      <- boundedQueue[IO, Manifest.Action](pipeline.bufferLimit)(Effect[IO], pools.defaultExecutor)
+
+      audit      =  readAudit(cfg.subconfig("nelson.audit"))
+      auditQueue <- boundedQueue[IO, AuditEvent[_]](audit.bufferLimit)(Effect[IO], pools.defaultExecutor)
     } yield {
       NelsonConfig(
         git                = gitcfg,
@@ -456,8 +457,8 @@ object Config {
         cleanup            = cleanup,
         deploymentMonitor  = DeploymentMonitorConfig(deploymentMonitor),
         datacenters        = dcs,
-        pipeline           = readPipeline(cfg.subconfig("nelson.pipeline")),
-        audit              = readAudit(cfg.subconfig("nelson.audit")),
+        pipeline           = pipeline,
+        audit              = audit,
         template           = readTemplate(cfg),
         http               = http,
         pools              = pools,
@@ -468,7 +469,9 @@ object Config {
         proxyPortWhitelist = whitelist,
         defaultNamespace   = defaultNS,
         expirationPolicy   = expirationPolicy,
-        discoveryDelay     = discoveryDelay
+        discoveryDelay     = discoveryDelay,
+        queue              = queue,
+        auditQueue         = auditQueue
       )
     }
   }
@@ -603,7 +606,8 @@ object Config {
       infra match {
         case Some((kubernetes, sslContext)) =>
           http4sClient(kubernetes.timeout, sslContext = Some(sslContext)).map { httpClient =>
-            new KubernetesClient(kubernetes.version, kubernetes.endpoint, httpClient, kubernetes.token)
+            val tokenFileContents = scala.io.Source.fromFile(kubernetes.token).getLines.mkString("")
+            new KubernetesClient(kubernetes.version, kubernetes.endpoint, httpClient, tokenFileContents)
           }
         case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
       }

@@ -51,21 +51,16 @@ object Pipeline {
    * effect generating sinks and observations.
    */
   def task(config: NelsonConfig)(effects: Sink[IO, Action]): IO[Unit] = {
-    def par[A](ps: Stream[IO, Stream[IO, A]]) = {
+    def par[A](ps: Stream[IO, Stream[IO, A]]): Stream[IO, A] = {
       implicit val ec = config.pools.defaultExecutor
 
       val withErrors = ps.join(config.pipeline.concurrencyLimit).attempt
 
-      config.auditor.map(auditor => withErrors.observeW(auditor.errorSink).stripW)
+      withErrors.observeW(config.auditor.errorSink).stripW
     }
 
-    val p: IO[Stream[IO, Stream[IO, Unit]]] =
-      config.queue.map(_.dequeue.map(a => Stream.emit(a).covary[IO].to(effects)))
+    val p: Stream[IO, Stream[IO, Unit]] = config.queue.dequeue.map(a => Stream.emit(a).covary[IO].to(effects))
 
-    for {
-      stream <- p
-      values <- par(stream)
-      _      <- values.compile.drain
-    } yield ()
+    par(p).compile.drain
   }
 }

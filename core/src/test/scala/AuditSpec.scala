@@ -58,7 +58,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
   override def beforeEach: Unit = setup.unsafeRunSync()
 
   it should "enqueue all events in the stream" in {
-    val audit = new Auditor(config.auditQueue.unsafeRunSync(),defaultSystemLogin)
+    val audit = new Auditor(config.auditQueue,defaultSystemLogin)
     val p: Stream[IO, Foo] = Stream(Foo(1),Foo(2),Foo(3),Foo(10))
 
     p.observe(audit.auditSink(LoggingAction))(Effect[IO], config.pools.defaultExecutor).compile.drain.unsafeRunSync()
@@ -69,7 +69,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   it should "store auditable events in storage" in {
-    val audit = new Auditor(config.auditQueue.unsafeRunSync(),defaultSystemLogin)
+    val audit = new Auditor(config.auditQueue,defaultSystemLogin)
     val events = Vector(Foo(1),Foo(2),Foo(3),Foo(10))
     val p: Stream[IO, Foo] = Stream(events: _*)
 
@@ -83,7 +83,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   it should "be able to write to audit log directly" in {
-    val audit = new Auditor(config.auditQueue.unsafeRunSync(), defaultSystemLogin)
+    val audit = new Auditor(config.auditQueue, defaultSystemLogin)
     val foo = Foo(1)
 
     audit.write(foo, CreateAction).unsafeRunSync()
@@ -97,7 +97,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   it should "accept an optional release id parameter" in {
-    val audit = new Auditor(config.auditQueue.unsafeRunSync(),defaultSystemLogin)
+    val audit = new Auditor(config.auditQueue,defaultSystemLogin)
     val foo = Foo(1)
 
     val releaseId = Option(10L)
@@ -114,7 +114,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "accept an optional user parameter" in {
     val login = "scalatest"
-    val audit = new Auditor(config.auditQueue.unsafeRunSync(),defaultSystemLogin)
+    val audit = new Auditor(config.auditQueue,defaultSystemLogin)
     val foo = Foo(1)
 
     audit.write(foo, CreateAction, login = login).unsafeRunSync()
@@ -130,7 +130,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
   behavior of "listing audit logs"
 
   it should "accept an optional action parameter for filtering" in {
-    val audit = new Auditor(config.auditQueue.unsafeRunSync(), defaultSystemLogin)
+    val audit = new Auditor(config.auditQueue, defaultSystemLogin)
     val foo = Foo(1)
 
     audit.write(foo, CreateAction).unsafeRunSync()
@@ -144,7 +144,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   it should "accept an optional category parameter for filtering" in {
-    val audit = new Auditor(config.auditQueue.unsafeRunSync(), defaultSystemLogin)
+    val audit = new Auditor(config.auditQueue, defaultSystemLogin)
     val foo = Foo(1)
     val bar = Bar(2)
 

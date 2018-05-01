@@ -20,6 +20,7 @@ package cleanup
 import nelson.Datacenter.Deployment
 import nelson.routing.RoutingTable
 
+import cats.syntax.apply._
 import cats.effect.{Effect, IO}
 import nelson.CatsHelpers._
 
@@ -85,7 +86,7 @@ object CleanupCron {
 
   def refresh(cfg: NelsonConfig): Stream[IO,Duration] =
     Stream.repeatEval(IO(cfg.cleanup.cleanupDelay)).flatMap(d =>
-      Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery[IO](d)(Effect[IO], cfg.pools.schedulingExecutor)).head
+      Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery[IO](d)(Effect[IO], cfg.pools.schedulingExecutor).head)
 
   /*
    * This is the entry point for the cleanup pipeline. The pipeline is run at
@@ -94,7 +95,5 @@ object CleanupCron {
    * to decommission deployments.
    */
   def pipeline(cfg: NelsonConfig)(implicit ec: ExecutionContext): Stream[IO, Unit] =
-    Stream.force {
-      cfg.auditor.map(auditor => refresh(cfg).flatMap(_ => process(cfg).attempt).observeW(auditor.errorSink).stripW.to(Reaper.reap(cfg)))
-    }
+    (refresh(cfg) *> process(cfg).attempt).observeW(cfg.auditor.errorSink).stripW.to(Reaper.reap(cfg))
 }

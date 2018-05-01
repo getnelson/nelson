@@ -20,7 +20,7 @@ package cleanup
 import cats.effect.IO
 import nelson.CatsHelpers._
 
-import fs2.{Pipe, Stream}
+import fs2.Pipe
 
 import java.time.Instant
 import journal.Logger
@@ -56,11 +56,9 @@ object GarbageCollector {
   def mark(cfg: NelsonConfig): Pipe[IO, CleanupRow, CleanupRow] = {
     import Json._
     import audit.AuditableInstances._
-    _.flatMap { case (dc, ns, d, gr) =>
-      Stream.eval {
-        runs(cfg.storage, markAsGarbage(d.deployment).map(_ => (dc, ns, d, gr))) <*
-        cfg.auditor.flatMap(_.write(d.deployment, audit.GarbageAction))
-      }
+    _.evalMap { case (dc, ns, d, gr) =>
+      runs(cfg.storage, markAsGarbage(d.deployment).map(_ => (dc, ns, d, gr))) <*
+        cfg.auditor.write(d.deployment, audit.GarbageAction)
     }
   }
 }

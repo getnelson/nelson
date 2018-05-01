@@ -57,10 +57,8 @@ object cron {
   }
 
   def consulRefresh(cfg: NelsonConfig): Stream[IO,(Datacenter,ConsulOp.ConsulOpF[Unit])] =
-    Stream.force(cfg.auditor.map { auditor =>
-      Stream.repeatEval(IO(cfg.discoveryDelay)).
-        flatMap(d => Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery(d)(Effect[IO], cfg.pools.defaultExecutor).head).
-        flatMap(_ => Stream.eval(refresh(cfg)).attempt.observeW(auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor).stripW).
-        flatMap(xs => Stream.emits(xs))
-    })
+    Stream.repeatEval(IO(cfg.discoveryDelay)).
+      flatMap(d => Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery(d)(Effect[IO], cfg.pools.defaultExecutor).head).
+      flatMap(_ => Stream.eval(refresh(cfg)).attempt.observeW(cfg.auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor).stripW).
+      flatMap(xs => Stream.emits(xs))
 }

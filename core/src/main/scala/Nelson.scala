@@ -158,9 +158,7 @@ object Nelson {
 
         rhk  = hook(cfg)
 
-        auditor <- cfg.auditor
-
-        out <- (auditor.write(rhk, CreateAction, login = session.user.login) *>
+        out <- (cfg.auditor.write(rhk, CreateAction, login = session.user.login) *>
                 getOrCreate(slug, rhk)(cfg))
 
         r2  <- (log(s"result of createRepoWebhook: out = $out") *>
@@ -168,7 +166,7 @@ object Nelson {
 
         foo <- (log(s"result of repo copy: r2 = $r2") *>
                 storage.run(cfg.storage, storage.StoreOp.insertOrUpdateRepositories(r2 :: Nil)) <*
-                auditor.write(r2, CreateAction, login = session.user.login))
+                cfg.auditor.write(r2, CreateAction, login = session.user.login))
         _   <- log(s"result of insertOrUpdateRepositories: foo = $foo")
       } yield r2
     }
@@ -184,8 +182,7 @@ object Nelson {
         rep <- storage.run(cfg.storage, storage.StoreOp.findRepository(session.user, slug))
         rrr <- rep.tfold(RepoNotFound(slug))(identity)
         id  <- rrr.hook.tfold(UnexpectedMissingHook(slug))(_.id)
-        au  <- cfg.auditor
-        _   <- au.write(rrr, DeleteAction, login = session.user.login)
+        _   <- cfg.auditor.write(rrr, DeleteAction, login = session.user.login)
         _   <- Github.Request.deleteRepoWebhook(slug, id)(session.github).runWith(cfg.github)
         .or(IO.unit)
         upd  = Repo(rrr.id, rrr.slug, rrr.access, None)
@@ -266,7 +263,7 @@ object Nelson {
   }
 
   def deploy(actions: List[Manifest.Action]): NelsonK[Unit] =
-    Kleisli(cfg => actions.traverse_(a => cfg.queue.flatMap(_.enqueue1(a))))
+    Kleisli(cfg => actions.traverse_(a => cfg.queue.enqueue1(a)))
 
   /**
    * Invoked when the inbound webhook from Github arrives, notifying Nelson
@@ -281,7 +278,7 @@ object Nelson {
       val unitFilter: (Datacenter,Namespace,Plan,UnitDef) => Boolean =
         (_,namespace,_,_) => namespace.name == ns
 
-       Manifest.unitActions(m, dcs, unitFilter)
+      Manifest.unitActions(m, dcs, unitFilter)
     }
 
     Kleisli { cfg =>
@@ -291,11 +288,9 @@ object Nelson {
                 fetchRepoManifestAndValidateDeployable(e.slug, r.tagName).run(cfg))
         m  <-  v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))
 
-        au <- cfg.auditor
-
         hm <- (log(s"received manifest from github: $m")
               *> storage.run(cfg.storage, storage.StoreOp.createRelease(e.repositoryId, r))
-              *> au.write(r, CreateAction, Option(r.id))
+              *> cfg.auditor.write(r, CreateAction, Option(r.id))
               *> log(s"created release in response to release ${r.id}")
               *> Manifest.saturateManifest(m)(r))
 
@@ -759,7 +754,7 @@ object Nelson {
                m.hash,
                m.description,
                m.port,
-               exp)) <* cfg.auditor.flatMap(_.write(m, CreateAction, login = s.user.login))
+               exp)) <* cfg.auditor.write(m, CreateAction, login = s.user.login)
      } yield guid
   }
 

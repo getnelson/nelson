@@ -77,16 +77,14 @@ object Sweeper {
     }
 
   def process(cfg: NelsonConfig)(implicit unclaimedResourceTracker: Kleisli[IO, (Datacenter, Int), Unit]): Stream[IO, Unit] =
-    Stream.force(cfg.auditor.map { auditor =>
-      Stream.repeatEval(IO(cfg.cleanup.sweeperDelay)).flatMap { d =>
-        Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery(d)(Effect[IO], cfg.pools.schedulingExecutor).head
-      }.flatMap(_ =>
-        Stream.eval(timer(cleanupLeakedConsulDiscoveryKeys(cfg)))
-          .attempt.observeW(auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor)
-          .stripW
-      )
-      .flatMap(os => Stream.emits(os).covary[IO]) to sweeperSink
-    })
+    Stream.repeatEval(IO(cfg.cleanup.sweeperDelay)).flatMap { d =>
+      Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery(d)(Effect[IO], cfg.pools.schedulingExecutor).head
+    }.flatMap(_ =>
+      Stream.eval(timer(cleanupLeakedConsulDiscoveryKeys(cfg)))
+        .attempt.observeW(cfg.auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor)
+        .stripW
+    )
+    .flatMap(os => Stream.emits(os).covary[IO]) to sweeperSink
 
   def sweeperSink(implicit unclaimedResourceTracker: Kleisli[IO, (Datacenter, Int), Unit]): Sink[IO, SweeperHelmOp] =
     Sink {

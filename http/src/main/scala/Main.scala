@@ -76,7 +76,7 @@ object Main {
       import cleanup.SweeperDefaults._
 
       log.info("booting the background processes nelson needs to operate...")
-      runBackgroundJob("auditor", Stream.force(cfg.auditor.map(auditor => auditor.process(cfg.storage)(cfg.pools.defaultExecutor))))
+      runBackgroundJob("auditor", cfg.auditor.process(cfg.storage)(cfg.pools.defaultExecutor))
       runBackgroundJob("pipeline_processor", Stream.eval(Pipeline.task(cfg)(Pipeline.sinks.runAction(cfg))))
       runBackgroundJob("workflow_logger", cfg.workflowLogger.process)
       runBackgroundJob("routing_cron", routing.cron.consulRefresh(cfg) to Http4sConsul.consulSink)
