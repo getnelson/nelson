@@ -36,7 +36,7 @@ class RuleRewriterSpec extends NelsonSuite with Checkers {
       List(PrometheusAlert("alert_with_rewrite", """IF a:b:c == 0 OR d:e:f == 1 ANNOTATIONS { foo = "bar" }""")),
       List(PrometheusRule("a:b:c", "avg(abc)"))
     )
-    RuleRewriter.identity.rewriteRules(StackName("example-unit", Version(1, 0, 0), "abc12345"), NamespaceName("test"), "default", alerting).run.asInstanceOf[Rewritten].transformed should equal (
+    RuleRewriter.identity.rewriteRules(StackName("example-unit", Version(1, 0, 0), "abc12345"), NamespaceName("test"), "default", alerting).unsafeRunSync().asInstanceOf[Rewritten].transformed should equal (
       """a:b:c = avg(abc)
         |
         |ALERT alert_with_rewrite

@@ -16,10 +16,12 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.net.URI
-import scalaz.concurrent.Task
-import delorean._
+import cats.ApplicativeError
+import cats.effect.IO
+
 import ca.mrvisser.sealerate
+
+import java.net.URI
 
 object Github {
 
@@ -85,14 +87,14 @@ object Github {
     id: Long,
     url: String,
     htmlUrl: String,
-    assets: Seq[Asset],
+    assets: List[Asset],
     tagName: String
   ){
-    def findAssetContent(withName: String): Task[String] =
+    def findAssetContent(withName: String): IO[String] =
       this.assets
         .find(_.name.trim.toLowerCase == withName.trim.toLowerCase)
         .flatMap(_.content)
-        .fold[Task[String]](Task.fail(new ProblematicDeployable(s"could not find an asset named $withName", url)))(Task.now)
+        .fold[IO[String]](IO.raiseError(new ProblematicDeployable(s"could not find an asset named $withName", url)))(IO.pure)
   }
 
   final case class Asset(
@@ -106,7 +108,7 @@ object Github {
 
   ////// GITHUB DSL & Interpreter
 
-  import scalaz.{Free, ~>, Coyoneda,Monad}
+  import scalaz.{Free, ~>, Coyoneda, Monad}
 
   sealed trait GithubOp[A]
 
@@ -226,22 +228,23 @@ object Github {
     }
   }
 
-  final class GithubHttp(cfg: GithubConfig, http: dispatch.Http) extends (GithubOp ~> Task) {
+  final class GithubHttp(cfg: GithubConfig, http: dispatch.Http) extends (GithubOp ~> IO) {
     import java.net.URI
     import dispatch._, Defaults._
     import nelson.Json._
-    import scalaz.Nondeterminism
     import Interpreter._
+    import fs2.async.parallelTraverse
+    import cats.instances.list._
 
-    def apply[A](in: GithubOp[A]): Task[A] = in match {
+    def apply[A](in: GithubOp[A]): IO[A] = in match {
 
       case GetAccessToken(fromCode: String) =>
-        val req: Task[String] = {
+        val req: IO[String] = {
           val r = (url(cfg.tokenEndpoint) << Map(
             "client_id" -> cfg.clientId,
             "client_secret" -> cfg.clientSecret,
             "code" -> fromCode)).addHeader("Accept","application/json")
-          http(r OK as.String).toTask
+          IO.fromFuture(IO(http(r OK as.String)))
         }
         req.flatMap(fromJson[AccessToken])
 
@@ -258,9 +261,7 @@ object Github {
         } yield orgs
 
       case GetOrganizations(keys: List[Github.OrgKey], t: AccessToken) =>
-        Nondeterminism[Task].gatherUnordered(
-          keys.map(key => fetch(cfg.orgEndpoint(key.slug), t).flatMap(fromJson[Organization]))
-        )
+        parallelTraverse(keys)(key => fetch(cfg.orgEndpoint(key.slug), t).flatMap(fromJson[Organization]))
 
       case GetReleaseAssetContent(asset: Github.Asset, t: AccessToken) =>
         val req = url(asset.url)
@@ -268,8 +269,8 @@ object Github {
           .setFollowRedirects(false) // TIM: doing this deliberately, such that github.com's s3 storage works.
           .token(t)
         for {
-          a <- http(req > as.Response(x => x.getHeader("location"))).toTask
-          b <- http(url(a) OK as.String).toTask
+          a <- IO.fromFuture(IO(http(req > as.Response(x => x.getHeader("location")))))
+          b <- IO.fromFuture(IO(http(url(a) OK as.String)))
         } yield asset.copy(content = Option(b))
 
       case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
@@ -281,37 +282,37 @@ object Github {
       case GetUserRepositories(t: AccessToken) =>
         def go(uri: URI)(accum: List[Repo]): List[Repo] = {
           val r = url(uri.toString).token(t)
-          val task = for {
-            a <- http(r OkWithPagination as.String).toTask
+          val io = for {
+            a <- IO.fromFuture(IO(http(r OkWithPagination as.String)))
             b <- fromJson[List[Repo]](a._1)
           } yield (b,a._2)
           // going to say this is ok, due to surrounding task...
           // it feels hella janky though.
-          val (repos,links) = task.run
+          val (repos,links) = io.unsafeRunSync()
           links.get(Next) match {
             case Some(u) => go(u)(accum ++ repos)
             case None    => accum ++ repos
           }
         }
-        Task.delay(go(new URI(cfg.repoEndpoint(page = 1)))(Nil))
+        IO(go(new URI(cfg.repoEndpoint(page = 1)))(Nil))
 
       case GetFileFromRepository(slug: Slug, path: String, tagOrBranch: String, t: AccessToken) =>
         val r = url(cfg.contentsEndpoint(slug,path))
           .addQueryParameter("ref", java.net.URLEncoder.encode(tagOrBranch, "UTF-8"))
           .token(t)
         for {
-          resp <- http(r OkWithErrors as.String).option.toTask
+          resp <- IO.fromFuture(IO(http(r OkWithErrors as.String).option))
           cont <- resp.fold(
-            Task.now(Option.empty[Github.Contents]))(x => fromJson[Github.Contents](x).map(Option(_))
+            IO.pure(Option.empty[Github.Contents]))(x => fromJson[Github.Contents](x).map(Option(_))
           )
         } yield cont
 
       case GetRepoWebHooks(slug: Slug, t: AccessToken) =>
         val r = url(cfg.webhookEndpoint(slug)).token(t)
         for {
-          resp <- http(r OkWithErrors as.String).option.toTask // returns 404 when repo has no webhooks
+          resp <- IO.fromFuture(IO(http(r OkWithErrors as.String).option)) // returns 404 when repo has no webhooks
           wk   <- resp.fold(
-            Task.now(List.empty[Github.WebHook]))(x => fromJson[List[Github.WebHook]](x))
+            IO.pure(List.empty[Github.WebHook]))(x => fromJson[List[Github.WebHook]](x))
         } yield wk
 
       case PostRepoWebHook(slug: Slug, hook: Github.WebHook, t: AccessToken) =>
@@ -321,24 +322,22 @@ object Github {
           .token(t)
           .setContentType("application/json", "UTF-8") << json
         for {
-          resp <- http(req OK as.String).toTask
+          resp <- IO.fromFuture(IO(http(req OK as.String)))
           wh   <- fromJson[Github.WebHook](resp)
         } yield wh
 
       case DeleteRepoWebHook(slug: Slug, id: Long, t: AccessToken) =>
-        http(url(s"${cfg.webhookEndpoint(slug)}/$id").DELETE.token(t) OK as.String).toTask
-          .map(_ => ())
-          .handle {
-            // swallow 404, as we're being asked to delete something that does not exist
-            case StatusCode(404) => ()
-         }
+        ApplicativeError[IO, Throwable].recover(IO.fromFuture(IO(http(url(s"${cfg.webhookEndpoint(slug)}/$id").DELETE.token(t) OK as.String))).map(_ => ())) {
+          // swallow 404, as we're being asked to delete something that does not exist
+          case StatusCode(404) => ()
+        }
     }
 
 
     /////////////////////////// INTERNALS ///////////////////////////
 
-    private def fetch(endpoint: String, t: AccessToken): Task[String] =
-      http(url(endpoint).token(t) OK as.String).toTask
+    private def fetch(endpoint: String, t: AccessToken): IO[String] =
+      IO.fromFuture(IO(http(url(endpoint).token(t) OK as.String)))
 
     case class GithubApiError(code: Int, body: String)
       extends Exception("Unexpected response status: %d".format(code))

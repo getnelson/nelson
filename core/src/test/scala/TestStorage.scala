@@ -17,6 +17,7 @@
 package nelson
 
 import nelson.storage.Migrate
+import nelson.CatsHelpers._
 
 object TestStorage {
   def dbConfig(testname: String): DatabaseConfig =
@@ -24,14 +25,14 @@ object TestStorage {
 
   def storage(testname: String) = {
     val cfg = dbConfig(testname)
-    Migrate.migrate(cfg).run
+    Migrate.migrate(cfg).unsafeRunSync()
     new nelson.storage.H2Storage(xa(cfg))
   }
 
   import doobie.imports._
 
   def xa(cfg: DatabaseConfig) = 
-    DriverManagerTransactor[scalaz.concurrent.Task](
+    DriverManagerTransactor[cats.effect.IO](
       cfg.driver,
       cfg.connection,
       cfg.username.getOrElse(""),

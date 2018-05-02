@@ -1,7 +1,15 @@
 package nelson
 
+import nelson.Datacenter.StackName
+import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, Plan, Ports, Port}
+import nelson.docker.Docker.Image
+import nelson.health._
+
 import argonaut._
 import argonaut.Argonaut._
+
+import cats.effect.{Effect, IO}
+
 import org.http4s.AuthScheme
 import org.http4s.Credentials.Token
 import org.http4s.Uri
@@ -9,14 +17,9 @@ import org.http4s.{Method, Request}
 import org.http4s.argonaut._
 import org.http4s.client.Client
 import org.http4s.headers.Authorization
-import scalaz.{Foldable, Monoid}
-import scalaz.concurrent.Task
-import scalaz.Scalaz._
 
-import nelson.Datacenter.StackName
-import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, Plan, Ports, Port}
-import nelson.docker.Docker.Image
-import nelson.health._
+import scalaz.{Foldable, Monoid}
+import scalaz.Scalaz._
 
 sealed abstract class KubernetesVersion extends Product with Serializable
 
@@ -41,61 +44,61 @@ object KubernetesVersion {
  *
  * See: https://kubernetes.io/docs/api-reference/v1.8/
  */
-final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: Client, serviceAccountToken: String) {
+final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: Client[IO], serviceAccountToken: String) {
   import KubernetesClient.cascadeDeletionPolicy
   import KubernetesJson._
   import KubernetesVersion._
 
-  def createDeployment(namespace: String, stackName: StackName, image: Image, plan: Plan, ports: Option[Ports]): Task[Json] = {
+  def createDeployment(namespace: String, stackName: StackName, image: Image, plan: Plan, ports: Option[Ports]): IO[Json] = {
     val json = KubernetesJson.deployment(namespace,stackName, image, plan, ports)
     val request = addCreds(Request(Method.POST, deploymentUri(namespace)))
     client.expect[Json](request.withBody(json))
   }
 
-  def createService(namespace: String, stackName: StackName, ports: Option[Ports]): Task[Json] = {
+  def createService(namespace: String, stackName: StackName, ports: Option[Ports]): IO[Json] = {
     val json = KubernetesJson.service(namespace, stackName, ports)
     val request = addCreds(Request(Method.POST, serviceUri(namespace)))
     client.expect[Json](request.withBody(json))
   }
 
-  def createCronJob(namespace: String, stackName: StackName, image: Image, plan: Plan, cronExpr: String): Task[Json] = {
+  def createCronJob(namespace: String, stackName: StackName, image: Image, plan: Plan, cronExpr: String): IO[Json] = {
     val json = KubernetesJson.cronJob(namespace, stackName, image, plan, cronExpr)
     val request = addCreds(Request(Method.POST, cronJobUri(namespace)))
     client.expect[Json](request.withBody(json))
   }
 
-  def createJob(namespace: String, stackName: StackName, image: Image, plan: Plan): Task[Json] = {
+  def createJob(namespace: String, stackName: StackName, image: Image, plan: Plan): IO[Json] = {
     val json = KubernetesJson.job(namespace, stackName, image, plan)
     val request = addCreds(Request(Method.POST, jobUri(namespace)))
     client.expect[Json](request.withBody(json))
   }
 
-  def deleteDeployment(namespace: String, name: String): Task[Json] = {
+  def deleteDeployment(namespace: String, name: String): IO[Json] = {
     val request = addCreds(Request(Method.DELETE, deploymentUri(namespace) / name))
     client.expect[Json](request.withBody(cascadeDeletionPolicy))
   }
 
-  def deleteService(namespace: String, name: String): Task[Json] = {
+  def deleteService(namespace: String, name: String): IO[Json] = {
     val request = addCreds(Request(Method.DELETE, serviceUri(namespace) / name))
     client.expect[Json](request.withBody(cascadeDeletionPolicy))
   }
 
-  def deleteCronJob(namespace: String, name: String): Task[Json] = {
+  def deleteCronJob(namespace: String, name: String): IO[Json] = {
     val request = addCreds(Request(Method.DELETE, cronJobUri(namespace) / name))
     client.expect[Json](request.withBody(cascadeDeletionPolicy))
   }
 
-  def deleteJob(namespace: String, name: String): Task[Json] = {
+  def deleteJob(namespace: String, name: String): IO[Json] = {
     val request = addCreds(Request(Method.DELETE, jobUri(namespace) / name))
     client.expect[Json](request.withBody(cascadeDeletionPolicy))
   }
 
-  def deploymentSummary(namespace: String, name: String): Task[DeploymentStatus] = {
+  def deploymentSummary(namespace: String, name: String): IO[DeploymentStatus] = {
     val request = addCreds(Request(Method.GET, deploymentUri(namespace) / name / "status"))
-    client.expect[DeploymentStatus](request)(jsonOf[DeploymentStatus])
+    client.expect[DeploymentStatus](request)(jsonOf[IO, DeploymentStatus])
   }
 
-  def cronJobSummary(namespace: String, name: String): Task[JobStatus] = {
+  def cronJobSummary(namespace: String, name: String): IO[JobStatus] = {
     // CronJob status doesn't give very useful information so we leverage Nelson-specific
     // information (the stackName label applied to cron jobs deployed by Nelson) to get status information
     val selector = s"stackName=${name}"
@@ -103,25 +106,25 @@ final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: 
     val request = addCreds(Request(Method.GET, selectedUri))
 
     val decoder: DecodeJson[List[JobStatus]] = DecodeJson(c => (c --\ "items").as[List[JobStatus]])
-    client.expect[List[JobStatus]](request)(jsonOf(decoder)).map((jss: List[JobStatus])=> Foldable[List].fold(jss))
+    client.expect[List[JobStatus]](request)(jsonOf(Effect[IO], decoder)).map((jss: List[JobStatus])=> Foldable[List].fold(jss))
   }
 
-  def jobSummary(namespace: String, name: String): Task[JobStatus] = {
+  def jobSummary(namespace: String, name: String): IO[JobStatus] = {
     val request = addCreds(Request(Method.GET, jobUri(namespace) / name / "status"))
-    client.expect[JobStatus](request)(jsonOf[JobStatus])
+    client.expect[JobStatus](request)(jsonOf[IO, JobStatus])
   }
 
-  def listPods(namespace: String, labelSelectors: Map[String, String]): Task[List[HealthStatus]] = {
+  def listPods(namespace: String, labelSelectors: Map[String, String]): IO[List[HealthStatus]] = {
     val selectors = labelSelectors.map { case (k, v) => s"${k}=${v}"}.mkString(",")
     val uri = podUri(namespace).withQueryParam("labelSelector", selectors)
     val request = addCreds(Request(Method.GET, uri))
 
     implicit val statusDecoder = healthStatusDecoder
     val decoder: DecodeJson[List[HealthStatus]] = DecodeJson(c => (c --\ "items").as[List[HealthStatus]])
-    client.expect[List[HealthStatus]](request)(jsonOf(decoder))
+    client.expect[List[HealthStatus]](request)(jsonOf(Effect[IO], decoder))
   }
 
-  private def addCreds(req: Request): Request =
+  private def addCreds(req: Request[IO]): Request[IO] =
     req.putHeaders(Authorization(Token(AuthScheme.Bearer, serviceAccountToken)))
 
   private def podUri(ns: String): Uri =
@@ -200,7 +203,7 @@ object KubernetesJson {
           "spec" := argonaut.Json(
             "containers" := List(
 
-              argonaut.Json.jObject(combineJsonObject(JsonObject.from(List(
+              argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
                 "name"      := stackName.toString,
                 "image"     := image.toString,
                 "env"       := plan.environment.bindings,
@@ -269,7 +272,7 @@ object KubernetesJson {
     image:     Image,
     plan:      Plan
   ): Json =
-    argonaut.Json.jObject(combineJsonObject(JsonObject.from(List(
+    argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
       "kind"       := "Job",
       "metadata"   := argonaut.Json(
         "name"      := stackName.toString,
@@ -290,8 +293,8 @@ object KubernetesJson {
   ): JsonObject = {
     val backoffLimit = JsonObject.single("backoffLimit", plan.environment.retries.getOrElse(3).asJson)
 
-    JsonObject.from(List(
-      "spec" := argonaut.Json.jObject(combineJsonObject(JsonObject.from(List(
+    JsonObject.fromTraversableOnce(List(
+      "spec" := argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
         "completions"  := plan.environment.desiredInstances.getOrElse(1),
         "template"     := argonaut.Json(
           "metadata" := argonaut.Json(
@@ -395,7 +398,7 @@ object KubernetesJson {
   }
 
   private def combineJsonObject(x: JsonObject, y: JsonObject): JsonObject =
-    JsonObject.from(x.toList ++ y.toList)
+    JsonObject.fromTraversableOnce(x.toList ++ y.toList)
 
   private def containerPortsJson(ports: List[Port]): List[Json] =
     ports.map { port =>

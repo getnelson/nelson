@@ -16,31 +16,36 @@
 //: ----------------------------------------------------------------------------
 package nelson.alerts
 
-import java.io.{BufferedWriter, OutputStreamWriter}
-import java.nio.charset.StandardCharsets.UTF_8
 import nelson.{NamespaceName, PlanRef, Pools}
 import nelson.Datacenter.StackName
 import nelson.Manifest.PrometheusConfig
+
+import cats.effect.IO
+
+import java.io.{BufferedWriter, OutputStreamWriter}
+import java.nio.charset.StandardCharsets.UTF_8
+
 import scala.io.Source
-import scalaz.concurrent.Task
 
 object Overhaul extends RuleRewriter {
   import RuleRewriter._
 
-  def rewriteRules(stackName: StackName, ns: NamespaceName, plan: PlanRef, prometheus: PrometheusConfig): Task[Result] = {
-    Task.delay {
+  def rewriteRules(stackName: StackName, ns: NamespaceName, plan: PlanRef, prometheus: PrometheusConfig): IO[Result] = {
+    IO {
       val rules = toSerializedRules(prometheus)
       val pb = new ProcessBuilder("overhaul", "transform", "-f", "promql", "-s",
         stackName.toString, "-p", plan, "-e", ns.root.asString)
       pb.redirectErrorStream(true)
       val p = pb.start()
 
-      Pools.default.serverExecutor {
-        val in = new BufferedWriter(new OutputStreamWriter(p.getOutputStream, UTF_8))
-        in.write(rules)
-        in.flush()
-        in.close()
-      }
+      Pools.default.serverExecutor.execute(new Runnable {
+        def run(): Unit = {
+          val in = new BufferedWriter(new OutputStreamWriter(p.getOutputStream, UTF_8))
+          in.write(rules)
+          in.flush()
+          in.close()
+        }
+      })
 
       val out = Source.fromInputStream(p.getInputStream).mkString
 

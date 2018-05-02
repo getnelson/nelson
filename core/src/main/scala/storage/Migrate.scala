@@ -1,18 +1,16 @@
 package nelson
 package storage
 
-
+import cats.effect.IO
 import org.flywaydb.core.Flyway
 import journal.Logger
-import scalaz.concurrent.Task
-
 
 object Migrate {
 
   val log = Logger[Migrate.type]
 
-  def migrate(cfg: DatabaseConfig): Task[Unit] =
-    Task.delay {
+  def migrate(cfg: DatabaseConfig): IO[Unit] =
+    IO {
       val flyway = new Flyway
       flyway.setDataSource(
         cfg.connection,

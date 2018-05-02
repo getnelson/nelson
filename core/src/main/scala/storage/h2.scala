@@ -18,16 +18,22 @@ package nelson
 package storage
 
 import argonaut._
-import java.net.URI
-import scalaz._
-import Scalaz._
-import scalaz.concurrent.Task
+
+import cats.effect.IO
+
 import doobie.imports._
-import journal._
+
+import java.net.URI
 import java.time.Instant
+
+import journal._
+
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
-final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
+import scalaz._
+import scalaz.Scalaz._
+
+final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   import StoreOp._
   import Datacenter._
   import nelson.audit.{AuditLog,AuditEvent,AuditAction,AuditCategory}
@@ -35,7 +41,7 @@ final case class H2Storage(xa: Transactor[Task]) extends (StoreOp ~> Task) {
 
   val log = Logger[this.type]
 
-  override def apply[A](s: StoreOp[A]): Task[A] = s match {
+  override def apply[A](s: StoreOp[A]): IO[A] = s match {
     case FindRepository(u, slug) => findRepository(u, slug).transact(xa)
     case ListRepositories(u) => listRepositories(u).transact(xa)
     case ListRepositoriesWithOwner(u, owner) => listRepositoriesWithOwner(u, owner).transact(xa)

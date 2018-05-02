@@ -17,14 +17,20 @@
 package nelson
 package logging
 
+import cats.effect.IO
+import cats.syntax.apply._
+
+import fs2.{Sink, Stream}
+import fs2.async.mutable.Queue
+import fs2.{io, text}
+
 import journal.Logger
-import scalaz.concurrent.Task
-import scalaz._, Scalaz._
-import scalaz.stream.{Process,Sink,sink}
-import scalaz.stream.async.mutable.{Queue}
+
+import scalaz._
+import scalaz.Scalaz._
+
 import java.nio.file.{Path,Files,StandardOpenOption}
 import java.time.Instant
-
 
 /*
  * The WorkflowLogger is a process that the logs workflow deployment progress
@@ -32,7 +38,7 @@ import java.time.Instant
  * purpose of this file is to provide the frontend with insight into
  * what is happening with this deployment, similar to what travis provides.
  */
-class WorkflowLogger(queue: Queue[(ID, String)], base: Path) extends (LoggingOp ~> Task) {
+class WorkflowLogger(queue: Queue[IO, (ID, String)], base: Path) extends (LoggingOp ~> IO) {
 
   private val logger = Logger[this.type]
 
@@ -40,15 +46,15 @@ class WorkflowLogger(queue: Queue[(ID, String)], base: Path) extends (LoggingOp 
   def apply[A](op: LoggingOp[A]) =
     op match {
       case Debug(msg: String) =>
-        Task.delay(logger.debug(msg))
+        IO(logger.debug(msg))
       case Info(msg: String) =>
-        Task.delay(logger.info(msg))
+        IO(logger.info(msg))
       case LogToFile(id, msg) =>
         log(id,msg)
     }
 
-  def setup(): Task[Unit] =
-    Task.delay {
+  def setup(): IO[Unit] =
+    IO {
       if (!exists(base)){
         logger.info(s"creating workflow log base directory at $base")
         Files.createDirectories(base)
@@ -56,32 +62,34 @@ class WorkflowLogger(queue: Queue[(ID, String)], base: Path) extends (LoggingOp 
       }
     }
 
-  def log(id: ID, line: String): Task[Unit] =
-    queue.enqueueOne((id, line))
+  def log(id: ID, line: String): IO[Unit] =
+    queue.enqueue1((id, line))
 
-  def process: Process[Task, Unit] =
-    queue.dequeue to appendToFile
+  def process: Stream[IO, Unit] =
+    queue.dequeue.to(appendToFile)
 
-  def read(id: ID, offset: Int): Task[List[String]] = {
+  def read(id: ID, offset: Int): IO[List[String]] = {
     for {
       file <- getPath(id)
-      lines <- scalaz.stream.io.linesR(file.toFile.getAbsolutePath)
-                 .drop(offset)
-                 .runLog // yolo
-                 .map(_.toList)
+      lines <- io.file.readAll[IO](file, 4096) // 4096 is a bit arbitrary..
+                 .through(text.utf8Decode)
+                 .through(text.lines)
+                 .drop(offset.toLong)
+                 .compile
+                 .toList // yolo
     } yield lines
   }
 
-  private def appendToFile: Sink[Task,(ID,String)] =
-    sink.lift { case (id, line) =>
+  private def appendToFile: Sink[IO,(ID,String)] =
+    Sink { case (id, line) =>
       for {
         path <- getPath(id)
-        _    <- createFile(path) >> append(path, line)
+        _    <- createFile(path) *> append(path, line)
       } yield ()
     }
 
-  private def append(path: Path, line: String): Task[Unit] =
-    Task.delay {
+  private def append(path: Path, line: String): IO[Unit] =
+    IO {
       val withNewline = if (!line.endsWith("\n")) s"$line\n" else line
       val withTimestamp = s"$NOW: $withNewline"
       // This will open and close the file every time a line is added.
@@ -91,11 +99,11 @@ class WorkflowLogger(queue: Queue[(ID, String)], base: Path) extends (LoggingOp 
       ()
     }
 
-  private def getPath(id: ID): Task[Path] =
-    Task.delay(base.resolve(s"${id}.log"))
+  private def getPath(id: ID): IO[Path] =
+    IO(base.resolve(s"${id}.log"))
 
-  private def createFile(path: Path): Task[Unit] =
-    Task.delay {
+  private def createFile(path: Path): IO[Unit] =
+    IO {
       if (!exists(path))
         Files.createFile(path)
         ()

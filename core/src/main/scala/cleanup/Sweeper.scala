@@ -21,10 +21,14 @@ import helm.ConsulOp
 import journal.Logger
 import nelson.routing.Discovery
 
+import cats.effect.{Effect, IO}
+import cats.syntax.applicativeError._
+import nelson.CatsHelpers._
+
+import fs2.{Scheduler, Sink, Stream}
+
 import scala.util.control.NonFatal
 import scalaz.{-\/, Kleisli, \/, \/-, ~>}
-import scalaz.concurrent.Task
-import scalaz.stream._
 import scalaz.std.list._
 import scalaz.std.option.optionSyntax._
 import scalaz.syntax.traverse._
@@ -51,10 +55,10 @@ object Sweeper {
   type SweeperHelmOp = (Datacenter, UnclaimedResources \/ ConsulOp.ConsulOpF[Unit])
   type SweeperHelmOps = List[SweeperHelmOp]
 
-  def cleanupLeakedConsulDiscoveryKeys(cfg: NelsonConfig): Task[SweeperHelmOps] =
-    cfg.datacenters.traverseM[Task, SweeperHelmOp] { dc =>
+  def cleanupLeakedConsulDiscoveryKeys(cfg: NelsonConfig): IO[SweeperHelmOps] =
+    cfg.datacenters.traverseM[IO, SweeperHelmOp] { dc =>
       for {
-        keys <- helm.run(dc.interpreters.consul, Discovery.listDiscoveryKeys).map(_.toList)
+        keys <- helm.run(dc.interpreters.consul.asCats, Discovery.listDiscoveryKeys).map(_.toList)
 
         stackNames <- storage.run(cfg.storage, storage.StoreOp.getRoutableDeploymentsByDatacenter(dc))
           .map(_.map(_.stackName.toString)).map(_.toList)
@@ -66,41 +70,41 @@ object Sweeper {
           )
         } yield deleteKey
 
-        deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.delete).map(op => dc -> \/-(op))
+        deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.kvDelete).map(op => dc -> \/-(op))
         unclaimedResource = dc -> -\/(UnclaimedResources(items.count(_.isLeft)))
 
       } yield deleteOps :+ unclaimedResource
     }
 
-  def process(cfg: NelsonConfig)(implicit unclaimedResourceTracker: Kleisli[Task, (Datacenter, Int), Unit]): Process[Task, Unit] =
-    Process.repeatEval(Task.delay(cfg.cleanup.sweeperDelay)).flatMap(d =>
-      time.awakeEvery(d)(cfg.pools.schedulingExecutor, cfg.pools.schedulingPool).once)
-      .flatMap(_ =>
-        Process.eval(timer(cleanupLeakedConsulDiscoveryKeys(cfg)))
-          .attempt().observeW(cfg.auditor.errorSink)
-          .stripW
-      )
-      .flatMap(Process.emitAll) to sweeperSink
+  def process(cfg: NelsonConfig)(implicit unclaimedResourceTracker: Kleisli[IO, (Datacenter, Int), Unit]): Stream[IO, Unit] =
+    Stream.repeatEval(IO(cfg.cleanup.sweeperDelay)).flatMap { d =>
+      Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery(d)(Effect[IO], cfg.pools.schedulingExecutor).head
+    }.flatMap(_ =>
+      Stream.eval(timer(cleanupLeakedConsulDiscoveryKeys(cfg)))
+        .attempt.observeW(cfg.auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor)
+        .stripW
+    )
+    .flatMap(os => Stream.emits(os).covary[IO]) to sweeperSink
 
-  def sweeperSink(implicit unclaimedResourceTracker: Kleisli[Task, (Datacenter, Int), Unit]): Sink[Task, SweeperHelmOp] =
-    Process.constant {
-      case (dc, -\/(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) handle {
-        case NonFatal(e) => log.error(s"error while attempting to track unclaimed resources", e)
+  def sweeperSink(implicit unclaimedResourceTracker: Kleisli[IO, (Datacenter, Int), Unit]): Sink[IO, SweeperHelmOp] =
+    Sink {
+      case (dc, -\/(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) recoverWith {
+        case NonFatal(e) => IO(log.error(s"error while attempting to track unclaimed resources", e))
       }
-      case (dc, \/-(op)) => helm.run(dc.consul, op) handle {
-        case NonFatal(e) => log.error(s"error while attempting to perform consul operation", e)
+      case (dc, \/-(op)) => helm.run(dc.consul.asCats, op) recoverWith {
+        case NonFatal(e) => IO(log.error(s"error while attempting to perform consul operation", e))
       }
     }
 
-  val timer : Task ~> Task = Metrics.timer(
-    before = Task.now(()),
-    onComplete = Kleisli[Task, Double, Unit] { elapsed =>
-      Task.delay(Metrics.default.sweeperLatencySeconds.observe(elapsed))
+  val timer : IO ~> IO = Metrics.timer(
+    before = IO.pure(()),
+    onComplete = Kleisli[IO, Double, Unit] { elapsed =>
+      IO(Metrics.default.sweeperLatencySeconds.observe(elapsed))
     },
-    onFail = Kleisli[Task, Throwable, Unit] { _ =>
-      Task.delay(Metrics.default.sweeperFailures.inc())
+    onFail = Kleisli[IO, Throwable, Unit] { _ =>
+      IO(Metrics.default.sweeperFailures.inc())
     },
-    onSuccess = Task.now(())
+    onSuccess = IO.unit
   )
 
 }
@@ -108,7 +112,7 @@ object Sweeper {
 object SweeperDefaults {
   type NumberWithinDC = (Datacenter, Int)
 
-  implicit val unclaimedResourceTracker : Kleisli[Task, NumberWithinDC, Unit] = Kleisli { case (dc, n) =>
-    Task.delay(Metrics.default.sweeperUnclaimedResourcesDetected.labels(dc.toString).observe(n.toDouble))
+  implicit val unclaimedResourceTracker : Kleisli[IO, NumberWithinDC, Unit] = Kleisli { case (dc, n) =>
+    IO(Metrics.default.sweeperUnclaimedResourcesDetected.labels(dc.toString).observe(n.toDouble))
   }
 }

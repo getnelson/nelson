@@ -18,9 +18,10 @@ package nelson
 package crypto
 package protocol
 
+import cats.effect.IO
+
 import scodec._
 import scodec.bits.{BitVector, ByteVector}
-import scalaz.concurrent.Task
 
 /**
  * a codec that delegates to the `target` codec but applies encryption during
@@ -44,15 +45,15 @@ import scalaz.concurrent.Task
  *  During encoding, this codec is used, and then the resulting bits are
  *  encrypted. During decoding, the bits are decrypted, and then this codec is used.
  *
- * @param nextNonce a `Task` that, when called, will generate an unpredictable
+ * @param nextNonce a `IO` that, when called, will generate an unpredictable
  *  random number. Typically this will be produced by
  *  `java.security.SecureRandom`.
  */
-private[protocol] final class EncryptedCodec[A](target: Codec[A], key: EncryptionKey, encryptor: Encryptor[AuthResult], decryptor: Decryptor[AuthResult], nextNonce: Task[Nonce]) extends Codec[A] {
+private[protocol] final class EncryptedCodec[A](target: Codec[A], key: EncryptionKey, encryptor: Encryptor[AuthResult], decryptor: Decryptor[AuthResult], nextNonce: IO[Nonce]) extends Codec[A] {
   import EncryptedCodec._
 
   def attemptNextNonce(): Attempt[Nonce] =
-    nextNonce.attemptRun.fold(
+    nextNonce.attempt.unsafeRunSync().fold(
       err => Attempt.failure(Err(s"failed to create nonce for encryption: $err.getMessage")),
       Attempt.successful)
 
@@ -88,7 +89,7 @@ private[protocol] final class EncryptedCodec[A](target: Codec[A], key: Encryptio
 object EncryptedCodec {
   private val nonceBytesCodec: Codec[ByteVector] = codecs.bytes(16)
 
-  def instance[A](target: Codec[A], key: EncryptionKey, encryptor: Encryptor[AuthResult], decryptor: Decryptor[AuthResult], nextNonce: Task[Nonce]): Codec[A] = new EncryptedCodec(target, key, encryptor, decryptor, nextNonce)
+  def instance[A](target: Codec[A], key: EncryptionKey, encryptor: Encryptor[AuthResult], decryptor: Decryptor[AuthResult], nextNonce: IO[Nonce]): Codec[A] = new EncryptedCodec(target, key, encryptor, decryptor, nextNonce)
 
   def fromAuthEnv[A](env: AuthEnv, key: EncryptionKey, codec: Codec[A]): Codec[A] =
     instance(codec, key, env.encryptor, env.decryptor, env.nextNonce)

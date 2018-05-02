@@ -17,19 +17,24 @@
 package nelson
 package loadbalancers
 
-import Manifest.{Port,Plan}
-import scalaz.{~>}
-import scalaz.syntax.apply._
-import scalaz.concurrent.Task
+import nelson.Manifest.{Port,Plan}
+
 import com.amazonaws.services.elasticloadbalancing.model.{Listener,CreateLoadBalancerRequest,DeleteLoadBalancerRequest}
 import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest}
 import com.amazonaws.services.autoscaling.model.AmazonAutoScalingException
+
+import cats.effect.IO
+import cats.syntax.apply._
+import cats.syntax.applicativeError._
+
 import journal.Logger
 
+import scalaz.{~>}
+import scalaz.syntax.apply._
 
 final case class ASGSize(desired: Int, min: Int, max: Int)
 
-final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> Task) {
+final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   import LoadbalancerOp._
   import scala.collection.JavaConverters._
@@ -40,7 +45,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> Task) {
   // in case desired isn't specified, launch one per az
   private val defaultSize = cfg.availabilityZones.toList.length
 
-  override def apply[A](op: LoadbalancerOp[A]): Task[A] = op match {
+  override def apply[A](op: LoadbalancerOp[A]): IO[A] = op match {
     case DeleteLoadbalancer(lb, dc, ns) =>
       delete(lb, dc)
     case LaunchLoadbalancer(lb, v, dc, ns, p, hash) =>
@@ -50,12 +55,12 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> Task) {
       resizeASG(name, asgSize(p))
   }
 
-  def delete(lb: Datacenter.LoadbalancerDeployment, dc: Datacenter): Task[Unit] = {
+  def delete(lb: Datacenter.LoadbalancerDeployment, dc: Datacenter): IO[Unit] = {
     val name = loadbalancerName(lb.loadbalancer.name, lb.loadbalancer.version, lb.hash)
     deleteELB(name) *> deleteASG(name)
   }
 
-  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Datacenter, ns: NamespaceName, p: Plan, hash: String): Task[DNSName] = {
+  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Datacenter, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
     val name = loadbalancerName(lb.name, v, hash)
     log.debug(s"caling aws client to launch $name")
     val size = asgSize(p)
@@ -65,15 +70,15 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> Task) {
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
     s"$name--${v.minVersion.toExternalString}--${hash}"
 
-  def deleteELB(name: String): Task[Unit] =
-    Task.delay {
+  def deleteELB(name: String): IO[Unit] =
+    IO {
       val req = new DeleteLoadBalancerRequest(name)
       cfg.elb.deleteLoadBalancer(req)
       ()
     }
 
-  def createELB(name: String, p: Vector[Port]): Task[DNSName] =
-    Task.delay {
+  def createELB(name: String, p: Vector[Port]): IO[DNSName] =
+    IO {
       val listeners = p.map(p => new Listener(TCP,p.port,p.port)).toList
       val req = new CreateLoadBalancerRequest(name)
         .withListeners(listeners.asJava)
@@ -85,24 +90,24 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> Task) {
       resp.getDNSName()
     }
 
-  def deleteASG(name: String): Task[Unit] =
-    Task.delay {
+  def deleteASG(name: String): IO[Unit] =
+    IO {
       val req = new DeleteAutoScalingGroupRequest()
         .withAutoScalingGroupName(name)
         .withForceDelete(true) // terminates all associated ec2s
       cfg.asg.deleteAutoScalingGroup(req)
-    }.map(_ => ()).handleWith {
+    }.map(_ => ()).recoverWith {
       // Matching on the error message is only way to detect a 404. I trolled the aws
       // documnetation and this is the best I could find, super janky.
       // swallow 404, as we're being asked to delete something that does not exist
       // this can happen when a workflow fails and the cleanup process is subsequently called
       case t: AmazonAutoScalingException if t.getErrorMessage.contains("not found") =>
         log.info(s"aws call to delete asg responded with ${t.getMessage} for ${name}, swallowing error and marking deployment as terminated")
-        Task.now(())
+        IO.unit
     }
 
-  def resizeASG(name: String, size: ASGSize): Task[Unit] =
-    Task.delay {
+  def resizeASG(name: String, size: ASGSize): IO[Unit] =
+    IO {
       val req = new UpdateAutoScalingGroupRequest()
         .withAutoScalingGroupName(name)
         .withDesiredCapacity(size.desired)
@@ -114,9 +119,8 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> Task) {
       ()
     }
 
-  def createASG(name: String, namespace: NamespaceName, size: ASGSize): Task[Unit] =
-    Task.delay {
-
+  def createASG(name: String, namespace: NamespaceName, size: ASGSize): IO[Unit] =
+    IO {
       // pass deployment specifics to haproxy
       val lbTag = new Tag()
         .withKey("NELSON_LB_NAME")

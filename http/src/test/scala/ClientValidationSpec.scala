@@ -18,9 +18,10 @@ package nelson
 
 import nelson.BannedClientsConfig.HttpUserAgent
 import nelson.plans.{Auth, ClientValidation}
+import cats.effect.IO
 import org.http4s.Uri.uri
 import org.http4s._
-import org.http4s.dsl._
+import org.http4s.dsl.io._
 import org.http4s.headers._
 
 class ClientValidationSpec extends NelsonSuite {
@@ -57,12 +58,12 @@ class ClientValidationSpec extends NelsonSuite {
     val nelsonConfig = config.copy(bannedClients = configThatContains(clientSansVersion(name)))
 
     val userAgent = `User-Agent`(AgentProduct(name = name, version = Option(versionStringDoesntMatter)))
-    val req = Request(GET, uri("/auth/login")).putHeaders(userAgent)
+    val req = Request[IO](GET, uri("/auth/login")).putHeaders(userAgent)
 
     val filteredService =
       ClientValidation.filterUserAgent(Auth(nelsonConfig).service)(nelsonConfig)
 
-    val resp = filteredService.orNotFound(req).run
+    val resp = filteredService.orNotFound(req).unsafeRunSync()
     resp.status shouldBe BadRequest
   }
 
@@ -72,14 +73,14 @@ class ClientValidationSpec extends NelsonSuite {
 
     val sameName: String = allowedClient.name
     val userAgent = `User-Agent`(AgentProduct(name = sameName, version = Option(versionStringDoesntMatter)))
-    val req = Request(GET, uri("/auth/login")).putHeaders(userAgent)
+    val req = Request[IO](GET, uri("/auth/login")).putHeaders(userAgent)
 
     val config0 = config.copy(bannedClients = Option(clientsConfig))
 
     val filteredService =
       ClientValidation.filterUserAgent(Auth(config0).service)(config0)
 
-    val resp = Auth(config0).service.orNotFound(req).run
+    val resp = Auth(config0).service.orNotFound(req).unsafeRunSync()
     resp.status shouldBe Found
   }
 

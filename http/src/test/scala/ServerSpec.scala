@@ -17,18 +17,19 @@
 package nelson
 
 import org.http4s._
-import org.http4s.dsl._
+import org.http4s.dsl.io._
 import org.http4s.Uri.uri
+import cats.effect.IO
 import Server._
 
 class ServerSpec extends NelsonSuite {
   "resources" should "return Ok for resources in /nelson/www" in {
-    val req = Request(GET, uri("/css/style.css"))
-    resources.orNotFound(req).map(_.status).run should equal (Ok)
+    val req = Request[IO](GET, uri("/css/style.css"))
+    resources.orNotFound(req).map(_.status).unsafeRunSync() should equal (Ok)
   }
 
   it should "return NotFound for directories" in {
-    val req = Request(GET, uri("/"))
-    resources.orNotFound(req).map(_.status).run should equal (NotFound)
+    val req = Request[IO](GET, uri("/"))
+    resources.orNotFound(req).map(_.status).unsafeRunSync() should equal (NotFound)
   }
 }

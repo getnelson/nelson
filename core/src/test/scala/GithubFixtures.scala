@@ -17,7 +17,7 @@
 package nelson
 
 object GitFixtures {
-  import scalaz.concurrent.Task
+  import cats.effect.IO
   import Github._
   import nelson.Json._
   import argonaut._, Argonaut._
@@ -44,7 +44,7 @@ object GitFixtures {
 
   val asset = Asset(0, "manifest.deployable.v1.b.yml", "", "", Some("content"))
 
-  val contents:Task[Option[Contents]] =
+  val contents:IO[Option[Contents]] =
     loadResourceAsString("/nelson/dependencies.bar_2.0.0.yml").map { c =>
       val encoded = java.util.Base64.getMimeEncoder.encodeToString(c.getBytes("utf-8"))
       Some(Contents(encoded,"manifest.deployable.v1.b.yml",encoded.length.toLong))
@@ -53,7 +53,7 @@ object GitFixtures {
   def release(id: ID) = Release(id,
     "https://github.example.com/api/v3/repos/tim/howdy/releases/250",
     "https://github.example.com/tim/howdy/releases/tag/0.13.17",
-    Seq(Asset(119,
+    List(Asset(119,
      "example-howdy.deployable.yml",
      "uploaded",
      "https://github.example.com/api/v3/repos/tim/howdy/releases/assets/119",
@@ -73,14 +73,14 @@ object GitFixtures {
 
   val repos = List(repo)
 
-  case class Interpreter() extends (Github.GithubOp ~> Task) {
+  case class Interpreter() extends (Github.GithubOp ~> IO) {
 
-    def apply[A](in: Github.GithubOp[A]): Task[A] = in match {
+    def apply[A](in: Github.GithubOp[A]): IO[A] = in match {
 
       case GetAccessToken(fromCode: String) =>
         fromCode match {
           case "crash" =>
-            Task.fail(new Exception("Crash!"))
+            IO.raiseError(new Exception("Crash!"))
           case _ =>
             loadResourceAsString("/nelson/github.oauth.json")
               .flatMap(fromJson[AccessToken])
@@ -89,7 +89,7 @@ object GitFixtures {
       case GetUser(token: AccessToken) =>
         token match {
           case AccessToken("crash") =>
-            Task.fail(new Exception("Crash!"))
+            IO.raiseError(new Exception("Crash!"))
           case _ =>
             loadResourceAsString("/nelson/github.user.json")
               .flatMap(fromJson[Github.User])
@@ -104,7 +104,7 @@ object GitFixtures {
           .flatMap(fromJson[List[Organization]])
 
       case GetReleaseAssetContent(asset: Github.Asset, t: AccessToken) =>
-        Task.now(asset)
+        IO.pure(asset)
 
       case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
         loadResourceAsString("/nelson/github.release.json")
@@ -122,10 +122,10 @@ object GitFixtures {
           .flatMap(fromJson[List[WebHook]])
 
       case PostRepoWebHook(slug: Slug, hook: Github.WebHook, t: AccessToken) =>
-        Task.now(hook)
+        IO.pure(hook)
 
       case DeleteRepoWebHook(slug: Slug, id: Long, token: AccessToken) =>
-        Task.now(())
+        IO.unit
     }
   }
 }

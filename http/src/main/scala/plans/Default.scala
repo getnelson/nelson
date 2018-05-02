@@ -20,11 +20,14 @@ package plans
 import _root_.argonaut.{DecodeResult => _, _}, Argonaut._
 import org.http4s._
 import org.http4s.argonaut._
-import org.http4s.dsl._
+import org.http4s.headers.Location
+import org.http4s.dsl.io._
 import journal.Logger
 
+import cats.data.{Kleisli, OptionT}
+import cats.effect.IO
+import nelson.CatsHelpers._
 import scalaz.Order
-import scalaz.concurrent.Task
 import scalaz.syntax.monad._
 import scalaz.syntax.std.option._
 
@@ -34,22 +37,22 @@ abstract class Default extends Product with Serializable { self =>
   protected val log = Logger[this.type]
   protected val CookieName = "nelson.session"
 
-  def service: HttpService
+  def service: HttpService[IO]
 
   def config: NelsonConfig
 
-  protected def json[A : EncodeJson](a: NelsonK[A]): Task[Response] =
+  protected def json[A : EncodeJson](a: NelsonK[A]): IO[Response[IO]] =
     self.jsonHandler(a)(None)
 
-  protected def jsonF[A : EncodeJson](a: NelsonK[A])(rf: A => Task[Response]): Task[Response] =
+  protected def jsonF[A : EncodeJson](a: NelsonK[A])(rf: A => IO[Response[IO]]): IO[Response[IO]] =
     self.jsonHandler(a)(Some(rf))
 
-  protected def jsonHandler[A : EncodeJson](a: NelsonK[A])(rf: Option[A => Task[Response]]): Task[Response] = {
-    val handler: A => Task[Response] = rf.getOrElse(a => Ok(a.asJson))
+  protected def jsonHandler[A : EncodeJson](a: NelsonK[A])(rf: Option[A => IO[Response[IO]]]): IO[Response[IO]] = {
+    val handler: A => IO[Response[IO]] = rf.getOrElse(a => Ok(a.asJson))
     a(config).flatMap(handler)
   }
 
-  protected def handleMessageFailure(req: Request, mf: MessageFailure): Task[Response] = {
+  protected def handleMessageFailure(req: Request[IO], mf: MessageFailure): IO[Response[IO]] = {
     log.error(s"Error handling request ${req.method} ${req.pathInfo}", mf)
     mf match {
       case MalformedMessageBodyFailure(details, _) =>
@@ -65,18 +68,18 @@ abstract class Default extends Product with Serializable { self =>
         ).asJson)
       case mf: MessageFailure =>
         for {
-          resp <- mf.toHttpResponse(req.httpVersion)
+          resp <- mf.toHttpResponse[IO](req.httpVersion)
           msg <- resp.as[String]
           resp0 <- resp.withBody(Map("message" -> msg).asJson)
         } yield resp0
     }
   }
 
-  protected def decode[A : DecodeJson](req: Request)(f: A => Task[Response]): Task[Response] = {
+  protected def decode[A : DecodeJson](req: Request[IO])(f: A => IO[Response[IO]]): IO[Response[IO]] = {
     // http4s puts the cursor history in the "details", along with the JSON.
     // We don't want to reflect the JSON back to the user, but we do want to
     // give some indication what the user needs to fix.
-    jsonDecoder.flatMapR[A] { json =>
+    jsonDecoder[IO].flatMapR[A] { json =>
       DecodeJson.of[A].decodeJson(json).fold(
         (message, history) => DecodeResult.failure(InvalidMessageBodyFailure(s"$history")),
         DecodeResult.success(_))}
@@ -86,9 +89,9 @@ abstract class Default extends Product with Serializable { self =>
   }
 
   object IsAuthenticated {
-    def unapply[A](req: Request): Option[Session] = {
+    def unapply[A](req: Request[IO]): Option[Session] = {
       req.headers.get(headers.Cookie)
-        .flatMap(_.values.list.find(_.name == CookieName))
+        .flatMap(_.values.toList.find(_.name == CookieName))
         .flatMap { cookie =>
           config.security.authenticator
             .authenticate(cookie.content)
@@ -109,16 +112,16 @@ abstract class Default extends Product with Serializable { self =>
   }
 
   object NotAuthenticated {
-    def unapply[A](req: Request): Boolean =
+    def unapply[A](req: Request[IO]): Boolean =
       IsAuthenticated.unapply(req).isEmpty
   }
 
-  protected def redirectToLogin: Task[Response] = {
+  protected def redirectToLogin: IO[Response[IO]] = {
     Uri.fromString(config.git.loginEndpoint).fold(
       e => {
         InternalServerError(s"Invalid login endpoint is configured: ${e.details}")
       },
-      Found(_)
+      s => Found(Location(s))
     )
   }
 }
@@ -162,10 +165,10 @@ object ClientValidation {
       config.httpUserAgents.forall(agentDoesntMatch(ua))
   }
 
-  def filterUserAgent(service: HttpService)
-    (config: NelsonConfig): HttpService = HttpService.lift { req =>
+  def filterUserAgent(service: HttpService[IO])
+    (config: NelsonConfig): HttpService[IO] = Kleisli { req =>
     val maybeUserAgent = req.headers.get(headers.`User-Agent`)
     if (isAllowedUserAgent(maybeUserAgent)(config.bannedClients)) service(req)
-    else BadRequest("User-Agent not allowed. Please upgrade your client to the latest version.")
+    else OptionT.liftF(BadRequest("User-Agent not allowed. Please upgrade your client to the latest version."))
   }
 }

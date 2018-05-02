@@ -16,18 +16,25 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scala.concurrent.duration.FiniteDuration
-import scalaz.concurrent.Task
-import scalaz._, Scalaz._
-import Manifest.{UnitDef,Versioned,Plan,AlertOptOut}
-import Datacenter.{Deployment}
-import docker.Docker.Image
-import storage.{StoreOp}
-import docker.DockerOp
+import nelson.Datacenter.{Deployment}
+import nelson.Manifest.{UnitDef,Versioned,Plan,AlertOptOut}
+import nelson.docker.Docker.Image
+import nelson.docker.DockerOp
+import nelson.logging.LoggingOp
+import nelson.scheduler.SchedulerOp
+import nelson.storage.{StoreOp}
+import nelson.vault.Vault
+
+import cats.effect.IO
+import nelson.CatsHelpers._
+
 import helm.ConsulOp
-import logging.LoggingOp
-import scheduler.SchedulerOp
-import vault.Vault
+
+import scala.concurrent.duration.FiniteDuration
+
+import scalaz._
+import scalaz.Scalaz._
+
 
 /**
  * Workflows must be defined in terms of a particular type of UnitDef
@@ -74,7 +81,7 @@ object Workflow {
 
   type WorkflowF[A] = Free.FreeC[WorkflowOp, A]
 
-  def run[A](wf: WorkflowF[A])(trans: WorkflowOp ~> Task): Task[A] =
+  def run[A](wf: WorkflowF[A])(trans: WorkflowOp ~> IO): IO[A] =
     Free.runFC(wf)(trans)
 
   object syntax {
@@ -113,16 +120,16 @@ object Workflow {
       fail(new RuntimeException(reason))
 
     def deleteFromConsul(key: String): WorkflowF[Unit] =
-      ConsulOp.delete(key).inject
+      ConsulOp.kvDelete(key).asScalaz.inject
 
     def deleteDiscoveryInfoFromConsul(sn: StackName): WorkflowF[Unit] =
       deleteFromConsul(routing.Discovery.consulDiscoveryKey(sn))
 
     def deleteAlertsFromConsul(sn: StackName): WorkflowF[Unit] =
-      alerts.deleteFromConsul(sn).inject
+      alerts.deleteFromConsul(sn).asScalaz.inject
 
     def writeAlertsToConsul(sn: StackName, ns: NamespaceName, p: PlanRef, a: UnitDef, outs: List[AlertOptOut]): WorkflowF[Option[String]] =
-      alerts.writeToConsul(sn,ns,p,a,outs).inject
+      alerts.writeToConsul(sn,ns,p,a,outs).asScalaz.inject
 
     def writePolicyToVault(cfg: PolicyConfig, sn: StackName, ns: NamespaceName, rs: Set[String]): WorkflowF[Unit] =
       policies.createPolicy(cfg, sn, ns, rs).inject
@@ -135,7 +142,7 @@ object Workflow {
         d  <- StoreOp.getDeployment(id).inject
         rg <- RoutingTable.outgoingRoutingGraph(d).inject
         dt  = Discovery.discoveryTable(routing.RoutingNode(d), rg)
-        _  <- Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dt).inject
+        _  <- Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dt).asScalaz.inject
       } yield ()
 
     def createTrafficShift(id: ID, nsRef: NamespaceName, dc: Datacenter, p: TrafficShiftPolicy, dur: FiniteDuration): WorkflowF[Unit] = {

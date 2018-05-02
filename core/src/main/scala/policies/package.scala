@@ -16,11 +16,14 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Datacenter.StackName
+import nelson.Datacenter.StackName
+
+import cats.effect.IO
+import nelson.CatsHelpers._
+
+import fs2.Stream
 
 import scalaz.~>
-import scalaz.concurrent.Task
-import scalaz.stream.Process
 import vault._
 
 package object policies {
@@ -74,13 +77,14 @@ package object policies {
     Vault.deletePolicy(name)
   }
 
-  def withPolicy[A](cfg: PolicyConfig, sn: StackName, ns: NamespaceName, resources: Set[String], interp: Vault ~> Task)(f: Token => Process[Task, A]): Process[Task, A] = {
+  def withPolicy[A](cfg: PolicyConfig, sn: StackName, ns: NamespaceName, resources: Set[String], interp: Vault ~> IO)(f: Token => Stream[IO, A]): Stream[IO, A] = {
     val acquire = (for {
       _ <- createPolicy(cfg, sn, ns, resources)
       token <- Vault.createToken(policies = Some(List(policyName(sn, ns))))
     } yield (token)).runWith(interp)
-    def release(token: Token) = Process.eval_(deletePolicy(sn, ns).runWith(interp))
 
-    Process.bracket(acquire)(release)(f)
+    def release(token: Token) = deletePolicy(sn, ns).runWith(interp)
+
+    Stream.bracket(acquire)(f, release)
   }
 }

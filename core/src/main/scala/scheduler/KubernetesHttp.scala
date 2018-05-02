@@ -1,20 +1,24 @@
 package nelson
 package scheduler
 
-import argonaut._
-import argonaut.Argonaut._
-import journal.Logger
-import org.http4s.Status.NotFound
-import org.http4s.client.UnexpectedStatus
-import scalaz.~>
-import scalaz.Scalaz._
-import scalaz.concurrent.Task
-
 import nelson.KubernetesJson.{DeploymentStatus, JobStatus}
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Manifest.{EnvironmentVariable, Plan, UnitDef, Versioned}
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
+import argonaut._
+import argonaut.Argonaut._
+
+import cats.effect.IO
+import cats.syntax.apply._
+import cats.syntax.applicativeError._
+
+import journal.Logger
+
+import org.http4s.Status.NotFound
+import org.http4s.client.UnexpectedStatus
+
+import scalaz.~>
 
 object KubernetesHttp {
   private val log = Logger[KubernetesHttp.type]
@@ -25,10 +29,10 @@ object KubernetesHttp {
  *
  * See: https://kubernetes.io/docs/api-reference/v1.8/
  */
-final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> Task) {
+final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO) {
   import KubernetesHttp.log
 
-  def apply[A](fa: SchedulerOp[A]): Task[A] = fa match {
+  def apply[A](fa: SchedulerOp[A]): IO[A] = fa match {
     case Delete(dc, deployment) =>
       delete(dc, deployment)
     case Launch(image, dc, ns, unit, plan, hash) =>
@@ -38,13 +42,13 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> Tas
 
     // TODO: Legacy, no longer used
     case RunningUnits(dc, prefix) =>
-      Task.delay {
+      IO {
         log.debug(s"KubernetesHttp RunningUnits(${dc}, ${prefix})")
         Set.empty
       }
   }
 
-  def delete(dc: Datacenter, deployment: Deployment): Task[Unit] = {
+  def delete(dc: Datacenter, deployment: Deployment): IO[Unit] = {
     val rootNs = deployment.namespace.name.root.asString
     val name = deployment.stackName.toString
 
@@ -52,22 +56,22 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> Tas
     // the name we don't know which one it is so we try each one in turn, presumably the
     // most common types first
     val deleteService =
-      (client.deleteDeployment(rootNs, name) |@| client.deleteService(rootNs, name)) { case (_, _) => () }
+      (client.deleteDeployment(rootNs, name), client.deleteService(rootNs, name)).mapN { case (_, _) => () }
 
-    deleteService.handleWith {
+    deleteService.recoverWith {
       case UnexpectedStatus(NotFound) =>
-        client.deleteCronJob(rootNs, name).map(_ => ()).handleWith {
+        client.deleteCronJob(rootNs, name).map(_ => ()).recoverWith {
           case UnexpectedStatus(NotFound) =>
-            client.deleteJob(rootNs, name).map(_ => ()).handleWith {
+            client.deleteJob(rootNs, name).map(_ => ()).recoverWith {
               // at this point swallow 404, as we're being asked to delete something that does not exist
               // this can happen when a workflow fails and the cleanup process is subsequently called
-              case UnexpectedStatus(NotFound) => Task.now(())
+              case UnexpectedStatus(NotFound) => IO.unit
             }
         }
     }
   }
 
-  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): Task[String] = {
+  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
     val stackName = StackName(unit.name, version, hash)
     val env = plan.environment.bindings ++ List(
       EnvironmentVariable("NELSON_STACKNAME",        stackName.toString),
@@ -87,7 +91,7 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> Tas
     val rootNs = ns.root.asString
     val response = schedule match {
       case None        =>
-        (client.createDeployment(rootNs, stackName, image, newPlan, unit.ports) |@| client.createService(rootNs, stackName, unit.ports)) {
+        (client.createDeployment(rootNs, stackName, image, newPlan, unit.ports), client.createService(rootNs, stackName, unit.ports)).mapN {
           case (deployment, service) => Json("deployment" := deployment, "service" := service)
         }
       case Some(sched) =>
@@ -100,20 +104,20 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> Tas
     response.map(_.nospaces)
   }
 
-  def summary(dc: Datacenter, ns: NamespaceName, stackName: StackName): Task[Option[DeploymentSummary]] = {
+  def summary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = {
     // K8s has different endpoints for Deployment, CronJob, and Job, so we hit all of them until we find one
-    deploymentSummary(dc, ns, stackName).handleWith {
+    deploymentSummary(dc, ns, stackName).recoverWith {
       case UnexpectedStatus(NotFound) =>
-        cronJobSummary(dc, ns, stackName).handleWith {
+        cronJobSummary(dc, ns, stackName).recoverWith {
           case UnexpectedStatus(NotFound) =>
-            jobSummary(dc, ns, stackName).handleWith {
-              case UnexpectedStatus(NotFound) => Task.now(None)
+            jobSummary(dc, ns, stackName).recoverWith {
+              case UnexpectedStatus(NotFound) => IO.pure(None)
             }
         }
     }
   }
 
-  private def deploymentSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): Task[Option[DeploymentSummary]] = {
+  private def deploymentSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = {
     val rootNs = ns.root.asString
 
     client.deploymentSummary(rootNs, stackName.toString).map {
@@ -127,7 +131,7 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> Tas
     }
   }
 
-  private def cronJobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): Task[Option[DeploymentSummary]] = {
+  private def cronJobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = {
     val rootNs = ns.root.asString
 
     client.cronJobSummary(rootNs, stackName.toString).map {
@@ -135,7 +139,7 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> Tas
     }
   }
 
-  private def jobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): Task[Option[DeploymentSummary]] = {
+  private def jobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = {
     val rootNs = ns.root.asString
 
     client.jobSummary(rootNs, stackName.toString).map {

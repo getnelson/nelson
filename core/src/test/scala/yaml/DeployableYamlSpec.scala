@@ -17,22 +17,21 @@
 package nelson
 package yaml
 
-import scalaz._
 import org.scalatest.{FlatSpec,Matchers}
 
 class DeployableYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   import Manifest._, Util._
 
-  def exe(yamlPath: String): Throwable \/ Deployable =
+  def exe(yamlPath: String): Either[Throwable, Deployable] =
     (for {
       yml <- loadResourceAsString(yamlPath)
-      out <- DeployableParser.parseTask(yml)
-    } yield out).attemptRun
+      out <- DeployableParser.parseIO(yml)
+    } yield out).attempt.unsafeRunSync()
 
   behavior of "v1 deployable parser:"
 
   it should "parse a typical descriptor yaml" in {
     exe("/nelson/manifest.deployable.v1.a.yml") should equal (
-      \/.right(Deployable("nelson-0.3", Version(0,3,123), Deployable.Container("units/nelson-0.3:0.3.0"))))
+      Right(Deployable("nelson-0.3", Version(0,3,123), Deployable.Container("units/nelson-0.3:0.3.0"))))
   }
 }

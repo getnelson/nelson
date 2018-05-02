@@ -16,16 +16,21 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.{Effect, IO}
+import nelson.CatsHelpers._
+
+import fs2.{Scheduler, Stream}
+
 import java.nio.file.{Files, Path}
 import java.util.concurrent.TimeoutException
+
 import journal._
+
 import scala.sys.process.{Process => _, _}
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-import scalaz.{\/-, -\/}
+
 import scalaz.Kleisli
-import scalaz.concurrent.Task
-import scalaz.stream.Process
-import scalaz.stream.time
 import scalaz.syntax.monad._
 
 import Datacenter.StackName
@@ -94,7 +99,7 @@ object Templates {
       val templateConfig = cfg.template
 
       policies.withPolicy(dc.policy, sn, ns, tv.resources, vault) { token =>
-        Process.bracket(Task.delay {
+        Stream.bracket(IO {
           // Mounting a single file in Docker is supported, but troublesome.
           // Instead, we're going to create a temp directory for our temp file.
           //
@@ -105,23 +110,25 @@ object Templates {
           val file = dir.toFile
           dir.toFile.deleteOnExit()
           dir
-        })(dir => Process.eval_(Task.delay(dir.toFile.delete()))) { dir =>
-          withTempFile(tv.template, "nelson", ".template", dir) { file =>
-            Process.eval(renderTemplate(cfg.pools.schedulingPool, templateConfig, cfg.dockercfg, file.toPath, token.value, env))
-          }
-        }
-      }.runLastOr(sys.error("Expected a ConsulTemplateResult"))
+        })(
+          dir => withTempFile(tv.template, "nelson", ".template", dir) { file =>
+            Stream.eval(renderTemplate(cfg.pools.defaultExecutor, cfg.pools.schedulingPool, templateConfig, cfg.dockercfg, file.toPath, token.value, env))
+          },
+          dir => IO { dir.toFile.delete(); () }
+        )
+      }.compile.last.map(_.getOrElse(sys.error("Expected a ConsulTemplateResult")))
     }
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf")) // false wart
   def renderTemplate(
+    ec: ExecutionContext,
     scheduler: ScheduledExecutorService,
     templateConfig: TemplateConfig,
     dockerConfig: DockerConfig,
     path: Path,
     vaultToken: String,
     env: Map[String, String] = Map.empty
-  ): Task[ConsulTemplateResult] = {
+  ): IO[ConsulTemplateResult] = {
     val containerName = s"consul-template-${randomAlphaNumeric(12)}"
     val dockerCommand = for {
       vaultAddr <- templateConfig.vaultAddress
@@ -143,54 +150,58 @@ object Templates {
       Nil
     }
 
-    def run(cmd: List[String]) = timedRun(Task.delay {
+    def run(cmd: List[String]) = timedRun(IO {
       val err = new StringBuilder
       def writeLine(s: String): Unit = { err.append(s).append("\n"); () }
       val pLogger = ProcessLogger(_ => (), writeLine)
 
-      Task.delay {
+      IO {
         consulTemplateContainersRunning.inc()
         val exitCode = cmd.!(pLogger)
         exitCode
-      }.timed(templateConfig.timeout)(scheduler).attempt.flatMap {
-        case \/-(0) =>
+      }.unsafeTimed(templateConfig.timeout)(ec, scheduler).attempt.flatMap {
+        // ^ NOTE: This will return when the timeout is up but will not cancel
+        // the already running action - that is pending https://github.com/typelevel/cats-effect/pull/121
+        case Right(0) =>
           consulTemplateContainersRunning.dec()
-          Task.now(Rendered)
-        case \/-(14) =>
+          IO.pure(Rendered)
+        case Right(14) =>
           consulTemplateContainersRunning.dec()
-          Task.now(InvalidTemplate(err.toString))
-        case \/-(n: Int) =>
+          IO.pure(InvalidTemplate(err.toString))
+        case Right(n: Int) =>
           consulTemplateContainersRunning.dec()
-          Task.fail(ConsulTemplateError(n, err.toString))
-        case -\/(e: TimeoutException) =>
+          IO.raiseError(ConsulTemplateError(n, err.toString))
+        case Left(e: TimeoutException) =>
           // We gave up.  We need to terminate the container and show the user as far as we got.
-          cleanup(scheduler, dockerConfig, containerName).attempt >> Task.now(TemplateTimeout(err.toString))
-        case -\/(e) =>
+          cleanup(scheduler, dockerConfig, containerName).attempt flatMap { _ => IO.pure(TemplateTimeout(err.toString)) }
+        case Left(e) =>
           // Something went wrong internally.  We need to clean up the template container.
-          cleanup(scheduler, dockerConfig, containerName).attempt >> Task.fail(e)
+          cleanup(scheduler, dockerConfig, containerName).attempt flatMap { _ => IO.raiseError(e) }
       }
     }.join)
 
     dockerCommand match {
       case Some(cmd) => run(cmd)
-      case None => Task.fail(ConsulTemplateError(2, "No vault address detected. Templates are linted against the vault in the first data center."))
+      case None => IO.raiseError(ConsulTemplateError(2, "No vault address detected. Templates are linted against the vault in the first data center."))
     }
   }
 
   private def cleanup(scheduler: ScheduledExecutorService, dockerConfig: DockerConfig, containerName: String) = {
     val stop = {
       val pLogger = ProcessLogger(_ => (), s => logger.info(s"[stopping docker $containerName]: ${s}"))
-      Task.delay {
+      IO {
         logger.info(s"Stopping failed container: container=${containerName}")
         List("docker", "-H", dockerConfig.connection, "rm", "-f", containerName).!(pLogger)
       }.attempt
     }
 
-    (time.awakeEvery(1.second)(implicitly, scheduler) >> Process.eval(stop))
+    (Scheduler.fromScheduledExecutorService(scheduler).awakeEvery[IO](1.second)(Effect[IO], ExecutionContext.fromExecutorService(scheduler))
+      >> Stream.eval(stop))
       .take(5)
-      .collect { case \/-(0) => () } // look for a success
+      .collect { case Right(0) => () } // look for a success
       .take(1) // Only need to succeed once
-      .runLast
+      .compile
+      .last
       .map {
         case Some(_) =>
           consulTemplateContainersRunning.dec()
@@ -201,23 +212,23 @@ object Templates {
   }
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf")) // false wart
-  private def timedRun(task: Task[ConsulTemplateResult]): Task[ConsulTemplateResult] =
-    Task.delay(System.nanoTime).flatMap { startNanos =>
+  private def timedRun(task: IO[ConsulTemplateResult]): IO[ConsulTemplateResult] =
+    IO(System.nanoTime).flatMap { startNanos =>
       task.attempt.flatMap { att =>
         val elapsed = System.nanoTime - startNanos
         consulTemplateRunsDurationSeconds.observe(elapsed / 1.0e9)
         att match {
-          case \/-(Rendered) =>
-            Task.now(Rendered)
-          case \/-(it: InvalidTemplate) =>
+          case Right(Rendered) =>
+            IO.pure(Rendered)
+          case Right(it: InvalidTemplate) =>
             consulTemplateRunsFailuresTotal.labels("invalid_template").inc()
-            Task.now(it)
-          case \/-(it: TemplateTimeout) =>
+            IO.pure(it)
+          case Right(it: TemplateTimeout) =>
             consulTemplateRunsFailuresTotal.labels("timeout").inc()
-            Task.now(it)
-          case -\/(e) =>
+            IO.pure(it)
+          case Left(e) =>
             consulTemplateRunsFailuresTotal.labels("error").inc()
-            Task.fail(e)
+            IO.raiseError(e)
         }
       }
     }

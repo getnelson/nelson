@@ -16,12 +16,14 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck,Route}
-import storage.StoreOp
-import Datacenter.StackName
-import scalaz._, Scalaz._
-import scalaz.concurrent.Task
+import nelson.Datacenter.StackName
+import nelson.Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck,Route}
+import nelson.storage.StoreOp
 
+import cats.effect.IO
+import nelson.CatsHelpers._
+
+import scalaz._, Scalaz._
 
 object ManifestValidator {
 
@@ -88,7 +90,7 @@ object ManifestValidator {
 
   def validateLoadbalancer(lb: Loadbalancer,
     units: List[UnitDef],
-    whiteList: Option[ProxyPortWhitelist])(stg: StoreOp ~> Task): Valid[Unit] = {
+    whiteList: Option[ProxyPortWhitelist])(stg: StoreOp ~> IO): Valid[Unit] = {
 
     // aws allows elb names to be at most 32 charasters. Nelson generates a name for
     // lbs that include 8 characters for a hash, 4 characters dashes and at least 1
@@ -141,7 +143,7 @@ object ManifestValidator {
     resolvePort +++ validatePathIfHttp
   }
 
-  def validateAlerts(unit: UnitDef, p: Plan): Task[Valid[Unit]] = {
+  def validateAlerts(unit: UnitDef, p: Plan): IO[Valid[Unit]] = {
     import alerts.Promtool
 
     // These values don't exist yet, but we need them for overhaul
@@ -191,20 +193,20 @@ object ManifestValidator {
       ().successNel
     }
 
-  def validateUnit(unit: UnitDef, plan: Plan): Task[Valid[Unit]] =
+  def validateUnit(unit: UnitDef, plan: Plan): IO[Valid[Unit]] =
     for {
       a <- validateAlerts(unit, plan)
-      b <- Task.now(plan.environment.healthChecks.traverse_(validateHealthCheck(_, unit)))
-      c <- Task.now(unit.resources.toList.traverse_(r => validateResource(r, plan)))
-      d <- Task.now(validatePeriodic(unit,plan))
-      e <- Task.now(validateUnitNameLength(unit))
-      f <- Task.now(validateUnitNameChars(unit))
+      b <- IO.pure(plan.environment.healthChecks.traverse_(validateHealthCheck(_, unit)))
+      c <- IO.pure(unit.resources.toList.traverse_(r => validateResource(r, plan)))
+      d <- IO.pure(validatePeriodic(unit,plan))
+      e <- IO.pure(validateUnitNameLength(unit))
+      f <- IO.pure(validateUnitNameChars(unit))
     } yield (a +++ b +++ c +++ d +++ e +++ f).map(_ => ())
 
-  def parseManifestAndValidate(str: String, cfg: NelsonConfig): Task[Valid[Manifest]] = {
+  def parseManifestAndValidate(str: String, cfg: NelsonConfig): IO[Valid[Manifest]] = {
 
-    def validateUnits(m: Manifest, dcs: Seq[Datacenter]): Task[Valid[Unit]] = {
-      val folder: (Datacenter,Namespace,Plan,UnitDef,List[Task[Valid[Unit]]]) => List[Task[Valid[Unit]]] =
+    def validateUnits(m: Manifest, dcs: Seq[Datacenter]): IO[Valid[Unit]] = {
+      val folder: (Datacenter,Namespace,Plan,UnitDef,List[IO[Valid[Unit]]]) => List[IO[Valid[Unit]]] =
         (dc,ns,p,u,res) =>
           validateUnit(u,p) :: res
 
@@ -213,8 +215,8 @@ object ManifestValidator {
         .map(l => Foldable[List].fold(l))
     }
 
-    def validateReferencesDefaultNamespace(m: Manifest, defaultNamespace: NamespaceName): Task[Valid[Unit]] =
-    Task.now(
+    def validateReferencesDefaultNamespace(m: Manifest, defaultNamespace: NamespaceName): IO[Valid[Unit]] =
+    IO.pure(
       m.namespaces.find(x => x.name == cfg.defaultNamespace)
         .cata(
           none = MissingDefaultNamespaceReference(cfg.defaultNamespace).failureNel,
@@ -227,8 +229,8 @@ object ManifestValidator {
     )
 
 
-    def validateLoadbalancers(m: Manifest, dcs: Seq[Datacenter]): Task[Valid[Unit]] = {
-      Task.delay {
+    def validateLoadbalancers(m: Manifest, dcs: Seq[Datacenter]): IO[Valid[Unit]] = {
+      IO {
         m.loadbalancers.foldLeft(Nil : List[Valid[Unit]])((res,lb) =>
           validateLoadbalancer(lb, m.units, cfg.proxyPortWhitelist)(cfg.storage) :: res)
           .sequence
@@ -236,8 +238,8 @@ object ManifestValidator {
       }
     }
 
-    def validate(m: Manifest): Task[Valid[Manifest]] = {
-      val x: Task[Valid[Manifest]] = for {
+    def validate(m: Manifest): IO[Valid[Manifest]] = {
+      val x: IO[Valid[Manifest]] = for {
         a <- Manifest.verifyDeployable(m, cfg.datacenters, cfg.storage)
         b <- validateUnits(m, cfg.datacenters)
         c <- validateLoadbalancers(m, cfg.datacenters)
@@ -252,21 +254,23 @@ object ManifestValidator {
     }
 
     yaml.ManifestParser.parse(str).fold(
-      e => Task.delay(e.failure),
+      e => IO(e.failure),
       m => validate(m)
     )
   }
 
   object Json {
     import argonaut._, Argonaut._
+    import argonaut.DecodeResultCats._
+    import cats.syntax.apply._
 
     implicit val codecNelsonUnit: CodecJson[NelsonUnit] =
       CodecJson.casecodec2(NelsonUnit.apply, NelsonUnit.unapply)("kind", "name")
 
     implicit val decodeManifestValidation: DecodeJson[ManifestValidation] = DecodeJson(c =>
-      ((c --\ "units").as[List[NelsonUnit]] |@|
+      ((c --\ "units").as[List[NelsonUnit]],
         (c --\ "manifest").as[Base64].map(_.decoded)
-      )(ManifestValidation.apply)
+      ).mapN(ManifestValidation.apply)
     )
   implicit val VersionDecode: DecodeJson[FeatureVersion] =
     DecodeJson.optionDecoder(_.string.flatMap { a =>

@@ -17,12 +17,14 @@
 package nelson
 package notifications
 
+import cats.effect.IO
+import nelson.CatsHelpers._
+
+import dispatch._, Defaults._
+
 import scalaz.{~>, Free, Coyoneda}
 import scalaz.syntax.traverse._
 import scalaz.std.list._
-import scalaz.concurrent.Task
-import dispatch._, Defaults._
-
 
 sealed abstract class SlackOp[A] extends Product with Serializable
 
@@ -38,20 +40,19 @@ object SlackOp {
     Free.liftFC(SendSlackNotification(channels, msg))
 }
 
-final class SlackHttp(cfg: SlackConfig, http: Http) extends (SlackOp ~> Task) {
+final class SlackHttp(cfg: SlackConfig, http: Http) extends (SlackOp ~> IO) {
   import argonaut._, Argonaut._
-  import delorean._
   import SlackOp._
 
-  def apply[A](op: SlackOp[A]): Task[A] = op match {
+  def apply[A](op: SlackOp[A]): IO[A] = op match {
     case SendSlackNotification(channels, msg) =>
       channels.traverse(channel => send(channel,msg)).map(_ => ())
   }
 
-  def send(channel: String, msg: String): Task[Unit] = {
+  def send(channel: String, msg: String): IO[Unit] = {
     val json = Json("channel" := "#"+channel, "text" := msg, "username" := cfg.username).asJson.nospaces
     val req = url(cfg.webhook).setContentType("application/json", "UTF-8") << json
-    http(req OK as.String).toTask.map(_ => ())
+    IO.fromFuture(IO(http(req OK as.String))).map(_ => ())
   }
 }
 

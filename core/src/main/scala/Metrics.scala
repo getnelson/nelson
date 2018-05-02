@@ -16,11 +16,13 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.IO
+import cats.syntax.applicativeError._
+import cats.syntax.apply._
+
 import io.prometheus.client._
 
 import scalaz.{Kleisli, ~>}
-import scalaz.syntax.std.option._
-import scalaz.concurrent.Task
 
 // To avoid redefinition of Metrics, all metrics should be defined here.
 // Bonus points if you keep it alphabetical.
@@ -156,13 +158,17 @@ object Metrics {
   /*
    * Perform a timed operation with configurable handlers.
    */
-  def timer(before: Task[Unit], onComplete: Kleisli[Task, Double, Unit], onFail: Kleisli[Task, Throwable, Unit], onSuccess: Task[Unit]) = new (Task ~> Task) {
-    def apply[A](op: Task[A]) : Task[A] = (for {
-      _ <- before
-      start <- Task.delay(System.nanoTime())
-      a <- op
-      elapsed = (System.nanoTime - start) / 1.0e9
-      _ <- onComplete.run(elapsed)
-    } yield a).onFinish(_.cata(onFail.run, onSuccess))
+  def timer(before: IO[Unit], onComplete: Kleisli[IO, Double, Unit], onFail: Kleisli[IO, Throwable, Unit], onSuccess: IO[Unit]) = new (IO ~> IO) {
+    def apply[A](op: IO[A]) : IO[A] = {
+      val io = for {
+        _       <- before
+        start   <- IO(System.nanoTime())
+        a       <- op
+        elapsed = (System.nanoTime - start) / 1.0e9
+        _       <- onComplete.run(elapsed)
+      } yield a
+
+      (io <* onSuccess).onError { case err => onFail(err) }
+    }
   }
 }

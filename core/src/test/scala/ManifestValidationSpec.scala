@@ -26,6 +26,8 @@ import ManifestValidator.{ManifestValidation}
 import ManifestValidator.Json._
 import argonaut.Argonaut._
 import journal.Logger
+import nelson.CatsHelpers._
+import cats.syntax.either._
 
 class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   // This spec has been hanging in Travis, and now it's not, but we
@@ -52,7 +54,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).run
+    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
     ()
   }
 
@@ -72,9 +74,9 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |}""".stripMargin
 
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val res = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
+      val res = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
       assert(res.toOption.get.isSuccess)
-    }.run
+    }.unsafeRunSync()
   }
 
   it should "reject invalid manifest" in {
@@ -90,9 +92,9 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
           |}""".stripMargin
 
     val mv = json.decodeEither[ManifestValidation].toOption.get
-    val res = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
+    val res = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
 
-    val \/-(Failure(x)) = res
+    val Right(Failure(x)) = res
   }
 
   it should "reject an undeployable manifest" in {
@@ -109,10 +111,10 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
           |  "manifest": "${base64Encode(manifest)}"
           |}""".stripMargin
       val mv = json.decodeEither[ManifestValidation].toOption.get // YOLO
-      val \/-(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
+      val Right(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
 
       e should equal (NonEmptyList(DeprecatedDependency("howdy", testName, "dev", Datacenter.ServiceName("search",FeatureVersion(1,1)))))
-     }.run
+     }.unsafeRunSync()
   }
 
   it should "reject an invalid unit kind" in {
@@ -131,9 +133,9 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |}""".stripMargin
 
       val mv = json.decodeEither[ManifestValidation].toOption.get // YOLO
-      ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun should equal (
-        \/.right(Failure(NonEmptyList(ManifestUnitKindMismatch("notright", List("howdy"))))))
-    }.run
+      ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync() should equal (
+        Right(Failure(NonEmptyList(ManifestUnitKindMismatch("notright", List("howdy"))))))
+    }.unsafeRunSync()
   }
 
   it should "reject an invalid loadbalancer port" in {
@@ -153,9 +155,9 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
 
       val cfg = config.copy(proxyPortWhitelist = Some(ProxyPortWhitelist(List(80,443))))
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val \/-(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(cfg).attemptRun
+      val Right(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(cfg).attempt.unsafeRunSync()
       e should equal (NonEmptyList(InvalidLoadbalancerPort(9000, List(80,443))))
-    }.run
+    }.unsafeRunSync()
   }
 
   it should "reject loadbalancer with name longer than 17 characters" in {
@@ -174,8 +176,8 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |}""".stripMargin
 
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val \/-(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
-      e should equal (NonEmptyList(InvalidLoadbalancerNameLength("xxxxxxxxxxxxxxxxxx"))) }.run
+      val Right(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
+      e should equal (NonEmptyList(InvalidLoadbalancerNameLength("xxxxxxxxxxxxxxxxxx"))) }.unsafeRunSync()
   }
 
   it should "accept multiple loadbalancer ports" in {
@@ -193,9 +195,9 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |}""".stripMargin
 
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val res = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
+      val res = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
       assert(res.map(_.isSuccess).getOrElse(false))
-    }.run
+    }.unsafeRunSync()
   }
 
   it should "reject an unknown route desitination unit name" in {
@@ -213,10 +215,10 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |}""".stripMargin
 
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val \/-(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
+      val Right(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
       val route = Route(MPort("default",8444,"https"),BackendDestination("foo","default"))
       e should equal (NonEmptyList(UnknownBackendDestination(route, List("howdy"))))
-    }.run
+    }.unsafeRunSync()
   }
 
   it should "reject an unknown health check port reference" in {
@@ -234,9 +236,9 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |}""".stripMargin
 
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val \/-(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
+      val Right(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
       e should equal (NonEmptyList(UnknownPortRef("unknown-port", "howdy")))
-    }.run
+    }.unsafeRunSync()
   }
 
   it should "reject an missing health check path" in {
@@ -254,14 +256,14 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |}""".stripMargin
 
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val \/-(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
-      e should equal (NonEmptyList(MissingHealthCheckPath("https"))) }.run
+      val Right(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
+      e should equal (NonEmptyList(MissingHealthCheckPath("https"))) }.unsafeRunSync()
   }
 
   it should "reject resources that aren't specified in plan" in {
     (Util.loadResourceAsString("/nelson/manifest.v1.invalid-resources.yml").flatMap { mf =>
       ManifestValidator.parseManifestAndValidate(mf, config)
-    }).run.fold(_.list.exists(_.getMessage.contains(
+    }).unsafeRunSync().fold(_.list.exists(_.getMessage.contains(
       "resources reference kafka is missing from plan default"
     )), _ => false) should be (true)
   }
@@ -269,14 +271,14 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   it should "reject invalid alerts" in {
     val errors = (Util.loadResourceAsString("/nelson/manifest.v1.invalid-alert-definition.yml").flatMap { mf =>
       ManifestValidator.parseManifestAndValidate(mf, config)
-     }).run.fold(_.list, _ => Nil).map(_.getMessage)
+     }).unsafeRunSync().fold(_.list, _ => Nil).map(_.getMessage)
     atLeast(1, errors) should include("""unexpected identifier "BALDERDASH" in alert statement, expected "if"""")
   }
 
   it should "reject manifest if default namespace is not referenced at least once" in {
     (Util.loadResourceAsString("/nelson/manifest.v1.missing-default-namespace-reference.yml").flatMap { mf =>
       ManifestValidator.parseManifestAndValidate(mf, config)
-    }).run.fold(_.list.exists(_.getMessage.contains(
+    }).unsafeRunSync().fold(_.list.exists(_.getMessage.contains(
       "All manifests must reference the default namespace at least once."
     )), _ => false) should be (false)
   }
@@ -284,7 +286,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   it should "reject manifest if default namespace is not referenced by every unit" in {
     (Util.loadResourceAsString("/nelson/manifest.v1.unit-missing-default-namespace-reference.yml").flatMap { mf =>
       ManifestValidator.parseManifestAndValidate(mf, config)
-    }).run.fold(_.list.exists(_.getMessage.contains(
+    }).unsafeRunSync().fold(_.list.exists(_.getMessage.contains(
       "Each unit in the manifest must reference the default namespace."
     )), _ => false) should be (false)
   }
@@ -292,7 +294,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   it should "reject unknown plan reference" in {
     (Util.loadResourceAsString("/nelson/manifest.v1.unknown-plan-ref.yml").flatMap { mf =>
       ManifestValidator.parseManifestAndValidate(mf, config)
-    }).run.fold(_.list.exists(a => a.getMessage.contains(
+    }).unsafeRunSync().fold(_.list.exists(a => a.getMessage.contains(
       """'unknown' isn't a valid plan reference, because it was not declared as a plan."""
     )), _ => false) should be (true)
   }
@@ -300,14 +302,14 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   it should "reject a manifest with unit name lengths greater than 41 characters" in {
     val errors = (Util.loadResourceAsString("/nelson/manifest.v1.invalid-unit-name-length.yml").flatMap { mf =>
       ManifestValidator.parseManifestAndValidate(mf, config)
-    }).run.fold(_.list, _ => Nil).map(_.getMessage)
+    }).unsafeRunSync().fold(_.list, _ => Nil).map(_.getMessage)
     atLeast(1, errors) should include("""Unit names must be less than 42 characters""")
   }
 
   it should "reject a manifest with an unit name with invalid DNS characters" in {
     val errors = (Util.loadResourceAsString("/nelson/manifest.v1.invalid-dns-characters.yml").flatMap { mf =>
       ManifestValidator.parseManifestAndValidate(mf, config)
-    }).run.fold(_.list, _ => Nil).map(_.getMessage)
+    }).unsafeRunSync().fold(_.list, _ => Nil).map(_.getMessage)
     atLeast(1, errors) should include("""Unit names can only include hyphens, A-Z, a-z, 0-9 where the unit name starts and ends with an alpha-numeric character.""")
   }
 
@@ -326,14 +328,14 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |  "manifest": "${base64Encode(manifest)}"
             |}""".stripMargin
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val e = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun.toOption.get.swap.toOption.get
+      val e = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync().toOption.get.swap.toOption.get
       val expectedErrors = NonEmptyList(
         CyclicDependency(
           "Dependency cycle detected for unit 'conductor' in namespace 'dev' in datacenter 'ManifestValidationSpec': conductor@1.1.1"
         )
       )
       e.toSet should === (expectedErrors.toSet)
-    }.run
+    }.unsafeRunSync()
   }
 
   it should "reject manifest that declares a dependency on transitively dependent unit" in {
@@ -349,7 +351,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |  "manifest": "${base64Encode(manifest)}"
             |}""".stripMargin
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val e = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun.toOption.get.swap.toOption.get
+      val e = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync().toOption.get.swap.toOption.get
       val expectedErrors = NonEmptyList(
         CyclicDependency(
           "Dependency cycle detected for unit 'inventory' in namespace 'dev' in datacenter 'ManifestValidationSpec': conductor@1.1.1"
@@ -365,7 +367,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
         )
       )
       e.toSet should === (expectedErrors.toSet)
-    }.run
+    }.unsafeRunSync()
   }
 
   it should "reject an periodic unit that also declares traffic shift" in {
@@ -383,14 +385,14 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
             |}""".stripMargin
 
       val mv = json.decodeEither[ManifestValidation].toOption.get
-      val \/-(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attemptRun
-      e should equal (NonEmptyList(PeriodicUnitWithTrafficShift("howdy"))) }.run
+      val Right(Failure(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
+      e should equal (NonEmptyList(PeriodicUnitWithTrafficShift("howdy"))) }.unsafeRunSync()
   }
 
   it should "reject a manifest with a loadbalancer that routes to different units" in {
     (Util.loadResourceAsString("/nelson/manifest.v1.invalid-loadbalancer-routes.yml").flatMap { mf =>
       ManifestValidator.parseManifestAndValidate(mf, config)
-    }).run.fold(_.list.exists(a => a.getMessage.contains(
+    }).unsafeRunSync().fold(_.list.exists(a => a.getMessage.contains(
       """loadbalancer lb has invalid route definition, all routes must route to the same backend service"""
     )), _ => false) should be (true)
   }

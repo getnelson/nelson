@@ -16,12 +16,12 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.concurrent.Task
+import cats.effect.IO
 
 object process {
   /** True if a program is on the path */
-  def isOnPath(program: String): Task[Boolean] =
-    Task.delay {
+  def isOnPath(program: String): IO[Boolean] =
+    IO {
       val pb = new ProcessBuilder("which", program)
       val proc = pb.start()
       proc.waitFor() == 0

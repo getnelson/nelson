@@ -17,27 +17,39 @@
 package nelson
 package scheduler
 
-
+import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
+import nelson.Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
+import nelson.docker.Docker
+import nelson.docker.Docker.Image
+
+import cats.effect.IO
+import cats.syntax.apply._
+import cats.syntax.applicativeError._
+import nelson.CatsHelpers._
+
+import java.util.concurrent.ScheduledExecutorService
+
+import journal.Logger
+
+import scala.concurrent.ExecutionContext
 
 import scalaz.~>
-import scalaz.concurrent.Task
+import scalaz.std.list._
 import scalaz.syntax.std.option._
 import scalaz.syntax.traverse._
-import scalaz.syntax.applicative._
-import scalaz.std.list._
-import journal.Logger
-import Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
-import Datacenter.{Deployment, StackName}
-import docker.Docker
-import Docker.Image
-
 
 object NomadHttp {
   private val log = Logger[NomadHttp.type]
 }
 
-final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org.http4s.client.Client) extends (SchedulerOp ~> Task) {
+final class NomadHttp(
+  cfg: NomadConfig,
+  nomad: Infrastructure.Nomad,
+  client: org.http4s.client.Client[IO],
+  scheduler: ScheduledExecutorService,
+  ec: ExecutionContext
+) extends (SchedulerOp ~> IO) {
   import NomadJson._
   import NomadHttp.log
   import SchedulerOp._
@@ -48,66 +60,66 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
   import org.http4s.headers.Authorization
   import org.http4s.argonaut._
 
-  def apply[A](co: SchedulerOp[A]): Task[A] =
+  def apply[A](co: SchedulerOp[A]): IO[A] =
     co match {
       case Delete(dc,d) =>
-        deleteUnitAndChildren(dc, d).retryExponentially()
+        deleteUnitAndChildren(dc, d).retryExponentially()(scheduler, ec)
       case Launch(i, dc, ns, u, p, hash) =>
         val unit = Manifest.Versioned.unwrap(u)
-        launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()
+        launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()(scheduler, ec)
       case Summary(dc,_,sn) =>
         summary(dc,sn)
       case RunningUnits(dc, prefix) =>
         runningUnits(dc, prefix)
     }
 
-  private def summary(dc: Datacenter, sn: Datacenter.StackName): Task[Option[DeploymentSummary]] = {
+  private def summary(dc: Datacenter, sn: Datacenter.StackName): IO[Option[DeploymentSummary]] = {
     val name = buildName(sn)
-    val req = addCreds(dc, Request(Method.GET, nomad.endpoint / "v1" / "job" / name / "summary"))
+    val req = addCreds(dc, Request[IO](Method.GET, nomad.endpoint / "v1" / "job" / name / "summary"))
     implicit val decoder = deploymentSummaryDecoder(name)
-    client.expect[DeploymentSummary](req)(jsonOf[DeploymentSummary]).map(Some.apply).handleWith {
-      case UnexpectedStatus(NotFound) => Task.now(None)
+    client.expect[DeploymentSummary](req)(jsonOf[IO, DeploymentSummary]).map(ds => Some(ds): Option[DeploymentSummary]).recoverWith {
+      case UnexpectedStatus(NotFound) => IO.pure(None)
     }
   }
 
-  private def runningUnits(dc: Datacenter, prefix: Option[String]): Task[Set[RunningUnit]] = {
+  private def runningUnits(dc: Datacenter, prefix: Option[String]): IO[Set[RunningUnit]] = {
     val baseUri = nomad.endpoint / "v1" / "jobs"
     val uri = prefix.cata(p => baseUri.withQueryParam("prefix", p), baseUri)
-    val req = addCreds(dc, Request(Method.GET, uri))
+    val req = addCreds(dc, Request[IO](Method.GET, uri))
 
-    client.expect[List[RunningUnit]](req)(jsonOf[List[RunningUnit]]).map(_.toSet)
+    client.expect[List[RunningUnit]](req)(jsonOf[IO, List[RunningUnit]]).map(_.toSet)
   }
 
   /*
    * Calls Nomad to delete a unit in a given datacenter
    */
-  private def deleteUnit(dc: Datacenter, name: String): Task[Unit] = {
-    val req = addCreds(dc,Request(Method.DELETE, nomad.endpoint / "v1" / "job" / name))
-    client.expect[String](req).map(_ => ())handleWith {
+  private def deleteUnit(dc: Datacenter, name: String): IO[Unit] = {
+    val req = addCreds(dc,Request[IO](Method.DELETE, nomad.endpoint / "v1" / "job" / name))
+    client.expect[String](req).map(_ => ()).recoverWith {
       // swallow 404, as we're being asked to delete something that does not exist
       // this can happen when a workflow fails and the cleanup process is subsequently called
-      case UnexpectedStatus(NotFound) => Task.now(())
+      case UnexpectedStatus(NotFound) => IO.unit
     }
   }
 
   /*
    * Calls Nomad to delete the given unit and all child jobs
    */
-  private def deleteUnitAndChildren(dc: Datacenter, d: Deployment): Task[Unit] = {
+  private def deleteUnitAndChildren(dc: Datacenter, d: Deployment): IO[Unit] = {
     val name = buildName(d.stackName)
     for {
       cs <- listChildren(dc, name).map(_.toList)
-      _  <- cs.traverse_(_.name.cata(c => deleteUnit(dc, c), Task.now(())))
+      _  <- cs.traverse_(_.name.cata(c => deleteUnit(dc, c), IO.unit))
       _  <- deleteUnit(dc, name)
     } yield ()
   }
 
-  private def listChildren(dc: Datacenter, parentID: String): Task[Set[RunningUnit]] = {
+  private def listChildren(dc: Datacenter, parentID: String): IO[Set[RunningUnit]] = {
     val prefix = parentID + "/periodic"
     runningUnits(dc, Some(prefix)).map(_.filter(_.parentID.exists(_ == parentID)))
   }
 
-  private def addCreds(dc: Datacenter, req: Request): Request =
+  private def addCreds(dc: Datacenter, req: Request[IO]): Request[IO] =
     dc.proxyCredentials.fold(req){ creds =>
       req.putHeaders(Authorization(BasicCredentials(creds.username,creds.password)))
     }
@@ -121,10 +133,10 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
-  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): Task[String] = {
-    def call(name: String, json: Json): Task[String] = {
+  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
+    def call(name: String, json: Json): IO[String] = {
       log.debug(s"sending nomad the following payload: ${json.nospaces}")
-      val req = addCreds(dc, Request(Method.POST, nomad.endpoint / "v1" / "job" / name))
+      val req = addCreds(dc, Request[IO](Method.POST, nomad.endpoint / "v1" / "job" / name))
       client.expect[String](req.withBody(json))
     }
 
@@ -150,6 +162,7 @@ final class NomadHttp(cfg: NomadConfig, nomad: Infrastructure.Nomad, client: org
 
 object NomadJson {
   import argonaut._, Argonaut._
+  import argonaut.DecodeResultCats._
   import Infrastructure.Nomad
   import scala.concurrent.duration._
 
@@ -199,12 +212,12 @@ object NomadJson {
   // reference: https://www.nomadproject.io/docs/http/allocs.html
   implicit def allocationDecoder: DecodeJson[TaskGroupAllocation] =
     DecodeJson[TaskGroupAllocation](c => (
-      (c --\ "ID").as[String] |@|
-      (c --\ "Name").as[String] |@|
-      (c --\ "JobID").as[String] |@|
-      (c --\ "TaskGroup").as[String] |@|
+      (c --\ "ID").as[String],
+      (c --\ "Name").as[String],
+      (c --\ "JobID").as[String],
+      (c --\ "TaskGroup").as[String],
       (c --\ "TaskStates").as[Option[Map[String, TaskEvents]]]
-      ){ case (i, n, j, g, s) => TaskGroupAllocation.build(i, n, j, g, s getOrElse Map.empty)}
+      ).mapN { case (i, n, j, g, s) => TaskGroupAllocation.build(i, n, j, g, s getOrElse Map.empty)}
     )
 
   def dockerConfigJson(
@@ -218,7 +231,7 @@ object NomadJson {
     val maybeLogging = nomad.splunk.map(splunk =>
       List(dockerSplunkJson(name, ns, splunk.splunkUrl, splunk.splunkToken)))
 
-    val maybePorts = ports.map(_.nel.map(p => argonaut.Json(p.ref := p.port)))
+    val maybePorts = ports.map(_.nel.toList.map(p => argonaut.Json(p.ref := p.port)))
 
     ("logging" :=? maybeLogging) ->?:
     ("port_map" :=? maybePorts) ->?: argonaut.Json(
@@ -246,7 +259,7 @@ object NomadJson {
 
   // cpu in MHZ, mem in MB
   def resourcesJson(cpu: Int, mem: Int, ports: Option[Ports]): argonaut.Json = {
-    val maybePorts = ports.map(_.nel.map(p => argonaut.Json(
+    val maybePorts = ports.map(_.nel.toList.map(p => argonaut.Json(
       "Label" := p.ref,
       "Value" := 0 // for dynamic ports this is required but is then ignored, garbage
     )))
@@ -354,7 +367,7 @@ object NomadJson {
   def leaderTaskJson(name: String, unitName: UnitName, i: Image, env: Environment, nm: NetworkMode, ports: Option[Ports], nomad: Nomad, ns: NamespaceName, plan: PlanRef, tags: Set[String]): argonaut.Json = {
     val cpu = (nomad.mhzPerCPU * env.cpu.getOrElse(0.5)).toInt
     val mem = (env.memory getOrElse 512.0).toInt
-    val services = ports.map(_.nel.map(p => servicesJson(
+    val services = ports.map(_.nel.toList.map(p => servicesJson(
       name,
       p,
       Set(ns.root.asString, s"port--${p.ref}", s"plan--$plan").union(tags),

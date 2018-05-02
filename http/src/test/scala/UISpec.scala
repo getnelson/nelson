@@ -19,6 +19,7 @@ package nelson
 import org.scalatest._, Matchers._
 import scalaz.{\/,\/-}
 import nelson.plans.UI
+import nelson.CatsHelpers._
 
 class UISpec extends FlatSpec {
 
@@ -26,7 +27,7 @@ class UISpec extends FlatSpec {
     (for {
       xml <- Util.loadResourceAsString(path)
       // _ = println(xml)
-    } yield xml).attemptRun
+    } yield xml).attempt.unsafeRunSync().toDisjunction
 
 
   "svg badges" should "match the refrence approved fixtures" in {

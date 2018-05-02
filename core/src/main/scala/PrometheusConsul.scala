@@ -16,36 +16,45 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{\/-, -\/, ~>}
-import scalaz.concurrent.Task
+import cats.effect.IO
+
 import helm.ConsulOp
 import helm.ConsulOp._
 
-class PrometheusConsul private (instance: String, interp: ConsulOp ~> Task, metrics: Metrics)
-    extends (ConsulOp ~> Task) {
+import scalaz.~>
 
-  def apply[A](op: ConsulOp[A]): Task[A] =
-    Task.delay(System.nanoTime).flatMap { startNanos =>
+class PrometheusConsul private (instance: String, interp: ConsulOp ~> IO, metrics: Metrics)
+    extends (ConsulOp ~> IO) {
+
+  def apply[A](op: ConsulOp[A]): IO[A] =
+    IO(System.nanoTime).flatMap { startNanos =>
       interp(op).attempt.flatMap { att =>
         val elapsed = System.nanoTime - startNanos
         val label = toLabel(op)
         metrics.helmRequestsLatencySeconds.labels(label, instance).observe(elapsed / 1.0e9)
         att match {
-          case \/-(a) =>
-            Task.now(a)
-          case -\/(e) =>
+          case Right(a) =>
+            IO.pure(a)
+          case Left(e) =>
             metrics.helmRequestsFailuresTotal.labels(label, instance).inc()
-            Task.fail(e)
+            IO.raiseError(e)
         }
       }
     }
 
   private def toLabel(op: ConsulOp[_]) = op match {
-    case _: Get => "get"
-    case _: Set => "set"
-    case _: Delete => "delete"
-    case _: ListKeys => "listKeys"
-    case _: HealthCheck => "healthCheck"
+    case _: KVGet => "kvGet"
+    case _: KVSet => "kvSet"
+    case _: KVDelete => "kvDelete"
+    case _: KVListKeys => "kvListKeys"
+    case _: HealthListChecksForService => "healthListChecksForService"
+    case _: AgentDeregisterService => "agentDeregisterService"
+    case _: AgentEnableMaintenanceMode => "agentEnableMaintenanceMode"
+    case _: AgentListServices.type => "agentListServices"
+    case _: AgentRegisterService => "agentRegisterService"
+    case _: HealthListChecksForNode => "healthListChecksForNode"
+    case _: HealthListChecksInState => "healthListChecksInState"
+    case _: HealthListNodesForService => "healthListNodesForService"
   }
 }
 
@@ -56,6 +65,6 @@ object PrometheusConsul {
    *  @param interp a helm interpreter to wrap
    *  @param registry the CollectorRegistry to record to; defaults to CollectorRegistry.default
    */
-  def apply(consulInstance: String, interp: ConsulOp ~> Task, metrics: Metrics = Metrics.default): ConsulOp ~> Task =
+  def apply(consulInstance: String, interp: ConsulOp ~> IO, metrics: Metrics = Metrics.default): ConsulOp ~> IO =
     new PrometheusConsul(consulInstance, interp, metrics)
 }

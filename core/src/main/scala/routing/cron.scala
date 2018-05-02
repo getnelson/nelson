@@ -17,17 +17,21 @@
 package nelson
 package routing
 
+import cats.effect.{Effect, IO}
+import nelson.CatsHelpers._
+
+import fs2.{Scheduler, Stream}
+
 import scalaz._
 import Scalaz._
-import scalaz.concurrent.Task
-import scalaz.stream._
+
 import journal.Logger
 import helm.ConsulOp
 
 object cron {
   private[cron] val log = Logger[cron.type]
 
-  def refresh(cfg: NelsonConfig): Task[List[(Datacenter,ConsulOp.ConsulOpF[Unit])]] = {
+  def refresh(cfg: NelsonConfig): IO[List[(Datacenter,ConsulOp.ConsulOpF[Unit])]] = {
     cfg.datacenters.traverseM { dc =>
       log.info(s"cron: refreshing ${dc.name}")
       for {
@@ -52,13 +56,9 @@ object cron {
     }
   }
 
-  def consulRefresh(cfg: NelsonConfig): Process[Task,(Datacenter,ConsulOp.ConsulOpF[Unit])] =
-    Process.repeatEval(Task.delay(cfg.discoveryDelay)).flatMap(d =>
-      time.awakeEvery(d)(cfg.pools.schedulingExecutor, cfg.pools.schedulingPool).once)
-      .flatMap(_ =>
-        Process.eval(refresh(cfg))
-          .attempt().observeW(cfg.auditor.errorSink)
-          .stripW
-      )
-      .flatMap(Process.emitAll)
+  def consulRefresh(cfg: NelsonConfig): Stream[IO,(Datacenter,ConsulOp.ConsulOpF[Unit])] =
+    Stream.repeatEval(IO(cfg.discoveryDelay)).
+      flatMap(d => Scheduler.fromScheduledExecutorService(cfg.pools.schedulingPool).awakeEvery(d)(Effect[IO], cfg.pools.defaultExecutor).head).
+      flatMap(_ => Stream.eval(refresh(cfg)).attempt.observeW(cfg.auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor).stripW).
+      flatMap(xs => Stream.emits(xs))
 }

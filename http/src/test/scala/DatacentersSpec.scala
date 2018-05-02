@@ -17,12 +17,14 @@
 package nelson
 
 import nelson.plans.Datacenters
+import nelson.CatsHelpers._
 import Datacenter._
 import argonaut._
 import Argonaut._
+import cats.effect.IO
 import org.http4s._
 import org.http4s.argonaut._
-import org.http4s.dsl._
+import org.http4s.dsl.io._
 import org.http4s.Uri.uri
 import Json._
 
@@ -30,7 +32,7 @@ class DatacentersSpec extends ServiceSpec {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).run
+    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
     ()
   }
 
@@ -39,25 +41,25 @@ class DatacentersSpec extends ServiceSpec {
   "Datacenters Object" should "allow us to query for all data centers" in {
     val service = Server.json500(Datacenters(config).service)
 
-    val req = Request(GET, uri("/v1/datacenters")).authed
-    val resp = service.orNotFound(req).run
+    val req = Request[IO](GET, uri("/v1/datacenters")).authed
+    val resp = service.orNotFound(req).unsafeRunSync()
     resp.status should equal (Ok)
   }
 
   it should "allow users of admin github orgs to create manual deployments" in {
     val service = Datacenters(config).service
-    val req = Request(POST, uri("/v1/deployments")).authed
+    val req = Request[IO](POST, uri("/v1/deployments")).authed
       .withBody(manual.asJson)
-    val resp = req.flatMap(service.orNotFound).run
+    val resp = req.flatMap(service.orNotFound.run).unsafeRunSync
     resp.status should equal (Found)
   }
 
   it should "not allow any user to create manual deployments" in {
     val config0 = config.copy(git = config.git.copy(organizationAdminList = Nil))
     val service = Datacenters(config0).service
-    val req = Request(POST, uri("/v1/deployments")).authed
+    val req = Request[IO](POST, uri("/v1/deployments")).authed
       .withBody(manual.asJson)
-    val resp = req.flatMap(service.orNotFound).run
+    val resp = req.flatMap(service.orNotFound.run).unsafeRunSync()
     resp.status should equal (NotFound)
   }
 
