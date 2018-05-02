@@ -18,7 +18,7 @@ package nelson
 
 import knobs._
 import java.io.File
-import java.util.concurrent.Executors
+import java.util.concurrent.{Executors, ThreadFactory}
 
 import journal.Logger
 
@@ -39,13 +39,21 @@ object Main {
   private val log = Logger[this.type]
 
   def main(args: Array[String]): Unit = {
-    val singleThreadPool = ExecutionContext.fromExecutorService(Executors.newSingleThreadExecutor())
+    val configThreadFactory = new ThreadFactory {
+      def newThread(r: Runnable) = {
+        val t = Executors.defaultThreadFactory.newThread(r)
+        t.setName("nelson-knobs")
+        t
+      }
+    }
+
+    val configThreadPool = ExecutionContext.fromExecutorService(Executors.newSingleThreadExecutor(configThreadFactory))
 
     val file = new File(args.headOption.getOrElse("/opt/application/conf/nelson.cfg"))
 
     def readConfig = for {
       defaults  <- knobs.loadImmutable[IO](Required(ClassPathResource("nelson/defaults.cfg")) :: Nil)
-      overrides <- knobs.loadImmutable[IO](Optional(FileResource(file)(singleThreadPool)) :: Nil)
+      overrides <- knobs.loadImmutable[IO](Optional(FileResource(file)(configThreadPool)) :: Nil)
       config    <- Config.readConfig(defaults ++ overrides, Http, Hikari.build _)
     } yield config
 
