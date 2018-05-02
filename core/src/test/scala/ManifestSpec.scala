@@ -101,12 +101,13 @@ class ManifestManualSpec extends NelsonSuite {
   import Manifest._
   import Util._
   import DeploymentTarget._
+  import nelson.CatsHelpers._
 
   def load(what: String) = {
     for {
-      a <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attemptRun
+      a <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync().toDisjunction
       b <- yaml.ManifestParser.parse(a)
-      c <- loadResourceAsString(what).attemptRun
+      c <- loadResourceAsString(what).attempt.unsafeRunSync().toDisjunction
       d  = Github.Asset(
         id = 45,
         name = "example-howdy.deployable.yml",
@@ -121,7 +122,7 @@ class ManifestManualSpec extends NelsonSuite {
         assets = List(d),
         tagName = "master"
       )
-    } yield Manifest.versionedUnits((Manifest.saturateManifest(b)(e)).run).map(_.version)
+    } yield Manifest.versionedUnits((Manifest.saturateManifest(b)(e)).unsafeRunSync()).map(_.version)
   }
 
   // TIM: so evil!
@@ -134,9 +135,9 @@ class ManifestManualSpec extends NelsonSuite {
 
   it should "be OK with *.yaml" in {
     val manifest = for {
-      resource <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attemptRun
+      resource <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync().toDisjunction
       manifest <- yaml.ManifestParser.parse(resource)
-      contents <- loadResourceAsString("/nelson/manifest.deployable.v1.c.yml").attemptRun
+      contents <- loadResourceAsString("/nelson/manifest.deployable.v1.c.yml").attempt.unsafeRunSync().toDisjunction
       asset = Github.Asset(
         id = 45,
         name = "example-howdy.deployable.yaml", // this is what is being tested - note .yaml instead of .yml
@@ -151,7 +152,7 @@ class ManifestManualSpec extends NelsonSuite {
         assets = List(asset),
         tagName = "master"
       )
-    } yield Manifest.versionedUnits((Manifest.saturateManifest(manifest)(release)).run).map(_.version)
+    } yield Manifest.versionedUnits((Manifest.saturateManifest(manifest)(release)).unsafeRunSync()).map(_.version)
 
     manifest should equal (\/.right(List(Version(0, 6, 10))))
   }

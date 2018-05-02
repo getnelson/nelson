@@ -16,27 +16,29 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.IO
+
 import scalaz.{Kleisli, ~>}
-import scalaz.concurrent.Task
+
 import vault.Vault
 import vault.Vault._
 
-class InstrumentedVaultClient private (instance: String, interp: Vault ~> Task, metrics: Metrics)
-    extends (Vault ~> Task) {
+class InstrumentedVaultClient private (instance: String, interp: Vault ~> IO, metrics: Metrics)
+    extends (Vault ~> IO) {
 
-  def timer(label: String) : Task ~> Task =
+  def timer(label: String) : IO ~> IO =
     Metrics.timer(
-      before = Task.now(()),
-      onComplete = Kleisli[Task, Double, Unit] { elapsed =>
-        Task.delay(metrics.vaultRequestsLatencySeconds.labels(label, instance).observe(elapsed))
+      before = IO.unit,
+      onComplete = Kleisli[IO, Double, Unit] { elapsed =>
+        IO(metrics.vaultRequestsLatencySeconds.labels(label, instance).observe(elapsed))
       },
-      onFail = Kleisli[Task, Throwable, Unit] { _ =>
-        Task.delay(metrics.vaultRequestsFailuresTotal.labels(label, instance).inc())
+      onFail = Kleisli[IO, Throwable, Unit] { _ =>
+        IO(metrics.vaultRequestsFailuresTotal.labels(label, instance).inc())
       },
-      onSuccess = Task.now(())
+      onSuccess = IO.unit
     )
 
-  def apply[A](op: Vault[A]): Task[A] = timer(toLabel(op))(interp(op))
+  def apply[A](op: Vault[A]): IO[A] = timer(toLabel(op))(interp(op))
 
   private def toLabel(op: Vault[_]) = op match {
     case IsInitialized => "isInitialized"
@@ -59,6 +61,6 @@ object InstrumentedVaultClient {
    *  @param interp a vault interpreter to wrap
    *  @param registry the CollectorRegistry to record to; defaults to CollectorRegistry.default
    */
-  def apply(consulInstance: String, interp: Vault ~> Task, metrics: Metrics = Metrics.default): Vault ~> Task =
+  def apply(consulInstance: String, interp: Vault ~> IO, metrics: Metrics = Metrics.default): Vault ~> IO =
     new InstrumentedVaultClient(consulInstance, interp, metrics)
 }

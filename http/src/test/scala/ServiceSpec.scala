@@ -16,6 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.IO
 import org.http4s._
 
 trait ServiceSpec extends NelsonSuite {
@@ -41,8 +42,8 @@ trait ServiceSpec extends NelsonSuite {
     httpOnly = false
   )
 
-  implicit class RequestSyntax(req: Request) {
-    def authed: Request =
+  implicit class RequestSyntax(req: Request[IO]) {
+    def authed: Request[IO] =
       req.putHeaders(org.http4s.headers.Cookie(cookie))
   }
 }

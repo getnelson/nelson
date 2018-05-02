@@ -17,9 +17,9 @@
 package nelson
 package notifications
 
-import scalaz.{~>, Free, Coyoneda}
-import scalaz.concurrent.Task
+import cats.effect.IO
 
+import scalaz.{~>, Free, Coyoneda}
 
 sealed abstract class EmailOp[A] extends Product with Serializable
 
@@ -39,17 +39,17 @@ object EmailOp {
     Free.liftFC(SendEmailNotification(rs, msg,s))
 }
 
-final class EmailServer(cfg: EmailConfig) extends (EmailOp ~> Task) {
+final class EmailServer(cfg: EmailConfig) extends (EmailOp ~> IO) {
   import org.apache.commons.mail.{Email=>JEmail,SimpleEmail}
   import EmailOp._
 
-  def apply[A](op: EmailOp[A]): Task[A] = op match {
+  def apply[A](op: EmailOp[A]): IO[A] = op match {
     case SendEmailNotification(r,m,s) =>
       send(cfg.from,r,m,s)
   }
 
-  def send(from: EmailAddress, recipients: List[EmailAddress], msg: String, subject: String): Task[Unit] =
-    Task.delay {
+  def send(from: EmailAddress, recipients: List[EmailAddress], msg: String, subject: String): IO[Unit] =
+    IO {
       val email = client
       email.setFrom(from)
       recipients.foreach(email.addTo)
@@ -67,6 +67,3 @@ final class EmailServer(cfg: EmailConfig) extends (EmailOp ~> Task) {
     email.setSSLOnConnect(cfg.useSSL)
   }
 }
-
-
-

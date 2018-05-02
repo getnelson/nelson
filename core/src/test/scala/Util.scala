@@ -18,10 +18,10 @@ package nelson
 
 /** this file is ironically call Util **/
 
-import scalaz.concurrent.Task
+import cats.effect.IO
 
 object Util {
-  def loadResourceAsString(path: String): Task[String] = Task {
+  def loadResourceAsString(path: String): IO[String] = IO {
     val stream  = getClass.getResourceAsStream(path)
     val content = scala.io.Source.fromInputStream(stream).mkString
     content

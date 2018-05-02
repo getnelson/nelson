@@ -16,13 +16,18 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalatest._
-import scalaz.stream.Process
-import scalaz.concurrent.Task
 import argonaut._, Argonaut._
-import doobie.imports._
-import scalaz._, Scalaz._
 
+import cats.effect.{Effect, IO}
+import nelson.CatsHelpers._
+
+import fs2.Stream
+
+import doobie.imports._
+
+import org.scalatest._
+
+import scalaz._, Scalaz._
 
 class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
@@ -50,20 +55,15 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
   val setup = for { _ <- truncEvery.transact(storage.xa) } yield ()
 
-  override def afterAll: Unit = {
-    config.auditQueue.close.run
-    super.afterAll
-  }
-
-  override def beforeEach: Unit = setup.run
+  override def beforeEach: Unit = setup.unsafeRunSync()
 
   it should "enqueue all events in the stream" in {
     val audit = new Auditor(config.auditQueue,defaultSystemLogin)
-    val p: Process[Task, Foo] = Process(Foo(1),Foo(2),Foo(3),Foo(10))
+    val p: Stream[IO, Foo] = Stream(Foo(1),Foo(2),Foo(3),Foo(10))
 
-    p.observe(audit.auditSink(LoggingAction)).run.run
+    p.observe(audit.auditSink(LoggingAction))(Effect[IO], config.pools.defaultExecutor).compile.drain.unsafeRunSync()
 
-    val vec = audit.process(storage).take(4).runLog.run
+    val vec = audit.process(storage)(config.pools.defaultExecutor).take(4).compile.toVector.unsafeRunSync()
 
     vec.length should equal (vec.length)
   }
@@ -71,13 +71,13 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "store auditable events in storage" in {
     val audit = new Auditor(config.auditQueue,defaultSystemLogin)
     val events = Vector(Foo(1),Foo(2),Foo(3),Foo(10))
-    val p: Process[Task, Foo] = Process(events: _*)
+    val p: Stream[IO, Foo] = Stream(events: _*)
 
-    p.observe(audit.auditSink(LoggingAction)).run.run
+    p.observe(audit.auditSink(LoggingAction))(Effect[IO], config.pools.defaultExecutor).compile.drain.unsafeRunSync()
 
-    audit.process(storage).take(4).runLog.run
+    audit.process(storage)(config.pools.defaultExecutor).take(4).compile.toVector.unsafeRunSync()
 
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).run
+    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).unsafeRunSync()
 
     ev.length should equal (events.length)
   }
@@ -86,12 +86,12 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
     val audit = new Auditor(config.auditQueue, defaultSystemLogin)
     val foo = Foo(1)
 
-    audit.write(foo, CreateAction).run
-    audit.write(foo, CreateAction).run
+    audit.write(foo, CreateAction).unsafeRunSync()
+    audit.write(foo, CreateAction).unsafeRunSync()
 
-    audit.process(storage).take(2).run.run
+    audit.process(storage)(config.pools.defaultExecutor).take(2).compile.drain.unsafeRunSync()
 
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).run
+    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).unsafeRunSync()
 
     ev.length should equal (2)
   }
@@ -102,9 +102,9 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
     val releaseId = Option(10L)
 
-    audit.write(foo, CreateAction, releaseId = releaseId).run
-    audit.process(storage).take(1).run.run
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).run
+    audit.write(foo, CreateAction, releaseId = releaseId).unsafeRunSync()
+    audit.process(storage)(config.pools.defaultExecutor).take(1).compile.drain.unsafeRunSync()
+    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).unsafeRunSync()
 
 
     ev.length should === (1)
@@ -117,9 +117,9 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
     val audit = new Auditor(config.auditQueue,defaultSystemLogin)
     val foo = Foo(1)
 
-    audit.write(foo, CreateAction, login = login).run
-    audit.process(storage).take(1).run.run
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).run
+    audit.write(foo, CreateAction, login = login).unsafeRunSync()
+    audit.process(storage)(config.pools.defaultExecutor).take(1).compile.drain.unsafeRunSync()
+    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).unsafeRunSync()
 
 
     ev.length should === (1)
@@ -133,12 +133,12 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
     val audit = new Auditor(config.auditQueue, defaultSystemLogin)
     val foo = Foo(1)
 
-    audit.write(foo, CreateAction).run
-    audit.write(foo, DeleteAction).run
+    audit.write(foo, CreateAction).unsafeRunSync()
+    audit.write(foo, DeleteAction).unsafeRunSync()
 
-    audit.process(storage).take(2).run.run
+    audit.process(storage)(config.pools.defaultExecutor).take(2).compile.drain.unsafeRunSync()
 
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0, action = Option("create"))).run
+    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0, action = Option("create"))).unsafeRunSync()
 
     ev.length should equal (1)
   }
@@ -148,12 +148,12 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
     val foo = Foo(1)
     val bar = Bar(2)
 
-    audit.write(foo, CreateAction).run
-    audit.write(bar, CreateAction).run
+    audit.write(foo, CreateAction).unsafeRunSync()
+    audit.write(bar, CreateAction).unsafeRunSync()
 
-    audit.process(storage).take(2).run.run
+    audit.process(storage)(config.pools.defaultExecutor).take(2).compile.drain.unsafeRunSync()
 
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0, category = Option("deploy"))).run
+    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0, category = Option("deploy"))).unsafeRunSync()
 
     ev.length should equal (1)
   }

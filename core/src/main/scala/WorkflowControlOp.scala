@@ -16,9 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{Free,~>}
-import scalaz.concurrent.Task
+import cats.effect.IO
 
+import scalaz.{Free,~>}
 
 /*
  * Basic operations for workflow control
@@ -38,13 +38,13 @@ object WorkflowControlOp {
   def pure[A](a: => A): WorkflowControlF[A] =
     Free.liftFC(Pure(a _))
 
-  val trans: (WorkflowControlOp ~> Task) =
-    new (WorkflowControlOp ~> Task) {
+  val trans: (WorkflowControlOp ~> IO) =
+    new (WorkflowControlOp ~> IO) {
       def apply[A](op: WorkflowControlOp[A]) = op match {
         case Pure(a) =>
-          Task.delay(a())
+          IO(a())
         case Failure(t) =>
-          Task.fail(t)
+          IO.raiseError(t)
       }
     }
 }

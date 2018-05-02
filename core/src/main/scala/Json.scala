@@ -22,6 +22,9 @@ import nelson.scheduler._
 
 object Json {
   import argonaut._, Argonaut._
+  import argonaut.DecodeResultCats._
+  import cats.syntax.apply._
+
   import Datacenter._
   import concurrent.duration._
   import health.HealthStatus
@@ -155,11 +158,11 @@ object Json {
 
   implicit lazy val OrganizationDecoder: DecodeJson[Organization] =
     DecodeJson(c =>
-      ((c --\ "id").as[Long] |@|
-        (c --\ "name").as[Option[String]] |@|
-        (c --\ "login").as[String] |@|
+      ((c --\ "id").as[Long],
+        (c --\ "name").as[Option[String]],
+        (c --\ "login").as[String],
         (c --\ "avatar_url").as[URI]
-      )(Organization.apply)
+      ).mapN(Organization.apply)
     )
 
   implicit lazy val HookEncoder: EncodeJson[Hook] =
@@ -170,10 +173,10 @@ object Json {
 
   implicit lazy val RepoAccessDecoder: DecodeJson[RepoAccess] =
     DecodeJson(c =>
-      ((c --\ "push").as[Boolean] |@|
-        (c --\ "pull").as[Boolean] |@|
+      ((c --\ "push").as[Boolean],
+        (c --\ "pull").as[Boolean],
         (c --\ "admin").as[Boolean]
-      )(RepoAccess.fromBools)
+      ).mapN(RepoAccess.fromBools)
     )
 
   implicit lazy val RepoDecoder: DecodeJson[Repo] =
@@ -230,12 +233,12 @@ object Json {
    */
   implicit lazy val GithubWebHookDecoder: DecodeJson[Github.WebHook] =
     DecodeJson(c =>
-      ((c --\ "id").as[Long] |@|
-        (c --\ "name").as[String] |@|
-        (c --\ "events").as[List[String]] |@|
-        (c --\ "active").as[Boolean] |@|
+      ((c --\ "id").as[Long],
+        (c --\ "name").as[String],
+        (c --\ "events").as[List[String]],
+        (c --\ "active").as[Boolean],
         (c --\ "config").as[Map[String,String]]
-      )(Github.WebHook.apply)
+      ).mapN(Github.WebHook.apply)
     )
 
   /**
@@ -289,10 +292,10 @@ object Json {
    */
   implicit val GithubContentsDecoder: DecodeJson[Github.Contents] =
     DecodeJson(c =>
-      ((c --\ "content").as[String] |@|
-        (c --\ "name").as[String] |@|
+      ((c --\ "content").as[String],
+        (c --\ "name").as[String],
         (c --\ "size").as[Long]
-      )(Github.Contents.apply)
+      ).mapN(Github.Contents.apply)
     )
 
   /**
@@ -369,12 +372,12 @@ object Json {
    */
   implicit val GithubReleaseDecoder: DecodeJson[Github.Release] =
     DecodeJson(z =>
-      ((z --\ "id").as[Long] |@|
-        (z --\ "url").as[String] |@|
-        (z --\ "html_url").as[String] |@|
-        (z --\ "assets").as[List[Github.Asset]] |@|
+      ((z --\ "id").as[Long],
+        (z --\ "url").as[String],
+        (z --\ "html_url").as[String],
+        (z --\ "assets").as[List[Github.Asset]],
         (z --\ "tag_name").as[String]
-        ) ((a, b, c, d, e) =>
+        ).mapN ((a, b, c, d, e) =>
         Github.Release(
           id = a,
           url = b,
@@ -531,11 +534,11 @@ object Json {
    */
   implicit lazy val AssetDecoder: DecodeJson[Github.Asset] =
     DecodeJson(c =>
-      ((c --\ "id").as[Long] |@|
-        (c --\ "name").as[String] |@|
-        (c --\ "state").as[String] |@|
+      ((c --\ "id").as[Long],
+        (c --\ "name").as[String],
+        (c --\ "state").as[String],
         (c --\ "url").as[String]
-      )((x,y,z,w) => Github.Asset(x,y,z,w))
+      ).mapN((x,y,z,w) => Github.Asset(x,y,z,w))
     )
 
   implicit lazy val GithubOrg: CodecJson[Github.OrgKey] =

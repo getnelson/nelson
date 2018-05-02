@@ -27,11 +27,11 @@ class PromtoolSpec extends NelsonSuite with Checkers {
       List(PrometheusAlert("InstanceDown", "IF up == 0 FOR 1m")),
       List(PrometheusRule("a:b:c", "avg(abc)"))
     )
-    validateRules("example_unit", "ALERT InstanceDown IF up == 0 FOR 1m").run should equal (Valid)
+    validateRules("example_unit", "ALERT InstanceDown IF up == 0 FOR 1m").unsafeRunSync() should equal (Valid)
   }
 
   it should "return Invalid with the atrocities documented for invalid rules" in {
-    val result = validateRules("example_unit", "ALERT InstanceDown Duh?").run
+    val result = validateRules("example_unit", "ALERT InstanceDown Duh?").unsafeRunSync()
     result shouldBe an[Invalid]
     result.asInstanceOf[Invalid].msg should include ("""FAILED: parse error at char 20: unexpected identifier "Duh" in alert statement, expected "if"""")
   }

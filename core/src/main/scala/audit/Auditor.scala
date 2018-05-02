@@ -17,43 +17,51 @@
 package nelson
 package audit
 
+import nelson.storage.StoreOp
+
+import cats.effect.IO
+import nelson.CatsHelpers._
+import cats.syntax.applicativeError._
+
+import fs2.{Sink, Stream}
+import fs2.async.mutable.Queue
+
 import journal.Logger
-import scalaz.concurrent.Task
-import scalaz.stream.{Process,Sink,sink}
-import scalaz.stream.async.mutable.{Queue}
+
+import scala.concurrent.ExecutionContext
+
 import scalaz.~>
 import scalaz.syntax.functor._
-import storage.StoreOp
 
-class Auditor(queue: Queue[AuditEvent[_]], defaultLogin: String) {
+class Auditor(queue: Queue[IO, AuditEvent[_]], defaultLogin: String) {
 
   private[this] val logger = Logger[Auditor]
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf"))
-  private def logSink: Sink[Task, AuditEvent[_]] =
-    sink.lift {
+  private def logSink: Sink[IO, AuditEvent[_]] =
+    Sink {
       case AuditEvent(t: Throwable, _, _, _, login, _)  =>
-        Task.delay(logger.error(s"[fatal] audit error event ${t.getMessage} by user ${login}"))
+        IO(logger.error(s"[fatal] audit error event ${t.getMessage} by user ${login}"))
       case a =>
-        Task.delay(logger.info(s"[info] audit event ${a.event} action ${a.action} by user ${a.userLogin}"))
+        IO(logger.info(s"[info] audit event ${a.event} action ${a.action} by user ${a.userLogin}"))
     }
 
-  private def persist(stg: StoreOp ~> Task): Sink[Task, AuditEvent[_]] =
-    sink.lift[Task,AuditEvent[_]]{ a =>
-      storage.run(stg, storage.StoreOp.audit(a).void).handleWith {
-        case t => Task.delay(logger.error(s"[fatal] audit error while persisting event ${t.getMessage}"))
+  private def persist(stg: StoreOp ~> IO): Sink[IO, AuditEvent[_]] =
+    Sink { a =>
+      storage.run(stg, storage.StoreOp.audit(a).void).recoverWith {
+        case t => IO(logger.error(s"[fatal] audit error while persisting event ${t.getMessage}"))
       }
     }
 
-  def auditSink[A](action: AuditAction)(implicit au: Auditable[A]): Sink[Task, A] =
-    sink.lift(a => write(a, action)(au))
+  def auditSink[A](action: AuditAction)(implicit au: Auditable[A]): Sink[IO, A] =
+    Sink(a => write(a, action)(au))
 
-  def errorSink: Sink[Task, Throwable] =
-    sink.lift[Task,Throwable](t => Task.delay(logger.error(t.getMessage))) // possibly truncate
+  def errorSink: Sink[IO, Throwable] =
+    Sink(t => IO(logger.error(t.getMessage))) // possibly truncate
 
-  def write[A](a: A, action: AuditAction, releaseId: Option[Long] = None, login: String = defaultLogin)(implicit au: Auditable[A]): Task[Unit] =
-    queue.enqueueOne(AuditEvent(a, action, releaseId, login))
+  def write[A](a: A, action: AuditAction, releaseId: Option[Long] = None, login: String = defaultLogin)(implicit au: Auditable[A]): IO[Unit] =
+    queue.enqueue1(AuditEvent(a, action, releaseId, login))
 
-  def process(stg: (StoreOp ~> Task)): Process[Task, Unit] =
-    (queue.dequeue.observe(persist(stg))).attempt().stripW.to(logSink)
+  def process(stg: (StoreOp ~> IO))(implicit ec: ExecutionContext): Stream[IO, Unit] =
+    (queue.dequeue.observe(persist(stg))).attempt.collect { case Right(a) => a }.to(logSink)
 }

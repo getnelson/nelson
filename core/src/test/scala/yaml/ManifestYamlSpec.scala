@@ -20,6 +20,8 @@ package yaml
 import scalaz._, Scalaz._
 import org.scalatest.{FlatSpec,Matchers}
 import scala.concurrent.duration._
+import cats.instances.either._
+import cats.syntax.foldable._
 
 class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   import Manifest._
@@ -170,7 +172,7 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   behavior of "v1 manifest parser:"
 
   it should "parse an exhaustive manifest file" in {
-    loadManifest("/nelson/manifest.v1.everything.yml") should equal (\/.right(m1))
+    loadManifest("/nelson/manifest.v1.everything.yml") should equal (Right(m1))
   }
 
   it should "load very minimal manifests" in {
@@ -200,7 +202,7 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
     hasError(mf, "Invalid memory request, request must be <= 512.0 but is 1024.0")
   }
 
-  def hasError[A](mf: Throwable \/ Manifest, slice: String) = {
+  def hasError[A](mf: Either[Throwable, Manifest], slice: String) = {
     mf.swap.exists { err =>
       val msg = err.getMessage
       msg.containsSlice(slice)

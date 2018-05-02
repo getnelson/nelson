@@ -17,11 +17,12 @@
 package nelson
 
 import doobie.imports._
-import scalaz.concurrent.Task
 import scalaz.syntax.monad._
-import scalaz.stream._
 import org.scalatest.BeforeAndAfterEach
 import java.time.Instant
+import nelson.CatsHelpers._
+import cats.effect.IO
+import fs2.Stream
 
 class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
   import cleanup._
@@ -33,12 +34,12 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    storage.run(config.storage, insertFixtures(testName)).run
+    storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
     ()
   }
 
   override def beforeEach: Unit = {
-    sql"DELETE FROM deployment_expiration".update.run.void.transact(stg.xa).run
+    sql"DELETE FROM deployment_expiration".update.run.void.transact(stg.xa).unsafeRunSync()
   }
 
   val dc = config.datacenters.head
@@ -47,7 +48,7 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "should identify expired deployments" in {
     val st = StackName("search", Version(1,1,0), "foo")
-    val su = runs(config.storage, StoreOp.findDeployment(st)).run.get
+    val su = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
     val ctx = DeploymentCtx(su, Ready, Some(Instant.now().minusSeconds(1000)))
 
     GarbageCollector.expired(ctx) should equal (true)
@@ -55,7 +56,7 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "should identify un-expired deployments" in {
     val st = StackName("search", Version(1,1,0), "foo")
-    val su = runs(config.storage, StoreOp.findDeployment(st)).run.get
+    val su = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
     val ctx = DeploymentCtx(su, Ready, Some(Instant.now().plusSeconds(1000)))
 
     GarbageCollector.expired(ctx) should equal (false)
@@ -63,39 +64,39 @@ class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "mark service as garbage in the database" in {
     val st = StackName("search", Version(1,1,0), "foo")
-    val su = runs(config.storage, StoreOp.findDeployment(st)).run.get
+    val su = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
     val ctx = DeploymentCtx(su, Ready, Some(Instant.now().minusSeconds(1000)))
 
-    val ns = runs(config.storage, StoreOp.listNamespacesForDatacenter(testName)).run.head
-    Process.eval(Task.now(((dc,ns,ctx,gr)))).through(GarbageCollector.mark(config)).runLog.run
+    val ns = runs(config.storage, StoreOp.listNamespacesForDatacenter(testName)).unsafeRunSync().head
+    Stream.eval(IO.pure(((dc,ns,ctx,gr)))).through(GarbageCollector.mark(config)).compile.toVector.unsafeRunSync()
 
-    val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).run
+    val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).unsafeRunSync()
     status should equal(Some(DeploymentStatus.Garbage))
   }
 
   it should "update expiration before running garbage collection process" in {
     val st = StackName("search", Version(1,1,0), "foo")
-    val su = runs(config.storage, StoreOp.findDeployment(st)).run.get
-    runs(config.storage, StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Ready, None)).run
+    val su = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
+    runs(config.storage, StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Ready, None)).unsafeRunSync()
     val ctx = DeploymentCtx(su, Ready, Some(Instant.now().minusSeconds(1000))) // expire it
 
     val in = StackName("inventory", Version(1,2,2), "ffff")
-    val ind = runs(config.storage, StoreOp.findDeployment(in)).run.get
+    val ind = runs(config.storage, StoreOp.findDeployment(in)).unsafeRunSync().get
 
     val emptyG = quiver.empty[RoutingNode,Unit,RoutePath]
 
-    val ns = runs(config.storage, StoreOp.listNamespacesForDatacenter(testName)).run.head
+    val ns = runs(config.storage, StoreOp.listNamespacesForDatacenter(testName)).unsafeRunSync().head
 
     val g = emptyG &
       Context(Vector(), RoutingNode(ind), (), Vector()) &
       Context(Vector((RoutePath(ind,"","",80,80),RoutingNode(su))), RoutingNode(su), (), Vector())
 
-    Process.eval(Task.now((dc,ns,ctx,g)))
+    Stream.eval(IO.pure((dc,ns,ctx,g)))
       .through(ExpirationPolicyProcess.expirationProcess(config))
       .filter(d => GarbageCollector.expired(d._3))
-      .through(GarbageCollector.mark(config)).runLog.run
+      .through(GarbageCollector.mark(config)).compile.toVector.unsafeRunSync()
 
-    val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).run
+    val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).unsafeRunSync()
     status should equal(Some(Ready))
   }
 }

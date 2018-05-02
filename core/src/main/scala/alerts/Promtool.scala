@@ -17,9 +17,9 @@
 package nelson
 package alerts
 
-import scalaz.concurrent.Task
+import cats.effect.IO
+import fs2.Stream
 import scala.sys.process.{Process => _, _}
-import scalaz.stream.Process
 
 object Promtool {
   /** The result of a prometheus validation */
@@ -32,9 +32,9 @@ object Promtool {
   final case class PromtoolError(exitCode: Int, msg: String)
       extends RuntimeException(s"Promtool exited with code $exitCode: $msg")
 
-  def validateRules(unitName: UnitName, rules: String): Task[Result] =
+  def validateRules(unitName: UnitName, rules: String): IO[Result] =
     withTempFile(rules, suffix=".rules") { f =>
-      Process.eval(Task.delay {
+      Stream.eval(IO {
         val out = new StringBuffer()
         def writeLine(s: String): Unit = { out.append(s).append("\n"); () }
         val logger = ProcessLogger(writeLine, writeLine)
@@ -50,5 +50,5 @@ object Promtool {
             throw PromtoolError(n, out.toString)
         }
       })
-    }.runLastOr(throw new AssertionError("Promtool process did not emit a result"))
+    }.compile.last.map(_.getOrElse(throw new AssertionError("Promtool process did not emit a result")))
 }

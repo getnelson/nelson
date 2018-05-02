@@ -19,6 +19,7 @@ package nelson
 import doobie.imports._
 import scalaz._,Scalaz._
 import storage.StoreOp
+import nelson.CatsHelpers._
 
 class DatacenterDBSpec extends NelsonSuite {
 
@@ -26,12 +27,12 @@ class DatacenterDBSpec extends NelsonSuite {
     nelson.storage.run(config.storage,
       StoreOp.createDatacenter(datacenter(testName))
       >> StoreOp.listDatacenters
-    ).run should contain (testName)
+    ).unsafeRunSync() should contain (testName)
   }
 
   "storage" should "be able to create namespaces" in {
     nelson.storage.run(config.storage,
       StoreOp.createNamespace(testName, NamespaceName("namespace")) >> StoreOp.listNamespacesForDatacenter(testName)
-    ).run.map(_.name) should contain (NamespaceName("namespace"))
+    ).unsafeRunSync().map(_.name) should contain (NamespaceName("namespace"))
   }
 }

@@ -29,17 +29,18 @@ import scala.collection.immutable.Set
 import scala.collection.mutable.Map
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
-import scalaz.stream._
-import scalaz.stream.{Process, Sink}
-import scalaz.concurrent.Task
 import scalaz.{NonEmptyList, ~>}
 import scala.language.postfixOps
 import scala.concurrent.duration._
 import java.time.Instant
 
+import cats.effect.IO
+
+import fs2.{Sink, Stream}
+
 class DeploymentMonitorSpec extends NelsonSuite {
 
-  def mkDatacenterWithStorage(name: String)(implicit h: HealthCheckOp ~> Task, op: StoreOp ~> Task) : Datacenter = {
+  def mkDatacenterWithStorage(name: String)(implicit h: HealthCheckOp ~> IO, op: StoreOp ~> IO) : Datacenter = {
     val dc = datacenter(name)
     dc.copy(interpreters = dc.interpreters.copy(
       storage = op,
@@ -47,13 +48,13 @@ class DeploymentMonitorSpec extends NelsonSuite {
     ))
   }
   
-  def mkNelsonConfig(dcs: List[Datacenter])(implicit sto: StoreOp ~> Task) =
+  def mkNelsonConfig(dcs: List[Datacenter])(implicit sto: StoreOp ~> IO) =
     config.copy(
       datacenters = dcs,
       interpreters = config.interpreters.copy(storage = sto)
     )
 
-  def mkNelsonConfig(deploymentMonitorDelay: Duration) =
+  def mkNelsonConfig(deploymentMonitorDelay: FiniteDuration) =
     config.copy(
       deploymentMonitor = config.deploymentMonitor.copy(delay = deploymentMonitorDelay)
     )
@@ -61,22 +62,22 @@ class DeploymentMonitorSpec extends NelsonSuite {
   def mkStoreOp(f: Map[String, Set[Namespace]],
                 g: Map[(ID, NonEmptyList[DeploymentStatus]), Set[(Deployment, DeploymentStatus)]],
                 h: Map[UnitName, List[Deployment]] = Map.empty,
-                i: Map[String, TrafficShift] = Map.empty) = new (StoreOp ~> Task) {
-    override def apply[A](s: StoreOp[A]): Task[A] = s match {
-      case ListNamespacesForDatacenter(dc) => Task.now(f(dc))
-      case ListDeploymentsForNamespaceByStatus(nsId, statuses, _) => Task.now(g(nsId -> statuses))
-      case GetDeploymentsForServiceNameByStatus(sn, ns, s) => Task.now(h.get(sn.serviceType).getOrElse(Nil))
-      case GetTrafficShiftForServiceName(nsid, sn) => Task.now(i.get(sn.serviceType))
-      case _ => Task.fail(new Exception("Unexpected Store Operation Executed"))
+                i: Map[String, TrafficShift] = Map.empty) = new (StoreOp ~> IO) {
+    override def apply[A](s: StoreOp[A]): IO[A] = s match {
+      case ListNamespacesForDatacenter(dc) => IO.pure(f(dc))
+      case ListDeploymentsForNamespaceByStatus(nsId, statuses, _) => IO.pure(g(nsId -> statuses))
+      case GetDeploymentsForServiceNameByStatus(sn, ns, s) => IO.pure(h.get(sn.serviceType).getOrElse(Nil))
+      case GetTrafficShiftForServiceName(nsid, sn) => IO.pure(i.get(sn.serviceType))
+      case _ => IO.raiseError(new Exception("Unexpected Store Operation Executed"))
     }
   }
 
   val namespace = Datacenter.Namespace(1L, NamespaceName("dev"), "dev")
 
-  def mkHealthOpWithMajorityHealthy(f: Map[UnitName, HealthStatus]) = new (HealthCheckOp ~> Task) {
-    override def apply[A](c: HealthCheckOp[A]): Task[A] = c match {
+  def mkHealthOpWithMajorityHealthy(f: Map[UnitName, HealthStatus]) = new (HealthCheckOp ~> IO) {
+    override def apply[A](c: HealthCheckOp[A]): IO[A] = c match {
       case Health(dc, ns, service) =>
-        Task.now(List(
+        IO.pure(List(
           f(service.toString),
           HealthStatus("a", Passing, "node000", None),
           HealthStatus("b", Passing, "node001", None),
@@ -86,9 +87,9 @@ class DeploymentMonitorSpec extends NelsonSuite {
     }
   }
 
-  def mkHealthOp(f: Map[UnitName, HealthStatus]) = new (HealthCheckOp ~> Task) {
-    override def apply[A](c: HealthCheckOp[A]): Task[A] = c match {
-      case Health(dc,ns,service) => Task.now(List(f(service.toString)))
+  def mkHealthOp(f: Map[UnitName, HealthStatus]) = new (HealthCheckOp ~> IO) {
+    override def apply[A](c: HealthCheckOp[A]): IO[A] = c match {
+      case Health(dc,ns,service) => IO.pure(List(f(service.toString)))
     }
   }
 
@@ -121,7 +122,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     val cfg = mkNelsonConfig(List(dc))(storeInterp)
 
-    val list = DeploymentMonitor.monitorActionItems(cfg).run
+    val list = DeploymentMonitor.monitorActionItems(cfg).unsafeRunSync()
 
     list.size should equal(2)
 
@@ -168,7 +169,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
       Map("service" -> List(dep100))
     )
     val dc = mkDatacenterWithStorage("dc0")(consul, stg)
-    val res = DeploymentMonitor.monitorActionItem(dc,dep100).run
+    val res = DeploymentMonitor.monitorActionItem(dc,dep100).unsafeRunSync()
     res should equal(PromoteToReady(dc,dep100))
   }
 
@@ -194,8 +195,8 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     val dc = mkDatacenterWithStorage("dc0")(consul, stg)
 
-    val i102 = DeploymentMonitor.monitorActionItem(dc, dep102).run
-    val i103 = DeploymentMonitor.monitorActionItem(dc, dep103).run
+    val i102 = DeploymentMonitor.monitorActionItem(dc, dep102).unsafeRunSync()
+    val i103 = DeploymentMonitor.monitorActionItem(dc, dep103).unsafeRunSync()
 
     i102 should equal(RetainAsWarming(dc, dep102, "Traffic shift in progress, can not promote at this time."))
     i103 should equal(RetainAsWarming(dc, dep103, "Traffic shift in progress, can not promote at this time."))
@@ -221,8 +222,8 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     val dc = mkDatacenterWithStorage("dc0")(consul, stg)
 
-    val i102 = DeploymentMonitor.monitorActionItem(dc, dep102).run
-    val i103 = DeploymentMonitor.monitorActionItem(dc, dep103).run
+    val i102 = DeploymentMonitor.monitorActionItem(dc, dep102).unsafeRunSync()
+    val i103 = DeploymentMonitor.monitorActionItem(dc, dep103).unsafeRunSync()
 
     i102 should equal(RetainAsWarming(dc, dep102, "Traffic shift in progress, can not promote at this time."))
     i103 should equal(RetainAsWarming(dc, dep103, "Traffic shift in progress, can not promote at this time."))
@@ -238,23 +239,23 @@ class DeploymentMonitorSpec extends NelsonSuite {
     val throughSinkBuffer = ListBuffer.empty[Int]
     val finalSinkBuffer = ListBuffer.empty[Int]
 
-    val heartbeat = Process.emitAll(Seq(0 seconds, 0 seconds)).toSource
+    val heartbeat = Stream.emits(Seq(0 seconds, 0 seconds))
 
-    val writer = lift[Process, Seq[Int]] { _ =>
-      Process.emit(fib).toSource
+    val writer = lift[Stream, Seq[Int]] { _ =>
+      Stream.emit(fib)
     }
 
-    val throughSink = sink.lift[Task, Int] { i =>
-      Task.delay { throughSinkBuffer += i; () }
+    val throughSink = Sink { (i: Int) =>
+      IO { throughSinkBuffer += i; () }
     }
 
     val toSink = lift[Sink, Int] { _ =>
-      sink.lift { i =>
-        Task.delay { finalSinkBuffer += i; () }
+      Sink { (i: Int) =>
+        IO { finalSinkBuffer += i; () }
       }
     }
 
-    DeploymentMonitor.drain(cfg)(heartbeat, writer, throughSink, toSink).run.run
+    DeploymentMonitor.drain(cfg)(heartbeat, writer, throughSink, toSink).compile.drain.unsafeRunSync()
 
     throughSinkBuffer.toList should equal((fib ++ fib).toList)
     finalSinkBuffer.toList should equal((fib ++ fib).toList)

@@ -16,6 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import nelson.CatsHelpers._
 import doobie.imports._
 import scalaz._,Scalaz._
 import storage.StoreOp
@@ -36,7 +37,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
     sql"TRUNCATE TABLE namespaces".update.run >>
     sql"TRUNCATE TABLE datacenters".update.run >>
     sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run
-  ).void.transact(stg.xa).run
+  ).void.transact(stg.xa).unsafeRunSync()
   }
 
   val lb = Loadbalancer("lb", Vector(Route(Port("default", 8080, "http"),
@@ -56,7 +57,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
       a  <- nelson.storage.run(config.storage, StoreOp.findLoadbalancerDeployment(lb.name, MajorVersion(1), ns))
-    } yield a).run.map(_.loadbalancer.name) should contain(lb.name)
+    } yield a).unsafeRunSync().map(_.loadbalancer.name) should contain(lb.name)
   }
 
   it should "be able to create loadbalancer then get it by id" in {
@@ -67,7 +68,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
       a  <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeployment(d))
-    } yield a).run.map(_.loadbalancer.name) should contain(lb.name)
+    } yield a).unsafeRunSync().map(_.loadbalancer.name) should contain(lb.name)
   }
 
   it should "be able to create loadbalancer then get it by guid" in {
@@ -79,7 +80,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
       a  <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeployment(d))
       b  <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeploymentByGUID(a.get.guid))
-    } yield b).run.map(_.loadbalancer.name) should contain(lb.name)
+    } yield b).unsafeRunSync().map(_.loadbalancer.name) should contain(lb.name)
   }
 
   it should "not create a new loadbalancer if it already exists" in {
@@ -89,7 +90,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
       ns  <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
       id  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
       id2 <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
-    } yield (id,id2)).run
+    } yield (id,id2)).unsafeRunSync()
     id1 should equal(id2)
   }
 
@@ -101,7 +102,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb2),9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
       a  <- nelson.storage.run(config.storage, StoreOp.listLoadbalancerDeploymentsForNamespace(ns))
-    } yield a).run.map(_.loadbalancer.name) should contain(lb2.name)
+    } yield a).unsafeRunSync().map(_.loadbalancer.name) should contain(lb2.name)
   }
 
   it should "be able to delete loadbalancer by id" in {
@@ -112,14 +113,14 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
       id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
       d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
       a  <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeployment(d))
-    } yield a).run
+    } yield a).unsafeRunSync()
 
     before.map(_.loadbalancer.name) should contain(lb.name)
 
     val after = (for {
       _ <- nelson.storage.run(config.storage, StoreOp.deleteLoadbalancerDeployment(before.get.id))
       a <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeployment(before.get.id))
-    } yield a).run
+    } yield a).unsafeRunSync()
 
     after should equal(None)
   }

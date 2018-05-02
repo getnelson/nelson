@@ -21,7 +21,7 @@ package autharbitrary
 import ArbFunction0._
 
 import scalaz.Apply
-import scalaz.concurrent.Task
+import cats.effect.IO
 import scodec.bits.ByteVector
 import org.scalacheck._
 import Arbitrary.arbitrary
@@ -68,7 +68,7 @@ object AuthArbitrary {
       AuthEnv.instance(
         encryptKey = encKey.bytes,
         sigKey = signKey.bytes,
-        getNextNonce = Task.delay(Nonce.fromLongs(randLong(), randLong()))
+        getNextNonce = IO(Nonce.fromLongs(randLong(), randLong()))
       )
     })
 

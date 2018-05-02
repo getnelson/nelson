@@ -16,30 +16,36 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import java.net.URI
-import java.time.Instant
-import scala.concurrent.duration.FiniteDuration
+import nelson.Workflow.WorkflowOp
+import nelson.docker.DockerOp
+import nelson.health.HealthCheckOp
+import nelson.loadbalancers.LoadbalancerOp
+import nelson.logging.LoggingOp
+import nelson.scheduler.SchedulerOp
+import nelson.storage.StoreOp
+import nelson.vault.Vault
+
+import cats.effect.IO
 
 import com.amazonaws.regions.Region
-import concurrent.duration._
-import health.HealthCheckOp
-import docker.DockerOp
+
 import helm.ConsulOp
-import loadbalancers.LoadbalancerOp
-import logging.LoggingOp
+
+import java.net.URI
+import java.time.Instant
+import java.nio.file.Path
+
 import org.http4s.Uri
-import scalaz.concurrent.Task
+
+import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.duration._
+
+import scalaz.{Order, ValidationNel, ~>}
 import scalaz.std.set._
 import scalaz.std.string._
 import scalaz.syntax.foldable._
 import scalaz.syntax.monoid._
 import scalaz.syntax.std.option._
-import scalaz.{Order, ValidationNel, ~>}
-import scheduler.SchedulerOp
-import storage.StoreOp
-import vault.Vault
-import Workflow.WorkflowOp
-
 
 object Infrastructure {
 
@@ -74,6 +80,9 @@ object Infrastructure {
 
   final case class Kubernetes(
     endpoint: Uri,
+    version: KubernetesVersion,
+    caCertPath: Path,
+    token: String,
     timeout: Duration
   )
 
@@ -128,17 +137,17 @@ object Infrastructure {
   )
 
   final case class Interpreters(
-    scheduler: SchedulerOp ~> Task,
-    consul: ConsulOp ~> Task,
-    vault: Vault ~> Task,
-    storage: StoreOp ~> Task,
-    logger: LoggingOp ~> Task,
-    docker: DockerOp ~> Task,
-    control: WorkflowControlOp ~> Task,
-    health: HealthCheckOp ~> Task
+    scheduler: SchedulerOp ~> IO,
+    consul: ConsulOp ~> IO,
+    vault: Vault ~> IO,
+    storage: StoreOp ~> IO,
+    logger: LoggingOp ~> IO,
+    docker: DockerOp ~> IO,
+    control: WorkflowControlOp ~> IO,
+    health: HealthCheckOp ~> IO
   ) {
     import ScalazHelpers._
-    val workflow: WorkflowOp ~> Task =
+    val workflow: WorkflowOp ~> IO =
       scheduler or (vault or (control or (storage or (logger or (docker or consul)))))
   }
 }
@@ -150,7 +159,7 @@ final case class Datacenter(
   defaultTrafficShift: Infrastructure.TrafficShift,
   proxyCredentials: Option[Infrastructure.ProxyCredentials],
   interpreters: Infrastructure.Interpreters,
-  loadbalancer: Option[LoadbalancerOp ~> Task],
+  loadbalancer: Option[LoadbalancerOp ~> IO],
   policy: PolicyConfig
 ) {
 
@@ -160,13 +169,13 @@ final case class Datacenter(
     (other.asInstanceOf[Datacenter].name == this.name)
   }
 
-  lazy val workflow: WorkflowOp ~> Task = interpreters.workflow
+  lazy val workflow: WorkflowOp ~> IO = interpreters.workflow
 
-  lazy val consul: ConsulOp ~> Task = interpreters.consul
+  lazy val consul: ConsulOp ~> IO = interpreters.consul
 
-  lazy val storage: StoreOp ~> Task = interpreters.storage
+  lazy val storage: StoreOp ~> IO = interpreters.storage
 
-  lazy val health: HealthCheckOp ~> Task = interpreters.health
+  lazy val health: HealthCheckOp ~> IO = interpreters.health
 
   override def hashCode: Int = name.hashCode
 }

@@ -18,8 +18,11 @@ package nelson
 package plans
 
 import org.http4s._
-import org.http4s.dsl._
+import org.http4s.headers.`Content-Type`
+import org.http4s.dsl.io._
 import _root_.argonaut._, Argonaut._
+import cats.effect.IO
+import nelson.CatsHelpers._
 import scalaz._, Scalaz._
 
 final case class Graph(config: NelsonConfig) extends Default {
@@ -29,7 +32,7 @@ final case class Graph(config: NelsonConfig) extends Default {
   def getRoutingGraph(ns: Datacenter.Namespace): storage.StoreOpF[Option[RoutingGraph]] =
      routing.RoutingTable.routingGraph(ns).map(x => Option(x))
 
-  val service: HttpService = HttpService {
+  val service: HttpService[IO] = HttpService[IO] {
     case GET -> Root / "v1" / "datacenters" / datacenter / namespace / "graph" =>
       type CoyoStoreOp[A] = Coyoneda[storage.StoreOp, A]
       type FreeCoyoStoreOp[A] = Free[CoyoStoreOp, A]
@@ -40,9 +43,9 @@ final case class Graph(config: NelsonConfig) extends Default {
         gr  <- OptionT(getRoutingGraph(ns))
          graph = DependencyGraph(gr)
        } yield graph.svg).run).attempt.flatMap {
-        case -\/(e) => BadRequest(e.getMessage)
-        case \/-(None) => BadRequest("no such namespace found")
-        case \/-(Some(t)) => Ok(t).withContentType(Some(MediaType.`image/svg+xml`))
+        case Left(e) => BadRequest(e.getMessage)
+        case Right(None) => BadRequest("no such namespace found")
+        case Right(Some(t)) => Ok(t).map(_.withContentType(`Content-Type`(MediaType.`image/svg+xml`)))
       }
 
     case GET -> Root / "v1" / "deprecated" / "graph" =>

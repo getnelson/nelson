@@ -18,6 +18,7 @@ package nelson
 
 import io.prometheus.client.CollectorRegistry
 import org.scalatest.FlatSpec
+import nelson.CatsHelpers._
 
 class PrometheusConsulSpec extends FlatSpec with NelsonSuite {
   val reg = new CollectorRegistry
@@ -28,17 +29,17 @@ class PrometheusConsulSpec extends FlatSpec with NelsonSuite {
   behavior of "PrometheusClient"
 
   it should "record latency" in {
-    def value = getValue("helm_requests_latency_seconds_count", "helm_op" -> "healthCheck", "consul_instance" -> "test")
+    def value = getValue("helm_requests_latency_seconds_count", "helm_op" -> "healthListChecksForService", "consul_instance" -> "test")
     val before = value
-    helm.run(client, helm.ConsulOp.healthCheck("foo")).attemptRun
+    helm.run(client.asCats, helm.ConsulOp.healthListChecksForService("foo", None, None, None)).attempt.unsafeRunSync()
     val after = value
     after should equal (before + 1.0)
   }
 
   it should "record failures" in {
-    def value = getValue("helm_requests_failures_total", "helm_op" -> "get", "consul_instance" -> "test")
+    def value = getValue("helm_requests_failures_total", "helm_op" -> "kvGet", "consul_instance" -> "test")
     val before = value
-    helm.run(client, helm.ConsulOp.get("I don't exist in consulMap")).attemptRun
+    helm.run(client.asCats, helm.ConsulOp.kvGet("I don't exist in consulMap")).attempt.unsafeRunSync()
     val after = value
     after should equal (before + 1.0)
   }

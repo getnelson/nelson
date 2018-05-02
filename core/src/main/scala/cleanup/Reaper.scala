@@ -18,16 +18,22 @@ package nelson
 package cleanup
 
 import nelson.Datacenter.{Deployment, Namespace}
+import nelson.Metrics.default.{destroyFailureCounter,destroySuccessCounter}
 import nelson.Workflow.WorkflowOp
-import notifications.Notify
-import Metrics.default.{destroyFailureCounter,destroySuccessCounter}
-import scala.util.control.NonFatal
-import scalaz.~>
-import scalaz.concurrent.Task
-import scalaz.stream.{Sink, sink}
-import scalaz.syntax.applicative._
-import journal.Logger
+import nelson.notifications.Notify
 
+import cats.effect.IO
+import cats.syntax.applicativeError._
+import cats.syntax.apply._
+
+import fs2.Sink
+
+import scala.util.control.NonFatal
+
+import scalaz.~>
+import scalaz.syntax.applicative._
+
+import journal.Logger
 
 object Reaper {
 
@@ -39,24 +45,24 @@ object Reaper {
    * scheduler was used to initially place the deployment
    * to delete the running job.
    */
-  def reap(cfg: NelsonConfig): Sink[Task, CleanupRow] =
-    sink.lift { case (dc, ns, d, gr) =>
+  def reap(cfg: NelsonConfig): Sink[IO, CleanupRow] =
+    Sink { case (dc, ns, d, gr) =>
       destroy(dc,ns,d.deployment)(dc.workflow)(cfg)
         .map { _ => destroySuccessCounter.labels(ns.name.asString).inc() }
-        .handleWith {
+        .recoverWith {
           // this is a Sink and the end of the world, so we need to handle NonFatal to keep Processes running
           case NonFatal(e) =>
             destroyFailureCounter.labels(ns.name.asString).inc()
-            Task.delay(log.warn(s"error occured during destroy phase $e"))
+            IO(log.warn(s"error occured during destroy phase $e"))
         }
     }
 
-  private def destroy(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(t: WorkflowOp ~> Task)(cfg: NelsonConfig): Task[Unit] = {
+  private def destroy(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(t: WorkflowOp ~> IO)(cfg: NelsonConfig): IO[Unit] = {
     import Json._
     import audit.AuditableInstances._
     Workflow.run(resolve(d).destroy(d,dc,ns))(t) <*
       cfg.auditor.write(d, audit.DeleteAction) <*
-      Task.delay(log.debug((s"finished cleaning up $d in datacenter $dc"))) <*
+      IO(log.debug((s"finished cleaning up $d in datacenter $dc"))) <*
       Notify.sendDecommissionedNotifications(dc,ns,d)(cfg)
   }
 

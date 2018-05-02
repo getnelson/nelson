@@ -18,9 +18,12 @@ package nelson
 package plans
 
 import org.http4s._
-import org.http4s.dsl._
+import org.http4s.dsl.io._
 import org.http4s.argonaut._
+import org.http4s.headers.Location
 import _root_.argonaut._, Argonaut._
+import cats.effect.IO
+import nelson.CatsHelpers._
 import scalaz.{Applicative, \/}
 import scalaz.Scalaz._
 import java.time.Instant
@@ -117,7 +120,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       jEmptyObject
   )
 
-  val service: HttpService = HttpService {
+  val service: HttpService[IO] = HttpService[IO] {
 
     /*
      * GET /v1/datacenters
@@ -125,7 +128,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      * List all the datacenters and their subordinate namespaces
      */
    case GET -> Root / "v1" / "datacenters" & IsAuthenticated(session) =>
-      json(Nelson.listDatacenters.map(_.toList))
+      json(Nelson.listDatacenters(config.pools.defaultExecutor).map(_.toList))
 
     /*
      * GET /v1/datacenters/portland
@@ -207,7 +210,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
         jsonF(Nelson.createManualDeployment(session,md)){ guid =>
           Uri.fromString(linkTo(s"/v1/deployments/$guid")(config.network).toString).fold(
             e => InternalServerError(s"Bad redirect: ${e.details}"),
-            Found.apply
+            s => Found(Location(s))
           )
         }
       }

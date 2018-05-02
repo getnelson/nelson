@@ -18,13 +18,18 @@ package nelson
 
 import knobs._
 import java.io.File
+import java.util.concurrent.{Executors, ThreadFactory}
 
 import journal.Logger
 
+import cats.effect.IO
+
+import fs2.Stream
+
+import scala.concurrent.ExecutionContext
+
 import scalaz.{Optional => _, _}
 import Scalaz._
-import scalaz.concurrent.Task
-import scalaz.stream.Process
 import nelson.monitoring.{DeploymentMonitor, Stoplight, registerJvmMetrics}
 import nelson.http.MonitoringServer
 import nelson.storage.{Migrate, Hikari}
@@ -34,33 +39,43 @@ object Main {
   private val log = Logger[this.type]
 
   def main(args: Array[String]): Unit = {
+    val configThreadFactory = new ThreadFactory {
+      def newThread(r: Runnable) = {
+        val t = Executors.defaultThreadFactory.newThread(r)
+        t.setName("nelson-knobs")
+        t
+      }
+    }
+
+    val configThreadPool = ExecutionContext.fromExecutorService(Executors.newSingleThreadExecutor(configThreadFactory))
+
     val file = new File(args.headOption.getOrElse("/opt/application/conf/nelson.cfg"))
 
-    def readConfig =
-      (knobs.loadImmutable(Required(ClassPathResource("nelson/defaults.cfg")) :: Nil) |@|
-        knobs.loadImmutable(Optional(FileResource(file)) :: Nil))((a,b) =>
-        Config.readConfig(a ++ b, Http, Hikari.build _)
-      )
+    def readConfig = for {
+      defaults  <- knobs.loadImmutable[IO](Required(ClassPathResource("nelson/defaults.cfg")) :: Nil)
+      overrides <- knobs.loadImmutable[IO](Optional(FileResource(file)(configThreadPool)) :: Nil)
+      config    <- Config.readConfig(defaults ++ overrides, Http, Hikari.build _)
+    } yield config
 
-    val cfg = readConfig.run
+    val cfg = readConfig.unsafeRunSync()
 
-    Migrate.migrate(cfg.database).run
+    Migrate.migrate(cfg.database).unsafeRunSync()
 
     log.info(Banner.text)
 
     if(cfg.datacenters.nonEmpty){
       log.info("bootstrapping the datacenter definitions known by nelson...")
-      Nelson.createDatacenters(cfg.datacenters)(cfg).run
+      Nelson.createDatacenters(cfg.datacenters)(cfg).unsafeRunSync()
 
       log.info(s"bootstrapping the namespaces to ensure the default '${cfg.defaultNamespace}' namespace is present...")
-      Nelson.createDefaultNamespaceIfAbsent(cfg.datacenters, cfg.defaultNamespace).run(cfg).run
+      Nelson.createDefaultNamespaceIfAbsent(cfg.datacenters, cfg.defaultNamespace).run(cfg).unsafeRunSync()
 
       log.info("setting up the workflow logger on the filesystem...")
-      cfg.workflowLogger.setup().run
+      cfg.workflowLogger.setup().unsafeRunSync()
 
-      def runBackgroundJob[A](name: String, p: Process[Task, A]): Unit = {
+      def runBackgroundJob[A](name: String, p: Stream[IO, A]): Unit = {
         log.info(s"starting the $name processor")
-        Stoplight(s"${name}_stoplight")(p).run.runAsync(_.fold(
+        Stoplight(s"${name}_stoplight")(p).compile.drain.unsafeRunAsync(_.fold(
           e => log.error(s"fatal error in background process: name=${name}", e),
           _ => log.warn(s"background process completed unexpectedly without exception: name=${name}")
         ))
@@ -69,11 +84,11 @@ object Main {
       import cleanup.SweeperDefaults._
 
       log.info("booting the background processes nelson needs to operate...")
-      runBackgroundJob("auditor", cfg.auditor.process(cfg.storage))
-      runBackgroundJob("pipeline_processor", Process.eval(Pipeline.task(cfg)(Pipeline.sinks.runAction(cfg))))
+      runBackgroundJob("auditor", cfg.auditor.process(cfg.storage)(cfg.pools.defaultExecutor))
+      runBackgroundJob("pipeline_processor", Stream.eval(Pipeline.task(cfg)(Pipeline.sinks.runAction(cfg))))
       runBackgroundJob("workflow_logger", cfg.workflowLogger.process)
       runBackgroundJob("routing_cron", routing.cron.consulRefresh(cfg) to Http4sConsul.consulSink)
-      runBackgroundJob("cleanup_pipeline", cleanup.CleanupCron.pipeline(cfg))
+      runBackgroundJob("cleanup_pipeline", cleanup.CleanupCron.pipeline(cfg)(cfg.pools.defaultExecutor))
       runBackgroundJob("sweeper", cleanup.Sweeper.process(cfg))
       runBackgroundJob("deployment_monitor", DeploymentMonitor.loop(cfg))
 
@@ -87,7 +102,7 @@ object Main {
       )
 
       log.info("starting the nelson server...")
-      Server.start(cfg).run
+      Server.start(cfg).unsafeRunSync()
       ()
     } else {
       log.error("zero datacenters defined, which makes nelson useless. Exiting, to avoid you trying to do something pointless.")

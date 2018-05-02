@@ -16,13 +16,14 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.effect.IO
 import org.http4s._
 
 /** This should be added to http4s */
 abstract class Accepts(mediaType: MediaType) {
-  def unapply(req: Request): Boolean =
+  def unapply(req: Request[IO]): Boolean =
     req.headers.get(headers.Accept).fold(true)(
-      _.values.list.exists(_.mediaRange.satisfiedBy(mediaType)))
+      _.values.toList.exists(_.mediaRange.satisfiedBy(mediaType)))
 }
 
 /** True if a request accepts svg+xml */

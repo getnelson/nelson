@@ -17,13 +17,16 @@
 package nelson
 package notifications
 
-import scalaz._, Scalaz._
-import scalaz.concurrent.Task
-import Datacenter.{Namespace, StackName, Deployment}
-import storage.StoreOp
-import Manifest.{UnitDef,Versioned}
+import nelson.Datacenter.{Namespace, StackName, Deployment}
+import nelson.Manifest.{UnitDef,Versioned}
+import nelson.storage.StoreOp
+
+import cats.effect.IO
+import nelson.CatsHelpers._
+
 import journal._
 
+import scalaz._, Scalaz._
 
 object Notify {
 
@@ -39,7 +42,7 @@ object Notify {
     |in ${ns.asString} $dc
     """.stripMargin
 
-  def sendDeployedNotifications(unit: UnitDef @@ Versioned, actionConfig: Manifest.ActionConfig)(cfg: NelsonConfig): Task[Unit] = {
+  def sendDeployedNotifications(unit: UnitDef @@ Versioned, actionConfig: Manifest.ActionConfig)(cfg: NelsonConfig): IO[Unit] = {
     val name = Versioned.unwrap(unit).name
     val sn = StackName(name, unit.version, actionConfig.hash)
     val msg = deployedTemplate(actionConfig.datacenter.name,actionConfig.namespace.name,sn)
@@ -48,9 +51,9 @@ object Notify {
     sendEmail(actionConfig.notifications.email.map(_.recipient), sub, msg)(cfg.email)
   }
 
-  def sendDecommissionedNotifications(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(cfg: NelsonConfig): Task[Unit] = {
+  def sendDecommissionedNotifications(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(cfg: NelsonConfig): IO[Unit] = {
 
-    def fetchNotifications(d: Deployment): Task[NotificationSubscriptions] = {
+    def fetchNotifications(d: Deployment): IO[NotificationSubscriptions] = {
       def fetchManifest(slug: Slug) = Github.Request.fetchFileFromRepository(slug,
         cfg.manifest.filename, "master")(cfg.git.systemAccessToken).runWith(cfg.github)
 
@@ -60,11 +63,11 @@ object Notify {
       val notes = for {
         slug <- OptionT(findRelease(d.guid))
         raw  <- OptionT(fetchManifest(slug))
-        man  <- OptionT(Task.now(yaml.ManifestParser.parse(raw.decoded).toOption))
+        man  <- OptionT(IO.pure(yaml.ManifestParser.parse(raw.decoded).toOption))
       } yield man.notifications
 
       notes.run.attempt.map {
-        case \/-(Some(ns)) => ns
+        case Right(Some(ns)) => ns
         case _ => NotificationSubscriptions.empty
       }
     }
@@ -78,18 +81,18 @@ object Notify {
     } yield ()
   }
 
-  private def sendEmail(rs: List[EmailAddress], sub: String, msg: String)(i: Option[EmailOp ~> Task]) =
-    if (rs.isEmpty) Task.now(())
+  private def sendEmail(rs: List[EmailAddress], sub: String, msg: String)(i: Option[EmailOp ~> IO]) =
+    if (rs.isEmpty) IO.unit
     else runOr(i, EmailOp.send(rs,sub,msg))(
       log(s"email ($sub) was not sent because the email server is not configured"))
 
-  private def sendSlack(cs: List[SlackChannel], msg: String)(i: Option[SlackOp ~> Task]) =
-    if (cs.isEmpty) Task.now(())
+  private def sendSlack(cs: List[SlackChannel], msg: String)(i: Option[SlackOp ~> IO]) =
+    if (cs.isEmpty) IO.unit
     else runOr(i, SlackOp.send(cs, msg))(
       log(s"slack notification was not sent because slack integration is not configured"))
 
   private val logger = Logger[Notify.type]
 
-  private def log(msg: String): Task[Unit] =
-    Task.delay(logger.info(msg))
+  private def log(msg: String): IO[Unit] =
+    IO(logger.info(msg))
 }

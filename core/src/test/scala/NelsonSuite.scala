@@ -16,16 +16,23 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import helm.ConsulOp
-import notifications.{SlackOp,EmailOp}
-import doobie.imports._
-import scalaz._, Scalaz._
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
-import scalaz.IMap
-import scalaz.concurrent.Task
-import knobs._
-import java.util.concurrent.{Executors, ThreadFactory}
+import cats.effect.IO
+
 import dispatch.Http
+
+import nelson.notifications.{SlackOp,EmailOp}
+
+import doobie.imports._
+
+import helm.{ConsulOp, HealthCheckResponse}
+
+import java.util.concurrent.{Executors, ThreadFactory}
+
+import knobs._
+
+import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
+
+import scalaz._, Scalaz._
 
 trait NelsonSuite
     extends FlatSpec
@@ -57,7 +64,7 @@ trait NelsonSuite
   val dbConfig = TestStorage.dbConfig(testName)
 
   override def beforeAll: Unit = {
-    trunc.transact(stg.xa).run
+    trunc.transact(stg.xa).unsafeRunSync()
   }
 
   /**
@@ -66,21 +73,23 @@ trait NelsonSuite
    */
   def consulMap: Map[String, String] = Map.empty
 
-  lazy val testConsul: ConsulOp ~> Task = new NaturalTransformation[ConsulOp, Task] {
+  lazy val testConsul: ConsulOp ~> IO = new NaturalTransformation[ConsulOp, IO] {
     @volatile var kvs: Map[String,String] = consulMap
     import helm.Key
-    def apply[A](a: ConsulOp[A]): Task[A] = a match {
-      case ConsulOp.Get(key: Key) => Task.delay(Some(kvs(key)))
-      case ConsulOp.Set(key: Key, value: String) => Task.delay(kvs = kvs + (key -> value))
-      case ConsulOp.Delete(key: Key) => Task.delay(kvs = kvs - key)
-      case ConsulOp.ListKeys(prefix: Key) => Task.delay(kvs.keySet.filter(_.startsWith(prefix)))
-      case ConsulOp.HealthCheck(service: String) => Task.delay(kvs(s"health/$service"))
+    def apply[A](a: ConsulOp[A]): IO[A] = a match {
+      case ConsulOp.KVGet(key: Key) => IO(Some(kvs(key)))
+      case ConsulOp.KVSet(key: Key, value: String) => IO(kvs = kvs + (key -> value))
+      case ConsulOp.KVDelete(key: Key) => IO(kvs = kvs - key)
+      case ConsulOp.KVListKeys(prefix: Key) => IO(kvs.keySet.filter(_.startsWith(prefix)))
+      case ConsulOp.HealthListChecksForService(service: String, _, _, _) =>
+        IO(List(HealthCheckResponse("", "", "", helm.HealthStatus.fromString(kvs(s"health/$service")).get, "", "", "", "", List.empty, 0L, 0L)))
+      case _ => throw new Exception("currently not used")
     }
   }
 
   import vault._
-  val testVault: Vault ~> Task = new (Vault ~> Task) {
-    def apply[A](v: Vault[A]): Task[A] = Task.now(v match {
+  val testVault: Vault ~> IO = new (Vault ~> IO) {
+    def apply[A](v: Vault[A]): IO[A] = IO.pure(v match {
       case Vault.IsInitialized => true
       case Vault.Initialize(init) => InitialCreds(Nil, RootToken("fake"))
       case Vault.GetSealStatus => SealStatus(false, 0, 0, 0)
@@ -95,71 +104,71 @@ trait NelsonSuite
     })
   }
 
-  lazy val testSlack: SlackOp ~> Task = new NaturalTransformation[SlackOp, Task] {
+  lazy val testSlack: SlackOp ~> IO = new NaturalTransformation[SlackOp, IO] {
     import SlackOp._
-    def apply[A](op: SlackOp[A]): Task[A] = op match {
+    def apply[A](op: SlackOp[A]): IO[A] = op match {
       case SendSlackNotification(channels, msg) =>
-        Task.now(())
+        IO.unit
     }
   }
 
-  lazy val testEmail: EmailOp ~> Task = new NaturalTransformation[EmailOp, Task] {
+  lazy val testEmail: EmailOp ~> IO = new NaturalTransformation[EmailOp, IO] {
     import EmailOp._
-    def apply[A](op: EmailOp[A]): Task[A] = op match {
+    def apply[A](op: EmailOp[A]): IO[A] = op match {
       case SendEmailNotification(r,m,s) =>
-        Task.now(())
+        IO.unit
     }
   }
 
   import docker._
-  lazy val testDocker = new (DockerOp ~> Task) {
+  lazy val testDocker = new (DockerOp ~> IO) {
     def apply[A](op: DockerOp[A]) = op match {
       case DockerOp.Pull(i) =>
-        Task.delay((0, Nil))
+        IO((0, Nil))
       case DockerOp.Extract(unit) =>
-        Task.delay(Docker.Image(unit.name,None))
+        IO(Docker.Image(unit.name,None))
       case DockerOp.Push(i) =>
-        Task.delay((0, Nil))
+        IO((0, Nil))
       case DockerOp.Tag(i, r) =>
-        Task.delay((0, i))
+        IO((0, i))
     }
   }
 
   import scheduler._
-  lazy val nomad = new (SchedulerOp ~> Task) {
+  lazy val nomad = new (SchedulerOp ~> IO) {
     import scheduler.SchedulerOp._
     def apply[A](op: SchedulerOp[A]) = op match {
       case Launch(i,dc,ns,unit,e,hash) =>
         val name = Manifest.Versioned.unwrap(unit).name
         val sn = Datacenter.StackName(name, unit.version,hash)
-        Task.delay(sn.toString)
+        IO(sn.toString)
       case Delete(dc,d) =>
-        Task.delay(())
+        IO.unit
       case Summary(dc,ns,sn) =>
-        Task.delay(None)
+        IO(None)
       case RunningUnits(dc, prefix) =>
-        Task.now(Set.empty)
+        IO.pure(Set.empty)
     }
   }
 
   import logging._
-  lazy val logger = new (LoggingOp ~> Task) {
+  lazy val logger = new (LoggingOp ~> IO) {
     import LoggingOp._
     def apply[A](op: LoggingOp[A]) = op match {
       case Info(msg) =>
-        Task.delay(())
+        IO.unit
       case Debug(msg) =>
-        Task.delay(())
+        IO.unit
       case LogToFile(id, msg) =>
-        Task.delay(())
+        IO.unit
     }
   }
 
   import health._
-  lazy val healthI = new (HealthCheckOp ~> Task) {
+  lazy val healthI = new (HealthCheckOp ~> IO) {
     import HealthCheckOp._
-    def apply[A](op: HealthCheckOp[A]): Task[A] = op match {
-      case Health(dc,ns,sn) => Task.now(Nil)
+    def apply[A](op: HealthCheckOp[A]): IO[A] = op match {
+      case Health(dc,ns,sn) => IO.pure(Nil)
     }
   }
 
@@ -168,12 +177,12 @@ trait NelsonSuite
   lazy val testInterpreters = Infrastructure.Interpreters(
     nomad,testConsul,testVault,stg,logger,testDocker,WorkflowControlOp.trans,healthI)
 
-  lazy val config = knobs.loadImmutable(List(
+  lazy val config = knobs.loadImmutable[IO](List(
     Required(ClassPathResource("nelson/defaults.cfg")),
     Required(ClassPathResource("nelson/nelson-test.cfg")),
     Required(ClassPathResource("nelson/datacenters.cfg"))
-  )).map(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _))
-    .run
+  )).flatMap(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _))
+    .unsafeRunSync()
     .copy( // Configure a minimal set of things in code. Otherwise, we want to test our config.
       database = dbConfig, // let each suite get its own h2
       dockercfg = DockerConfig(sys.env.getOrElse("DOCKER_HOST", "unix:///var/run/docker.sock"), true),

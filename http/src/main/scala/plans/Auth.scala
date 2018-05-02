@@ -18,11 +18,12 @@ package nelson
 package plans
 
 import org.http4s._
-import org.http4s.dsl._
-import org.http4s.headers.`Set-Cookie`
+import org.http4s.dsl.io._
+import org.http4s.headers.{Location, `Set-Cookie`}
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
-import scalaz.concurrent.Task
+import cats.effect.IO
+import nelson.CatsHelpers._
 
 final case class Auth(config: NelsonConfig) extends Default {
   import nelson.Json._
@@ -35,17 +36,16 @@ final case class Auth(config: NelsonConfig) extends Default {
       jEmptyObject
     }
 
-  val service: HttpService = HttpService {
+  val service: HttpService[IO] = HttpService[IO] {
     case GET -> Root / "auth" / "login" =>
       if(cfg.security.useEnvironmentSession){
-        Found(uri("/auth/exchange?code=yolo"))
+        Found(Location(uri("/auth/exchange?code=yolo")))
       } else {
         redirectToLogin
       }
 
     case GET -> Root / "auth" / "logout" =>
-      Found(uri("/"))
-        .putHeaders(Cookie(CookieName, "").clearCookie)
+      Found(Location(uri("/"))).map(_.putHeaders(Cookie(CookieName, "").clearCookie))
 
     /*
      * used to exchange github token for a nelson token. This endpoint
@@ -57,10 +57,10 @@ final case class Auth(config: NelsonConfig) extends Default {
     case req @ POST -> Root / "auth" / "github" =>
       decode[AccessToken](req){ tk =>
         (for {
-          a <- Nelson.createSessionFromGithubToken(tk)(cfg).attemptRun
+          a <- Nelson.createSessionFromGithubToken(tk)(cfg).attempt.unsafeRunSync().toDisjunction
           b <- cfg.security.authenticator.serialize(a)
         } yield (a.expiry, b)).fold(
-          e => Task.fail(new RuntimeException(e.toString)),
+          e => IO.raiseError(new RuntimeException(e.toString)),
           s => Ok(s.asJson)
         )
       }
@@ -68,10 +68,10 @@ final case class Auth(config: NelsonConfig) extends Default {
     case req @ GET -> Root / "auth" / "exchange" =>
       val code = req.params.getOrElse("code", "unknown")
       (for {
-        a <- Nelson.createSessionFromOAuthCode(code)(cfg).attemptRun
+        a <- Nelson.createSessionFromOAuthCode(code)(cfg).attempt.unsafeRunSync().toDisjunction
         b <- cfg.security.authenticator.serialize(a)
       } yield b).fold(
-        e => Task.fail(new RuntimeException(e.toString)),
+        e => IO.raiseError(new RuntimeException(e.toString)),
         s => {
           val cookie = Cookie(CookieName, s,
             path   = Some("/"),
@@ -80,7 +80,7 @@ final case class Auth(config: NelsonConfig) extends Default {
             maxAge = Some(cfg.security.expireLoginAfter.toSeconds.toLong),
             httpOnly = false // determines if js can read this cookie
           )
-          Found(uri("/")).putHeaders(`Set-Cookie`(cookie))
+          Found(Location(uri("/"))).map(_.putHeaders(`Set-Cookie`(cookie)))
         }
       )
 

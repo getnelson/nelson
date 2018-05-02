@@ -17,15 +17,15 @@
 package nelson
 package yaml
 
-import scalaz.\/
-import scalaz.concurrent.Task
+import cats.effect.IO
 
 trait SnakeCharmer {
+  def toEither[A, B](disj: scalaz.\/[A, B]): Either[A, B] = disj.fold[Either[A, B]](Left(_), Right(_))
 
-  def loadManifest(yamlPath: String): Throwable \/ Manifest =
+  def loadManifest(yamlPath: String): Either[Throwable, Manifest] =
     (for {
       yml <- Util.loadResourceAsString(yamlPath)
-      out <- Task.fromDisjunction(ManifestParser.parse(yml).leftMap(e => new RuntimeException(s"parse failed! ${e.list.map(_.getMessage).mkString("\n")} ${e.map(_.getStackTrace).list.flatten.mkString("\n")}")))
-    } yield out).attemptRun
+      out <- IO.fromEither(toEither(ManifestParser.parse(yml).leftMap(e => new RuntimeException(s"parse failed! ${e.list.map(_.getMessage).mkString("\n")} ${e.map(_.getStackTrace).list.flatten.mkString("\n")}"))))
+    } yield out).attempt.unsafeRunSync()
 
 }

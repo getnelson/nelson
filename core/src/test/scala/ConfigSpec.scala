@@ -18,26 +18,26 @@ package nelson
 
 import knobs._
 import org.scalatest.{FlatSpec,Matchers}
-import org.scalatest.{FlatSpec,Matchers}
-import scalaz.concurrent.Task
+import cats.effect.IO
+import cats.implicits._
 
 class ConfigSpec extends FlatSpec with Matchers {
 
-  def read(file: String): Task[List[Datacenter]] =
+  def read(file: String): IO[List[Datacenter]] =
     (for {
-      a <- knobs.loadImmutable(Required(
-        ClassPathResource(file)) :: Nil)
-    } yield Config.readDatacenters(a.subconfig("nelson.datacenters"), null, DockerConfig("docker.local", true), null, null, null,null))
+      a <- knobs.loadImmutable[IO](Required(ClassPathResource(file)) :: Nil)
+      c <- Config.readDatacenters(a.subconfig("nelson.datacenters"), null, DockerConfig("docker.local", true), null, null, null,null)
+    } yield c)
 
   it should "correctly parse the datacenter definitions from file" in {
-    val dcs = read("nelson/datacenters.cfg").run
+    val dcs = read("nelson/datacenters.cfg").unsafeRunSync()
     dcs.find(_.name == "california").flatMap(_.loadbalancer).isDefined should equal (false)
     dcs.find(_.name == "oregon").flatMap(_.loadbalancer).isDefined should equal (true)
     dcs.length should equal (2)
   }
 
   it should "fail if consul is not specified" in {
-    val cfg = read("nelson/datacenters-missing-consul.cfg").attemptRun
+    val cfg = read("nelson/datacenters-missing-consul.cfg").attempt.unsafeRunSync()
     cfg.swap.exists { err =>
       val msg = err.getMessage
       msg == "No such key: infrastructure.consul.endpoint"
@@ -45,28 +45,28 @@ class ConfigSpec extends FlatSpec with Matchers {
   }
 
   it should "fail if domain is not specified" in {
-    val cfg = read("nelson/datacenters-missing-domain.cfg").attemptRun
+    val cfg = read("nelson/datacenters-missing-domain.cfg").attempt.unsafeRunSync()
     cfg.swap.exists { err =>
       val msg = err.getMessage
       msg == "No such key: domain"
     } should equal (true)
   }
 
-  def readAws(file: String): Task[Option[Infrastructure.Aws]] =
+  def readAws(file: String): IO[Option[Infrastructure.Aws]] =
     (for {
-      a <- knobs.loadImmutable(Required(
+      a <- knobs.loadImmutable[IO](Required(
         ClassPathResource(file)) :: Nil)
     } yield Config.readAwsInfrastructure(a.subconfig("aws")))
 
   it should "fail if public subnet is not specified in aws config" in {
-    val cfg = readAws("nelson/datacenters-missing-subnet.cfg").attemptRun
+    val cfg = readAws("nelson/datacenters-missing-subnet.cfg").attempt.unsafeRunSync()
     cfg.swap.exists { err =>
       val msg = err.getMessage
       msg == "No such key: public-subnet"
     } should equal (true)
   }
   it should "fail if private subnet is not specified in aws config" in {
-    val cfg = readAws("nelson/datacenters-missing-private-subnet.cfg").attemptRun
+    val cfg = readAws("nelson/datacenters-missing-private-subnet.cfg").attempt.unsafeRunSync()
     cfg.swap.exists { err =>
       val msg = err.getMessage
       msg == "No such key: private-subnet"
@@ -76,21 +76,21 @@ class ConfigSpec extends FlatSpec with Matchers {
   behavior of "readTemplate"
 
   it should "take vault address from first datacenter, alphabetically" in {
-    val config = knobs.loadImmutable(
+    val config = knobs.loadImmutable[IO](
       List(
         Required(ClassPathResource("nelson/defaults.cfg")),
         Required(ClassPathResource("nelson/nelson-test.cfg")),
         Required(ClassPathResource("nelson/datacenters.cfg"))
-      )).map(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _)).run
+      )).flatMap(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _)).unsafeRunSync()
     config.template.vaultAddress should equal (Some("https://vault.california.service"))
   }
 
   it should "find no vault address with no datacenters" in {
-    val config = knobs.loadImmutable(
+    val config = knobs.loadImmutable[IO](
       List(
         Required(ClassPathResource("nelson/defaults.cfg")),
         Required(ClassPathResource("nelson/nelson-test.cfg"))
-      )).map(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _)).run
+      )).flatMap(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _)).unsafeRunSync()
     config.template.vaultAddress should equal (None)
   }
 }

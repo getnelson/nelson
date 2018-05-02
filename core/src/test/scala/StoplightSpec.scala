@@ -17,8 +17,8 @@
 package nelson
 package monitoring
 
-import scalaz.stream.Process
-import scalaz.concurrent.Task
+import cats.effect.IO
+import fs2.Stream
 import io.prometheus.client._
 
 class StoplightSpec extends NelsonSuite {
@@ -28,22 +28,22 @@ class StoplightSpec extends NelsonSuite {
   def gaugeValue = Option(reg.getSampleValue(gaugeName))
 
   it should "be stopped before run" in {
-    Stoplight(gauge)(Process.constant(1))
+    Stoplight(gauge)(Stream.constant(1))
     gaugeValue should be (Some(Stoplight.Stopped))
   }
 
   it should "be running while running" in {
-    val p = Stoplight(gauge)(Process.eval(Task.delay(gaugeValue)))
-    p.runLast.run.flatten should be (Some(Stoplight.Running))
+    val p = Stoplight(gauge)(Stream.eval(IO(gaugeValue)))
+    p.compile.last.unsafeRunSync().flatten should be (Some(Stoplight.Running))
   }
 
   it should "be stopped after successful run" in {
-    Stoplight(gauge)(Process.emit(1)).run.run
+    Stoplight(gauge)(Stream.emit(1)).compile.drain.unsafeRunSync()
     gaugeValue should be (Some(Stoplight.Stopped))
   }
 
   it should "be failed after failure" in {
-    Stoplight(gauge)(Process.fail(new Exception("sad trombone"))).run.attemptRun
+    Stoplight(gauge)(Stream.raiseError(new Exception("sad trombone"))).compile.drain.unsafeRunSync()
     gaugeValue should be (Some(Stoplight.Failed))
   }
 }

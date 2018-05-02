@@ -21,6 +21,7 @@ import org.scalatest.FlatSpec
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp
 import nelson.Datacenter._
+import nelson.CatsHelpers._
 
 class InstrumentedNomadClientSpec extends FlatSpec with NelsonSuite {
   val reg = new CollectorRegistry
@@ -38,7 +39,7 @@ class InstrumentedNomadClientSpec extends FlatSpec with NelsonSuite {
     val before = value
     val now = java.time.Instant.now
     val d = Deployment(4L, DCUnit(4L,"foo",Version(2,1,0),"",Set.empty,Set.empty,Set.empty),"e",ns,now,"pulsar","plan","guid","retain-active")
-    scheduler.run(client, SchedulerOp.delete(config.datacenters.head, d)).run
+    scheduler.run(client, SchedulerOp.delete(config.datacenters.head, d)).unsafeRunSync()
     val after = value
     after should equal (before + 1.0)
   }

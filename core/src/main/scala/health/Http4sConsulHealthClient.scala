@@ -17,33 +17,27 @@
 package nelson
 package health
 
-import scalaz.~>
-import scalaz.concurrent.Task
+import cats.effect.IO
+import nelson.CatsHelpers._
+
 import helm.ConsulOp
-import argonaut._, Argonaut._
 
+import scalaz.~>
 
-final case class Http4sConsulHealthClient(client: ConsulOp ~> Task) extends (HealthCheckOp ~> Task) {
+final case class Http4sConsulHealthClient(client: ConsulOp ~> IO) extends (HealthCheckOp ~> IO) {
 
   import HealthCheckOp._
 
-  def apply[A](a: HealthCheckOp[A]): Task[A] = a match {
+  def apply[A](a: HealthCheckOp[A]): IO[A] = a match {
     case Health(dc, ns, sn) =>
-      val op = ConsulOp.healthCheckJson[HealthStatus](sn.toString).map(_.fold(_ => Nil, x => x))
-      helm.run(client, op) 
+      val op = ConsulOp.healthListChecksForService(sn.toString, None, None, None).
+        map(_.map(hcr => HealthStatus(hcr.checkId, toNelsonStatus(hcr.status), hcr.node, Some(hcr.name))))
+      helm.run(client.asCats, op)
   }
 
-  private def fromConsulString(s: String): HealthCheck = s match {
-    case "passing"  => Passing
-    case "critical" => Failing
-    case _          => Unknown
+  private def toNelsonStatus(status: helm.HealthStatus): HealthCheck = status match {
+    case helm.HealthStatus.Passing  => Passing
+    case helm.HealthStatus.Critical => Failing
+    case _                          => Unknown
   }
-
-  implicit val healthStatusDecoder: DecodeJson[HealthStatus] =
-    DecodeJson(c => for {
-      id     <- (c --\ "CheckID").as[String]
-      status <- (c --\ "Status").as[String].map(fromConsulString)
-      node   <- (c --\ "Node").as[String]
-      name   <- (c --\ "Name").as[String]
-    } yield HealthStatus(id, status, node, Some(name)))
 }

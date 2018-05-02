@@ -24,14 +24,18 @@ package nelson
  * only support Prometheus.
  */
 package object alerts {
-  import helm.ConsulOp
   import nelson.Datacenter.StackName
   import nelson.Manifest._
-  import Manifest.AlertOptOut
-  import scalaz.{\/, Free}
-  import scalaz.concurrent.Task
+  import nelson.Manifest.AlertOptOut
+
+  import cats.free.Free
+  import cats.effect.IO
+
+  import helm.ConsulOp
+
+  import scalaz.{\/}
   import scalaz.syntax.either._
-  import scalaz.syntax.functor._
+
   import journal.Logger
 
   private[this] val logger = Logger("nelson.alerts")
@@ -43,16 +47,14 @@ package object alerts {
    * Writes alert configuration to consul, if not opted out.
    */
   def writeToConsul(sn: StackName, ns: NamespaceName, plan: PlanRef, u: UnitDef, outs: List[AlertOptOut]): ConsulOp.ConsulOpF[Option[String]] = {
-    import ConsulOp.ConsulOpFMonad
-
     if (outs.contains(ns.asString))
       Free.pure(None)
     else {
       val key = alertingKey(sn)
       // TODO a run not at the end of the world and a throw.  The horror.
       // ConsulOp doesn't represent other tasks well, nor does it represent failure
-      val rules = rewriteRules(u, sn, plan, ns, outs).run.valueOr(throw _)
-      ConsulOp.set(key, rules) as Some(rules)
+      val rules = rewriteRules(u, sn, plan, ns, outs).unsafeRunSync().fold(throw _, identity)
+      ConsulOp.kvSet(key, rules).map(_ => Some(rules))
     }
   }
 
@@ -62,7 +64,7 @@ package object alerts {
     pc.copy(alerts = pc.alerts.filterNot(a => optedOut(a.alert)))
   }
 
-  def rewriteRules(unit: UnitDef, stackName: StackName, plan: PlanRef, ns: NamespaceName, outs: List[AlertOptOut]): Task[NelsonError \/ String] = {
+  def rewriteRules(unit: UnitDef, stackName: StackName, plan: PlanRef, ns: NamespaceName, outs: List[AlertOptOut]): IO[NelsonError \/ String] = {
     val pc = optedOutPrometheusConfig(unit, outs)
     for {
       rewriter <- RuleRewriter.autoDetect
@@ -80,6 +82,6 @@ package object alerts {
    * definitions, recording rules, and per-namespace opt-outs.
    */
   def deleteFromConsul(stackName: StackName): ConsulOp.ConsulOpF[Unit] =
-    ConsulOp.delete(alertingKey(stackName))
+    ConsulOp.kvDelete(alertingKey(stackName))
 }
 

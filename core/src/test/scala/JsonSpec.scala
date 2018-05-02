@@ -21,12 +21,12 @@ import org.scalatest._
 class JsonSpec extends FlatSpec with Matchers {
   import Util._
   import Json._
-  import argonaut._, Argonaut._
-  import scalaz.\/
+  import argonaut._
+  import cats.implicits._
 
   it should "parse the github release defined in the docs" in {
     val out = for {
-      a <- loadResourceAsString("/nelson/github.release.json").attemptRun
+      a <- loadResourceAsString("/nelson/github.release.json").attempt.unsafeRunSync()
       b <- Parse.decodeEither[Github.Release](a)
     } yield b
 
@@ -35,12 +35,12 @@ class JsonSpec extends FlatSpec with Matchers {
 
   it should "parse the arbitrary events from Github" in {
     (for {
-      a <- loadResourceAsString("/nelson/github.webhookping.json").attemptRun
+      a <- loadResourceAsString("/nelson/github.webhookping.json").attempt.unsafeRunSync()
       b <- Parse.decodeEither[Github.Event](a)
     } yield b match {
       case Github.PingEvent(_)              => true
       case Github.ReleaseEvent(_,_,_) => false
-    }) should equal (\/.right(true))
+    }) should equal (Right(true))
   }
 
 }

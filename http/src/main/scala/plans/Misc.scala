@@ -22,13 +22,15 @@ import ManifestValidator.Json._
 import cleanup.ExpirationPolicy.Json._
 import argonaut._
 import Argonaut._
+import argonaut.DecodeResultCats._
+
 import org.http4s.{BuildInfo => _, _}
-import org.http4s.dsl._
+import org.http4s.dsl.io._
 import org.http4s.argonaut._
 
-import scalaz.{-\/, Failure, Success, \/-}
-import scalaz.syntax.applicative._
-import scalaz.concurrent.Task
+import cats.effect.IO
+import cats.syntax.apply._
+import scalaz.{Failure, Success}
 
 final case class Misc(config: NelsonConfig) extends Default {
   import Misc._
@@ -64,19 +66,19 @@ final case class Misc(config: NelsonConfig) extends Default {
 
   implicit val datacenterEncoder: EncodeJson[Datacenter] = EncodeJson { dc => dc.name.asJson }
 
-  def handleLintRequest(str: String, units: List[ManifestValidator.NelsonUnit]): Task[Response] =
+  def handleLintRequest(str: String, units: List[ManifestValidator.NelsonUnit]): IO[Response[IO]] =
     ManifestValidator.validate(str, units).run(config).attempt.flatMap {
-      case -\/(errors) =>
+      case Left(errors) =>
         // server error, blame ourselves
         InternalServerError(errors.toString.asJson)
-      case \/-(Failure(errors)) =>
+      case Right(Failure(errors)) =>
         // validation error, blame the user
         BadRequest(errors.list.map(_.getMessage).mkString("\n\n"))
-      case \/-(Success(mf)) =>
+      case Right(Success(mf)) =>
         Ok()
     }
 
-  val service: HttpService = HttpService {
+  val service: HttpService[IO] = HttpService[IO] {
     /*
      * POST /v1/profile/sync
      * Purpose of this resource is primarily to support the UI such that
@@ -209,9 +211,9 @@ final case class Misc(config: NelsonConfig) extends Default {
 object Misc {
   implicit val codecTemplateValidation: DecodeJson[Templates.TemplateValidation] =
     DecodeJson { c =>
-      ((c --\ "unit").as[UnitRef] |@|
-       (c --\ "resources").as[Set[String]] |@|
-       (c --\ "template").as[Base64].map(_.decoded))(Templates.TemplateValidation.apply)
+      ((c --\ "unit").as[UnitRef],
+       (c --\ "resources").as[Set[String]],
+       (c --\ "template").as[Base64].map(_.decoded)).mapN(Templates.TemplateValidation.apply)
     }
 
   implicit val encodeBuildInfo: EncodeJson[BuildInfo.type] =

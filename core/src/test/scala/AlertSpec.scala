@@ -19,8 +19,10 @@ package nelson
 import alerts._
 import helm.ConsulOp
 import nelson.Datacenter.StackName
+import nelson.CatsHelpers._
 import nelson.test._
 import org.scalatest.prop.Checkers
+import nelson.CatsHelpers._
 import scalaz.concurrent.Task
 import scalaz.concurrent.Task.now
 import Manifest._
@@ -58,11 +60,11 @@ class AlertSpec extends FlatSpec
   "writeToConsul" should "write when not opted out" in {
     val interp = for {
       r <- I.expect[Option[String], Unit] {
-        case ConsulOp.Set(alertKey, rules) =>
+        case ConsulOp.KVSet(alertKey, rules) =>
           Some(rules) -> now(())
       }
     } yield r
-    interp.run(writeToConsul(stackName, NamespaceName("dev"), "default-plan", unit, optOuts("dev"))).run should equal (Some(
+    interp.run(writeToConsul(stackName, NamespaceName("dev"), "default-plan", unit, optOuts("dev")).asScalaz).run should equal (Some(
       """average_latency = avg(latency)
         |
         |ALERT instance_down
@@ -77,11 +79,11 @@ class AlertSpec extends FlatSpec
   it should "only write what is not opted out" in {
     val interp = for {
       r <- I.expect[Option[String], Unit] {
-        case ConsulOp.Set(alertKey, rules) =>
+        case ConsulOp.KVSet(alertKey, rules) =>
           Some(rules) -> now(())
       }
     } yield r
-    interp.run(writeToConsul(stackName, NamespaceName("qa"), "default-plan", unit, optOuts("qa"))).run should equal (Some(
+    interp.run(writeToConsul(stackName, NamespaceName("qa"), "default-plan", unit, optOuts("qa")).asScalaz).run should equal (Some(
       """average_latency = avg(latency)
         |
         |ALERT instance_down
@@ -93,10 +95,10 @@ class AlertSpec extends FlatSpec
   "deleteFromConsul" should "delete the value at the key" in {
     val interp = for {
       _ <- I.expectU[Unit] {
-        case ConsulOp.Delete(alertKey) =>
+        case ConsulOp.KVDelete(alertKey) =>
           now(())
       }
     } yield ()
-    interp.run(deleteFromConsul(stackName)).run should equal (())
+    interp.run(deleteFromConsul(stackName).asScalaz).run should equal (())
   }
 }

@@ -23,12 +23,14 @@ import org.scalatest.{BeforeAndAfterEach}
 import scala.concurrent.duration._
 import Datacenter.{StackName}
 import java.time.Instant
+import nelson.CatsHelpers._
+import cats.syntax.either._
 
 class TrafficShiftDBSpec extends NelsonSuite with BeforeAndAfterEach {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    runs(config.storage, insertFixtures(testName)).run
+    runs(config.storage, insertFixtures(testName)).unsafeRunSync()
     ()
   }
 
@@ -36,86 +38,86 @@ class TrafficShiftDBSpec extends NelsonSuite with BeforeAndAfterEach {
    (sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run >>
     sql"TRUNCATE TABLE traffic_shift_reverse".update.run >>
     sql"TRUNCATE TABLE traffic_shift_start".update.run >>
-    sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run).void.transact(stg.xa).run
+    sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run).void.transact(stg.xa).unsafeRunSync()
   }
 
   it should "start a traffic shift" in {
     // inventory is currently in a traffic split, 1.2.3 is the `to` target
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).run.get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
-    val res = storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(120))).run
+    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
+    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
+    val res = storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(120))).unsafeRunSync()
     res.isDefined should equal(true)
   }
 
   it should "start a traffic shift reverse" in {
     // inventory is currently in a traffic split, 1.2.3 is the `to` target
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).run.get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
-    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).run
-    val res = storage.run(config.storage, StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(15))).run
+    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
+    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
+    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
+    val res = storage.run(config.storage, StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(15))).unsafeRunSync()
     res.isDefined should equal(true)
   }
 
   it should "noop when trying to start a traffic shift in progress" in {
     // inventory is currently in a traffic split, 1.2.3 is the `to` target
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).run.get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
-    val id = storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).run
-    val id2 = storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).run
+    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
+    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
+    val id = storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
+    val id2 = storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
 
     id should equal(id2)
   }
 
   it should "noop when trying to reverse a traffic shift that's already been reversed" in {
     // inventory is currently in a traffic split, 1.2.3 is the `to` target
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).run.get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
-    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).run
-    val id = storage.run(config.storage, StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(30))).run
-    val id2 = storage.run(config.storage, StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(30))).run
+    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
+    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
+    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
+    val id = storage.run(config.storage, StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
+    val id2 = storage.run(config.storage, StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
 
     id should equal(id2)
   }
 
   it should "get the latest traffic shift after traffic shift has started" in {
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).run.get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
+    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
+    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
 
     // gotta start traffic shift
-    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(120))).run
+    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(120))).unsafeRunSync()
 
-    val res = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory2.nsid, inventory2.unit.serviceName)).run
+    val res = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory2.nsid, inventory2.unit.serviceName)).unsafeRunSync()
     res.map(_.to) should equal(Some(inventory2))
   }
 
   it should "not get the latest traffic shift if traffic shift hasn't started" in {
-    val inventory = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
-    val res = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory.nsid, inventory.unit.serviceName)).run
+    val inventory = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
+    val res = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory.nsid, inventory.unit.serviceName)).unsafeRunSync()
     // traffic shift wasn't started so nothing should be returned
     res.map(_.to) should equal(None)
   }
 
   it should "not get the latest traffic shift if either the from or to deployment is in an un-routable state" in {
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).run.get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
+    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
+    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
 
-    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).run
+    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
 
-    val res = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory1.nsid, inventory1.unit.serviceName)).run
+    val res = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory1.nsid, inventory1.unit.serviceName)).unsafeRunSync()
     res.isDefined should equal(true)
 
-    runs(config.storage, StoreOp.createDeploymentStatus(inventory1.id, DeploymentStatus.Terminated, None)).run
-    val res1 = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory1.nsid, inventory1.unit.serviceName)).run
+    runs(config.storage, StoreOp.createDeploymentStatus(inventory1.id, DeploymentStatus.Terminated, None)).unsafeRunSync()
+    val res1 = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory1.nsid, inventory1.unit.serviceName)).unsafeRunSync()
     res1 should equal(None)
 
-    runs(config.storage, StoreOp.createDeploymentStatus(inventory1.id, DeploymentStatus.Ready, None)).run
-    runs(config.storage, StoreOp.createDeploymentStatus(inventory2.id, DeploymentStatus.Terminated, None)).run
-    val res2 = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory1.nsid, inventory1.unit.serviceName)).run
+    runs(config.storage, StoreOp.createDeploymentStatus(inventory1.id, DeploymentStatus.Ready, None)).unsafeRunSync()
+    runs(config.storage, StoreOp.createDeploymentStatus(inventory2.id, DeploymentStatus.Terminated, None)).unsafeRunSync()
+    val res2 = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory1.nsid, inventory1.unit.serviceName)).unsafeRunSync()
     res2 should equal(None)
 
-    runs(config.storage, StoreOp.createDeploymentStatus(inventory1.id, DeploymentStatus.Ready, None)).run
-    runs(config.storage, StoreOp.createDeploymentStatus(inventory2.id, DeploymentStatus.Ready, None)).run
-    val res3 = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory1.nsid, inventory1.unit.serviceName)).run
+    runs(config.storage, StoreOp.createDeploymentStatus(inventory1.id, DeploymentStatus.Ready, None)).unsafeRunSync()
+    runs(config.storage, StoreOp.createDeploymentStatus(inventory2.id, DeploymentStatus.Ready, None)).unsafeRunSync()
+    val res3 = storage.run(config.storage, StoreOp.getTrafficShiftForServiceName(inventory1.nsid, inventory1.unit.serviceName)).unsafeRunSync()
     res3.isDefined should equal(true)
   }
 
@@ -123,26 +125,26 @@ class TrafficShiftDBSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "start traffic shift reverse from nelson if everything validates" in {
     // inventory is currently in a traffic split, 1.2.3 is the `to` target
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).run.get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
-    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).run
-    val res = Nelson.reverseTrafficShift(inventory2.guid).run(config).attempt.run
+    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
+    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
+    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
+    val res = Nelson.reverseTrafficShift(inventory2.guid).run(config).attempt.unsafeRunSync()
     res.toOption.isDefined should equal(true)
   }
 
   it should "not reverse traffic shift that has already been reversed" in {
     // inventory is currently in a traffic split, 1.2.3 is the `to` target
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).run.get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).run.get
+    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
+    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
 
-    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).run
+    storage.run(config.storage, StoreOp.startTrafficShift(inventory1.id, inventory2.id, Instant.now.minusSeconds(30))).unsafeRunSync()
 
-    val res1 = Nelson.reverseTrafficShift(inventory2.guid).run(config).attempt.run
+    val res1 = Nelson.reverseTrafficShift(inventory2.guid).run(config).attempt.unsafeRunSync()
     res1.toOption.isDefined should equal(true)
 
     // try it again, this should fail
-    val res2 = Nelson.reverseTrafficShift(inventory2.guid).run(config).attempt.run
-    res2 should equal(-\/(InvalidTrafficShiftReverse("can't reverse a traffic shift that's already been reversed")))
+    val res2 = Nelson.reverseTrafficShift(inventory2.guid).run(config).attempt.unsafeRunSync()
+    res2 should equal(Left(InvalidTrafficShiftReverse("can't reverse a traffic shift that's already been reversed")))
   }
 
   it should "not reverse a traffic shift that that is not currently in progress" in {
@@ -152,10 +154,10 @@ class TrafficShiftDBSpec extends NelsonSuite with BeforeAndAfterEach {
       _   <- StoreOp.createTrafficShift(ab2.nsid, ab2, LinearShiftPolicy, 1.minutes)
       // traffic shift duration is 1 minute, so traffic shift in not in progress
       _   <- StoreOp.startTrafficShift(ab1.id, ab2.id, Instant.now.minusSeconds(120))
-    } yield ab2).run
+    } yield ab2).unsafeRunSync()
 
-    val res = Nelson.reverseTrafficShift(ab.guid).run(config).attempt.run
+    val res = Nelson.reverseTrafficShift(ab.guid).run(config).attempt.unsafeRunSync()
 
-    res should equal(-\/(InvalidTrafficShiftReverse("can't reverse a traffic shift that is currently not in progress")))
+    res should equal(Left(InvalidTrafficShiftReverse("can't reverse a traffic shift that is currently not in progress")))
   }
 }

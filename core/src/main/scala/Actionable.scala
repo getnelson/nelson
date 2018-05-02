@@ -16,16 +16,22 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Manifest.{Versioned,UnitDef,Loadbalancer,ActionConfig}
-import cleanup.ExpirationPolicy
-import notifications.Notify
-import Metrics.default.{deploySuccessCounter,deployFailureCounter}
-import scalaz.concurrent.Task
-import scalaz._, Scalaz._
-import Workflow.WorkflowOp
-import storage.{StoreOp, StoreOpF, run => runs}
-import java.time.Instant
+import nelson.Manifest.{Versioned,UnitDef,Loadbalancer,ActionConfig}
+import nelson.Metrics.default.{deploySuccessCounter,deployFailureCounter}
+import nelson.Workflow.WorkflowOp
+import nelson.cleanup.ExpirationPolicy
+import nelson.notifications.Notify
+import nelson.storage.{StoreOp, StoreOpF, run => runs}
+
+import cats.effect.IO
+import nelson.CatsHelpers._
+
 import io.prometheus.client.Counter
+
+import java.time.Instant
+
+import scalaz._
+import scalaz.Scalaz._
 
 /**
  * An Actionable is something that can be "acted" upon in the context
@@ -34,7 +40,7 @@ import io.prometheus.client.Counter
  * Aws to launch some infrastructure.
  */
 trait Actionable[A] {
-  def action(a: A): Kleisli[Task, (NelsonConfig, ActionConfig), Unit]
+  def action(a: A): Kleisli[IO, (NelsonConfig, ActionConfig), Unit]
 }
 
 object Actionable {
@@ -64,7 +70,7 @@ object Actionable {
        } yield id).run
     }
 
-    def action(unit: UnitDef @@ Versioned): Kleisli[Task, (NelsonConfig,ActionConfig), Unit] =
+    def action(unit: UnitDef @@ Versioned): Kleisli[IO, (NelsonConfig,ActionConfig), Unit] =
       Kleisli { case (cfg, actionConfig) =>
         val unitw = Manifest.Versioned.unwrap(unit)
         val ttl = cfg.cleanup.initialTTL.toSeconds
@@ -79,18 +85,18 @@ object Actionable {
           else
             cfg.expirationPolicy.defaultNonPeriodic
 
-        def incCounter(c: Counter): Task[Unit] = Task.delay {
+        def incCounter(c: Counter): IO[Unit] = IO {
           c.labels(ns.name.asString).inc()
           ()
         }
 
-        def deploy(id: ID)(t: WorkflowOp ~> Task): Task[Throwable \/ Unit] =
+        def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Throwable \/ Unit] =
           Workflow.run(unitw.workflow.deploy(id, hash, unit, plan, dc, ns))(t).attempt.flatMap(_.fold(
             e => (Workflow.run(Workflow.syntax.status(id, DeploymentStatus.Failed,
                     s"workflow failed because: ${e.getMessage}"))(t) >>
-                  incCounter(deployFailureCounter)).attempt,
+                  incCounter(deployFailureCounter)).attempt.map(_.toDisjunction),
             s => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) >>
-                  incCounter(deploySuccessCounter)).attempt
+                  incCounter(deploySuccessCounter)).attempt.map(_.toDisjunction)
         ))
 
         storage.run(cfg.storage, create(unit, dc, ns, plan, hash, exp, policy)).flatMap(_.cata(
@@ -110,7 +116,7 @@ object Actionable {
     import Datacenter.StackName
     import Manifest.Route
 
-    def action(lbv: Loadbalancer @@ Versioned): Kleisli[Task, (NelsonConfig,ActionConfig), Unit] =
+    def action(lbv: Loadbalancer @@ Versioned): Kleisli[IO, (NelsonConfig,ActionConfig), Unit] =
       Kleisli { case (cfg, actionConfig) =>
         val lb = Manifest.Versioned.unwrap(lbv)
         val major = lbv.version.toMajorVersion
@@ -120,14 +126,14 @@ object Actionable {
         val hash = actionConfig.hash
         val sn = StackName(lb.name, major.minVersion, hash)
 
-        def launch(id: ID, sn: StackName, rs: Vector[Route], nsid: ID)(t: LoadbalancerOp ~> Task): Task[Unit] =
+        def launch(id: ID, sn: StackName, rs: Vector[Route], nsid: ID)(t: LoadbalancerOp ~> IO): IO[Unit] =
           for {
-            _   <- helm.run(dc.consul, loadbalancers.writeLoadbalancerV2ConfigToConsul(sn, rs))
+            _   <- helm.run(dc.consul.asCats, loadbalancers.writeLoadbalancerV2ConfigToConsul(sn, rs))
             dns <- loadbalancers.run(t, loadbalancers.launch(lb, major, dc, ns.name, plan, hash))
             _   <- runs(dc.storage, StoreOp.insertLoadbalancerDeployment(id, nsid, hash, dns))
           } yield ()
 
-        def resize(lbd: Datacenter.LoadbalancerDeployment)(t: LoadbalancerOp ~> Task): Task[Unit] =
+        def resize(lbd: Datacenter.LoadbalancerDeployment)(t: LoadbalancerOp ~> IO): IO[Unit] =
           loadbalancers.run(t, loadbalancers.resize(lbd, plan))
 
         for {
