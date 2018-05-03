@@ -24,7 +24,6 @@ object V {
   val knobs            = "6.0.33"
   val prometheus       = "0.0.21"
   val scalaz           = "7.1.11"
-  val scalazStream     = "0.8.6"
   val scodec           = "1.9.0"
   val dockerit         = "0.9.0-RC1"
 

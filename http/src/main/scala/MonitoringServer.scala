@@ -27,7 +27,8 @@ import io.prometheus.client.exporter.common.TextFormat
 import journal.Logger
 
 import scala.concurrent.duration._
-import scalaz.concurrent.Task
+
+import cats.effect.IO
 
 object MonitoringServer {
   /**
@@ -37,7 +38,7 @@ object MonitoringServer {
   def apply(
     registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
     port: Int = 5775,
-    keyTTL: Duration = 36.hours): Task[MonitoringServer] = Task.delay {
+    keyTTL: Duration = 36.hours): IO[MonitoringServer] = IO {
     val svr = (new MonitoringServer(registry, port, keyTTL))
     svr.start()
     svr
@@ -78,7 +79,7 @@ class MonitoringServer private (
   /**
    * Returns a Task to stop this server
    */
-  def stop: Task[Unit] = Task.delay { server.stop(0) }
+  def stop: IO[Unit] = IO { server.stop(0) }
 
   protected def handler = new HttpHandler {
     def handle(req: HttpExchange): Unit = try {

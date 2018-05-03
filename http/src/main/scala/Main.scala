@@ -93,7 +93,7 @@ object Main {
       runBackgroundJob("deployment_monitor", DeploymentMonitor.loop(cfg))
 
       registerJvmMetrics()
-      MonitoringServer(port = cfg.network.monitoringPort).attemptRun.fold(
+      MonitoringServer(port = cfg.network.monitoringPort).attempt.unsafeRunSync().fold(
         e => {
           log.error(s"fatal error starting monitoring server: '$e'")
           e.printStackTrace
