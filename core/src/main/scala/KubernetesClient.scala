@@ -1,7 +1,7 @@
 package nelson
 
 import nelson.Datacenter.StackName
-import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, Plan, Ports, Port}
+import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, ResourceSpec, Plan, Ports, Port}
 import nelson.docker.Docker.Image
 import nelson.health._
 
@@ -167,6 +167,33 @@ object KubernetesClient {
 }
 
 object KubernetesJson {
+  val defaultCPU = 0.5
+  val defaultMemory = 512
+
+  def resources(cpu: ResourceSpec, memory: ResourceSpec): JsonObject = {
+    val (cpuRequest, cpuLimit) = cpu.fold(
+      (defaultCPU, defaultCPU),
+      limit => (limit, limit),
+      (request, limit) => (request, limit)
+    )
+    val (memoryRequest, memoryLimit) = memory.fold(
+      (s"${defaultMemory}M", s"${defaultMemory}M"),
+      limit => (s"${limit}M", s"${limit}M"),
+      (request, limit) => (s"${request}M", s"${limit}M")
+    )
+
+    JsonObject.single("resources", argonaut.Json(
+      "requests" := argonaut.Json(
+        "cpu"    := cpuRequest,
+        "memory" := memoryRequest
+      ),
+      "limits" := argonaut.Json(
+        "cpu"    := cpuLimit,
+        "memory" := memoryLimit
+      )
+    ))
+  }
+
   def deployment(
     namespace: String,
     stackName: StackName,
@@ -203,18 +230,12 @@ object KubernetesJson {
           "spec" := argonaut.Json(
             "containers" := List(
 
-              argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+              argonaut.Json.jObject(combineJsonObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
                 "name"      := stackName.toString,
                 "image"     := image.toString,
                 "env"       := plan.environment.bindings,
-                "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.list)),
-                "resources" := argonaut.Json(
-                  "limits" := argonaut.Json(
-                    "cpu"    := plan.environment.cpu.getOrElse(0.5),
-                    "memory" := s"${plan.environment.memory.getOrElse(512.0)}M"
-                  )
-                )
-              )), livenessProbe(plan.environment.healthChecks)))
+                "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.list))
+              )), resources(plan.environment.cpu, plan.environment.memory)), livenessProbe(plan.environment.healthChecks)))
             )
           )
         )
@@ -308,17 +329,11 @@ object KubernetesJson {
           ),
           "spec" := argonaut.Json(
             "containers" := List(
-              argonaut.Json(
+              argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
                 "name"  := stackName.toString,
                 "image" := image.toString,
-                "env"   := plan.environment.bindings,
-                "resources" := argonaut.Json(
-                  "limits" := argonaut.Json(
-                    "cpu"    := plan.environment.cpu.getOrElse(0.5),
-                    "memory" := s"${plan.environment.memory.getOrElse(512.0)}M"
-                  )
-                )
-              )
+                "env"   := plan.environment.bindings
+              )), resources(plan.environment.cpu, plan.environment.memory)))
             ),
             // See: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#pod-backoff-failure-policy
             // This should be "OnFailure" but at the time of this writing this section said:
