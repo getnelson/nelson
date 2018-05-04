@@ -3,13 +3,13 @@ package nelson
 import cats.{Monad, StackSafeMonad}
 import cats.arrow.FunctionK
 import cats.free.Free
-import cats.effect.{Effect, IO}
-import cats.syntax.apply._
+import cats.effect.{Effect, IO, Timer}
+import cats.syntax.functor._
+import cats.syntax.monadError._
 
 import doobie.imports.Capture
 
-import fs2.{Pipe, Scheduler, Sink, Stream}
-import fs2.async
+import fs2.{Pipe, Sink, Stream}
 
 import java.util.concurrent.{ScheduledExecutorService, TimeoutException}
 
@@ -77,20 +77,11 @@ object CatsHelpers {
     def ensure(failure: => Throwable)(f: A => Boolean): IO[A] =
       io.flatMap(a => if (f(a)) IO.pure(a) else IO.raiseError(failure))
 
-    /** NOTE: Unlike scalaz.concurrent.Task#timed this does not attempt to cancel the IO.
-      * IO cancellation is pending https://github.com/typelevel/cats-effect/pull/121
-      */
-    def unsafeTimed(timeout: FiniteDuration)(implicit ec: ExecutionContext, schedulerES: ScheduledExecutorService): IO[A] = {
-      val scheduler = Scheduler.fromScheduledExecutorService(schedulerES)
-      async.Promise.empty[IO, Either[Throwable, A]].flatMap { p =>
-        async.fork(io.attempt.flatMap(p.complete)) *>
-        p.timedGet(timeout, scheduler).flatMap {
-          case Some(Left(t))  => IO.raiseError(t)
-          case Some(Right(a)) => IO.pure(a)
-          case None           => IO.raiseError(new TimeoutException())
-        }
-      }
-    }
+    def timed(timeout: FiniteDuration)(implicit ec: ExecutionContext, schedulerES: ScheduledExecutorService): IO[A] =
+      IO.race(
+        Timer[IO].sleep(timeout).as(new TimeoutException(s"Timed out after ${timeout.toMillis} milliseconds"): Throwable),
+        io
+      ).rethrow
   }
 
   private def sinkW[F[_], W, O](actualSink: Sink[F, W]): Sink[F, Either[W, O]] =

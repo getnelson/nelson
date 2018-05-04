@@ -17,7 +17,6 @@
 package nelson
 
 import cats.effect.IO
-import cats.syntax.applicativeError._
 import cats.syntax.apply._
 
 import io.prometheus.client._
@@ -168,7 +167,10 @@ object Metrics {
         _       <- onComplete.run(elapsed)
       } yield a
 
-      (io <* onSuccess).onError { case err => onFail(err) }
+      io.attempt.flatMap {
+        case Left(e)  => onFail(e) *> IO.raiseError(e)
+        case Right(a) => onSuccess *> IO.pure(a)
+      }
     }
   }
 }

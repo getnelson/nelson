@@ -159,7 +159,7 @@ object Templates {
         consulTemplateContainersRunning.inc()
         val exitCode = cmd.!(pLogger)
         exitCode
-      }.unsafeTimed(templateConfig.timeout)(ec, scheduler).attempt.flatMap {
+      }.timed(templateConfig.timeout)(ec, scheduler).attempt.flatMap {
         // ^ NOTE: This will return when the timeout is up but will not cancel
         // the already running action - that is pending https://github.com/typelevel/cats-effect/pull/121
         case Right(0) =>

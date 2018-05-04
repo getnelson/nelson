@@ -23,10 +23,10 @@ import nelson.CatsHelpers._
 import nelson.test._
 import org.scalatest.prop.Checkers
 import nelson.CatsHelpers._
-import scalaz.concurrent.Task
-import scalaz.concurrent.Task.now
 import Manifest._
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
+
+import cats.effect.IO
 
 class AlertSpec extends FlatSpec
     with Matchers
@@ -55,16 +55,16 @@ class AlertSpec extends FlatSpec
     alertKey should equal ("nelson/alerting/v2/howdy-http--0-2-3--abcd1234")
   }
 
-  val I = Interpreter.prepare[ConsulOp, Task]
+  val I = Interpreter.prepare[ConsulOp, IO]
 
   "writeToConsul" should "write when not opted out" in {
     val interp = for {
       r <- I.expect[Option[String], Unit] {
         case ConsulOp.KVSet(alertKey, rules) =>
-          Some(rules) -> now(())
+          Some(rules) -> IO.unit
       }
     } yield r
-    interp.run(writeToConsul(stackName, NamespaceName("dev"), "default-plan", unit, optOuts("dev")).asScalaz).run should equal (Some(
+    interp.run(writeToConsul(stackName, NamespaceName("dev"), "default-plan", unit, optOuts("dev")).asScalaz).unsafeRunSync() should equal (Some(
       """average_latency = avg(latency)
         |
         |ALERT instance_down
@@ -80,10 +80,10 @@ class AlertSpec extends FlatSpec
     val interp = for {
       r <- I.expect[Option[String], Unit] {
         case ConsulOp.KVSet(alertKey, rules) =>
-          Some(rules) -> now(())
+          Some(rules) -> IO.unit
       }
     } yield r
-    interp.run(writeToConsul(stackName, NamespaceName("qa"), "default-plan", unit, optOuts("qa")).asScalaz).run should equal (Some(
+    interp.run(writeToConsul(stackName, NamespaceName("qa"), "default-plan", unit, optOuts("qa")).asScalaz).unsafeRunSync() should equal (Some(
       """average_latency = avg(latency)
         |
         |ALERT instance_down
@@ -96,9 +96,9 @@ class AlertSpec extends FlatSpec
     val interp = for {
       _ <- I.expectU[Unit] {
         case ConsulOp.KVDelete(alertKey) =>
-          now(())
+          IO.unit
       }
     } yield ()
-    interp.run(deleteFromConsul(stackName).asScalaz).run should equal (())
+    interp.run(deleteFromConsul(stackName).asScalaz).unsafeRunSync() should equal (())
   }
 }

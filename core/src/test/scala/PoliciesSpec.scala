@@ -19,15 +19,17 @@ package nelson
 import org.scalatest.{Matchers,FlatSpec,Inspectors}
 import policies._
 import nelson.test._
-import scalaz.concurrent.Task
 import vault._
+
+import cats.effect.IO
+import nelson.CatsHelpers._
 
 class PoliciesSpec extends FlatSpec with Matchers with Inspectors with RoutingFixtures {
   val nsRef = "qa"
   val ns = NamespaceName(nsRef)
   val sn = Datacenter.StackName("howdy-http", Version(2, 0, 38), "abcdef12")
 
-  val I = Interpreter.prepare[Vault, Task]
+  val I = Interpreter.prepare[Vault, IO]
   "createPolicy" should "create the policy" in {
     val interp = for {
       _ <- I.expectU[Unit] {
@@ -44,14 +46,14 @@ class PoliciesSpec extends FlatSpec with Matchers with Inspectors with RoutingFi
               Rule("test/qa/testrail/creds/howdy-http", List("read"), None)
             )
           ))
-          Task.now(())
+          IO.unit
       }
     } yield ()
     interp.run(createPolicy(
       testPolicyConfig,
       sn = sn,
       ns = ns,
-      resources = Set("mysql-foo", "cassandra-bar", "s3", "testrail"))).run
+      resources = Set("mysql-foo", "cassandra-bar", "s3", "testrail"))).unsafeRunSync()
   }
 
   "resourceRule" should "always use root namespace in path" in {
