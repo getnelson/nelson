@@ -22,6 +22,7 @@ import quiver.{LNode,LEdge}
 import scalaz._
 import Scalaz._
 import journal._
+import CatsHelpers._
 
 object RoutingTable {
   import Datacenter._

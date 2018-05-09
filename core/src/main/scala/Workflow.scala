@@ -25,16 +25,15 @@ import nelson.scheduler.SchedulerOp
 import nelson.storage.{StoreOp}
 import nelson.vault.Vault
 
-import cats.effect.IO
-import nelson.CatsHelpers._
+import cats.data.EitherK
+import cats.free.Free
+import cats.implicits._
 
 import helm.ConsulOp
 
 import scala.concurrent.duration.FiniteDuration
 
-import scalaz._
-import scalaz.Scalaz._
-
+import scalaz.{Free => _, _}
 
 /**
  * Workflows must be defined in terms of a particular type of UnitDef
@@ -67,29 +66,26 @@ object Workflow {
    * A Workflow is the Coproduct of:
    * DockerOp, ConsulOp, Vault, LoggingOp, FailureOp, StorageOp and SchedulerOp
    */
-  type Op0[A] = Coproduct[DockerOp, ConsulOp, A]
+  type Op0[A] = EitherK[DockerOp, ConsulOp, A]
 
-  type Op1[A] = Coproduct[LoggingOp, Op0,A]
+  type Op1[A] = EitherK[LoggingOp, Op0,A]
 
-  type Op2[A] = Coproduct[StoreOp, Op1, A]
+  type Op2[A] = EitherK[StoreOp, Op1, A]
 
-  type Op3[A] = Coproduct[WorkflowControlOp, Op2,A]
+  type Op3[A] = EitherK[WorkflowControlOp, Op2,A]
 
-  type Op4[A] = Coproduct[Vault, Op3, A]
+  type Op4[A] = EitherK[Vault, Op3, A]
 
-  type WorkflowOp[A] = Coproduct[SchedulerOp, Op4, A]
+  type WorkflowOp[A] = EitherK[SchedulerOp, Op4, A]
 
-  type WorkflowF[A] = Free.FreeC[WorkflowOp, A]
-
-  def run[A](wf: WorkflowF[A])(trans: WorkflowOp ~> IO): IO[A] =
-    Free.runFC(wf)(trans)
+  type WorkflowF[A] = Free[WorkflowOp, A]
 
   object syntax {
     import docker.Docker
     import Datacenter.StackName
     import Datacenter.ServiceName
     import Docker.RegistryURI
-    import ScalazHelpers._
+    import CatsHelpers._
     import routing.{RoutingTable,Discovery}
 
     def pure[A](a: => A): WorkflowF[A] =
@@ -120,16 +116,16 @@ object Workflow {
       fail(new RuntimeException(reason))
 
     def deleteFromConsul(key: String): WorkflowF[Unit] =
-      ConsulOp.kvDelete(key).asScalaz.inject
+      ConsulOp.kvDelete(key).inject
 
     def deleteDiscoveryInfoFromConsul(sn: StackName): WorkflowF[Unit] =
       deleteFromConsul(routing.Discovery.consulDiscoveryKey(sn))
 
     def deleteAlertsFromConsul(sn: StackName): WorkflowF[Unit] =
-      alerts.deleteFromConsul(sn).asScalaz.inject
+      alerts.deleteFromConsul(sn).inject
 
     def writeAlertsToConsul(sn: StackName, ns: NamespaceName, p: PlanRef, a: UnitDef, outs: List[AlertOptOut]): WorkflowF[Option[String]] =
-      alerts.writeToConsul(sn,ns,p,a,outs).asScalaz.inject
+      alerts.writeToConsul(sn,ns,p,a,outs).inject
 
     def writePolicyToVault(cfg: PolicyConfig, sn: StackName, ns: NamespaceName, rs: Set[String]): WorkflowF[Unit] =
       policies.createPolicy(cfg, sn, ns, rs).inject
@@ -139,10 +135,10 @@ object Workflow {
 
     def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Datacenter): WorkflowF[Unit] =
       for {
-        d  <- StoreOp.getDeployment(id).inject
-        rg <- RoutingTable.outgoingRoutingGraph(d).inject
+        d  <- StoreOp.getDeployment(id).inject[WorkflowOp]
+        rg <- RoutingTable.outgoingRoutingGraph(d).inject[WorkflowOp]
         dt  = Discovery.discoveryTable(routing.RoutingNode(d), rg)
-        _  <- Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dt).asScalaz.inject
+        _  <- Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dt).inject[WorkflowOp]
       } yield ()
 
     def createTrafficShift(id: ID, nsRef: NamespaceName, dc: Datacenter, p: TrafficShiftPolicy, dur: FiniteDuration): WorkflowF[Unit] = {
@@ -154,7 +150,7 @@ object Workflow {
         _    <- OptionT(StoreOp.createTrafficShift(ns.id, to, p, dur).map(Option(_)))
       } yield ()
 
-      prog.run.inject.map(_ => ())
+      prog.run.inject[WorkflowOp].map(_ => ())
     }
 
     def dockerOps(id: ID, unit: UnitDef, registry: RegistryURI): WorkflowF[Image] = {
@@ -173,13 +169,13 @@ object Workflow {
       }
 
       for {
-        i <- DockerOp.extract(unit).inject
+        i <- DockerOp.extract(unit).inject[WorkflowOp]
         _ <- status(id, DeploymentStatus.Deploying, s"replicating ${i.toString} to remote registry $registry")
-        a <- DockerOp.pull(i).inject
+        a <- DockerOp.pull(i).inject[WorkflowOp]
         _ <- a._2.traverse(out => logToFile(id, out.asString))
         _ <- handleDockerLogs(a) { case e: PullError => e }
-        b <- DockerOp.tag(i, registry).inject
-        c <- DockerOp.push(b._2).inject
+        b <- DockerOp.tag(i, registry).inject[WorkflowOp]
+        c <- DockerOp.push(b._2).inject[WorkflowOp]
         _ <- c._2.traverse(out => logToFile(id, out.asString))
         _ <- handleDockerLogs(c) { case e: PushError => e }
       } yield b._2

@@ -21,12 +21,14 @@ import nelson.Datacenter.{Namespace, StackName, Deployment}
 import nelson.Manifest.{UnitDef,Versioned}
 import nelson.storage.StoreOp
 
+import cats.~>
 import cats.effect.IO
 import nelson.CatsHelpers._
 
 import journal._
 
-import scalaz._, Scalaz._
+import scalaz.{~> => _, _}
+import Scalaz._
 
 object Notify {
 
@@ -55,10 +57,10 @@ object Notify {
 
     def fetchNotifications(d: Deployment): IO[NotificationSubscriptions] = {
       def fetchManifest(slug: Slug) = Github.Request.fetchFileFromRepository(slug,
-        cfg.manifest.filename, "master")(cfg.git.systemAccessToken).runWith(cfg.github)
+        cfg.manifest.filename, "master")(cfg.git.systemAccessToken).foldMap(cfg.github)
 
-      def findRelease(guid: GUID) = storage.run(cfg.storage,
-        StoreOp.findReleaseByDeploymentGuid(d.guid).map(_.map(_._1.slug)))
+      def findRelease(guid: GUID) =
+        StoreOp.findReleaseByDeploymentGuid(d.guid).map(_.map(_._1.slug)).foldMap(cfg.storage)
 
       val notes = for {
         slug <- OptionT(findRelease(d.guid))
@@ -83,13 +85,15 @@ object Notify {
 
   private def sendEmail(rs: List[EmailAddress], sub: String, msg: String)(i: Option[EmailOp ~> IO]) =
     if (rs.isEmpty) IO.unit
-    else runOr(i, EmailOp.send(rs,sub,msg))(
-      log(s"email ($sub) was not sent because the email server is not configured"))
+    else i.fold(log(s"email ($sub) was not sent because the email server is not configured")) { interp =>
+      EmailOp.send(rs, sub, msg).foldMap(interp)
+    }
 
   private def sendSlack(cs: List[SlackChannel], msg: String)(i: Option[SlackOp ~> IO]) =
     if (cs.isEmpty) IO.unit
-    else runOr(i, SlackOp.send(cs, msg))(
-      log(s"slack notification was not sent because slack integration is not configured"))
+    else i.fold(log(s"slack notification was not sent because slack integration is not configured")) { interp =>
+      SlackOp.send(cs, msg).foldMap(interp)
+    }
 
   private val logger = Logger[Notify.type]
 

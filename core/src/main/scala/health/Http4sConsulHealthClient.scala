@@ -17,12 +17,10 @@
 package nelson
 package health
 
+import cats.~>
 import cats.effect.IO
-import nelson.CatsHelpers._
 
 import helm.ConsulOp
-
-import scalaz.~>
 
 final case class Http4sConsulHealthClient(client: ConsulOp ~> IO) extends (HealthCheckOp ~> IO) {
 
@@ -32,7 +30,7 @@ final case class Http4sConsulHealthClient(client: ConsulOp ~> IO) extends (Healt
     case Health(dc, ns, sn) =>
       val op = ConsulOp.healthListChecksForService(sn.toString, None, None, None).
         map(_.map(hcr => HealthStatus(hcr.checkId, toNelsonStatus(hcr.status), hcr.node, Some(hcr.name))))
-      helm.run(client.asCats, op)
+      helm.run(client, op)
   }
 
   private def toNelsonStatus(status: helm.HealthStatus): HealthCheck = status match {

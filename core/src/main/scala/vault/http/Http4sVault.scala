@@ -20,7 +20,7 @@ package http4s
 
 import argonaut._, Argonaut._
 
-import cats.FlatMap
+import cats.{~>, FlatMap}
 import cats.effect.IO
 import cats.syntax.functor._
 
@@ -30,8 +30,7 @@ import org.http4s.{argonaut => _, _}
 import org.http4s.argonaut._
 import org.http4s.client._
 
-import scalaz.{==>>,~>}
-import scalaz.syntax.functor._
+import scalaz.==>>
 
 final case class Initialized(init: Boolean)
 

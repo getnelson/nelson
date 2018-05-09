@@ -18,12 +18,11 @@ package nelson
 
 import nelson.Datacenter.StackName
 
+import cats.~>
 import cats.effect.IO
-import nelson.CatsHelpers._
 
 import fs2.Stream
 
-import scalaz.~>
 import vault._
 
 package object policies {
@@ -81,9 +80,9 @@ package object policies {
     val acquire = (for {
       _ <- createPolicy(cfg, sn, ns, resources)
       token <- Vault.createToken(policies = Some(List(policyName(sn, ns))))
-    } yield (token)).runWith(interp)
+    } yield (token)).foldMap(interp)
 
-    def release(token: Token) = deletePolicy(sn, ns).runWith(interp)
+    def release(token: Token) = deletePolicy(sn, ns).foldMap(interp)
 
     Stream.bracket(acquire)(f, release)
   }

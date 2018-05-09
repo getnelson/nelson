@@ -16,9 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.~>
 import cats.effect.IO
 
-import scalaz.{Kleisli, ~>}
+import scalaz.Kleisli
 
 import vault.Vault
 import vault.Vault._

@@ -90,13 +90,13 @@ object DeploymentMonitor {
 
   def monitorActionItemsByDatacenter(dc: Datacenter): IO[List[MonitorActionItem]] =
     for {
-      ns <- storage.run(dc.storage, StoreOp.listNamespacesForDatacenter(dc.name)).map(_.toList)
+      ns <- StoreOp.listNamespacesForDatacenter(dc.name).foldMap(dc.storage).map(_.toList)
       d  <- ns.traverseM(n => monitorActionItemsByNamespace(dc,n))
     } yield d
 
   def monitorActionItemsByNamespace(dc: Datacenter, ns: Datacenter.Namespace): IO[List[MonitorActionItem]] =
     for {
-      d  <- storage.run(dc.storage, StoreOp.listDeploymentsForNamespaceByStatus(ns.id, NonEmptyList(Warming)))
+      d  <- StoreOp.listDeploymentsForNamespaceByStatus(ns.id, NonEmptyList(Warming)).foldMap(dc.storage)
              .map(_.toList.map(_._1))
       ai <- d.traverse(d => monitorActionItem(dc, d))
     } yield ai
@@ -110,9 +110,9 @@ object DeploymentMonitor {
    */
   def monitorActionItem(dc: Datacenter, d: Deployment): IO[MonitorActionItem] =
     for {
-      hcs    <- health.run(dc.health, getHealth(dc, d.namespace.name, d.stackName))
-      shift  <- storage.run(dc.storage, trafficShift(d))
-      next   <- storage.run(dc.storage, next(d))
+      hcs    <- getHealth(dc, d.namespace.name, d.stackName).foldMap(dc.health)
+      shift  <- trafficShift(d).foldMap(dc.storage)
+      next   <- next(d).foldMap(dc.storage)
     } yield {
       if (!majorityPassing(hcs))
         RetainAsWarming(dc, d, "The majority of all health status checks must be passing.")
@@ -171,7 +171,7 @@ object DeploymentMonitor {
   def promote(item: MonitorActionItem)(auditor: audit.Auditor): IO[Unit] = {
     val task = item match {
       case PromoteToReady(dc, d) =>
-        val t = storage.run(dc.storage, promoteToReady(d))
+        val t = promoteToReady(d).foldMap(dc.storage)
         t >> auditor.write(d, audit.ReadyAction)
       case _ =>
         IO.unit

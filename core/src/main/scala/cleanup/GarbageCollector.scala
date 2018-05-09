@@ -34,7 +34,7 @@ import scalaz._, Scalaz._
  */
 object GarbageCollector {
   import nelson.Datacenter.Deployment
-  import nelson.storage.{run => runs, StoreOp,StoreOpF}
+  import nelson.storage.{StoreOp,StoreOpF}
 
   private val log = Logger[GarbageCollector.type]
 
@@ -57,7 +57,7 @@ object GarbageCollector {
     import Json._
     import audit.AuditableInstances._
     _.evalMap { case (dc, ns, d, gr) =>
-      runs(cfg.storage, markAsGarbage(d.deployment).map(_ => (dc, ns, d, gr))) <*
+      markAsGarbage(d.deployment).map(_ => (dc, ns, d, gr)).foldMap(cfg.storage) <*
         cfg.auditor.write(d.deployment, audit.GarbageAction)
     }
   }

@@ -21,6 +21,7 @@ import helm.ConsulOp
 import journal.Logger
 import nelson.routing.Discovery
 
+import cats.~>
 import cats.effect.{Effect, IO}
 import cats.syntax.applicativeError._
 import nelson.CatsHelpers._
@@ -28,7 +29,7 @@ import nelson.CatsHelpers._
 import fs2.{Scheduler, Sink, Stream}
 
 import scala.util.control.NonFatal
-import scalaz.{-\/, Kleisli, \/, \/-, ~>}
+import scalaz.{-\/, Kleisli, \/, \/-}
 import scalaz.std.list._
 import scalaz.std.option.optionSyntax._
 import scalaz.syntax.traverse._
@@ -58,9 +59,9 @@ object Sweeper {
   def cleanupLeakedConsulDiscoveryKeys(cfg: NelsonConfig): IO[SweeperHelmOps] =
     cfg.datacenters.traverseM[IO, SweeperHelmOp] { dc =>
       for {
-        keys <- helm.run(dc.interpreters.consul.asCats, Discovery.listDiscoveryKeys).map(_.toList)
+        keys <- helm.run(dc.interpreters.consul, Discovery.listDiscoveryKeys).map(_.toList)
 
-        stackNames <- storage.run(cfg.storage, storage.StoreOp.getRoutableDeploymentsByDatacenter(dc))
+        stackNames <- storage.StoreOp.getRoutableDeploymentsByDatacenter(dc).foldMap(cfg.storage)
           .map(_.map(_.stackName.toString)).map(_.toList)
 
         items = for {
@@ -91,7 +92,7 @@ object Sweeper {
       case (dc, -\/(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to track unclaimed resources", e))
       }
-      case (dc, \/-(op)) => helm.run(dc.consul.asCats, op) recoverWith {
+      case (dc, \/-(op)) => helm.run(dc.consul, op) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to perform consul operation", e))
       }
     }

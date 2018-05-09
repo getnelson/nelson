@@ -21,6 +21,7 @@ package object routing {
   import scalaz.{==>>,NonEmptyList,RWST}
   import scalaz.std.list._
   import quiver.Graph
+  import nelson.CatsHelpers._
 
   import Datacenter._
 

@@ -18,7 +18,7 @@ package nelson
 
 import nelson.Datacenter.DCUnit
 import nelson.Manifest.{apply => _, _}
-import nelson.storage.{StoreOp, StoreOpF, run => runs}
+import nelson.storage.{StoreOp, StoreOpF}
 import nelson.routing._
 
 import cats.effect.IO
@@ -35,7 +35,7 @@ object CycleDetection {
     m: Manifest,
     cfg: NelsonConfig): DisjunctionT[IO, NonEmptyList[NelsonError], Unit] = {
     val op: StoreOpF[Valid[Unit]] = detect(m, cfg)
-    DisjunctionT(runs(cfg.storage, op).map(_.disjunction))
+    DisjunctionT(op.foldMap(cfg.storage).map(_.disjunction))
   }
 
   // Detecting definite cycles:

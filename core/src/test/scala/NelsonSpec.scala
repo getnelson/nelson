@@ -18,9 +18,8 @@ package nelson
 
 import scalaz.NonEmptyList
 import org.scalatest.BeforeAndAfterEach
-import storage.{run => runs, StoreOp}
+import storage.StoreOp
 import org.scalacheck._
-import nelson.CatsHelpers._
 
 class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
   import Datacenter._
@@ -28,7 +27,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 
@@ -37,25 +36,25 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     val st = StackName("ab", Version(2,2,1), "abcd")
     val sn = ServiceName("ab", st.version.toFeatureVersion)
 
-    val ab = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
+    val ab =  StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync().get
 
-    val before = runs(config.storage, StoreOp.listDeploymentStatuses(ab.id)).unsafeRunSync()
+    val before = StoreOp.listDeploymentStatuses(ab.id).foldMap(config.storage).unsafeRunSync()
     assert(before.find(_._1 == DeploymentStatus.Deprecated).isEmpty)
 
     Nelson.deprecateService(sn).run(config).unsafeRunSync()
 
-    val after = runs(config.storage, StoreOp.listDeploymentStatuses(ab.id)).unsafeRunSync()
+    val after = StoreOp.listDeploymentStatuses(ab.id).foldMap(config.storage).unsafeRunSync()
     assert(after.find(_._1 == DeploymentStatus.Deprecated).nonEmpty)
   }
 
   it should "expiration deployment" in {
     val st = StackName("ab", Version(2,2,1), "abcd")
     val sn = ServiceName("ab", st.version.toFeatureVersion)
-    val dep = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
+    val dep = StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync().get
 
-    val exp1 = runs(config.storage, StoreOp.findDeploymentExpiration(dep.id)).unsafeRunSync()
+    val exp1 = StoreOp.findDeploymentExpiration(dep.id).foldMap(config.storage).unsafeRunSync()
     Nelson.expireService(sn).run(config).unsafeRunSync()
-    val exp2 = runs(config.storage, StoreOp.findDeploymentExpiration(dep.id)).unsafeRunSync()
+    val exp2 = StoreOp.findDeploymentExpiration(dep.id).foldMap(config.storage).unsafeRunSync()
 
     assert(exp2.get.isBefore(exp1.get))
   }
@@ -65,22 +64,22 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     val job311 = StackName("job", Version(3,1,1), "zzzz1")
     val job300 = StackName("job", Version(3,0,0), "zzzz4")
 
-    val ns = runs(config.storage, StoreOp.getNamespace(testName, NamespaceName("dev"))).unsafeRunSync().get
-    val j410 = runs(config.storage, StoreOp.findDeployment(job410)).unsafeRunSync().get
-    val j311 = runs(config.storage, StoreOp.findDeployment(job311)).unsafeRunSync().get
-    val j300 = runs(config.storage, StoreOp.findDeployment(job300)).unsafeRunSync().get
+    val ns =   StoreOp.getNamespace(testName, NamespaceName("dev")).foldMap(config.storage).unsafeRunSync().get
+    val j410 = StoreOp.findDeployment(job410).foldMap(config.storage).unsafeRunSync().get
+    val j311 = StoreOp.findDeployment(job311).foldMap(config.storage).unsafeRunSync().get
+    val j300 = StoreOp.findDeployment(job300).foldMap(config.storage).unsafeRunSync().get
 
-    val exp410A = runs(config.storage, StoreOp.findDeploymentExpiration(j410.id)).unsafeRunSync().get
-    val exp311A = runs(config.storage, StoreOp.findDeploymentExpiration(j311.id)).unsafeRunSync().get
-    val exp300A = runs(config.storage, StoreOp.findDeploymentExpiration(j300.id)).unsafeRunSync().get
+    val exp410A = StoreOp.findDeploymentExpiration(j410.id).foldMap(config.storage).unsafeRunSync().get
+    val exp311A = StoreOp.findDeploymentExpiration(j311.id).foldMap(config.storage).unsafeRunSync().get
+    val exp300A = StoreOp.findDeploymentExpiration(j300.id).foldMap(config.storage).unsafeRunSync().get
 
     // deprecate 311 only
     val sn = ServiceName("job", job311.version.toFeatureVersion)
     Nelson.expireService(sn).run(config).unsafeRunSync()
 
-    val exp410B = runs(config.storage, StoreOp.findDeploymentExpiration(j410.id)).unsafeRunSync().get
-    val exp311B = runs(config.storage, StoreOp.findDeploymentExpiration(j311.id)).unsafeRunSync().get
-    val exp300B = runs(config.storage, StoreOp.findDeploymentExpiration(j300.id)).unsafeRunSync().get
+    val exp410B = StoreOp.findDeploymentExpiration(j410.id).foldMap(config.storage).unsafeRunSync().get
+    val exp311B = StoreOp.findDeploymentExpiration(j311.id).foldMap(config.storage).unsafeRunSync().get
+    val exp300B = StoreOp.findDeploymentExpiration(j300.id).foldMap(config.storage).unsafeRunSync().get
 
     assert(exp410A == exp410B)
     assert(exp300A == exp300B)
@@ -95,8 +94,8 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     val absn = ServiceName("ab", abst.version.toFeatureVersion)
     val cond = StackName("conductor", Version(1,1,1), "abcd")
 
-    val ab = runs(config.storage, StoreOp.findDeployment(abst)).unsafeRunSync().get
-    val co = runs(config.storage, StoreOp.findDeployment(cond)).unsafeRunSync().get
+    val ab = StoreOp.findDeployment(abst).foldMap(config.storage).unsafeRunSync().get
+    val co = StoreOp.findDeployment(cond).foldMap(config.storage).unsafeRunSync().get
 
     Nelson.deprecateService(absn).run(config).unsafeRunSync()
 
@@ -141,13 +140,13 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     Nelson.createManualDeployment(session,md).run(config).unsafeRunSync()
     val st = StackName("manual-deployment", Version(1,1,1), "hash")
 
-    val dep = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync()
+    val dep = StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync()
     dep.isDefined should equal(true)
 
-    val status = runs(config.storage, StoreOp.getDeploymentStatus(dep.get.id)).unsafeRunSync()
+    val status = StoreOp.getDeploymentStatus(dep.get.id).foldMap(config.storage).unsafeRunSync()
     status should equal(Some(DeploymentStatus.Ready))
 
-    val exp = runs(config.storage, StoreOp.findDeploymentExpiration(dep.get.id)).unsafeRunSync()
+    val exp = StoreOp.findDeploymentExpiration(dep.get.id).foldMap(config.storage).unsafeRunSync()
     exp.isDefined should equal(true)
   }
 
@@ -155,14 +154,14 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     val ns = NamespaceName("qa", List("sandbox", "foo", "bar"))
     Nelson.recursiveCreateNamespace(testName, ns).run(config).unsafeRunSync()
 
-    val res = storage.run(config.storage,
-      for {
+    val res =
+      (for {
         root <- StoreOp.getNamespace(testName, NamespaceName("qa"))
         sand <- StoreOp.getNamespace(testName, NamespaceName("qa", List("sandbox")))
         foo <- StoreOp.getNamespace(testName, NamespaceName("qa", List("sandbox", "foo")))
         bar <- StoreOp.getNamespace(testName, NamespaceName("qa", List("sandbox", "foo", "bar")))
       } yield List(root, sand, foo, bar)
-    ).unsafeRunSync()
+    ).foldMap(config.storage).unsafeRunSync()
     res.forall(_.isDefined) should equal (true)
   }
 
@@ -177,7 +176,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     val res = Nelson.recursiveCreateSubordinateNamespace(testName, ns).run(config).attempt.unsafeRunSync()
     res should equal (Right(()))
 
-    val devbar = storage.run(config.storage, StoreOp.getNamespace(testName, ns)).unsafeRunSync().get
+    val devbar = StoreOp.getNamespace(testName, ns).foldMap(config.storage).unsafeRunSync().get
     devbar.name should equal (ns)
   }
 
@@ -188,8 +187,8 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   it should "fetch load balancer by GUID" in {
-    val ns = runs(config.storage, StoreOp.getNamespace(testName, NamespaceName("dev"))).unsafeRunSync().get
-    val lb = runs(config.storage, StoreOp.findLoadbalancerDeployment("lb", MajorVersion(1), ns.id)).unsafeRunSync().get
+    val ns = StoreOp.getNamespace(testName, NamespaceName("dev")).foldMap(config.storage).unsafeRunSync().get
+    val lb = StoreOp.findLoadbalancerDeployment("lb", MajorVersion(1), ns.id).foldMap(config.storage).unsafeRunSync().get
     val guid = lb.guid
     val res = Nelson.fetchLoadbalancerDeployment(guid).run(config).unsafeRunSync().get
 
@@ -199,7 +198,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "fetch deployment by GUID" in {
     val sn = StackName("conductor", Version(1,1,1), "abcd")
-    val dep = runs(config.storage, StoreOp.findDeployment(sn)).unsafeRunSync().get
+    val dep = StoreOp.findDeployment(sn).foldMap(config.storage).unsafeRunSync().get
     val ma = Nelson.fetchDeployment(dep.guid).run(config).unsafeRunSync().get
 
     ma.deployment should equal (dep)
@@ -221,12 +220,12 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "create default namespace" in {
     val ns = NamespaceName("some-default")
     val cfg = config.copy(defaultNamespace = ns)
-    val ns1 = runs(cfg.storage, StoreOp.getNamespace(testName, ns)).unsafeRunSync()
+    val ns1 = StoreOp.getNamespace(testName, ns).foldMap(config.storage).unsafeRunSync()
     ns1 should equal (None)
 
     Nelson.createDefaultNamespaceIfAbsent(cfg.datacenters, cfg.defaultNamespace).run(cfg).unsafeRunSync()
 
-    val ns2 = runs(cfg.storage, StoreOp.getNamespace(testName, ns)).unsafeRunSync()
+    val ns2 = StoreOp.getNamespace(testName, ns).foldMap(config.storage).unsafeRunSync()
     ns2.map(_.name) should equal (Some(ns))
   }
 

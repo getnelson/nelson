@@ -17,10 +17,9 @@
 package nelson
 
 import org.scalatest.BeforeAndAfterEach
-import storage.{run=>runs, StoreOp}
+import storage.StoreOp
 import Datacenter._
 import cleanup._
-import nelson.CatsHelpers._
 import cats.effect.IO
 import fs2.Stream
 
@@ -28,7 +27,7 @@ class ReaperSpec extends NelsonSuite with BeforeAndAfterEach {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 
@@ -39,13 +38,13 @@ class ReaperSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "mark deployment as terminated" in {
     val st = StackName("search", Version(1,1,0), "foo")
     val sn = ServiceName("search", st.version.toFeatureVersion)
-    val dep = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
+    val dep = StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync().get
 
     val ctx = DeploymentCtx(dep, DeploymentStatus.Garbage, Some(java.time.Instant.now))
 
     Stream.eval(IO.pure((dc,dep.namespace,ctx,gr))).to(Reaper.reap(config)).take(1).compile.toVector.unsafeRunSync()
 
-    val status = runs(config.storage, StoreOp.getDeploymentStatus(dep.id)).unsafeRunSync()
+    val status = StoreOp.getDeploymentStatus(dep.id).foldMap(config.storage).unsafeRunSync()
     status should equal(Some(DeploymentStatus.Terminated))
   }
 }

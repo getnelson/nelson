@@ -17,11 +17,12 @@
 package nelson
 package storage
 
+import cats.free.Free
+import cats.implicits._
+
 import java.time.Instant
 
-import scalaz.{==>>, @@, Free, NonEmptyList, ValidationNel, \/}
-import scalaz.std.list._
-import scalaz.syntax.traverse._
+import scalaz.{==>>, @@, NonEmptyList, ValidationNel, \/}
 
 sealed trait StoreOp[A]
 
@@ -32,76 +33,76 @@ object StoreOp {
   import nelson.audit.{AuditLog,AuditEvent}
 
   def findRepository(u: User, slug: Slug): StoreOpF[Option[Repo]] =
-    Free.liftFC(FindRepository(u, slug))
+    Free.liftF(FindRepository(u, slug))
 
   def listRepositories(u: User): StoreOpF[List[Repo]] =
-    Free.liftFC(ListRepositories(u))
+    Free.liftF(ListRepositories(u))
 
   def listRepositoriesWithOwner(u: User, owner: String): StoreOpF[List[Repo]] =
-    Free.liftFC(ListRepositoriesWithOwner(u, owner))
+    Free.liftF(ListRepositoriesWithOwner(u, owner))
 
   def listRepositoriesWithActiveHooks(u: User): StoreOpF[List[Repo]] =
-    Free.liftFC(ListRepositoriesWithActiveHooks(u))
+    Free.liftF(ListRepositoriesWithActiveHooks(u))
 
   def insertOrUpdateRepositories(list: List[Repo]): StoreOpF[Unit] =
-    Free.liftFC(InsertOrUpdateRepositories(list))
+    Free.liftF(InsertOrUpdateRepositories(list))
 
   def linkRepositoriesToUser(list: List[Repo], u: User): StoreOpF[Unit] =
-    Free.liftFC(LinkRepositoriesToUser(list, u))
+    Free.liftF(LinkRepositoriesToUser(list, u))
 
   def deleteRepositories(nel: NonEmptyList[Repo]): StoreOpF[Unit] =
-    Free.liftFC(DeleteRepositories(nel))
+    Free.liftF(DeleteRepositories(nel))
 
   def addUnit(unit: UnitDef @@ Versioned, repoId: ID): StoreOpF[Unit] =
-    Free.liftFC(AddUnit(unit, repoId))
+    Free.liftF(AddUnit(unit, repoId))
 
   def createRelease(repositoryId: Long, r: Github.Release): StoreOpF[Unit] =
-    Free.liftFC(CreateRelease(repositoryId, r))
+    Free.liftF(CreateRelease(repositoryId, r))
 
   def killRelease(slug: Slug, version: String): StoreOpF[Throwable \/ Unit] =
-    Free.liftFC(KillRelease(slug, version))
+    Free.liftF(KillRelease(slug, version))
 
   def listRecentReleasesForRepository(slug: Slug): StoreOpF[Released ==>> List[ReleasedDeployment]] =
-    Free.liftFC(ListRecentReleasesForRepository(slug))
+    Free.liftF(ListRecentReleasesForRepository(slug))
 
   def listReleases(limit: Int): StoreOpF[Released ==>> List[ReleasedDeployment]] =
-    Free.liftFC(ListReleases(limit))
+    Free.liftF(ListReleases(limit))
 
   def findRelease(id: Long): StoreOpF[Released ==>> List[ReleasedDeployment]] =
-    Free.liftFC(FindRelease(id))
+    Free.liftF(FindRelease(id))
 
   def createDatacenter(dc: Datacenter): StoreOpF[Unit] =
-    Free.liftFC(CreateDatacenter(dc))
+    Free.liftF(CreateDatacenter(dc))
 
   def listDatacenters: StoreOpF[Set[String]] =
-    Free.liftFC(ListDatacenters)
+    Free.liftF(ListDatacenters)
 
   def listNamespacesForDatacenter(dc: String): StoreOpF[Set[Namespace]] =
-    Free.liftFC(ListNamespacesForDatacenter(dc))
+    Free.liftF(ListNamespacesForDatacenter(dc))
 
   def listDeploymentsForNamespaceByStatus(ns: ID, statuses: NonEmptyList[DeploymentStatus], unit: Option[UnitName] = None): StoreOpF[Set[(Deployment, DeploymentStatus)]] =
-    Free.liftFC(ListDeploymentsForNamespaceByStatus(ns, statuses, unit))
+    Free.liftF(ListDeploymentsForNamespaceByStatus(ns, statuses, unit))
 
   def getNamespace(dc: String, nsName: NamespaceName): StoreOpF[Option[Namespace]] =
-    Free.liftFC(GetNamespace(dc, nsName))
+    Free.liftF(GetNamespace(dc, nsName))
 
   def getNamespaceByID(ns: ID): StoreOpF[Namespace] =
-    Free.liftFC(GetNamespaceByID(ns))
+    Free.liftF(GetNamespaceByID(ns))
 
   def createNamespace(dc: String, name: NamespaceName): StoreOpF[ID] =
-    Free.liftFC(CreateNamespace(dc, name))
+    Free.liftF(CreateNamespace(dc, name))
 
   def getUnit(name: String, version: Version): StoreOpF[Option[DCUnit]] =
-    Free.liftFC(GetUnit(name, version))
+    Free.liftF(GetUnit(name, version))
 
   def listDeploymentsForUnitByStatus(nsid: ID, name: UnitName,s: NonEmptyList[DeploymentStatus]): StoreOpF[Set[Deployment]] =
-    Free.liftFC(ListDeploymentsForUnitByStatus(nsid, name, s))
+    Free.liftF(ListDeploymentsForUnitByStatus(nsid, name, s))
 
   def listDeploymentStatuses(id: ID): StoreOpF[List[(DeploymentStatus, Option[StatusMessage], Instant)]] =
-    Free.liftFC(ListDeploymentStatuses(id))
+    Free.liftF(ListDeploymentStatuses(id))
 
   def getDeploymentStatus(id: ID): StoreOpF[Option[DeploymentStatus]] =
-    Free.liftFC(GetDeploymentStatus(id))
+    Free.liftF(GetDeploymentStatus(id))
 
   def getDeploymentStatusByGuid(guid: GUID): StoreOpF[Option[DeploymentStatus]] =
     getDeploymentByGuid(guid).flatMap {
@@ -110,60 +111,60 @@ object StoreOp {
     }
 
   def getDeploymentResources(id: ID): StoreOpF[Set[(String, java.net.URI)]] =
-    Free.liftFC(GetDeploymentResources(id))
+    Free.liftF(GetDeploymentResources(id))
 
   def getRoutableDeploymentsByDatacenter(dc: Datacenter): StoreOpF[Set[Deployment]] =
     (for {
       ns <- listNamespacesForDatacenter(dc.name)
-      ds <- ns.toList.traverseM { n =>
+      ds <- ns.toList.flatTraverse { n =>
         listDeploymentsForNamespaceByStatus(n.id, DeploymentStatus.routable).map(_.toList.map(_._1))
       }
     } yield ds).map(_.toSet)
 
   def findDeployment(stackName: StackName): StoreOpF[Option[Deployment]] =
-    Free.liftFC(FindDeployment(stackName))
+    Free.liftF(FindDeployment(stackName))
 
   def getDeployment(id: ID): StoreOpF[Deployment] =
-    Free.liftFC(GetDeployment(id))
+    Free.liftF(GetDeployment(id))
 
   def createDeployment(unitId: ID, hash: String, ns: Datacenter.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef): StoreOpF[ID] =
-    Free.liftFC(CreateDeployment(unitId, hash, ns, wf, plan, policy))
+    Free.liftF(CreateDeployment(unitId, hash, ns, wf, plan, policy))
 
   def getDeploymentByGuid(guid: GUID): StoreOpF[Option[Deployment]] =
-    Free.liftFC(GetDeploymentByGuid(guid))
+    Free.liftF(GetDeploymentByGuid(guid))
 
   def createDeploymentStatus(id: ID, status: DeploymentStatus, msg: Option[String]): StoreOpF[Unit] =
-    Free.liftFC(CreateDeploymentStatus(id, status, msg))
+    Free.liftF(CreateDeploymentStatus(id, status, msg))
 
   def listUnitsByStatus(nsid: ID, statuses: NonEmptyList[DeploymentStatus]): StoreOpF[Vector[(GUID,ServiceName)]] =
-    Free.liftFC(ListUnitsByStatus(nsid, statuses))
+    Free.liftF(ListUnitsByStatus(nsid, statuses))
 
   def createManualDeployment(datacenter: Datacenter, namespace: NamespaceName, serviceType: String, version: String, hash: String, description: String, port: Int, exp: Instant): StoreOpF[GUID] =
-    Free.liftFC(CreateManualDeployment(datacenter, namespace, serviceType, version, hash, description, port, exp))
+    Free.liftF(CreateManualDeployment(datacenter, namespace, serviceType, version, hash, description, port, exp))
 
   def findReleaseByDeploymentGuid(guid: GUID): StoreOpF[Option[(Released, ReleasedDeployment)]] =
-    Free.liftFC(FindReleaseByDeploymentGuid(guid: GUID))
+    Free.liftF(FindReleaseByDeploymentGuid(guid: GUID))
 
   def findReleasedByUnitNameAndVersion(u: UnitName, v: Version): StoreOpF[Option[Released]] =
-    Free.liftFC(FindReleasedByUnitNameAndVersion(u, v))
+    Free.liftF(FindReleasedByUnitNameAndVersion(u, v))
 
   def getDeploymentsForServiceNameByStatus(sn: ServiceName, ns: ID, s: NonEmptyList[DeploymentStatus]): StoreOpF[List[Deployment]] =
-    Free.liftFC(GetDeploymentsForServiceNameByStatus(sn, ns, s))
+    Free.liftF(GetDeploymentsForServiceNameByStatus(sn, ns, s))
 
   def getDeploymentForServiceNameByStatus(sn: ServiceName, ns: ID, s: NonEmptyList[DeploymentStatus]): StoreOpF[Option[Deployment]] =
     getDeploymentsForServiceNameByStatus(sn, ns, s).map(_.headOption)
 
   def createDeploymentExpiration(id : ID, exp: Instant): StoreOpF[ID] =
-    Free.liftFC(CreateDeploymentExpiration(id, exp))
+    Free.liftF(CreateDeploymentExpiration(id, exp))
 
   def createDeploymentResource(dId: ID, name: String, uri: java.net.URI): StoreOpF[ID] =
-    Free.liftFC(CreateDeploymentResource(dId, name, uri))
+    Free.liftF(CreateDeploymentResource(dId, name, uri))
 
   def findDeploymentExpiration(id: ID): StoreOpF[Option[Instant]] =
-    Free.liftFC(FindDeploymentExpiration(id))
+    Free.liftF(FindDeploymentExpiration(id))
 
   def listShiftableDeployments(unit: Manifest.UnitDef, ns: ID): StoreOpF[List[Deployment]] =
-    Free.liftFC(ListShiftableDeployments(unit,ns))
+    Free.liftF(ListShiftableDeployments(unit,ns))
 
   def findDeploymentExpirationByGuid(guid: GUID): StoreOpF[Option[Instant]] =
      getDeploymentByGuid(guid).flatMap {
@@ -172,67 +173,67 @@ object StoreOp {
     }
 
   def getCurrentTargetForServiceName(nsid: ID, sn: ServiceName): StoreOpF[Option[Target]] =
-    Free.liftFC(GetCurrentTargetForServiceName(nsid, sn))
+    Free.liftF(GetCurrentTargetForServiceName(nsid, sn))
 
   def createTrafficShift(nsid: ID, to: Deployment, p: TrafficShiftPolicy, dur: FiniteDuration): StoreOpF[ID] =
-    Free.liftFC(CreateTrafficShift(nsid, to, p, dur))
+    Free.liftF(CreateTrafficShift(nsid, to, p, dur))
 
   def startTrafficShift(from: ID, to: ID, start: Instant): StoreOpF[Option[ID]] =
-    Free.liftFC(StartTrafficShift(from, to, start))
+    Free.liftF(StartTrafficShift(from, to, start))
 
   def reverseTrafficShift(id: ID, rev: Instant): StoreOpF[Option[ID]] =
-    Free.liftFC(ReverseTrafficShift(id, rev))
+    Free.liftF(ReverseTrafficShift(id, rev))
 
   def getTrafficShiftForServiceName(nsid: ID, sn: ServiceName): StoreOpF[Option[Datacenter.TrafficShift]] =
-    Free.liftFC(GetTrafficShiftForServiceName(nsid, sn))
+    Free.liftF(GetTrafficShiftForServiceName(nsid, sn))
 
   def verifyDeployable(dcName: String, nsName: NamespaceName, unit: Manifest.UnitDef): StoreOpF[ValidationNel[NelsonError, Unit]] =
-    Free.liftFC(VerifyDeployable(dcName, nsName, unit))
+    Free.liftF(VerifyDeployable(dcName, nsName, unit))
 
   def audit[A](a: AuditEvent[A]): StoreOpF[ID] =
-    Free.liftFC[StoreOp, Long](Audit(a))
+    Free.liftF[StoreOp, Long](Audit(a))
 
   def listAuditLog(limit: Long, offset: Long, action: Option[String] = None, category: Option[String] = None): StoreOpF[List[AuditLog]] =
-    Free.liftFC(ListAuditLog(limit, offset, action, category))
+    Free.liftF(ListAuditLog(limit, offset, action, category))
 
   def listAuditLogByReleaseId(limit: Long, offset: Long, releaseId: Long): StoreOpF[List[AuditLog]] =
-    Free.liftFC(ListAuditLogByReleaseId(limit, offset, releaseId))
+    Free.liftF(ListAuditLogByReleaseId(limit, offset, releaseId))
 
   def getLoadbalancer(name: String, v: MajorVersion): StoreOpF[Option[Datacenter.DCLoadbalancer]] =
-    Free.liftFC(GetLoadbalancer(name, v))
+    Free.liftF(GetLoadbalancer(name, v))
 
   def getLoadbalancerDeployment(id: ID): StoreOpF[Option[Datacenter.LoadbalancerDeployment]] =
-    Free.liftFC(GetLoadbalancerDeployment(id))
+    Free.liftF(GetLoadbalancerDeployment(id))
 
   def getLoadbalancerDeploymentByGUID(guid: GUID): StoreOpF[Option[Datacenter.LoadbalancerDeployment]] =
-    Free.liftFC(GetLoadbalancerDeploymentByGUID(guid))
+    Free.liftF(GetLoadbalancerDeploymentByGUID(guid))
 
   def findLoadbalancerDeployment(name: String, v: MajorVersion, nsid: ID): StoreOpF[Option[Datacenter.LoadbalancerDeployment]] =
-    Free.liftFC(FindLoadbalancerDeployment(name, v, nsid))
+    Free.liftF(FindLoadbalancerDeployment(name, v, nsid))
 
   def listLoadbalancerDeploymentsForNamespace(id: ID): StoreOpF[Vector[Datacenter.LoadbalancerDeployment]] =
-    Free.liftFC(ListLoadbalancerDeploymentsForNamespace(id))
+    Free.liftF(ListLoadbalancerDeploymentsForNamespace(id))
 
   def insertLoadbalancerDeployment(lbid: ID, nsid: ID, hash: String, address: String): StoreOpF[ID] =
-    Free.liftFC(InsertLoadbalancerDeployment(lbid, nsid, hash, address))
+    Free.liftF(InsertLoadbalancerDeployment(lbid, nsid, hash, address))
 
   def insertLoadbalancerIfAbsent(lb: Manifest.Loadbalancer @@ Versioned, repoId: ID): StoreOpF[ID] =
-    Free.liftFC(InsertLoadbalancerIfAbsent(lb, repoId))
+    Free.liftF(InsertLoadbalancerIfAbsent(lb, repoId))
 
   def deleteLoadbalancerDeployment(lbid: ID): StoreOpF[Int] =
-    Free.liftFC(DeleteLoadbalancerDeployment(lbid))
+    Free.liftF(DeleteLoadbalancerDeployment(lbid))
 
   def countDeploymentsByStatus(since: Instant): StoreOpF[List[(String, Int)]] =
-    Free.liftFC(CountDeploymentsByStatus(since.getEpochSecond * 1000))
+    Free.liftF(CountDeploymentsByStatus(since.getEpochSecond * 1000))
 
   def getMostAndLeastDeployed(since: Instant, number: Int, sortOrder: String): StoreOpF[List[(String, Int)]] =
-    Free.liftFC(GetMostAndLeastDeployed(since.getEpochSecond * 1000, number, sortOrder))
+    Free.liftF(GetMostAndLeastDeployed(since.getEpochSecond * 1000, number, sortOrder))
 
   def findLastReleaseDeploymentStatus(s: Slug, u: UnitName): StoreOpF[Option[DeploymentStatus]] =
-    Free.liftFC(FindLastReleaseDeploymentStatus(s, u))
+    Free.liftF(FindLastReleaseDeploymentStatus(s, u))
 
   def getLatestReleaseForLoadbalancer(name: String, mv: MajorVersion): StoreOpF[Option[Released]] =
-    Free.liftFC(GetLatestReleaseForLoadbalancer(name, mv))
+    Free.liftF(GetLatestReleaseForLoadbalancer(name, mv))
 
   final case class FindRepository(u: User, slug: Slug) extends StoreOp[Option[Repo]]
   final case class ListRepositories(u: User) extends StoreOp[List[Repo]]

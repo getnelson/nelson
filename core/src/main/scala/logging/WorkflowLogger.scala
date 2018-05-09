@@ -17,6 +17,7 @@
 package nelson
 package logging
 
+import cats.~>
 import cats.effect.IO
 import cats.syntax.apply._
 
@@ -26,7 +27,7 @@ import fs2.{io, text}
 
 import journal.Logger
 
-import scalaz._
+import scalaz.{~> => _, _}
 import scalaz.Scalaz._
 
 import java.nio.file.{Path,Files,StandardOpenOption}

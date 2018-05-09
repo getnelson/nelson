@@ -20,13 +20,14 @@ import knobs._
 import org.scalatest.{FlatSpec,Matchers}
 import cats.effect.IO
 import cats.implicits._
+import nelson.Util._
 
 class ConfigSpec extends FlatSpec with Matchers {
 
   def read(file: String): IO[List[Datacenter]] =
     (for {
       a <- knobs.loadImmutable[IO](Required(ClassPathResource(file)) :: Nil)
-      c <- Config.readDatacenters(a.subconfig("nelson.datacenters"), null, DockerConfig("docker.local", true), null, null, null,null)
+      c <- Config.readDatacenters(a.subconfig("nelson.datacenters"), null, DockerConfig("docker.local", true), null, null, stubbedInterpreter, stubbedInterpreter)
     } yield c)
 
   it should "correctly parse the datacenter definitions from file" in {

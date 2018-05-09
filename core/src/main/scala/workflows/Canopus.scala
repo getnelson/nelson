@@ -1,13 +1,13 @@
 package nelson
 
+import cats.syntax.apply._
+
 import scalaz.@@
-import scalaz.syntax.apply._
-import nelson.ScalazHelpers._
 
 import nelson.Datacenter.{Deployment, Namespace => DCNamespace}
 import nelson.DeploymentStatus.{Pending, Ready, Terminated, Warming}
 import nelson.Manifest.{Namespace => ManifestNamespace, Plan, UnitDef, Versioned}
-import nelson.Workflow.WorkflowF
+import nelson.Workflow.{WorkflowF, WorkflowOp}
 import nelson.Workflow.syntax._
 import nelson.docker.DockerOp
 
@@ -36,7 +36,7 @@ object Canopus extends Workflow[Unit] {
       else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
 
     for {
-      i <- DockerOp.extract(Versioned.unwrap(vunit)).inject
+      i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
       _ <- status(id, Pending, "Canopus workflow about to start")
       _ <- logToFile(id, s"Instructing ${dc.name}'s scheduler to handle service container")
       l <- launch(i, dc, ns.name, vunit, p, hash)

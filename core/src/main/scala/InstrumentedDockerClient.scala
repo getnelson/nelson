@@ -16,12 +16,11 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.~>
 import cats.effect.IO
 
 import nelson.docker.DockerOp
 import nelson.docker.DockerOp._
-
-import scalaz.~>
 
 class InstrumentedDockerClient private (instance: String, interp: DockerOp ~> IO, metrics: Metrics)
     extends (DockerOp ~> IO) {

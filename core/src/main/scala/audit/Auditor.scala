@@ -19,9 +19,9 @@ package audit
 
 import nelson.storage.StoreOp
 
+import cats.~>
 import cats.effect.IO
-import nelson.CatsHelpers._
-import cats.syntax.applicativeError._
+import cats.implicits._
 
 import fs2.{Sink, Stream}
 import fs2.async.mutable.Queue
@@ -29,9 +29,6 @@ import fs2.async.mutable.Queue
 import journal.Logger
 
 import scala.concurrent.ExecutionContext
-
-import scalaz.~>
-import scalaz.syntax.functor._
 
 class Auditor(queue: Queue[IO, AuditEvent[_]], defaultLogin: String) {
 
@@ -48,7 +45,7 @@ class Auditor(queue: Queue[IO, AuditEvent[_]], defaultLogin: String) {
 
   private def persist(stg: StoreOp ~> IO): Sink[IO, AuditEvent[_]] =
     Sink { a =>
-      storage.run(stg, storage.StoreOp.audit(a).void).recoverWith {
+      storage.StoreOp.audit(a).void.foldMap(stg).recoverWith {
         case t => IO(logger.error(s"[fatal] audit error while persisting event ${t.getMessage}"))
       }
     }

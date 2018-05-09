@@ -19,7 +19,6 @@ package nelson
 import argonaut._, Argonaut._
 
 import cats.effect.{Effect, IO}
-import nelson.CatsHelpers._
 
 import fs2.Stream
 
@@ -77,7 +76,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
     audit.process(storage)(config.pools.defaultExecutor).take(4).compile.toVector.unsafeRunSync()
 
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).unsafeRunSync()
+    val ev = nelson.storage.StoreOp.listAuditLog(10, 0).foldMap(storage).unsafeRunSync()
 
     ev.length should equal (events.length)
   }
@@ -91,7 +90,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
     audit.process(storage)(config.pools.defaultExecutor).take(2).compile.drain.unsafeRunSync()
 
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).unsafeRunSync()
+    val ev = nelson.storage.StoreOp.listAuditLog(10, 0).foldMap(storage).unsafeRunSync()
 
     ev.length should equal (2)
   }
@@ -104,7 +103,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
     audit.write(foo, CreateAction, releaseId = releaseId).unsafeRunSync()
     audit.process(storage)(config.pools.defaultExecutor).take(1).compile.drain.unsafeRunSync()
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).unsafeRunSync()
+    val ev = nelson.storage.StoreOp.listAuditLog(10, 0).foldMap(storage).unsafeRunSync()
 
 
     ev.length should === (1)
@@ -119,7 +118,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
     audit.write(foo, CreateAction, login = login).unsafeRunSync()
     audit.process(storage)(config.pools.defaultExecutor).take(1).compile.drain.unsafeRunSync()
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0)).unsafeRunSync()
+    val ev = nelson.storage.StoreOp.listAuditLog(10, 0).foldMap(storage).unsafeRunSync()
 
 
     ev.length should === (1)
@@ -138,7 +137,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
     audit.process(storage)(config.pools.defaultExecutor).take(2).compile.drain.unsafeRunSync()
 
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0, action = Option("create"))).unsafeRunSync()
+    val ev = nelson.storage.StoreOp.listAuditLog(10, 0, action = Option("create")).foldMap(storage).unsafeRunSync()
 
     ev.length should equal (1)
   }
@@ -153,7 +152,7 @@ class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 
     audit.process(storage)(config.pools.defaultExecutor).take(2).compile.drain.unsafeRunSync()
 
-    val ev = nelson.storage.run(storage, nelson.storage.StoreOp.listAuditLog(10, 0, category = Option("deploy"))).unsafeRunSync()
+    val ev = nelson.storage.StoreOp.listAuditLog(10, 0, category = Option("deploy")).foldMap(storage).unsafeRunSync()
 
     ev.length should equal (1)
   }

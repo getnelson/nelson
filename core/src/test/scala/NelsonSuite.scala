@@ -16,6 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.~>
 import cats.effect.IO
 
 import dispatch.Http
@@ -32,7 +33,8 @@ import knobs._
 
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 
-import scalaz._, Scalaz._
+import scalaz.{~> => _, _}
+import Scalaz._
 
 trait NelsonSuite
     extends FlatSpec
@@ -73,7 +75,7 @@ trait NelsonSuite
    */
   def consulMap: Map[String, String] = Map.empty
 
-  lazy val testConsul: ConsulOp ~> IO = new NaturalTransformation[ConsulOp, IO] {
+  lazy val testConsul: ConsulOp ~> IO = new (ConsulOp ~> IO) {
     @volatile var kvs: Map[String,String] = consulMap
     import helm.Key
     def apply[A](a: ConsulOp[A]): IO[A] = a match {
@@ -104,7 +106,7 @@ trait NelsonSuite
     })
   }
 
-  lazy val testSlack: SlackOp ~> IO = new NaturalTransformation[SlackOp, IO] {
+  lazy val testSlack: SlackOp ~> IO = new (SlackOp ~> IO) {
     import SlackOp._
     def apply[A](op: SlackOp[A]): IO[A] = op match {
       case SendSlackNotification(channels, msg) =>
@@ -112,7 +114,7 @@ trait NelsonSuite
     }
   }
 
-  lazy val testEmail: EmailOp ~> IO = new NaturalTransformation[EmailOp, IO] {
+  lazy val testEmail: EmailOp ~> IO = new (EmailOp ~> IO) {
     import EmailOp._
     def apply[A](op: EmailOp[A]): IO[A] = op match {
       case SendEmailNotification(r,m,s) =>

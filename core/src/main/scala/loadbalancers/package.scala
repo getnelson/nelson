@@ -18,10 +18,8 @@ package nelson
 
 import Manifest._
 import Datacenter.{StackName,LoadbalancerDeployment}
-import scalaz._
 import helm.ConsulOp
 import routing._
-
 
 package object loadbalancers {
   import LoadbalancerOp._
@@ -74,9 +72,6 @@ package object loadbalancers {
 
   def resize(lb: Datacenter.LoadbalancerDeployment, p: Manifest.Plan): LoadbalancerF[Unit] =
     LoadbalancerOp.resize(lb, p)
-
-  def run[F[_]:Monad,A](interpreter: LoadbalancerOp ~> F , op: LoadbalancerF[A]): F[A] =
-    Free.runFC(op)(interpreter)
 
   object Json {
     import argonaut._, Argonaut._

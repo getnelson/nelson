@@ -19,20 +19,39 @@ package nelson
 import helm.ConsulOp
 import nelson.Datacenter.{DCUnit, Deployment, Namespace}
 import nelson.DeploymentStatus.Ready
+import nelson.Util._
 import nelson.cleanup.Sweeper
 import nelson.cleanup.Sweeper.UnclaimedResources
 import nelson.storage.StoreOp
 import nelson.storage.StoreOp.{ListDeploymentsForNamespaceByStatus, ListNamespacesForDatacenter}
 
-import cats.arrow.FunctionK
+import cats.~>
 import cats.effect.IO
-import scalaz.{-\/, \/-, ~>}
+import scalaz.{-\/, \/-}
 
 class SweeperSpec extends NelsonSuite {
 
   def cfg(dcs: List[String], sto: StoreOp ~> IO, csl: ConsulOp ~> IO) = config.copy(
-    datacenters = dcs.map(name => Datacenter(name, null, null, null, None,
-      Infrastructure.Interpreters(null, csl, null, null, null, null, null, null), None, null)),
+    datacenters = dcs.map { name =>
+      Datacenter(
+        name,
+        null,
+        null,
+        null,
+        None,
+        Infrastructure.Interpreters(
+          stubbedInterpreter,
+          csl,
+          stubbedInterpreter,
+          stubbedInterpreter,
+          stubbedInterpreter,
+          stubbedInterpreter,
+          stubbedInterpreter,
+          stubbedInterpreter
+        ),
+        None,
+        null)
+    },
     interpreters = config.interpreters.copy(storage = sto)
   )
 
@@ -82,7 +101,7 @@ class SweeperSpec extends NelsonSuite {
     var deleteKeys = List.empty[(String, String)]
     var unclaimedResource = List.empty[(String, Int)]
 
-    def interp(dc: Datacenter): FunctionK[ConsulOp, IO] = new FunctionK[ConsulOp, IO] {
+    def interp(dc: Datacenter): ConsulOp ~> IO = new (ConsulOp ~> IO) {
       def apply[A](fa: ConsulOp[A]): IO[A] = fa match {
         case ConsulOp.KVDelete(key) => IO(deleteKeys = deleteKeys :+ (dc.name -> key))
         case _ => IO.raiseError(new Exception("Unexpected Result."))

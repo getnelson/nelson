@@ -36,7 +36,7 @@ object Nelson {
   import Json._
   import audit._
   import AuditableInstances._
-  import nelson.storage.{run => runs, StoreOp, StoreOpF}
+  import nelson.storage.{StoreOp, StoreOpF}
   import Manifest.Versioned
   import health._
 
@@ -74,7 +74,7 @@ object Nelson {
           logger.warn("Using environment session authentication. Should only be used for development.")
           AccessToken(sys.env("GITHUB_TOKEN"))
         }
-      else Github.Request.fetchAccessToken(code).runWith(cfg.github)
+      else Github.Request.fetchAccessToken(code).foldMap(cfg.github)
     }.flatMap(token => createSessionFromGithubToken(token))
 
   /**
@@ -86,7 +86,7 @@ object Nelson {
   def createSessionFromGithubToken(githubToken: AccessToken): NelsonK[Session] =
     Kleisli { cfg =>
       for {
-        c <- Github.Request.fetchUserData(githubToken).runWith(cfg.github)
+        c <- Github.Request.fetchUserData(githubToken).foldMap(cfg.github)
         d  = Instant.now.plusMillis(cfg.security.expireLoginAfter.toMillis)
         e  = c.copy(orgs = c.orgs.filterNot(o => blacklist(cfg.git.organizationBlacklist)(o.slug)))
       } yield Session(expiry = d, github = githubToken, user = e)
@@ -115,13 +115,12 @@ object Nelson {
 
     Kleisli { cfg =>
       for {
-        nelson <- storage.run(cfg.storage, session.user.orgs.traverseM(o =>
-                    StoreOp.listRepositoriesWithOwner(session.user, o.slug)))
-        github <- Github.Request.listUserRepositories(session.github).runWith(cfg.github)
+        nelson <- session.user.orgs.traverseM(o => StoreOp.listRepositoriesWithOwner(session.user, o.slug)).foldMap(cfg.storage)
+        github <- Github.Request.listUserRepositories(session.github).foldMap(cfg.github)
         repos   = github.filterNot(r => blacklist(cfg.git.organizationBlacklist)(r.slug.owner)).map(augment(nelson)(_))
         delete  = diff(nelson, github)
 
-        _ <- storage.run(cfg.storage, insertRepos(repos) >> deleteRepos(delete))
+        _ <- (insertRepos(repos) >> deleteRepos(delete)).foldMap(cfg.storage)
       } yield ()
     }
   }
@@ -140,15 +139,15 @@ object Nelson {
     }
 
     def getOrCreate(slug: Slug, hk: Github.WebHook): NelsonK[Github.WebHook] = Kleisli { cfg =>
-      val make = Github.Request.createRepoWebhook(slug, hk)(session.github).runWith(cfg.github)
-      Github.Request.fetchRepoWebhooks(slug)(session.github).runWith(cfg.github).flatMap(list =>
+      val make = Github.Request.createRepoWebhook(slug, hk)(session.github).foldMap(cfg.github)
+      Github.Request.fetchRepoWebhooks(slug)(session.github).foldMap(cfg.github).flatMap(list =>
         list.find(_.callback == hk.callback)
           .fold(make)(IO.pure(_))).or(make)
     }
 
     Kleisli { cfg =>
       for {
-        r1  <- storage.run(cfg.storage,storage.StoreOp.findRepository(session.user, slug))
+        r1  <- storage.StoreOp.findRepository(session.user, slug).foldMap(cfg.storage)
         _   <- log(s"result of findRepository: r1 = $r1")
 
         // ensure we can access and read the .nelson.yml file
@@ -165,7 +164,7 @@ object Nelson {
                 r1.tfold(RepoNotFound(slug))(_.copy(hook = Some(Hook(out.id, out.active)))))
 
         foo <- (log(s"result of repo copy: r2 = $r2") *>
-                storage.run(cfg.storage, storage.StoreOp.insertOrUpdateRepositories(r2 :: Nil)) <*
+                storage.StoreOp.insertOrUpdateRepositories(r2 :: Nil).foldMap(cfg.storage) <*
                 cfg.auditor.write(r2, CreateAction, login = session.user.login))
         _   <- log(s"result of insertOrUpdateRepositories: foo = $foo")
       } yield r2
@@ -179,14 +178,14 @@ object Nelson {
   def deleteHook(session: Session, slug: Slug): NelsonK[Unit] =
     Kleisli { cfg =>
       for {
-        rep <- storage.run(cfg.storage, storage.StoreOp.findRepository(session.user, slug))
+        rep <- storage.StoreOp.findRepository(session.user, slug).foldMap(cfg.storage)
         rrr <- rep.tfold(RepoNotFound(slug))(identity)
         id  <- rrr.hook.tfold(UnexpectedMissingHook(slug))(_.id)
         _   <- cfg.auditor.write(rrr, DeleteAction, login = session.user.login)
-        _   <- Github.Request.deleteRepoWebhook(slug, id)(session.github).runWith(cfg.github)
+        _   <- Github.Request.deleteRepoWebhook(slug, id)(session.github).foldMap(cfg.github)
         .or(IO.unit)
         upd  = Repo(rrr.id, rrr.slug, rrr.access, None)
-        _   <- storage.run(cfg.storage, storage.StoreOp.insertOrUpdateRepositories(upd :: Nil))
+        _   <- storage.StoreOp.insertOrUpdateRepositories(upd :: Nil).foldMap(cfg.storage)
       } yield ()
     }
 
@@ -201,12 +200,12 @@ object Nelson {
           case Some(o) =>
             for {
               _ <- log("listing repositories with owner")
-              t <- storage.run(cfg.storage, storage.StoreOp.listRepositoriesWithOwner(session.user, o))
+              t <- storage.StoreOp.listRepositoriesWithOwner(session.user, o).foldMap(cfg.storage)
             } yield t
           case None    =>
             for {
               _ <- log(s"listing repositories with active hooks for '${session.user}'")
-              t <- storage.run(cfg.storage, storage.StoreOp.listRepositoriesWithActiveHooks(session.user))
+              t <- storage.StoreOp.listRepositoriesWithActiveHooks(session.user).foldMap(cfg.storage)
             } yield t
         }
       } yield out.sortBy(_.slug.toString)
@@ -234,7 +233,7 @@ object Nelson {
     Kleisli { cfg =>
       for {
         _   <- log(s"about to fetch ${cfg.manifest.filename} from ${slug}:${tagOrBranch} repository")
-        raw <- Github.Request.fetchFileFromRepository(slug, cfg.manifest.filename, tagOrBranch)(token).runWith(cfg.github)
+        raw <- Github.Request.fetchFileFromRepository(slug, cfg.manifest.filename, tagOrBranch)(token).foldMap(cfg.github)
         dec <- raw.tfold(ProblematicRepoManifest(slug))(_.decoded)
       } yield dec
     }
@@ -257,7 +256,7 @@ object Nelson {
   private def fetchRelease(e: Github.ReleaseEvent): NelsonK[Github.Release] = Kleisli { cfg =>
     val t = cfg.git.systemAccessToken
 
-    Github.Request.fetchRelease(e.slug, e.id)(t).runWith(cfg.github)
+    Github.Request.fetchRelease(e.slug, e.id)(t).foldMap(cfg.github)
       .ensure(MissingReleaseAssets(e))(_.assets.nonEmpty)
       .retryExponentially(2.seconds, 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
   }
@@ -289,7 +288,7 @@ object Nelson {
         m  <-  v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))
 
         hm <- (log(s"received manifest from github: $m")
-              *> storage.run(cfg.storage, storage.StoreOp.createRelease(e.repositoryId, r))
+              *> storage.StoreOp.createRelease(e.repositoryId, r).foldMap(cfg.storage)
               *> cfg.auditor.write(r, CreateAction, Option(r.id))
               *> log(s"created release in response to release ${r.id}")
               *> Manifest.saturateManifest(m)(r))
@@ -305,10 +304,9 @@ object Nelson {
   def storeManifest(m: Manifest @@ Versioned, repoId: ID): NelsonK[Unit] = {
     Kleisli { cfg =>
       val mnf = Manifest.Versioned.unwrap(m)
-      storage.run(cfg.storage,
-        mnf.units.traverse_(u => StoreOp.addUnit(Versioned(u), repoId)) >>
-        mnf.loadbalancers.traverse_(lb => StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), repoId).map(_ => ()))
-      )
+      (mnf.units.traverse_(u => StoreOp.addUnit(Versioned(u), repoId)) >>
+       mnf.loadbalancers.traverse_(lb => StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), repoId).map(_ => ()))
+      ).foldMap(cfg.storage)
     }
   }
 
@@ -318,7 +316,7 @@ object Nelson {
    */
   def listRepositoryReleases(s: Slug): NelsonK[Released ==>> List[ReleasedDeployment]] =
     Kleisli { cfg =>
-      storage.run(cfg.storage, storage.StoreOp.listRecentReleasesForRepository(s))
+      storage.StoreOp.listRecentReleasesForRepository(s).foldMap(cfg.storage)
     }
 
   /**
@@ -330,7 +328,7 @@ object Nelson {
         a <- (limit.fold(IO.pure(50))(l =>
                 if(l > 50) IO.raiseError(ExceededLimitRange(l))
                 else IO.pure(l)))
-        b <- storage.run(cfg.storage, storage.StoreOp.listReleases(a))
+        b <- storage.StoreOp.listReleases(a).foldMap(cfg.storage)
       } yield b
     }
 
@@ -338,7 +336,7 @@ object Nelson {
    * Given the ID of a particular release, show the release information and any associated deployments
    */
   def getRelease(id: Long): NelsonK[Released ==>> List[ReleasedDeployment]] =
-    Kleisli(cfg => storage.run(cfg.storage, storage.StoreOp.findRelease(id)))
+    Kleisli(cfg => storage.StoreOp.findRelease(id).foldMap(cfg.storage))
 
   /**
    * Given a repo slug and a specific unit, figure out what the state of the latest released version is,
@@ -349,7 +347,7 @@ object Nelson {
   def getStatusOfReleaseUnit(s: Slug, u: UnitName): NelsonK[Option[DeploymentStatus]] =
     Kleisli { cfg =>
       cfg.caches.stackStatusCache.get((s.owner, s.repository, u))
-        .fold(storage.run(cfg.storage, storage.StoreOp.findLastReleaseDeploymentStatus(s,u))
+        .fold(storage.StoreOp.findLastReleaseDeploymentStatus(s,u).foldMap(cfg.storage)
           )(x => IO.pure(Option(x)))
     }
 
@@ -371,7 +369,7 @@ object Nelson {
         leastDeployed <- StoreOp.getMostAndLeastDeployed(whence, 10, "Asc")
       }
       yield RecentStatistics(statusCounts, mostDeployed, leastDeployed)
-      storage.run(cfg.storage, prog)
+      prog.foldMap(cfg.storage)
     }
   }
 
@@ -384,7 +382,7 @@ object Nelson {
    * This function should only ever be called at bootup.
    */
   def createDatacenters(list: List[Datacenter]): NelsonK[Unit] = Kleisli { cfg =>
-    list.traverse_(dc => storage.run(cfg.storage, storage.StoreOp.createDatacenter(dc)))
+    list.traverse_(dc => storage.StoreOp.createDatacenter(dc).foldMap(cfg.storage))
   }
 
   /*
@@ -395,9 +393,7 @@ object Nelson {
    * This function should only ever be called at bootup
    */
   def createDefaultNamespaceIfAbsent(dcs: List[Datacenter], ns: NamespaceName): NelsonK[Unit] =
-    Kleisli(cfg =>
-      storage.run(cfg.storage,
-        dcs.traverse(dc => getOrCreateNamespace(dc.name, ns))).map(_ => ()))
+    Kleisli(cfg => dcs.traverse(dc => getOrCreateNamespace(dc.name, ns)).foldMap(cfg.storage).map(_ => ()))
 
   /**
    * List all the datacenters Nelson is currently aware of, and return
@@ -405,7 +401,7 @@ object Nelson {
    */
   def listDatacenters(implicit ec: ExecutionContext): NelsonK[Map[Datacenter, Set[Namespace]]] = Kleisli { cfg =>
     parallelTraverse(cfg.datacenters) { d =>
-      storage.run(cfg.storage, storage.StoreOp.listNamespacesForDatacenter(d.name).map(d -> _))
+      storage.StoreOp.listNamespacesForDatacenter(d.name).map(d -> _).foldMap(cfg.storage)
     }.map(_.toMap)
   }
 
@@ -416,7 +412,7 @@ object Nelson {
   def fetchDatacenterByName(name: String): NelsonK[Option[(Datacenter, Set[Namespace])]] =
     Kleisli { cfg =>
       cfg.datacenters.find(_.name.trim.toLowerCase == name.trim.toLowerCase).traverse(dc =>
-        storage.run(cfg.storage, storage.StoreOp.listNamespacesForDatacenter(dc.name).map(dc -> _))
+        storage.StoreOp.listNamespacesForDatacenter(dc.name).map(dc -> _).foldMap(cfg.storage)
       )
     }
 
@@ -450,7 +446,7 @@ object Nelson {
     def findNsByName(set: Set[Namespace]): NelsonK[List[(Namespace,Deployment,DeploymentStatus)]] = Kleisli { cfg =>
       val namespaces = set.toList.filter(x => ns.toList.exists(_ == x.name)) // only query for namepaces in this dc
       namespaces.traverseM { n =>
-        storage.run(cfg.storage, storage.StoreOp.listDeploymentsForNamespaceByStatus(n.id, status, unit))
+        storage.StoreOp.listDeploymentsForNamespaceByStatus(n.id, status, unit).foldMap(cfg.storage)
           .map((s: Set[(Deployment,DeploymentStatus)]) => s.toList.map(pair => (n,pair._1,pair._2)))
       }
     }
@@ -478,7 +474,7 @@ object Nelson {
       for {
          opt <- cfg.datacenters.find(_.name.trim.toLowerCase == dc.trim.toLowerCase).point[IO]
          _   <- opt.tfold(UnknownDatacenter(dc))(identity)
-         _   <- storage.run(cfg.storage, ns.hierarchy.traverse(n => getOrCreateNamespace(dc, n)))
+         _   <- ns.hierarchy.traverse(n => getOrCreateNamespace(dc, n)).foldMap(cfg.storage)
       } yield ()
     }
 
@@ -488,7 +484,7 @@ object Nelson {
   def recursiveCreateSubordinateNamespace(dc: DatacenterRef, ns: NamespaceName): NelsonK[Unit] =
     Kleisli { cfg =>
       for {
-        root <- storage.run(cfg.storage, StoreOp.getNamespace(dc, ns.root))
+        root <- StoreOp.getNamespace(dc, ns.root).foldMap(cfg.storage)
         _    <- root.tfold(NamespaceCreateFailed(s"root namespace (${ns.root.asString}) does not exist"))(identity)
         _    <- recursiveCreateNamespace(dc, ns).run(cfg)
       } yield ()
@@ -514,7 +510,7 @@ object Nelson {
             if (ns.isEmpty) set.toList // if no ns supplied use them all
             else set.toList.filter(n => ns.exists(_ == n.name))
 
-          Kleisli(cfg => storage.run(cfg.storage, getRoutingGraphByNamespaces(namespaces)))
+          Kleisli(cfg => getRoutingGraphByNamespaces(namespaces).foldMap(cfg.storage))
       }
     } yield b
   }
@@ -559,7 +555,7 @@ object Nelson {
       s <- fetchDeploymentStatuses(guid)
       e <- findDeploymentExpiration(guid)
       t <- Kleisli[IO, NelsonConfig, Option[(Namespace,Datacenter.Deployment,RoutingGraph)]]{ config =>
-        storage.run(config.storage, getDplWithNs.run)
+        getDplWithNs.run.foldMap(config.storage)
       }
     } yield for {
         a <- t
@@ -593,11 +589,11 @@ object Nelson {
       } yield (dep,exp,st,dep.namespace)).run
 
       (for {
-        a   <- OptionT(storage.run(cfg.storage, query))
+        a   <- OptionT(query.foldMap(cfg.storage))
         (dep, exp, status, ns) = a
         dc  <- OptionT(IO.pure(cfg.datacenters.find(_.name == ns.datacenter)))
-        sum <- OptionT(scheduler.run(dc.interpreters.scheduler, scheduler.SchedulerOp.summary(dc, ns.name, dep.stackName)))
-        h   <- OptionT(health.run(dc.health, HealthCheckOp.health(dc, ns.name, dep.stackName)).map(h => Some(h): Option[List[HealthStatus]]))
+        sum <- OptionT(scheduler.SchedulerOp.summary(dc, ns.name, dep.stackName).foldMap(dc.interpreters.scheduler))
+        h   <- OptionT(HealthCheckOp.health(dc, ns.name, dep.stackName).foldMap(dc.health).map(h => Some(h): Option[List[HealthStatus]]))
       } yield RuntimeSummary(sum, h, status, exp)).run
     }
   }
@@ -630,7 +626,7 @@ object Nelson {
   def commit(un: UnitName, v: Version, ns: NamespaceName): NelsonK[Unit] = {
     Kleisli { cfg =>
       for {
-        a  <- runs(cfg.storage, StoreOp.findReleasedByUnitNameAndVersion(un, v))
+        a  <- StoreOp.findReleasedByUnitNameAndVersion(un, v).foldMap(cfg.storage)
         b  <- a.tfold(DeploymentCommitFailed(
                 s"could not find release by unit name: $un and version: $v"))(identity)
         m  <- getVersionedManifestForRelease(b).run(cfg)
@@ -651,13 +647,13 @@ object Nelson {
 
     Kleisli { cfg =>
       for {
-        a   <- runs(cfg.storage, storage.StoreOp.getDeploymentByGuid(deploymentGuid))
+        a   <- storage.StoreOp.getDeploymentByGuid(deploymentGuid).foldMap(cfg.storage)
         d   <- a.tfold(MissingDeployment(deploymentGuid))(identity)
         _   <- validateDeployment(d)
         ns   = d.namespace
         dct <- cfg.datacenters.find(_.name == ns.datacenter).point[IO]
         dc  <- dct.tfold(MisconfiguredDatacenter(ns.datacenter, s"couldn't be found"))(identity)
-        rm  <- runs(cfg.storage, storage.StoreOp.findReleaseByDeploymentGuid(d.guid))
+        rm  <- storage.StoreOp.findReleaseByDeploymentGuid(d.guid).foldMap(cfg.storage)
         r   <- rm.tfold(MissingReleaseForDeployment(deploymentGuid))(identity)
         m   <- getVersionedManifestForRelease(r._1).run(cfg)
         _   <- commit(d.unit.name, ns.name, List(dc), m).run(cfg)
@@ -671,11 +667,11 @@ object Nelson {
   def fetchDeploymentStatuses(guid: GUID): NelsonK[List[(DeploymentStatus, Option[String], Instant)]] =
     Kleisli { config =>
       for {
-        a <- storage.run(config.storage, storage.StoreOp.getDeploymentByGuid(guid))
+        a <- storage.StoreOp.getDeploymentByGuid(guid).foldMap(config.storage)
         d <- a.tfold(MissingDeployment(guid))(identity(_))
         ns = d.namespace
         dc <- config.datacenters.find(_.name == ns.datacenter).fold[IO[Datacenter]](IO.raiseError(MisconfiguredDatacenter(ns.datacenter, "couldn't be found")))(IO.pure)
-        status <- storage.run(config.storage, storage.StoreOp.listDeploymentStatuses(d.id))
+        status <- storage.StoreOp.listDeploymentStatuses(d.id).foldMap(config.storage)
       } yield status
     }
 
@@ -705,8 +701,8 @@ object Nelson {
     def findNsByName(set: Set[Namespace]): NelsonK[List[(Namespace,GUID,ServiceName)]] = Kleisli { cfg =>
       val namespaces = set.toList.filter(x => ns.toList.exists(_ == x.name)) // only query for namepaces in this dc
       namespaces.traverseM(n =>
-        storage.run(cfg.storage, storage.StoreOp.listUnitsByStatus(n.id, status)
-          .map(s => s.toList.map(x => (n,x._1,x._2)))))
+        storage.StoreOp.listUnitsByStatus(n.id, status)
+          .map(s => s.toList.map(x => (n,x._1,x._2))).foldMap(cfg.storage))
     }
 
     val empty: IO[List[(Namespace,GUID,ServiceName)]] = List.empty.point[IO]
@@ -723,7 +719,7 @@ object Nelson {
    * Returns the latest expiration for deployment
    */
   def findDeploymentExpiration(guid: GUID): NelsonK[Option[Instant]] =
-    Kleisli(cfg => runs(cfg.storage, StoreOp.findDeploymentExpirationByGuid(guid)))
+    Kleisli(cfg => StoreOp.findDeploymentExpirationByGuid(guid).foldMap(cfg.storage))
 
   /**
    * Create a manual deployment. That is to say, let Nelson know about something
@@ -746,7 +742,7 @@ object Nelson {
       dc   <- cfg.datacenters.find(_.name == m.datacenter)
                  .fold[IO[Datacenter]](IO.raiseError(ManualDeployFailed(s"datacenter ${m.datacenter} couldn't be found")))(IO.pure)
        ns   <- validateNamespace(m.namespace)
-       guid <- storage.run(cfg.storage, StoreOp.createManualDeployment(
+       guid <- StoreOp.createManualDeployment(
                dc,
                ns,
                m.serviceType,
@@ -754,7 +750,7 @@ object Nelson {
                m.hash,
                m.description,
                m.port,
-               exp)) <* cfg.auditor.write(m, CreateAction, login = s.user.login)
+               exp).foldMap(cfg.storage) <* cfg.auditor.write(m, CreateAction, login = s.user.login)
      } yield guid
   }
 
@@ -787,7 +783,7 @@ object Nelson {
       } yield ()
 
     val prog = cfg.datacenters.traverse_(dc => deprecateByDatacenter(dc))
-    storage.run(cfg.storage, prog)
+    prog.foldMap(cfg.storage)
   }
 
   /**
@@ -811,7 +807,7 @@ object Nelson {
       } yield ()
 
     val prog = cfg.datacenters.traverse_(dc => expireByDatacenter(dc))
-    storage.run(cfg.storage, prog)
+    prog.foldMap(cfg.storage)
   }
 
   /*
@@ -845,7 +841,7 @@ object Nelson {
         _   <- EitherT(reverse(ts))
       } yield ts
 
-      storage.run(cfg.storage, prog.run)
+      prog.run.foldMap(cfg.storage)
        .flatMap(_.fold(e => IO.raiseError(InvalidTrafficShiftReverse(e)), r => IO.pure(r)))
     }
   }
@@ -866,23 +862,21 @@ object Nelson {
    */
   def listDeploymentsWithDeprecatedDependencies(dc: Datacenter): NelsonK[Vector[DependencyEdge]] = {
     import nelson.routing.deprecated
-    Kleisli(cfg => runs(cfg.storage, deprecated.deploymentsWithDeprecatedDependencies(dc)))
+    Kleisli(cfg => deprecated.deploymentsWithDeprecatedDependencies(dc).foldMap(cfg.storage))
   }
 
   def listAuditEvents(
     limit: Long, offset: Long, releaseId: Option[Long],
     action: Option[String], category: Option[String]): NelsonK[List[AuditLog]] =
-    Kleisli { cfg =>
-      storage.run(cfg.storage,
-                  releaseId.fold(storage.StoreOp.listAuditLog(limit, offset, action, category))(
-                    storage.StoreOp.listAuditLogByReleaseId(limit, offset, _)))
+    Kleisli { cfg => releaseId.fold(storage.StoreOp.listAuditLog(limit, offset, action, category))(
+      storage.StoreOp.listAuditLogByReleaseId(limit, offset, _)).foldMap(cfg.storage)
     }
 
   def fetchWorkflowLog(guid: GUID, offset: Int): NelsonK[Option[(Int, List[String])]] = {
     val empty: IO[Option[(Int,List[String])]] = IO.pure(Option.empty[(Int,List[String])])
     for {
       cfg <- config
-      a <- storage.run(cfg.storage, StoreOp.getDeploymentByGuid(guid)).liftKleisli
+      a <- StoreOp.getDeploymentByGuid(guid).foldMap(cfg.storage).liftKleisli
       b <- a.fold(empty)(dpl => cfg.workflowLogger.read(dpl.id, offset).map(l => Some(offset -> l))).liftKleisli
     } yield b
   }
@@ -891,7 +885,7 @@ object Nelson {
   import Datacenter.LoadbalancerDeployment
 
   def getLoadbalancerByGUID(guid: GUID): NelsonK[Option[LoadbalancerDeployment]] =
-    Kleisli(cfg => storage.run(cfg.storage, StoreOp.getLoadbalancerDeploymentByGUID(guid)))
+    Kleisli(cfg => StoreOp.getLoadbalancerDeploymentByGUID(guid).foldMap(cfg.storage))
 
   // Launches loadbalancer with name and major version into the given datacenter and namespace
   def commitLoadbalancer(name: String, v: Int, dcName: DatacenterRef, ns: NamespaceName): NelsonK[Unit] = {
@@ -913,9 +907,9 @@ object Nelson {
 
     Kleisli { cfg =>
       for {
-        lbo <- storage.run(cfg.storage, StoreOp.getLoadbalancer(name, mv))
+        lbo <- StoreOp.getLoadbalancer(name, mv).foldMap(cfg.storage)
         lb  <- lbo.tfold(DeploymentCommitFailed(s"couldn't find loadbalancer: $name $mv"))(identity)
-        rr  <- storage.run(cfg.storage, StoreOp.getLatestReleaseForLoadbalancer(name, mv))
+        rr  <- StoreOp.getLatestReleaseForLoadbalancer(name, mv).foldMap(cfg.storage)
         r   <- rr.tfold(DeploymentCommitFailed(s"couldn't find latest release for loadblancer $name $mv"))(identity)
         ms  <- getVersionedManifestForRelease(r).run(cfg)
         act  = Manifest.loadbalancerActions(ms, cfg.datacenters, lbFilter)
@@ -929,15 +923,14 @@ object Nelson {
   def deleteLoadbalancerDeployment(guid: GUID): NelsonK[Unit] = {
     Kleisli { cfg =>
       for {
-        a  <- storage.run(cfg.storage, StoreOp.getLoadbalancerDeploymentByGUID(guid))
+        a  <- StoreOp.getLoadbalancerDeploymentByGUID(guid).foldMap(cfg.storage)
         lb <- a.tfold(LoadbalancerNotFound(guid))(identity)
-        ns <- storage.run(cfg.storage, StoreOp.getNamespaceByID(lb.nsid))
+        ns <- StoreOp.getNamespaceByID(lb.nsid).foldMap(cfg.storage)
         dc <- cfg.datacenters.find(_.name == ns.datacenter)
                 .fold[IO[Datacenter]](IO.raiseError(MisconfiguredDatacenter(ns.datacenter, "couldn't be found")))(IO.pure)
-        _  <- dc.loadbalancer.traverse(trans =>
-                loadbalancers.run(trans,  loadbalancers.delete(lb,dc,ns)))
-        _  <- storage.run(cfg.storage, StoreOp.deleteLoadbalancerDeployment(lb.id))
-        _  <- helm.run(dc.consul.asCats, loadbalancers.deleteLoadbalancerConfigFromConsul(lb))
+        _  <- dc.loadbalancer.traverse(trans => loadbalancers.delete(lb,dc,ns).foldMap(trans))
+        _  <- StoreOp.deleteLoadbalancerDeployment(lb.id).foldMap(cfg.storage)
+        _  <- helm.run(dc.consul, loadbalancers.deleteLoadbalancerConfigFromConsul(lb))
       } yield ()
     }
   }
@@ -956,8 +949,8 @@ object Nelson {
     def findNsByName(set: Set[Namespace]): NelsonK[List[(Namespace,LoadbalancerDeployment)]] = Kleisli { cfg =>
       val namespaces = set.toList.filter(x => ns.toList.exists(_ == x.name)) // only query for namepaces in this dc
       namespaces.traverseM(n =>
-        storage.run(cfg.storage, storage.StoreOp.listLoadbalancerDeploymentsForNamespace(n.id)
-          .map(s => s.toList.map(n -> _))))
+        storage.StoreOp.listLoadbalancerDeploymentsForNamespace(n.id)
+          .map(s => s.toList.map(n -> _)).foldMap(cfg.storage))
     }
 
     for {
@@ -981,13 +974,13 @@ object Nelson {
       if (g.contains(RoutingNode(lb))) g.outs(RoutingNode(lb)).map(_._2) else Vector.empty[routing.RoutingNode]
 
     Kleisli { cfg =>
-      storage.run( cfg.storage, (for {
+      (for {
         lb <- OptionT(storage.StoreOp.getLoadbalancerDeploymentByGUID(guid))
         ns <- OptionT(storage.StoreOp.getNamespaceByID(lb.nsid).map(Option(_)))
         od <- OptionT(RoutingTable.routingGraph(ns).map(Option(_)))
       } yield {
         LoadbalancerSummary(ns, lb, getOuts(od, lb))
-      }).run)
+      }).run.foldMap(cfg.storage)
     }
   }
 

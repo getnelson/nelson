@@ -20,7 +20,6 @@ import io.prometheus.client.CollectorRegistry
 import org.scalatest.FlatSpec
 import docker._
 import nelson.docker.Docker.Image
-import nelson.CatsHelpers._
 
 class InstrumentedDockerClientSpec extends FlatSpec with NelsonSuite {
   val reg = new CollectorRegistry
@@ -34,7 +33,7 @@ class InstrumentedDockerClientSpec extends FlatSpec with NelsonSuite {
     val image = Image("test", "0.0.1")
     def value = getValue("docker_requests_latency_seconds_count", "docker_op" -> "push", "docker_instance" -> "test")
     val before = value
-    Docker.run(client, DockerOp.push(image)).unsafeRunSync()
+    DockerOp.push(image).foldMap(client).unsafeRunSync()
     val after = value
     after should equal (before + 1.0)
   }

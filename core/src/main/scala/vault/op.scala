@@ -17,8 +17,9 @@
 package nelson
 package vault
 
+import cats.free.Free
 import scala.concurrent.duration.FiniteDuration
-import scalaz.{Free,==>>}
+import scalaz.==>>
 
 /**
  * An algebra which represents an operation interacting with a
@@ -73,41 +74,41 @@ final case class Mount(path: String,
 
 object Vault {
   def isInitialized: VaultF[Boolean] =
-    Free.liftFC(IsInitialized)
+    Free.liftF(IsInitialized)
 
   def initialize(masters: Int, quorum: Int): VaultF[InitialCreds] =
-    Free.liftFC(Initialize(Initialization(masters, quorum)))
+    Free.liftF(Initialize(Initialization(masters, quorum)))
 
   def unseal(key: MasterKey): VaultF[SealStatus] =
-    Free.liftFC(Unseal(key))
+    Free.liftF(Unseal(key))
 
   def seal: VaultF[Unit] =
-    Free.liftFC(Seal)
+    Free.liftF(Seal)
 
   def sealStatus: VaultF[SealStatus] =
-    Free.liftFC(GetSealStatus)
+    Free.liftF(GetSealStatus)
 
   def get(path: String): VaultF[String] = //VaultF[Option[String ==>> String]] =
-    Free.liftFC(Get(path))
+    Free.liftF(Get(path))
 
   def set(path: String, value: String): VaultF[Unit] =
-    Free.liftFC(Set(path, value))
+    Free.liftF(Set(path, value))
 
   def createPolicy(name: String, rules: List[Rule]): VaultF[Unit] =
-    Free.liftFC(CreatePolicy(name, rules))
+    Free.liftF(CreatePolicy(name, rules))
 
   def deletePolicy(name: String): VaultF[Unit] =
-    Free.liftFC(DeletePolicy(name))
+    Free.liftF(DeletePolicy(name))
 
   def getMounts: VaultF[String ==>> Mount] =
-    Free.liftFC(GetMounts)
+    Free.liftF(GetMounts)
 
   def createToken(
     policies: Option[List[String]] = None,
     renewable: Boolean = true,
     ttl: Option[FiniteDuration] = None,
     numUses: Long = 0L
-  ): VaultF[Token] = Free.liftFC(CreateToken(policies, renewable, ttl, numUses))
+  ): VaultF[Token] = Free.liftF(CreateToken(policies, renewable, ttl, numUses))
 
   case object IsInitialized extends Vault[Boolean]
   final case class Initialize(init: Initialization) extends Vault[InitialCreds]

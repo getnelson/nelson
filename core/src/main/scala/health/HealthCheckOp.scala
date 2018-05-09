@@ -17,7 +17,7 @@
 package nelson
 package health
 
-import scalaz.Free
+import cats.free.Free
 
 final case class HealthStatus(
   id: String,
@@ -32,8 +32,8 @@ object HealthCheckOp {
 
   final case class Health(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends HealthCheckOp[List[HealthStatus]]
 
-  type HealthCheckF[A] = Free.FreeC[HealthCheckOp, A]
+  type HealthCheckF[A] = Free[HealthCheckOp, A]
 
   def health(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName): HealthCheckF[List[HealthStatus]] =
-    Free.liftFC(Health(dc, ns, sn))
+    Free.liftF(Health(dc, ns, sn))
 }

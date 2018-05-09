@@ -17,9 +17,10 @@
 package nelson
 package docker
 
-import scalaz.Free
-import Docker.{Image,RegistryURI}
-import Manifest.UnitDef
+import nelson.Manifest.UnitDef
+import nelson.docker.Docker.{Image,RegistryURI}
+
+import cats.free.Free
 
 sealed abstract class DockerOp[A] extends Product with Serializable
 
@@ -33,17 +34,17 @@ object DockerOp {
 
   final case class Pull(image: Image) extends DockerOp[(Int, List[Docker.Pull.Output])]
 
-  type DockerF[A] = Free.FreeC[DockerOp, A]
+  type DockerF[A] = Free[DockerOp, A]
 
   def extract(unit: UnitDef): DockerF[Image] =
-    Free.liftFC(Extract(unit))
+    Free.liftF(Extract(unit))
 
   def tag(image: Image, registry: RegistryURI): DockerF[(Int, Image)] =
-    Free.liftFC(Tag(image,registry))
+    Free.liftF(Tag(image,registry))
 
   def push(image: Image): DockerF[(Int, List[Docker.Push.Output])] =
-    Free.liftFC(Push(image))
+    Free.liftF(Push(image))
 
   def pull(image: Image): DockerF[(Int, List[Docker.Pull.Output])] =
-    Free.liftFC(Pull(image))
+    Free.liftF(Pull(image))
 }
