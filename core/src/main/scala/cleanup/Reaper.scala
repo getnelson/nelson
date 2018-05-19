@@ -22,6 +22,7 @@ import nelson.Metrics.default.{destroyFailureCounter,destroySuccessCounter}
 import nelson.Workflow.WorkflowOp
 import nelson.notifications.Notify
 
+import cats.~>
 import cats.effect.IO
 import cats.syntax.applicativeError._
 import cats.syntax.apply._
@@ -29,9 +30,6 @@ import cats.syntax.apply._
 import fs2.Sink
 
 import scala.util.control.NonFatal
-
-import scalaz.~>
-import scalaz.syntax.applicative._
 
 import journal.Logger
 
@@ -60,7 +58,7 @@ object Reaper {
   private def destroy(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(t: WorkflowOp ~> IO)(cfg: NelsonConfig): IO[Unit] = {
     import Json._
     import audit.AuditableInstances._
-    Workflow.run(resolve(d).destroy(d,dc,ns))(t) <*
+    resolve(d).destroy(d,dc,ns).foldMap(t) <*
       cfg.auditor.write(d, audit.DeleteAction) <*
       IO(log.debug((s"finished cleaning up $d in datacenter $dc"))) <*
       Notify.sendDecommissionedNotifications(dc,ns,d)(cfg)

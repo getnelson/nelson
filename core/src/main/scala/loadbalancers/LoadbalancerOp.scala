@@ -17,8 +17,7 @@
 package nelson
 package loadbalancers
 
-
-import scalaz.Free
+import cats.free.Free
 
 sealed abstract class LoadbalancerOp[A] extends Product with Serializable
 
@@ -30,14 +29,14 @@ object LoadbalancerOp {
 
   final case class ResizeLoadbalancer(lb: Datacenter.LoadbalancerDeployment, p: Manifest.Plan) extends LoadbalancerOp[Unit]
 
-  type LoadbalancerF[A] = Free.FreeC[LoadbalancerOp,A]
+  type LoadbalancerF[A] = Free[LoadbalancerOp,A]
 
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Datacenter, ns: NamespaceName, pl: Manifest.Plan, hash: String): LoadbalancerF[String] =
-    Free.liftFC(LaunchLoadbalancer(lb, v, dc, ns, pl, hash))
+    Free.liftF(LaunchLoadbalancer(lb, v, dc, ns, pl, hash))
 
   def delete(lb: Datacenter.LoadbalancerDeployment, dc: Datacenter, ns: Datacenter.Namespace): LoadbalancerF[Unit] =
-    Free.liftFC(DeleteLoadbalancer(lb, dc, ns))
+    Free.liftF(DeleteLoadbalancer(lb, dc, ns))
 
   def resize(lb: Datacenter.LoadbalancerDeployment, p: Manifest.Plan): LoadbalancerF[Unit] =
-    Free.liftFC(ResizeLoadbalancer(lb, p))
+    Free.liftF(ResizeLoadbalancer(lb, p))
 }

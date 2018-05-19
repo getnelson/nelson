@@ -16,12 +16,13 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.~>
 import cats.effect.IO
 import cats.syntax.apply._
 
 import io.prometheus.client._
 
-import scalaz.{Kleisli, ~>}
+import scalaz.Kleisli
 
 // To avoid redefinition of Metrics, all metrics should be defined here.
 // Bonus points if you keep it alphabetical.

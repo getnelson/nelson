@@ -108,13 +108,12 @@ object Github {
 
   ////// GITHUB DSL & Interpreter
 
-  import scalaz.{Free, ~>, Coyoneda, Monad}
+  import cats.~>
+  import cats.free.Free
 
   sealed trait GithubOp[A]
 
-  type GithubOpC[A] = Coyoneda[GithubOp, A]
-
-  type GithubOpF[A] = Free.FreeC[GithubOp, A]
+  type GithubOpF[A] = Free[GithubOp, A]
 
   final case class GetAccessToken(fromCode: String)
     extends GithubOp[AccessToken]
@@ -149,9 +148,6 @@ object Github {
   final case class DeleteRepoWebHook(slug: Slug, id: Long, token: AccessToken)
     extends GithubOp[Unit]
 
-  def run[F[_]:Monad,A](interpreter: GithubOp ~> F , op: GithubOpF[A]): F[A] =
-    Free.runFC(op)(interpreter)
-
   object Request {
 
     /**
@@ -160,20 +156,20 @@ object Github {
      * use to make API calls on the users behalf.
      */
     def fetchAccessToken(code: String): GithubOpF[AccessToken] =
-      Free.liftFC(GetAccessToken(code))
+      Free.liftF(GetAccessToken(code))
 
     def fetchUser(token: AccessToken): GithubOpF[Github.User] =
-      Free.liftFC(GetUser(token))
+      Free.liftF(GetUser(token))
 
     def fetchUserOrgKeys(token: AccessToken): GithubOpF[List[Github.OrgKey]] =
-      Free.liftFC(GetUserOrgKeys(token))
+      Free.liftF(GetUserOrgKeys(token))
 
     def fetchOrganizations(keys: List[Github.OrgKey], token: AccessToken): GithubOpF[List[Organization]] =
-      Free.liftFC(GetOrganizations(keys, token))
+      Free.liftF(GetOrganizations(keys, token))
 
     /** * https://developer.github.com/v3/repos/releases/#get-a-single-release-asset */
     def fetchReleaseAssetContent(asset: Github.Asset)(t: AccessToken): GithubOpF[Github.Asset] =
-      Free.liftFC(GetReleaseAssetContent(asset, t))
+      Free.liftF(GetReleaseAssetContent(asset, t))
 
     /**
      * reach out and fetch a specific release from a repo. we use this when
@@ -182,7 +178,7 @@ object Github {
      */
     def fetchRelease(slug: Slug, id: ID)(t: AccessToken): GithubOpF[Github.Release] =
       for {
-        r <- Free.liftFC(GetRelease(slug, id, t))
+        r <- Free.liftF(GetRelease(slug, id, t))
         a <- fetchReleaseAssets(r)(t)
       } yield r.copy(assets = a)
 
@@ -191,23 +187,23 @@ object Github {
      * user is an admin or collaborator for.
      */
     def listUserRepositories(token: AccessToken): GithubOpF[List[Repo]] =
-      Free.liftFC(GetUserRepositories(token))
+      Free.liftF(GetUserRepositories(token))
 
     /** * https://developer.github.com/v3/repos/contents/#get-contents */
     def fetchFileFromRepository(s: Slug, p: String, tOrB: String)(t: AccessToken):  GithubOpF[Option[Github.Contents]] =
-      Free.liftFC(GetFileFromRepository(s, p, tOrB, t))
+      Free.liftF(GetFileFromRepository(s, p, tOrB, t))
 
     /** * https://developer.github.com/v3/repos/hooks/#list-hooks */
     def fetchRepoWebhooks(slug: Slug)(token: AccessToken): GithubOpF[List[Github.WebHook]] =
-      Free.liftFC(GetRepoWebHooks(slug, token))
+      Free.liftF(GetRepoWebHooks(slug, token))
 
     /** * https://developer.github.com/v3/repos/hooks/#create-a-hook */
     def createRepoWebhook(slug: Slug, hook: Github.WebHook)(t: AccessToken): GithubOpF[Github.WebHook] =
-      Free.liftFC(PostRepoWebHook(slug, hook, t))
+      Free.liftF(PostRepoWebHook(slug, hook, t))
 
     /** * https://developer.github.com/v3/repos/hooks/#delete-a-hook */
     def deleteRepoWebhook(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Unit] =
-      Free.liftFC(DeleteRepoWebHook(slug, id, token))
+      Free.liftF(DeleteRepoWebHook(slug, id, token))
 
     /**
      * retrieve the user-specifc information about the agent logging
@@ -223,7 +219,7 @@ object Github {
       } yield nelson.User(gu.login, gu.avatar, gu.name, gu.email, orgs)
 
     def fetchReleaseAssets(r: Github.Release)(t: AccessToken): GithubOpF[List[Github.Asset]] = {
-      import scalaz._, Scalaz._
+      import cats.implicits._
       r.assets.toList.traverse(asset => fetchReleaseAssetContent(asset)(t))
     }
   }

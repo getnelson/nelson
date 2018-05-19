@@ -20,8 +20,6 @@ package cleanup
 import nelson.Datacenter.Deployment
 import nelson.routing.{RoutingNode,RoutingGraph}
 
-import nelson.CatsHelpers._
-
 import ca.mrvisser.sealerate
 
 import java.time.Instant
@@ -168,7 +166,7 @@ object ExpirationPolicy {
 
 object ExpirationPolicyProcess {
   import nelson.Datacenter.{Namespace,Deployment}
-  import nelson.storage.{run => runs,StoreOp, StoreOpF}
+  import nelson.storage.{StoreOp, StoreOpF}
   import cats.effect.IO
   import fs2.{Pipe, Stream}
 
@@ -216,7 +214,7 @@ object ExpirationPolicyProcess {
   def expirationProcess(cfg: NelsonConfig): Pipe[IO, CleanupRow, CleanupRow] =
     _.flatMap { case (dc, ns, d, graph) =>
       applyPolicyToDeployment(d, graph)(cfg.cleanup.extendTTL)
-        .map(ext => Stream.eval(runs(cfg.storage, updateExpiration(d,ext)).map(d => (dc,ns,d,graph))))
+        .map(ext => Stream.eval(updateExpiration(d,ext).foldMap(cfg.storage).map(d => (dc,ns,d,graph))))
         .getOrElse(Stream.emit((dc,ns,d,graph)))
     }
 }

@@ -31,7 +31,7 @@ object TestStorage {
 
   import doobie.imports._
 
-  def xa(cfg: DatabaseConfig) = 
+  def xa(cfg: DatabaseConfig) =
     DriverManagerTransactor[cats.effect.IO](
       cfg.driver,
       cfg.connection,

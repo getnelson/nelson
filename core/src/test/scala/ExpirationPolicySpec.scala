@@ -16,9 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.~>
 import cats.effect.IO
-import storage.{run=>runs, StoreOp}
-import scalaz.~>
+import storage.StoreOp
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck._
@@ -31,14 +31,13 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
   import DeploymentStatus._
   import scala.concurrent.duration._
   import quiver._
-  import nelson.CatsHelpers._
   import nelson.cleanup._
   import nelson.routing.{RoutePath,RoutingTable}
   import java.time.Instant
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    runs(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 
@@ -49,13 +48,13 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
   val ext = 1.day
 
   private def getDeploymentCtx(sn: StackName)(storage: StoreOp ~> IO): DeploymentCtx = {
-    nelson.storage.run(storage, for {
+      (for {
         od <- StoreOp.findDeployment(sn)
         d =  od.get
         os <- StoreOp.getDeploymentStatus(d.id)
         s = os.get
         e <- StoreOp.findDeploymentExpiration(d.id)
-      } yield DeploymentCtx(d,s,e)).unsafeRunSync()
+      } yield DeploymentCtx(d,s,e)).foldMap(storage).unsafeRunSync()
   }
 
   private def makeDeployment(id: ID,name: String, version: Version, policy: ExpirationPolicy,
@@ -69,20 +68,20 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
 
 
   it should "partition job deployments by name and namespace" in {
-    val ns = nelson.storage.run(config.storage, StoreOp.getNamespace(dc.name, NamespaceName("dev"))).unsafeRunSync().get
-    val graph = nelson.storage.run(config.storage, RoutingTable.routingGraph(ns)).unsafeRunSync()
+    val ns = StoreOp.getNamespace(dc.name, NamespaceName("dev")).foldMap(config.storage).unsafeRunSync().get
+    val graph = RoutingTable.routingGraph(ns).foldMap(config.storage).unsafeRunSync()
     val map = ExpirationPolicyProcess.partitionByName(graph, ns)
     map.keys should equal (Set("inventory", "ab", "db", "job", "conductor", "crawler", "search", "foo", "service-a"))
     map.map { case (k,v) => v.forall(_.unit.name == k) }.foldLeft(true)(_ && _) should equal (true)
 
-    val ns2 = nelson.storage.run(config.storage, StoreOp.getNamespace(dc.name, NamespaceName("dev", List("sandbox")))).unsafeRunSync().get
-    val graph2 = nelson.storage.run(config.storage, RoutingTable.routingGraph(ns2)).unsafeRunSync()
+    val ns2 = StoreOp.getNamespace(dc.name, NamespaceName("dev", List("sandbox"))).foldMap(config.storage).unsafeRunSync().get
+    val graph2 = RoutingTable.routingGraph(ns2).foldMap(config.storage).unsafeRunSync()
     val map2 = ExpirationPolicyProcess.partitionByName(graph2, ns2)
     map2.keys should equal (Set("service-b", "service-c"))
 
 
-    val ns3 = nelson.storage.run(config.storage, StoreOp.getNamespace(dc.name, NamespaceName("dev", List("sandbox", "rodrigo")))).unsafeRunSync().get
-    val graph3 = nelson.storage.run(config.storage, RoutingTable.routingGraph(ns3)).unsafeRunSync()
+    val ns3 = StoreOp.getNamespace(dc.name, NamespaceName("dev", List("sandbox", "rodrigo"))).foldMap(config.storage).unsafeRunSync().get
+    val graph3 = RoutingTable.routingGraph(ns3).foldMap(config.storage).unsafeRunSync()
     val map3 = ExpirationPolicyProcess.partitionByName(graph3, ns3)
     map3.keys should equal (Set("service-c"))
   }
@@ -441,18 +440,18 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
   it should "update expirations in the database" in {
     val job311 = StackName("job", Version(3,1,1), "zzzz1")
     val dep311 = getDeploymentCtx(job311)(config.storage)
-    runs(config.storage, StoreOp.createDeploymentExpiration(dep311.deployment.id, java.time.Instant.now())).unsafeRunSync()
+    StoreOp.createDeploymentExpiration(dep311.deployment.id, java.time.Instant.now()).foldMap(config.storage).unsafeRunSync()
     val dep311After = getDeploymentCtx(job311)(config.storage)
 
     val tomorrow = java.time.Instant.now().plusSeconds(1.day.toSeconds)
 
-    val before = runs(config.storage, StoreOp.findDeploymentExpiration(dep311.deployment.id)).unsafeRunSync().get
+    val before = StoreOp.findDeploymentExpiration(dep311.deployment.id).foldMap(config.storage).unsafeRunSync().get
 
     assert(before.isBefore(tomorrow))
 
-    runs(config.storage, ExpirationPolicyProcess.updateExpiration(dep311After,2.days)).unsafeRunSync()
+    ExpirationPolicyProcess.updateExpiration(dep311After,2.days).foldMap(config.storage).unsafeRunSync()
 
-    val after = runs(config.storage, StoreOp.findDeploymentExpiration(dep311.deployment.id)).unsafeRunSync().get
+    val after = StoreOp.findDeploymentExpiration(dep311.deployment.id).foldMap(config.storage).unsafeRunSync().get
 
     assert(after.isAfter(tomorrow))
   }

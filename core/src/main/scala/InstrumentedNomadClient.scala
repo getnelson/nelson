@@ -16,9 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.~>
 import cats.effect.IO
 
-import scalaz.~>
 import nelson.scheduler.SchedulerOp
 import nelson.scheduler.SchedulerOp._
 

@@ -85,20 +85,20 @@ package nelson
 
 
 trait RoutingFixtures {
-import doobie.imports._
   import Datacenter.{Port=>_, _}
   import Manifest._
   import nelson.Datacenter.Namespace
   import nelson.Manifest.Deployable.Container
   import nelson.storage.{StoreOp, StoreOpF}
-  import scalaz._
-  import Scalaz._
+  import scalaz.{~> => _, _}
+  import cats.implicits._
   import Workflow.WorkflowF
   import Deployment._
   import java.time.Instant
   import scala.concurrent.duration._
   import cleanup._
   import notifications.NotificationSubscriptions
+  import Util._
 
   def insertFixtures(name: String, namespaceName: String = "dev"): StoreOpF[Manifest.Namespace] = {
 
@@ -143,15 +143,33 @@ import doobie.imports._
     pkiPath = Some("pki/%env%")
   )
 
-  def datacenter(name: String) = Datacenter(name,
-    Infrastructure.Docker(""), Infrastructure.Domain(""), Infrastructure.TrafficShift(LinearShiftPolicy, 1.minutes), None, Infrastructure.Interpreters(null, null, null, null, null, null, null, null), None, testPolicyConfig)
+  def datacenter(name: String) =
+    Datacenter(
+      name,
+      Infrastructure.Docker(""),
+      Infrastructure.Domain(""),
+      Infrastructure.TrafficShift(LinearShiftPolicy, 1.minutes),
+      None,
+      Infrastructure.Interpreters(
+        stubbedInterpreter,
+        stubbedInterpreter,
+        stubbedInterpreter,
+        stubbedInterpreter,
+        stubbedInterpreter,
+        stubbedInterpreter,
+        stubbedInterpreter,
+        stubbedInterpreter
+      ),
+      None,
+      testPolicyConfig
+    )
 
   val emptyWorkflow = new Workflow[Unit] {
     override val name = "empty"
     def deploy(id: ID, hash: String, unit: Manifest.UnitDef @@ Manifest.Versioned, e: Manifest.Plan, dc: Datacenter, ns: Manifest.Namespace): WorkflowF[Unit] =
-      ().point[WorkflowF]
+      ().pure[WorkflowF]
     def destroy(d: Deployment, dc: Datacenter, ns: Namespace): WorkflowF[Unit] =
-      ().point[WorkflowF]
+      ().pure[WorkflowF]
   }
 
   val slug = Slug("owner","RoutingTableSpec")
@@ -176,23 +194,23 @@ import doobie.imports._
   val release621 = Github.Release(621L, "", "", Nil, "6.2.1")
 
   val ingestReleases: StoreOpF[Unit] =
-    StoreOp.createRelease(repo.toOption.get.id, release100) >>
-    StoreOp.createRelease(repo.toOption.get.id, release110) >>
-    StoreOp.createRelease(repo.toOption.get.id, release110100) >>
-    StoreOp.createRelease(repo.toOption.get.id, release111) >>
-    StoreOp.createRelease(repo.toOption.get.id, release200) >>
-    StoreOp.createRelease(repo.toOption.get.id, release222) >>
-    StoreOp.createRelease(repo.toOption.get.id, release221) >>
-    StoreOp.createRelease(repo.toOption.get.id, release122) >>
-    StoreOp.createRelease(repo.toOption.get.id, release123) >>
-    StoreOp.createRelease(repo.toOption.get.id, release300) >>
-    StoreOp.createRelease(repo.toOption.get.id, release310) >>
-    StoreOp.createRelease(repo.toOption.get.id, release311) >>
-    StoreOp.createRelease(repo.toOption.get.id, release410) >>
-    StoreOp.createRelease(repo.toOption.get.id, release510) >>
-    StoreOp.createRelease(repo.toOption.get.id, release600) >>
-    StoreOp.createRelease(repo.toOption.get.id, release610) >>
-    StoreOp.createRelease(repo.toOption.get.id, release620) >>
+    StoreOp.createRelease(repo.toOption.get.id, release100) *>
+    StoreOp.createRelease(repo.toOption.get.id, release110) *>
+    StoreOp.createRelease(repo.toOption.get.id, release110100) *>
+    StoreOp.createRelease(repo.toOption.get.id, release111) *>
+    StoreOp.createRelease(repo.toOption.get.id, release200) *>
+    StoreOp.createRelease(repo.toOption.get.id, release222) *>
+    StoreOp.createRelease(repo.toOption.get.id, release221) *>
+    StoreOp.createRelease(repo.toOption.get.id, release122) *>
+    StoreOp.createRelease(repo.toOption.get.id, release123) *>
+    StoreOp.createRelease(repo.toOption.get.id, release300) *>
+    StoreOp.createRelease(repo.toOption.get.id, release310) *>
+    StoreOp.createRelease(repo.toOption.get.id, release311) *>
+    StoreOp.createRelease(repo.toOption.get.id, release410) *>
+    StoreOp.createRelease(repo.toOption.get.id, release510) *>
+    StoreOp.createRelease(repo.toOption.get.id, release600) *>
+    StoreOp.createRelease(repo.toOption.get.id, release610) *>
+    StoreOp.createRelease(repo.toOption.get.id, release620) *>
     StoreOp.createRelease(repo.toOption.get.id, release621)
 
   def lbManifest(ns: Manifest.Namespace) =
@@ -575,25 +593,25 @@ import doobie.imports._
   def ingestServiceC2( ns: Manifest.Namespace, repo: ID): StoreOpF[Unit] = ingest(serviceC2Manifest(ns), repo)
 
   def ingestAll(ns: Manifest.Namespace, ns2: Manifest.Namespace, ns3: Manifest.Namespace) =
-    ingestLb(ns,9999) >>
-    ingestSearch(ns,9999) >>
-    ingestInventory2(ns,9999) >>
-    ingestInventory1(ns,9999) >>
-    ingestFoo1(ns,9999) >>
-    ingestFoo2(ns,9999) >>
-    ingestAB2(ns,9999) >>
-    ingestAB1(ns,9999) >>
-    ingestConductor(ns,9999) >>
-    ingestDeprecated(ns,9999) >>
-    ingestJob300(ns,9999) >>
-    ingestJob310(ns,9999) >>
-    ingestJob311(ns,9999) >>
-    ingestJob410(ns,9999) >>
-    ingestCrawler(ns,9999) >>
-    ingestServiceA(ns,9999) >>
+    ingestLb(ns,9999) *>
+    ingestSearch(ns,9999) *>
+    ingestInventory2(ns,9999) *>
+    ingestInventory1(ns,9999) *>
+    ingestFoo1(ns,9999) *>
+    ingestFoo2(ns,9999) *>
+    ingestAB2(ns,9999) *>
+    ingestAB1(ns,9999) *>
+    ingestConductor(ns,9999) *>
+    ingestDeprecated(ns,9999) *>
+    ingestJob300(ns,9999) *>
+    ingestJob310(ns,9999) *>
+    ingestJob311(ns,9999) *>
+    ingestJob410(ns,9999) *>
+    ingestCrawler(ns,9999) *>
+    ingestServiceA(ns,9999) *>
     // ingest into devel/sandbox
-    ingestServiceB(ns2,9999) >>
-    ingestServiceC(ns2,9999) >>
+    ingestServiceB(ns2,9999) *>
+    ingestServiceC(ns2,9999) *>
     // ingest service-c into devel/sandbox/rodrigo
     ingestServiceC2(ns3,9999)
 
@@ -651,27 +669,27 @@ import doobie.imports._
 
   def deployAll(dc: Datacenter, ns: Datacenter.Namespace, ns2: Datacenter.Namespace, ns3: Datacenter.Namespace) =
     (
-      deployLb(ns) >>
-      deploySearch1(ns) >>
-      deploySearch2(ns) >>
-      deployInventory2(ns) >>
-      deployInventory1(ns) >>
-      deployFoo1(ns) >>
-      deployFoo2(ns) >>
-      deployAB2(ns) >>
-      deployAB1(ns) >>
-      deployConductor(ns) >>
-      deploydb(dc, ns) >>
-      deployDeprecated(ns) >>
-      deployJob300(ns) >>
-      deployJob310(ns) >>
-      deployJob311(ns) >>
-      deployJob410(ns) >>
-      deployCrawler(ns) >>
-      deployServiceA(ns) >>
+      deployLb(ns) *>
+      deploySearch1(ns) *>
+      deploySearch2(ns) *>
+      deployInventory2(ns) *>
+      deployInventory1(ns) *>
+      deployFoo1(ns) *>
+      deployFoo2(ns) *>
+      deployAB2(ns) *>
+      deployAB1(ns) *>
+      deployConductor(ns) *>
+      deploydb(dc, ns) *>
+      deployDeprecated(ns) *>
+      deployJob300(ns) *>
+      deployJob310(ns) *>
+      deployJob311(ns) *>
+      deployJob410(ns) *>
+      deployCrawler(ns) *>
+      deployServiceA(ns) *>
       // deploy to dev/sandbox
-      deployServiceB(ns2) >>
-      deployServiceC(ns2) >>
+      deployServiceB(ns2) *>
+      deployServiceC(ns2) *>
       deployServiceC2(ns3)
     ).void
 

@@ -19,9 +19,8 @@ package nelson
 import doobie.imports._
 import scalaz.syntax.functor._
 import org.scalatest.BeforeAndAfterEach
-import storage.{run => runs, StoreOp}
+import storage.StoreOp
 import java.time.Instant
-import nelson.CatsHelpers._
 
 class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
   import Datacenter._
@@ -30,7 +29,7 @@ class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 
@@ -57,7 +56,7 @@ class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
 
     try {
       val routingTables: List[(Namespace, RoutingGraph)] =
-        runs(config.storage, generateRoutingTables("RoutingTableSpec")).unsafeRunSync()
+        generateRoutingTables("RoutingTableSpec").foldMap(config.storage).unsafeRunSync()
 
       routingTableSize = routingTables.size
 
@@ -69,19 +68,19 @@ class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
       // dev/sandbox/rodrigo
       val graph3 = routingTables(2)._2
 
-      val conductor = runs(config.storage, StoreOp.findDeployment(StackName("conductor", Version(1,1,1), "abcd"))).unsafeRunSync().get
-      val ab = runs(config.storage, StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd"))).unsafeRunSync().get
+      val conductor = StoreOp.findDeployment(StackName("conductor", Version(1,1,1), "abcd")).foldMap(config.storage).unsafeRunSync().get
+      val ab = StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd")).foldMap(config.storage).unsafeRunSync().get
 
-      val ns = runs(config.storage, StoreOp.getNamespace(testName, NamespaceName("dev"))).unsafeRunSync().get
-      val lb = runs(config.storage, StoreOp.findLoadbalancerDeployment("lb", MajorVersion(1), ns.id)).unsafeRunSync().get
+      val ns = StoreOp.getNamespace(testName, NamespaceName("dev")).foldMap(config.storage).unsafeRunSync().get
+      val lb = StoreOp.findLoadbalancerDeployment("lb", MajorVersion(1), ns.id).foldMap(config.storage).unsafeRunSync().get
 
-      val serviceA = runs(config.storage, StoreOp.findDeployment(StackName("service-a", Version(6,0,0), "aaaa"))).unsafeRunSync().get
+      val serviceA = StoreOp.findDeployment(StackName("service-a", Version(6,0,0), "aaaa")).foldMap(config.storage).unsafeRunSync().get
 
-      val serviceB = runs(config.storage, StoreOp.findDeployment(StackName("service-b", Version(6,1,0), "aaaa"))).unsafeRunSync().get
+      val serviceB = StoreOp.findDeployment(StackName("service-b", Version(6,1,0), "aaaa")).foldMap(config.storage).unsafeRunSync().get
 
-      val serviceC = runs(config.storage, StoreOp.findDeployment(StackName("service-c", Version(6,2,0), "aaaa"))).unsafeRunSync().get
+      val serviceC = StoreOp.findDeployment(StackName("service-c", Version(6,2,0), "aaaa")).foldMap(config.storage).unsafeRunSync().get
 
-      val serviceC2 = runs(config.storage, StoreOp.findDeployment(StackName("service-c", Version(6,2,1), "bbbb"))).unsafeRunSync().get
+      val serviceC2 = StoreOp.findDeployment(StackName("service-c", Version(6,2,1), "bbbb")).foldMap(config.storage).unsafeRunSync().get
 
       conductor_ab = graph.decomp(RoutingNode(conductor)).ctx.get.outAdj
         .find(_._2.deployment.exists(_.unit.name === "ab")).get._1.stack.stackName.toString
@@ -171,12 +170,12 @@ class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "include deployments involved in reverse traffic shift with incoming edges" in {
 
-    val inventory1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
-    val inventory2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
-    val id = storage.run(config.storage, StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(1))).unsafeRunSync()
+    val inventory1 = StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff")).foldMap(config.storage).unsafeRunSync().get
+    val inventory2 = StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff")).foldMap(config.storage).unsafeRunSync().get
+    val id = StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(1)).foldMap(config.storage).unsafeRunSync()
 
     val rts: List[(Namespace, RoutingGraph)] =
-      runs(config.storage, generateRoutingTables("RoutingTableSpec")).unsafeRunSync()
+      generateRoutingTables("RoutingTableSpec").foldMap(config.storage).unsafeRunSync()
 
     val graph = rts(0)._2
 
@@ -184,8 +183,8 @@ class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
     graph.nodes.flatMap(_.deployment).find(_.id == inventory1.id) should equal(Some(inventory1))
     graph.nodes.flatMap(_.deployment).find(_.id == inventory2.id) should equal(Some(inventory2))
 
-    val ab1 = runs(config.storage, StoreOp.findDeployment(StackName("ab", Version(2,2,1), "abcd"))).unsafeRunSync().get
-    val ab2 = runs(config.storage, StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd"))).unsafeRunSync().get
+    val ab1 = StoreOp.findDeployment(StackName("ab", Version(2,2,1), "abcd")).foldMap(config.storage).unsafeRunSync().get
+    val ab2 = StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd")).foldMap(config.storage).unsafeRunSync().get
 
     // should should have incoming edges from ab
     graph.ins(RoutingNode(inventory1)).flatMap(_._2.deployment).toSet should equal (Set(ab1, ab2))
@@ -193,75 +192,75 @@ class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   it should "generate outgoing routing graph for single deployment with traffic shiftinging" in {
-    val ab = runs(config.storage, StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd"))).unsafeRunSync().get
-    val i1 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff"))).unsafeRunSync().get
-    val i2 = runs(config.storage, StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff"))).unsafeRunSync().get
-    storage.run(config.storage, StoreOp.startTrafficShift(i1.id, i2.id, Instant.now.minusSeconds(120))).unsafeRunSync()
-    val rg = runs(config.storage, outgoingRoutingGraph(ab)).unsafeRunSync()
+    val ab = StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd")).foldMap(config.storage).unsafeRunSync().get
+    val i1 = StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff")).foldMap(config.storage).unsafeRunSync().get
+    val i2 = StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff")).foldMap(config.storage).unsafeRunSync().get
+    StoreOp.startTrafficShift(i1.id, i2.id, Instant.now.minusSeconds(120)).foldMap(config.storage).unsafeRunSync()
+    val rg = outgoingRoutingGraph(ab).foldMap(config.storage).unsafeRunSync()
     rg.nodes.flatMap(_.deployment).toSet should equal (Set(ab,i1,i2))
   }
 
   it should "generate outgoing routing graph for single deployment" in {
-    val conductor = runs(config.storage, StoreOp.findDeployment(StackName("conductor", Version(1,1,1), "abcd"))).unsafeRunSync().get
-    val ab = runs(config.storage, StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd"))).unsafeRunSync().get
-    val foo = runs(config.storage, StoreOp.findDeployment(StackName("foo", Version(1,10,100), "aaaa"))).unsafeRunSync().get
-    val search = runs(config.storage, StoreOp.findDeployment(StackName("search", Version(2,2,2), "aaaa"))).unsafeRunSync().get
-    val db = runs(config.storage, StoreOp.findDeployment(StackName("db", Version(1,2,3), "aaaa"))).unsafeRunSync().get
-    val rg = runs(config.storage, outgoingRoutingGraph(conductor)).unsafeRunSync()
+    val conductor = StoreOp.findDeployment(StackName("conductor", Version(1,1,1), "abcd")).foldMap(config.storage).unsafeRunSync().get
+    val ab = StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd")).foldMap(config.storage).unsafeRunSync().get
+    val foo = StoreOp.findDeployment(StackName("foo", Version(1,10,100), "aaaa")).foldMap(config.storage).unsafeRunSync().get
+    val search = StoreOp.findDeployment(StackName("search", Version(2,2,2), "aaaa")).foldMap(config.storage).unsafeRunSync().get
+    val db = StoreOp.findDeployment(StackName("db", Version(1,2,3), "aaaa")).foldMap(config.storage).unsafeRunSync().get
+    val rg = outgoingRoutingGraph(conductor).foldMap(config.storage).unsafeRunSync()
     rg.nodes.flatMap(_.deployment).toSet should equal (Set(ab,conductor,foo,search,db))
   }
 
   it should "generate outgoing routing graph for single deployment in a subordinate namespace" in {
 
-    val serviceB = runs(config.storage, StoreOp.findDeployment(StackName("service-b", Version(6,1,0), "aaaa"))).unsafeRunSync().get
-    val serviceC = runs(config.storage, StoreOp.findDeployment(StackName("service-c", Version(6,2,1), "bbbb"))).unsafeRunSync().get
-    val serviceCDown = runs(config.storage, StoreOp.findDeployment(StackName("service-c", Version(6,2,0), "aaaa"))).unsafeRunSync().get
-    val foo = runs(config.storage, StoreOp.findDeployment(StackName("foo", Version(1,10,100), "aaaa"))).unsafeRunSync().get
+    val serviceB = StoreOp.findDeployment(StackName("service-b", Version(6,1,0), "aaaa")).foldMap(config.storage).unsafeRunSync().get
+    val serviceC = StoreOp.findDeployment(StackName("service-c", Version(6,2,1), "bbbb")).foldMap(config.storage).unsafeRunSync().get
+    val serviceCDown = StoreOp.findDeployment(StackName("service-c", Version(6,2,0), "aaaa")).foldMap(config.storage).unsafeRunSync().get
+    val foo = StoreOp.findDeployment(StackName("foo", Version(1,10,100), "aaaa")).foldMap(config.storage).unsafeRunSync().get
 
     // downstream dependency
-    val rg1 = runs(config.storage, outgoingRoutingGraph(serviceB)).unsafeRunSync()
+    val rg1 = outgoingRoutingGraph(serviceB).foldMap(config.storage).unsafeRunSync()
     rg1.nodes.flatMap(_.deployment).toSet should equal (Set(serviceB, serviceCDown, serviceC))
 
     // upstream dependency
-    val rg2 = runs(config.storage, outgoingRoutingGraph(serviceC)).unsafeRunSync()
+    val rg2 = outgoingRoutingGraph(serviceC).foldMap(config.storage).unsafeRunSync()
     rg2.nodes.flatMap(_.deployment).toSet should equal (Set(foo, serviceC))
   }
 
   "routingTables" should "not include deployments with terminated, garbage, unknown or failed status" in {
-    val ab = runs(config.storage, StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd"))).unsafeRunSync().get
+    val ab = StoreOp.findDeployment(StackName("ab", Version(2,2,2), "abcd")).foldMap(config.storage).unsafeRunSync().get
 
     // active -> included
-    runs(config.storage, StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Ready, None)).unsafeRunSync()
+    StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Ready, None).foldMap(config.storage).unsafeRunSync()
     val routingTables: List[(Namespace, RoutingGraph)] =
-     runs(config.storage, generateRoutingTables("RoutingTableSpec")).unsafeRunSync()
+     generateRoutingTables("RoutingTableSpec").foldMap(config.storage).unsafeRunSync()
     val graph = routingTables(0)._2
     graph.nodes.flatMap(_.deployment).find(_.id == ab.id) should equal (Some(ab))
 
     // terminated -> out
-    runs(config.storage, StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Terminated, None)).unsafeRunSync()
+    StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Terminated, None).foldMap(config.storage).unsafeRunSync()
     val routingTables1: List[(Namespace, RoutingGraph)] =
-     runs(config.storage, generateRoutingTables("RoutingTableSpec")).unsafeRunSync()
+     generateRoutingTables("RoutingTableSpec").foldMap(config.storage).unsafeRunSync()
     val graph1 = routingTables1(0)._2
     graph1.nodes.flatMap(_.deployment).find(_.id == ab.id) should equal (None)
 
     // garbage -> excluded
-    runs(config.storage, StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Garbage, None)).unsafeRunSync()
+    StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Garbage, None).foldMap(config.storage).unsafeRunSync()
     val routingTables2: List[(Namespace, RoutingGraph)] =
-     runs(config.storage, generateRoutingTables("RoutingTableSpec")).unsafeRunSync()
+     generateRoutingTables("RoutingTableSpec").foldMap(config.storage).unsafeRunSync()
     val graph2 = routingTables2(0)._2
     graph2.nodes.flatMap(_.deployment).find(_.id == ab.id) should equal (None)
 
     // failed -> excluded
-    runs(config.storage, StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Failed, None)).unsafeRunSync()
+    StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Failed, None).foldMap(config.storage).unsafeRunSync()
     val routingTables3: List[(Namespace, RoutingGraph)] =
-     runs(config.storage, generateRoutingTables("RoutingTableSpec")).unsafeRunSync()
+     generateRoutingTables("RoutingTableSpec").foldMap(config.storage).unsafeRunSync()
     val graph3 = routingTables3(0)._2
     graph3.nodes.flatMap(_.deployment).find(_.id == ab.id) should equal (None)
 
     // unkonwn -> excluded
-    runs(config.storage, StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Failed, None)).unsafeRunSync()
+    StoreOp.createDeploymentStatus(ab.id, DeploymentStatus.Failed, None).foldMap(config.storage).unsafeRunSync()
     val routingTables4: List[(Namespace, RoutingGraph)] =
-     runs(config.storage, generateRoutingTables("RoutingTableSpec")).unsafeRunSync()
+     generateRoutingTables("RoutingTableSpec").foldMap(config.storage).unsafeRunSync()
     val graph4 = routingTables4(0)._2
     graph4.nodes.flatMap(_.deployment).find(_.id == ab.id) should equal (None)
   }

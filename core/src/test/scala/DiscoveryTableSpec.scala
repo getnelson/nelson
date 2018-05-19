@@ -22,17 +22,16 @@ class DiscoveryTableSpec extends NelsonSuite {
   import Datacenter._
   import routing._
   import routing.RoutingTable._
-  import nelson.CatsHelpers._
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 
   "discoveryTables" should "be built from database" in {
     val rts: List[(Namespace,RoutingGraph)] =
-      nelson.storage.run(config.storage, generateRoutingTables("DiscoveryTableSpec")).unsafeRunSync()
+      generateRoutingTables("DiscoveryTableSpec").foldMap(config.storage).unsafeRunSync()
     var conductorTable: Option[DiscoveryTables] = None
     var serviceBTable: Option[DiscoveryTables] = None
     var serviceCTable: Option[DiscoveryTables] = None
@@ -78,7 +77,7 @@ class DiscoveryTableSpec extends NelsonSuite {
 
   it should "use fully qualified namespace paths" in {
     val rts: List[(Namespace,RoutingGraph)] =
-      nelson.storage.run(config.storage, generateRoutingTables("DiscoveryTableSpec")).unsafeRunSync()
+      generateRoutingTables("DiscoveryTableSpec").foldMap(config.storage).unsafeRunSync()
     val dts = Discovery.discoveryTables(rts)
     val ns = dts.toList.map { case ((deployment,y),z) => y }
     ns.map(_.asString).toSet should be(Set("dev", "dev/sandbox", "dev/sandbox/rodrigo"))
@@ -86,7 +85,7 @@ class DiscoveryTableSpec extends NelsonSuite {
 
   "discoveryTables" should "include traffic shifts" in {
     val rts: List[(Namespace, RoutingGraph)] =
-      nelson.storage.run(config.storage, generateRoutingTables("DiscoveryTableSpec")).unsafeRunSync()
+      generateRoutingTables("DiscoveryTableSpec").foldMap(config.storage).unsafeRunSync()
     var suTable: Option[DiscoveryTables] = None
     val dts = Discovery.discoveryTables(rts)
     dts.toList.foreach {

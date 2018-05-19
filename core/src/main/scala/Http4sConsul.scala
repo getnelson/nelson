@@ -16,10 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.~>
 import cats.effect.IO
 import cats.syntax.either._
 import cats.syntax.applicativeError._
-import nelson.CatsHelpers._
 import fs2.Sink
 
 import helm.ConsulOp
@@ -32,8 +32,6 @@ import org.http4s._
 import org.http4s.client._
 
 import scala.util.control.NonFatal
-
-import scalaz.~>
 
 object Http4sConsul {
   val log = Logger[Http4sConsul.type]
@@ -52,11 +50,11 @@ object Http4sConsul {
     consul.creds.map(x => x.username -> x.password)
 
   def client(consul: Infrastructure.Consul, http4sClient: Client[IO]): ConsulOp ~> IO =
-    new Http4sConsulClient(baseUri(consul), http4sClient, token(consul), creds(consul)).asScalaz
+    new Http4sConsulClient(baseUri(consul), http4sClient, token(consul), creds(consul))
 
   def consulSink: Sink[IO, (Datacenter,ConsulOpF[Unit])] =
     Sink {
-      case (dc, op) => helm.run(dc.consul.asCats,op) recover {
+      case (dc, op) => helm.run(dc.consul, op) recover {
         case NonFatal(e) => log.error(s"error while attempting to perform consul operation", e)
       }
     }

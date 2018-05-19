@@ -3,9 +3,8 @@ package health
 
 import nelson.health.HealthCheckOp.Health
 
+import cats.~>
 import cats.effect.IO
-
-import scalaz.~>
 
 final case class KubernetesHealthClient(client: KubernetesClient) extends (HealthCheckOp ~> IO) {
   def apply[A](fa: HealthCheckOp[A]): IO[A] = fa match {

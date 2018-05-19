@@ -21,6 +21,7 @@ import nelson.cleanup.ExpirationPolicy
 import nelson.notifications.NotificationSubscriptions
 import nelson.storage.StoreOp
 
+import cats.~>
 import cats.effect.IO
 import cats.syntax.applicativeError._
 import nelson.CatsHelpers._
@@ -29,7 +30,7 @@ import java.net.URI
 
 import scala.concurrent.duration._
 
-import scalaz._
+import scalaz.{~> => _, _}
 import scalaz.Scalaz._
 
 final case class Manifest(
@@ -398,7 +399,7 @@ object Manifest {
 
   def verifyDeployable(m: Manifest, dcs: Seq[Datacenter], storage: StoreOp ~> IO): IO[ValidationNel[NelsonError,Unit]] = {
     val folder: (Datacenter,Namespace,Plan,UnitDef,List[IO[ValidationNel[NelsonError,Unit]]]) => List[IO[ValidationNel[NelsonError,Unit]]] =
-      (dc,ns,p,u,res) => nelson.storage.run(storage, StoreOp.verifyDeployable(dc.name, ns.name, u)) ::  res
+      (dc,ns,p,u,res) => StoreOp.verifyDeployable(dc.name, ns.name, u).foldMap(storage) ::  res
 
     implicit val monoid: Monoid[ValidationNel[NelsonError, Unit]] =
       Monoid.instance[ValidationNel[NelsonError, Unit]](_ +++ _, ().successNel)

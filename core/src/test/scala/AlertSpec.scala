@@ -64,7 +64,7 @@ class AlertSpec extends FlatSpec
           Some(rules) -> IO.unit
       }
     } yield r
-    interp.run(writeToConsul(stackName, NamespaceName("dev"), "default-plan", unit, optOuts("dev")).asScalaz).unsafeRunSync() should equal (Some(
+    interp.run(writeToConsul(stackName, NamespaceName("dev"), "default-plan", unit, optOuts("dev"))).unsafeRunSync() should equal (Some(
       """average_latency = avg(latency)
         |
         |ALERT instance_down
@@ -83,7 +83,7 @@ class AlertSpec extends FlatSpec
           Some(rules) -> IO.unit
       }
     } yield r
-    interp.run(writeToConsul(stackName, NamespaceName("qa"), "default-plan", unit, optOuts("qa")).asScalaz).unsafeRunSync() should equal (Some(
+    interp.run(writeToConsul(stackName, NamespaceName("qa"), "default-plan", unit, optOuts("qa"))).unsafeRunSync() should equal (Some(
       """average_latency = avg(latency)
         |
         |ALERT instance_down
@@ -99,6 +99,6 @@ class AlertSpec extends FlatSpec
           IO.unit
       }
     } yield ()
-    interp.run(deleteFromConsul(stackName).asScalaz).unsafeRunSync() should equal (())
+    interp.run(deleteFromConsul(stackName)).unsafeRunSync() should equal (())
   }
 }

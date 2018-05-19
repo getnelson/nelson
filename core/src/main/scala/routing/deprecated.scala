@@ -17,7 +17,7 @@
 package nelson
 package routing
 
-import scalaz._, Scalaz._
+import cats.implicits._
 
 object deprecated {
 
@@ -28,7 +28,7 @@ object deprecated {
    * if the deployment is deprecated.
    */
   private def writeDeployment(d: RoutingNode, g: RoutingGraph): StoreOpF[Vector[DependencyEdge]] = {
-    d.node.fold(_ => Vector.empty[DependencyEdge].point[StoreOpF], de =>
+    d.node.fold(_ => Vector.empty[DependencyEdge].pure[StoreOpF], de =>
       StoreOp.getDeploymentStatus(de.id).map { status =>
         if (status.exists(_ != DeploymentStatus.Deprecated)) Vector()
         else g.predecessors(d).map(x => (x, d))
@@ -41,7 +41,7 @@ object deprecated {
    * that terminate on a deprecated service.
    */
   private def traverseGraph(g: RoutingGraph): StoreOpF[Vector[DependencyEdge]] = {
-    g.nodes.traverseM(d => writeDeployment(d,g))
+    g.nodes.flatTraverse(d => writeDeployment(d,g))
   }
 
   /**
@@ -52,6 +52,6 @@ object deprecated {
   def deploymentsWithDeprecatedDependencies(dc: Datacenter): StoreOpF[Vector[DependencyEdge]] =
     for {
       graph   <- RoutingTable.generateRoutingTables(dc.name)
-      deps    <- graph.toVector.traverseM(rg => traverseGraph(rg._2))
+      deps    <- graph.toVector.flatTraverse(rg => traverseGraph(rg._2))
     } yield deps.distinct
 }

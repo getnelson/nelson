@@ -29,13 +29,13 @@ class ConsulDiscoverySpec extends NelsonSuite {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 
   def consulOps: List[ConsulOp.ConsulOpF[Unit]] = {
     val rts: List[(Namespace, RoutingGraph)] =
-      nelson.storage.run(config.storage, generateRoutingTables("ConsulDiscoverySpec")).unsafeRunSync()
+      generateRoutingTables("ConsulDiscoverySpec").foldMap(config.storage).unsafeRunSync()
     val dts = Discovery.discoveryTables(rts)
 
     dts.toList.map {

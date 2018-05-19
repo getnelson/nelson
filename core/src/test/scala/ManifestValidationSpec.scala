@@ -26,7 +26,6 @@ import ManifestValidator.{ManifestValidation}
 import ManifestValidator.Json._
 import argonaut.Argonaut._
 import journal.Logger
-import nelson.CatsHelpers._
 import cats.syntax.either._
 
 class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
@@ -54,7 +53,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 

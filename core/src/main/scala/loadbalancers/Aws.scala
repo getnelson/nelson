@@ -23,14 +23,12 @@ import com.amazonaws.services.elasticloadbalancing.model.{Listener,CreateLoadBal
 import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest}
 import com.amazonaws.services.autoscaling.model.AmazonAutoScalingException
 
+import cats.~>
 import cats.effect.IO
 import cats.syntax.apply._
 import cats.syntax.applicativeError._
 
 import journal.Logger
-
-import scalaz.{~>}
-import scalaz.syntax.apply._
 
 final case class ASGSize(desired: Int, min: Int, max: Int)
 

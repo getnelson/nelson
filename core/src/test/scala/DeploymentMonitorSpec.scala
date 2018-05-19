@@ -29,11 +29,12 @@ import scala.collection.immutable.Set
 import scala.collection.mutable.Map
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
-import scalaz.{NonEmptyList, ~>}
+import scalaz.NonEmptyList
 import scala.language.postfixOps
 import scala.concurrent.duration._
 import java.time.Instant
 
+import cats.~>
 import cats.effect.IO
 
 import fs2.{Sink, Stream}
@@ -47,7 +48,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
       health = h
     ))
   }
-  
+
   def mkNelsonConfig(dcs: List[Datacenter])(implicit sto: StoreOp ~> IO) =
     config.copy(
       datacenters = dcs,

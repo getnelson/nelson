@@ -17,27 +17,23 @@
 package nelson
 package notifications
 
+import cats.~>
 import cats.effect.IO
-import nelson.CatsHelpers._
+import cats.free.Free
+import cats.implicits._
 
 import dispatch._, Defaults._
-
-import scalaz.{~>, Free, Coyoneda}
-import scalaz.syntax.traverse._
-import scalaz.std.list._
 
 sealed abstract class SlackOp[A] extends Product with Serializable
 
 object SlackOp {
 
-  type SlackOpF[A] = Free.FreeC[SlackOp, A]
-
-  type SlackOpC[A] = Coyoneda[SlackOp, A]
+  type SlackOpF[A] = Free[SlackOp, A]
 
   final case class SendSlackNotification(channels: List[SlackChannel], message: String) extends SlackOp[Unit]
 
   def send(channels: List[SlackChannel], msg: String): SlackOpF[Unit] =
-    Free.liftFC(SendSlackNotification(channels, msg))
+    Free.liftF(SendSlackNotification(channels, msg))
 }
 
 final class SlackHttp(cfg: SlackConfig, http: Http) extends (SlackOp ~> IO) {

@@ -17,12 +17,12 @@
 package nelson
 
 object GitFixtures {
+  import cats.~>
   import cats.effect.IO
   import Github._
   import nelson.Json._
   import argonaut._, Argonaut._
   import Util._
-  import scalaz.~>
 
   val interpreter = Interpreter()
 

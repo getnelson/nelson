@@ -16,9 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.~>
 import cats.effect.IO
-
-import scalaz.{Free,~>}
+import cats.free.Free
 
 /*
  * Basic operations for workflow control
@@ -30,13 +30,13 @@ object WorkflowControlOp {
 
   final case class Failure(t: Throwable) extends WorkflowControlOp[Nothing]
 
-  type WorkflowControlF[A] = Free.FreeC[WorkflowControlOp, A]
+  type WorkflowControlF[A] = Free[WorkflowControlOp, A]
 
   def fail[A](t: Throwable): WorkflowControlF[A] =
-    Free.liftFC(Failure(t))
+    Free.liftF(Failure(t))
 
   def pure[A](a: => A): WorkflowControlF[A] =
-    Free.liftFC(Pure(a _))
+    Free.liftF(Pure(a _))
 
   val trans: (WorkflowControlOp ~> IO) =
     new (WorkflowControlOp ~> IO) {

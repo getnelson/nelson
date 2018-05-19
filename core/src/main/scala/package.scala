@@ -37,7 +37,7 @@ package object nelson {
   import scala.concurrent.duration._
 
   import scalaz.syntax.kleisli._
-  import scalaz.{~>,Monad,Order}
+  import scalaz.Order
 
   type ID = Long
   type GUID = String
@@ -156,10 +156,6 @@ package object nelson {
 
   private[nelson] implicit val orderInstant: Order[java.time.Instant] =
     Order.order((i1, i2) => scalaz.Ordering.fromInt(i1.compareTo(i2)))
-
-  final implicit class GithubFreeOps[A](val req: Github.GithubOpF[A]) extends AnyVal {
-    def runWith[F[_]:Monad](interpreter: Github.GithubOp ~> F): F[A] = Github.run(interpreter, req)
-  }
 
   def featureVersionFrom1or2DotString(versionString: String): Option[FeatureVersion] = {
     Version

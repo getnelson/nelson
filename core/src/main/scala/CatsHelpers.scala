@@ -1,6 +1,5 @@
 package nelson
 
-import cats.{Monad, StackSafeMonad}
 import cats.arrow.FunctionK
 import cats.free.Free
 import cats.effect.{Effect, IO, Timer}
@@ -31,6 +30,12 @@ object CatsHelpers {
       def apply[A](a: => A): IO[A] = IO(a)
     }
 
+  implicit def catsFreeScalazInstances[F[_]]: scalaz.Monad[Free[F, ?]] =
+    new scalaz.Monad[Free[F, ?]] {
+      def bind[A, B](fa: Free[F, A])(f: A => Free[F, B]): Free[F, B] = fa.flatMap(f)
+      def point[A](a: => A): Free[F, A] = Free.pure(a)
+    }
+
   implicit class NelsonEnrichedEither[A, B](val either: Either[A, B]) extends AnyVal {
     def toDisjunction: scalaz.\/[A, B] = either match {
       case Left(a)  => scalaz.-\/(a)
@@ -48,19 +53,6 @@ object CatsHelpers {
     def asScalaz: scalaz.~>[F, G] = new scalaz.~>[F, G] {
       def apply[A](fa: F[A]): G[A] = functionK(fa)
     }
-  }
-
-  private implicit def scalazFreeCCatsInstances[F[_]]: Monad[scalaz.Free.FreeC[F, ?]] = new StackSafeMonad[scalaz.Free.FreeC[F, ?]] {
-    def flatMap[A, B](fa: scalaz.Free.FreeC[F, A])(f: A => scalaz.Free.FreeC[F, B]): scalaz.Free.FreeC[F, B] = fa.flatMap(f)
-    def pure[A](a: A): scalaz.Free.FreeC[F, A] = scalaz.Free.pure(a)
-  }
-
-  private def catsToScalazFreeC[F[_]]: FunctionK[F, scalaz.Free.FreeC[F, ?]] = new FunctionK[F, scalaz.Free.FreeC[F, ?]] {
-    def apply[A](fa: F[A]): scalaz.Free.FreeC[F, A] = scalaz.Free.liftFC(fa)
-  }
-
-  implicit class NelsonEnrichedCatsFree[F[_], A](val free: Free[F, A]) extends AnyVal {
-    def asScalaz: scalaz.Free.FreeC[F, A] = free.foldMap(catsToScalazFreeC[F])
   }
 
   implicit class NelsonEnrichedIO[A](val io: IO[A]) extends AnyVal {

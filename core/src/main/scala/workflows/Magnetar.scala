@@ -19,7 +19,8 @@ package nelson
 import Manifest.{UnitDef,Versioned,Plan,TrafficShift}
 import Datacenter.{Namespace,Deployment}
 import Workflow.WorkflowF
-import scalaz._, Scalaz._
+import cats.implicits._
+import scalaz.@@
 
 object Magnetar extends Workflow[Unit] {
   import Workflow.syntax._
@@ -39,7 +40,7 @@ object Magnetar extends Workflow[Unit] {
     // a gating factor for promoting deployments to "Ready", we can potentially set all units to "Warming" here.
     def getStatus(unit: UnitDef, plan: Plan):  DeploymentStatus =
       if (Manifest.isPeriodic(unit,plan)) Ready
-      else unit.ports.cata(_ => Warming, Ready)
+      else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
 
     def getTrafficShift: Option[TrafficShift] =
       if (!Manifest.isPeriodic(unit, p))
@@ -56,9 +57,7 @@ object Magnetar extends Workflow[Unit] {
       _  <- writePolicyToVault(cfg = dc.policy, sn = sn, ns = ns.name, rs = rs)
       _  <- logToFile(id, s"writing discovery tables to ${routing.Discovery.consulDiscoveryKey(sn)}")
       _  <- writeDiscoveryToConsul(id, sn, ns.name, dc)
-      _  <- getTrafficShift.cata(
-              some = ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) >> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"),
-              none = pure(()))
+      _  <- getTrafficShift.fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
       _  <- logToFile(id, s"instructing ${dc.name}'s scheduler to handle service container")
       l  <- launch(i, dc, ns.name, vunit, p, hash)
       _  <- debug(s"response from scheduler $l")
@@ -69,14 +68,14 @@ object Magnetar extends Workflow[Unit] {
 
   def destroy(d: Deployment, dc: Datacenter, ns: Namespace): WorkflowF[Unit] = {
     val sn = d.stackName
-    logToFile(d.id, s"removing policy from vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}") >>
-    deletePolicyFromVault(d.stackName, ns.name) >>
-    logToFile(d.id, s"removing alerts from consul ${alerts.alertingKey(sn)}") >>
-    deleteAlertsFromConsul(d.stackName) >>
-    logToFile(d.id, s"removing discovery tables from consul ${routing.Discovery.consulDiscoveryKey(sn)}") >>
-    deleteDiscoveryInfoFromConsul(sn) >>
-    logToFile(d.id, s"instructing ${dc.name}'s scheduler to decommission ${sn}") >>
-    delete(dc,d) >>
+    logToFile(d.id, s"removing policy from vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}") *>
+    deletePolicyFromVault(d.stackName, ns.name) *>
+    logToFile(d.id, s"removing alerts from consul ${alerts.alertingKey(sn)}") *>
+    deleteAlertsFromConsul(d.stackName) *>
+    logToFile(d.id, s"removing discovery tables from consul ${routing.Discovery.consulDiscoveryKey(sn)}") *>
+    deleteDiscoveryInfoFromConsul(sn) *>
+    logToFile(d.id, s"instructing ${dc.name}'s scheduler to decommission ${sn}") *>
+    delete(dc,d) *>
     status(d.id, Terminated, s"Decommissioning deployment ${sn} in ${dc.name}")
   }
 

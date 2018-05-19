@@ -16,16 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{~>, Coyoneda, Free, Monad}
+import cats.free.Free
 
 package object vault {
   type MasterKey = String
 
-  type VaultC[A] = Coyoneda[Vault, A]
-  type VaultF[A] = Free.FreeC[Vault, A]
-
-  implicit class VaultFOps[A](va: VaultF[A]) {
-    def runWith[F[_]: Monad](interpreter: Vault ~> F): F[A] =
-      Free.runFC(va)(interpreter)
-  }
+  type VaultF[A] = Free[Vault, A]
 }

@@ -18,6 +18,7 @@ package nelson
 
 /** this file is ironically call Util **/
 
+import cats.~>
 import cats.effect.IO
 
 object Util {
@@ -25,5 +26,11 @@ object Util {
     val stream  = getClass.getResourceAsStream(path)
     val content = scala.io.Source.fromInputStream(stream).mkString
     content
+  }
+
+  // Stubbed interpreter that should never actually be used
+  // Used in favor of null so strictness/laziness of test instantiations (e.g. composing with 'or') does not NPE
+  def stubbedInterpreter[F[_], G[_]]: F ~> G = new (F ~> G) {
+    def apply[A](fa: F[A]): G[A] = ???
   }
 }

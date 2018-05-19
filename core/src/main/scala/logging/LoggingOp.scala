@@ -17,7 +17,7 @@
 package nelson
 package logging
 
-import scalaz.Free
+import cats.free.Free
 
 sealed abstract class LoggingOp[A] extends Product with Serializable
 
@@ -29,15 +29,15 @@ object LoggingOp {
 
   final case class LogToFile(id: ID, msg: String) extends LoggingOp[Unit]
 
-  type LoggingF[A] = Free.FreeC[LoggingOp, A]
+  type LoggingF[A] = Free[LoggingOp, A]
 
   def debug(msg: String): LoggingF[Unit] =
-    Free.liftFC(Info(msg))
+    Free.liftF(Info(msg))
 
   def info(msg: String): LoggingF[Unit] =
-    Free.liftFC(Info(msg))
+    Free.liftF(Info(msg))
 
   def logToFile(id: ID, msg: String): LoggingF[Unit] =
-    Free.liftFC(LogToFile(id,msg))
+    Free.liftF(LogToFile(id,msg))
 }
 

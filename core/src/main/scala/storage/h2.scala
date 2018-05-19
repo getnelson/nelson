@@ -19,6 +19,7 @@ package storage
 
 import argonaut._
 
+import cats.~>
 import cats.effect.IO
 
 import doobie.imports._
@@ -30,7 +31,7 @@ import journal._
 
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
-import scalaz._
+import scalaz.{~> => _, _}
 import scalaz.Scalaz._
 
 final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {

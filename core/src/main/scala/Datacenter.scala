@@ -25,6 +25,7 @@ import nelson.scheduler.SchedulerOp
 import nelson.storage.StoreOp
 import nelson.vault.Vault
 
+import cats.~>
 import cats.effect.IO
 
 import com.amazonaws.regions.Region
@@ -40,7 +41,7 @@ import org.http4s.Uri
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.duration._
 
-import scalaz.{Order, ValidationNel, ~>}
+import scalaz.{Order, ValidationNel}
 import scalaz.std.set._
 import scalaz.std.string._
 import scalaz.syntax.foldable._
@@ -146,7 +147,6 @@ object Infrastructure {
     control: WorkflowControlOp ~> IO,
     health: HealthCheckOp ~> IO
   ) {
-    import ScalazHelpers._
     val workflow: WorkflowOp ~> IO =
       scheduler or (vault or (control or (storage or (logger or (docker or consul)))))
   }

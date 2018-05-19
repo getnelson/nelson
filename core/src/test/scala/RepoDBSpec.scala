@@ -19,8 +19,7 @@ package nelson
 import doobie.imports._
 import scalaz._, Scalaz._
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterEach}
-import storage.{run => runs, StoreOp}
-import nelson.CatsHelpers._
+import storage.StoreOp
 
 class RepoDBSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
 
@@ -47,38 +46,38 @@ class RepoDBSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
 
   override def beforeEach: Unit = {
     trunc.transact(storage.xa).unsafeRunSync()
-    runs(storage, StoreOp.insertOrUpdateRepositories(List(repo1,repo1,repo2,repo3))).unsafeRunSync()
+    StoreOp.insertOrUpdateRepositories(List(repo1,repo1,repo2,repo3)).foldMap(storage).unsafeRunSync()
   }
 
   it should "list repos for user" in {
 
-    val repos = runs(storage, StoreOp.listRepositoriesWithOwner(user, "org1")).unsafeRunSync()
+    val repos = StoreOp.listRepositoriesWithOwner(user, "org1").foldMap(storage).unsafeRunSync()
     repos.map(_.id).toSet should equal (Set(repo1.id,repo3.id))
 
-    val repos1 = runs(storage, StoreOp.listRepositoriesWithOwner(user, "org2")).unsafeRunSync()
+    val repos1 = StoreOp.listRepositoriesWithOwner(user, "org2").foldMap(storage).unsafeRunSync()
     repos1.map(_.id).toSet should equal (Set(repo2.id))
     repos1.map(_.access).toSet should equal (Set(RepoAccess.Unknown)) // unkown because user is not currently linked to repo
 
-    runs(storage, StoreOp.linkRepositoriesToUser(List(repo1,repo2,repo3), user)).unsafeRunSync()
+    StoreOp.linkRepositoriesToUser(List(repo1,repo2,repo3), user).foldMap(storage).unsafeRunSync()
 
-    val repos3 = runs(storage, StoreOp.listRepositoriesWithOwner(user, "org1")).unsafeRunSync() // user is linked so access is known
+    val repos3 = StoreOp.listRepositoriesWithOwner(user, "org1").foldMap(storage).unsafeRunSync() // user is linked so access is known
     repos3.map(_.access).toSet should equal (Set(RepoAccess.Admin))
   }
 
   it should "soft delete repos" in {
 
-    val repos = runs(storage, StoreOp.listRepositoriesWithOwner(user, "org1")).unsafeRunSync()
+    val repos = StoreOp.listRepositoriesWithOwner(user, "org1").foldMap(storage).unsafeRunSync()
     repos.map(_.id).toSet should equal (Set(repo1.id,repo3.id))
 
-    val repos1 = runs(storage, StoreOp.listRepositoriesWithOwner(user, "org2")).unsafeRunSync()
+    val repos1 = StoreOp.listRepositoriesWithOwner(user, "org2").foldMap(storage).unsafeRunSync()
     repos1.map(_.id).toSet should equal (Set(repo2.id))
 
-    runs(storage, StoreOp.deleteRepositories(NonEmptyList(repo1,repo2))).unsafeRunSync()
+    StoreOp.deleteRepositories(NonEmptyList(repo1,repo2)).foldMap(storage).unsafeRunSync()
 
-    val repos3 = runs(storage, StoreOp.listRepositoriesWithOwner(user, "org1")).unsafeRunSync()
+    val repos3 = StoreOp.listRepositoriesWithOwner(user, "org1").foldMap(storage).unsafeRunSync()
     repos3.map(_.id).toSet should equal (Set(repo3.id))
 
-    val repos4 = runs(storage, StoreOp.listRepositoriesWithOwner(user, "org2")).unsafeRunSync()
+    val repos4 = StoreOp.listRepositoriesWithOwner(user, "org2").foldMap(storage).unsafeRunSync()
     repos4.map(_.id).toSet should equal (Set())
   }
 }

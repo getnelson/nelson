@@ -16,11 +16,8 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{~>, Free, Monad}
+import cats.free.Free
 
 package object storage {
-  def run[F[_]:Monad, A](interpreter: StoreOp ~> F, op: StoreOpF[A]): F[A] =
-    Free.runFC(op)(interpreter)
-
-  type StoreOpF[A] = Free.FreeC[StoreOp, A]
+  type StoreOpF[A] = Free[StoreOp, A]
 }

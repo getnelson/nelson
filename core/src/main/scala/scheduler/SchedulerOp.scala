@@ -17,7 +17,8 @@
 package nelson
 package scheduler
 
-import scalaz.{@@, Free}
+import cats.free.Free
+import scalaz.@@
 import docker.Docker.Image
 import Manifest.{Plan, UnitDef, Versioned}
 
@@ -33,17 +34,17 @@ object SchedulerOp {
 
   final case class RunningUnits(dc: Datacenter, prefix: Option[String]) extends SchedulerOp[Set[RunningUnit]]
 
-  type SchedulerF[A] = Free.FreeC[SchedulerOp, A]
+  type SchedulerF[A] = Free[SchedulerOp, A]
 
   def launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String): SchedulerF[String] =
-    Free.liftFC(Launch(i, dc, ns, a, p, hash))
+    Free.liftF(Launch(i, dc, ns, a, p, hash))
 
   def delete(dc: Datacenter, d: Datacenter.Deployment): SchedulerF[Unit] =
-    Free.liftFC(Delete(dc,d))
+    Free.liftF(Delete(dc,d))
 
   def summary(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName): SchedulerF[Option[DeploymentSummary]] =
-    Free.liftFC(Summary(dc,ns,sn))
+    Free.liftF(Summary(dc,ns,sn))
 
   def runningUnits(dc: Datacenter, prefix: Option[String] = None): SchedulerF[Set[RunningUnit]] =
-    Free.liftFC(RunningUnits(dc, prefix))
+    Free.liftF(RunningUnits(dc, prefix))
 }

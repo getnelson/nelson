@@ -21,8 +21,9 @@ import nelson.Metrics.default.{deploySuccessCounter,deployFailureCounter}
 import nelson.Workflow.WorkflowOp
 import nelson.cleanup.ExpirationPolicy
 import nelson.notifications.Notify
-import nelson.storage.{StoreOp, StoreOpF, run => runs}
+import nelson.storage.{StoreOp, StoreOpF}
 
+import cats.~>
 import cats.effect.IO
 import nelson.CatsHelpers._
 
@@ -30,7 +31,7 @@ import io.prometheus.client.Counter
 
 import java.time.Instant
 
-import scalaz._
+import scalaz.{~> => _, _}
 import scalaz.Scalaz._
 
 /**
@@ -91,15 +92,15 @@ object Actionable {
         }
 
         def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Throwable \/ Unit] =
-          Workflow.run(unitw.workflow.deploy(id, hash, unit, plan, dc, ns))(t).attempt.flatMap(_.fold(
-            e => (Workflow.run(Workflow.syntax.status(id, DeploymentStatus.Failed,
-                    s"workflow failed because: ${e.getMessage}"))(t) >>
+          unitw.workflow.deploy(id, hash, unit, plan, dc, ns).foldMap(t).attempt.flatMap(_.fold(
+            e => (Workflow.syntax.status(id, DeploymentStatus.Failed,
+                    s"workflow failed because: ${e.getMessage}").foldMap(t) >>
                   incCounter(deployFailureCounter)).attempt.map(_.toDisjunction),
             s => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) >>
                   incCounter(deploySuccessCounter)).attempt.map(_.toDisjunction)
         ))
 
-        storage.run(cfg.storage, create(unit, dc, ns, plan, hash, exp, policy)).flatMap(_.cata(
+        create(unit, dc, ns, plan, hash, exp, policy).foldMap(cfg.storage).flatMap(_.cata(
           some = id => deploy(id)(dc.workflow).map(_ => ()),
           none = incCounter(deployFailureCounter)
         ))
@@ -128,21 +129,21 @@ object Actionable {
 
         def launch(id: ID, sn: StackName, rs: Vector[Route], nsid: ID)(t: LoadbalancerOp ~> IO): IO[Unit] =
           for {
-            _   <- helm.run(dc.consul.asCats, loadbalancers.writeLoadbalancerV2ConfigToConsul(sn, rs))
-            dns <- loadbalancers.run(t, loadbalancers.launch(lb, major, dc, ns.name, plan, hash))
-            _   <- runs(dc.storage, StoreOp.insertLoadbalancerDeployment(id, nsid, hash, dns))
+            _   <- helm.run(dc.consul, loadbalancers.writeLoadbalancerV2ConfigToConsul(sn, rs))
+            dns <- loadbalancers.launch(lb, major, dc, ns.name, plan, hash).foldMap(t)
+            _   <- StoreOp.insertLoadbalancerDeployment(id, nsid, hash, dns).foldMap(dc.storage)
           } yield ()
 
         def resize(lbd: Datacenter.LoadbalancerDeployment)(t: LoadbalancerOp ~> IO): IO[Unit] =
-          loadbalancers.run(t, loadbalancers.resize(lbd, plan))
+          loadbalancers.resize(lbd, plan).foldMap(t)
 
         for {
           t   <- dc.loadbalancer.tfold(FailedLoadbalancerDeploy(lb.name, s"datacenter ${dc.name} is not configured to deploy loadbalancers"))(identity)
-          n   <- runs(cfg.storage, StoreOp.getNamespace(dc.name, ns.name))
+          n   <- StoreOp.getNamespace(dc.name, ns.name).foldMap(cfg.storage)
           nsd <- n.tfold(FailedLoadbalancerDeploy(lb.name, s"namespace ${ns.name.asString} was not found for ${dc.name}"))(identity)
-          i   <- runs(cfg.storage, StoreOp.getLoadbalancer(lb.name, major)).map(_.map(_.id))
+          i   <- StoreOp.getLoadbalancer(lb.name, major).foldMap(cfg.storage).map(_.map(_.id))
           id  <- i.tfold(FailedLoadbalancerDeploy(lb.name, s"loadbalancer ${lb.name} was not found for major version ${major}"))(identity)
-          lbd <- runs(cfg.storage, StoreOp.findLoadbalancerDeployment(lb.name, major, nsd.id))
+          lbd <- StoreOp.findLoadbalancerDeployment(lb.name, major, nsd.id).foldMap(cfg.storage)
 
           // if loadbalancer exists resize, otherwise create
           _   <- lbd.cata(l => resize(l)(t), launch(id, sn, lb.routes, nsd.id)(t))

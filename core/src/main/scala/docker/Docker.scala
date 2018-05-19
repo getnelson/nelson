@@ -17,6 +17,7 @@
 package nelson
 package docker
 
+import cats.~>
 import cats.effect.IO
 
 import java.util.concurrent.ScheduledExecutorService
@@ -25,8 +26,6 @@ import journal.Logger
 
 import scala.collection.mutable.MutableList
 import scala.concurrent.ExecutionContext
-
-import scalaz._
 
 /**
  * The fugiest docker client around.
@@ -96,10 +95,6 @@ object Docker {
   type Name = String
   type Tag = String
   type Digest = String
-
-
-  def run[F[_]:Monad, A](interpreter: DockerOp ~> F, op: DockerOp.DockerF[A]): F[A] =
-    Free.runFC(op)(interpreter)
 
   final case class Image(
     name: Name,

@@ -17,7 +17,6 @@
 package nelson
 
 import scalaz.{Success,NonEmptyList}
-import nelson.CatsHelpers._
 
 class VerifyDeployableSpec extends NelsonSuite {
   import Datacenter._
@@ -26,7 +25,7 @@ class VerifyDeployableSpec extends NelsonSuite {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    ns = nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    ns = insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
   }
 
   "verifyDeployable" should "think conductor is deployable" in {

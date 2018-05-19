@@ -22,8 +22,10 @@ import org.http4s.headers.`Content-Type`
 import org.http4s.dsl.io._
 import _root_.argonaut._, Argonaut._
 import cats.effect.IO
+import cats.free.Free
+import cats.implicits._
 import nelson.CatsHelpers._
-import scalaz._, Scalaz._
+import scalaz.OptionT
 
 final case class Graph(config: NelsonConfig) extends Default {
   import nelson.Json._
@@ -34,15 +36,12 @@ final case class Graph(config: NelsonConfig) extends Default {
 
   val service: HttpService[IO] = HttpService[IO] {
     case GET -> Root / "v1" / "datacenters" / datacenter / namespace / "graph" =>
-      type CoyoStoreOp[A] = Coyoneda[storage.StoreOp, A]
-      type FreeCoyoStoreOp[A] = Free[CoyoStoreOp, A]
-      implicit val stgMonad: Monad[FreeCoyoStoreOp] = Free.freeMonad[CoyoStoreOp]
-      storage.run(config.storage, (for {
-        name <- OptionT(NamespaceName.fromString(namespace).toOption.point[FreeCoyoStoreOp])
+      (for {
+        name <- OptionT(NamespaceName.fromString(namespace).toOption.pure[Free[storage.StoreOp, ?]])
         ns  <- OptionT(storage.StoreOp.getNamespace(datacenter, name))
         gr  <- OptionT(getRoutingGraph(ns))
          graph = DependencyGraph(gr)
-       } yield graph.svg).run).attempt.flatMap {
+       } yield graph.svg).run.foldMap(config.storage).attempt.flatMap {
         case Left(e) => BadRequest(e.getMessage)
         case Right(None) => BadRequest("no such namespace found")
         case Right(Some(t)) => Ok(t).map(_.withContentType(`Content-Type`(MediaType.`image/svg+xml`)))

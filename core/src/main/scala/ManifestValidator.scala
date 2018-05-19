@@ -20,10 +20,12 @@ import nelson.Datacenter.StackName
 import nelson.Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck,Route}
 import nelson.storage.StoreOp
 
+import cats.~>
 import cats.effect.IO
 import nelson.CatsHelpers._
 
-import scalaz._, Scalaz._
+import scalaz.{~> => _, _}
+import Scalaz._
 
 object ManifestValidator {
 

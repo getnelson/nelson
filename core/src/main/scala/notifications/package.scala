@@ -18,14 +18,5 @@ package nelson
 
 
 package object notifications {
-
-  import scalaz.{Monad,Free,~>}
-
   type SlackChannel = String
-
-  def run[F[_]:Monad, A[_], B](i: A ~> F, op: Free.FreeC[A,B]): F[B] =
-    Free.runFC(op)(i)
-
-  def runOr[F[_]:Monad, A[_], B](i: Option[A ~> F], op: Free.FreeC[A,B])(b: => F[B]) =
-    i.fold(b)(run(_,op))
 }

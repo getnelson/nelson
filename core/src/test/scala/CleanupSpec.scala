@@ -18,65 +18,64 @@ package nelson
 
 class CleanupSpec extends NelsonSuite  {
   import Datacenter._
-  import storage.{run=>runs, StoreOp}
-  import nelson.CatsHelpers._
+  import storage.StoreOp
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 
   it should "run the entire cleanup pipeline and mark expired services as terminated" in {
     import cleanup._
     val st = StackName("search", Version(1,1,0), "foo")
-    val su = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
+    val su = StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync().get
 
-    runs(config.storage, StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Ready, None)).unsafeRunSync()
-    val statusBefore = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).unsafeRunSync()
+    StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Ready, None).foldMap(config.storage).unsafeRunSync()
+    val statusBefore = StoreOp.getDeploymentStatus(su.id).foldMap(config.storage).unsafeRunSync()
     statusBefore should equal(Some(DeploymentStatus.Ready))
 
-    runs(config.storage, StoreOp.createDeploymentExpiration(su.id, java.time.Instant.now().minusSeconds(1000))).unsafeRunSync()
+    StoreOp.createDeploymentExpiration(su.id, java.time.Instant.now().minusSeconds(1000)).foldMap(config.storage).unsafeRunSync()
 
     (CleanupCron.process(config) to Reaper.reap(config)).compile.toVector.unsafeRunSync()
 
-    val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).unsafeRunSync()
+    val status = StoreOp.getDeploymentStatus(su.id).foldMap(config.storage).unsafeRunSync()
     status should equal(Some(DeploymentStatus.Terminated))
   }
 
   it should "run the entire cleanup pipeline and not mark active services as terminated" in {
     import cleanup._
     val st = StackName("search", Version(1,1,0), "foo")
-    val su = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
+    val su = StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync().get
 
-    runs(config.storage, StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Ready, None)).unsafeRunSync()
-    val statusBefore = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).unsafeRunSync()
+    StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Ready, None).foldMap(config.storage).unsafeRunSync()
+    val statusBefore = StoreOp.getDeploymentStatus(su.id).foldMap(config.storage).unsafeRunSync()
     statusBefore should equal(Some(DeploymentStatus.Ready))
 
-    runs(config.storage, StoreOp.createDeploymentExpiration(su.id, java.time.Instant.now().plusSeconds(1000))).unsafeRunSync()
+    StoreOp.createDeploymentExpiration(su.id, java.time.Instant.now().plusSeconds(1000)).foldMap(config.storage).unsafeRunSync()
 
     (CleanupCron.process(config) to Reaper.reap(config)).compile.toVector.unsafeRunSync()
 
-    val status = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).unsafeRunSync()
+    val status = StoreOp.getDeploymentStatus(su.id).foldMap(config.storage).unsafeRunSync()
     status should equal(Some(DeploymentStatus.Ready))
   }
 
   it should "run the entire cleanup pipeline and not apply an expiration policy to non routable deployments" in {
     import cleanup._
     val st = StackName("search", Version(2,2,2), "aaaa")
-    val su = runs(config.storage, StoreOp.findDeployment(st)).unsafeRunSync().get
+    val su = StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync().get
 
-    runs(config.storage, StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Warming, None)).unsafeRunSync()
-    val statusBefore = runs(config.storage, StoreOp.getDeploymentStatus(su.id)).unsafeRunSync()
+    StoreOp.createDeploymentStatus(su.id, DeploymentStatus.Warming, None).foldMap(config.storage).unsafeRunSync()
+    val statusBefore = StoreOp.getDeploymentStatus(su.id).foldMap(config.storage).unsafeRunSync()
     statusBefore should equal(Some(DeploymentStatus.Warming))
 
     val exp = java.time.Instant.now().plusSeconds(1000)
 
-    runs(config.storage, StoreOp.createDeploymentExpiration(su.id, exp)).unsafeRunSync()
+    StoreOp.createDeploymentExpiration(su.id, exp).foldMap(config.storage).unsafeRunSync()
 
     CleanupCron.process(config).compile.toVector.unsafeRunSync()
 
-    val expAfter = runs(config.storage, StoreOp.findDeploymentExpiration(su.id)).unsafeRunSync()
+    val expAfter = StoreOp.findDeploymentExpiration(su.id).foldMap(config.storage).unsafeRunSync()
     expAfter should equal(Some(exp))
   }
 }

@@ -17,7 +17,6 @@
 package nelson
 
 import nelson.plans.Datacenters
-import nelson.CatsHelpers._
 import Datacenter._
 import argonaut._
 import Argonaut._
@@ -32,7 +31,7 @@ class DatacentersSpec extends ServiceSpec {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    nelson.storage.run(config.storage, insertFixtures(testName)).unsafeRunSync()
+    insertFixtures(testName).foldMap(config.storage).unsafeRunSync()
     ()
   }
 

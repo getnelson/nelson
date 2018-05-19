@@ -16,7 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.CatsHelpers._
 import doobie.imports._
 import scalaz._,Scalaz._
 import storage.StoreOp
@@ -51,75 +50,75 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "be able to create loadbalancer then find it" in {
     (for {
-      _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
-      ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
-      id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
-      d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
-      a  <- nelson.storage.run(config.storage, StoreOp.findLoadbalancerDeployment(lb.name, MajorVersion(1), ns))
+      _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
+      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
+      id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999).foldMap(config.storage)
+      d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
+      a  <- StoreOp.findLoadbalancerDeployment(lb.name, MajorVersion(1), ns).foldMap(config.storage)
     } yield a).unsafeRunSync().map(_.loadbalancer.name) should contain(lb.name)
   }
 
   it should "be able to create loadbalancer then get it by id" in {
     (for {
-      _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
-      ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
-      id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999))
-      d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
-      a  <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeployment(d))
+      _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
+      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
+      id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999).foldMap(config.storage)
+      d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
+      a  <- StoreOp.getLoadbalancerDeployment(d).foldMap(config.storage)
     } yield a).unsafeRunSync().map(_.loadbalancer.name) should contain(lb.name)
   }
 
   it should "be able to create loadbalancer then get it by guid" in {
     (for {
-      _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
-      ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
-      id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999))
-      d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
-      a  <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeployment(d))
-      b  <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeploymentByGUID(a.get.guid))
+      _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
+      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
+      id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999).foldMap(config.storage)
+      d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
+      a  <- StoreOp.getLoadbalancerDeployment(d).foldMap(config.storage)
+      b  <- StoreOp.getLoadbalancerDeploymentByGUID(a.get.guid).foldMap(config.storage)
     } yield b).unsafeRunSync().map(_.loadbalancer.name) should contain(lb.name)
   }
 
   it should "not create a new loadbalancer if it already exists" in {
     val (id1, id2) = (for {
-      _   <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc  <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
-      ns  <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
-      id  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
-      id2 <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
+      _   <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
+      dc  <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      ns  <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
+      id  <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999).foldMap(config.storage)
+      id2 <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999).foldMap(config.storage)
     } yield (id,id2)).unsafeRunSync()
     id1 should equal(id2)
   }
 
   it should "be able to create loadbalancers, make deploy, and then find them by namespace" in {
     (for {
-      _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
-      ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
-      id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb2),9999))
-      d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
-      a  <- nelson.storage.run(config.storage, StoreOp.listLoadbalancerDeploymentsForNamespace(ns))
+      _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
+      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
+      id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb2),9999).foldMap(config.storage)
+      d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
+      a  <- StoreOp.listLoadbalancerDeploymentsForNamespace(ns).foldMap(config.storage)
     } yield a).unsafeRunSync().map(_.loadbalancer.name) should contain(lb2.name)
   }
 
   it should "be able to delete loadbalancer by id" in {
     val before = (for {
-      _  <- nelson.storage.run(config.storage, StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)))
-      dc <- nelson.storage.run(config.storage, StoreOp.createDatacenter(dc))
-      ns <- nelson.storage.run(config.storage, StoreOp.createNamespace(testName, namespace))
-      id <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999))
-      d  <- nelson.storage.run(config.storage, StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns"))
-      a  <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeployment(d))
+      _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
+      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
+      id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999).foldMap(config.storage)
+      d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
+      a  <- StoreOp.getLoadbalancerDeployment(d).foldMap(config.storage)
     } yield a).unsafeRunSync()
 
     before.map(_.loadbalancer.name) should contain(lb.name)
 
     val after = (for {
-      _ <- nelson.storage.run(config.storage, StoreOp.deleteLoadbalancerDeployment(before.get.id))
-      a <- nelson.storage.run(config.storage, StoreOp.getLoadbalancerDeployment(before.get.id))
+      _ <- StoreOp.deleteLoadbalancerDeployment(before.get.id).foldMap(config.storage)
+      a <- StoreOp.getLoadbalancerDeployment(before.get.id).foldMap(config.storage)
     } yield a).unsafeRunSync()
 
     after should equal(None)

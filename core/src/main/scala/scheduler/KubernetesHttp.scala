@@ -9,6 +9,7 @@ import nelson.scheduler.SchedulerOp._
 import argonaut._
 import argonaut.Argonaut._
 
+import cats.~>
 import cats.effect.IO
 import cats.syntax.apply._
 import cats.syntax.applicativeError._
@@ -17,8 +18,6 @@ import journal.Logger
 
 import org.http4s.Status.NotFound
 import org.http4s.client.UnexpectedStatus
-
-import scalaz.~>
 
 object KubernetesHttp {
   private val log = Logger[KubernetesHttp.type]

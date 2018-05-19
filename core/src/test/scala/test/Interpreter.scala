@@ -17,8 +17,11 @@
 package nelson
 package test
 
-import scalaz.{-\/, \/-, Catchable, Forall, Free, Monad}, Free.FreeC
-import scalaz.syntax.monad._
+import cats.{~>, Monad}
+import cats.free.{Coyoneda, Free}
+import cats.implicits._
+
+import scalaz.{Catchable, Forall}
 
 /**
  * TODO redefine this as Free over the following functor:
@@ -86,10 +89,7 @@ sealed trait Interpreter[F[_], M[_], +S] {
   // eff1 -> eff2 -> (eff3 -> eff5, eff4) -> eff6
   // expect(eff1) -> expect(eff2) -> (expect(eff3) -> expect(eff5), expect(eff4), expect(eff7)) -> expect(eff6)
 
-  def run[A](fc: FreeC[F, A])(
-      implicit M: Monad[M],
-      C: Catchable[M],
-      T: TestFramework): M[A] = {
+  def run[A](fc: Free[F, A])(implicit M: Monad[M], C: Catchable[M], T: TestFramework): M[A] = {
 
     // we need to cache these here to save off the call stack
     val earlyTermination =
@@ -98,13 +98,14 @@ sealed trait Interpreter[F[_], M[_], +S] {
     val suspensionTermination = T.failed("unexpected suspension: <unknown>", 2)
 
     def loop(
-        it: Interpreter[F, M, S],
-        fc: FreeC[F, A],
-        lastSuspension: Option[Any]): M[A] = it match {
+      it: Interpreter[F, M, S],
+      fc: Free[Coyoneda[F, ?], A],
+      lastSuspension: Option[Any]
+    ): M[A] = it match {
       case Expect(patternF, fail) =>
         fc.resume match {
-          case -\/(cy) =>
-            val pattern = patternF.apply[cy.I]
+          case Left(cy) =>
+            val pattern = patternF.apply[cy.Pivot]
 
             if (pattern isDefinedAt cy.fi) {
               val (it2, ma) = pattern(cy.fi)
@@ -114,7 +115,7 @@ sealed trait Interpreter[F[_], M[_], +S] {
               loop(fail, fc, lastSuspension) // restart with the failure continuation
             }
 
-          case \/-(_) =>
+          case Right(_) =>
             val t2 = lastSuspension map { a =>
               T.withMessage(
                 earlyTermination,
@@ -129,40 +130,41 @@ sealed trait Interpreter[F[_], M[_], +S] {
 
       case Return(_) =>
         fc.resume match {
-          case -\/(cy) =>
+          case Left(cy) =>
             val t2 = T.withMessage(
               suspensionTermination,
               s"unexpected suspension: ${cy.fi}")
 
             C.fail(t2)
 
-          case \/-(r) => M.point(r)
+          case Right(r) => M.pure(r)
         }
 
       case Fail(t) => C.fail(t)
     }
 
-    loop(this, fc, None)
+    loop(this, fc.mapK(liftCoyoneda), None)
   }
 }
 
 object Interpreter {
+  def liftCoyoneda[F[_]]: F ~> Coyoneda[F, ?] = new (F ~> Coyoneda[F, ?]) {
+    def apply[A](fa: F[A]): Coyoneda[F, A] = Coyoneda.lift(fa)
+  }
 
   trait Functions[F[_], M[_]] {
     def point[S](s: S) = Interpreter.point[F, M, S](s)
 
     def eval[S](ms: M[S]) = Interpreter.eval[F, M, S](ms)
 
-    def expectU[A](pattern: PartialFunction[F[A], M[A]])(
-        implicit T: TestFramework) = {
+    def expectU[A](pattern: PartialFunction[F[A], M[A]])(implicit T: TestFramework) = {
 
       expectOr[Unit, A](pattern andThen { r =>
         ((), r)
       }, fail(T.failed("could not match expected pattern", 2)))
     }
 
-    def expect[S, A](pattern: PartialFunction[F[A], (S, M[A])])(
-        implicit T: TestFramework) = {
+    def expect[S, A](pattern: PartialFunction[F[A], (S, M[A])])(implicit T: TestFramework) = {
 
       expectOr[S, A](
         pattern,
@@ -189,8 +191,7 @@ object Interpreter {
     })
   }
 
-  def expect[F[_], M[_], S, A](pattern: PartialFunction[F[A], (S, M[A])])(
-      implicit T: TestFramework): Interpreter[F, M, S] =
+  def expect[F[_], M[_], S, A](pattern: PartialFunction[F[A], (S, M[A])])(implicit T: TestFramework): Interpreter[F, M, S] =
     expectOr(pattern, fail(T.failed("could not match expected pattern", 1))) // probably not the right offset
 
   def expectOr[F[_], M[_], S, A](

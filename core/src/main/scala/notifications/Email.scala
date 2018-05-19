@@ -17,17 +17,14 @@
 package nelson
 package notifications
 
+import cats.~>
 import cats.effect.IO
-
-import scalaz.{~>, Free, Coyoneda}
+import cats.free.Free
 
 sealed abstract class EmailOp[A] extends Product with Serializable
 
 object EmailOp {
-
-  type EmailOpF[A] = Free.FreeC[EmailOp, A]
-
-  type EmailOpC[A] = Coyoneda[EmailOp, A]
+  type EmailOpF[A] = Free[EmailOp, A]
 
   final case class SendEmailNotification(
     recipients: List[EmailAddress],
@@ -36,7 +33,7 @@ object EmailOp {
   ) extends EmailOp[Unit]
 
   def send(rs: List[EmailAddress], msg: String, s: String): EmailOpF[Unit] =
-    Free.liftFC(SendEmailNotification(rs, msg,s))
+    Free.liftF(SendEmailNotification(rs, msg,s))
 }
 
 final class EmailServer(cfg: EmailConfig) extends (EmailOp ~> IO) {

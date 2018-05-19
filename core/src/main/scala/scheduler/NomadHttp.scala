@@ -23,21 +23,15 @@ import nelson.Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Por
 import nelson.docker.Docker
 import nelson.docker.Docker.Image
 
+import cats.~>
 import cats.effect.IO
-import cats.syntax.apply._
-import cats.syntax.applicativeError._
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import java.util.concurrent.ScheduledExecutorService
 
 import journal.Logger
 
 import scala.concurrent.ExecutionContext
-
-import scalaz.~>
-import scalaz.std.list._
-import scalaz.syntax.std.option._
-import scalaz.syntax.traverse._
 
 object NomadHttp {
   private val log = Logger[NomadHttp.type]
@@ -84,7 +78,7 @@ final class NomadHttp(
 
   private def runningUnits(dc: Datacenter, prefix: Option[String]): IO[Set[RunningUnit]] = {
     val baseUri = nomad.endpoint / "v1" / "jobs"
-    val uri = prefix.cata(p => baseUri.withQueryParam("prefix", p), baseUri)
+    val uri = prefix.fold(baseUri)(p => baseUri.withQueryParam("prefix", p))
     val req = addCreds(dc, Request[IO](Method.GET, uri))
 
     client.expect[List[RunningUnit]](req)(jsonOf[IO, List[RunningUnit]]).map(_.toSet)
@@ -109,7 +103,7 @@ final class NomadHttp(
     val name = buildName(d.stackName)
     for {
       cs <- listChildren(dc, name).map(_.toList)
-      _  <- cs.traverse_(_.name.cata(c => deleteUnit(dc, c), IO.unit))
+      _  <- cs.traverse_(_.name.fold(IO.unit)(deleteUnit(dc, _)))
       _  <- deleteUnit(dc, name)
     } yield ()
   }
@@ -231,7 +225,7 @@ object NomadJson {
     val maybeLogging = nomad.splunk.map(splunk =>
       List(dockerSplunkJson(name, ns, splunk.splunkUrl, splunk.splunkToken)))
 
-    val maybePorts = ports.map(_.nel.toList.map(p => argonaut.Json(p.ref := p.port)))
+    val maybePorts = ports.map(_.nel.list.map(p => argonaut.Json(p.ref := p.port)))
 
     ("logging" :=? maybeLogging) ->?:
     ("port_map" :=? maybePorts) ->?: argonaut.Json(
@@ -259,7 +253,7 @@ object NomadJson {
 
   // cpu in MHZ, mem in MB
   def resourcesJson(cpu: Int, mem: Int, ports: Option[Ports]): argonaut.Json = {
-    val maybePorts = ports.map(_.nel.toList.map(p => argonaut.Json(
+    val maybePorts = ports.map(_.nel.list.map(p => argonaut.Json(
       "Label" := p.ref,
       "Value" := 0 // for dynamic ports this is required but is then ignored, garbage
     )))

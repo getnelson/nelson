@@ -18,9 +18,8 @@ package nelson
 
 import io.prometheus.client.CollectorRegistry
 import org.scalatest.FlatSpec
-import scalaz.~>
+import cats.~>
 import cats.effect.IO
-import nelson.CatsHelpers._
 import vault._
 
 class InstrumentedVaultSpec extends FlatSpec with NelsonSuite {
@@ -35,7 +34,7 @@ class InstrumentedVaultSpec extends FlatSpec with NelsonSuite {
   it should "record latency" in {
     def value = getValue("vault_requests_latency_seconds_count", "vault_op" -> "getMounts", "vault_instance" -> "test")
     val before = value
-    Vault.getMounts.runWith(client).attempt.unsafeRunSync()
+    Vault.getMounts.foldMap(client).attempt.unsafeRunSync()
     val after = value
     after should equal (before + 1.0)
   }
@@ -47,7 +46,7 @@ class InstrumentedVaultSpec extends FlatSpec with NelsonSuite {
     val badClient = InstrumentedVaultClient("test", badInterp, metrics)
     def value = getValue("vault_requests_failures_total", "vault_op" -> "get", "vault_instance" -> "test")
     val before = value
-    Vault.get("I don't exist in vaultMap").runWith(badClient).attempt.unsafeRunSync()
+    Vault.get("I don't exist in vaultMap").foldMap(badClient).attempt.unsafeRunSync()
     val after = value
     after should equal (before + 1.0)
   }

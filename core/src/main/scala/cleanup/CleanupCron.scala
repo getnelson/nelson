@@ -40,7 +40,7 @@ import Scalaz._
 final case class DeploymentCtx(deployment: Deployment, status: DeploymentStatus, exp: Option[Instant])
 
 object CleanupCron {
-  import nelson.storage.{run => runs, StoreOp,StoreOpF}
+  import nelson.storage.{StoreOp,StoreOpF}
   import nelson.Datacenter.Namespace
 
   private val log = Logger[CleanupCron.type]
@@ -71,7 +71,7 @@ object CleanupCron {
 
   /* Gets all deployments (excluding terminated) for all datacenters and namespaces */
   def getDeployments(cfg: NelsonConfig): IO[Vector[CleanupRow]] =
-    runs(cfg.storage, cfg.datacenters.toVector.traverseM(dc => getDeploymentsForDatacenter(dc)))
+    cfg.datacenters.toVector.traverseM(dc => getDeploymentsForDatacenter(dc)).foldMap(cfg.storage)
 
   def routable(d: DeploymentCtx): Boolean =
     routables.exists(_ == d.status)

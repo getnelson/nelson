@@ -27,6 +27,7 @@ import nelson.storage.StoreOp
 import nelson.vault._
 import nelson.vault.http4s._
 
+import cats.~>
 import cats.effect.{Effect, IO}
 import cats.syntax.either._
 import nelson.CatsHelpers._
@@ -48,7 +49,6 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
 
-import scalaz.~>
 import scalaz.Scalaz._
 
 /**

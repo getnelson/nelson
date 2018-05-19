@@ -18,6 +18,7 @@ package nelson
 package routing
 
 import cats.effect.{Effect, IO}
+import cats.implicits._
 import nelson.CatsHelpers._
 
 import fs2.{Scheduler, Stream}
@@ -32,10 +33,10 @@ object cron {
   private[cron] val log = Logger[cron.type]
 
   def refresh(cfg: NelsonConfig): IO[List[(Datacenter,ConsulOp.ConsulOpF[Unit])]] = {
-    cfg.datacenters.traverseM { dc =>
+    cfg.datacenters.flatTraverse { dc =>
       log.info(s"cron: refreshing ${dc.name}")
       for {
-        rts <- nelson.storage.run(cfg.storage, RoutingTable.generateRoutingTables(dc.name))
+        rts <- RoutingTable.generateRoutingTables(dc.name).foldMap(cfg.storage)
 
         dts = Discovery.discoveryTables(rts).toList
 
