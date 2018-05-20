@@ -16,11 +16,11 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz.syntax.monad._
+import doobie.implicits._
 import org.scalatest.BeforeAndAfterEach
 import java.time.Instant
 import cats.effect.IO
+import cats.implicits._
 import fs2.Stream
 
 class GarbageCollectorSpec extends NelsonSuite with BeforeAndAfterEach {

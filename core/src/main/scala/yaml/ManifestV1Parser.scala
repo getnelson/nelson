@@ -17,70 +17,63 @@
 package nelson
 package yaml
 
+import nelson.Manifest._
+import nelson.YamlError._
+import nelson.YamlParser.fromYaml
+import nelson.cleanup.{ExpirationPolicy}
+import nelson.notifications._
+
+import cats.Apply
+import cats.data.{NonEmptyList, State, Validated, ValidatedNel}
+import cats.implicits._
+import nelson.CatsHelpers._
+
 import java.net.URI
-import scala.concurrent.duration.{Duration,FiniteDuration,MILLISECONDS}
-import scalaz.Apply
-import scala.beans.BeanProperty
 import java.util.{ArrayList => JList}
-import scalaz.{\/,NonEmptyList,ValidationNel,Validation,State}
-import cleanup.{ExpirationPolicy}
-import notifications._
-import BiggerApplies._
+
+import scala.beans.BeanProperty
+import scala.collection.JavaConverters._
+import scala.concurrent.duration._
+
+import scalaz.\/
+import scalaz.syntax.std.option._
 
 object ManifestV1Parser {
-  // putting implicits in module scope
-  import scalaz.std.list._
-  import scalaz.std.vector._
-  import YamlParser.fromYaml
-  import scalaz.std.string._
-  import scalaz.syntax.nel._
-  import scalaz.syntax.equal._
-  import scalaz.syntax.either._
-  import Manifest._, YamlError._
-  import scalaz.syntax.traverse._
-  import scalaz.syntax.validation._
-  import scalaz.syntax.std.option._
-  import scalaz.std.option._
-  import scalaz.syntax.applicative._
-  import scala.collection.JavaConverters._
-  import scala.concurrent.duration._
-
-  type YamlValidation[A] = ValidationNel[YamlError, A]
+  type YamlValidation[A] = ValidatedNel[YamlError, A]
 
   def parseDependency(dep: DependencyYaml): YamlValidation[(String,FeatureVersion)] = {
     val str = dep.ref
     val parts = str.split('@')
 
     if(parts.size == 2) {
-      FeatureVersion.fromString(parts(1)).toSuccessNel(InvalidFeatureVersion(str, parts(1))) map {v =>
+      FeatureVersion.fromString(parts(1)).toValidNel(InvalidFeatureVersion(str, parts(1))) map {v =>
         val n = parts(0)
         n -> v
       }
     } else {
-      Validation.failureNel(InvalidServiceName(str))
+      Validated.invalidNel(InvalidServiceName(str))
     }
   }
 
   def parseResource(r: ResourceYaml): YamlValidation[Resource] = {
-    (parseAlphaNumHyphen(r.name, "unit.resources.name") |@|
-     Validation.success(Option(r.description)))((a,b) => Manifest.Resource(a, b))
+    (parseAlphaNumHyphen(r.name, "unit.resources.name"), Validated.valid(Option(r.description))).mapN((a,b) => Manifest.Resource(a, b))
   }
 
   def validateMeta(s: String): YamlValidation[String] = {
 
     def validateLength =
-      if (s.length <= 14) Validation.success(s).toValidationNel
-      else Validation.failure(invalidMetaLength(s)).toValidationNel
+      if (s.length <= 14) Validated.validNel(s)
+      else Validated.invalidNel(invalidMetaLength(s))
 
-    (parseAlphaNumHyphen(s, "unit.meta") |@| validateLength)((a,_) => a)
+    (parseAlphaNumHyphen(s, "unit.meta"), validateLength).mapN((a,_) => a)
   }
 
   private val alphaNumHyphen = """[a-zA-Z0-9-]*""".r
   def parseAlphaNumHyphen(str: String, fieldName: String): YamlValidation[String] =
     if (alphaNumHyphen.pattern.matcher(str).matches)
-      Validation.success(str).toValidationNel
+      Validated.validNel(str)
     else
-      Validation.failure(invalidAlphaNumHyphen(str,fieldName)).toValidationNel
+      Validated.invalidNel(invalidAlphaNumHyphen(str,fieldName))
 
   val noDefaultPortError: YamlError =
     invalidPortSpecification(s"a ${Port.defaultRef} port must be specified")
@@ -90,36 +83,35 @@ object ManifestV1Parser {
 
   def resolveWorkflow(name: String) =
     Workflow.fromString(name)
-      .toSuccessNel(YamlError.invalidWorkflow(name))
+      .toValidNel(YamlError.invalidWorkflow(name))
 
   def resolvePolicy(name: String): YamlValidation[ExpirationPolicy] =
     ExpirationPolicy.fromString(name)
-      .toSuccessNel(YamlError.unknownExpirationPolicyRef(name))
+      .toValidNel(YamlError.unknownExpirationPolicyRef(name))
 
   def parseURI(raw: String): YamlValidation[URI] =
     \/.fromTryCatchNonFatal(new URI(raw))
-      .leftMap(e => YamlError.invalidURI(raw)).validationNel
+      .leftMap(e => YamlError.invalidURI(raw)).toValidatedNel
 
   def parseSchedule(str: String): YamlValidation[Schedule] =
-    Schedule.parse(str).leftMap(invalidSchedule).validationNel
+    Schedule.parse(str).leftMap(invalidSchedule).toValidatedNel
 
   def toPlanResource(raw: PlanResourceYaml): YamlValidation[(String,URI)] =
-    (Option(raw.ref).toSuccessNel(missingProperty("plan.resources.ref")) |@|
-     parseURI(raw.uri))((a,b) => (a,b))
+    (Option(raw.ref).toValidNel(missingProperty("plan.resources.ref")), parseURI(raw.uri)).mapN((a,b) => (a,b))
 
   def validatePlanConstraints[A : Numeric](n: A, e: A => YamlError)(f: A => Boolean): YamlValidation[A] =
-    if (f(n)) Validation.success(n).toValidationNel
-    else Validation.failure(e(n)).toValidationNel
+    if (f(n)) Validated.validNel(n)
+    else Validated.invalidNel(e(n))
 
   def validateCPU(i:Double): YamlValidation[Double] =
     validatePlanConstraints(i, invalidCPU)(i => i > 0 && i < 100)
 
   def validateCPURequest(request: Double, limit: Option[Double]): YamlValidation[ResourceSpec] = limit match {
-    case None => Validation.failureNel(missingCPULimit)
+    case None => Validated.invalidNel(missingCPULimit)
     case Some(limit) =>
       ResourceSpec.bounded(request, limit) match {
-        case None       => Validation.failureNel(invalidCPUBound(request, limit))
-        case Some(spec) => Validation.success(spec)
+        case None       => Validated.invalidNel(invalidCPUBound(request, limit))
+        case Some(spec) => Validated.valid(spec)
       }
   }
 
@@ -127,11 +119,11 @@ object ManifestV1Parser {
     validatePlanConstraints(i, invalidMemory)(i => i > 0 && i < 50000)
 
   def validateMemoryRequest(request: Double, limit: Option[Double]): YamlValidation[ResourceSpec] = limit match {
-    case None => Validation.failureNel(missingMemoryLimit)
+    case None => Validated.invalidNel(missingMemoryLimit)
     case Some(limit) =>
       ResourceSpec.bounded(request, limit) match {
-        case None       => Validation.failureNel(invalidMemoryBound(request, limit))
-        case Some(spec) => Validation.success(spec)
+        case None       => Validated.invalidNel(invalidMemoryBound(request, limit))
+        case Some(spec) => Validated.valid(spec)
       }
   }
 
@@ -140,9 +132,9 @@ object ManifestV1Parser {
 
   def validateEphemeral(i: Int): YamlValidation[Int] =
     if (i < 101 || i > 10000)
-      Validation.failure(invalidEphemeralDisk(101, 10000, i)).toValidationNel
+      Validated.invalidNel(invalidEphemeralDisk(101, 10000, i))
     else
-      Validation.success(i).toValidationNel
+      Validated.validNel(i)
 
   def parseDuration(d: String): YamlError \/ FiniteDuration =
     \/.fromTryCatchNonFatal {
@@ -154,34 +146,35 @@ object ManifestV1Parser {
     parseDuration(dur).flatMap(d =>
       if (d <= 1.minutes || d >= 5.days) \/.left(YamlError.invalidTrafficShiftDuration(dur))
       else \/.right(d)
-    ).validationNel
+    ).toValidatedNel
 
   def validateTrafficShift(raw: TrafficShiftYaml): YamlValidation[TrafficShift] =
-    (TrafficShiftPolicy.fromString(raw.policy).toSuccessNel(YamlError.invalidTrafficShiftPolicy(raw.policy)) |@|
-     validateTrafficShiftDuration(raw.duration))(TrafficShift)
+    (TrafficShiftPolicy.fromString(raw.policy).toValidNel(YamlError.invalidTrafficShiftPolicy(raw.policy)), validateTrafficShiftDuration(raw.duration)).mapN(TrafficShift)
 
   def toPlan(raw: PlanYaml): YamlValidation[Plan] = {
-    import scalaz.Validation.FlatMap._
+    val validatedCPU =
+      Option(raw.cpu).filter(_ > 0).traverse(validateCPU).andThen { cpuLimit =>
+        Option(raw.cpu_request).filter(_ > 0).traverse(validateCPURequest(_, cpuLimit)).map { cpuBounds =>
+          cpuBounds.orElse(cpuLimit.flatMap(ResourceSpec.limitOnly)).getOrElse(ResourceSpec.unspecified)
+        }
+      }
 
-    val validatedCPU = for {
-      cpuLimit  <- Option(raw.cpu).filter(_ > 0).traverse(validateCPU)
-      cpuBounds <- Option(raw.cpu_request).filter(_ > 0).traverse(validateCPURequest(_, cpuLimit))
-    } yield cpuBounds.orElse(cpuLimit.flatMap(ResourceSpec.limitOnly)).getOrElse(ResourceSpec.unspecified)
+    val validatedMemory =
+      Option(raw.memory).filter(_ > 0).traverse(validateMemory).andThen { memoryLimit =>
+        Option(raw.memory_request).filter(_ > 0).traverse(validateMemoryRequest(_, memoryLimit)).map { memoryBounds =>
+          memoryBounds.orElse(memoryLimit.flatMap(ResourceSpec.limitOnly)).getOrElse(ResourceSpec.unspecified)
+        }
+      }
 
-    val validatedMemory = for {
-      memoryLimit  <- Option(raw.memory).filter(_ > 0).traverse(validateMemory)
-      memoryBounds <- Option(raw.memory_request).filter(_ > 0).traverse(validateMemoryRequest(_, memoryLimit))
-    } yield memoryBounds.orElse(memoryLimit.flatMap(ResourceSpec.limitOnly)).getOrElse(ResourceSpec.unspecified)
-
-    Apply[YamlValidation].apply14(
+    Apply[YamlValidation].map14(
       parseAlphaNumHyphen(raw.name, "plan.name"),
       validatedCPU,
       validatedMemory,
       Option(raw.instances).flatMap(x => Option(x.desired).filter(_ > 0)).traverse(d => validateInstances(d)),
-      Validation.success(Option(raw.retries).filter(_ > 0)),
-      Validation.success(raw.constraints.asScala.toList.flatMap(toConstraint)),
-      Validation.success(raw.alert_opt_outs.asScala.toList.map(AlertOptOut)), // opt out -> unit resolution is validated later
-      Validation.success(raw.environment.asScala.toList.flatMap(toEnvironmentVariable)),
+      Validated.valid(Option(raw.retries).filter(_ > 0)),
+      Validated.valid(raw.constraints.asScala.toList.flatMap(toConstraint)),
+      Validated.valid(raw.alert_opt_outs.asScala.toList.map(AlertOptOut)), // opt out -> unit resolution is validated later
+      Validated.valid(raw.environment.asScala.toList.flatMap(toEnvironmentVariable)),
       raw.health_checks.asScala.toList.traverse(toHealthCheck),
       raw.resources.asScala.toList.traverse(toPlanResource).map(_.toMap),
       Option(raw.schedule).traverse(s => parseSchedule(s)),
@@ -197,34 +190,34 @@ object ManifestV1Parser {
   def toHealthCheck(raw: HealthCheckYaml): YamlValidation[HealthCheck] = {
     def parseProtocol(s: String): YamlValidation[String] =
       if (s == "http" || s == "https" || s == "tcp")
-        Validation.success(s).toValidationNel
+        Validated.validNel(s)
       else
-        Validation.failure(invalidProtocol(s)).toValidationNel
+        Validated.invalidNel(invalidProtocol(s))
 
     def validateDuration(d: String): YamlValidation[FiniteDuration] =
-      parseDuration(d).validationNel
+      parseDuration(d).toValidatedNel
 
-    (parseAlphaNumHyphen(raw.name, "health_check.name") |@|
-     Option(raw.port_reference).toSuccessNel(missingProperty("health_check.port_reference")) |@|
-     parseProtocol(raw.protocol) |@|
-     Validation.success(Option(raw.path)) |@|
-     validateDuration(raw.interval) |@|
+    (parseAlphaNumHyphen(raw.name, "health_check.name"),
+     Option(raw.port_reference).toValidNel(missingProperty("health_check.port_reference")),
+     parseProtocol(raw.protocol),
+     Validated.valid(Option(raw.path)),
+     validateDuration(raw.interval),
      validateDuration(raw.timeout)
-   )((a,b,c,d,e,f) => HealthCheck(a,b,c,d,e,f))
+   ).mapN((a,b,c,d,e,f) => HealthCheck(a,b,c,d,e,f))
   }
 
   def toUnit(raw: UnitYaml): YamlValidation[UnitDef] = {
     def mkPort(value: String): YamlValidation[Port] =
       PortParser.parse(value)
         .leftMap(e => YamlError.invalidPortSpecification(e.getMessage))
-        .validationNel
+        .toValidatedNel
 
     def toPorts(l: List[Port]): YamlError \/ Ports = {
       l.foldLeftM[YamlError \/ ?, (Option[Port], List[Port])]((None, Nil)){ case ((defaultMaybe, rest), port) =>
         if (port.isDefault) {
-          if (defaultMaybe.isDefined) multipleDefaultPortError.left
-          else (Some(port), rest).right
-        } else (defaultMaybe, port :: rest).right
+          if (defaultMaybe.isDefined) \/.left(multipleDefaultPortError)
+          else \/.right((Some(port), rest))
+        } else \/.right((defaultMaybe, port :: rest))
       } flatMap { case (defaultMaybe, rest) =>
           defaultMaybe.toRightDisjunction(noDefaultPortError).map(Ports(_, rest))
       }
@@ -232,25 +225,23 @@ object ManifestV1Parser {
 
     def mkPorts(portDeclarations: List[String]): YamlValidation[Ports] =
       (for {
-        portDeclarations <- Option(portDeclarations).toRightDisjunction(missingProperty("unit.ports").wrapNel)
-        ports <- portDeclarations.traverse(mkPort).disjunction
-        ports <- toPorts(ports).leftMap(_.wrapNel)
-      } yield ports).validation
+        portDeclarations <- Option(portDeclarations).toRightDisjunction(NonEmptyList.of(missingProperty("unit.ports")))
+        ports <- portDeclarations.traverse(mkPort).toDisjunction
+        ports <- toPorts(ports).leftMap(NonEmptyList.of(_))
+      } yield ports).toValidated
 
     def validateJList[A, B](field: String, raw: JList[A], f: A => YamlValidation[B]): YamlValidation[List[B]] =
-      Option(raw).cata(
-        some = _.asScala.toList.traverse(a => f(a)),
-        none = Validation.failure(emptyList(field)).toValidationNel)
+      Option(raw).fold[YamlValidation[List[B]]](Validated.invalidNel(emptyList(field)))(_.asScala.toList.traverse(f))
 
-    Apply[YamlValidation].apply11(
-      Option(raw.name).toSuccessNel(missingProperty("unit.name")),
-      Option(raw.description).toSuccessNel(missingProperty("unit.description")),
+    Apply[YamlValidation].map11(
+      Option(raw.name).toValidNel(missingProperty("unit.name")),
+      Option(raw.description).toValidNel(missingProperty("unit.description")),
       validateJList("unit.dependencies", raw.dependencies, parseDependency _).map(_.toMap),
       validateJList("unit.resources", raw.resources, parseResource _).map(_.toSet),
       parseAlerting(raw.name, raw.alerting),
       resolveWorkflow(raw.workflow),
       Option(raw.ports).filter(_.size > 0).traverse(p => mkPorts(p.asScala.toList)),
-      Validation.success(None),
+      Validated.valid(None),
       validateJList("unit.meta", raw.meta, validateMeta _).map(_.toSet),
       Option(raw.schedule).traverse(s => parseSchedule(s)),
       Option(raw.expiration_policy).traverse(resolvePolicy)
@@ -269,21 +260,21 @@ object ManifestV1Parser {
 
   def toLoadbalancer(raw: LoadbalancerYaml): YamlValidation[Loadbalancer] = {
 
-     def fromRoute(r: RouteYaml): ValidationNel[YamlError, Route] = {
+     def fromRoute(r: RouteYaml): ValidatedNel[YamlError, Route] = {
        val result = {
          val dest = BackendDestinationParser.parse(r.destination).leftMap(e => YamlError.loadError(e.getMessage))
          val port = PortParser.parse(r.expose).leftMap(e => YamlError.loadError(e.getMessage))
-         (dest |@| port)((dest, port) => Route(port, dest))
+         (dest, port).mapN((dest, port) => Route(port, dest))
        }
-       result.validation.toValidationNel
+       result.toValidatedNel
      }
 
-    def fromRoutes(r: Vector[RouteYaml]): ValidationNel[YamlError, Vector[Route]] =
-       r.traverseU(fromRoute(_))
+    def fromRoutes(r: Vector[RouteYaml]): ValidatedNel[YamlError, Vector[Route]] =
+       r.traverse(fromRoute(_))
 
-    (parseAlphaNumHyphen(raw.name, "loadbalancer.name") |@|
-     fromRoutes(raw.routes.asScala.toVector) |@|
-     Validation.success(None))(Loadbalancer.apply)
+    (parseAlphaNumHyphen(raw.name, "loadbalancer.name"),
+     fromRoutes(raw.routes.asScala.toVector),
+     Validated.valid(None)).mapN(Loadbalancer.apply)
   }
 
   /**
@@ -312,29 +303,34 @@ object ManifestV1Parser {
   def parseNotifications(raw: NotificationYaml): YamlValidation[NotificationSubscriptions] = {
     val slack = parseSlackNotifications(raw.slack).map(_.map(SlackSubscription(_)))
     val email = parseEmailNotifications(raw.email).map(_.map(EmailSubscription(_)))
-    (slack |@| email)(NotificationSubscriptions.apply)
+    (slack, email).mapN(NotificationSubscriptions.apply)
   }
 
   private[this] val validEmail = """(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b""".r
   def parseEmailNotifications(raw: NotificationEmailYaml): YamlValidation[List[String]] = {
     def parseEmail(str: String): YamlValidation[String] =
-      if(validEmail.pattern.matcher(str).matches) Validation.success(str)
-      else Validation.failureNel(invalidEmail(str))
+      if(validEmail.pattern.matcher(str).matches) Validated.valid(str)
+      else Validated.invalidNel(invalidEmail(str))
 
     raw.recipients.asScala.toList.traverse(parseEmail)
   }
 
   def parseSlackNotifications(raw: NotificationSlackYaml): YamlValidation[List[String]] =
-    raw.channels.asScala.toList.successNel
+    raw.channels.asScala.toList.validNel
 
   def parseAlerting(unitName: UnitName, rawAlerting: AlertingYaml): YamlValidation[Alerting] =
     parsePrometheusAlerting(unitName, rawAlerting.prometheus).map(Alerting.apply)
 
   def parsePrometheusAlerting(unitName: UnitName, rawPrometheus: PrometheusConfigYaml): YamlValidation[PrometheusConfig] = {
+    import cats.data.Nested
     (
-      rawPrometheus.alerts.asScala.toList.traverseSTrampoline(parsePrometheusAlert).run(Set.empty)._2 |@|
-      rawPrometheus.rules.asScala.toList.traverseSTrampoline(parsePrometheusRule).run(Set.empty)._2
-    )(PrometheusConfig.apply)
+      rawPrometheus.alerts.asScala.toList.traverse(a => Nested(parsePrometheusAlert(a))).value.run(Set.empty).value._2,
+      rawPrometheus.rules.asScala.toList.traverse(r => Nested(parsePrometheusRule(r))).value.run(Set.empty).value._2
+    ).mapN(PrometheusConfig.apply)
+    // (
+    //   rawPrometheus.alerts.asScala.toList.traverse(parsePrometheusAlert).run(Set.empty).value._2,
+    //   rawPrometheus.rules.asScala.toList.traverse(parsePrometheusRule).run(Set.empty).value._2
+    // ).mapN(PrometheusConfig.apply)
     /*
     configV match {
       case Success(config) =>
@@ -356,21 +352,21 @@ object ManifestV1Parser {
     for {
       seen <- State.get[Set[String]]
       name =  rawAlert.alert.toSnakeCase
-      _    <- State.put(seen + name)
+      _    <- State.set(seen + name)
     } yield if (seen.contains(name))
-      YamlError.duplicateAlertName(name).failureNel
+      YamlError.duplicateAlertName(name).invalidNel
     else
-      PrometheusAlert(name, rawAlert.expression).successNel
+      PrometheusAlert(name, rawAlert.expression).validNel
 
   def parsePrometheusRule(rawRule: PrometheusRuleYaml): State[Set[String], YamlValidation[PrometheusRule]] =
     for {
       seen <- State.get[Set[String]]
       name =  rawRule.rule.toSnakeCase
-      _    <- State.put(seen + name)
+      _    <- State.set(seen + name)
     } yield if (seen.contains(name))
-      YamlError.duplicateRuleName(name).failureNel
+      YamlError.duplicateRuleName(name).invalidNel
     else
-      PrometheusRule(name, rawRule.expression).successNel
+      PrometheusRule(name, rawRule.expression).validNel
 
   /**
    *
@@ -378,67 +374,67 @@ object ManifestV1Parser {
   def parse(input: String): NonEmptyList[NelsonError] \/ Manifest = {
 
     def toUnits(list: List[UnitYaml]): NonEmptyList[NelsonError] \/ List[UnitDef] =
-      list.traverse(toUnit).disjunction
+      list.traverse(toUnit).toDisjunction
 
     def toPlans(list: List[PlanYaml]): NonEmptyList[NelsonError] \/ List[Plan] =
-      list.traverse(toPlan).disjunction
+      list.traverse(toPlan).toDisjunction
 
     def toLoadbalancers(list: List[LoadbalancerYaml]): NonEmptyList[NelsonError] \/ List[Loadbalancer] =
-      list.traverse(toLoadbalancer).disjunction
+      list.traverse(toLoadbalancer).toDisjunction
 
     def toNamespaces(list: List[NamespaceYaml], us: List[UnitDef], ps: List[Plan], lbs: List[Loadbalancer]): NonEmptyList[NelsonError] \/ List[Namespace] = {
       def resolvePlan(name: String) =
         ps.find(_.name === name)
-          .toSuccessNel(YamlError.unknownPlanRef(name))
+          .toValidNel(YamlError.unknownPlanRef(name))
 
       def validateOptOut(unit: Manifest.UnitDef)(out: AlertOptOut) =
-        if (unit.alerting.prometheus.alerts.exists(_.alert === out.ref)) out.successNel
-        else YamlError.unknownAlertOptOutRef(unit, out.ref).failureNel
+        if (unit.alerting.prometheus.alerts.exists(_.alert === out.ref)) out.validNel
+        else YamlError.unknownAlertOptOutRef(unit, out.ref).invalidNel
 
       def parseNamespaceName(s: String) =
          NamespaceName.fromString(s)
            .leftMap(e => YamlError.invalidNamespace(s, e.getMessage))
-           .validationNel
+           .toValidatedNel
 
-       import scalaz.Validation.FlatMap._
       list.traverse { n =>
-        val units = n.units.asScala.toList.traverse { ns =>
-          val resolvedUnit =
-            us.find(_.name === ns.ref)
-              .toSuccessNel(YamlError.unknownUnitRef(ns.ref))
+        val units: YamlValidation[List[(String, Set[String])]] = n.units.asScala.toList.traverse { ns =>
+          val resolvedUnit = us.find(_.name === ns.ref).toValidNel(YamlError.unknownUnitRef(ns.ref))
 
-          for {
-            ru <- resolvedUnit
-            rp <- ns.plans.asScala.toList.traverse(resolvePlan)
-            _  <- rp.traverse(_.environment.alertOptOuts.traverse(validateOptOut(ru)))
-          } yield (ru.name, rp.map(_.name).toSet)
+          resolvedUnit.andThen { ru =>
+            ns.plans.asScala.toList.traverse(resolvePlan).andThen { rp =>
+              rp.traverse(_.environment.alertOptOuts.traverse(validateOptOut(ru))).map { _ =>
+                (ru.name, rp.map(_.name).toSet)
+              }
+            }
+          }
         }
 
-        val loadbalancers = n.loadbalancers.asScala.toList.traverse { lb =>
+        val loadbalancers: YamlValidation[List[(String, Option[String])]] = n.loadbalancers.asScala.toList.traverse { lb =>
           val resolveLb =
             lbs.find(_.name == lb.ref).map(_.name)
-              .toSuccessNel(YamlError.unknownLoadbalancerRef(lb.ref))
+              .toValidNel(YamlError.unknownLoadbalancerRef(lb.ref))
 
-           for {
-             rlb <- resolveLb
-             rp <- Option(lb.plan).traverse(resolvePlan)
-           } yield (rlb, rp.map(_.name))
+          resolveLb.andThen { rlb =>
+            Option(lb.plan).traverse(resolvePlan).map { rp =>
+              (rlb, rp.map(_.name))
+            }
+          }
         }
 
-        val name = parseNamespaceName(n.name)
+        val name: YamlValidation[NamespaceName] = parseNamespaceName(n.name)
 
-        (units |@| loadbalancers |@| name)((u,l,n) => Namespace(n, u.toSet, l.toSet)).disjunction
+        (units, loadbalancers, name).mapN((u,l,n) => Namespace(n, u.toSet, l.toSet)).toDisjunction
       }
     }
 
     for {
-      mf <- fromYaml[ManifestYaml](input).leftMap(NonEmptyList(_))
+      mf <- fromYaml[ManifestYaml](input).leftMap(NonEmptyList.of(_))
       us <- toUnits(mf.units.asScala.toList)
       ps <- toPlans(mf.plans.asScala.toList)
       lb <- toLoadbalancers(mf.loadbalancers.asScala.toList)
       ns <- toNamespaces(mf.namespaces.asScala.toList, us, ps, lb)
       ts  = toDeploymentTarget(mf.datacenters)
-      no <- parseNotifications(mf.notifications).disjunction
+      no <- parseNotifications(mf.notifications).toDisjunction
     } yield Manifest(us, ps, lb, ns, ts, no)
   }
 }

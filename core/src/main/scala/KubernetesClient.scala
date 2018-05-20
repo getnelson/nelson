@@ -234,7 +234,7 @@ object KubernetesJson {
                 "name"      := stackName.toString,
                 "image"     := image.toString,
                 "env"       := plan.environment.bindings,
-                "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.list))
+                "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.toList))
               )), resources(plan.environment.cpu, plan.environment.memory)), livenessProbe(plan.environment.healthChecks)))
             )
           )
@@ -257,7 +257,7 @@ object KubernetesJson {
       ),
       "spec" := argonaut.Json(
         "selector" := argonaut.Json("stackName" := stackName.toString),
-        "ports"    := servicePortsJson(ports.toList.flatMap(_.nel.list)),
+        "ports"    := servicePortsJson(ports.toList.flatMap(_.nel.toList)),
         "type"     := "ClusterIP"
       )
     )

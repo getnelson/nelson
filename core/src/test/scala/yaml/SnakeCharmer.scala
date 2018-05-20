@@ -25,7 +25,7 @@ trait SnakeCharmer {
   def loadManifest(yamlPath: String): Either[Throwable, Manifest] =
     (for {
       yml <- Util.loadResourceAsString(yamlPath)
-      out <- IO.fromEither(toEither(ManifestParser.parse(yml).leftMap(e => new RuntimeException(s"parse failed! ${e.list.map(_.getMessage).mkString("\n")} ${e.map(_.getStackTrace).list.flatten.mkString("\n")}"))))
+      out <- IO.fromEither(toEither(ManifestParser.parse(yml).leftMap(e => new RuntimeException(s"parse failed! ${e.toList.map(_.getMessage).mkString("\n")} ${e.map(_.getStackTrace).toList.flatten.mkString("\n")}"))))
     } yield out).attempt.unsafeRunSync()
 
 }

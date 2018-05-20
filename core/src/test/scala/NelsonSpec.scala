@@ -16,10 +16,13 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.NonEmptyList
-import org.scalatest.BeforeAndAfterEach
-import storage.StoreOp
+import nelson.storage.StoreOp
+
+import cats.data.NonEmptyList
+
 import org.scalacheck._
+
+import org.scalatest.BeforeAndAfterEach
 
 class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
   import Datacenter._
@@ -119,7 +122,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
       notifications = notifications.NotificationSubscriptions.empty
     )
     val res = Nelson.commit("ab", NamespaceName("foo"), Nil, Manifest.Versioned(m)).run(config).attempt.unsafeRunSync()
-    res should equal (Left(MultipleValidationErrors(NonEmptyList(
+    res should equal (Left(MultipleValidationErrors(NonEmptyList.of(
         DeploymentCommitFailed("namespace foo is not declared in namespaces stanza of the manifest"),
         DeploymentCommitFailed("unit ab is not declared for namespace foo")))))
   }
@@ -231,14 +234,14 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "list deployments" in {
     val deps = Nelson.listDeployments(config.datacenters.map(_.name),
-      NonEmptyList(NamespaceName("dev")), NonEmptyList(DeploymentStatus.Ready), Some("conductor")).run(config).unsafeRunSync()
+      NonEmptyList.of(NamespaceName("dev")), NonEmptyList.of(DeploymentStatus.Ready), Some("conductor")).run(config).unsafeRunSync()
 
     deps.map(_._3.stackName.toString).toSet should equal (Set("conductor--1-1-1--abcd"))
   }
 
   it should "list units by status" in {
     val units = Nelson.listUnitsByStatus(config.datacenters.map(_.name),
-      NonEmptyList(NamespaceName("dev", List("sandbox"))), NonEmptyList(DeploymentStatus.Ready)).run(config).unsafeRunSync()
+      NonEmptyList.of(NamespaceName("dev", List("sandbox"))), NonEmptyList.of(DeploymentStatus.Ready)).run(config).unsafeRunSync()
 
     units.map(_._4).toSet should equal (Set(
       ServiceName("service-b", FeatureVersion(6,1)),

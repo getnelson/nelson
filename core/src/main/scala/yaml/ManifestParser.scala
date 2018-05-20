@@ -17,7 +17,8 @@
 package nelson
 package yaml
 
-import scalaz.{ NonEmptyList, \/ }
+import cats.data.NonEmptyList
+import scalaz.\/
 
 object ManifestParser extends YamlParser[Manifest] {
 

@@ -16,9 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.data.NonEmptyList
 import cats.effect.IO
 
-import scalaz.{ NonEmptyList, \/ }
+import scalaz.\/
 import scala.reflect.ClassTag
 
 import org.yaml.snakeyaml.Yaml
@@ -34,7 +35,7 @@ object YamlParser {
 }
 abstract class YamlParser[A] {
   def parseIO(input: String): IO[A] =
-    IO.fromEither(parse(input).leftMap(e => LoadError(e.list.map(_.getMessage).mkString(","))).toEither)
+    IO.fromEither(parse(input).leftMap(e => LoadError(e.toList.map(_.getMessage).mkString(","))).toEither)
 
   def parse(input: String): NonEmptyList[NelsonError] \/ A
 }

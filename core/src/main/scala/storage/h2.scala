@@ -20,9 +20,13 @@ package storage
 import argonaut._
 
 import cats.~>
+import cats.data.{NonEmptyList, OptionT, ValidatedNel}
 import cats.effect.IO
+import cats.implicits._
 
-import doobie.imports._
+import doobie._
+import doobie.Fragments.{in, whereAnd}
+import doobie.implicits._
 
 import java.net.URI
 import java.time.Instant
@@ -31,8 +35,7 @@ import journal._
 
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
-import scalaz.{~> => _, _}
-import scalaz.Scalaz._
+import scalaz.{~> => _, OptionT => _, NonEmptyList => _, _}
 
 final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   import StoreOp._
@@ -142,9 +145,10 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     """
     select
       .query[AuditRow]
-      .process
+      .stream
       .map(auditLogFromRow)
-      .list
+      .compile
+      .toList
   }
 
   def listAuditLogByReleaseId(limit: Long, offset: Long, releaseId: Long): ConnectionIO[List[AuditLog]] = {
@@ -158,9 +162,10 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     """
     select
       .query[AuditRow]
-      .process
+      .stream
       .map(auditLogFromRow)
-      .list
+      .compile
+      .toList
   }
 
   def auditLogFromRow(row: AuditRow): AuditLog =
@@ -194,7 +199,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
            FROM PUBLIC.datacenters
            ORDER BY name"""
       .query[String]
-      .list.map(_.toSet)
+      .to[List].map(_.toSet)
 
   type DeploymentRow = (ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef)
 
@@ -203,9 +208,9 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
    */
   def listDeploymentsForUnitByStatus(nsid: ID, name: UnitName, stats: NonEmptyList[DeploymentStatus]): ConnectionIO[Set[Deployment]] = {
     val statusStrings = stats.map(_.toString)
-    implicit val statusesParam: Param[statusStrings.type] = Param.many(statusStrings)
+
     val cio: ConnectionIO[List[Deployment]] = for {
-        dep <- sql"""SELECT d.id,
+        dep <- (fr"""SELECT d.id,
                             d.unit_id,
                             d.namespace_id,
                             d.hash,
@@ -223,17 +228,17 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
                            FROM PUBLIC.deployment_statuses AS x
                            WHERE x.deployment_id = d.id
                            ORDER BY x.id DESC
-                       )
-                     WHERE u.name = ${name}
-                     AND d.namespace_id = ${nsid}
-                     AND ds.state IN (${statusStrings: statusStrings.type})
-                  """.query[DeploymentRow].process.list
+                       )""" ++
+                  whereAnd(fr"u.name = ${name}", fr"d.namespace_id = ${nsid}", in(fr"ds.state", statusStrings))).
+                  query[DeploymentRow].stream.compile.toList
 
         dep2 <- dep.traverse(deploymentFromRow)
       } yield dep2
 
-    cio.map(_.toSet).map(_ <| (d =>
-      log.debug(s"[listDeploymentsForUnitByStatus] found ${d.size} deployments with serviceType ${name} in namespace ${nsid}")))
+    cio.map(_.toSet).map { d =>
+      log.debug(s"[listDeploymentsForUnitByStatus] found ${d.size} deployments with serviceType ${name} in namespace ${nsid}")
+      d
+    }
   }
 
   def findDeployment(stackName: StackName): ConnectionIO[Option[Deployment]] = {
@@ -273,12 +278,15 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
                             expiration_policy
                      FROM PUBLIC.deployments
                      WHERE datacenter=${dc}
-                  """.query[DeploymentRow].process.list
+                  """.query[DeploymentRow].stream.compile.toList
 
         dep2 <- dep.traverse(deploymentFromRow)
       } yield dep2
 
-    cio.map(_.toSet).map(_ <| (d => log.debug(s"[listDeploymentsForDatacenter] returning ${d.size} deployments for datacenter: ${dc}")))
+    cio.map(_.toSet).map{ d =>
+      log.debug(s"[listDeploymentsForDatacenter] returning ${d.size} deployments for datacenter: ${dc}")
+      d
+    }
   }
 
   def createDeploymentResource(deploymentId: ID, name: String, uri: java.net.URI): ConnectionIO[ID] =
@@ -295,7 +303,10 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
           VALUES(${unitId}, ${namespace.id}, ${hash}, ${Instant.now()}, ${wf}, ${plan}, $expPolicy)
        """.update
           .withUniqueGeneratedKeys[ID]("id")
-          .map(_ <| (id => log.info(s"[createDeployment] created a deployment of unit: ${unitId} with hash ${hash} in namespace ${namespace.name}")))
+          .map { id =>
+            log.info(s"[createDeployment] created a deployment of unit: ${unitId} with hash ${hash} in namespace ${namespace.name}")
+            id
+          }
 
   /**
    *
@@ -317,7 +328,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       SELECT name, uri
       FROM PUBLIC.deployment_resources
       where deployment_id = $id
-    """.query[(String,String)].map(x => (x._1, new java.net.URI(x._2))).list.map(_.toSet)
+    """.query[(String,String)].map(x => (x._1, new java.net.URI(x._2))).to[List].map(_.toSet)
   }
 
   /**
@@ -334,12 +345,13 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     ORDER BY s.deployment_id, s.status_time DESC
     """
     .query[(String, Option[String], Instant)]
-    .process
+    .stream
     .map {
       case (state, msg, timestamp) =>
         (DeploymentStatus.fromString(state), msg, timestamp)
     }
-    .list
+    .compile
+    .toList
 
   def getDeployment(id: ID): ConnectionIO[Deployment] = {
     fetchDeployments(
@@ -355,7 +367,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         FROM PUBLIC.deployments
         WHERE id = ${id}
         ORDER BY id DESC
-      """.query[DeploymentRow].process.list).map(_.head)
+      """.query[DeploymentRow].stream.compile.toList).map(_.head)
   }
 
   def getDeploymentByGuid(guid: GUID): ConnectionIO[Option[Deployment]] =
@@ -372,15 +384,15 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         FROM PUBLIC.deployments
         WHERE guid = ${guid}
         ORDER BY id DESC
-      """.query[DeploymentRow].process.list).map(_.headOption)
+      """.query[DeploymentRow].stream.compile.toList).map(_.headOption)
 
   type DeploymentWithStatusRow = (ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef, DeploymentStatusString)
 
   def listDeploymentsForNamespaceByStatus(ns: ID, stats: NonEmptyList[DeploymentStatus], unit: Option[UnitName] = None): ConnectionIO[Set[(Deployment, DeploymentStatus)]] = {
     //  See http://tpolecat.github.io/doobie-0.2.3/05-Parameterized.html#dealing-with-in-clauses
     val statusStrings = stats.map(_.toString)
-    implicit val statusesParam: Param[statusStrings.type] = Param.many(statusStrings)
-    def query1 = sql"""
+
+    def query1 = fr"""
       SELECT
         d.id,
         d.unit_id,
@@ -400,13 +412,10 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
           FROM PUBLIC.deployment_statuses AS x
           WHERE x.deployment_id = d.id
           ORDER BY x.id DESC
-        )
-      WHERE namespace_id = ${ns}
-          AND ds.state IN (${statusStrings: statusStrings.type})
-      ORDER BY id DESC
-    """
+        )""" ++ whereAnd(fr"namespace_id = ${ns}", in(fr"ds.state", statusStrings)) ++
+      fr"ORDER BY id DESC"
 
-    def query2(unitName: UnitName) = sql"""
+    def query2(unitName: UnitName) = fr"""
       SELECT
         d.id,
         d.unit_id,
@@ -428,16 +437,13 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
           ORDER BY x.id DESC
         )
       JOIN PUBLIC.units AS u ON u.id = d.unit_id
-      WHERE u.name = ${unitName}
-          AND namespace_id = ${ns}
-          AND ds.state IN (${statusStrings: statusStrings.type})
-      ORDER BY id DESC
-    """
+      """ ++ whereAnd(fr"u.name = ${unitName}", fr"namespace_id = ${ns}", in(fr"ds.state", statusStrings)) ++
+      fr"ORDER BY id DESC"
 
     val query = (unit match{
       case Some(unitName) => query2(unitName)
       case None => query1
-    }).query[DeploymentWithStatusRow].process.list
+    }).query[DeploymentWithStatusRow].stream.compile.toList
 
     fetchDeploymentsWithStatuses(query)
   }
@@ -474,19 +480,17 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     //  See http://tpolecat.github.io/doobie-0.2.3/05-Parameterized.html#dealing-with-in-clauses
     val statusStrings = statuses.map(_.toString)
 
-    implicit val statusesParam: Param[statusStrings.type] = Param.many(statusStrings)
-    sql"""SELECT u.name, u.version, u.guid
+    (fr"""SELECT u.name, u.version, u.guid
         FROM PUBLIC.units u
         JOIN PUBLIC.deployments d
           ON u.id = d.unit_id
         JOIN PUBLIC.deployment_statuses s
           ON s.deployment_id = d.id
-        WHERE d.namespace_id = $nsid
-          AND s.state IN (${statusStrings: statusStrings.type})
-        ORDER BY u.name ASC
-     """.query[(UnitName, Version, String)].map { case (name, version, guid) =>
+    """ ++ whereAnd(fr"d.namespace_id = ${nsid}", in(fr"s.state", statusStrings)) ++
+    fr"ORDER BY u.name ASC")
+    .query[(UnitName, Version, String)].map { case (name, version, guid) =>
       (guid, ServiceName(name, version.toFeatureVersion))
-    }.vector.map(_.groupBy(_._2).values.map(_.head).toVector) // distinct by ServiceName
+    }.to[Vector].map(_.groupBy(_._2).values.map(_.head).toVector) // distinct by ServiceName
   }
 
   def createManualDeployment(datacenter: Datacenter,
@@ -519,10 +523,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         WHERE u.name = ${serviceType} AND u.version = ${version}
       """.query[ID].option
 
-      getUnitId.flatMap(_.cata(
-        none = insertUnit,
-        some = id => id.point[ConnectionIO]
-      ))
+      getUnitId.flatMap(_.fold(insertUnit)(_.pure[ConnectionIO]))
     }
 
     def insertRelease(v: String) = sql"""
@@ -602,11 +603,14 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
   def listNamespacesForDatacenter(dc: String): ConnectionIO[Set[Namespace]] = {
     (for {
-      nsids <- sql"SELECT id, name FROM PUBLIC.namespaces WHERE datacenter=${dc}".query[(ID, NamespaceName)].list
+      nsids <- sql"SELECT id, name FROM PUBLIC.namespaces WHERE datacenter=${dc}".query[(ID, NamespaceName)].to[List]
       nss = nsids.map {
         case (nsid,nsname) => Namespace(nsid, nsname, dc)
       }
-    } yield nss.toSet).map(_ <| (s => log.debug(s"""[listNamespacesForDatacenter] found namespaces: ${s.map(_.name).mkString("<",",",">")} in datacenter: $dc""")))
+    } yield nss.toSet).map { s =>
+      log.debug(s"""[listNamespacesForDatacenter] found namespaces: ${s.map(_.name).mkString("<",",",">")} in datacenter: $dc""")
+      s
+    }
   }
 
   /**
@@ -616,7 +620,10 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   def createNamespace(dc: String, name: NamespaceName): ConnectionIO[ID] =
     sql"""INSERT INTO PUBLIC.namespaces (datacenter, name)
           VALUES (${dc}, ${name.asString})
-       """.update.withUniqueGeneratedKeys[ID]("id").map(_ <| (id => log.info(s"[createNamespace] created namespace ${name.asString} with id ${id} in datacenter ${dc}")))
+       """.update.withUniqueGeneratedKeys[ID]("id").map { id =>
+      log.info(s"[createNamespace] created namespace ${name.asString} with id ${id} in datacenter ${dc}")
+      id
+    }
 
   def getNamespace(dc: String, nsName: NamespaceName): ConnectionIO[Option[Namespace]] =
     (for {
@@ -626,7 +633,10 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
               WHERE name = ${nsName.asString}
                    AND datacenter = ${dc}""".query[(ID,NamespaceName)].option)
       (id,name) = nsids
-    } yield Namespace(id, name, dc)).run.map(_ <| (ns => log.debug(s"[getNamespace] found ${ns.map(_.id)} as ${nsName.asString} namespace in dc: $dc")))
+    } yield Namespace(id, name, dc)).value.map { ns =>
+      log.debug(s"[getNamespace] found ${ns.map(_.id)} as ${nsName.asString} namespace in dc: $dc")
+      ns
+    }
 
   def getNamespaceByID(id: ID): ConnectionIO[Namespace] =
     for {
@@ -666,16 +676,20 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
             AND r.is_deleted = false
         """
       .query[(Long,String,String,Option[Long],Option[Boolean])]
-      .process
+      .stream
       .map {
       case (id,slug,acc,Some(hid),Some(hactive)) =>
         Repo(id,slug,acc,Option(Hook(hid,hactive))).toOption
       case (id,slug,acc,_,_) =>
         Repo(id,slug,acc,None).toOption
       }
-      .list
+      .compile
+      .toList
       .map(_.flatten)
-      .map(_.headOption).map( _ <| (r => log.debug(s"[findRepository] found ${r.map(_.id)} when looking for ${slug} for user: ${u.name}")))
+      .map(_.headOption).map { r =>
+        log.debug(s"[findRepository] found ${r.map(_.id)} when looking for ${slug} for user: ${u.name}")
+        r
+      }
 
   /**
    * Fetch all repositories for a given owner, that the specified user
@@ -689,14 +703,15 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
           WHERE slug LIKE $constraint
             AND is_deleted = false"""
     .query[(Long,String,Option[String],Option[Long],Option[Boolean])]
-    .process
+    .stream
     .map {
       case (id,slug,acc,Some(hid),hactive) =>
         Repo(id,slug,acc.getOrElse("unknown"),Option(Hook(hid,hactive.getOrElse(false)))).toOption
       case (id,slug,acc,None,hactive) =>
         Repo(id,slug,acc.getOrElse("unknown"),None).toOption
     }
-    .list
+    .compile
+    .toList
     .map(_.flatten)
   }
 
@@ -719,14 +734,15 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
             AND r.hook_is_active = true
             AND r.is_deleted = false"""
     .query[(Long,String,String,Option[Long],Boolean)]
-    .process
+    .stream
     .map {
       case (id,slug,acc,Some(hid),hactive) =>
         Repo(id,slug,acc,Option(Hook(hid,hactive))).toOption
       case (id,slug,acc,None,hactive) =>
         Repo(id,slug,acc,None).toOption
     }
-    .list
+    .compile
+    .toList
     .map(_.flatten)
   }
 
@@ -762,14 +778,12 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
   def deleteRepositories(repos: NonEmptyList[Repo]): ConnectionIO[Unit] = {
     val repoIds = repos.map(_.id)
-    implicit val reposParam: Param[repoIds.type] = Param.many(repoIds)
 
     // soft delete
     val query = sql"""
       UPDATE PUBLIC.repositories
       SET is_deleted = true
-      WHERE id IN (${repoIds: repoIds.type})
-    """
+    """ ++ whereAnd(in(fr"id", repoIds))
 
     query.update.run.map(i => log.debug(s"deleting $repos from repositories"))
   }
@@ -777,7 +791,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   def killRelease(slug: Slug, version: String): ConnectionIO[Throwable \/ Unit] =
     sql"""SELECT id FROM repositories WHERE slug=${slug.toString}""".query[Long].option flatMap {
       case Some(r) => sql"""DELETE FROM releases WHERE repository_id=${r} and version=${version}""".update.run.as(\/.right(()))
-      case None => \/.left[Throwable, Unit](new NoSuchElementException(s"couldn't find a repo with slug: ${slug}")).point[ConnectionIO]
+      case None => \/.left[Throwable, Unit](new NoSuchElementException(s"couldn't find a repo with slug: ${slug}")).pure[ConnectionIO]
   }
 
   /**
@@ -790,8 +804,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   }
 
   def rowToReleased(row: (String,String,Instant,Long,String)): Option[Released] =
-    (Slug.fromString(row._1).toOption |@| Version.fromString(row._2)
-    )((a,b) => Released(a,b,row._3, row._4, new URI(row._5)))
+    (Slug.fromString(row._1).toOption, Version.fromString(row._2)).mapN((a,b) => Released(a,b,row._3, row._4, new URI(row._5)))
 
   // Given a unit name and version find the release event
   def findReleasedByUnitNameAndVersion(un: UnitName, v: Version): ConnectionIO[Option[Released]] = {
@@ -915,17 +928,17 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         ).toQuery0(limit.toLong)
     }
 
-    val result = constraint.process.map {
+    val result = constraint.stream.map {
       case (slug,ver,ts,Some(releaseid),Some(url),Some(uname),ns,hash,deployid,dts,state,dguid) =>
-        (Slug.fromString(slug).toOption |@|
-          Version.fromString(ver) |@|
-          state.map(DeploymentStatus.fromString(_))
-        )((a,b,c) => ReleaseRow(a, b, ts, releaseid, new URI(url), uname, ns, hash, deployid, dts, c, dguid))
+        (Slug.fromString(slug).toOption, Version.fromString(ver), state.map(DeploymentStatus.fromString(_))).mapN { (a,b,c) =>
+          ReleaseRow(a, b, ts, releaseid, new URI(url), uname, ns, hash, deployid, dts, c, dguid)
+        }
       case _ =>
         log.error(s"unexpected non-result when querying for recent repo releases for '$slug'")
         None // TIM: ZOMG so hacky. THROW AWAY ALL THE ERRORS
     }
-    .list
+    .compile
+    .toList
     .map(_.flatten)
 
     val combined: ConnectionIO[Released ==>> List[ReleasedDeployment]] =
@@ -1015,7 +1028,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     for {
       f <- deploymentFromRow((fid,fuid,fns,fhash,fdt,fwf,fp,fguid,fexp))
       t <- deploymentFromRow((tid,tuid,tns,thash,tdt,twf,tp,tguid,texp))
-      b <- TrafficShiftPolicy.fromString(ref).yolo(s"can't parse traffic shift policy $ref").point[ConnectionIO]
+      b <- TrafficShiftPolicy.fromString(ref).yolo(s"can't parse traffic shift policy $ref").pure[ConnectionIO]
     } yield TrafficShift(f, t, b, st, dur, rev)
   }
 
@@ -1023,9 +1036,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   // Both from and to deployments must be in an routable state (i.e. ready or deprecated)
   def getTrafficShiftForServiceName(ns: ID, sn: ServiceName): ConnectionIO[Option[TrafficShift]] = {
     val statuses: NonEmptyList[String] = DeploymentStatus.routable.map(_.toString)
-    implicit val statusesParam: Param[statuses.type] = Param.many(statuses)
     val likeVersion = s"${sn.version.major}.%"
-    val sql = sql"""
+    val sql = (fr"""
        SELECT tb.policy, tbs.start_time, tb.duration, tbr.reverse_time,
            fd.id, fu.id, fd.namespace_id, fd.hash, fd.deploy_time,fd.workflow, fd.plan, fd.guid, fd.expiration_policy,
            td.id, tu.id, td.namespace_id, td.hash, td.deploy_time,td.workflow, td.plan, td.guid, td.expiration_policy
@@ -1042,25 +1054,26 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
        JOIN PUBLIC.deployment_statuses td_ds on td_ds.deployment_id = td.id
        LEFT JOIN PUBLIC.deployment_statuses td_ds2 on td_ds2.deployment_id = td.id and td_ds2.status_time > td_ds.status_time
        JOIN PUBLIC.units tu on td.unit_id = tu.id
-
-       WHERE fu.name = ${sn.serviceType}
-          AND fu.version like ${likeVersion}
-          AND tb.namespace_id=${ns}
-          AND fd_ds.state IN (${statuses: statuses.type})
-          AND fd_ds2.deployment_id IS NULL
-          AND td_ds.state IN (${statuses: statuses.type})
-          AND td_ds2.deployment_id IS NULL
+    """ ++ whereAnd(
+      fr"fu.name = ${sn.serviceType}",
+      fr"fu.version like ${likeVersion}",
+      fr"tb.namespace_id = ${ns}",
+      in(fr"fd_ds.state", statuses),
+      fr"fd_ds2.deployment_id IS NULL",
+      in(fr"td_ds.state", statuses),
+      fr"td_ds2.deployment_id IS NULL"
+    ) ++
+    fr"""
        ORDER BY tbs.start_time DESC
        LIMIT 1
-     """.query[TrafficShiftRow].option
+     """).query[TrafficShiftRow].option
 
     sql.flatMap(_.traverse(trafficShiftFromRow))
   }
 
   private def listDeployments(name: UnitName, likeVersion: String, ns: ID, status: NonEmptyList[DeploymentStatus]): ConnectionIO[List[Deployment]] = {
     val statuses = status.map(_.toString)
-    implicit val statusesParam: Param[statuses.type] = Param.many(statuses)
-    sql"""
+    (fr"""
      SELECT d.id,
             d.unit_id,
             d.namespace_id,
@@ -1074,12 +1087,13 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
      JOIN PUBLIC.units u on d.unit_id = u.id
      JOIN PUBLIC.deployment_statuses ds on ds.deployment_id = d.id
      LEFT JOIN PUBLIC.deployment_statuses ds2 on ds2.deployment_id = d.id and ds2.status_time > ds.status_time
-     WHERE ds.state IN (${statuses: statuses.type})
-        AND d.namespace_id = ${ns}
-        AND u.name = $name
-        AND u.version LIKE $likeVersion
-        AND ds2.deployment_id IS NULL
-    """.query[DeploymentRow].list.flatMap(_.traverse(deploymentFromRow _))
+    """ ++ whereAnd(
+      in(fr"ds.state", statuses),
+      fr"d.namespace_id = ${ns}",
+      fr"u.name = ${name}",
+      fr"u.version LIKE ${likeVersion}",
+      fr"ds2.deployment_id IS NULL"
+    )).query[DeploymentRow].to[List].flatMap(_.traverse(deploymentFromRow _))
   }
 
   /*
@@ -1103,9 +1117,9 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   def getCurrentTargetForServiceName(ns: ID, sn: ServiceName): ConnectionIO[Option[Target]] =
     getTrafficShiftForServiceName(ns, sn) flatMap {
       case Some(t) if t.inProgress(Instant.now) =>
-        t.some.point[ConnectionIO].map(identity)
+        t.some.pure[ConnectionIO].map(identity)
       case Some(t) =>
-        SingletonTarget(t.deploymentTarget).some.point[ConnectionIO].map(identity)
+        SingletonTarget(t.deploymentTarget).some.pure[ConnectionIO].map(identity)
       case _ =>
         getDeploymentsForServiceNameByStatus(sn, ns, DeploymentStatus.routable).map(_.headOption.map(SingletonTarget.apply))
     }
@@ -1155,16 +1169,13 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
           VALUES (${tsid}, ${startTime}, ${from})
         """.update.withUniqueGeneratedKeys[ID]("id")
 
-      getStart(tsid).flatMap(_.cata(
-        none = insert,
-        some = _.point[ConnectionIO]
-      ))
+      getStart(tsid).flatMap(_.fold(insert)(_.pure[ConnectionIO]))
     }
 
     (for {
       tsid <- OptionT(getId)
       id   <- OptionT(start(tsid).map(Option(_)))
-    } yield id).run
+    } yield id).value
   }
 
   /*
@@ -1196,22 +1207,19 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
           VALUES (${tsid}, ${reverseTime})
         """.update.withUniqueGeneratedKeys[ID]("id")
 
-       getReverse(tsid).flatMap(_.cata(
-        none = insert,
-        some = _.point[ConnectionIO]
-      ))
+       getReverse(tsid).flatMap(_.fold(insert)(_.pure[ConnectionIO]))
     }
 
     (for {
       tsid <- OptionT(getId)
       id   <- OptionT(reverse(tsid).map(Option(_)))
-    } yield id).run
+    } yield id).value
   }
 
-  def verifyDeployable(dcName: String, ns: NamespaceName, unit: Manifest.UnitDef): ConnectionIO[ValidationNel[NelsonError, Unit]] = {
+  def verifyDeployable(dcName: String, ns: NamespaceName, unit: Manifest.UnitDef): ConnectionIO[ValidatedNel[NelsonError, Unit]] = {
 
-     def error(e: NelsonError): ConnectionIO[ValidationNel[NelsonError, Unit]] =
-       e.failureNel[Unit].point[ConnectionIO]
+     def error(e: NelsonError): ConnectionIO[ValidatedNel[NelsonError, Unit]] =
+       e.invalidNel[Unit].pure[ConnectionIO]
 
 
     /*
@@ -1219,35 +1227,35 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
      * If not resolved then move up namespace ancestory unil
      * depedency is found or root namespace it hit.
      */
-     def resolveDependency(sn: ServiceName, ns: Datacenter.Namespace): ConnectionIO[ValidationNel[NelsonError, Unit]] = {
+     def resolveDependency(sn: ServiceName, ns: Datacenter.Namespace): ConnectionIO[ValidatedNel[NelsonError, Unit]] = {
 
-        def hasDefaultPort(d: Deployment, sn: ServiceName): ConnectionIO[ValidationNel[NelsonError, Unit]] =
+        def hasDefaultPort(d: Deployment, sn: ServiceName): ConnectionIO[ValidatedNel[NelsonError, Unit]] =
            if (d.unit.ports.exists(_.name == "default"))
-             ().successNel[NelsonError].point[ConnectionIO]
+             ().validNel[NelsonError].pure[ConnectionIO]
            else
              error(MissingDependency(unit.name, dcName, ns.name.asString, sn))
 
        // dependencies must expose a default port and be in ready state
-       def isReady(d: Deployment, sn: ServiceName): ConnectionIO[ValidationNel[NelsonError, Unit]] =
+       def isReady(d: Deployment, sn: ServiceName): ConnectionIO[ValidatedNel[NelsonError, Unit]] =
          getDeploymentStatus(d.id) flatMap {
            case Some(DeploymentStatus.Ready) =>
-             ().successNel[NelsonError].point[ConnectionIO]
+             ().validNel[NelsonError].pure[ConnectionIO]
            case _ =>
              error(DeprecatedDependency(unit.name, dcName, ns.name.asString, sn))
          }
 
-      def checkMinVersion(d: Deployment, sn: ServiceName): ConnectionIO[ValidationNel[NelsonError, Unit]] =
+      def checkMinVersion(d: Deployment, sn: ServiceName): ConnectionIO[ValidatedNel[NelsonError, Unit]] =
         if (d.unit.version.major == sn.version.major && d.unit.version.minor >= sn.version.minor)
-          ().successNel[NelsonError].point[ConnectionIO]
+          ().validNel[NelsonError].pure[ConnectionIO]
         else
           error(MissingDependency(unit.name, dcName, ns.name.asString, sn))
 
-      def validateTarget(d: Deployment, sn: ServiceName): ConnectionIO[ValidationNel[NelsonError, Unit]] =
+      def validateTarget(d: Deployment, sn: ServiceName): ConnectionIO[ValidatedNel[NelsonError, Unit]] =
         for {
           a <- isReady(d, sn)
           b <- hasDefaultPort(d, sn)
           c <- checkMinVersion(d, sn)
-        } yield a +++ b +++ c
+        } yield a combine b combine c
 
       getCurrentTargetForServiceName(ns.id, sn) flatMap {
          case Some(t) =>
@@ -1321,20 +1329,20 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       id <- insertUnit
       _ <- unit.dependencies.toList.traverse_(insertServiceDependency(id))
       _ <- unit.ports.traverse(_.nel.traverse_(insertPort(id)))
-      _ <- unit.resources.traverse_(insertResource(id))
+      _ <- unit.resources.toList.traverse_(insertResource(id))
     } yield ()
   }
 
   def getUnitDependencies(id: ID): ConnectionIO[Set[ServiceName]] =
     sql"""SELECT to_service, to_version FROM unit_dependencies
           WHERE from_unit = ${id}
-       """.query[ServiceName].list.map(_.toSet)
+       """.query[ServiceName].to[List].map(_.toSet)
 
   def getUnitResources(id: ID): ConnectionIO[Set[String]] =
     sql"""SELECT name
           FROM PUBLIC.unit_resources
           WHERE unit_id = ${id}
-       """.query[String].list.map(_.toSet)
+       """.query[String].to[List].map(_.toSet)
 
   def getUnitById(id: ID): ConnectionIO[DCUnit] = {
     val res = for {
@@ -1353,7 +1361,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
   def unitPorts(id: ID): ConnectionIO[Set[Port]] =
     sql"SELECT port, ref, protocol FROM PUBLIC.service_ports WHERE unit = ${id}"
-       .query[Port].list.map(_.toSet)
+       .query[Port].to[List].map(_.toSet)
 
   def unitDependencies(id: ID): ConnectionIO[Set[ServiceName]] =
      sql"""
@@ -1363,9 +1371,12 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         WHERE ud.from_unit=${id}
         """.query[(String,String)].map {
       case (name,versionStr) => FeatureVersion.fromString(versionStr).map(ServiceName(name, _))
-    }.list.map(_.collect{ case Some(sn) => sn })
+    }.to[List].map(_.collect{ case Some(sn) => sn })
      .map(_.toSet)
-     .map(_ <| (sn => log.debug(s"""[unitDependencies] found depedencies: ${sn.mkString("<",",",">")} for unit: $id""")))
+     .map { sn =>
+       log.debug(s"""[unitDependencies] found depedencies: ${sn.mkString("<",",",">")} for unit: $id""")
+       sn
+     }
 
 
   def getUnit(name: String, version: Version): ConnectionIO[Option[DCUnit]] = {
@@ -1380,9 +1391,9 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       for {
         unitRow                <- OptionT(unitRowQ)
         (id,v,name,desc)        = unitRow
-        deps                   <- unitDependencies(id).liftM[OptionT]
-        ports <- unitPorts(id).liftM[OptionT]
-        rs <- getUnitResources(id).liftM[OptionT]
+        deps                   <- OptionT.liftF(unitDependencies(id))
+        ports <- OptionT.liftF(unitPorts(id))
+        rs <- OptionT.liftF(getUnitResources(id))
       } yield DCUnit(
         id,
         name,
@@ -1393,7 +1404,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         ports
       )
 
-    res.run
+    res.value
   }
 
   def countDeploymentsByStatus(since: Long): ConnectionIO[List[(String,Int)]] = {
@@ -1409,7 +1420,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
           )
           WHERE d.deploy_time BETWEEN ${since} AND ${present}
           GROUP BY ds.state
-      """.query[(String,Int)].list
+      """.query[(String,Int)].to[List]
   }
 
   def getMostAndLeastDeployed(since: Long, number: Int, sortOrder: String): ConnectionIO[List[(String,Int)]] = {
@@ -1428,7 +1439,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     val present = Instant.now.getEpochSecond * 1000
     Query[(Long, Long, Int), (String, Int)](sql, None)
       .toQuery0((since, present, number))
-      .list
+      .to[List]
   }
 
   def insertLoadbalancerDeployment(lbid: ID, nsid: ID, hash: String, address: String): ConnectionIO[ID] = {
@@ -1452,7 +1463,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       SELECT port, port_reference, protocol, to_unit_name, to_port_reference
       FROM loadbalancer_routes
       WHERE loadbalancer_id = ${id}
-    """.query[RouteRow].map(rowToRoute).vector
+    """.query[RouteRow].map(rowToRoute).to[Vector]
   }
 
   def getLoadbalancer(name: String, v: MajorVersion): ConnectionIO[Option[DCLoadbalancer]] = {
@@ -1464,8 +1475,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
     (for {
       lb <- OptionT(query)
-      rt <- getLoadbalancerRoutes(lb._1).liftM[OptionT]
-    } yield DCLoadbalancer(lb._1, lb._2, lb._3, rt)).run
+      rt <- OptionT.liftF(getLoadbalancerRoutes(lb._1))
+    } yield DCLoadbalancer(lb._1, lb._2, lb._3, rt)).value
   }
 
   private def loadbalancerRowToDeployment(lb: LoadbalancerRow): ConnectionIO[LoadbalancerDeployment] = {
@@ -1487,8 +1498,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
     (for {
       row <- OptionT(query)
-      lb  <- loadbalancerRowToDeployment(row).liftM[OptionT]
-    } yield lb).run
+      lb  <- OptionT.liftF(loadbalancerRowToDeployment(row))
+    } yield lb).value
   }
 
   def getLoadbalancerDeployment(id: ID): ConnectionIO[Option[LoadbalancerDeployment]] = {
@@ -1501,8 +1512,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
     (for {
       row <- OptionT(query)
-      lb  <- loadbalancerRowToDeployment(row).liftM[OptionT]
-    } yield lb).run
+      lb  <- OptionT.liftF(loadbalancerRowToDeployment(row))
+    } yield lb).value
   }
 
   def getLoadbalancerDeploymentByGUID(guid: GUID): ConnectionIO[Option[LoadbalancerDeployment]] = {
@@ -1515,8 +1526,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
     (for {
       row <- OptionT(query)
-      lb  <- loadbalancerRowToDeployment(row).liftM[OptionT]
-    } yield lb).run
+      lb  <- OptionT.liftF(loadbalancerRowToDeployment(row))
+    } yield lb).value
   }
 
   def listLoadbalancerDeploymentsForNamespace(nsid: ID): ConnectionIO[Vector[LoadbalancerDeployment]] = {
@@ -1525,7 +1536,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       FROM PUBLIC.loadbalancers lb
       JOIN PUBLIC.loadbalancer_deployments d on lb.id = d.loadbalancer_id
       WHERE d.namespace_id = ${nsid}
-    """.query[LoadbalancerRow].vector
+    """.query[LoadbalancerRow].to[Vector]
 
     for {
       lbs <- query
@@ -1544,10 +1555,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     val major = lbv.version.toMajorVersion
     val lb = Manifest.Versioned.unwrap(lbv)
 
-    getLoadbalancerId(lb.name, major).flatMap(_.cata(
-      none = insertLoadbalancer(lb, major, repoId),
-      some = id => id.point[ConnectionIO]
-    ))
+    getLoadbalancerId(lb.name, major).flatMap(_.fold(insertLoadbalancer(lb, major, repoId))(_.pure[ConnectionIO]))
   }
 
   def insertLoadbalancer(lb: Manifest.Loadbalancer, version: MajorVersion, repoId: ID): ConnectionIO[ID] = {

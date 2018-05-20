@@ -16,6 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.data.{NonEmptyList, ValidatedNel}
 import cats.effect.IO
 import cats.instances.list._
 import nelson.CatsHelpers._
@@ -26,7 +27,7 @@ import java.time.Instant
 
 import journal.Logger
 
-import scalaz._
+import scalaz.{NonEmptyList => _, _}
 import Scalaz._
 
 object Nelson {
@@ -108,7 +109,7 @@ object Nelson {
       nelson.filterNot(n => github.exists(e => e.id == n.id))
 
     def deleteRepos(repos: List[Repo]): StoreOpF[Unit] =
-      repos.toNel.cata(r => StoreOp.deleteRepositories(r), ().point[StoreOpF])
+      NonEmptyList.fromList(repos).cata(r => StoreOp.deleteRepositories(r), ().point[StoreOpF])
 
     def insertRepos(repos: List[Repo]): StoreOpF[Unit] =
       StoreOp.insertOrUpdateRepositories(repos) >> StoreOp.linkRepositoriesToUser(repos,session.user)
@@ -220,7 +221,7 @@ object Nelson {
    *
    * Anything else is just not cricket.
    */
-  def fetchRepoManifestAndValidateDeployable(slug: Slug, tagOrBranch: String = "master"): NelsonK[ValidationNel[NelsonError, Manifest]] = {
+  def fetchRepoManifestAndValidateDeployable(slug: Slug, tagOrBranch: String = "master"): NelsonK[ValidatedNel[NelsonError, Manifest]] = {
     for {
       cfg <- config
       token = cfg.git.systemAccessToken
@@ -766,7 +767,7 @@ object Nelson {
    */
   def deprecateService(sn: Datacenter.ServiceName): NelsonK[Unit] = Kleisli { cfg =>
 
-    val ready = NonEmptyList(DeploymentStatus.Ready) // only deprecate deployments in the ready state
+    val ready = NonEmptyList.of(DeploymentStatus.Ready) // only deprecate deployments in the ready state
 
     def deprecateDeployment(d: Deployment): storage.StoreOpF[Unit] =
       storage.StoreOp.createDeploymentStatus(d.id, DeploymentStatus.Deprecated, None)

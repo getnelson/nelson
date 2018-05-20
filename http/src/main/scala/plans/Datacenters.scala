@@ -17,16 +17,20 @@
 package nelson
 package plans
 
+import _root_.argonaut._, Argonaut._
+
+import cats.effect.IO
+import cats.implicits._
+import nelson.CatsHelpers._
+
 import org.http4s._
 import org.http4s.dsl.io._
 import org.http4s.argonaut._
 import org.http4s.headers.Location
-import _root_.argonaut._, Argonaut._
-import cats.effect.IO
-import nelson.CatsHelpers._
-import scalaz.{Applicative, \/}
-import scalaz.Scalaz._
+
 import java.time.Instant
+
+import scalaz.syntax.std.option._
 
 final case class Datacenters(config: NelsonConfig) extends Default {
   import nelson.Json._
@@ -151,7 +155,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
    case req @ GET -> Root /"v1" / "datacenters" / dcname / "graph" :? NsO(ns) & IsAuthenticated(_) =>
      ns.map(commaSeparatedStringToNamespace) match {
        case Some(ns) =>
-         Applicative[\/[InvalidNamespaceName, ?]].sequence(ns).fold(
+         ns.sequence.fold(
            e => BadRequest(e.getMessage),
            n => json(Nelson.getRoutingGraphs(dcname, n)))
        case None =>
@@ -174,7 +178,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
-          ns => ns.sequenceU.fold(
+          ns => ns.sequence.fold(
             e => BadRequest(e.getMessage),
             n => json(Nelson.listDeployments(datacenters, n, statuses, units)))
         )
@@ -285,7 +289,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
-          ns => ns.sequenceU.fold(
+          ns => ns.sequence.fold(
             e => BadRequest(e.getMessage),
             n => json(Nelson.listUnitsByStatus(datacenters, n, statuses)))
         )

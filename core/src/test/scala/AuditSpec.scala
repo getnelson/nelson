@@ -19,14 +19,13 @@ package nelson
 import argonaut._, Argonaut._
 
 import cats.effect.{Effect, IO}
+import cats.implicits._
 
 import fs2.Stream
 
-import doobie.imports._
+import doobie.implicits._
 
 import org.scalatest._
-
-import scalaz._, Scalaz._
 
 class AuditSpec extends NelsonSuite with BeforeAndAfterEach {
 

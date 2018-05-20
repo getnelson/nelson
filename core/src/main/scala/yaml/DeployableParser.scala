@@ -17,7 +17,8 @@
 package nelson
 package yaml
 
-import scalaz.{ NonEmptyList, \/ }
+import cats.data.NonEmptyList
+import scalaz.\/
 import java.util.{Map => JMap}
 import scala.beans.BeanProperty
 
@@ -34,7 +35,7 @@ object DeployableParser extends YamlParser[Manifest.Deployable] {
   import scala.collection.JavaConverters._
 
   def parse(input: String): NonEmptyList[NelsonError] \/ Manifest.Deployable =
-    v1.parse(input).leftMap(NonEmptyList(_))
+    v1.parse(input).leftMap(NonEmptyList.of(_))
 
   object v1 {
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.Product", "org.brianmckenna.wartremover.warts.Serializable"))

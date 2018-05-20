@@ -18,7 +18,7 @@ package nelson
 
 import storage.StoreOp
 
-import scalaz.NonEmptyList
+import cats.data.NonEmptyList
 import org.scalactic.TypeCheckedTripleEquals
 
 class DeploymentTableSpec extends NelsonSuite with TypeCheckedTripleEquals {
@@ -83,7 +83,7 @@ class DeploymentTableSpec extends NelsonSuite with TypeCheckedTripleEquals {
   it should "list deployed units" in {
     import DeploymentStatus._
     val ns = StoreOp.getNamespace(testName, nsName).foldMap(config.storage).unsafeRunSync().get
-    val units = StoreOp.listUnitsByStatus(ns.id,NonEmptyList(Ready, Deprecated)).foldMap(config.storage).unsafeRunSync()
+    val units = StoreOp.listUnitsByStatus(ns.id,NonEmptyList.of(Ready, Deprecated)).foldMap(config.storage).unsafeRunSync()
 
     // ignore the other parts of the data here, as they are random
     units.map(_._2).toSet should === (
@@ -149,7 +149,7 @@ class DeploymentTableSpec extends NelsonSuite with TypeCheckedTripleEquals {
     all.toSet should === (expected1)
 
     StoreOp.createDeploymentStatus(ab222.id, DeploymentStatus.Terminated, None).foldMap(config.storage).unsafeRunSync()
-    val terminated: Set[(Deployment, DeploymentStatus)] = StoreOp.listDeploymentsForNamespaceByStatus(ns.id, NonEmptyList(DeploymentStatus.Terminated)).foldMap(config.storage).unsafeRunSync()
+    val terminated: Set[(Deployment, DeploymentStatus)] = StoreOp.listDeploymentsForNamespaceByStatus(ns.id, NonEmptyList.of(DeploymentStatus.Terminated)).foldMap(config.storage).unsafeRunSync()
     val expected2: Set[(Deployment, DeploymentStatus)] = Set((ab222,DeploymentStatus.Terminated))
     terminated.toSet should === (expected2)
   }

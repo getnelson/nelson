@@ -21,21 +21,22 @@ import nelson.Manifest.{apply => _, _}
 import nelson.storage.{StoreOp, StoreOpF}
 import nelson.routing._
 
+import cats.data.{NonEmptyList, Validated, ValidatedNel}
 import cats.effect.IO
+import cats.implicits._
 import nelson.CatsHelpers._
 
-import scalaz._
-import Scalaz._
+import scalaz.{NonEmptyList => _, _}
 
 object CycleDetection {
-  type Valid[A] = ValidationNel[NelsonError, A]
+  type Valid[A] = ValidatedNel[NelsonError, A]
   type ReverseRoutingGraph = RoutingGraph
 
   def validateNoCycles(
     m: Manifest,
     cfg: NelsonConfig): DisjunctionT[IO, NonEmptyList[NelsonError], Unit] = {
     val op: StoreOpF[Valid[Unit]] = detect(m, cfg)
-    DisjunctionT(op.foldMap(cfg.storage).map(_.disjunction))
+    DisjunctionT(op.foldMap(cfg.storage).map(_.toDisjunction))
   }
 
   // Detecting definite cycles:
@@ -84,7 +85,7 @@ object CycleDetection {
     namespaces: List[Manifest.Namespace]): StoreOpF[List[Datacenter.Namespace]] = {
     // These namespaces have been validated by the validations this validation depends on.
     // We effectively ignore the optionality of the storage with _.flatten.
-    datacenters.traverseM[StoreOpF, Datacenter.Namespace] { dc =>
+    datacenters.flatTraverse[StoreOpF, Datacenter.Namespace] { dc =>
       namespaces.traverse[StoreOpF, Option[Datacenter.Namespace]] { n =>
         StoreOp.getNamespace(dc.name, n.name)
       }.map(_.flatten)
@@ -126,13 +127,11 @@ object CycleDetection {
     reachables: List[DCUnit],
     namespace: Datacenter.Namespace
   ): Valid[Unit] = {
-    u.dependencies.toList.traverse_[Valid] {
+    u.dependencies.toList.traverse_[Valid, Unit] {
       case (dep, depVersion) =>
         reachables
           .filter(isViolation(dep, depVersion))
-          .traverse_[Valid] { dcu =>
-          Validation.failureNel[NelsonError, Unit](err(u, namespace, dcu))
-        }
+          .traverse_[Valid, Unit] { dcu => Validated.invalidNel[NelsonError, Unit](err(u, namespace, dcu)) }
     }
   }
 

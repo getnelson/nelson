@@ -16,10 +16,15 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz._, Scalaz._
+import nelson.storage.StoreOp
+
+import cats.data.NonEmptyList
+import cats.implicits._
+
+import doobie._
+import doobie.implicits._
+
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterEach}
-import storage.StoreOp
 
 class RepoDBSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
 
@@ -38,9 +43,9 @@ class RepoDBSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
   val repo3 = Repo(3, slug3.toString, RepoAccess.Admin.toString, None).toOption.get
 
   def trunc: ConnectionIO[Unit] = (
-    sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run >>
-    sql"TRUNCATE TABLE repositories".update.run >>
-    sql"TRUNCATE TABLE user_repositories".update.run >>
+    sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run *>
+    sql"TRUNCATE TABLE repositories".update.run *>
+    sql"TRUNCATE TABLE user_repositories".update.run *>
     sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run
   ).void
 
@@ -72,7 +77,7 @@ class RepoDBSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
     val repos1 = StoreOp.listRepositoriesWithOwner(user, "org2").foldMap(storage).unsafeRunSync()
     repos1.map(_.id).toSet should equal (Set(repo2.id))
 
-    StoreOp.deleteRepositories(NonEmptyList(repo1,repo2)).foldMap(storage).unsafeRunSync()
+    StoreOp.deleteRepositories(NonEmptyList.of(repo1,repo2)).foldMap(storage).unsafeRunSync()
 
     val repos3 = StoreOp.listRepositoriesWithOwner(user, "org1").foldMap(storage).unsafeRunSync()
     repos3.map(_.id).toSet should equal (Set(repo3.id))
