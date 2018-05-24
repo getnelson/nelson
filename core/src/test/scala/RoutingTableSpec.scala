@@ -16,10 +16,14 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz.syntax.functor._
+import nelson.storage.StoreOp
+
+import cats.syntax.functor._
+
+import doobie.implicits._
+
 import org.scalatest.BeforeAndAfterEach
-import storage.StoreOp
+
 import java.time.Instant
 
 class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {

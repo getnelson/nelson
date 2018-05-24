@@ -17,9 +17,10 @@
 package nelson
 
 import nelson.Manifest.UnitDef
-import scalaz.{@@,NonEmptyList}
-import scalaz.std.string._
-import scalaz.syntax.foldable1._
+import cats.data.NonEmptyList
+import cats.instances.string._
+import cats.syntax.reducible._
+import scalaz.@@
 
 abstract class NelsonError(msg: String) extends RuntimeException {
   override def getMessage: String = msg
@@ -80,10 +81,10 @@ final case class UnsatisfiedDeploymentRequirements(u: Manifest.UnitDef)
   extends NelsonError(s"the input unit did not satisfy the deployment requirements. unit was: $u")
 
 final case class MultipleErrors(errors: NonEmptyList[NelsonError])
-    extends NelsonError("Multiple errors: " + errors.foldMap1(_.getMessage))
+    extends NelsonError("Multiple errors: " + errors.reduceMap(_.getMessage))
 
 final case class MultipleValidationErrors(errors: NonEmptyList[NelsonError])
-  extends NelsonError("Validation errors: " + errors.foldMap1(e => s"${e.getMessage}. "))
+  extends NelsonError("Validation errors: " + errors.reduceMap(e => s"${e.getMessage}. "))
 
 final case class UnexpectedConsulResponse(resp: String)
     extends NelsonError(s"got an unexpected response from consul: $resp")

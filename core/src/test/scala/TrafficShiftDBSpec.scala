@@ -16,14 +16,18 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz._,Scalaz._
-import storage.StoreOp
-import org.scalatest.{BeforeAndAfterEach}
-import scala.concurrent.duration._
-import Datacenter.{StackName}
+import nelson.Datacenter.{StackName}
+import nelson.storage.StoreOp
+
+import cats.implicits._
+
+import doobie.implicits._
+
 import java.time.Instant
-import cats.syntax.either._
+
+import org.scalatest.{BeforeAndAfterEach}
+
+import scala.concurrent.duration._
 
 class TrafficShiftDBSpec extends NelsonSuite with BeforeAndAfterEach {
 
@@ -34,9 +38,9 @@ class TrafficShiftDBSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   override def beforeEach: Unit = {
-   (sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run >>
-    sql"TRUNCATE TABLE traffic_shift_reverse".update.run >>
-    sql"TRUNCATE TABLE traffic_shift_start".update.run >>
+   (sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run *>
+    sql"TRUNCATE TABLE traffic_shift_reverse".update.run *>
+    sql"TRUNCATE TABLE traffic_shift_start".update.run *>
     sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run).void.transact(stg.xa).unsafeRunSync()
   }
 

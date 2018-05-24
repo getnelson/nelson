@@ -16,8 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz._, Scalaz._
+import cats.data.NonEmptyList
 import scala.annotation.tailrec
+import scalaz.{-\/, \/, \/-, Order}
+import scalaz.std.string._
 
 /*
  * Represents a fully qualified namespace path, where 'dev' is the parent
@@ -43,7 +45,7 @@ final case class NamespaceName(private val nel: NonEmptyList[String]) {
         case None => false
       }
 
-    other.parent.cata(p => go(p), false)
+    other.parent.fold(false)(go)
   }
 
   /*
@@ -65,9 +67,9 @@ final case class NamespaceName(private val nel: NonEmptyList[String]) {
 
 object NamespaceName {
 
-  def apply(root: String): NamespaceName = NamespaceName(NonEmptyList.nel(root, Nil))
+  def apply(root: String): NamespaceName = NamespaceName(NonEmptyList.of(root))
 
-  def apply(root: String, rest: List[String]): NamespaceName = NamespaceName(NonEmptyList.nel(root, rest))
+  def apply(root: String, rest: List[String]): NamespaceName = NamespaceName(NonEmptyList.of(root, rest: _*))
 
   private val alphaNumHyphen = """[a-z][a-z-/]*[a-z]""".r
   def fromString(str: String): InvalidNamespaceName \/ NamespaceName = {

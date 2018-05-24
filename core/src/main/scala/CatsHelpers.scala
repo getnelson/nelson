@@ -1,12 +1,12 @@
 package nelson
 
+import cats.Monad
 import cats.arrow.FunctionK
+import cats.data.{Validated, ValidatedNel}
 import cats.free.Free
 import cats.effect.{Effect, IO, Timer}
 import cats.syntax.functor._
 import cats.syntax.monadError._
-
-import doobie.imports.Capture
 
 import fs2.{Pipe, Sink, Stream}
 
@@ -16,8 +16,8 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
 object CatsHelpers {
-  implicit val catsIOScalazInstances: scalaz.Monad[IO] with scalaz.Catchable[IO] with Capture[IO] =
-    new scalaz.Monad[IO] with scalaz.Catchable[IO] with Capture[IO] {
+  implicit val catsIOScalazInstances: scalaz.Monad[IO] with scalaz.Catchable[IO] =
+    new scalaz.Monad[IO] with scalaz.Catchable[IO] {
       def bind[A, B](fa: IO[A])(f: A => IO[B]): IO[B] = fa.flatMap(f)
       def point[A](a: => A): IO[A] = IO(a)
 
@@ -26,8 +26,6 @@ object CatsHelpers {
         case Right(b) => scalaz.\/-(b)
       }
       def fail[A](err: Throwable): IO[A] = IO.raiseError(err)
-
-      def apply[A](a: => A): IO[A] = IO(a)
     }
 
   implicit def catsFreeScalazInstances[F[_]]: scalaz.Monad[Free[F, ?]] =
@@ -36,11 +34,41 @@ object CatsHelpers {
       def point[A](a: => A): Free[F, A] = Free.pure(a)
     }
 
+  implicit def scalazEitherCatsInstances[L]: Monad[scalaz.\/[L, ?]] =
+    new Monad[scalaz.\/[L, ?]] {
+      def flatMap[A, B](fa: scalaz.\/[L, A])(f: A => scalaz.\/[L, B]): scalaz.\/[L, B] =
+        fa.flatMap(f)
+      def pure[A](a: A): scalaz.\/[L, A] = scalaz.\/.right(a)
+
+      @annotation.tailrec
+      def tailRecM[A, B](a: A)(f: A => scalaz.\/[L, Either[A, B]]): scalaz.\/[L, B] =
+        f(a) match {
+          case left@scalaz.-\/(_) => left.asInstanceOf[scalaz.\/[L, B]] // yolo
+          case scalaz.\/-(e) => e match {
+            case Left(a) => tailRecM(a)(f)
+            case right@Right(b) => scalaz.\/.right(b)
+          }
+        }
+    }
+
   implicit class NelsonEnrichedEither[A, B](val either: Either[A, B]) extends AnyVal {
     def toDisjunction: scalaz.\/[A, B] = either match {
       case Left(a)  => scalaz.-\/(a)
       case Right(b) => scalaz.\/-(b)
     }
+  }
+
+  implicit class NelsonEnrichedDisjunction[A, B](val either: scalaz.\/[A, B]) extends AnyVal {
+    def toValidatedNel: ValidatedNel[A, B] =
+      either.fold(Validated.invalidNel, Validated.valid)
+
+    def toValidated: Validated[A, B] =
+      either.fold(Validated.invalid, Validated.valid)
+  }
+
+  implicit class NelsonEnrichedValidated[A, B](val validated: Validated[A, B]) extends AnyVal {
+    def toDisjunction: scalaz.\/[A, B] =
+      validated.fold(scalaz.\/.left, scalaz.\/.right)
   }
 
   implicit class NelsonEnrichedScalazFunctionK[F[_], G[_]](val functionK: scalaz.~>[F, G]) extends AnyVal {

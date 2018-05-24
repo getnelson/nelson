@@ -16,7 +16,8 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{Success,NonEmptyList}
+import cats.data.NonEmptyList
+import cats.data.Validated.Valid
 
 class VerifyDeployableSpec extends NelsonSuite {
   import Datacenter._
@@ -31,14 +32,14 @@ class VerifyDeployableSpec extends NelsonSuite {
   "verifyDeployable" should "think conductor is deployable" in {
     Manifest.verifyDeployable(conductorManifest(ns),
                               List(datacenter(testName)),
-                              config.storage).unsafeRunSync() should be (Success(()))
+                              config.storage).unsafeRunSync() should be (Valid(()))
   }
 
   it should "think undeployable is undeployable" in {
     val left = Manifest.verifyDeployable(undeployable(ns), List(datacenter(testName)), config.storage).unsafeRunSync()
     left.swap.toOption.get match {
       case n: NonEmptyList[NelsonError] =>
-        n.list.map(_.asInstanceOf[MissingDependency].dependency) should contain theSameElementsAs List(ServiceName("nonexistant", FeatureVersion(1,0)), ServiceName("ab", FeatureVersion(10,0)))
+        n.toList.map(_.asInstanceOf[MissingDependency].dependency) should contain theSameElementsAs List(ServiceName("nonexistant", FeatureVersion(1,0)), ServiceName("ab", FeatureVersion(10,0)))
     }
   }
 
@@ -46,13 +47,13 @@ class VerifyDeployableSpec extends NelsonSuite {
     val left = Manifest.verifyDeployable(undeployableDeprecatedDep(ns), List(datacenter(testName)), config.storage).unsafeRunSync()
     left.swap.toOption.get match {
       case n: NonEmptyList[NelsonError] =>
-        n.list.map(_.asInstanceOf[DeprecatedDependency].dependency) should contain theSameElementsAs List(ServiceName("search", FeatureVersion(1,1)))
+        n.toList.map(_.asInstanceOf[DeprecatedDependency].dependency) should contain theSameElementsAs List(ServiceName("search", FeatureVersion(1,1)))
     }
   }
 
   it should "resolve dependencies in upstream namespaces" in {
     val ns2 = Manifest.Namespace(name = NamespaceName("dev", List("sandbox", "rodrigo")), units = Set(), loadbalancers = Set())
     val res = Manifest.verifyDeployable(serviceC2Manifest(ns2), List(datacenter(testName)), config.storage).unsafeRunSync()
-    res should be (Success(()))
+    res should be (Valid(()))
   }
 }

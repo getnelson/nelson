@@ -17,12 +17,13 @@
 package nelson
 package storage
 
+import cats.data.{NonEmptyList, ValidatedNel}
 import cats.free.Free
 import cats.implicits._
 
 import java.time.Instant
 
-import scalaz.{==>>, @@, NonEmptyList, ValidationNel, \/}
+import scalaz.{==>>, @@, \/}
 
 sealed trait StoreOp[A]
 
@@ -187,7 +188,7 @@ object StoreOp {
   def getTrafficShiftForServiceName(nsid: ID, sn: ServiceName): StoreOpF[Option[Datacenter.TrafficShift]] =
     Free.liftF(GetTrafficShiftForServiceName(nsid, sn))
 
-  def verifyDeployable(dcName: String, nsName: NamespaceName, unit: Manifest.UnitDef): StoreOpF[ValidationNel[NelsonError, Unit]] =
+  def verifyDeployable(dcName: String, nsName: NamespaceName, unit: Manifest.UnitDef): StoreOpF[ValidatedNel[NelsonError, Unit]] =
     Free.liftF(VerifyDeployable(dcName, nsName, unit))
 
   def audit[A](a: AuditEvent[A]): StoreOpF[ID] =
@@ -279,7 +280,7 @@ object StoreOp {
   final case class StartTrafficShift(to: ID, from: ID, start: Instant) extends StoreOp[Option[ID]]
   final case class ReverseTrafficShift(id: ID, rev: Instant) extends StoreOp[Option[ID]]
   final case class GetTrafficShiftForServiceName(nsid: ID, sn: ServiceName) extends StoreOp[Option[Datacenter.TrafficShift]]
-  final case class VerifyDeployable(dcName: String, nsName: NamespaceName, unit: Manifest.UnitDef) extends StoreOp[ValidationNel[NelsonError, Unit]]
+  final case class VerifyDeployable(dcName: String, nsName: NamespaceName, unit: Manifest.UnitDef) extends StoreOp[ValidatedNel[NelsonError, Unit]]
   final case class Audit[A](a: AuditEvent[A]) extends StoreOp[ID]
   final case class ListAuditLog(limit: Long, offset: Long, action: Option[String], category: Option[String]) extends StoreOp[List[AuditLog]]
   final case class ListAuditLogByReleaseId(limit: Long, offset: Long, releaseId: Long) extends StoreOp[List[AuditLog]]

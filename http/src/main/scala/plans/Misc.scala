@@ -28,9 +28,9 @@ import org.http4s.{BuildInfo => _, _}
 import org.http4s.dsl.io._
 import org.http4s.argonaut._
 
+import cats.data.Validated.{Invalid, Valid}
 import cats.effect.IO
 import cats.syntax.apply._
-import scalaz.{Failure, Success}
 
 final case class Misc(config: NelsonConfig) extends Default {
   import Misc._
@@ -71,10 +71,10 @@ final case class Misc(config: NelsonConfig) extends Default {
       case Left(errors) =>
         // server error, blame ourselves
         InternalServerError(errors.toString.asJson)
-      case Right(Failure(errors)) =>
+      case Right(Invalid(errors)) =>
         // validation error, blame the user
-        BadRequest(errors.list.map(_.getMessage).mkString("\n\n"))
-      case Right(Success(mf)) =>
+        BadRequest(errors.toList.map(_.getMessage).mkString("\n\n"))
+      case Right(Valid(mf)) =>
         Ok()
     }
 

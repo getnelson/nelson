@@ -29,12 +29,12 @@ import scala.collection.immutable.Set
 import scala.collection.mutable.Map
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
-import scalaz.NonEmptyList
 import scala.language.postfixOps
 import scala.concurrent.duration._
 import java.time.Instant
 
 import cats.~>
+import cats.data.NonEmptyList
 import cats.effect.IO
 
 import fs2.{Sink, Stream}
@@ -113,9 +113,9 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     val storeInterp = mkStoreOp(
       Map("dc0" -> Set(mkNamespace(1L, NamespaceName("dev"), "dc0"), mkNamespace(2L, NamespaceName("qa"), "dc0"), mkNamespace(3L, NamespaceName("prod"), "dc0"))),
-      Map((1L, NonEmptyList(Warming)) -> Set(dep1 -> DeploymentStatus.Warming, dep2 -> DeploymentStatus.Warming),
-          (2L, NonEmptyList(Warming)) -> Set.empty,
-          (3L, NonEmptyList(Warming)) -> Set.empty),
+      Map((1L, NonEmptyList.of(Warming)) -> Set(dep1 -> DeploymentStatus.Warming, dep2 -> DeploymentStatus.Warming),
+          (2L, NonEmptyList.of(Warming)) -> Set.empty,
+          (3L, NonEmptyList.of(Warming)) -> Set.empty),
       Map("s0" -> List(dep1))
     )
 
@@ -166,7 +166,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
     ))
     val stg = mkStoreOp(
       Map("dc0" -> Set(mkNamespace(1L, NamespaceName("dev"), "dc0"))),
-      Map((1L, NonEmptyList(Warming)) -> Set(dep100 -> Warming)),
+      Map((1L, NonEmptyList.of(Warming)) -> Set(dep100 -> Warming)),
       Map("service" -> List(dep100))
     )
     val dc = mkDatacenterWithStorage("dc0")(consul, stg)
@@ -189,7 +189,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     val stg = mkStoreOp(
       Map("dc0" -> Set(mkNamespace(1L, NamespaceName("dev"), "dc0"))),
-      Map((1L, NonEmptyList(Warming)) -> Set(dep102 -> Warming, dep103 -> Warming)),
+      Map((1L, NonEmptyList.of(Warming)) -> Set(dep102 -> Warming, dep103 -> Warming)),
       Map("service" -> List(dep101)),
       Map(dep101.unit.name -> ts)
     )
@@ -216,7 +216,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
     val stg = mkStoreOp(
       Map("dc0" -> Set(mkNamespace(1L, NamespaceName("dev"), "dc0"))),
-      Map((1L, NonEmptyList(Warming)) -> Set(dep102 -> Warming, dep103 -> Warming)),
+      Map((1L, NonEmptyList.of(Warming)) -> Set(dep102 -> Warming, dep103 -> Warming)),
       Map("service" -> List(dep101)),
       Map(dep101.unit.name -> ts)
     )

@@ -25,6 +25,7 @@ import nelson.audit.AuditableInstances.deploymentAuditable
 import nelson.storage.{StoreOp, StoreOpF}
 import nelson.health.{HealthCheckOp, Passing}
 
+import cats.data.NonEmptyList
 import cats.effect.{Effect, IO}
 import cats.syntax.applicativeError._
 import nelson.CatsHelpers._
@@ -37,7 +38,7 @@ import java.time.Instant
 
 import journal.Logger
 
-import scalaz.{NonEmptyList, OptionT}
+import scalaz.OptionT
 import scalaz.syntax.bind._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
@@ -96,7 +97,7 @@ object DeploymentMonitor {
 
   def monitorActionItemsByNamespace(dc: Datacenter, ns: Datacenter.Namespace): IO[List[MonitorActionItem]] =
     for {
-      d  <- StoreOp.listDeploymentsForNamespaceByStatus(ns.id, NonEmptyList(Warming)).foldMap(dc.storage)
+      d  <- StoreOp.listDeploymentsForNamespaceByStatus(ns.id, NonEmptyList.of(Warming)).foldMap(dc.storage)
              .map(_.toList.map(_._1))
       ai <- d.traverse(d => monitorActionItem(dc, d))
     } yield ai
@@ -144,7 +145,7 @@ object DeploymentMonitor {
   // this allows us to sequence traffic shifts in the order they were deployed
   // getDeploymentForServiceNameByStatus returns an ordered list of deployments
   def next(d: Deployment): StoreOpF[Option[Deployment]] =
-    StoreOp.getDeploymentsForServiceNameByStatus(d.unit.serviceName, d.nsid, NonEmptyList(Warming)).map(_.reverse.headOption)
+    StoreOp.getDeploymentsForServiceNameByStatus(d.unit.serviceName, d.nsid, NonEmptyList.of(Warming)).map(_.reverse.headOption)
 
   val counterSink: Sink[IO, MonitorActionItem] =
     Sink { item => count(item) }

@@ -17,11 +17,16 @@
 package nelson
 package plans
 
+import _root_.argonaut._, Argonaut._
+
+import cats.effect.IO
+import cats.implicits._
+import nelson.CatsHelpers._
+
 import org.http4s._
 import org.http4s.dsl.io._
-import _root_.argonaut._, Argonaut._
-import cats.effect.IO
-import scalaz._, Scalaz._
+
+import scalaz.syntax.std.option._
 
 final case class Loadbalancers(config: NelsonConfig) extends Default {
   import Datacenter.{Namespace, LoadbalancerDeployment}
@@ -109,7 +114,7 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
       namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
-          ns => ns.sequenceU.fold(
+          ns => ns.sequence.fold(
             e => BadRequest(e.getMessage),
             n => json(Nelson.listLoadbalancers(datacenters, n)))
         )

@@ -18,12 +18,14 @@ package nelson
 
 import cats.~>
 import cats.effect.IO
+import cats.implicits._
 
 import dispatch.Http
 
 import nelson.notifications.{SlackOp,EmailOp}
 
-import doobie.imports._
+import doobie._
+import doobie.implicits._
 
 import helm.{ConsulOp, HealthCheckResponse}
 
@@ -31,10 +33,9 @@ import java.util.concurrent.{Executors, ThreadFactory}
 
 import knobs._
 
-import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
+import scalaz.IMap
 
-import scalaz.{~> => _, _}
-import Scalaz._
+import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 
 trait NelsonSuite
     extends FlatSpec
@@ -45,21 +46,21 @@ trait NelsonSuite
   val testName: String = getClass.getSimpleName
 
   def trunc: ConnectionIO[Unit] = (
-    sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run >>
-    sql"TRUNCATE TABLE traffic_shifts".update.run >>
-    sql"TRUNCATE TABLE traffic_shift_start".update.run >>
-    sql"TRUNCATE TABLE traffic_shift_reverse".update.run >>
-    sql"TRUNCATE TABLE deployment_statuses".update.run >>
-    sql"TRUNCATE TABLE deployments".update.run >>
-    sql"TRUNCATE TABLE unit_dependencies".update.run >>
-    sql"TRUNCATE TABLE service_ports".update.run >>
-    sql"TRUNCATE TABLE units".update.run >>
-    sql"TRUNCATE TABLE loadbalancer_routes".update.run >>
-    sql"TRUNCATE TABLE loadbalancer_deployments".update.run >>
-    sql"TRUNCATE TABLE loadbalancers".update.run >>
-    sql"TRUNCATE TABLE releases".update.run >>
-    sql"TRUNCATE TABLE namespaces".update.run >>
-    sql"TRUNCATE TABLE datacenters".update.run >>
+    sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run *>
+    sql"TRUNCATE TABLE traffic_shifts".update.run *>
+    sql"TRUNCATE TABLE traffic_shift_start".update.run *>
+    sql"TRUNCATE TABLE traffic_shift_reverse".update.run *>
+    sql"TRUNCATE TABLE deployment_statuses".update.run *>
+    sql"TRUNCATE TABLE deployments".update.run *>
+    sql"TRUNCATE TABLE unit_dependencies".update.run *>
+    sql"TRUNCATE TABLE service_ports".update.run *>
+    sql"TRUNCATE TABLE units".update.run *>
+    sql"TRUNCATE TABLE loadbalancer_routes".update.run *>
+    sql"TRUNCATE TABLE loadbalancer_deployments".update.run *>
+    sql"TRUNCATE TABLE loadbalancers".update.run *>
+    sql"TRUNCATE TABLE releases".update.run *>
+    sql"TRUNCATE TABLE namespaces".update.run *>
+    sql"TRUNCATE TABLE datacenters".update.run *>
     sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run
   ).void
 

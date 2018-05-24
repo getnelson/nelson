@@ -94,9 +94,9 @@ object Actionable {
         def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Throwable \/ Unit] =
           unitw.workflow.deploy(id, hash, unit, plan, dc, ns).foldMap(t).attempt.flatMap(_.fold(
             e => (Workflow.syntax.status(id, DeploymentStatus.Failed,
-                    s"workflow failed because: ${e.getMessage}").foldMap(t) >>
+                    s"workflow failed because: ${e.getMessage}").foldMap(t) *>
                   incCounter(deployFailureCounter)).attempt.map(_.toDisjunction),
-            s => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) >>
+            s => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) *>
                   incCounter(deploySuccessCounter)).attempt.map(_.toDisjunction)
         ))
 
