@@ -26,7 +26,9 @@ import nelson.storage.StoreOp
 import nelson.vault.Vault
 
 import cats.~>
+import cats.data.ValidatedNel
 import cats.effect.IO
+import cats.syntax.option._
 
 import com.amazonaws.regions.Region
 
@@ -41,7 +43,7 @@ import org.http4s.Uri
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.duration._
 
-import scalaz.{Order, ValidationNel}
+import scalaz.Order
 import scalaz.std.set._
 import scalaz.std.string._
 import scalaz.syntax.foldable._
@@ -262,8 +264,8 @@ object Datacenter {
       }
     }
 
-    def validate(str: String): ValidationNel[String, StackName] =
-      (parsePublic(str) \/> "Unable to parse StackName").validationNel
+    def validate(str: String): ValidatedNel[String, StackName] =
+      parsePublic(str).toValidNel("Unable to parse StackName")
   }
 
   final case class ServiceName(serviceType: UnitName, version: FeatureVersion) {

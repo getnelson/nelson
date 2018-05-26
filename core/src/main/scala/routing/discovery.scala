@@ -19,7 +19,9 @@ package routing
 
 
 import helm.ConsulOp
-import scalaz._
+import cats.data.NonEmptyList
+import nelson.CatsHelpers._
+import scalaz.{NonEmptyList => _, _}
 import Scalaz._
 import journal._
 
@@ -91,7 +93,7 @@ object Discovery {
       e.to.deployment.fold[DiscoveryTables](==>>.empty){ to =>
         val path = e.label
         val service = NamedService(to.unit.serviceName.serviceType, path.portName)
-        m.updateAppend(to.namespace.name, ==>>(service -> NonEmptyList(path)))
+        m.updateAppend(to.namespace.name, ==>>(service -> NonEmptyList.of(path)))
       }
     )
   }

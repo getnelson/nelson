@@ -1,8 +1,8 @@
 package nelson
 
-import cats.Monad
+import cats.{Monad, Semigroup}
 import cats.arrow.FunctionK
-import cats.data.{Validated, ValidatedNel}
+import cats.data.{NonEmptyList, Validated, ValidatedNel}
 import cats.free.Free
 import cats.effect.{Effect, IO, Timer}
 import cats.syntax.functor._
@@ -49,6 +49,12 @@ object CatsHelpers {
             case right@Right(b) => scalaz.\/.right(b)
           }
         }
+    }
+
+  implicit def catsNelScalazInstances[A]: scalaz.Semigroup[NonEmptyList[A]] =
+    new scalaz.Semigroup[NonEmptyList[A]] {
+      def append(f1: NonEmptyList[A], f2: => NonEmptyList[A]): NonEmptyList[A] =
+        Semigroup[NonEmptyList[A]].combine(f1, f2)
     }
 
   implicit class NelsonEnrichedEither[A, B](val either: Either[A, B]) extends AnyVal {

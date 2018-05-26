@@ -18,7 +18,8 @@ package nelson
 
 package object routing {
   import storage._
-  import scalaz.{==>>,NonEmptyList,RWST}
+  import cats.data.NonEmptyList
+  import scalaz.{==>>,RWST}
   import scalaz.std.list._
   import quiver.Graph
   import nelson.CatsHelpers._

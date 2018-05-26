@@ -97,9 +97,9 @@ class DiscoveryTableSpec extends NelsonSuite {
     val dt: DiscoveryTable = suTable.get.lookup(NamespaceName("dev")).get
     val sn = dt.lookup(NamedService("inventory", "default")).get.map(_.stack.stackName.toString)
     val po = dt.lookup(NamedService("inventory", "default")).get.map(_.port)
-    val we = dt.lookup(NamedService("inventory", "default")).get.map(_.weight).list.sum
+    val we = dt.lookup(NamedService("inventory", "default")).get.map(_.weight).toList.sum
 
-    sn.list.toSet should be(Set("inventory--1-2-2--ffff", "inventory--1-2-3--ffff"))
+    sn.toList.toSet should be(Set("inventory--1-2-2--ffff", "inventory--1-2-3--ffff"))
     we should be(100)
   }
 }
