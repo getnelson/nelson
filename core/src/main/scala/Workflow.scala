@@ -33,7 +33,7 @@ import helm.ConsulOp
 
 import scala.concurrent.duration.FiniteDuration
 
-import scalaz.{Free => _, _}
+import scalaz.{@@, OptionT}
 
 /**
  * Workflows must be defined in terms of a particular type of UnitDef

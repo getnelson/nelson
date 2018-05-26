@@ -19,8 +19,8 @@ package routing
 
 import storage._
 import quiver.{LNode,LEdge}
-import scalaz._
-import Scalaz._
+import scalaz.{==>>, Order}
+import scalaz.Scalaz._
 import journal._
 import CatsHelpers._
 

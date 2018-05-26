@@ -28,7 +28,8 @@ object Json {
   import Datacenter._
   import concurrent.duration._
   import health.HealthStatus
-  import scalaz._, Scalaz._
+  import scalaz.{@@, ==>>, Tag}
+  import scalaz.Scalaz._
 
   implicit lazy val UriToJson: EncodeJson[URI] =
     implicitly[EncodeJson[String]].contramap(_.toString)

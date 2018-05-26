@@ -25,7 +25,7 @@ import fs2.Pipe
 import java.time.Instant
 import journal.Logger
 
-import scalaz._, Scalaz._
+import scalaz.Scalaz._
 
 /**
  * The GarbageCollector is a process that periodically traverses the

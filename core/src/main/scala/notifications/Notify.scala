@@ -27,8 +27,8 @@ import nelson.CatsHelpers._
 
 import journal._
 
-import scalaz.{~> => _, _}
-import Scalaz._
+import scalaz.{@@, OptionT}
+import scalaz.Scalaz._
 
 object Notify {
 

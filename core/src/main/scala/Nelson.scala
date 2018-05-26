@@ -27,8 +27,8 @@ import java.time.Instant
 
 import journal.Logger
 
-import scalaz.{NonEmptyList => _, _}
-import Scalaz._
+import scalaz.{~>, @@, ==>>, \/, -\/, \/-, EitherT, Kleisli, OptionT}
+import scalaz.Scalaz._
 
 object Nelson {
   import Datacenter._

@@ -18,7 +18,7 @@ package nelson
 
 import scalaz.\/
 import ca.mrvisser.sealerate
-import scalaz._, Scalaz._
+import scalaz.Scalaz._
 
 final case class Repo(
   /* e.g. 1296269 */

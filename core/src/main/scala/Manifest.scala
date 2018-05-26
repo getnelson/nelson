@@ -33,7 +33,7 @@ import java.net.URI
 
 import scala.concurrent.duration._
 
-import scalaz.{~> => _, NonEmptyList => _, _}
+import scalaz.{@@, Foldable, Kleisli, Monoid, Tag}
 import scalaz.Scalaz._
 
 final case class Manifest(

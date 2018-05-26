@@ -35,7 +35,7 @@ import journal._
 
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
-import scalaz.{~> => _, OptionT => _, NonEmptyList => _, _}
+import scalaz.{@@, ==>>, \/, Order}
 
 final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   import StoreOp._

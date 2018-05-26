@@ -19,7 +19,7 @@ package crypto
 
 import AuthFailure._
 
-import scalaz._
+import scalaz.\/
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import java.security.AlgorithmParameters

@@ -21,8 +21,8 @@ package routing
 import helm.ConsulOp
 import cats.data.NonEmptyList
 import nelson.CatsHelpers._
-import scalaz.{NonEmptyList => _, _}
-import Scalaz._
+import scalaz.{==>>, Foldable}
+import scalaz.Scalaz._
 import journal._
 
 object Discovery {

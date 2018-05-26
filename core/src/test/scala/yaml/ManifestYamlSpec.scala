@@ -17,7 +17,7 @@
 package nelson
 package yaml
 
-import scalaz._, Scalaz._
+import scalaz.Scalaz._
 import org.scalatest.{FlatSpec,Matchers}
 import scala.concurrent.duration._
 import cats.instances.either._

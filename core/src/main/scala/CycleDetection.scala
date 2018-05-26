@@ -26,7 +26,7 @@ import cats.effect.IO
 import cats.implicits._
 import nelson.CatsHelpers._
 
-import scalaz.{NonEmptyList => _, _}
+import scalaz.DisjunctionT
 
 object CycleDetection {
   type Valid[A] = ValidatedNel[NelsonError, A]

@@ -23,8 +23,7 @@ import nelson.CatsHelpers._
 
 import fs2.{Scheduler, Stream}
 
-import scalaz._
-import Scalaz._
+import scalaz.Scalaz._
 
 import journal.Logger
 import helm.ConsulOp

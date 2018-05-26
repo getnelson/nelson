@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz._,Scalaz._
+import scalaz.Scalaz._
 import storage.StoreOp
 import nelson.CatsHelpers._
 

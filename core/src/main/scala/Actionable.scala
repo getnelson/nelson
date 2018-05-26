@@ -31,7 +31,7 @@ import io.prometheus.client.Counter
 
 import java.time.Instant
 
-import scalaz.{~> => _, _}
+import scalaz.{@@, \/, Kleisli, OptionT}
 import scalaz.Scalaz._
 
 /**
