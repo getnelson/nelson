@@ -23,13 +23,13 @@ import nelson.routing.Discovery
 
 import cats.~>
 import cats.effect.{Effect, IO}
-import cats.syntax.applicativeError._
+import cats.implicits._
 import nelson.CatsHelpers._
 
 import fs2.{Scheduler, Sink, Stream}
 
 import scala.util.control.NonFatal
-import scalaz.{-\/, Kleisli, \/, \/-}
+import scalaz.Kleisli
 import scalaz.std.list._
 import scalaz.std.option.optionSyntax._
 import scalaz.syntax.traverse._
@@ -53,7 +53,7 @@ object Sweeper {
   final case class UnclaimedResources(n: Int)
   final case object SingleUnclaimedResource
 
-  type SweeperHelmOp = (Datacenter, UnclaimedResources \/ ConsulOp.ConsulOpF[Unit])
+  type SweeperHelmOp = (Datacenter, Either[UnclaimedResources,ConsulOp.ConsulOpF[Unit]])
   type SweeperHelmOps = List[SweeperHelmOp]
 
   def cleanupLeakedConsulDiscoveryKeys(cfg: NelsonConfig): IO[SweeperHelmOps] =
@@ -66,13 +66,13 @@ object Sweeper {
 
         items = for {
           (key, sno) <- keys.map(k => k -> Discovery.stackNameFrom(k))
-          deleteKey <- sno.cata(sn =>
-            Some(sn).filterNot(stackNames.contains).map(_ => \/-(key)).toList, List(-\/(SingleUnclaimedResource))
+          deleteKey <- sno.cata[List[Either[SingleUnclaimedResource.type, String]]](sn =>
+            Some(sn).filterNot(stackNames.contains).map(_ => Right(key)).toList, List(Left(SingleUnclaimedResource))
           )
         } yield deleteKey
 
-        deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.kvDelete).map(op => dc -> \/-(op))
-        unclaimedResource = dc -> -\/(UnclaimedResources(items.count(_.isLeft)))
+        deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.kvDelete).map(op => dc -> Right(op))
+        unclaimedResource = dc -> Left(UnclaimedResources(items.count(_.isLeft)))
 
       } yield deleteOps :+ unclaimedResource
     }
@@ -89,10 +89,10 @@ object Sweeper {
 
   def sweeperSink(implicit unclaimedResourceTracker: Kleisli[IO, (Datacenter, Int), Unit]): Sink[IO, SweeperHelmOp] =
     Sink {
-      case (dc, -\/(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) recoverWith {
+      case (dc, Left(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to track unclaimed resources", e))
       }
-      case (dc, \/-(op)) => helm.run(dc.consul, op) recoverWith {
+      case (dc, Right(op)) => helm.run(dc.consul, op) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to perform consul operation", e))
       }
     }

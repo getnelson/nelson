@@ -17,24 +17,22 @@
 package nelson
 
 import org.scalatest._, Matchers._
-import scalaz.{\/,\/-}
 import nelson.plans.UI
-import nelson.CatsHelpers._
 
 class UISpec extends FlatSpec {
 
-  def loadSVGFixture(path: String): Throwable \/ String =
+  def loadSVGFixture(path: String): Either[Throwable, String] =
     (for {
       xml <- Util.loadResourceAsString(path)
       // _ = println(xml)
-    } yield xml).attempt.unsafeRunSync().toDisjunction
+    } yield xml).attempt.unsafeRunSync()
 
 
   "svg badges" should "match the refrence approved fixtures" in {
     val results: List[Boolean] = DeploymentStatus.all.toList
       .map(s => s -> UI.badge(s)).map { case (status, xml) =>
         loadSVGFixture(s"/badges/${status.toString}.svg") match {
-          case \/-(x) => x.toString == UI.badge(status).toString
+          case Right(x) => x.toString == UI.badge(status).toString
           case _ => false
         }
       }

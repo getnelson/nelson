@@ -26,6 +26,7 @@ import journal.Logger
 
 import cats.data.{Kleisli, OptionT}
 import cats.effect.IO
+import cats.implicits._
 import nelson.CatsHelpers._
 import scalaz.Order
 import scalaz.syntax.monad._

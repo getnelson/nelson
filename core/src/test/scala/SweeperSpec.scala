@@ -27,7 +27,6 @@ import nelson.storage.StoreOp.{ListDeploymentsForNamespaceByStatus, ListNamespac
 
 import cats.~>
 import cats.effect.IO
-import scalaz.{-\/, \/-}
 
 class SweeperSpec extends NelsonSuite {
 
@@ -110,8 +109,8 @@ class SweeperSpec extends NelsonSuite {
 
     results.foreach { r =>
       r match {
-        case (dc, -\/(UnclaimedResources(n))) => unclaimedResource = unclaimedResource :+ (dc.name -> n)
-        case (dc, \/-(op)) => helm.run(interp(dc), op).unsafeRunSync()
+        case (dc, Left(UnclaimedResources(n))) => unclaimedResource = unclaimedResource :+ (dc.name -> n)
+        case (dc, Right(op)) => helm.run(interp(dc), op).unsafeRunSync()
       }
     }
 

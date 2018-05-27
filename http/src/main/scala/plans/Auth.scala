@@ -23,7 +23,7 @@ import org.http4s.headers.{Location, `Set-Cookie`}
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
 import cats.effect.IO
-import nelson.CatsHelpers._
+import cats.implicits._
 
 final case class Auth(config: NelsonConfig) extends Default {
   import nelson.Json._
@@ -57,7 +57,7 @@ final case class Auth(config: NelsonConfig) extends Default {
     case req @ POST -> Root / "auth" / "github" =>
       decode[AccessToken](req){ tk =>
         (for {
-          a <- Nelson.createSessionFromGithubToken(tk)(cfg).attempt.unsafeRunSync().toDisjunction
+          a <- Nelson.createSessionFromGithubToken(tk)(cfg).attempt.unsafeRunSync()
           b <- cfg.security.authenticator.serialize(a)
         } yield (a.expiry, b)).fold(
           e => IO.raiseError(new RuntimeException(e.toString)),
@@ -68,7 +68,7 @@ final case class Auth(config: NelsonConfig) extends Default {
     case req @ GET -> Root / "auth" / "exchange" =>
       val code = req.params.getOrElse("code", "unknown")
       (for {
-        a <- Nelson.createSessionFromOAuthCode(code)(cfg).attempt.unsafeRunSync().toDisjunction
+        a <- Nelson.createSessionFromOAuthCode(code)(cfg).attempt.unsafeRunSync()
         b <- cfg.security.authenticator.serialize(a)
       } yield b).fold(
         e => IO.raiseError(new RuntimeException(e.toString)),

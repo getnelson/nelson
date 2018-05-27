@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import cats.data.{NonEmptyList, ValidatedNel}
+import cats.data.{EitherT, NonEmptyList, ValidatedNel}
 import cats.effect.IO
 import cats.instances.list._
 import nelson.CatsHelpers._
@@ -27,7 +27,7 @@ import java.time.Instant
 
 import journal.Logger
 
-import scalaz.{~>, @@, ==>>, \/, -\/, \/-, EitherT, Kleisli, OptionT}
+import scalaz.{~>, @@, ==>>, Kleisli, OptionT}
 import scalaz.Scalaz._
 
 object Nelson {
@@ -816,33 +816,29 @@ object Nelson {
    */
   def reverseTrafficShift(guid: GUID): NelsonK[Datacenter.TrafficShift] = {
 
-    def validate(ts: TrafficShift): String \/ TrafficShift =
-      if (ts.to.guid != guid) -\/(s"deployment ($guid) is not the target for latest traffic shift")
-      else if (ts.reverse.isDefined) -\/("can't reverse a traffic shift that's already been reversed")
-      else if (!ts.inProgress(Instant.now)) -\/("can't reverse a traffic shift that is currently not in progress")
-      else \/-(ts)
+    def validate(ts: TrafficShift): Either[String, TrafficShift] =
+      if (ts.to.guid != guid) Left(s"deployment ($guid) is not the target for latest traffic shift")
+      else if (ts.reverse.isDefined) Left("can't reverse a traffic shift that's already been reversed")
+      else if (!ts.inProgress(Instant.now)) Left("can't reverse a traffic shift that is currently not in progress")
+      else Right(ts)
 
-    def reverse(ts: TrafficShift): StoreOpF[String \/ ID] = {
-      val prog = for {
-        id <- OptionT(StoreOp.reverseTrafficShift(ts.to.id, Instant.now))
-                .toRight("unable to start traffic shift reverse")
-      } yield id
-
-      prog.run
+    def reverse(ts: TrafficShift): StoreOpF[Either[String, ID]] = {
+      val prog = OptionT(StoreOp.reverseTrafficShift(ts.to.id, Instant.now)).toCatsRight("unsable to start traffic shift reverse")
+      prog.value
     }
 
     Kleisli { cfg =>
 
       val prog = for {
         dep <- OptionT(StoreOp.getDeploymentByGuid(guid))
-                .toRight(s"deployment with guid $guid not found")
+                .toCatsRight(s"deployment with guid $guid not found")
         ts  <- OptionT(StoreOp.getTrafficShiftForServiceName(dep.nsid, dep.unit.serviceName))
-                .toRight(s"unable to find traffic shift for to deployment ${dep.stackName}")
+                .toCatsRight(s"unable to find traffic shift for to deployment ${dep.stackName}")
         _   <- EitherT(validate(ts).point[StoreOpF])
         _   <- EitherT(reverse(ts))
       } yield ts
 
-      prog.run.foldMap(cfg.storage)
+      prog.value.foldMap(cfg.storage)
        .flatMap(_.fold(e => IO.raiseError(InvalidTrafficShiftReverse(e)), r => IO.pure(r)))
     }
   }

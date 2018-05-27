@@ -18,11 +18,10 @@ package nelson
 package yaml
 
 import cats.data.NonEmptyList
-import scalaz.\/
 
 object ManifestParser extends YamlParser[Manifest] {
 
-  def parse(input: String): NonEmptyList[NelsonError] \/ Manifest =
+  def parse(input: String): Either[NonEmptyList[NelsonError], Manifest] =
     ManifestV1Parser.parse(input)
     // or loadV2(input)
     // or loadV3(input)

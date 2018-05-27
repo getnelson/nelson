@@ -16,7 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson.yaml
 
-import scalaz.\/
 import nelson.Manifest
 import scala.util.parsing.combinator._
 
@@ -54,7 +53,7 @@ object PortParser {
    * Create a new instance for every usage, as the scala parsers are
    * not thread safe. This was not fixed until 2.12. See SI-4929
    */
-  def parse(input: String): Throwable \/ Manifest.Port =
+  def parse(input: String): Either[Throwable, Manifest.Port] =
     (new PortParser).parse(input)
 }
 class PortParser extends JavaTokenParsers {
@@ -67,10 +66,10 @@ class PortParser extends JavaTokenParsers {
     case (n ~ _ ~ p ~ _ ~ t) => Manifest.Port(n,p,t)
   }
 
-  def parse(input: String): Throwable \/ Manifest.Port =
+  def parse(input: String): Either[Throwable, Manifest.Port] =
     parseAll(parser, input) match {
-      case Success(result, _) => \/.right(result)
-      case Failure(msg, _) => \/.left(PortParser.Error(msg))
-      case Error(msg, _) => \/.left(PortParser.Error(msg))
+      case Success(result, _) => Right(result)
+      case Failure(msg, _) => Left(PortParser.Error(msg))
+      case Error(msg, _) => Left(PortParser.Error(msg))
     }
 }

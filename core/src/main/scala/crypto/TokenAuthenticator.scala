@@ -17,8 +17,6 @@
 package nelson
 package crypto
 
-import scalaz.\/
-
 /**
  * A [[TokenAuthenticator]] can authenticate with a provided encoded token
  * and can serialize a decoded token.
@@ -38,5 +36,5 @@ trait TokenAuthenticator[SerializedToken, DeserializedToken] {
    * @return an error message (String) if serialization fails,
    *  or the serialized token if serialization succeeds.
    */
-  def serialize(token: DeserializedToken): String \/ SerializedToken
+  def serialize(token: DeserializedToken): Either[String, SerializedToken]
 }

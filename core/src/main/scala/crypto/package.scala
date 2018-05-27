@@ -17,10 +17,9 @@
 package nelson
 
 import journal.Logger
-import scalaz.\/
 
 package object crypto {
-  type AuthResult[A] = AuthFailure \/ A
+  type AuthResult[A] = Either[AuthFailure, A]
   type AuthEnv = AuthEnvironment[AuthResult]
 
   private[crypto] val log: Logger = Logger[this.type]

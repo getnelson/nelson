@@ -1,8 +1,7 @@
 package nelson
 
-import cats.{Monad, Semigroup}
-import cats.arrow.FunctionK
-import cats.data.{NonEmptyList, Validated, ValidatedNel}
+import cats.Semigroup
+import cats.data.{EitherT, NonEmptyList}
 import cats.free.Free
 import cats.effect.{Effect, IO, Timer}
 import cats.syntax.functor._
@@ -34,59 +33,18 @@ object CatsHelpers {
       def point[A](a: => A): Free[F, A] = Free.pure(a)
     }
 
-  implicit def scalazEitherCatsInstances[L]: Monad[scalaz.\/[L, ?]] =
-    new Monad[scalaz.\/[L, ?]] {
-      def flatMap[A, B](fa: scalaz.\/[L, A])(f: A => scalaz.\/[L, B]): scalaz.\/[L, B] =
-        fa.flatMap(f)
-      def pure[A](a: A): scalaz.\/[L, A] = scalaz.\/.right(a)
-
-      @annotation.tailrec
-      def tailRecM[A, B](a: A)(f: A => scalaz.\/[L, Either[A, B]]): scalaz.\/[L, B] =
-        f(a) match {
-          case left@scalaz.-\/(_) => left.asInstanceOf[scalaz.\/[L, B]] // yolo
-          case scalaz.\/-(e) => e match {
-            case Left(a) => tailRecM(a)(f)
-            case right@Right(b) => scalaz.\/.right(b)
-          }
-        }
-    }
-
   implicit def catsNelScalazInstances[A]: scalaz.Semigroup[NonEmptyList[A]] =
     new scalaz.Semigroup[NonEmptyList[A]] {
       def append(f1: NonEmptyList[A], f2: => NonEmptyList[A]): NonEmptyList[A] =
         Semigroup[NonEmptyList[A]].combine(f1, f2)
     }
 
-  implicit class NelsonEnrichedEither[A, B](val either: Either[A, B]) extends AnyVal {
-    def toDisjunction: scalaz.\/[A, B] = either match {
-      case Left(a)  => scalaz.-\/(a)
-      case Right(b) => scalaz.\/-(b)
-    }
-  }
-
-  implicit class NelsonEnrichedDisjunction[A, B](val either: scalaz.\/[A, B]) extends AnyVal {
-    def toValidatedNel: ValidatedNel[A, B] =
-      either.fold(Validated.invalidNel, Validated.valid)
-
-    def toValidated: Validated[A, B] =
-      either.fold(Validated.invalid, Validated.valid)
-  }
-
-  implicit class NelsonEnrichedValidated[A, B](val validated: Validated[A, B]) extends AnyVal {
-    def toDisjunction: scalaz.\/[A, B] =
-      validated.fold(scalaz.\/.left, scalaz.\/.right)
-  }
-
-  implicit class NelsonEnrichedScalazFunctionK[F[_], G[_]](val functionK: scalaz.~>[F, G]) extends AnyVal {
-    def asCats: FunctionK[F, G] = new FunctionK[F, G] {
-      def apply[A](fa: F[A]): G[A] = functionK(fa)
-    }
-  }
-
-  implicit class NelsonEnrichedCatsFunctionK[F[_], G[_]](val functionK: FunctionK[F, G]) extends AnyVal {
-    def asScalaz: scalaz.~>[F, G] = new scalaz.~>[F, G] {
-      def apply[A](fa: F[A]): G[A] = functionK(fa)
-    }
+  implicit class NelsonEnrichedOptionT[F[_], A](val fa: scalaz.OptionT[F, A]) extends AnyVal {
+    def toCatsRight[B](b: => B)(implicit F: scalaz.Functor[F]): EitherT[F, B, A] =
+      EitherT(F.map(fa.run) {
+        case Some(a) => Right(a)
+        case None    => Left(b)
+      })
   }
 
   implicit class NelsonEnrichedIO[A](val io: IO[A]) extends AnyVal {

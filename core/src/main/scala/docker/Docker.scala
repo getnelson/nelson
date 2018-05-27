@@ -88,8 +88,6 @@ class Docker(cfg: DockerConfig, scheduler: ScheduledExecutorService, ec: Executi
     }
 }
 
-import scalaz.\/
-
 object Docker {
   type RegistryURI = String
   type Name = String
@@ -149,19 +147,19 @@ object Docker {
      * yourreg.com/namespace/foo@f4sdsf4f
      * yourreg.com/namespace/foo:latest@sdff44f4f
      */
-    def fromString(s: String): Throwable \/ Image =
+    def fromString(s: String): Either[Throwable, Image] =
       s.split(':') match {
         case Array(name) =>
           name.split('@') match {
-            case Array(_) => \/.right(Image(name, None, None))
-            case Array(n,d) => \/.right(Image(n, None, Option(d)))
+            case Array(_) => Right(Image(name, None, None))
+            case Array(n,d) => Right(Image(n, None, Option(d)))
           }
         case Array(name, tag) =>
           tag.split('@') match {
-            case Array(_) => \/.right(Image(name, Option(tag), None))
-            case Array(t,digest) => \/.right(Image(name, Option(t), Option(digest)))
+            case Array(_) => Right(Image(name, Option(tag), None))
+            case Array(t,digest) => Right(Image(name, Option(t), Option(digest)))
           }
-        case _ => \/.left(InvalidDockerImage(s))
+        case _ => Left(InvalidDockerImage(s))
       }
   }
 

@@ -31,7 +31,7 @@ import io.prometheus.client.Counter
 
 import java.time.Instant
 
-import scalaz.{@@, \/, Kleisli, OptionT}
+import scalaz.{@@, Kleisli, OptionT}
 import scalaz.Scalaz._
 
 /**
@@ -91,13 +91,13 @@ object Actionable {
           ()
         }
 
-        def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Throwable \/ Unit] =
+        def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Either[Throwable, Unit]] =
           unitw.workflow.deploy(id, hash, unit, plan, dc, ns).foldMap(t).attempt.flatMap(_.fold(
             e => (Workflow.syntax.status(id, DeploymentStatus.Failed,
                     s"workflow failed because: ${e.getMessage}").foldMap(t) *>
-                  incCounter(deployFailureCounter)).attempt.map(_.toDisjunction),
+                  incCounter(deployFailureCounter)).attempt,
             s => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) *>
-                  incCounter(deploySuccessCounter)).attempt.map(_.toDisjunction)
+                  incCounter(deploySuccessCounter)).attempt
         ))
 
         create(unit, dc, ns, plan, hash, exp, policy).foldMap(cfg.storage).flatMap(_.cata(

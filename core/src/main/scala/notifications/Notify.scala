@@ -23,6 +23,7 @@ import nelson.storage.StoreOp
 
 import cats.~>
 import cats.effect.IO
+import cats.implicits._
 import nelson.CatsHelpers._
 
 import journal._
@@ -49,7 +50,7 @@ object Notify {
     val sn = StackName(name, unit.version, actionConfig.hash)
     val msg = deployedTemplate(actionConfig.datacenter.name,actionConfig.namespace.name,sn)
     val sub = s"Deployed $sn in ${actionConfig.datacenter.name} ${actionConfig.namespace.name.asString}"
-    sendSlack(actionConfig.notifications.slack.map(_.channel), msg)(cfg.slack) >>
+    sendSlack(actionConfig.notifications.slack.map(_.channel), msg)(cfg.slack) productR
     sendEmail(actionConfig.notifications.email.map(_.recipient), sub, msg)(cfg.email)
   }
 

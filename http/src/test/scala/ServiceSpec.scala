@@ -32,7 +32,7 @@ trait ServiceSpec extends NelsonSuite {
     )
   )
 
-  lazy val serialized = config.security.authenticator.serialize(session).valueOr(e => sys.error(e.toString))
+  lazy val serialized = config.security.authenticator.serialize(session).fold(e => sys.error(e.toString), identity)
 
   lazy val cookie = org.http4s.Cookie("nelson.session", serialized,
     path   = Some("/"),

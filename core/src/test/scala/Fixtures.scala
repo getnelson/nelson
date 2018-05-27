@@ -16,13 +16,14 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.implicits._
+
 import java.net.URI
 import java.time.{Instant,ZonedDateTime,ZoneId}
 import scala.util.matching.Regex
 import scala.concurrent.duration._
 
 import org.scalacheck.{ Arbitrary, Gen }
-import scalaz.\/
 
 import nelson.Manifest.ResourceSpec
 
@@ -387,7 +388,7 @@ object Fixtures {
   val genRegex: Gen[Regex] = {
     (for {
       s <- listOf(choose(' ', '~')).map(_.mkString)
-    } yield \/.fromTryCatchNonFatal(s.r).toOption)
+    } yield Either.catchNonFatal(s.r).toOption)
       .retryUntil(_.isDefined)
       .map(_.yolo("bug"))
   }

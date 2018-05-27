@@ -16,7 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.\/
 import ca.mrvisser.sealerate
 import scalaz.Scalaz._
 
@@ -33,7 +32,7 @@ final case class Repo(
   // description: Option[String] = None
 )
 object Repo {
-  def apply(id: Long, slug: String, access: String, hook: Option[Hook]): NelsonError \/ Repo = {
+  def apply(id: Long, slug: String, access: String, hook: Option[Hook]): Either[NelsonError, Repo] = {
     (RepoAccess.fromString(access) |@|
       Slug.fromString(slug)
     )((a,b) => Repo(id,b,a,hook))
@@ -60,10 +59,10 @@ final case class Slug(
     s"$owner/$repository"
 }
 object Slug {
-  def fromString(s: String): NelsonError \/ Slug =
+  def fromString(s: String): Either[NelsonError, Slug] =
     s.split('/') match {
-      case Array(o,r) => \/.right(Slug(o,r))
-      case _          => \/.left(InvalidSlug(s))
+      case Array(o,r) => Right(Slug(o,r))
+      case _          => Left(InvalidSlug(s))
     }
 }
 
@@ -93,9 +92,9 @@ object RepoAccess {
     else if(pull) Pull
     else Forbidden
 
-  def fromString(s: String): NelsonError \/ RepoAccess =
+  def fromString(s: String): Either[NelsonError, RepoAccess] =
     all.find(_.toString.toLowerCase == s.toLowerCase) match {
-      case Some(a) => \/.right(a)
-      case _       => \/.left(InvalidRepoAccess(s))
+      case Some(a) => Right(a)
+      case _       => Left(InvalidRepoAccess(s))
     }
 }

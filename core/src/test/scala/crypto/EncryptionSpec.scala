@@ -18,8 +18,7 @@ package nelson
 package crypto
 
 import autharbitrary.AuthArbitrary._
-
-import scalaz.\/
+import cats.implicits._
 import scodec.bits.ByteVector
 
 class EncryptionSpec extends AuthSpec {
@@ -30,7 +29,7 @@ class EncryptionSpec extends AuthSpec {
         res <- env.decryptor.decrypt(encrypted, env.encryptionKey, iv)
       } yield res
 
-      decrypted should ===(\/.right(originalData))
+      decrypted should ===(Right(originalData))
     }
   }
 
@@ -39,9 +38,9 @@ class EncryptionSpec extends AuthSpec {
       val encryptionKey = env.encryptionKey
       val encrypted = env.encryptor.encrypt(originalData, encryptionKey, iv).toOption.get // YOLO
       val modified = ByteVector("garbage".getBytes)
-      env.decryptor.decrypt(modified, encryptionKey, iv).swap.map(_.isInstanceOf[AuthFailure.EncryptionError]) should ===(\/.right(true))
+      env.decryptor.decrypt(modified, encryptionKey, iv).swap.map(_.isInstanceOf[AuthFailure.EncryptionError]) should ===(Right(true))
       env.decryptor.decrypt(encrypted, encryptionKey, iv) should ===(
-        \/.right(originalData))
+        Right(originalData))
     }
   }
 

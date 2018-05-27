@@ -18,9 +18,10 @@ package nelson
 package crypto
 package protocol
 
+import cats.implicits._
+
 import scodec._
 import scodec.bits.BitVector
-import scalaz.\/
 
 /**
  * Token authenticator that uses Scodec encoding and then base-64 encodes the
@@ -70,18 +71,18 @@ abstract class ScodecTokenAuthenticator[A] extends TokenAuthenticator[String, A]
    * @return an error message on the left if serialization fails, otherwise
    *  a base-64 endoded token on the right.
    */
-  def serialize(token: A): String \/ String =
+  def serialize(token: A): Either[String, String] =
     codec.encode(token).fold(
-      error => \/.left(error.message),
-      bits => \/.right(bits.toBase64))
+      error => Left(error.message),
+      bits => Right(bits.toBase64))
 }
 
 object ScodecTokenAuthenticator {
 
   def toAuthResult[A](attempt: Attempt[DecodeResult[A]]): AuthResult[A] =
     attempt.fold(
-      error => \/.left(errToAuthFailure(error)),
-      r => \/.right(r.value))
+      error => Left(errToAuthFailure(error)),
+      r => Right(r.value))
 
   def errToAuthFailure(err: scodec.Err): AuthFailure = err match {
     case AuthFailureErr(failure, _) => failure
@@ -97,7 +98,7 @@ object ScodecTokenAuthenticator {
    * See {{https://github.com/scodec/scodec-bits/issues/32 the GitHub issue }}.
    */
   def bitVectorFromBase64(base64: String): AuthResult[BitVector] =
-    \/.fromTryCatchNonFatal(
+    Either.catchNonFatal(
       BitVector.view(java.util.Base64.getDecoder.decode(base64))
     ).leftMap(AuthFailure.Base64DecodeFailure.apply)
 }

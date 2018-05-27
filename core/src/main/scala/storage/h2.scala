@@ -35,7 +35,7 @@ import journal._
 
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
-import scalaz.{@@, ==>>, \/, Order}
+import scalaz.{@@, ==>>, Order}
 
 final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   import StoreOp._
@@ -788,10 +788,10 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     query.update.run.map(i => log.debug(s"deleting $repos from repositories"))
   }
 
-  def killRelease(slug: Slug, version: String): ConnectionIO[Throwable \/ Unit] =
+  def killRelease(slug: Slug, version: String): ConnectionIO[Either[Throwable, Unit]] =
     sql"""SELECT id FROM repositories WHERE slug=${slug.toString}""".query[Long].option flatMap {
-      case Some(r) => sql"""DELETE FROM releases WHERE repository_id=${r} and version=${version}""".update.run.as(\/.right(()))
-      case None => \/.left[Throwable, Unit](new NoSuchElementException(s"couldn't find a repo with slug: ${slug}")).pure[ConnectionIO]
+      case Some(r) => sql"""DELETE FROM releases WHERE repository_id=${r} and version=${version}""".update.run.as(Right(()))
+      case None => (Left(new NoSuchElementException(s"couldn't find a repo with slug: ${slug}")): Either[Throwable, Unit]).pure[ConnectionIO]
   }
 
   /**

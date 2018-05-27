@@ -26,7 +26,6 @@ import nelson.notifications._
 import cats.Apply
 import cats.data.{NonEmptyList, State, Validated, ValidatedNel}
 import cats.implicits._
-import nelson.CatsHelpers._
 
 import java.net.URI
 import java.util.{ArrayList => JList}
@@ -34,9 +33,6 @@ import java.util.{ArrayList => JList}
 import scala.beans.BeanProperty
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
-
-import scalaz.\/
-import scalaz.syntax.std.option._
 
 object ManifestV1Parser {
   type YamlValidation[A] = ValidatedNel[YamlError, A]
@@ -90,7 +86,7 @@ object ManifestV1Parser {
       .toValidNel(YamlError.unknownExpirationPolicyRef(name))
 
   def parseURI(raw: String): YamlValidation[URI] =
-    \/.fromTryCatchNonFatal(new URI(raw))
+    Either.catchNonFatal(new URI(raw))
       .leftMap(e => YamlError.invalidURI(raw)).toValidatedNel
 
   def parseSchedule(str: String): YamlValidation[Schedule] =
@@ -136,16 +132,16 @@ object ManifestV1Parser {
     else
       Validated.validNel(i)
 
-  def parseDuration(d: String): YamlError \/ FiniteDuration =
-    \/.fromTryCatchNonFatal {
+  def parseDuration(d: String): Either[YamlError, FiniteDuration] =
+    Either.catchNonFatal {
       val dur = Duration(d)
       FiniteDuration(dur.toMillis, MILLISECONDS)
     }.leftMap(e => YamlError.invalidDuration(d, e.getMessage))
 
   def validateTrafficShiftDuration(dur: String): YamlValidation[FiniteDuration] =
     parseDuration(dur).flatMap(d =>
-      if (d <= 1.minutes || d >= 5.days) \/.left(YamlError.invalidTrafficShiftDuration(dur))
-      else \/.right(d)
+      if (d <= 1.minutes || d >= 5.days) Left(YamlError.invalidTrafficShiftDuration(dur))
+      else Right(d)
     ).toValidatedNel
 
   def validateTrafficShift(raw: TrafficShiftYaml): YamlValidation[TrafficShift] =
@@ -212,21 +208,21 @@ object ManifestV1Parser {
         .leftMap(e => YamlError.invalidPortSpecification(e.getMessage))
         .toValidatedNel
 
-    def toPorts(l: List[Port]): YamlError \/ Ports = {
-      l.foldLeftM[YamlError \/ ?, (Option[Port], List[Port])]((None, Nil)){ case ((defaultMaybe, rest), port) =>
+    def toPorts(l: List[Port]): Either[YamlError, Ports] = {
+      l.foldLeftM[Either[YamlError, ?], (Option[Port], List[Port])]((None, Nil)){ case ((defaultMaybe, rest), port) =>
         if (port.isDefault) {
-          if (defaultMaybe.isDefined) \/.left(multipleDefaultPortError)
-          else \/.right((Some(port), rest))
-        } else \/.right((defaultMaybe, port :: rest))
+          if (defaultMaybe.isDefined) Left(multipleDefaultPortError)
+          else Right((Some(port), rest))
+        } else Right((defaultMaybe, port :: rest))
       } flatMap { case (defaultMaybe, rest) =>
-          defaultMaybe.toRightDisjunction(noDefaultPortError).map(Ports(_, rest))
+          defaultMaybe.toRight(noDefaultPortError).map(Ports(_, rest))
       }
     }
 
     def mkPorts(portDeclarations: List[String]): YamlValidation[Ports] =
       (for {
-        portDeclarations <- Option(portDeclarations).toRightDisjunction(NonEmptyList.of(missingProperty("unit.ports")))
-        ports <- portDeclarations.traverse(mkPort).toDisjunction
+        portDeclarations <- Option(portDeclarations).toRight(NonEmptyList.of(missingProperty("unit.ports")))
+        ports <- portDeclarations.traverse(mkPort).toEither
         ports <- toPorts(ports).leftMap(NonEmptyList.of(_))
       } yield ports).toValidated
 
@@ -281,7 +277,7 @@ object ManifestV1Parser {
    * TIM: need to do something better here with errors.
    */
   def toEnvironmentVariable(s: String): Option[EnvironmentVariable] =
-    \/.fromTryCatchNonFatal {
+    Either.catchNonFatal {
       val Array(k,v) = s.split('=')
       EnvironmentVariable(k,v)
     }.toOption
@@ -371,18 +367,18 @@ object ManifestV1Parser {
   /**
    *
    */
-  def parse(input: String): NonEmptyList[NelsonError] \/ Manifest = {
+  def parse(input: String): Either[NonEmptyList[NelsonError], Manifest] = {
 
-    def toUnits(list: List[UnitYaml]): NonEmptyList[NelsonError] \/ List[UnitDef] =
-      list.traverse(toUnit).toDisjunction
+    def toUnits(list: List[UnitYaml]): Either[NonEmptyList[NelsonError], List[UnitDef]] =
+      list.traverse(toUnit).toEither
 
-    def toPlans(list: List[PlanYaml]): NonEmptyList[NelsonError] \/ List[Plan] =
-      list.traverse(toPlan).toDisjunction
+    def toPlans(list: List[PlanYaml]): Either[NonEmptyList[NelsonError], List[Plan]] =
+      list.traverse(toPlan).toEither
 
-    def toLoadbalancers(list: List[LoadbalancerYaml]): NonEmptyList[NelsonError] \/ List[Loadbalancer] =
-      list.traverse(toLoadbalancer).toDisjunction
+    def toLoadbalancers(list: List[LoadbalancerYaml]): Either[NonEmptyList[NelsonError], List[Loadbalancer]] =
+      list.traverse(toLoadbalancer).toEither
 
-    def toNamespaces(list: List[NamespaceYaml], us: List[UnitDef], ps: List[Plan], lbs: List[Loadbalancer]): NonEmptyList[NelsonError] \/ List[Namespace] = {
+    def toNamespaces(list: List[NamespaceYaml], us: List[UnitDef], ps: List[Plan], lbs: List[Loadbalancer]): Either[NonEmptyList[NelsonError], List[Namespace]] = {
       def resolvePlan(name: String) =
         ps.find(_.name === name)
           .toValidNel(YamlError.unknownPlanRef(name))
@@ -423,7 +419,7 @@ object ManifestV1Parser {
 
         val name: YamlValidation[NamespaceName] = parseNamespaceName(n.name)
 
-        (units, loadbalancers, name).mapN((u,l,n) => Namespace(n, u.toSet, l.toSet)).toDisjunction
+        (units, loadbalancers, name).mapN((u,l,n) => Namespace(n, u.toSet, l.toSet)).toEither
       }
     }
 
@@ -434,7 +430,7 @@ object ManifestV1Parser {
       lb <- toLoadbalancers(mf.loadbalancers.asScala.toList)
       ns <- toNamespaces(mf.namespaces.asScala.toList, us, ps, lb)
       ts  = toDeploymentTarget(mf.datacenters)
-      no <- parseNotifications(mf.notifications).toDisjunction
+      no <- parseNotifications(mf.notifications).toEither
     } yield Manifest(us, ps, lb, ns, ts, no)
   }
 }
