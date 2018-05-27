@@ -18,7 +18,6 @@ import nelson.Manifest.{Loadbalancer, UnitDef, Versioned}
 import nelson.Nelson.NelsonK
 import nelson.Versionable.AllOps
 
-import scalaz.@@
 package object nelson {
 
   import argonaut.{Parse,DecodeJson}
@@ -55,6 +54,12 @@ package object nelson {
   type LoadbalancerRef = String
   type DNSName = String
   type DeploymentStatusString = String
+
+/** Copied and adapted from Scalaz's Tag implementation.
+  * https://github.com/scalaz/scalaz/blob/v7.1.17/core/src/main/scala/scalaz/package.scala
+  */
+  private[this] type Tagged[A, T] = { type Tag = T; type Self = A; }
+  type @@[T, Tag] = Tagged[T, Tag]
 
   /**
    * Given we're mostly parsing string results to task, make a simple decoder

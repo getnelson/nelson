@@ -23,8 +23,6 @@ import cats.implicits._
 
 import java.time.Instant
 
-import scalaz.@@
-
 import scala.collection.immutable.SortedMap
 
 sealed trait StoreOp[A]

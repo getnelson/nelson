@@ -16,8 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{@@, Tag}
-
 final case class TaskGroupAllocation(
   id: String,
   name: String,

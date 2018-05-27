@@ -102,8 +102,6 @@ trait RoutingFixtures {
 
   import scala.concurrent.duration._
 
-  import scalaz.@@
-
   def insertFixtures(name: String, namespaceName: String = "dev"): StoreOpF[Manifest.Namespace] = {
 
     val devNs = NamespaceName(namespaceName)

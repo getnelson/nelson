@@ -33,8 +33,6 @@ import helm.ConsulOp
 
 import scala.concurrent.duration.FiniteDuration
 
-import scalaz.@@
-
 /**
  * Workflows must be defined in terms of a particular type of UnitDef
  * they target, and an output of the workflow. By having a workflow

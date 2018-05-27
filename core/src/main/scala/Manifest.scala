@@ -30,8 +30,6 @@ import java.net.URI
 
 import scala.concurrent.duration._
 
-import scalaz.{@@, Tag}
-
 final case class Manifest(
   units: List[UnitDef],
   plans: List[Plan],

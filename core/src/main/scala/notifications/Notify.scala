@@ -28,8 +28,6 @@ import cats.implicits._
 
 import journal._
 
-import scalaz.@@
-
 object Notify {
 
   def deployedTemplate(dc: DatacenterRef, ns: NamespaceName, sn: StackName): String =

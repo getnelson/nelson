@@ -29,8 +29,6 @@ import journal.Logger
 
 import scala.collection.immutable.SortedMap
 
-import scalaz.@@
-
 object Nelson {
   import Datacenter._
   import scala.concurrent.ExecutionContext
@@ -45,7 +43,7 @@ object Nelson {
   /**
    * NelsonK[U] provides us with a context that accepts a configuration and gives us a cats IO[U]
    * NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and gives us an F[IO, U]
-   *    this gives us the flexibility of defining a monadic function that yields scalaz streams of
+   *    this gives us the flexibility of defining a monadic function that yields FS2 streams of
    *    IO and U as emitted values (e.g. Stream[IO, U], Sink[IO, U])
    */
   type NelsonK[U] = Kleisli[IO, NelsonConfig, U]

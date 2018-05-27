@@ -36,8 +36,6 @@ import journal._
 import scala.collection.immutable.SortedMap
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
-import scalaz.@@
-
 final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   import StoreOp._
   import Datacenter._

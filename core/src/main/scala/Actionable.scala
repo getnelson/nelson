@@ -32,8 +32,6 @@ import io.prometheus.client.Counter
 
 import java.time.Instant
 
-import scalaz.@@
-
 /**
  * An Actionable is something that can be "acted" upon in the context
  * of a datacenter and namespace. In Nelson this typically means deploying

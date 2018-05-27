@@ -20,7 +20,6 @@ import nelson.Manifest.UnitDef
 import cats.data.NonEmptyList
 import cats.instances.string._
 import cats.syntax.reducible._
-import scalaz.@@
 
 abstract class NelsonError(msg: String) extends RuntimeException {
   override def getMessage: String = msg
