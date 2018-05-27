@@ -18,11 +18,10 @@ package nelson
 
 package object routing {
   import storage._
-  import cats.data.NonEmptyList
-  import scalaz.RWST
-  import scalaz.std.list._
+  import cats.Applicative
+  import cats.data.{NonEmptyList, RWST}
+  import cats.implicits._
   import quiver.Graph
-  import nelson.CatsHelpers._
   import scala.collection.immutable.SortedMap
 
   import Datacenter._
@@ -62,6 +61,12 @@ package object routing {
   type GraphBuildT[F[_],A] = RWST[F,RoutingTables,List[String],RoutingGraph,A]
 
   // this is a value which has all of the MonadReader (ask),
-  // MonadState (get,put,modify) syntax for our RWST
-  val graphBuild = RWST.rwstMonad[StoreOpF,RoutingTables,List[String],RoutingGraph]
+  // MonadState (get,put,modify) syntax for our RWST for better type inference
+  object graphBuild {
+    def modify(f: RoutingGraph => RoutingGraph): GraphBuild[Unit] = RWST.modify(f)
+    def ask: GraphBuild[RoutingTables] = RWST.ask
+    def liftF[F[_]: Applicative, A](fa: F[A]): GraphBuildT[F, A] = RWST.liftF(fa)
+    def tell(l: List[String]): GraphBuild[Unit] = RWST.tell(l)
+    def get: GraphBuild[RoutingGraph] = RWST.get
+  }
 }

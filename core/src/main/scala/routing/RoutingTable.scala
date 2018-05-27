@@ -20,11 +20,9 @@ package routing
 import storage._
 import quiver.{LNode,LEdge}
 import cats.Order
-import cats.instances.string._
+import cats.implicits._
 import scala.collection.immutable.SortedMap
-import scalaz.Scalaz._
 import journal._
-import CatsHelpers._
 
 object RoutingTable {
   import Datacenter._
@@ -69,8 +67,8 @@ object RoutingTable {
   private def addLoadbalancerDependency(from: LoadbalancerDeployment)(r: Manifest.Route): GraphBuild[Unit] =
     for {
       rts <- graphBuild.ask
-      ns  <- StoreOp.getNamespaceByID(from.nsid).liftM[GraphBuildT]
-      d   <- rts.get(ns.name).flatMap(_.get((r.destination.name, from.loadbalancer.version))).point[StoreOpF].liftM[GraphBuildT]
+      ns  <- graphBuild.liftF(StoreOp.getNamespaceByID(from.nsid))
+      d   <- graphBuild.liftF(rts.get(ns.name).flatMap(_.get((r.destination.name, from.loadbalancer.version))).pure[StoreOpF])
       _   <- d.fold(graphBuild.tell(List(s"missing ${r.destination.name} dependency for ${from.stackName}")))(t => addTarget(RoutingNode(from))(t))
     } yield ()
 
@@ -89,7 +87,7 @@ object RoutingTable {
     def addDefault(ns: Namespace): GraphBuild[Unit] =
       for {
         rt <- graphBuild.ask
-        d  <- resolveDefault(ns.name, rt).point[StoreOpF].liftM[GraphBuildT]
+        d  <- graphBuild.liftF(resolveDefault(ns.name, rt).pure[StoreOpF])
         _  <- d.fold(graphBuild.tell(List(s"missing $sn dependency for ${from.stackName}")))(t => addTarget(RoutingNode(from))(t))
       } yield ()
 
@@ -102,7 +100,7 @@ object RoutingTable {
     def addDownstream(ns: Namespace): GraphBuild[Unit] =
       for {
         rt <- graphBuild.ask
-        ds <- resolveDownstream(ns, rt).point[StoreOpF].liftM[GraphBuildT]
+        ds <- graphBuild.liftF(resolveDownstream(ns, rt).pure[StoreOpF])
         _  <- ds.traverse(t => addTarget(RoutingNode(from))(t))
       } yield ()
 
@@ -151,16 +149,16 @@ object RoutingTable {
       ds.filter(!_.unit.ports.isEmpty)
         .map(x => (x.unit.name, x.unit.version.toMajorVersion)).toSet
 
-    st.foldLeft[StoreOpF[RoutingTable]](SortedMap.empty[ServiceTarget, Target].point[StoreOpF]) { (s, x) =>
+    st.foldLeft[StoreOpF[RoutingTable]](SortedMap.empty[ServiceTarget, Target].pure[StoreOpF]) { (s, x) =>
       for {
         m <- s
         t <- StoreOp.getCurrentTargetForServiceName(ns.id, ServiceName(x._1, x._2.minFeatureVersion))
-      } yield t.cata(t => m + ((x, t)), m)
+      } yield t.fold(m)(t => m + ((x, t)))
     }
   }
 
   private def generateRoutingTables(ds: List[Deployment]): StoreOpF[RoutingTables] = {
-    ds.groupBy(_.namespace).foldLeft[StoreOpF[RoutingTables]](SortedMap.empty[NamespaceName, RoutingTable].point[StoreOpF]) { (s, x) =>
+    ds.groupBy(_.namespace).foldLeft[StoreOpF[RoutingTables]](SortedMap.empty[NamespaceName, RoutingTable].pure[StoreOpF]) { (s, x) =>
       val (ns, d) = x
       for {
         m  <- s
@@ -170,14 +168,14 @@ object RoutingTable {
   }
 
   private def getDeployments(ns: Set[Namespace]): StoreOpF[List[Deployment]] =
-    ns.toList.traverseM { n =>
+    ns.toList.flatTraverse { n =>
       StoreOp.listDeploymentsForNamespaceByStatus(n.id, DeploymentStatus.routable)
         .map(_.map(_._1))
         .map(_.toList)
     }
 
   private def getLoadbalancers(ns: Set[Namespace]): StoreOpF[List[LoadbalancerDeployment]] =
-    ns.toList.traverseM { n =>
+    ns.toList.flatTraverse { n =>
       StoreOp.listLoadbalancerDeploymentsForNamespace(n.id).map(_.toList)
     }
 
@@ -189,7 +187,7 @@ object RoutingTable {
       gr   <- addEdges.run(rts, seed)
     } yield {
       gr._1.foreach(e => log.error("ERROR calculating dependency graph: "+ e))
-      gr._3
+      gr._2
     }
 
   /*
@@ -198,15 +196,15 @@ object RoutingTable {
   def outgoingRoutingGraph(d: Deployment): StoreOpF[RoutingGraph] = {
 
     def dependencies(n: Namespace): StoreOpF[Vector[Deployment]] =
-      d.unit.dependencies.toVector.traverseM { sn =>
+      d.unit.dependencies.toVector.flatTraverse { sn =>
         StoreOp.getCurrentTargetForServiceName(n.id, sn)
-          .map(_.cata(_.deployments, Vector()))
+          .map(_.fold(Vector.empty[Deployment])(_.deployments))
       }
 
     for {
       ud <- upDownNamespaces(d.namespace)
       ns  = ud + d.namespace
-      ds <- ns.toVector.traverseM(n => dependencies(n))
+      ds <- ns.toVector.flatTraverse(n => dependencies(n))
       gr <- generateGraph(d :: ds.toList, Nil)
     } yield gr
   }
