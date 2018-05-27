@@ -19,10 +19,8 @@ package nelson
 import alerts._
 import helm.ConsulOp
 import nelson.Datacenter.StackName
-import nelson.CatsHelpers._
 import nelson.test._
 import org.scalatest.prop.Checkers
-import nelson.CatsHelpers._
 import Manifest._
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 

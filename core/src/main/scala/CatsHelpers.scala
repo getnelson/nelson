@@ -12,16 +12,6 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
 object CatsHelpers {
-  implicit val catsIOScalazInstances: scalaz.Catchable[IO] =
-    new scalaz.Catchable[IO] {
-      def attempt[A](fa: IO[A]): IO[scalaz.\/[Throwable, A]] = fa.attempt.map {
-        case Left(a) => scalaz.-\/(a)
-        case Right(b) => scalaz.\/-(b)
-      }
-
-      def fail[A](err: Throwable): IO[A] = IO.raiseError(err)
-    }
-
   implicit class NelsonEnrichedIO[A](val io: IO[A]) extends AnyVal {
     /** Run `other` if this IO fails */
     def or(other: IO[A]): IO[A] = io.attempt.flatMap {
