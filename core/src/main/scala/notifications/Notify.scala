@@ -29,7 +29,6 @@ import cats.implicits._
 import journal._
 
 import scalaz.@@
-import scalaz.Scalaz._
 
 object Notify {
 

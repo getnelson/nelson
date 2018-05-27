@@ -28,9 +28,7 @@ import nelson.vault.Vault
 import cats.{~>, Order}
 import cats.data.ValidatedNel
 import cats.effect.IO
-import cats.instances.string._
-import cats.syntax.option._
-import cats.syntax.order._
+import cats.implicits._
 
 import com.amazonaws.regions.Region
 
@@ -44,8 +42,6 @@ import org.http4s.Uri
 
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.duration._
-
-import scalaz.syntax.std.option._
 
 object Infrastructure {
 
@@ -317,7 +313,7 @@ object Datacenter {
 
     // The deployment target for shift. In the common case the target is the to deployment.
     // In the case of a reverse then it's the from target as that's now the target being shifted to.
-    val deploymentTarget = reverse.cata(_ => from, to)
+    val deploymentTarget = reverse.fold(to)(_ => from)
 
     lazy val end = start.plusSeconds(duration.toSeconds)
 
@@ -333,17 +329,14 @@ object Datacenter {
      * the amount of time it will take to reverse to the start
      */
     def inProgress(ts: Instant): Boolean =
-      reverse.cata(
-        none = ts.isAfter(start) && ts.isBefore(end),
-        some = reverseStart => {
-          val rsMilli = reverseStart.toEpochMilli
-          val tsMilli = ts.toEpochMilli
-          val stMilli = start.toEpochMilli
-          val reverseTime = rsMilli - stMilli
-          val elapsed = tsMilli - rsMilli
-          elapsed < reverseTime
-        }
-      )
+      reverse.fold(ts.isAfter(start) && ts.isBefore(end)) { reverseStart =>
+        val rsMilli = reverseStart.toEpochMilli
+        val tsMilli = ts.toEpochMilli
+        val stMilli = start.toEpochMilli
+        val reverseTime = rsMilli - stMilli
+        val elapsed = tsMilli - rsMilli
+        elapsed < reverseTime
+      }
 
     /*
      * time is used by the traffic shifting policy to calculate the
@@ -352,16 +345,13 @@ object Datacenter {
      * the point when the reverse happened to the start
      */
     private def time(ts: Instant): Instant =
-      reverse.cata(
-        none = ts,
-        some = reverseStart => {
-          val rsMilli = reverseStart.toEpochMilli
-          val tsMilli = ts.toEpochMilli
-          val delta = tsMilli - rsMilli
-          val reverse = rsMilli - delta
-          Instant.ofEpochMilli(reverse)
-        }
-      )
+      reverse.fold(ts) { reverseStart =>
+        val rsMilli = reverseStart.toEpochMilli
+        val tsMilli = ts.toEpochMilli
+        val delta = tsMilli - rsMilli
+        val reverse = rsMilli - delta
+        Instant.ofEpochMilli(reverse)
+      }
   }
 
   final case class SingletonTarget(d: Deployment) extends Target {

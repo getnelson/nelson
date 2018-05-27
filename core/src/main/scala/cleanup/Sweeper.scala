@@ -30,9 +30,6 @@ import nelson.CatsHelpers._
 import fs2.{Scheduler, Sink, Stream}
 
 import scala.util.control.NonFatal
-import scalaz.std.list._
-import scalaz.std.option.optionSyntax._
-import scalaz.syntax.traverse._
 
 /**
   * Infrequently running cleanup of "leaked" data or data which is otherwise unaccounted for.  Unlike the cleanup
@@ -57,7 +54,7 @@ object Sweeper {
   type SweeperHelmOps = List[SweeperHelmOp]
 
   def cleanupLeakedConsulDiscoveryKeys(cfg: NelsonConfig): IO[SweeperHelmOps] =
-    cfg.datacenters.traverseM[IO, SweeperHelmOp] { dc =>
+    cfg.datacenters.flatTraverse[IO, SweeperHelmOp] { dc =>
       for {
         keys <- helm.run(dc.interpreters.consul, Discovery.listDiscoveryKeys).map(_.toList)
 
@@ -66,9 +63,9 @@ object Sweeper {
 
         items = for {
           (key, sno) <- keys.map(k => k -> Discovery.stackNameFrom(k))
-          deleteKey <- sno.cata[List[Either[SingleUnclaimedResource.type, String]]](sn =>
-            Some(sn).filterNot(stackNames.contains).map(_ => Right(key)).toList, List(Left(SingleUnclaimedResource))
-          )
+          deleteKey <- sno.fold[List[Either[SingleUnclaimedResource.type, String]]](List(Left(SingleUnclaimedResource))) { sn =>
+            Some(sn).filterNot(stackNames.contains).map(_ => Right(key)).toList
+          }
         } yield deleteKey
 
         deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.kvDelete).map(op => dc -> Right(op))

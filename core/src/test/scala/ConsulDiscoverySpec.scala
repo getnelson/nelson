@@ -17,7 +17,7 @@
 package nelson
 
 import cats.{~>, Id}
-import scalaz.std.list._
+import cats.instances.list._
 import helm.ConsulOp
 
 class ConsulDiscoverySpec extends NelsonSuite {

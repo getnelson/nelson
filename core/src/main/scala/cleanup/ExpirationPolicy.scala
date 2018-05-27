@@ -26,8 +26,6 @@ import java.time.Instant
 
 import scala.concurrent.duration._
 
-import scalaz.Scalaz._
-
 /*
  * An EpxirationPolicy defines a policy that given
  * a Deployment and RoutingGraph optionally returns

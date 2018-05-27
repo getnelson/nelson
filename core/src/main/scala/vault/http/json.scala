@@ -25,7 +25,6 @@ import cats.instances.stream._
 import cats.syntax.foldable._
 
 import scala.collection.immutable.SortedMap
-import scalaz.syntax.std.option._
 
 trait Json {
   import Vault._
@@ -78,7 +77,7 @@ trait Json {
           DecodeResult.ok(res)
       }
 
-    c.focus.obj.cata(go, DecodeResult.fail("expected mounts to be a JsonObject", c.history))
+    c.focus.obj.fold[DecodeResult[SortedMap[String, Mount]]](DecodeResult.fail("expected mounts to be a JsonObject", c.history))(go)
   }
 
   implicit val jsonRootToken: DecodeJson[RootToken] = implicitly[DecodeJson[String]].map(RootToken.apply)

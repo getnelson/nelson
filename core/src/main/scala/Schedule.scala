@@ -17,7 +17,6 @@
 package nelson
 
 import cats.implicits._
-import scalaz.syntax.std.option._
 
 /*
  * A schedule is defined by an interval.
@@ -53,9 +52,9 @@ object Schedule {
   final case class Cron(exp: String) extends Interval(exp)
 
   def parse(input: String): Either[String, Schedule] =
-    preDefined.find(_.asString == input.toLowerCase).cata(
-      some = i => Right(Schedule(i)),
-      none = parseCron(input).map(cron => Schedule(cron)))
+    preDefined.find(_.asString == input.toLowerCase).fold(parseCron(input).map(cron => Schedule(cron))) { i =>
+      Right(Schedule(i))
+    }
 
   private val preDefined = Set(Monthly, Daily, Hourly, QuarterHourly, Once)
 

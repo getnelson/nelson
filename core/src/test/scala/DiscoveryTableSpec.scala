@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.std.list._
+import cats.instances.list._
 
 class DiscoveryTableSpec extends NelsonSuite {
   import Datacenter._

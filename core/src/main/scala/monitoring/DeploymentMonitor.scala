@@ -27,7 +27,7 @@ import nelson.health.{HealthCheckOp, Passing}
 
 import cats.data.{NonEmptyList, OptionT}
 import cats.effect.{Effect, IO}
-import cats.syntax.applicativeError._
+import cats.implicits._
 import nelson.CatsHelpers._
 
 import fs2.{Scheduler, Sink, Stream}
@@ -37,10 +37,6 @@ import helm.HealthStatus._
 import java.time.Instant
 
 import journal.Logger
-
-import scalaz.syntax.bind._
-import scalaz.syntax.traverse._
-import scalaz.std.list._
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -75,7 +71,7 @@ object DeploymentMonitor {
    * Drain all actions from the writer (using an auditor error sink, observing it and routing to a final sink.
    */
   def drain[A](cfg: NelsonConfig)(h: Stream[IO, Duration], w: NelsonFK[Stream, Seq[A]], s: Sink[IO, A], k: NelsonFK[Sink, A]): Stream[IO, Unit] =
-    h >> w.run(cfg).flatMap(as => Stream.emits(as).covary[IO])
+    h *> w.run(cfg).flatMap(as => Stream.emits(as).covary[IO])
       .observe(s)(Effect[IO], cfg.pools.defaultExecutor)
       .attempt
       .observeW(cfg.auditor.errorSink)(Effect[IO], cfg.pools.defaultExecutor)
@@ -86,12 +82,12 @@ object DeploymentMonitor {
    * Build a list of MonitorActionItems based on the health of deployments that are presently in the Warming state.
    */
   def monitorActionItems(cfg: NelsonConfig): IO[List[MonitorActionItem]] =
-    cfg.datacenters.traverseM(dc => monitorActionItemsByDatacenter(dc))
+    cfg.datacenters.flatTraverse(dc => monitorActionItemsByDatacenter(dc))
 
   def monitorActionItemsByDatacenter(dc: Datacenter): IO[List[MonitorActionItem]] =
     for {
       ns <- StoreOp.listNamespacesForDatacenter(dc.name).foldMap(dc.storage).map(_.toList)
-      d  <- ns.traverseM(n => monitorActionItemsByNamespace(dc,n))
+      d  <- ns.flatTraverse(n => monitorActionItemsByNamespace(dc,n))
     } yield d
 
   def monitorActionItemsByNamespace(dc: Datacenter, ns: Datacenter.Namespace): IO[List[MonitorActionItem]] =
@@ -172,7 +168,7 @@ object DeploymentMonitor {
     val task = item match {
       case PromoteToReady(dc, d) =>
         val t = promoteToReady(d).foldMap(dc.storage)
-        t >> auditor.write(d, audit.ReadyAction)
+        t *> auditor.write(d, audit.ReadyAction)
       case _ =>
         IO.unit
     }
@@ -194,7 +190,7 @@ object DeploymentMonitor {
       StoreOp.createDeploymentStatus(d.id, Ready,
         Some(s"Promoting ${d.stackName} to ready."))
 
-    startTrafficShift >> ready
+    startTrafficShift *> ready
   }
 
   private def warn(msg: String): IO[Unit] =

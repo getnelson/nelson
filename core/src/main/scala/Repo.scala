@@ -17,7 +17,7 @@
 package nelson
 
 import ca.mrvisser.sealerate
-import scalaz.Scalaz._
+import cats.implicits._
 
 final case class Repo(
   /* e.g. 1296269 */
@@ -33,9 +33,9 @@ final case class Repo(
 )
 object Repo {
   def apply(id: Long, slug: String, access: String, hook: Option[Hook]): Either[NelsonError, Repo] = {
-    (RepoAccess.fromString(access) |@|
+    (RepoAccess.fromString(access),
       Slug.fromString(slug)
-    )((a,b) => Repo(id,b,a,hook))
+    ).mapN((a,b) => Repo(id,b,a,hook))
   }
 }
 

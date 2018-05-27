@@ -17,10 +17,8 @@
 package nelson
 package scheduler
 
-import scalaz.Monoid
-import scalaz.std.anyVal._
-import scalaz.std.option._
-import scalaz.syntax.monoid._
+import cats.Monoid
+import cats.implicits._
 
 final case class DeploymentSummary(
   running: Option[Int],
@@ -32,7 +30,7 @@ final case class DeploymentSummary(
 object DeploymentSummary {
   implicit val deploymentSummaryMonoid: Monoid[DeploymentSummary] =
     new Monoid[DeploymentSummary] {
-      def append(f1: DeploymentSummary, f2: => DeploymentSummary): DeploymentSummary =
+      def combine(f1: DeploymentSummary, f2: DeploymentSummary): DeploymentSummary =
         DeploymentSummary(
           running =   f1.running   |+| f2.running,
           pending =   f1.pending   |+| f2.pending,
@@ -40,7 +38,7 @@ object DeploymentSummary {
           failed =    f1.failed    |+| f2.failed
         )
 
-      def zero: DeploymentSummary =
+      def empty: DeploymentSummary =
         DeploymentSummary(None, None, None, None)
     }
 }

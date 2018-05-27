@@ -19,12 +19,10 @@ package routing
 
 
 import helm.ConsulOp
+import cats.Foldable
 import cats.data.NonEmptyList
-import cats.instances.sortedMap._
-import cats.syntax.monoid._
+import cats.implicits._
 import scala.collection.immutable.SortedMap
-import scalaz.Foldable
-import scalaz.Scalaz._
 import journal._
 
 object Discovery {

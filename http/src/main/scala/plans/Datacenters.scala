@@ -29,8 +29,6 @@ import org.http4s.headers.Location
 
 import java.time.Instant
 
-import scalaz.syntax.std.option._
-
 final case class Datacenters(config: NelsonConfig) extends Default {
   import nelson.Json._
   import Datacenter._
@@ -174,7 +172,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
       val units = u
-      namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
+      namespace.toNel.toRight("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
           ns => ns.sequence.fold(
@@ -285,7 +283,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       val namespace = commaSeparatedStringToNamespace(ns)
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
-      namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
+      namespace.toNel.toRight("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
           ns => ns.sequence.fold(

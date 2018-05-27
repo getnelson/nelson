@@ -28,7 +28,6 @@ import fs2.Stream
 
 import scala.concurrent.ExecutionContext
 
-import scalaz.Scalaz._
 import nelson.monitoring.{DeploymentMonitor, Stoplight, registerJvmMetrics}
 import nelson.http.MonitoringServer
 import nelson.storage.{Migrate, Hikari}

@@ -1,8 +1,5 @@
 package nelson
 
-import cats.Semigroup
-import cats.data.NonEmptyList
-import cats.free.Free
 import cats.effect.{Effect, IO, Timer}
 import cats.syntax.functor._
 import cats.syntax.monadError._
@@ -15,28 +12,14 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
 object CatsHelpers {
-  implicit val catsIOScalazInstances: scalaz.Monad[IO] with scalaz.Catchable[IO] =
-    new scalaz.Monad[IO] with scalaz.Catchable[IO] {
-      def bind[A, B](fa: IO[A])(f: A => IO[B]): IO[B] = fa.flatMap(f)
-      def point[A](a: => A): IO[A] = IO(a)
-
+  implicit val catsIOScalazInstances: scalaz.Catchable[IO] =
+    new scalaz.Catchable[IO] {
       def attempt[A](fa: IO[A]): IO[scalaz.\/[Throwable, A]] = fa.attempt.map {
         case Left(a) => scalaz.-\/(a)
         case Right(b) => scalaz.\/-(b)
       }
+
       def fail[A](err: Throwable): IO[A] = IO.raiseError(err)
-    }
-
-  implicit def catsFreeScalazInstances[F[_]]: scalaz.Monad[Free[F, ?]] =
-    new scalaz.Monad[Free[F, ?]] {
-      def bind[A, B](fa: Free[F, A])(f: A => Free[F, B]): Free[F, B] = fa.flatMap(f)
-      def point[A](a: => A): Free[F, A] = Free.pure(a)
-    }
-
-  implicit def catsNelScalazInstances[A]: scalaz.Semigroup[NonEmptyList[A]] =
-    new scalaz.Semigroup[NonEmptyList[A]] {
-      def append(f1: NonEmptyList[A], f2: => NonEmptyList[A]): NonEmptyList[A] =
-        Semigroup[NonEmptyList[A]].combine(f1, f2)
     }
 
   implicit class NelsonEnrichedIO[A](val io: IO[A]) extends AnyVal {

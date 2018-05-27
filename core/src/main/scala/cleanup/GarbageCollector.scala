@@ -18,14 +18,12 @@ package nelson
 package cleanup
 
 import cats.effect.IO
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import fs2.Pipe
 
 import java.time.Instant
 import journal.Logger
-
-import scalaz.Scalaz._
 
 /**
  * The GarbageCollector is a process that periodically traverses the
@@ -45,7 +43,7 @@ object GarbageCollector {
   /* Marks deployable as Garbage. A separate process will handle the actual cleanup */
   def markAsGarbage(d: Deployment): StoreOpF[Deployment] =
     StoreOp.createDeploymentStatus(d.id, DeploymentStatus.Garbage, None).map(_ => d) <*
-      (log.debug(s"marking deployment ${d.stackName} as garbage").point[StoreOpF])
+      (log.debug(s"marking deployment ${d.stackName} as garbage").pure[StoreOpF])
 
   /**
    * A Pipe that captures the output of the ExpirationPolicy process.

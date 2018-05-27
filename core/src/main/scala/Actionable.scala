@@ -26,14 +26,13 @@ import nelson.storage.{StoreOp, StoreOpF}
 import cats.~>
 import cats.data.{Kleisli, OptionT}
 import cats.effect.IO
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import io.prometheus.client.Counter
 
 import java.time.Instant
 
 import scalaz.@@
-import scalaz.Scalaz._
 
 /**
  * An Actionable is something that can be "acted" upon in the context
@@ -101,10 +100,9 @@ object Actionable {
                   incCounter(deploySuccessCounter)).attempt
         ))
 
-        create(unit, dc, ns, plan, hash, exp, policy).foldMap(cfg.storage).flatMap(_.cata(
-          some = id => deploy(id)(dc.workflow).map(_ => ()),
-          none = incCounter(deployFailureCounter)
-        ))
+        create(unit, dc, ns, plan, hash, exp, policy).foldMap(cfg.storage).flatMap(_.fold(incCounter(deployFailureCounter)) { id =>
+          deploy(id)(dc.workflow).map(_ => ())
+        })
       }
   }
 
@@ -147,7 +145,7 @@ object Actionable {
           lbd <- StoreOp.findLoadbalancerDeployment(lb.name, major, nsd.id).foldMap(cfg.storage)
 
           // if loadbalancer exists resize, otherwise create
-          _   <- lbd.cata(l => resize(l)(t), launch(id, sn, lb.routes, nsd.id)(t))
+          _   <- lbd.fold(launch(id, sn, lb.routes, nsd.id)(t))(l => resize(l)(t))
         } yield ()
       }
   }

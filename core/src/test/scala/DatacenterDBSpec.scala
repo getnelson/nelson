@@ -16,20 +16,19 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.Scalaz._
 import storage.StoreOp
-import nelson.CatsHelpers._
+import cats.syntax.apply._
 
 class DatacenterDBSpec extends NelsonSuite {
 
   "storage" should "be able to create datacenters then find it" in {
     (StoreOp.createDatacenter(datacenter(testName))
-      >> StoreOp.listDatacenters
+      *> StoreOp.listDatacenters
     ).foldMap(config.storage).unsafeRunSync() should contain (testName)
   }
 
   "storage" should "be able to create namespaces" in {
-    (StoreOp.createNamespace(testName, NamespaceName("namespace")) >> StoreOp.listNamespacesForDatacenter(testName)).
+    (StoreOp.createNamespace(testName, NamespaceName("namespace")) *> StoreOp.listNamespacesForDatacenter(testName)).
       foldMap(config.storage).unsafeRunSync().map(_.name) should contain (NamespaceName("namespace"))
   }
 }
