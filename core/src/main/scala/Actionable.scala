@@ -24,7 +24,7 @@ import nelson.notifications.Notify
 import nelson.storage.{StoreOp, StoreOpF}
 
 import cats.~>
-import cats.data.OptionT
+import cats.data.{Kleisli, OptionT}
 import cats.effect.IO
 import nelson.CatsHelpers._
 
@@ -32,7 +32,7 @@ import io.prometheus.client.Counter
 
 import java.time.Instant
 
-import scalaz.{@@, Kleisli}
+import scalaz.@@
 import scalaz.Scalaz._
 
 /**

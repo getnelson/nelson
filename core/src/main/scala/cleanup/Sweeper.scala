@@ -22,6 +22,7 @@ import journal.Logger
 import nelson.routing.Discovery
 
 import cats.~>
+import cats.data.Kleisli
 import cats.effect.{Effect, IO}
 import cats.implicits._
 import nelson.CatsHelpers._
@@ -29,7 +30,6 @@ import nelson.CatsHelpers._
 import fs2.{Scheduler, Sink, Stream}
 
 import scala.util.control.NonFatal
-import scalaz.Kleisli
 import scalaz.std.list._
 import scalaz.std.option.optionSyntax._
 import scalaz.syntax.traverse._

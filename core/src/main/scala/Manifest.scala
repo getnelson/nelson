@@ -22,7 +22,7 @@ import nelson.notifications.NotificationSubscriptions
 import nelson.storage.StoreOp
 
 import cats.~>
-import cats.data.{NonEmptyList, ValidatedNel}
+import cats.data.{Kleisli, NonEmptyList, ValidatedNel}
 import cats.effect.IO
 import cats.instances.unit._
 import cats.syntax.applicativeError._
@@ -33,7 +33,7 @@ import java.net.URI
 
 import scala.concurrent.duration._
 
-import scalaz.{@@, Foldable, Kleisli, Monoid, Tag}
+import scalaz.{@@, Foldable, Monoid, Tag}
 import scalaz.Scalaz._
 
 final case class Manifest(

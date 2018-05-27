@@ -22,7 +22,6 @@ import org.http4s.dsl.io._
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
 import cats.effect.IO
-import nelson.CatsHelpers._
 
 final case class Repos(config: NelsonConfig) extends Default {
   import nelson.Json._

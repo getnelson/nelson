@@ -21,12 +21,10 @@ import nelson.Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck
 import nelson.storage.StoreOp
 
 import cats.{~>, Foldable}
-import cats.data.{EitherT, ValidatedNel}
+import cats.data.{EitherT, Kleisli, ValidatedNel}
 import cats.data.Validated.{Valid, Invalid}
 import cats.effect.IO
 import cats.implicits._
-
-import scalaz.Kleisli
 
 object ManifestValidator {
 

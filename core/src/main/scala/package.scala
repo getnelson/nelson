@@ -24,6 +24,7 @@ package object nelson {
   import argonaut.{Parse,DecodeJson}
 
   import cats.Order
+  import cats.data.Kleisli
   import cats.effect.IO
 
   import fs2.{Scheduler, Stream}
@@ -36,8 +37,6 @@ package object nelson {
 
   import scala.concurrent.ExecutionContext
   import scala.concurrent.duration._
-
-  import scalaz.syntax.kleisli._
 
   type ID = Long
   type GUID = String
@@ -85,7 +84,7 @@ package object nelson {
       IO.raiseError(err)
 
     def nfold[B](e: NelsonError)(f: A => B): NelsonK[B] =
-      tfold(e)(f).liftKleisli
+      Kleisli.liftF(tfold(e)(f))
 
     def tfold[B](e: NelsonError)(f: A => B): IO[B] =
       in.fold(fail[B](e))(a => IO(f(a)))

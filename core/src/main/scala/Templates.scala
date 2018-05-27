@@ -16,6 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.data.Kleisli
 import cats.effect.{Effect, IO}
 import nelson.CatsHelpers._
 
@@ -30,7 +31,6 @@ import scala.sys.process.{Process => _, _}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-import scalaz.Kleisli
 import scalaz.syntax.monad._
 
 import Datacenter.StackName
@@ -74,7 +74,7 @@ object Templates {
 
   /** Validate a template according to a template validation request */
   def validateTemplate(tv: TemplateValidation): NelsonK[ConsulTemplateResult] =
-    Kleisli.kleisli { cfg =>
+    Kleisli { cfg =>
       val dc = cfg.datacenters.headOption.getOrElse {
         // We should never see this. Nelson doesn't start without a datacenter.
         sys.error("Can't validate a template without a datacenter")

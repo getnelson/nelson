@@ -21,7 +21,6 @@ import _root_.argonaut._, Argonaut._
 
 import cats.effect.IO
 import cats.implicits._
-import nelson.CatsHelpers._
 
 import org.http4s._
 import org.http4s.dsl.io._

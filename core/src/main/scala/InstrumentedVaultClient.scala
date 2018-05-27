@@ -17,9 +17,8 @@
 package nelson
 
 import cats.~>
+import cats.data.Kleisli
 import cats.effect.IO
-
-import scalaz.Kleisli
 
 import vault.Vault
 import vault.Vault._
