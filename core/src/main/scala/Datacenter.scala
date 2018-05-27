@@ -25,10 +25,12 @@ import nelson.scheduler.SchedulerOp
 import nelson.storage.StoreOp
 import nelson.vault.Vault
 
-import cats.~>
+import cats.{~>, Order}
 import cats.data.ValidatedNel
 import cats.effect.IO
+import cats.instances.string._
 import cats.syntax.option._
+import cats.syntax.order._
 
 import com.amazonaws.regions.Region
 
@@ -43,11 +45,6 @@ import org.http4s.Uri
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.duration._
 
-import scalaz.Order
-import scalaz.std.set._
-import scalaz.std.string._
-import scalaz.syntax.foldable._
-import scalaz.syntax.monoid._
 import scalaz.syntax.std.option._
 
 object Infrastructure {
@@ -194,8 +191,7 @@ object Datacenter {
 
   object Namespace {
     implicit def namespaceOrder: Order[Namespace] =
-      Order[String].contramap[Namespace](_.datacenter) |+|
-      Order[String].contramap[Namespace](_.name.asString)
+      Order.whenEqual(Order.by(_.datacenter), Order.by(_.name.asString))
   }
 
   final case class Port(port: Int, name: String, protocol: String)
@@ -228,18 +224,25 @@ object Datacenter {
   }
   object Deployment {
     implicit val deploymentOrder: Order[Deployment] =
-      (Order[Version].contramap[Deployment](_.unit.version) |+|
-          Order[Instant].contramap[Deployment](_.deployTime))
+      Order.whenEqual(
+        Order.by(_.unit.version),
+        Order.by(_.deployTime)
+      )
 
     def filterByStackName(ds: Set[Deployment], sn: StackName): Set[Deployment] =
       ds.filter(_.stackName != sn)
 
     def getLatestVersion(ds: Set[Deployment]): Option[Version] =
-      ds.maximumBy(_.unit.version).headOption.map(_.unit.version)
+      ds.foldLeft(Option.empty[Version]) { (maxSoFar, current) =>
+        maxSoFar match {
+          case Some(version) => Some(version max current.unit.version)
+          case None          => Some(current.unit.version)
+        }
+      }
 
     def getLatestDeployment(ds: Set[Deployment]): Option[Deployment] = {
       if (ds.isEmpty) None
-      else Option(ds.reduceLeft((x,y) => if (deploymentOrder.greaterThanOrEqual(x, y)) x else y))
+      else Option(ds.reduceLeft((x,y) => if (x >= y) x else y))
     }
   }
 
@@ -252,8 +255,9 @@ object Datacenter {
   }
 
   object StackName {
-    implicit val stackNameOrder: Order[StackName] =
-      Order[String].contramap[StackName](_.toString)
+    implicit val stackNameOrder: Order[StackName] = Order.by(_.toString)
+
+    implicit val stackNameOrdering: Ordering[StackName] = stackNameOrder.toOrdering
 
     def parsePublic(str: String): Option[StackName] = {
       val parts = str.split("--")
@@ -379,8 +383,7 @@ object Datacenter {
     port: Int
   )
 
-  implicit val datacenterOrder: Order[Datacenter] =
-    Order[String].contramap[Datacenter](_.name)
+  implicit val datacenterOrder: Order[Datacenter] = Order.by(_.name)
 
   final case class StatusUpdate(stack: StackName,
                                 status: DeploymentStatus,

@@ -19,10 +19,11 @@ package nelson
 package object routing {
   import storage._
   import cats.data.NonEmptyList
-  import scalaz.{==>>,RWST}
+  import scalaz.RWST
   import scalaz.std.list._
   import quiver.Graph
   import nelson.CatsHelpers._
+  import scala.collection.immutable.SortedMap
 
   import Datacenter._
 
@@ -40,19 +41,19 @@ package object routing {
    * this namespace, and looking for this service type, here is
    * the current target
    */
-  type RoutingTable = ServiceTarget ==>> Target
+  type RoutingTable = SortedMap[ServiceTarget, Target]
 
   /** A routing table for each known namesapce */
-  type RoutingTables = NamespaceName ==>> (RoutingTable)
+  type RoutingTables = SortedMap[NamespaceName, RoutingTable]
 
   /**
    * A table used to discover deployments offering a particular named
    * port in a particular namespace
    */
-  type DiscoveryTable = NamedService ==>> NonEmptyList[RoutePath]
+  type DiscoveryTable = SortedMap[NamedService, NonEmptyList[RoutePath]]
 
   /** A Discovery Table for each known namespace */
-  type DiscoveryTables = NamespaceName ==>> DiscoveryTable
+  type DiscoveryTables = SortedMap[NamespaceName, DiscoveryTable]
 
   // this just gets our monad in the the expected * → * shape
   type GraphBuild[A] = RWST[StoreOpF,RoutingTables,List[String],RoutingGraph,A]

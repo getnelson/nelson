@@ -23,6 +23,7 @@ package object nelson {
 
   import argonaut.{Parse,DecodeJson}
 
+  import cats.Order
   import cats.effect.IO
 
   import fs2.{Scheduler, Stream}
@@ -37,7 +38,6 @@ package object nelson {
   import scala.concurrent.duration._
 
   import scalaz.syntax.kleisli._
-  import scalaz.Order
 
   type ID = Long
   type GUID = String
@@ -155,7 +155,7 @@ package object nelson {
   }
 
   private[nelson] implicit val orderInstant: Order[java.time.Instant] =
-    Order.order((i1, i2) => scalaz.Ordering.fromInt(i1.compareTo(i2)))
+    Order.from(_ compareTo _)
 
   def featureVersionFrom1or2DotString(versionString: String): Option[FeatureVersion] = {
     Version

@@ -19,11 +19,12 @@ package crypto
 
 import autharbitrary.AuthArbitrary._
 
+import org.scalatest.EitherValues
 import org.scalacheck._, Arbitrary.arbitrary
 import cats.implicits._
 import scodec.bits.ByteVector
 
-class SigningSpec extends AuthSpec {
+class SigningSpec extends AuthSpec with EitherValues {
   property("signature is consistent and can be verified"){
     forAll(arbitrary[ByteVector], arbitrary[AuthEnv], Gen.chooseNum(1, 32)) {
         (originalData, env, signatureLengthBytes) =>
@@ -33,7 +34,7 @@ class SigningSpec extends AuthSpec {
         signature2 <- env.signer.signature(env.signingKey, originalData, signatureLengthBytes)
       } yield signature1 should ===(signature2)
 
-      result should ===(Right(()))
+      result.right.value
     }
   }
 
@@ -45,7 +46,7 @@ class SigningSpec extends AuthSpec {
         signature <- env.signer.signature(env.signingKey, originalData, signatureLengthBytes)
       } yield signature.length should ===(signatureLengthBytes.toLong)
 
-      result should ===(Right(()))
+      result.right.value
     }
   }
 
@@ -59,7 +60,7 @@ class SigningSpec extends AuthSpec {
           signature2 <- env.signer.signature(env.signingKey, data2, signatureLengthBytes)
         } yield signature1 should !==(signature2)
 
-        result should ===(Right(()))
+        result.right.value
       }
     }
   }

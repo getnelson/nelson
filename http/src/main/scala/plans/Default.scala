@@ -28,7 +28,6 @@ import cats.data.{Kleisli, OptionT}
 import cats.effect.IO
 import cats.implicits._
 import nelson.CatsHelpers._
-import scalaz.Order
 import scalaz.syntax.monad._
 import scalaz.syntax.std.option._
 
@@ -129,10 +128,8 @@ abstract class Default extends Product with Serializable { self =>
 
 object ClientValidation {
 
-  def versionLte(v: Version, maxBannedVersion: Version): Boolean = {
-    val O = implicitly[Order[Version]]
-    O.lessThanOrEqual(v, maxBannedVersion)
-  }
+  def versionLte(v: Version, maxBannedVersion: Version): Boolean =
+    v <= maxBannedVersion
 
   def agentDoesntMatch(ua: headers.`User-Agent`)
     (agentConfig: BannedClientsConfig.HttpUserAgent): Boolean =

@@ -49,21 +49,21 @@ class DiscoveryTableSpec extends NelsonSuite {
           lbTable = Some(z)
     }
 
-    val dt: DiscoveryTable = conductorTable.get.lookup(NamespaceName("dev")).get
-    val sn = dt.lookup(NamedService("ab", "default")).get.map(_.stack.stackName.toString).head
-    val pn = dt.lookup(NamedService("ab", "default")).get.map(_.portName).head
-    val po = dt.lookup(NamedService("ab", "default")).get.map(_.port).head
-    val we = dt.lookup(NamedService("ab", "default")).get.map(_.weight).head
+    val dt: DiscoveryTable = conductorTable.get.get(NamespaceName("dev")).get
+    val sn = dt.get(NamedService("ab", "default")).get.map(_.stack.stackName.toString).head
+    val pn = dt.get(NamedService("ab", "default")).get.map(_.portName).head
+    val po = dt.get(NamedService("ab", "default")).get.map(_.port).head
+    val we = dt.get(NamedService("ab", "default")).get.map(_.weight).head
 
-    val sandbox: DiscoveryTable = serviceBTable.get.lookup(NamespaceName("dev", List("sandbox"))).get
-    val sandboxRodrigo: DiscoveryTable = serviceBTable.get.lookup(NamespaceName("dev", List("sandbox", "rodrigo"))).get
-    val rodrigo: DiscoveryTable = serviceCTable.get.lookup(NamespaceName("dev")).get // only routes to something 'devel' namespace
-    val sn2 = sandbox.lookup(NamedService("service-c", "default")).get.map(_.stack.stackName.toString).head
-    val sn3 = sandboxRodrigo.lookup(NamedService("service-c", "default")).get.map(_.stack.stackName.toString).head
-    val sn4 = rodrigo.lookup(NamedService("foo", "default")).get.map(_.stack.stackName.toString).head
+    val sandbox: DiscoveryTable = serviceBTable.get.get(NamespaceName("dev", List("sandbox"))).get
+    val sandboxRodrigo: DiscoveryTable = serviceBTable.get.get(NamespaceName("dev", List("sandbox", "rodrigo"))).get
+    val rodrigo: DiscoveryTable = serviceCTable.get.get(NamespaceName("dev")).get // only routes to something 'devel' namespace
+    val sn2 = sandbox.get(NamedService("service-c", "default")).get.map(_.stack.stackName.toString).head
+    val sn3 = sandboxRodrigo.get(NamedService("service-c", "default")).get.map(_.stack.stackName.toString).head
+    val sn4 = rodrigo.get(NamedService("foo", "default")).get.map(_.stack.stackName.toString).head
 
-    val lb = lbTable.get.lookup(NamespaceName("dev")).get
-    val ma = lb.lookup(NamedService("conductor", "default")).get.map(_.stack.stackName.toString).head
+    val lb = lbTable.get.get(NamespaceName("dev")).get
+    val ma = lb.get(NamedService("conductor", "default")).get.map(_.stack.stackName.toString).head
 
     sn should be("ab--2-2-2--abcd")
     pn should be("default")
@@ -94,10 +94,10 @@ class DiscoveryTableSpec extends NelsonSuite {
           suTable = Some(z)
     }
 
-    val dt: DiscoveryTable = suTable.get.lookup(NamespaceName("dev")).get
-    val sn = dt.lookup(NamedService("inventory", "default")).get.map(_.stack.stackName.toString)
-    val po = dt.lookup(NamedService("inventory", "default")).get.map(_.port)
-    val we = dt.lookup(NamedService("inventory", "default")).get.map(_.weight).toList.sum
+    val dt: DiscoveryTable = suTable.get.get(NamespaceName("dev")).get
+    val sn = dt.get(NamedService("inventory", "default")).get.map(_.stack.stackName.toString)
+    val po = dt.get(NamedService("inventory", "default")).get.map(_.port)
+    val we = dt.get(NamedService("inventory", "default")).get.map(_.weight).toList.sum
 
     sn.toList.toSet should be(Set("inventory--1-2-2--ffff", "inventory--1-2-3--ffff"))
     we should be(100)

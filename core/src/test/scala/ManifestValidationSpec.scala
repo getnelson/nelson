@@ -39,7 +39,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   // the cycle.
   val timeLimit = convertIntToGrainOfTime(30).seconds
   private[this] val log = Logger("TestInterruptor")
-  override val defaultTestInterruptor = new org.scalatest.concurrent.Interruptor {
+  override val defaultTestSignaler = new org.scalatest.concurrent.Signaler {
     val threadsDumped = new java.util.concurrent.atomic.AtomicBoolean(false)
     def apply(testThread: Thread) = {
       if (threadsDumped.compareAndSet(false, true)) {

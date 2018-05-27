@@ -23,7 +23,9 @@ import cats.implicits._
 
 import java.time.Instant
 
-import scalaz.{==>>, @@}
+import scalaz.@@
+
+import scala.collection.immutable.SortedMap
 
 sealed trait StoreOp[A]
 
@@ -63,13 +65,13 @@ object StoreOp {
   def killRelease(slug: Slug, version: String): StoreOpF[Either[Throwable, Unit]] =
     Free.liftF(KillRelease(slug, version))
 
-  def listRecentReleasesForRepository(slug: Slug): StoreOpF[Released ==>> List[ReleasedDeployment]] =
+  def listRecentReleasesForRepository(slug: Slug): StoreOpF[SortedMap[Released, List[ReleasedDeployment]]] =
     Free.liftF(ListRecentReleasesForRepository(slug))
 
-  def listReleases(limit: Int): StoreOpF[Released ==>> List[ReleasedDeployment]] =
+  def listReleases(limit: Int): StoreOpF[SortedMap[Released, List[ReleasedDeployment]]] =
     Free.liftF(ListReleases(limit))
 
-  def findRelease(id: Long): StoreOpF[Released ==>> List[ReleasedDeployment]] =
+  def findRelease(id: Long): StoreOpF[SortedMap[Released, List[ReleasedDeployment]]] =
     Free.liftF(FindRelease(id))
 
   def createDatacenter(dc: Datacenter): StoreOpF[Unit] =
@@ -246,9 +248,9 @@ object StoreOp {
   final case class AddUnit(unit: UnitDef @@ Versioned, repo_id: ID) extends StoreOp[Unit]
   final case class CreateRelease(repositoryId: Long, r: Github.Release) extends StoreOp[Unit]
   final case class KillRelease(slug: Slug, version: String) extends StoreOp[Either[Throwable, Unit]]
-  final case class ListRecentReleasesForRepository(slug: Slug) extends StoreOp[Released ==>> List[ReleasedDeployment]]
-  final case class ListReleases(limit: Int) extends StoreOp[Released ==>> List[ReleasedDeployment]]
-  final case class FindRelease(id: Long) extends StoreOp[Released ==>> List[ReleasedDeployment]]
+  final case class ListRecentReleasesForRepository(slug: Slug) extends StoreOp[SortedMap[Released, List[ReleasedDeployment]]]
+  final case class ListReleases(limit: Int) extends StoreOp[SortedMap[Released, List[ReleasedDeployment]]]
+  final case class FindRelease(id: Long) extends StoreOp[SortedMap[Released, List[ReleasedDeployment]]]
   final case class CreateDatacenter(dc: Datacenter) extends StoreOp[Unit]
   case object ListDatacenters extends StoreOp[Set[String]]
   final case class ListNamespacesForDatacenter(dc: String) extends StoreOp[Set[Namespace]]

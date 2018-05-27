@@ -19,7 +19,9 @@ package routing
 
 import storage._
 import quiver.{LNode,LEdge}
-import scalaz.{==>>, Order}
+import cats.Order
+import cats.instances.string._
+import scala.collection.immutable.SortedMap
 import scalaz.Scalaz._
 import journal._
 import CatsHelpers._
@@ -30,7 +32,10 @@ object RoutingTable {
   private val log = Logger[RoutingTable.type]
 
   implicit val NamespaceNameOrder: Order[ServiceTarget] =
-    Order[String].contramap[ServiceTarget](_._1)
+    Order.by(_._1)
+
+  implicit val NamespaceNameOrdering: Ordering[ServiceTarget] =
+    NamespaceNameOrder.toOrdering
 
   /*
    * add a single route to the routing table
@@ -65,7 +70,7 @@ object RoutingTable {
     for {
       rts <- graphBuild.ask
       ns  <- StoreOp.getNamespaceByID(from.nsid).liftM[GraphBuildT]
-      d   <- rts.lookup(ns.name).flatMap(_.lookup((r.destination.name, from.loadbalancer.version))).point[StoreOpF].liftM[GraphBuildT]
+      d   <- rts.get(ns.name).flatMap(_.get((r.destination.name, from.loadbalancer.version))).point[StoreOpF].liftM[GraphBuildT]
       _   <- d.fold(graphBuild.tell(List(s"missing ${r.destination.name} dependency for ${from.stackName}")))(t => addTarget(RoutingNode(from))(t))
     } yield ()
 
@@ -74,7 +79,7 @@ object RoutingTable {
     val dc = from.namespace.datacenter
 
     def lookup(ns: NamespaceName, rts: RoutingTables): Option[Target] =
-      rts.lookup(ns).flatMap(_.lookup((sn.serviceType, sn.version.toMajorVersion)))
+      rts.get(ns).flatMap(_.get((sn.serviceType, sn.version.toMajorVersion)))
 
     // Look for dependency in current namespace. If target doesn't exist
     // move up the namespace ancestery until target is found.
@@ -92,7 +97,7 @@ object RoutingTable {
     def resolveDownstream(ns: Namespace, rts: RoutingTables): List[Target] =
       rts.keys
         .filter(n => ns.name.isSubordinate(n))
-        .flatMap(n => lookup(n, rts))
+        .flatMap(n => lookup(n, rts)).toList
 
     def addDownstream(ns: Namespace): GraphBuild[Unit] =
       for {
@@ -146,21 +151,21 @@ object RoutingTable {
       ds.filter(!_.unit.ports.isEmpty)
         .map(x => (x.unit.name, x.unit.version.toMajorVersion)).toSet
 
-    st.foldLeft[StoreOpF[RoutingTable]](==>>.empty.point[StoreOpF]) { (s, x) =>
+    st.foldLeft[StoreOpF[RoutingTable]](SortedMap.empty[ServiceTarget, Target].point[StoreOpF]) { (s, x) =>
       for {
         m <- s
         t <- StoreOp.getCurrentTargetForServiceName(ns.id, ServiceName(x._1, x._2.minFeatureVersion))
-      } yield t.cata(t => m.insert(x, t), m)
+      } yield t.cata(t => m + ((x, t)), m)
     }
   }
 
   private def generateRoutingTables(ds: List[Deployment]): StoreOpF[RoutingTables] = {
-    ds.groupBy(_.namespace).foldLeft[StoreOpF[RoutingTables]](==>>.empty.point[StoreOpF]) { (s, x) =>
+    ds.groupBy(_.namespace).foldLeft[StoreOpF[RoutingTables]](SortedMap.empty[NamespaceName, RoutingTable].point[StoreOpF]) { (s, x) =>
       val (ns, d) = x
       for {
         m  <- s
         rt <- generateRoutingTable(ns, d)
-      } yield m.insert(ns.name, rt)
+      } yield m + ((ns.name, rt))
     }
   }
 

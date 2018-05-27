@@ -27,7 +27,9 @@ import java.time.Instant
 
 import journal.Logger
 
-import scalaz.{~>, @@, ==>>, Kleisli}
+import scala.collection.immutable.SortedMap
+
+import scalaz.{~>, @@, Kleisli}
 import scalaz.Scalaz._
 
 object Nelson {
@@ -312,10 +314,9 @@ object Nelson {
   }
 
   /**
-   * list releases this repository has had. Feels a little hack to be doing
-   * the jiggery pokery with ==>> but whatever, its better than using Map.
+   * list releases this repository has had.
    */
-  def listRepositoryReleases(s: Slug): NelsonK[Released ==>> List[ReleasedDeployment]] =
+  def listRepositoryReleases(s: Slug): NelsonK[SortedMap[Released, List[ReleasedDeployment]]] =
     Kleisli { cfg =>
       storage.StoreOp.listRecentReleasesForRepository(s).foldMap(cfg.storage)
     }
@@ -323,7 +324,7 @@ object Nelson {
   /**
    * list recent releases, regardless of repository.
    */
-  def listReleases(limit: Option[Int]): NelsonK[Released ==>> List[ReleasedDeployment]] =
+  def listReleases(limit: Option[Int]): NelsonK[SortedMap[Released, List[ReleasedDeployment]]] =
     Kleisli { cfg =>
       for {
         a <- (limit.fold(IO.pure(50))(l =>
@@ -336,7 +337,7 @@ object Nelson {
   /**
    * Given the ID of a particular release, show the release information and any associated deployments
    */
-  def getRelease(id: Long): NelsonK[Released ==>> List[ReleasedDeployment]] =
+  def getRelease(id: Long): NelsonK[SortedMap[Released, List[ReleasedDeployment]]] =
     Kleisli(cfg => storage.StoreOp.findRelease(id).foldMap(cfg.storage))
 
   /**

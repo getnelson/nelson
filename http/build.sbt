@@ -87,6 +87,6 @@ dockerCommands ++= {
   )
 }
 
-scalaTestVersion := "2.2.6"
+scalaTestVersion := "3.0.5"
 
-scalaCheckVersion := "1.12.5"
+scalaCheckVersion := "1.13.5"

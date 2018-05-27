@@ -20,8 +20,10 @@ package routing
 
 import helm.ConsulOp
 import cats.data.NonEmptyList
-import nelson.CatsHelpers._
-import scalaz.{==>>, Foldable}
+import cats.instances.sortedMap._
+import cats.syntax.monoid._
+import scala.collection.immutable.SortedMap
+import scalaz.Foldable
 import scalaz.Scalaz._
 import journal._
 
@@ -53,8 +55,8 @@ object Discovery {
 
   implicit val encodeRT: EncodeJson[DiscoveryTables] =
     EncodeJson(rt =>
-      rt.fold(jEmptyArray){(k,v,a) =>
-        val routes = v.fold(jEmptyArray){(k,v,a) =>
+      rt.foldLeft(jEmptyArray) { case (a, (k, v)) =>
+        val routes = v.foldLeft(jEmptyArray) { case (a, (k, v)) =>
           val r = ("service" := k.serviceType) ->: ("targets" := v.toList) ->: ("port" := v.head.j.portName)->: jEmptyObject
           r -->>: a
         }
@@ -78,22 +80,22 @@ object Discovery {
     ("weight" := rp.weight)                   ->: jEmptyObject
   }
 
-  def discoveryTables[F[_]: Foldable](graphs: F[(Namespace, RoutingGraph)]): (StackName,NamespaceName) ==>> DiscoveryTables = {
-    graphs.foldLeft[(StackName,NamespaceName) ==>> DiscoveryTables](==>>.empty){(smap,g) =>
+  def discoveryTables[F[_]: Foldable](graphs: F[(Namespace, RoutingGraph)]): SortedMap[(StackName,NamespaceName), DiscoveryTables] = {
+    graphs.foldLeft[SortedMap[(StackName,NamespaceName), DiscoveryTables]](SortedMap.empty){(smap,g) =>
       val (ns, rg) = g
       rg.nodes.filter(_.nsid == ns.id).foldLeft(smap){(s,rn) =>
-        s.insert((rn.stackName, ns.name), discoveryTable(rn, rg))
+        s + (((rn.stackName, ns.name), discoveryTable(rn, rg)))
       }
     }
   }
 
   def discoveryTable(rn: RoutingNode, rg: RoutingGraph): DiscoveryTables = {
     val context = rg.decomp(rn).ctx.yolo(s"discoveryTables: no ctx after decomposing ${rn.stackName}")
-    context.outEdges.foldLeft[DiscoveryTables](==>>.empty)((m,e) =>
-      e.to.deployment.fold[DiscoveryTables](==>>.empty){ to =>
+    context.outEdges.foldLeft[DiscoveryTables](SortedMap.empty)((m,e) =>
+      e.to.deployment.fold[DiscoveryTables](SortedMap.empty){ to =>
         val path = e.label
         val service = NamedService(to.unit.serviceName.serviceType, path.portName)
-        m.updateAppend(to.namespace.name, ==>>(service -> NonEmptyList.of(path)))
+        m |+| SortedMap(to.namespace.name -> SortedMap(service -> NonEmptyList.of(path)))
       }
     )
   }

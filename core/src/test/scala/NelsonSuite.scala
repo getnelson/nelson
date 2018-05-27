@@ -33,7 +33,7 @@ import java.util.concurrent.{Executors, ThreadFactory}
 
 import knobs._
 
-import scalaz.IMap
+import scala.collection.immutable.SortedMap
 
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 
@@ -102,7 +102,7 @@ trait NelsonSuite
       case Vault.Set(path, value) => ()
       case Vault.CreatePolicy(_,_) => ()
       case Vault.DeletePolicy(_) => ()
-      case Vault.GetMounts => IMap.empty
+      case Vault.GetMounts => SortedMap.empty
       case _: Vault.CreateToken => vault.Token("aaaaaaaa-bbbb-cccc-dddddddddddd")
     })
   }

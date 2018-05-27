@@ -23,7 +23,7 @@ import java.time.{Instant,ZonedDateTime,ZoneId}
 import scala.util.matching.Regex
 import scala.concurrent.duration._
 
-import org.scalacheck.{ Arbitrary, Gen }
+import org.scalacheck.{ Arbitrary, Cogen, Gen }
 
 import nelson.Manifest.ResourceSpec
 
@@ -35,6 +35,7 @@ object Fixtures {
   implicit lazy val arbURI: Arbitrary[URI] = Arbitrary(genURI)
   implicit lazy val arbUser: Arbitrary[User] = Arbitrary(genUser)
   implicit lazy val arbInstant: Arbitrary[Instant] = Arbitrary(genInstant)
+  implicit lazy val arbCogen: Cogen[Instant] = Cogen[String].contramap(_.toString)
   implicit lazy val arbAccessToken: Arbitrary[AccessToken] = Arbitrary(genAccessToken)
   implicit lazy val arbSession: Arbitrary[Session] = Arbitrary(genSession)
   implicit lazy val arbManifest: Arbitrary[Manifest] = Arbitrary(genManifest)

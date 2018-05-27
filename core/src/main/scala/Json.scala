@@ -28,7 +28,7 @@ object Json {
   import Datacenter._
   import concurrent.duration._
   import health.HealthStatus
-  import scalaz.{@@, ==>>, Tag}
+  import scalaz.{@@, Tag}
   import scalaz.Scalaz._
 
   implicit lazy val UriToJson: EncodeJson[URI] =
@@ -644,14 +644,6 @@ object Json {
    * Encode a map as a transposed JSON list of maps, such that each map has (klabel: key) and (vlabel: value) entries.
    */
   def encodeTransposeMap[K, V](klabel: Symbol, vlabel: Symbol)(implicit ek: EncodeJson[K], ev: EncodeJson[V]): EncodeJson[Map[K, V]] = EncodeJson { m =>
-    m.toList.map { case (k, v) =>
-      (vlabel.name := v.asJson) ->:
-      (klabel.name := k.asJson) ->:
-      jEmptyObject
-    }.asJson
-  }
-
-  def encodeTransposeZMap[K, V](klabel: Symbol, vlabel: Symbol)(implicit ek: EncodeJson[K], ev: EncodeJson[V]): EncodeJson[K ==>> V] = EncodeJson { m =>
     m.toList.map { case (k, v) =>
       (vlabel.name := v.asJson) ->:
       (klabel.name := k.asJson) ->:

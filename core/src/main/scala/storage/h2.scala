@@ -19,7 +19,7 @@ package storage
 
 import argonaut._
 
-import cats.~>
+import cats.{~>, Order, Semigroup}
 import cats.data.{NonEmptyList, OptionT, ValidatedNel}
 import cats.effect.IO
 import cats.implicits._
@@ -33,9 +33,10 @@ import java.time.Instant
 
 import journal._
 
+import scala.collection.immutable.SortedMap
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
-import scalaz.{@@, ==>>, Order}
+import scalaz.@@
 
 final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   import StoreOp._
@@ -858,7 +859,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     deploymentGuid: Option[GUID],
     unitName: Option[UnitName] = None,
     limit: Int = 50
-  ): ConnectionIO[Released ==>> List[ReleasedDeployment]] = {
+  ): ConnectionIO[SortedMap[Released, List[ReleasedDeployment]]] = {
     val base = s"""
       SELECT
         rr.slug,
@@ -941,7 +942,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     .toList
     .map(_.flatten)
 
-    val combined: ConnectionIO[Released ==>> List[ReleasedDeployment]] =
+    val combined: ConnectionIO[SortedMap[Released, List[ReleasedDeployment]]] =
       for {
         a <- result
         b <- a.traverse(row => getUnit(row.unitName, row.version).map{
@@ -956,7 +957,9 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
           }
           case None => List.empty[(Released,ReleasedDeployment)]
         })
-      } yield ==>>.fromListWith(b.flatten.map { case (r,d) => r -> List(d) })((y,z) => y ++ z)
+      } yield b.flatten.foldLeft(SortedMap.empty[Released, List[ReleasedDeployment]]) {
+        case (map, (r, d)) => map + ((r, Semigroup.maybeCombine(map.get(r), List(d))))
+      }
 
     combined
   }
@@ -974,7 +977,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   /**
    *
    */
-  def listReleases(limit: Int): ConnectionIO[Released ==>> List[ReleasedDeployment]] =
+  def listReleases(limit: Int): ConnectionIO[SortedMap[Released, List[ReleasedDeployment]]] =
     _listReleasesQuery(
       slug = None,
       releaseId = None,
@@ -984,7 +987,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   /**
    *
    */
-  def listRecentReleasesForRepository(slug: Slug): ConnectionIO[Released ==>> List[ReleasedDeployment]] =
+  def listRecentReleasesForRepository(slug: Slug): ConnectionIO[SortedMap[Released, List[ReleasedDeployment]]] =
     _listReleasesQuery(
       slug = Option(slug),
       releaseId = None,
@@ -994,7 +997,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   /**
    *
    */
-  def findRelease(id: Long): ConnectionIO[Released ==>> List[ReleasedDeployment]] =
+  def findRelease(id: Long): ConnectionIO[SortedMap[Released, List[ReleasedDeployment]]] =
     _listReleasesQuery(
       slug = None,
       releaseId = Option(id),
@@ -1011,7 +1014,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       deploymentGuid = Option(guid),
       limit = 20).map { pair =>
       for {
-        (k,v) <- pair.findMax
+        (k,v) <- Either.catchNonFatal(pair.last).toOption // get the max key w/ value
         o     <- v.find(_.guid == guid)
       } yield (k,o)
     }
@@ -1105,8 +1108,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     listDeployments(sn.serviceType, likeVersion, ns, status).map { deployments =>
       val minVersion: Version = sn.version.minVersion
       deployments
-        .filter(d => Order[Version].greaterThanOrEqual(d.unit.version, minVersion))
-        .sorted(Order[Deployment].toScalaOrdering.reverse)
+        .filter(d => d.unit.version >= minVersion)
+        .sorted(Order[Deployment].toOrdering.reverse)
     }
   }
 

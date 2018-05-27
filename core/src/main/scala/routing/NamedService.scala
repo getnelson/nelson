@@ -17,9 +17,8 @@
 package nelson
 package routing
 
-import scalaz.Order
-import scalaz.std.string._
-import scalaz.std.tuple._
+import cats.Order
+import cats.implicits._
 
 /**
  * Services potentially offer multiple exposed ports, each must be
@@ -32,6 +31,9 @@ private[nelson] final case class NamedService(serviceType: UnitName, name: Strin
 
 object NamedService {
   implicit val namedServiceOrder: Order[NamedService] =
-    Order[(UnitName, String)].contramap[NamedService](ns => (ns.serviceType, ns.name))
+    Order.by(ns => (ns.serviceType, ns.name))
+
+  implicit val namedServiceOrdering: Ordering[NamedService] =
+    namedServiceOrder.toOrdering
 }
 

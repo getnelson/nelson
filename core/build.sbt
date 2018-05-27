@@ -46,9 +46,8 @@ libraryDependencies ++= Seq(
   "org.flywaydb"                % "flyway-core"                        % "3.2.1",
   "net.databinder.dispatch"    %% "dispatch-core"                      % "0.11.2",
   "ca.mrvisser"                %% "sealerate"                          % "0.0.4",
-  "org.scalaz"                 %% "scalaz-scalacheck-binding"          % V.scalaz % "test",
+  "org.typelevel"              %% "cats-kernel-laws"                   % V.cats   % "test",
   "org.apache.commons"          % "commons-email"                      % "1.3.3",
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.12"          % "0.3.1" % "test",
   "com.amazonaws"               % "aws-java-sdk-autoscaling"           % "1.11.25",
   "com.amazonaws"               % "aws-java-sdk-elasticloadbalancing"  % "1.11.25",
   "com.google.guava"            % "guava"                              % "20.0",
@@ -81,6 +80,6 @@ scalacOptions in (Compile, doc) ++= Seq(
   "-no-link-warnings" // Suppresses problems with Scaladoc @throws links
 )
 
-scalaTestVersion := "2.2.6"
+scalaTestVersion := "3.0.5"
 
-scalaCheckVersion := "1.12.5"
+scalaCheckVersion := "1.13.5"

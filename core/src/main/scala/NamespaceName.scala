@@ -18,8 +18,8 @@ package nelson
 
 import cats.data.NonEmptyList
 import scala.annotation.tailrec
-import scalaz.Order
-import scalaz.std.string._
+import cats.Order
+import cats.instances.string._
 
 /*
  * Represents a fully qualified namespace path, where 'dev' is the parent
@@ -92,5 +92,8 @@ object NamespaceName {
     fromString(ls.mkString("/"))
 
   implicit val NamespaceNameOrder: Order[NamespaceName] =
-    Order[String].contramap[NamespaceName](_.asString)
+    Order.by(_.asString)
+
+  implicit val NamespaceNameordering: Ordering[NamespaceName] =
+    NamespaceNameOrder.toOrdering
 }

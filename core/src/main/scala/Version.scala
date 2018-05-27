@@ -16,9 +16,8 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.Order
-import scalaz.syntax.monoid._
-import scalaz.std.anyVal._
+import cats.Order
+import cats.implicits._
 
 final case class Version(major: Int, minor: Int, patch: Int){
   /**
@@ -47,13 +46,12 @@ object Version {
     case _ => None
   }
 
-  implicit def versionOrder: Order[Version] = {
-    val I = Order[Int]
-    I.contramap[Version](_.major) |+|
-    I.contramap[Version](_.minor) |+|
-    I.contramap[Version](_.patch)
-  }
-
+  implicit val versionOrder: Order[Version] =
+    Order.whenEqualMonoid.combineAll(List(
+      Order.by(_.major),
+      Order.by(_.minor),
+      Order.by(_.patch)
+    ))
 }
 
 final case class FeatureVersion(major: Int, minor: Int){
@@ -70,10 +68,8 @@ object FeatureVersion {
     case _ => None
   }
 
-  implicit def featureVersionOrder: Order[FeatureVersion] = {
-    val I = Order[Int]
-    I.contramap[FeatureVersion](_.major) |+| I.contramap[FeatureVersion](_.minor)
-  }
+  implicit val featureVersionOrder: Order[FeatureVersion] =
+    Order.whenEqual(Order.by(_.major), Order.by(_.minor))
 }
 
 final case class MajorVersion(major: Int) {
