@@ -25,7 +25,7 @@ import nelson.audit.AuditableInstances.deploymentAuditable
 import nelson.storage.{StoreOp, StoreOpF}
 import nelson.health.{HealthCheckOp, Passing}
 
-import cats.data.NonEmptyList
+import cats.data.{NonEmptyList, OptionT}
 import cats.effect.{Effect, IO}
 import cats.syntax.applicativeError._
 import nelson.CatsHelpers._
@@ -38,7 +38,6 @@ import java.time.Instant
 
 import journal.Logger
 
-import scalaz.OptionT
 import scalaz.syntax.bind._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
@@ -189,7 +188,7 @@ object DeploymentMonitor {
       (for {
         t  <- OptionT(StoreOp.getCurrentTargetForServiceName(d.nsid, d.unit.serviceName))
         id <- OptionT(StoreOp.startTrafficShift(from = t.deploymentTarget.id, to = d.id, start = Instant.now))
-      } yield id).run.map(_ => ())
+      } yield id).value.map(_ => ())
 
     def ready: StoreOpF[Unit] =
       StoreOp.createDeploymentStatus(d.id, Ready,

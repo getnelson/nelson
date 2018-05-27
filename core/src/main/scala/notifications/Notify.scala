@@ -22,13 +22,13 @@ import nelson.Manifest.{UnitDef,Versioned}
 import nelson.storage.StoreOp
 
 import cats.~>
+import cats.data.OptionT
 import cats.effect.IO
 import cats.implicits._
-import nelson.CatsHelpers._
 
 import journal._
 
-import scalaz.{@@, OptionT}
+import scalaz.@@
 import scalaz.Scalaz._
 
 object Notify {
@@ -69,7 +69,7 @@ object Notify {
         man  <- OptionT(IO.pure(yaml.ManifestParser.parse(raw.decoded).toOption))
       } yield man.notifications
 
-      notes.run.attempt.map {
+      notes.value.attempt.map {
         case Right(Some(ns)) => ns
         case _ => NotificationSubscriptions.empty
       }

@@ -24,6 +24,7 @@ import nelson.notifications.Notify
 import nelson.storage.{StoreOp, StoreOpF}
 
 import cats.~>
+import cats.data.OptionT
 import cats.effect.IO
 import nelson.CatsHelpers._
 
@@ -31,7 +32,7 @@ import io.prometheus.client.Counter
 
 import java.time.Instant
 
-import scalaz.{@@, Kleisli, OptionT}
+import scalaz.{@@, Kleisli}
 import scalaz.Scalaz._
 
 /**
@@ -63,12 +64,12 @@ object Actionable {
       (for {
          u  <- OptionT(StoreOp.getUnit(unit.name, version))
          n  <- OptionT(StoreOp.getNamespace(dc.name, ns.name)) // gets a Datacetner.Namespace
-         id <- StoreOp.createDeployment(u.id, hash, n, unit.workflow.name, plan.name, policy.name).liftM[OptionT]
-         _  <- plan.environment.resources.map { case (name, uri) =>
+         id <- OptionT.liftF(StoreOp.createDeployment(u.id, hash, n, unit.workflow.name, plan.name, policy.name))
+         _  <- OptionT.liftF(plan.environment.resources.map { case (name, uri) =>
                 StoreOp.createDeploymentResource(id, name, uri)
-               }.toList.sequence.liftM[OptionT]
-         _  <- StoreOp.createDeploymentExpiration(id, exp).liftM[OptionT]
-       } yield id).run
+               }.toList.sequence)
+         _  <- OptionT.liftF(StoreOp.createDeploymentExpiration(id, exp))
+       } yield id).value
     }
 
     def action(unit: UnitDef @@ Versioned): Kleisli[IO, (NelsonConfig,ActionConfig), Unit] =

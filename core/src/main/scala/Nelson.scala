@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import cats.data.{EitherT, NonEmptyList, ValidatedNel}
+import cats.data.{EitherT, NonEmptyList, OptionT, ValidatedNel}
 import cats.effect.IO
 import cats.instances.list._
 import nelson.CatsHelpers._
@@ -27,7 +27,7 @@ import java.time.Instant
 
 import journal.Logger
 
-import scalaz.{~>, @@, ==>>, Kleisli, OptionT}
+import scalaz.{~>, @@, ==>>, Kleisli}
 import scalaz.Scalaz._
 
 object Nelson {
@@ -556,7 +556,7 @@ object Nelson {
       s <- fetchDeploymentStatuses(guid)
       e <- findDeploymentExpiration(guid)
       t <- Kleisli[IO, NelsonConfig, Option[(Namespace,Datacenter.Deployment,RoutingGraph)]]{ config =>
-        getDplWithNs.run.foldMap(config.storage)
+        getDplWithNs.value.foldMap(config.storage)
       }
     } yield for {
         a <- t
@@ -587,7 +587,7 @@ object Nelson {
         dep <- OptionT(StoreOp.getDeploymentByGuid(guid))
         exp <- OptionT(StoreOp.findDeploymentExpiration(dep.id))
         st  <- OptionT(StoreOp.getDeploymentStatus(dep.id))
-      } yield (dep,exp,st,dep.namespace)).run
+      } yield (dep,exp,st,dep.namespace)).value
 
       (for {
         a   <- OptionT(query.foldMap(cfg.storage))
@@ -595,7 +595,7 @@ object Nelson {
         dc  <- OptionT(IO.pure(cfg.datacenters.find(_.name == ns.datacenter)))
         sum <- OptionT(scheduler.SchedulerOp.summary(dc, ns.name, dep.stackName).foldMap(dc.interpreters.scheduler))
         h   <- OptionT(HealthCheckOp.health(dc, ns.name, dep.stackName).foldMap(dc.health).map(h => Some(h): Option[List[HealthStatus]]))
-      } yield RuntimeSummary(sum, h, status, exp)).run
+      } yield RuntimeSummary(sum, h, status, exp)).value
     }
   }
 
@@ -823,17 +823,16 @@ object Nelson {
       else Right(ts)
 
     def reverse(ts: TrafficShift): StoreOpF[Either[String, ID]] = {
-      val prog = OptionT(StoreOp.reverseTrafficShift(ts.to.id, Instant.now)).toCatsRight("unsable to start traffic shift reverse")
+      val prog = OptionT(StoreOp.reverseTrafficShift(ts.to.id, Instant.now)).toRight("unsable to start traffic shift reverse")
       prog.value
     }
 
     Kleisli { cfg =>
 
       val prog = for {
-        dep <- OptionT(StoreOp.getDeploymentByGuid(guid))
-                .toCatsRight(s"deployment with guid $guid not found")
+        dep <- OptionT(StoreOp.getDeploymentByGuid(guid)).toRight(s"deployment with guid $guid not found")
         ts  <- OptionT(StoreOp.getTrafficShiftForServiceName(dep.nsid, dep.unit.serviceName))
-                .toCatsRight(s"unable to find traffic shift for to deployment ${dep.stackName}")
+                .toRight(s"unable to find traffic shift for to deployment ${dep.stackName}")
         _   <- EitherT(validate(ts).point[StoreOpF])
         _   <- EitherT(reverse(ts))
       } yield ts
@@ -977,7 +976,7 @@ object Nelson {
         od <- OptionT(RoutingTable.routingGraph(ns).map(Option(_)))
       } yield {
         LoadbalancerSummary(ns, lb, getOuts(od, lb))
-      }).run.foldMap(cfg.storage)
+      }).value.foldMap(cfg.storage)
     }
   }
 

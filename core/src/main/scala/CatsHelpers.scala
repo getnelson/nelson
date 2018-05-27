@@ -1,7 +1,7 @@
 package nelson
 
 import cats.Semigroup
-import cats.data.{EitherT, NonEmptyList}
+import cats.data.NonEmptyList
 import cats.free.Free
 import cats.effect.{Effect, IO, Timer}
 import cats.syntax.functor._
@@ -38,14 +38,6 @@ object CatsHelpers {
       def append(f1: NonEmptyList[A], f2: => NonEmptyList[A]): NonEmptyList[A] =
         Semigroup[NonEmptyList[A]].combine(f1, f2)
     }
-
-  implicit class NelsonEnrichedOptionT[F[_], A](val fa: scalaz.OptionT[F, A]) extends AnyVal {
-    def toCatsRight[B](b: => B)(implicit F: scalaz.Functor[F]): EitherT[F, B, A] =
-      EitherT(F.map(fa.run) {
-        case Some(a) => Right(a)
-        case None    => Left(b)
-      })
-  }
 
   implicit class NelsonEnrichedIO[A](val io: IO[A]) extends AnyVal {
     /** Run `other` if this IO fails */
