@@ -24,6 +24,7 @@ import nelson.routing._
 import cats.data.{EitherT, NonEmptyList, Validated, ValidatedNel}
 import cats.effect.IO
 import cats.implicits._
+import nelson.CatsHelpers._
 
 object CycleDetection {
   type Valid[A] = ValidatedNel[NelsonError, A]

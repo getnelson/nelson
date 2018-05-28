@@ -1,15 +1,20 @@
 package nelson
 
+import cats.Eval
 import cats.effect.{Effect, IO, Timer}
+import cats.free.Cofree
 import cats.syntax.functor._
 import cats.syntax.monadError._
 
 import fs2.{Pipe, Sink, Stream}
 
+import quiver.{Context, Decomp, Graph}
+
 import java.util.concurrent.{ScheduledExecutorService, TimeoutException}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
+import scala.collection.immutable.{Stream => SStream}
 
 object CatsHelpers {
   implicit class NelsonEnrichedIO[A](val io: IO[A]) extends AnyVal {
@@ -50,5 +55,33 @@ object CatsHelpers {
 
     def throughO[O2](pipe: Pipe[F, O, O2]): Stream[F, Either[W, O2]] =
       stream.through(pipeO(pipe))
+  }
+
+
+  /** This is pending release of https://github.com/Verizon/quiver/pull/31 */
+  private type Tree[A] = Cofree[SStream, A]
+
+  private def flattenTree[A](tree: Tree[A]): SStream[A] = {
+    def go(tree: Tree[A], xs: SStream[A]): SStream[A] =
+      SStream.cons(tree.head, tree.tail.value.foldRight(xs)(go(_, _)))
+    go(tree, SStream.Empty)
+  }
+
+  private def Node[A](root: A, forest: => SStream[Tree[A]]): Tree[A] =
+    Cofree[SStream, A](root, Eval.later(forest))
+
+  implicit class NelsonEnrichedGraph[N, A, B](val graph: Graph[N, A, B]) extends AnyVal {
+    def reachable(v: N): Vector[N] =
+      xdfWith(Seq(v), _.successors, _.vertex)._1.flatMap(flattenTree)
+
+    def xdfWith[C](vs: Seq[N], d: Context[N, A, B] => Seq[N], f: Context[N, A, B] => C): (Vector[Tree[C]], Graph[N, A, B]) =
+      if (vs.isEmpty || graph.isEmpty) (Vector(), graph)
+      else graph.decomp(vs.head) match {
+        case Decomp(None, g) => g.xdfWith(vs.tail, d, f)
+        case Decomp(Some(c), g) =>
+          val (xs, _) = g.xdfWith(d(c), d, f)
+          val (ys, g3) = g.xdfWith(vs.tail, d, f)
+          (Node(f(c), xs.toStream) +: ys, g3)
+      }
   }
 }

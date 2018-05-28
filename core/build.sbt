@@ -32,7 +32,7 @@ libraryDependencies ++= Seq(
   "io.verizon.helm"            %% "http4s"                             % "3.0.82",
   "io.verizon.knobs"           %% "core"                               % V.knobs,
   "io.verizon.journal"         %% "core"                               % V.journal,
-  "io.verizon.quiver"          %% "core"                               % "5.4.11",
+  "io.verizon.quiver"          %% "core"                               % "7.0.19",
   "org.yaml"                    % "snakeyaml"                          % "1.16",
   "io.argonaut"                %% "argonaut"                           % "6.2.1",
   "io.argonaut"                %% "argonaut-cats"                      % "6.2.1",
