@@ -21,20 +21,14 @@ import nelson.cleanup.ExpirationPolicy
 import nelson.notifications.NotificationSubscriptions
 import nelson.storage.StoreOp
 
-import cats.~>
-import cats.data.{NonEmptyList, ValidatedNel}
+import cats.{~>, Foldable, Monoid}
+import cats.data.{Kleisli, NonEmptyList, ValidatedNel}
 import cats.effect.IO
-import cats.instances.unit._
-import cats.syntax.applicativeError._
-import cats.syntax.validated._
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import java.net.URI
 
 import scala.concurrent.duration._
-
-import scalaz.{~> => _, NonEmptyList => _, _}
-import scalaz.Scalaz._
 
 final case class Manifest(
   units: List[UnitDef],
@@ -405,7 +399,12 @@ object Manifest {
       (dc,ns,p,u,res) => StoreOp.verifyDeployable(dc.name, ns.name, u).foldMap(storage) ::  res
 
     implicit val monoid: Monoid[ValidatedNel[NelsonError, Unit]] =
-      Monoid.instance[ValidatedNel[NelsonError, Unit]](_ combine _, ().validNel)
+      new Monoid[ValidatedNel[NelsonError, Unit]] {
+        def combine(x: ValidatedNel[NelsonError, Unit], y: ValidatedNel[NelsonError, Unit]): ValidatedNel[NelsonError, Unit] =
+          x combine y
+
+        def empty: ValidatedNel[NelsonError, Unit] = ().validNel
+      }
 
     foldUnits(m, dcs, folder, Nil)
       .sequence

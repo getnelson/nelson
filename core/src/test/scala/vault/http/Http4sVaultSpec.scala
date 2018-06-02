@@ -24,7 +24,6 @@ import org.http4s.Uri
 import org.http4s.client.blaze._
 import org.scalatest.{FlatSpec, Matchers}
 import scala.concurrent.duration._
-import scalaz.std.string._
 import cats.effect.IO
 import cats.syntax.either._
 
@@ -107,9 +106,9 @@ class Http4sVaultSpec extends FlatSpec
   it should "have cubbyhole, secret, sys mounted" in {
     val mounts = Vault.getMounts.foldMap(interp).attempt.unsafeRunSync()
     mounts.toOption.get.size should be (3)
-    mounts.toOption.get.member("cubbyhole/") should be (true)
-    mounts.toOption.get.member("secret/") should be (true)
-    mounts.toOption.get.member("sys/") should be (true)
+    mounts.toOption.get.contains("cubbyhole/") should be (true)
+    mounts.toOption.get.contains("secret/") should be (true)
+    mounts.toOption.get.contains("sys/") should be (true)
   }
 
   // This is how nelson writes policies.  It provides a good test case for us.

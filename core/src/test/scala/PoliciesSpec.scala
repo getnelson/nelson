@@ -22,7 +22,6 @@ import nelson.test._
 import vault._
 
 import cats.effect.IO
-import nelson.CatsHelpers._
 
 class PoliciesSpec extends FlatSpec with Matchers with Inspectors with RoutingFixtures {
   val nsRef = "qa"

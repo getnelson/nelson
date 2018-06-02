@@ -21,7 +21,6 @@ import _root_.argonaut._, Argonaut._
 
 import cats.effect.IO
 import cats.implicits._
-import nelson.CatsHelpers._
 
 import org.http4s._
 import org.http4s.dsl.io._
@@ -29,8 +28,6 @@ import org.http4s.argonaut._
 import org.http4s.headers.Location
 
 import java.time.Instant
-
-import scalaz.syntax.std.option._
 
 final case class Datacenters(config: NelsonConfig) extends Default {
   import nelson.Json._
@@ -175,7 +172,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
       val units = u
-      namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
+      namespace.toNel.toRight("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
           ns => ns.sequence.fold(
@@ -286,7 +283,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       val namespace = commaSeparatedStringToNamespace(ns)
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
-      namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
+      namespace.toNel.toRight("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
           ns => ns.sequence.fold(

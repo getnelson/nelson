@@ -18,14 +18,13 @@ package nelson
 package yaml
 
 import cats.effect.IO
+import cats.implicits._
 
 trait SnakeCharmer {
-  def toEither[A, B](disj: scalaz.\/[A, B]): Either[A, B] = disj.fold[Either[A, B]](Left(_), Right(_))
-
   def loadManifest(yamlPath: String): Either[Throwable, Manifest] =
     (for {
       yml <- Util.loadResourceAsString(yamlPath)
-      out <- IO.fromEither(toEither(ManifestParser.parse(yml).leftMap(e => new RuntimeException(s"parse failed! ${e.toList.map(_.getMessage).mkString("\n")} ${e.map(_.getStackTrace).toList.flatten.mkString("\n")}"))))
+      out <- IO.fromEither(ManifestParser.parse(yml).leftMap(e => new RuntimeException(s"parse failed! ${e.toList.map(_.getMessage).mkString("\n")} ${e.map(_.getStackTrace).toList.flatten.mkString("\n")}")))
     } yield out).attempt.unsafeRunSync()
 
 }

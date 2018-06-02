@@ -21,12 +21,10 @@ import nelson.Manifest.{apply => _, _}
 import nelson.storage.{StoreOp, StoreOpF}
 import nelson.routing._
 
-import cats.data.{NonEmptyList, Validated, ValidatedNel}
+import cats.data.{EitherT, NonEmptyList, Validated, ValidatedNel}
 import cats.effect.IO
 import cats.implicits._
 import nelson.CatsHelpers._
-
-import scalaz.{NonEmptyList => _, _}
 
 object CycleDetection {
   type Valid[A] = ValidatedNel[NelsonError, A]
@@ -34,9 +32,9 @@ object CycleDetection {
 
   def validateNoCycles(
     m: Manifest,
-    cfg: NelsonConfig): DisjunctionT[IO, NonEmptyList[NelsonError], Unit] = {
+    cfg: NelsonConfig): EitherT[IO, NonEmptyList[NelsonError], Unit] = {
     val op: StoreOpF[Valid[Unit]] = detect(m, cfg)
-    DisjunctionT(op.foldMap(cfg.storage).map(_.toDisjunction))
+    EitherT(op.foldMap(cfg.storage).map(_.toEither))
   }
 
   // Detecting definite cycles:

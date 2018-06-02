@@ -25,15 +25,14 @@ libraryDependencies ++= Seq(
   "co.fs2"                     %% "fs2-core"                           % V.fs2,
   "co.fs2"                     %% "fs2-io"                             % V.fs2,
   "co.fs2"                     %% "fs2-scodec"                         % V.fs2,
-  "org.typelevel"              %% "cats-effect"                        % V.catsEffect,
   "org.typelevel"              %% "cats-core"                          % V.cats,
+  "org.typelevel"              %% "cats-effect"                        % V.catsEffect,
   "org.typelevel"              %% "cats-free"                          % V.cats,
   "io.verizon.helm"            %% "core"                               % "3.0.82",
   "io.verizon.helm"            %% "http4s"                             % "3.0.82",
   "io.verizon.knobs"           %% "core"                               % V.knobs,
   "io.verizon.journal"         %% "core"                               % V.journal,
-  "io.verizon.quiver"          %% "core"                               % "5.4.11",
-  "io.verizon.delorean"        %% "core"                               % "1.1.37",
+  "io.verizon.quiver"          %% "core"                               % "7.0.19",
   "org.yaml"                    % "snakeyaml"                          % "1.16",
   "io.argonaut"                %% "argonaut"                           % "6.2.1",
   "io.argonaut"                %% "argonaut-cats"                      % "6.2.1",
@@ -46,9 +45,8 @@ libraryDependencies ++= Seq(
   "org.flywaydb"                % "flyway-core"                        % "3.2.1",
   "net.databinder.dispatch"    %% "dispatch-core"                      % "0.11.2",
   "ca.mrvisser"                %% "sealerate"                          % "0.0.4",
-  "org.scalaz"                 %% "scalaz-scalacheck-binding"          % V.scalaz % "test",
+  "org.typelevel"              %% "cats-kernel-laws"                   % V.cats   % "test",
   "org.apache.commons"          % "commons-email"                      % "1.3.3",
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.12"          % "0.3.1" % "test",
   "com.amazonaws"               % "aws-java-sdk-autoscaling"           % "1.11.25",
   "com.amazonaws"               % "aws-java-sdk-elasticloadbalancing"  % "1.11.25",
   "com.google.guava"            % "guava"                              % "20.0",
@@ -81,6 +79,6 @@ scalacOptions in (Compile, doc) ++= Seq(
   "-no-link-warnings" // Suppresses problems with Scaladoc @throws links
 )
 
-scalaTestVersion := "2.2.6"
+scalaTestVersion := "3.0.5"
 
-scalaCheckVersion := "1.12.5"
+scalaCheckVersion := "1.13.5"

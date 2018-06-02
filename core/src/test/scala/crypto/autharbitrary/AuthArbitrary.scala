@@ -20,18 +20,15 @@ package autharbitrary
 
 import ArbFunction0._
 
-import scalaz.Apply
 import cats.effect.IO
 import scodec.bits.ByteVector
 import org.scalacheck._
 import Arbitrary.arbitrary
 
-import scalaz.scalacheck.ScalaCheckBinding._
-
 object AuthArbitrary {
 
   implicit def arbSafeHolder[V]: Arbitrary[SafeHolder[V]] = Arbitrary(
-    Gen.wrap(Gen.const(new SafeHolder[V])))
+    Gen.delay(Gen.const(new SafeHolder[V])))
 
   def genByteVector(minLength: Int, maxLength: Int): Gen[ByteVector] = for {
     n <- Gen.chooseNum(minLength, maxLength)
@@ -60,22 +57,21 @@ object AuthArbitrary {
       ).map(InitializationVector.unsafe))
 
   implicit val arbAuthEnv: Arbitrary[AuthEnv] = Arbitrary(
-    Apply[Gen].apply3(
-      arbitrary[EncryptionKey],
-      arbitrary[SignatureKey],
-      arbitrary[() => Long]
-    ){ (encKey, signKey, randLong) =>
+    for {
+      encKey <- arbitrary[EncryptionKey]
+      signKey <- arbitrary[SignatureKey]
+      randLong <- arbitrary[() => Long]
+    } yield
       AuthEnv.instance(
         encryptKey = encKey.bytes,
         sigKey = signKey.bytes,
         getNextNonce = IO(Nonce.fromLongs(randLong(), randLong()))
       )
-    })
+    )
 
-  implicit val arbTokenVersion: Arbitrary[TokenVersion] = Arbitrary(
-    Apply[Gen].apply3(
-      Gen.chooseNum(0, 255),
-      Gen.chooseNum(0, 255),
-      Gen.chooseNum(0, 255)
-    )(TokenVersion.apply))
+  implicit val arbTokenVersion: Arbitrary[TokenVersion] = Arbitrary(for {
+    a <- Gen.chooseNum(0, 255)
+    b <- Gen.chooseNum(0, 255)
+    c <- Gen.chooseNum(0, 255)
+  } yield TokenVersion(a, b, c))
 }

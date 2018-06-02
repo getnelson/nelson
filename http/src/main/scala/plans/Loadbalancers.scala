@@ -21,12 +21,9 @@ import _root_.argonaut._, Argonaut._
 
 import cats.effect.IO
 import cats.implicits._
-import nelson.CatsHelpers._
 
 import org.http4s._
 import org.http4s.dsl.io._
-
-import scalaz.syntax.std.option._
 
 final case class Loadbalancers(config: NelsonConfig) extends Default {
   import Datacenter.{Namespace, LoadbalancerDeployment}
@@ -111,7 +108,7 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
     case req @ GET -> Root / "v1" / "loadbalancers" :? Ns(ns) +& Dc(dc) & IsAuthenticated(session) =>
       val namespace = commaSeparatedStringToNamespace(ns)
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
-      namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
+      namespace.toNel.toRight("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
           ns => ns.sequence.fold(

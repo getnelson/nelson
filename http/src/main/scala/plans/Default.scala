@@ -26,10 +26,7 @@ import journal.Logger
 
 import cats.data.{Kleisli, OptionT}
 import cats.effect.IO
-import nelson.CatsHelpers._
-import scalaz.Order
-import scalaz.syntax.monad._
-import scalaz.syntax.std.option._
+import cats.implicits._
 
 abstract class Default extends Product with Serializable { self =>
   import Nelson.NelsonK
@@ -85,7 +82,7 @@ abstract class Default extends Product with Serializable { self =>
         DecodeResult.success(_))}
       .decode(req, true).fold(
         mf => handleMessageFailure(req, mf),
-        f).join
+        f).flatten
   }
 
   object IsAuthenticated {
@@ -128,10 +125,8 @@ abstract class Default extends Product with Serializable { self =>
 
 object ClientValidation {
 
-  def versionLte(v: Version, maxBannedVersion: Version): Boolean = {
-    val O = implicitly[Order[Version]]
-    O.lessThanOrEqual(v, maxBannedVersion)
-  }
+  def versionLte(v: Version, maxBannedVersion: Version): Boolean =
+    v <= maxBannedVersion
 
   def agentDoesntMatch(ua: headers.`User-Agent`)
     (agentConfig: BannedClientsConfig.HttpUserAgent): Boolean =
@@ -141,18 +136,10 @@ object ClientValidation {
     (agentConfig: BannedClientsConfig.HttpUserAgent): Boolean = {
     val namesMatch = agentConfig.name == ua.product.name
     def versionsMatch: Boolean =
-      agentConfig.maxBannedVersion.cata(
-        // Ban all, regardless of version.
-        none = true,
-        some = (maxBannedVersion: Version) =>
-          // If the UA has no version, allow. If the version can't be parsed, allow.
-          ua.product.version.flatMap(Version.fromString).cata(
-            none = false,
-            // If the UA version exists and is lte the config version, ban.
-            some = (uaVersion: Version) =>
-              versionLte(uaVersion, maxBannedVersion)
-          )
-      )
+      agentConfig.maxBannedVersion.fold(true) { maxBannedVersion =>
+        // If the UA has no version, allow. If the version can't be parsed, allow.
+        ua.product.version.flatMap(Version.fromString).fold(false)(uaVersion => versionLte(uaVersion, maxBannedVersion))
+      }
 
     namesMatch && versionsMatch
   }

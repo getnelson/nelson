@@ -18,16 +18,16 @@ package nelson
 
 import cats.data.NonEmptyList
 import cats.effect.IO
+import cats.implicits._
 
-import scalaz.\/
 import scala.reflect.ClassTag
 
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 
 object YamlParser {
-  def fromYaml[A : ClassTag](input: String): NelsonError \/ A =
-    \/.fromTryCatchNonFatal {
+  def fromYaml[A : ClassTag](input: String): Either[NelsonError, A] =
+    Either.catchNonFatal {
       val constructor = new Constructor(implicitly[ClassTag[A]].runtimeClass)
       val yaml = new Yaml(constructor)
       yaml.load(input).asInstanceOf[A]
@@ -35,7 +35,7 @@ object YamlParser {
 }
 abstract class YamlParser[A] {
   def parseIO(input: String): IO[A] =
-    IO.fromEither(parse(input).leftMap(e => LoadError(e.toList.map(_.getMessage).mkString(","))).toEither)
+    IO.fromEither(parse(input).leftMap(e => LoadError(e.toList.map(_.getMessage).mkString(","))))
 
-  def parse(input: String): NonEmptyList[NelsonError] \/ A
+  def parse(input: String): Either[NonEmptyList[NelsonError], A]
 }

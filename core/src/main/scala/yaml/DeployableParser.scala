@@ -18,7 +18,7 @@ package nelson
 package yaml
 
 import cats.data.NonEmptyList
-import scalaz.\/
+import cats.implicits._
 import java.util.{Map => JMap}
 import scala.beans.BeanProperty
 
@@ -34,24 +34,24 @@ object DeployableParser extends YamlParser[Manifest.Deployable] {
   import YamlParser.fromYaml
   import scala.collection.JavaConverters._
 
-  def parse(input: String): NonEmptyList[NelsonError] \/ Manifest.Deployable =
+  def parse(input: String): Either[NonEmptyList[NelsonError], Manifest.Deployable] =
     v1.parse(input).leftMap(NonEmptyList.of(_))
 
   object v1 {
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.Product", "org.brianmckenna.wartremover.warts.Serializable"))
-    def parse(input: String): NelsonError \/ Manifest.Deployable = {
+    def parse(input: String): Either[NelsonError, Manifest.Deployable] = {
       def toDeployable(in: Map[String,String]): Option[Manifest.Deployable.Output] =
         in.get("image").map(Manifest.Deployable.Container.apply)
 
       def toVersion(v: String) =
-        Version.fromString(v).map(\/.right)
-          .getOrElse(\/.left(UnparsableReleaseVersion(v)))
+        Version.fromString(v).map(Right(_))
+          .getOrElse(Left(UnparsableReleaseVersion(v)))
 
       for {
         a <- fromYaml[DeployableYamlVersion1](input)
         b <- toDeployable(a.output.asScala.toMap)
-              .map(d => \/.right(d))
-              .getOrElse(\/.left(LoadError(
+              .map(d => Right(d))
+              .getOrElse(Left(LoadError(
               s"could not convert the input YAML to a Manifest.Deployable. Input was:\n $input")))
         c <- toVersion(a.version)
       } yield Manifest.Deployable(

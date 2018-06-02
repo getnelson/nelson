@@ -16,8 +16,8 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.implicits._
 import org.scalacheck._, Prop._
-import scalaz.\/
 
 object ManifestSpec extends Properties("manifest") with RoutingFixtures {
   import Fixtures._
@@ -101,13 +101,12 @@ class ManifestManualSpec extends NelsonSuite {
   import Manifest._
   import Util._
   import DeploymentTarget._
-  import nelson.CatsHelpers._
 
   def load(what: String) = {
     for {
-      a <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync().toDisjunction
+      a <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync()
       b <- yaml.ManifestParser.parse(a)
-      c <- loadResourceAsString(what).attempt.unsafeRunSync().toDisjunction
+      c <- loadResourceAsString(what).attempt.unsafeRunSync()
       d  = Github.Asset(
         id = 45,
         name = "example-howdy.deployable.yml",
@@ -135,9 +134,9 @@ class ManifestManualSpec extends NelsonSuite {
 
   it should "be OK with *.yaml" in {
     val manifest = for {
-      resource <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync().toDisjunction
+      resource <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync()
       manifest <- yaml.ManifestParser.parse(resource)
-      contents <- loadResourceAsString("/nelson/manifest.deployable.v1.c.yml").attempt.unsafeRunSync().toDisjunction
+      contents <- loadResourceAsString("/nelson/manifest.deployable.v1.c.yml").attempt.unsafeRunSync()
       asset = Github.Asset(
         id = 45,
         name = "example-howdy.deployable.yaml", // this is what is being tested - note .yaml instead of .yml
@@ -154,15 +153,15 @@ class ManifestManualSpec extends NelsonSuite {
       )
     } yield Manifest.versionedUnits((Manifest.saturateManifest(manifest)(release)).unsafeRunSync()).map(_.version)
 
-    manifest should equal (\/.right(List(Version(0, 6, 10))))
+    manifest should equal (Right(List(Version(0, 6, 10))))
   }
 
   it should "augment the manifest with a release in the happy case" in {
-    load("/nelson/manifest.deployable.v1.c.yml") should equal (\/.right(List(Version(0,6,10))))
+    load("/nelson/manifest.deployable.v1.c.yml") should equal (Right(List(Version(0,6,10))))
   }
 
   it should "fail when the deployable has a different name" in {
-    load("/nelson/manifest.deployable.v1.d.yml") should equal (\/.right(List(Version(0,6,10))))
+    load("/nelson/manifest.deployable.v1.d.yml") should equal (Right(List(Version(0,6,10))))
   }
 
   behavior of "filterDatacenters"

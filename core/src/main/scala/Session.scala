@@ -29,7 +29,6 @@ final case class Session(
 )
 
 object Session { session =>
-  import scalaz.\/
   import java.net.URI
   import scodec._, codecs._
   import crypto._, protocol._
@@ -88,11 +87,11 @@ object Session { session =>
 
   def validate(session: Session): AuthResult[Unit] = {
     if (session.expiry.isBefore(Instant.now()))
-      \/.left(AuthFailure.Expired(session.expiry))
+      Left(AuthFailure.Expired(session.expiry))
     else if (session.user.login.isEmpty)
-      \/.left(AuthFailure.InvalidField("user.login", "user login cannot be empty"))
+      Left(AuthFailure.InvalidField("user.login", "user login cannot be empty"))
     else
-      \/.right(())
+      Right(())
   }
 
   def authenticatorForEnv(env: AuthEnv): TokenAuthenticator[String, Session] =

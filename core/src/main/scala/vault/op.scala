@@ -19,7 +19,7 @@ package vault
 
 import cats.free.Free
 import scala.concurrent.duration.FiniteDuration
-import scalaz.==>>
+import scala.collection.immutable.SortedMap
 
 /**
  * An algebra which represents an operation interacting with a
@@ -88,7 +88,7 @@ object Vault {
   def sealStatus: VaultF[SealStatus] =
     Free.liftF(GetSealStatus)
 
-  def get(path: String): VaultF[String] = //VaultF[Option[String ==>> String]] =
+  def get(path: String): VaultF[String] = //VaultF[Option[SortedMap[String, String]]] =
     Free.liftF(Get(path))
 
   def set(path: String, value: String): VaultF[Unit] =
@@ -100,7 +100,7 @@ object Vault {
   def deletePolicy(name: String): VaultF[Unit] =
     Free.liftF(DeletePolicy(name))
 
-  def getMounts: VaultF[String ==>> Mount] =
+  def getMounts: VaultF[SortedMap[String, Mount]] =
     Free.liftF(GetMounts)
 
   def createToken(
@@ -115,9 +115,9 @@ object Vault {
   final case class Unseal(key: MasterKey) extends Vault[SealStatus]
   case object GetSealStatus extends Vault[SealStatus]
   case object Seal extends Vault[Unit]
-  final case class Get(path: String) extends Vault[String] // Vault[Option[String ==>> String]]
+  final case class Get(path: String) extends Vault[String] // Vault[Option[SortedMap[String, String]]]
   final case class Set(path: String, value: String) extends Vault[Unit]
-  case object GetMounts extends Vault[String ==>> Mount]
+  case object GetMounts extends Vault[SortedMap[String, Mount]]
   final case class CreatePolicy(name: String, rules: List[Rule]) extends Vault[Unit]
   final case class DeletePolicy(name: String) extends Vault[Unit]
   final case class CreateToken(policies: Option[List[String]], renewable: Boolean, ttl: Option[FiniteDuration], numUses: Long = 0L) extends Vault[Token]

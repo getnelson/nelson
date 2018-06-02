@@ -16,15 +16,15 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.implicits._
 import org.scalacheck._, Prop._
-import scalaz.\/-
 
 object NamespaceNameSpec extends Properties("NamespaceNameSpec") {
 
   property("roundtrip") = forAll(Fixtures.genNamespaceNameStr) { (name: String) =>
     val ns = NamespaceName.fromString(name)
     val str = ns.map(_.asString)
-    str == \/-(name)
+    str == Right(name)
   }
 
   property("subordinate") = forAll(Fixtures.genNamespaceNameStr) { (name: String) =>

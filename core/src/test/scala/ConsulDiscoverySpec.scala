@@ -16,11 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.~>
-import scalaz.Id
-import scalaz.std.list._
+import cats.{~>, Id}
+import cats.instances.list._
 import helm.ConsulOp
-import nelson.CatsHelpers._
 
 class ConsulDiscoverySpec extends NelsonSuite {
   import Datacenter._
@@ -48,8 +46,8 @@ class ConsulDiscoverySpec extends NelsonSuite {
     var stacks: Set[String] = Set.empty
     var gets = false
 
-    val interp = new ~>[ConsulOp,Id.Id] {
-      def apply[A](f: ConsulOp[A]): Id.Id[A] = f match {
+    val interp = new ~>[ConsulOp, Id] {
+      def apply[A](f: ConsulOp[A]): Id[A] = f match {
         case ConsulOp.KVGet(key) => gets = true
           Some(key)
 
@@ -71,7 +69,7 @@ class ConsulDiscoverySpec extends NelsonSuite {
       }
     }
 
-    consulOps.foreach(helm.run(interp.asCats, _))
+    consulOps.foreach(helm.run(interp, _))
 
     val expected =
       Set("conductor--1-1-1--abcd",

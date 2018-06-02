@@ -8,7 +8,9 @@ import nelson.health._
 import argonaut._
 import argonaut.Argonaut._
 
+import cats.{Foldable, Monoid}
 import cats.effect.{Effect, IO}
+import cats.implicits._
 
 import org.http4s.AuthScheme
 import org.http4s.Credentials.Token
@@ -17,9 +19,6 @@ import org.http4s.{Method, Request}
 import org.http4s.argonaut._
 import org.http4s.client.Client
 import org.http4s.headers.Authorization
-
-import scalaz.{Foldable, Monoid}
-import scalaz.Scalaz._
 
 sealed abstract class KubernetesVersion extends Product with Serializable
 
@@ -106,7 +105,7 @@ final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: 
     val request = addCreds(Request(Method.GET, selectedUri))
 
     val decoder: DecodeJson[List[JobStatus]] = DecodeJson(c => (c --\ "items").as[List[JobStatus]])
-    client.expect[List[JobStatus]](request)(jsonOf(Effect[IO], decoder)).map((jss: List[JobStatus])=> Foldable[List].fold(jss))
+    client.expect[List[JobStatus]](request)(jsonOf(Effect[IO], decoder)).map((jss: List[JobStatus]) => Foldable[List].fold(jss))
   }
 
   def jobSummary(namespace: String, name: String): IO[JobStatus] = {
@@ -401,14 +400,14 @@ object KubernetesJson {
       })
 
     implicit val jobStatusMonoid: Monoid[JobStatus] = new Monoid[JobStatus] {
-      def append(f1: JobStatus, f2: => JobStatus): JobStatus =
+      def combine(f1: JobStatus, f2: JobStatus): JobStatus =
         JobStatus(
           active =    f1.active    |+| f2.active,
           failed =    f1.failed    |+| f2.failed,
           succeeded = f1.succeeded |+| f2.succeeded
         )
 
-      def zero: JobStatus = JobStatus(None, None, None)
+      def empty: JobStatus = JobStatus(None, None, None)
     }
   }
 

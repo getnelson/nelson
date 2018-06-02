@@ -55,7 +55,7 @@ resolvers += "splunk-releases" at "http://splunk.artifactoryonline.com/splunk/ex
 
 libraryDependencies ++= Seq(
   "com.splunk.logging"         % "splunk-library-javalogging" % "1.5.2",
-  "org.http4s"                %% "http4s-argonaut61"          % V.http4sArgonaut61,
+  "org.http4s"                %% "http4s-argonaut"            % V.http4s,
   "org.http4s"                %% "http4s-dsl"                 % V.http4s,
   "org.http4s"                %% "http4s-blaze-server"        % V.http4s,
   "io.prometheus"              % "simpleclient_common"        % V.prometheus
@@ -87,6 +87,6 @@ dockerCommands ++= {
   )
 }
 
-scalaTestVersion := "2.2.6"
+scalaTestVersion := "3.0.5"
 
-scalaCheckVersion := "1.12.5"
+scalaCheckVersion := "1.13.5"

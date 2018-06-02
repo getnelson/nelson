@@ -16,9 +16,12 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck._, Prop._, Arbitrary.arbitrary
 import nelson.crypto.{EncryptionKey, SignatureKey}
 import nelson.crypto.autharbitrary.AuthArbitrary._
+
+import cats.implicits._
+
+import org.scalacheck._, Prop._, Arbitrary.arbitrary
 
 object SessionSpec extends Properties("session"){
   import Fixtures._

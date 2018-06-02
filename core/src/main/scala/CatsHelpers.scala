@@ -1,88 +1,22 @@
 package nelson
 
-import cats.Monad
-import cats.arrow.FunctionK
-import cats.data.{Validated, ValidatedNel}
-import cats.free.Free
+import cats.Eval
 import cats.effect.{Effect, IO, Timer}
+import cats.free.Cofree
 import cats.syntax.functor._
 import cats.syntax.monadError._
 
 import fs2.{Pipe, Sink, Stream}
 
+import quiver.{Context, Decomp, Graph}
+
 import java.util.concurrent.{ScheduledExecutorService, TimeoutException}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
+import scala.collection.immutable.{Stream => SStream}
 
 object CatsHelpers {
-  implicit val catsIOScalazInstances: scalaz.Monad[IO] with scalaz.Catchable[IO] =
-    new scalaz.Monad[IO] with scalaz.Catchable[IO] {
-      def bind[A, B](fa: IO[A])(f: A => IO[B]): IO[B] = fa.flatMap(f)
-      def point[A](a: => A): IO[A] = IO(a)
-
-      def attempt[A](fa: IO[A]): IO[scalaz.\/[Throwable, A]] = fa.attempt.map {
-        case Left(a) => scalaz.-\/(a)
-        case Right(b) => scalaz.\/-(b)
-      }
-      def fail[A](err: Throwable): IO[A] = IO.raiseError(err)
-    }
-
-  implicit def catsFreeScalazInstances[F[_]]: scalaz.Monad[Free[F, ?]] =
-    new scalaz.Monad[Free[F, ?]] {
-      def bind[A, B](fa: Free[F, A])(f: A => Free[F, B]): Free[F, B] = fa.flatMap(f)
-      def point[A](a: => A): Free[F, A] = Free.pure(a)
-    }
-
-  implicit def scalazEitherCatsInstances[L]: Monad[scalaz.\/[L, ?]] =
-    new Monad[scalaz.\/[L, ?]] {
-      def flatMap[A, B](fa: scalaz.\/[L, A])(f: A => scalaz.\/[L, B]): scalaz.\/[L, B] =
-        fa.flatMap(f)
-      def pure[A](a: A): scalaz.\/[L, A] = scalaz.\/.right(a)
-
-      @annotation.tailrec
-      def tailRecM[A, B](a: A)(f: A => scalaz.\/[L, Either[A, B]]): scalaz.\/[L, B] =
-        f(a) match {
-          case left@scalaz.-\/(_) => left.asInstanceOf[scalaz.\/[L, B]] // yolo
-          case scalaz.\/-(e) => e match {
-            case Left(a) => tailRecM(a)(f)
-            case right@Right(b) => scalaz.\/.right(b)
-          }
-        }
-    }
-
-  implicit class NelsonEnrichedEither[A, B](val either: Either[A, B]) extends AnyVal {
-    def toDisjunction: scalaz.\/[A, B] = either match {
-      case Left(a)  => scalaz.-\/(a)
-      case Right(b) => scalaz.\/-(b)
-    }
-  }
-
-  implicit class NelsonEnrichedDisjunction[A, B](val either: scalaz.\/[A, B]) extends AnyVal {
-    def toValidatedNel: ValidatedNel[A, B] =
-      either.fold(Validated.invalidNel, Validated.valid)
-
-    def toValidated: Validated[A, B] =
-      either.fold(Validated.invalid, Validated.valid)
-  }
-
-  implicit class NelsonEnrichedValidated[A, B](val validated: Validated[A, B]) extends AnyVal {
-    def toDisjunction: scalaz.\/[A, B] =
-      validated.fold(scalaz.\/.left, scalaz.\/.right)
-  }
-
-  implicit class NelsonEnrichedScalazFunctionK[F[_], G[_]](val functionK: scalaz.~>[F, G]) extends AnyVal {
-    def asCats: FunctionK[F, G] = new FunctionK[F, G] {
-      def apply[A](fa: F[A]): G[A] = functionK(fa)
-    }
-  }
-
-  implicit class NelsonEnrichedCatsFunctionK[F[_], G[_]](val functionK: FunctionK[F, G]) extends AnyVal {
-    def asScalaz: scalaz.~>[F, G] = new scalaz.~>[F, G] {
-      def apply[A](fa: F[A]): G[A] = functionK(fa)
-    }
-  }
-
   implicit class NelsonEnrichedIO[A](val io: IO[A]) extends AnyVal {
     /** Run `other` if this IO fails */
     def or(other: IO[A]): IO[A] = io.attempt.flatMap {
@@ -121,5 +55,33 @@ object CatsHelpers {
 
     def throughO[O2](pipe: Pipe[F, O, O2]): Stream[F, Either[W, O2]] =
       stream.through(pipeO(pipe))
+  }
+
+
+  /** This is pending release of https://github.com/Verizon/quiver/pull/31 */
+  private type Tree[A] = Cofree[SStream, A]
+
+  private def flattenTree[A](tree: Tree[A]): SStream[A] = {
+    def go(tree: Tree[A], xs: SStream[A]): SStream[A] =
+      SStream.cons(tree.head, tree.tail.value.foldRight(xs)(go(_, _)))
+    go(tree, SStream.Empty)
+  }
+
+  private def Node[A](root: A, forest: => SStream[Tree[A]]): Tree[A] =
+    Cofree[SStream, A](root, Eval.later(forest))
+
+  implicit class NelsonEnrichedGraph[N, A, B](val graph: Graph[N, A, B]) extends AnyVal {
+    def reachable(v: N): Vector[N] =
+      xdfWith(Seq(v), _.successors, _.vertex)._1.flatMap(flattenTree)
+
+    def xdfWith[C](vs: Seq[N], d: Context[N, A, B] => Seq[N], f: Context[N, A, B] => C): (Vector[Tree[C]], Graph[N, A, B]) =
+      if (vs.isEmpty || graph.isEmpty) (Vector(), graph)
+      else graph.decomp(vs.head) match {
+        case Decomp(None, g) => g.xdfWith(vs.tail, d, f)
+        case Decomp(Some(c), g) =>
+          val (xs, _) = g.xdfWith(d(c), d, f)
+          val (ys, g3) = g.xdfWith(vs.tail, d, f)
+          (Node(f(c), xs.toStream) +: ys, g3)
+      }
   }
 }

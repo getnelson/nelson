@@ -18,10 +18,11 @@ package nelson
 
 package object routing {
   import storage._
-  import scalaz.{==>>,NonEmptyList,RWST}
-  import scalaz.std.list._
+  import cats.Applicative
+  import cats.data.{NonEmptyList, RWST}
+  import cats.implicits._
   import quiver.Graph
-  import nelson.CatsHelpers._
+  import scala.collection.immutable.SortedMap
 
   import Datacenter._
 
@@ -39,19 +40,19 @@ package object routing {
    * this namespace, and looking for this service type, here is
    * the current target
    */
-  type RoutingTable = ServiceTarget ==>> Target
+  type RoutingTable = SortedMap[ServiceTarget, Target]
 
   /** A routing table for each known namesapce */
-  type RoutingTables = NamespaceName ==>> (RoutingTable)
+  type RoutingTables = SortedMap[NamespaceName, RoutingTable]
 
   /**
    * A table used to discover deployments offering a particular named
    * port in a particular namespace
    */
-  type DiscoveryTable = NamedService ==>> NonEmptyList[RoutePath]
+  type DiscoveryTable = SortedMap[NamedService, NonEmptyList[RoutePath]]
 
   /** A Discovery Table for each known namespace */
-  type DiscoveryTables = NamespaceName ==>> DiscoveryTable
+  type DiscoveryTables = SortedMap[NamespaceName, DiscoveryTable]
 
   // this just gets our monad in the the expected * → * shape
   type GraphBuild[A] = RWST[StoreOpF,RoutingTables,List[String],RoutingGraph,A]
@@ -60,6 +61,12 @@ package object routing {
   type GraphBuildT[F[_],A] = RWST[F,RoutingTables,List[String],RoutingGraph,A]
 
   // this is a value which has all of the MonadReader (ask),
-  // MonadState (get,put,modify) syntax for our RWST
-  val graphBuild = RWST.rwstMonad[StoreOpF,RoutingTables,List[String],RoutingGraph]
+  // MonadState (get,put,modify) syntax for our RWST for better type inference
+  object graphBuild {
+    def modify(f: RoutingGraph => RoutingGraph): GraphBuild[Unit] = RWST.modify(f)
+    def ask: GraphBuild[RoutingTables] = RWST.ask
+    def liftF[F[_]: Applicative, A](fa: F[A]): GraphBuildT[F, A] = RWST.liftF(fa)
+    def tell(l: List[String]): GraphBuild[Unit] = RWST.tell(l)
+    def get: GraphBuild[RoutingGraph] = RWST.get
+  }
 }

@@ -51,9 +51,9 @@ final case class ReleasedDeployment(
 )
 
 object Released {
-  import scalaz.Order
-  import scalaz.std.anyVal._
+  import cats.Order
+  import cats.instances.long._
 
   implicit def releasedOrder: Order[Released] =
-    Order[Long].contramap[Released](_.releaseId)
+    Order.by(_.releaseId)
 }

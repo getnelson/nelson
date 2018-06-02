@@ -16,9 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.{\/,\/-}
-import scalaz.syntax.std.option._
-
+import cats.implicits._
 
 /*
  * A schedule is defined by an interval.
@@ -53,18 +51,18 @@ object Schedule {
   final case object Once extends Interval("once")
   final case class Cron(exp: String) extends Interval(exp)
 
-  def parse(input: String): String \/ Schedule =
-    preDefined.find(_.asString == input.toLowerCase).cata(
-      some = i => \/-(Schedule(i)),
-      none = parseCron(input).map(cron => Schedule(cron)))
+  def parse(input: String): Either[String, Schedule] =
+    preDefined.find(_.asString == input.toLowerCase).fold(parseCron(input).map(cron => Schedule(cron))) { i =>
+      Right(Schedule(i))
+    }
 
   private val preDefined = Set(Monthly, Daily, Hourly, QuarterHourly, Once)
 
-  private def parseCron(str: String): String \/ Cron = {
+  private def parseCron(str: String): Either[String, Cron] = {
     import com.cronutils.model.definition.CronDefinitionBuilder
     import com.cronutils.parser.CronParser
     import com.cronutils.model.CronType.UNIX
-    \/.fromTryCatchNonFatal {
+    Either.catchNonFatal {
       val definition = CronDefinitionBuilder.instanceDefinitionFor(UNIX)
       val parser = new CronParser(definition)
       parser.parse(str)

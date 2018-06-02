@@ -18,7 +18,6 @@ package nelson
 package plans
 
 import org.http4s.dsl.io._
-import scalaz.\/
 
 object Params {
 
@@ -43,6 +42,6 @@ object Params {
   def commaSeparatedStringToStatus(str: String): List[DeploymentStatus] =
     commaSeparatedStringTo(str, DeploymentStatus.fromString _)
 
-  def commaSeparatedStringToNamespace(str: String): List[InvalidNamespaceName \/ NamespaceName] =
+  def commaSeparatedStringToNamespace(str: String): List[Either[InvalidNamespaceName, NamespaceName]] =
     commaSeparatedStringTo(str, NamespaceName.fromString _)
 }

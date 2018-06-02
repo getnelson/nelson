@@ -18,9 +18,8 @@ package nelson
 
 import ca.mrvisser.sealerate
 
-import scalaz.NonEmptyList
-import scalaz.syntax.std.list._
-
+import cats.data.NonEmptyList
+import cats.syntax.list._
 
 sealed abstract class TaskStatus extends Product with Serializable
 

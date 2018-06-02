@@ -21,14 +21,10 @@ import nelson.Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck
 import nelson.storage.StoreOp
 
 import cats.{~>, Foldable}
-import cats.data.ValidatedNel
+import cats.data.{EitherT, Kleisli, ValidatedNel}
 import cats.data.Validated.{Valid, Invalid}
 import cats.effect.IO
 import cats.implicits._
-import nelson.CatsHelpers._
-
-import scalaz.{EitherT, Kleisli}
-import scalaz.syntax.either._
 
 object ManifestValidator {
 
@@ -158,13 +154,11 @@ object ManifestValidator {
     (for {
       // Provide a dummy namespace and version
       a <- EitherT(alerts.rewriteRules(unit, dummyStackName(unit), p.name, DummyNamespaceName, p.environment.alertOptOuts))
-      b <- EitherT(Promtool.validateRules(unit.name, a).map {
-        case Promtool.Valid =>
-          ().right
-        case i: Promtool.Invalid =>
-          (InvalidPrometheusRules(i.msg): NelsonError).left
+      b <- EitherT(Promtool.validateRules(unit.name, a).map[Either[NelsonError, Unit]] {
+        case Promtool.Valid      => Right(())
+        case i: Promtool.Invalid => Left(InvalidPrometheusRules(i.msg): NelsonError)
       })
-    } yield b).run.map(_.toValidatedNel)
+    } yield b).value.map(_.toValidatedNel)
   }
 
   def validateResource(r: Resource, plan: Plan): Valid[Unit] =
@@ -244,9 +238,9 @@ object ManifestValidator {
 
       // We cannot do this validation in parallel with the above.
       // We rely on the assumptions the above validations afford us.
-      EitherT(x.map(_.toDisjunction)).flatMap { m =>
+      EitherT(x.map(_.toEither)).flatMap { m =>
         CycleDetection.validateNoCycles(m, cfg)
-      }.run.map(x => x.toValidated.map(_ => m))
+      }.value.map(x => x.toValidated.map(_ => m))
     }
 
     yaml.ManifestParser.parse(str).fold(

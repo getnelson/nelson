@@ -22,13 +22,11 @@ import nelson.Manifest.{UnitDef,Versioned}
 import nelson.storage.StoreOp
 
 import cats.~>
+import cats.data.OptionT
 import cats.effect.IO
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import journal._
-
-import scalaz.{~> => _, _}
-import Scalaz._
 
 object Notify {
 
@@ -49,7 +47,7 @@ object Notify {
     val sn = StackName(name, unit.version, actionConfig.hash)
     val msg = deployedTemplate(actionConfig.datacenter.name,actionConfig.namespace.name,sn)
     val sub = s"Deployed $sn in ${actionConfig.datacenter.name} ${actionConfig.namespace.name.asString}"
-    sendSlack(actionConfig.notifications.slack.map(_.channel), msg)(cfg.slack) >>
+    sendSlack(actionConfig.notifications.slack.map(_.channel), msg)(cfg.slack) productR
     sendEmail(actionConfig.notifications.email.map(_.recipient), sub, msg)(cfg.email)
   }
 
@@ -68,7 +66,7 @@ object Notify {
         man  <- OptionT(IO.pure(yaml.ManifestParser.parse(raw.decoded).toOption))
       } yield man.notifications
 
-      notes.run.attempt.map {
+      notes.value.attempt.map {
         case Right(Some(ns)) => ns
         case _ => NotificationSubscriptions.empty
       }

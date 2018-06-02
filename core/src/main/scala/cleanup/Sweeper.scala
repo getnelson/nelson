@@ -22,17 +22,14 @@ import journal.Logger
 import nelson.routing.Discovery
 
 import cats.~>
+import cats.data.Kleisli
 import cats.effect.{Effect, IO}
-import cats.syntax.applicativeError._
+import cats.implicits._
 import nelson.CatsHelpers._
 
 import fs2.{Scheduler, Sink, Stream}
 
 import scala.util.control.NonFatal
-import scalaz.{-\/, Kleisli, \/, \/-}
-import scalaz.std.list._
-import scalaz.std.option.optionSyntax._
-import scalaz.syntax.traverse._
 
 /**
   * Infrequently running cleanup of "leaked" data or data which is otherwise unaccounted for.  Unlike the cleanup
@@ -53,11 +50,11 @@ object Sweeper {
   final case class UnclaimedResources(n: Int)
   final case object SingleUnclaimedResource
 
-  type SweeperHelmOp = (Datacenter, UnclaimedResources \/ ConsulOp.ConsulOpF[Unit])
+  type SweeperHelmOp = (Datacenter, Either[UnclaimedResources,ConsulOp.ConsulOpF[Unit]])
   type SweeperHelmOps = List[SweeperHelmOp]
 
   def cleanupLeakedConsulDiscoveryKeys(cfg: NelsonConfig): IO[SweeperHelmOps] =
-    cfg.datacenters.traverseM[IO, SweeperHelmOp] { dc =>
+    cfg.datacenters.flatTraverse[IO, SweeperHelmOp] { dc =>
       for {
         keys <- helm.run(dc.interpreters.consul, Discovery.listDiscoveryKeys).map(_.toList)
 
@@ -66,13 +63,13 @@ object Sweeper {
 
         items = for {
           (key, sno) <- keys.map(k => k -> Discovery.stackNameFrom(k))
-          deleteKey <- sno.cata(sn =>
-            Some(sn).filterNot(stackNames.contains).map(_ => \/-(key)).toList, List(-\/(SingleUnclaimedResource))
-          )
+          deleteKey <- sno.fold[List[Either[SingleUnclaimedResource.type, String]]](List(Left(SingleUnclaimedResource))) { sn =>
+            Some(sn).filterNot(stackNames.contains).map(_ => Right(key)).toList
+          }
         } yield deleteKey
 
-        deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.kvDelete).map(op => dc -> \/-(op))
-        unclaimedResource = dc -> -\/(UnclaimedResources(items.count(_.isLeft)))
+        deleteOps = items.flatMap(_.toOption.toSet).map(ConsulOp.kvDelete).map(op => dc -> Right(op))
+        unclaimedResource = dc -> Left(UnclaimedResources(items.count(_.isLeft)))
 
       } yield deleteOps :+ unclaimedResource
     }
@@ -89,10 +86,10 @@ object Sweeper {
 
   def sweeperSink(implicit unclaimedResourceTracker: Kleisli[IO, (Datacenter, Int), Unit]): Sink[IO, SweeperHelmOp] =
     Sink {
-      case (dc, -\/(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) recoverWith {
+      case (dc, Left(UnclaimedResources(n))) => unclaimedResourceTracker.run(dc -> n) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to track unclaimed resources", e))
       }
-      case (dc, \/-(op)) => helm.run(dc.consul, op) recoverWith {
+      case (dc, Right(op)) => helm.run(dc.consul, op) recoverWith {
         case NonFatal(e) => IO(log.error(s"error while attempting to perform consul operation", e))
       }
     }

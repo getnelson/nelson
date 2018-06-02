@@ -23,7 +23,6 @@ object V {
   val journal          = "3.0.18"
   val knobs            = "6.0.33"
   val prometheus       = "0.0.21"
-  val scalaz           = "7.1.11"
   val scodec           = "1.9.0"
   val dockerit         = "0.9.0-RC1"
 

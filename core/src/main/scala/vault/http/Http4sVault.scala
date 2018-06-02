@@ -30,7 +30,7 @@ import org.http4s.{argonaut => _, _}
 import org.http4s.argonaut._
 import org.http4s.client._
 
-import scalaz.==>>
+import scala.collection.immutable.SortedMap
 
 final case class Initialized(init: Boolean)
 
@@ -116,8 +116,8 @@ final class Http4sVaultClient(authToken: Token,
   def deletePolicy(name: String): IO[Unit] =
     reqVoid(IO.pure(Request(DELETE, v1BaseUri / "sys" / "policy" / name)))
 
-  def getMounts: IO[String ==>> Mount] =
-    req[String ==>> Mount](IO.pure(Request(GET, uri = v1BaseUri / "sys" / "mounts")))
+  def getMounts: IO[SortedMap[String, Mount]] =
+    req[SortedMap[String, Mount]](IO.pure(Request(GET, uri = v1BaseUri / "sys" / "mounts")))
 
   def createToken(ct: CreateToken): IO[Token] =
     req[argonaut.Json](Request(POST, v1BaseUri / "auth" / "token" / "create").withBody(ct.asJson)).flatMap { json =>

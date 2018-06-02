@@ -250,8 +250,9 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
 }
 
 class NelsonProps extends Properties("Nelson"){
-  import scalaz.scalacheck.ScalazProperties
+  import cats.kernel.laws.discipline.OrderTests
+  import cats.instances.option._
   import Fixtures._
 
-  include(ScalazProperties.order.laws[java.time.Instant])
+  include(OrderTests[java.time.Instant].order.all)
 }

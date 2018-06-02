@@ -29,8 +29,7 @@ import nelson.vault.http4s._
 
 import cats.~>
 import cats.effect.{Effect, IO}
-import cats.syntax.either._
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import java.io.FileInputStream
 import java.nio.file.{Path, Paths}
@@ -48,8 +47,6 @@ import org.http4s.client.blaze._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
-
-import scalaz.Scalaz._
 
 /**
  *
@@ -529,20 +526,20 @@ object Config {
 
     def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
       def readSplunk: Option[Infrastructure.SplunkConfig] =
-        (kfg.lookup[String]("docker.splunk-url") |@| kfg.lookup[String]("docker.splunk-token")
-          )((x,y) => Infrastructure.SplunkConfig(x,y))
+        (kfg.lookup[String]("docker.splunk-url"), kfg.lookup[String]("docker.splunk-token")
+          ).mapN((x,y) => Infrastructure.SplunkConfig(x,y))
 
       def readLoggingImage: Option[Docker.Image] =
         kfg.lookup[String]("logging-sidecar")
           .flatMap(a => docker.Docker.Image.fromString(a).toOption)
 
-      (kfg.lookup[String]("endpoint") |@|
-       kfg.lookup[Duration]("timeout") |@|
-       kfg.lookup[String]("docker.user") |@|
-       kfg.lookup[String]("docker.password") |@|
-       kfg.lookup[String]("docker.host") |@|
+      (kfg.lookup[String]("endpoint"),
+       kfg.lookup[Duration]("timeout"),
+       kfg.lookup[String]("docker.user"),
+       kfg.lookup[String]("docker.password"),
+       kfg.lookup[String]("docker.host"),
        kfg.lookup[Int]("mhz-per-cpu")
-        )((a,b,c,d,e,g) => {
+        ).mapN((a,b,c,d,e,g) => {
           val splunk = readSplunk
           val loggingSidecar = readLoggingImage
           val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
@@ -551,12 +548,12 @@ object Config {
     }
 
     def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] =
-      (kfg.lookup[String]("endpoint") |@|
-       kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString) |@|
-       kfg.lookup[String]("ca-cert").map(p => Paths.get(p)) |@|
-       kfg.lookup[String]("token") |@|
+      (kfg.lookup[String]("endpoint"),
+       kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString),
+       kfg.lookup[String]("ca-cert").map(p => Paths.get(p)),
+       kfg.lookup[String]("token"),
        kfg.lookup[Duration]("timeout")
-      ) { (endpoint, version, caCert, token, timeout) =>
+      ).mapN { (endpoint, version, caCert, token, timeout) =>
         val uri = Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
         Infrastructure.Kubernetes(uri, version, caCert, token, timeout)
       }
@@ -616,9 +613,9 @@ object Config {
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
     def readDatacenter(id: String, kfg: KConfig): IO[Datacenter] = {
       val proxyCreds =
-        (kfg.lookup[String](s"proxy-credentials.username") |@|
+        (kfg.lookup[String](s"proxy-credentials.username"),
           kfg.lookup[String](s"proxy-credentials.password")
-        )((a,b) => Infrastructure.ProxyCredentials(a,b))
+        ).mapN((a,b) => Infrastructure.ProxyCredentials(a,b))
 
       val consul = {
         val a = kfg.require[String]("infrastructure.consul.endpoint")
@@ -732,13 +729,13 @@ object Config {
 
     val zones = readAvailabilityZones(kfg.subconfig("availability-zones"))
 
-    (kfg.lookup[String]("access-key-id") |@|
-     kfg.lookup[String]("secret-access-key") |@|
-     lookupRegion(kfg) |@|
-     kfg.lookup[String]("launch-configuration-name") |@|
-     kfg.lookup[List[String]]("elb-security-group-names") |@|
+    (kfg.lookup[String]("access-key-id"),
+     kfg.lookup[String]("secret-access-key"),
+     lookupRegion(kfg),
+     kfg.lookup[String]("launch-configuration-name"),
+     kfg.lookup[List[String]]("elb-security-group-names"),
      kfg.lookup[String]("image")
-    )((a,b,c,d,e,f) => Infrastructure.Aws(a,b,c,d,e.toSet,zones,f))
+    ).mapN((a,b,c,d,e,f) => Infrastructure.Aws(a,b,c,d,e.toSet,zones,f))
   }
 
   private def readNomad(cfg: KConfig): NomadConfig =
@@ -819,12 +816,9 @@ object Config {
       val name = splitted.head // yolo, but safe
       val maybeVersion = splitted.drop(1).headOption
 
-      maybeVersion.cata(
-        none = Option(HttpUserAgent(name, None)),
-        some = version =>
-        Version.fromString(version)
-          .map(version => HttpUserAgent(name, Some(version)))
-      )
+      maybeVersion.fold(Option(HttpUserAgent(name, None))) { version =>
+        Version.fromString(version).map(version => HttpUserAgent(name, Some(version)))
+      }
     }
     cfg.lookup[List[String]]("http-user-agents").map { agents =>
       val httpUserAgents: List[HttpUserAgent] = agents
