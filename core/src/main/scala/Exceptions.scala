@@ -225,6 +225,8 @@ object YamlError {
   def invalidNamespace(n: String, reason: String): YamlError = InvalidNamespace(n,reason)
   def emptyList(name: String): YamlError = EmptyList(name)
   def invalidMetaLength(meta: String): YamlError = InvalidMetaLength(meta)
+  val missingVolumeType: YamlError = MissingVolumeType
+  def invalidMountPath(path: String, reason: String): YamlError = InvalidMountPath(path, reason)
 }
 
 private final case class InvalidExternalAddress(uri: String)
@@ -337,3 +339,9 @@ private final case class EmptyList(field: String)
 
 private final case class InvalidMetaLength(meta: String)
   extends YamlError(s"""meta ($meta) must less that or equal to 14 characters""")
+
+private final case object MissingVolumeType
+  extends YamlError(s"missing volume type in volume manifest")
+
+private final case class InvalidMountPath(path: String, reason: String)
+  extends YamlError(s"${path} is an invalid mount path: ${reason}")

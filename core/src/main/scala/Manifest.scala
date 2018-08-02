@@ -27,6 +27,7 @@ import cats.effect.IO
 import cats.implicits._
 
 import java.net.URI
+import java.nio.file.Path
 
 import scala.concurrent.duration._
 
@@ -114,6 +115,7 @@ object Manifest {
     schedule: Option[Schedule] = None,
     policy: Option[ExpirationPolicy] = None,
     trafficShift: Option[TrafficShift] = None,
+    volumes: List[Volume] = List.empty,
     ephemeralDisk: Option[Int] = None
   )
 
@@ -191,10 +193,16 @@ object Manifest {
   }
 
   final case class Volume(
-    mount: String,
-    source: String,
-    mode: String // rw, r
+    name: String,
+    mountPath: Path,
+    volumeType: VolumeType
   )
+
+  sealed abstract class VolumeType extends Product with Serializable
+
+  object VolumeType {
+    final case class EmptyDirectory(sizeInMb: Int) extends VolumeType
+  }
 
   final case class AlertOptOut(ref: String)
 

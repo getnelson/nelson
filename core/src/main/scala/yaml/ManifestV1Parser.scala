@@ -28,11 +28,13 @@ import cats.data.{NonEmptyList, State, Validated, ValidatedNel}
 import cats.implicits._
 
 import java.net.URI
+import java.nio.file.Paths
 import java.util.{ArrayList => JList}
 
 import scala.beans.BeanProperty
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
+import scala.util.control.NonFatal
 
 object ManifestV1Parser {
   type YamlValidation[A] = ValidatedNel[YamlError, A]
@@ -126,6 +128,21 @@ object ManifestV1Parser {
   def validateInstances(i:Int): YamlValidation[Int] =
     validatePlanConstraints(i, invalidInstances)(i => i > 0 && i < 500)
 
+  def validateVolumes(volume: VolumeYaml): YamlValidation[Volume] = {
+    val emptyDir = Option(volume.emptyDir)
+
+    val mountPath = try {
+      Validated.validNel(Paths.get(volume.mountPath))
+    } catch {
+      case NonFatal(ex) => Validated.invalidNel(invalidMountPath(volume.mountPath, ex.getMessage))
+    }
+
+    emptyDir match {
+      case None => Validated.invalidNel(missingVolumeType)
+      case Some(ed) => mountPath.map(mp => Volume(volume.name, mp, VolumeType.EmptyDirectory(ed.size)))
+    }
+  }
+
   def validateEphemeral(i: Int): YamlValidation[Int] =
     if (i < 101 || i > 10000)
       Validated.invalidNel(invalidEphemeralDisk(101, 10000, i))
@@ -162,7 +179,7 @@ object ManifestV1Parser {
         }
       }
 
-    Apply[YamlValidation].map14(
+    Apply[YamlValidation].map15(
       parseAlphaNumHyphen(raw.name, "plan.name"),
       validatedCPU,
       validatedMemory,
@@ -176,10 +193,11 @@ object ManifestV1Parser {
       Option(raw.schedule).traverse(s => parseSchedule(s)),
       Option(raw.expiration_policy).traverse(resolvePolicy),
       Option(raw.traffic_shift).traverse(validateTrafficShift),
+      raw.volumes.asScala.toList.traverse(validateVolumes),
       Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i))
     ) {
-      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n) =>
-        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n))
+      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o) =>
+        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o))
     }
   }
 
@@ -487,6 +505,7 @@ class PlanYaml {
   @BeanProperty var schedule: String = _
   @BeanProperty var expiration_policy: String = _
   @BeanProperty var traffic_shift: TrafficShiftYaml = _
+  @BeanProperty var volumes: JList[VolumeYaml] = new java.util.ArrayList
   @BeanProperty var ephemeral_disk: Int = -1
 }
 
@@ -507,6 +526,21 @@ class HealthCheckYaml {
 class PlanResourceYaml {
   @BeanProperty var ref: String = _
   @BeanProperty var uri: String = _
+}
+
+class VolumeYaml {
+  @BeanProperty var name: String = _
+  @BeanProperty var mountPath: String = _
+
+  /* can't do sum types so we'll enumerate them all here and
+   * make sure only one is set at validation time..
+   */
+  @BeanProperty var emptyDir: EmptyDirYaml = _
+}
+
+class EmptyDirYaml {
+  /* size of the empty directory in MB */
+  @BeanProperty var size: Int = _
 }
 
 /* here be dragons, be **EXTREAMLY** careful with this, fair reader */

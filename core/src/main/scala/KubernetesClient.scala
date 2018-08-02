@@ -1,7 +1,7 @@
 package nelson
 
 import nelson.Datacenter.StackName
-import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, ResourceSpec, Plan, Ports, Port}
+import nelson.Manifest.{HealthCheck => HealthProbe, _}
 import nelson.docker.Docker.Image
 import nelson.health._
 
@@ -193,6 +193,32 @@ object KubernetesJson {
     ))
   }
 
+  def volumeJson(volume: Volume): Json = argonaut.Json.jObject(volume match {
+    case Volume(id, _, VolumeType.EmptyDirectory(sizeInMb)) =>
+      JsonObject.fromTraversableOnce(List(
+        "name" := id,
+        "emptyDir" := argonaut.Json("sizeLimit" := s"${sizeInMb}M")
+      ))
+  })
+
+  def volumesJson(volumes: List[Volume]): JsonObject = volumes match {
+    case Nil     => JsonObject.empty
+    case v :: vs => JsonObject.single("volumes", (volumeJson(v) :: vs.map(volumeJson)).asJson)
+  }
+
+  def volumeMountJson(volume: Volume): Json = argonaut.Json.jObject(volume match {
+    case Volume(id, mountPath, _) =>
+      JsonObject.fromTraversableOnce(List(
+        "name" := id,
+        "mountPath" := mountPath.toString
+      ))
+  })
+
+  def volumeMountsJson(volumes: List[Volume]): JsonObject = volumes match {
+    case Nil => JsonObject.empty
+    case v :: vs => JsonObject.single("volumeMounts", (volumeMountJson(v) :: vs.map(volumeMountJson)).asJson)
+  }
+
   def deployment(
     namespace: String,
     stackName: StackName,
@@ -226,17 +252,17 @@ object KubernetesJson {
               "nelson"      := "true"
             )
           ),
-          "spec" := argonaut.Json(
-            "containers" := List(
-
-              argonaut.Json.jObject(combineJsonObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+          "spec" := argonaut.Json.jObject(combineJsonObjects(
+            argonaut.JsonObject.fromTraversableOnce(List("containers" := List(
+              argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
                 "name"      := stackName.toString,
                 "image"     := image.toString,
                 "env"       := plan.environment.bindings,
                 "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.toList))
-              )), resources(plan.environment.cpu, plan.environment.memory)), livenessProbe(plan.environment.healthChecks)))
-            )
-          )
+              )), volumeMountsJson(plan.environment.volumes), resources(plan.environment.cpu, plan.environment.memory), livenessProbe(plan.environment.healthChecks)))
+            ))),
+            volumesJson(plan.environment.volumes)
+          ))
         )
       )
     )
@@ -292,7 +318,7 @@ object KubernetesJson {
     image:     Image,
     plan:      Plan
   ): Json =
-    argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+    argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
       "kind"       := "Job",
       "metadata"   := argonaut.Json(
         "name"      := stackName.toString,
@@ -314,7 +340,7 @@ object KubernetesJson {
     val backoffLimit = JsonObject.single("backoffLimit", plan.environment.retries.getOrElse(3).asJson)
 
     JsonObject.fromTraversableOnce(List(
-      "spec" := argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+      "spec" := argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
         "completions"  := plan.environment.desiredInstances.getOrElse(1),
         "template"     := argonaut.Json(
           "metadata" := argonaut.Json(
@@ -326,20 +352,21 @@ object KubernetesJson {
               "nelson"      := "true"
             )
           ),
-          "spec" := argonaut.Json(
-            "containers" := List(
-              argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+          "spec" := argonaut.Json.jObject(combineJsonObjects(
+            JsonObject.fromTraversableOnce(List("containers" := List(
+              argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
                 "name"  := stackName.toString,
                 "image" := image.toString,
                 "env"   := plan.environment.bindings
-              )), resources(plan.environment.cpu, plan.environment.memory)))
-            ),
+              )), volumeMountsJson(plan.environment.volumes), resources(plan.environment.cpu, plan.environment.memory)))
+            ))),
+            volumesJson(plan.environment.volumes)) :+
             // See: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#pod-backoff-failure-policy
             // This should be "OnFailure" but at the time of this writing this section said:
             // Note: Due to a known issue #54870, when the spec.template.spec.restartPolicy field is set to “OnFailure”,
             // the back-off limit may be ineffective. As a short-term workaround, set the restart policy for the embedded template to “Never”
             // https://github.com/kubernetes/kubernetes/issues/54870
-            "restartPolicy" := "Never"
+            ("restartPolicy" := "Never")
           )
         )
       )), backoffLimit))
@@ -411,8 +438,8 @@ object KubernetesJson {
     }
   }
 
-  private def combineJsonObject(x: JsonObject, y: JsonObject): JsonObject =
-    JsonObject.fromTraversableOnce(x.toList ++ y.toList)
+  private def combineJsonObjects(x: JsonObject, xs: JsonObject*): JsonObject =
+    JsonObject.fromTraversableOnce(x.toList ++ xs.toList.flatMap(_.toList))
 
   private def containerPortsJson(ports: List[Port]): List[Json] =
     ports.map { port =>

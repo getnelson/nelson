@@ -17,6 +17,8 @@
 package nelson
 package yaml
 
+import java.nio.file.Paths
+
 import org.scalatest.{FlatSpec,Matchers}
 import scala.concurrent.duration._
 import cats.instances.either._
@@ -81,7 +83,8 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
           resources = Map("s3" -> new java.net.URI("http://s3.aws.com")),
           alertOptOuts = List(AlertOptOut("api_high_request_latency")),
           policy = Some(RetainLatestTwoMajor),
-          healthChecks = List(HealthCheck("http-status","default","https",Some("v1/status"), 10.seconds, 2.seconds))
+          healthChecks = List(HealthCheck("http-status","default","https",Some("v1/status"), 10.seconds, 2.seconds)),
+          volumes = List(Volume("an-empty-dir", Paths.get("/foo/bar"), VolumeType.EmptyDirectory(500)))
         )
       ),
       Plan(
