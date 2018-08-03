@@ -23,15 +23,19 @@ import org.http4s.headers.Authorization
 sealed abstract class KubernetesVersion extends Product with Serializable
 
 object KubernetesVersion {
-  final case object `1.6` extends KubernetesVersion
-  final case object `1.7` extends KubernetesVersion
-  final case object `1.8` extends KubernetesVersion
+  final case object `1.6`  extends KubernetesVersion
+  final case object `1.7`  extends KubernetesVersion
+  final case object `1.8`  extends KubernetesVersion
+  final case object `1.9`  extends KubernetesVersion
+  final case object `1.10` extends KubernetesVersion
 
   def fromString(s: String): Option[KubernetesVersion] = s match {
-    case "1.6" => Some(`1.6`)
-    case "1.7" => Some(`1.7`)
-    case "1.8" => Some(`1.8`)
-    case _     => None
+    case "1.6"  => Some(`1.6`)
+    case "1.7"  => Some(`1.7`)
+    case "1.8"  => Some(`1.8`)
+    case "1.9"  => Some(`1.9`)
+    case "1.10" => Some(`1.10`)
+    case _      => None
   }
 }
 
@@ -131,9 +135,10 @@ final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: 
 
   private def deploymentUri(ns: String): Uri = {
     val apiVersion = version match {
-      case `1.6` => "v1beta1"
-      case `1.7` => "v1beta1"
-      case `1.8` => "v1beta2"
+      case `1.6`          => "v1beta1"
+      case `1.7`          => "v1beta1"
+      case `1.8`          => "v1beta2"
+      case `1.9` | `1.10` => "v1"
     }
     endpoint / "apis" / "apps"  / apiVersion / "namespaces" / ns / "deployments"
   }
@@ -144,9 +149,9 @@ final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: 
 
   private def cronJobUri(ns: String): Uri = {
     val apiVersion = version match {
-      case `1.6` => "v2alpha1"
-      case `1.7` => "v2alpha1"
-      case `1.8` => "v1beta1"
+      case `1.6`                  => "v2alpha1"
+      case `1.7`                  => "v2alpha1"
+      case `1.8` | `1.9` | `1.10` => "v1beta1"
     }
     endpoint / "apis" / "batch" / apiVersion / "namespaces" / ns / "cronjobs"
   }
