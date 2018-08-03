@@ -17,6 +17,7 @@
 package nelson
 
 import nelson.BannedClientsConfig.HttpUserAgent
+import nelson.Infrastructure.KubernetesMode
 import nelson.audit.{Auditor,AuditEvent}
 import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
@@ -547,16 +548,19 @@ object Config {
         })
     }
 
-    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] =
-      (kfg.lookup[String]("endpoint"),
-       kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString),
-       kfg.lookup[String]("ca-cert").map(p => Paths.get(p)),
-       kfg.lookup[String]("token"),
-       kfg.lookup[Duration]("timeout")
-      ).mapN { (endpoint, version, caCert, token, timeout) =>
-        val uri = Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
-        Infrastructure.Kubernetes(uri, version, caCert, token, timeout)
+    def readKubernetesOutClusterParams(kfg: KConfig): Option[KubernetesMode] =
+      (kfg.lookup[String]("ca-cert").map(p => Paths.get(p)), kfg.lookup[String]("token")).mapN {
+        case (caCert, token) => KubernetesMode.OutCluster(caCert, token)
       }
+
+    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] = for {
+      endpoint  <- kfg.lookup[String]("endpoint")
+      version   <- kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString)
+      timeout   <- kfg.lookup[Duration]("timeout")
+      inCluster <- kfg.lookup[Boolean]("in-cluster")
+      mode      <- if (inCluster) Some(KubernetesMode.InCluster) else readKubernetesOutClusterParams(kfg)
+      uri       =  Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
+    } yield Infrastructure.Kubernetes(uri, version, timeout, mode)
 
     def readNomadScheduler(kfg: KConfig): IO[SchedulerOp ~> IO] =
       readNomadInfrastructure(kfg) match {
@@ -597,14 +601,13 @@ object Config {
     def readKubernetesClient(kfg: KConfig): IO[KubernetesClient] = {
       val infra = for {
         kubernetes <- readKubernetesInfrastructure(kfg)
-        sslContext <- getKubernetesCert(kubernetes.caCertPath)
+        sslContext <- getKubernetesCert(kubernetes.mode.caCert)
       } yield (kubernetes, sslContext)
 
       infra match {
         case Some((kubernetes, sslContext)) =>
           http4sClient(kubernetes.timeout, sslContext = Some(sslContext)).map { httpClient =>
-            val tokenFileContents = scala.io.Source.fromFile(kubernetes.token).getLines.mkString("")
-            new KubernetesClient(kubernetes.version, kubernetes.endpoint, httpClient, tokenFileContents)
+            new KubernetesClient(kubernetes.version, kubernetes.endpoint, httpClient, kubernetes.mode)
           }
         case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
       }

@@ -1,6 +1,7 @@
 package nelson
 
 import nelson.Datacenter.StackName
+import nelson.Infrastructure.KubernetesMode
 import nelson.Manifest.{HealthCheck => HealthProbe, _}
 import nelson.docker.Docker.Image
 import nelson.health._
@@ -47,10 +48,15 @@ object KubernetesVersion {
  *
  * See: https://kubernetes.io/docs/api-reference/v1.8/
  */
-final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: Client[IO], serviceAccountToken: String) {
-  import KubernetesClient.cascadeDeletionPolicy
+final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: Client[IO], mode: KubernetesMode) {
+  import KubernetesClient._
   import KubernetesJson._
   import KubernetesVersion._
+
+  private[this] val serviceAccountToken = mode match {
+    case KubernetesMode.InCluster            => scala.io.Source.fromFile(podTokenPath).getLines.toList.head
+    case KubernetesMode.OutCluster(_, token) => token
+  }
 
   def createDeployment(namespace: String, stackName: StackName, image: Image, plan: Plan, ports: Option[Ports]): IO[Json] = {
     val json = KubernetesJson.deployment(namespace,stackName, image, plan, ports)
@@ -161,6 +167,12 @@ final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: 
 }
 
 object KubernetesClient {
+  /** All pods in Kubernetes get a token mounted at this path.
+    * See https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
+    * for more info.
+    */
+  private val podTokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
   // Cascade deletes - deleting a Deployment should delete the associated ReplicaSet and Pods
   // See: https://kubernetes.io/docs/concepts/workloads/controllers/garbage-collection/
   private val cascadeDeletionPolicy = argonaut.Json(
