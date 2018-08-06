@@ -83,10 +83,9 @@ object Infrastructure {
 
   sealed abstract class KubernetesMode extends Product with Serializable {
     def caCert: Path = this match {
-      /** All pods in Kubernetes get a cert mounted at this path.
-        * See https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
-        * for more info.
-        */
+      // All pods in Kubernetes get a cert mounted at this path.
+      // See https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
+      // for more info.
       case KubernetesMode.InCluster => Paths.get("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt")
       case KubernetesMode.OutCluster(p, _) => p
     }
