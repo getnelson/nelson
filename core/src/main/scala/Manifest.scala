@@ -27,6 +27,7 @@ import cats.effect.IO
 import cats.implicits._
 
 import java.net.URI
+import java.nio.file.Path
 
 import scala.concurrent.duration._
 
@@ -114,6 +115,7 @@ object Manifest {
     schedule: Option[Schedule] = None,
     policy: Option[ExpirationPolicy] = None,
     trafficShift: Option[TrafficShift] = None,
+    volumes: List[Volume] = List.empty,
     ephemeralDisk: Option[Int] = None
   )
 
@@ -190,11 +192,8 @@ object Manifest {
     val defaultRef: String = "default"
   }
 
-  final case class Volume(
-    mount: String,
-    source: String,
-    mode: String // rw, r
-  )
+  /** An empty scratch volume to be mounted onto a container */
+  final case class Volume(name: String, mountPath: Path, size: Int)
 
   final case class AlertOptOut(ref: String)
 

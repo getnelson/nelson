@@ -1,7 +1,8 @@
 package nelson
 
 import nelson.Datacenter.StackName
-import nelson.Manifest.{EnvironmentVariable, HealthCheck => HealthProbe, ResourceSpec, Plan, Ports, Port}
+import nelson.Infrastructure.KubernetesMode
+import nelson.Manifest.{HealthCheck => HealthProbe, _}
 import nelson.docker.Docker.Image
 import nelson.health._
 
@@ -23,15 +24,19 @@ import org.http4s.headers.Authorization
 sealed abstract class KubernetesVersion extends Product with Serializable
 
 object KubernetesVersion {
-  final case object `1.6` extends KubernetesVersion
-  final case object `1.7` extends KubernetesVersion
-  final case object `1.8` extends KubernetesVersion
+  final case object `1.6`  extends KubernetesVersion
+  final case object `1.7`  extends KubernetesVersion
+  final case object `1.8`  extends KubernetesVersion
+  final case object `1.9`  extends KubernetesVersion
+  final case object `1.10` extends KubernetesVersion
 
   def fromString(s: String): Option[KubernetesVersion] = s match {
-    case "1.6" => Some(`1.6`)
-    case "1.7" => Some(`1.7`)
-    case "1.8" => Some(`1.8`)
-    case _     => None
+    case "1.6"  => Some(`1.6`)
+    case "1.7"  => Some(`1.7`)
+    case "1.8"  => Some(`1.8`)
+    case "1.9"  => Some(`1.9`)
+    case "1.10" => Some(`1.10`)
+    case _      => None
   }
 }
 
@@ -43,10 +48,15 @@ object KubernetesVersion {
  *
  * See: https://kubernetes.io/docs/api-reference/v1.8/
  */
-final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: Client[IO], serviceAccountToken: String) {
-  import KubernetesClient.cascadeDeletionPolicy
+final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: Client[IO], mode: KubernetesMode) {
+  import KubernetesClient._
   import KubernetesJson._
   import KubernetesVersion._
+
+  private[this] val serviceAccountToken = mode match {
+    case KubernetesMode.InCluster            => scala.io.Source.fromFile(podTokenPath).getLines.toList.head
+    case KubernetesMode.OutCluster(_, token) => token
+  }
 
   def createDeployment(namespace: String, stackName: StackName, image: Image, plan: Plan, ports: Option[Ports]): IO[Json] = {
     val json = KubernetesJson.deployment(namespace,stackName, image, plan, ports)
@@ -131,9 +141,10 @@ final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: 
 
   private def deploymentUri(ns: String): Uri = {
     val apiVersion = version match {
-      case `1.6` => "v1beta1"
-      case `1.7` => "v1beta1"
-      case `1.8` => "v1beta2"
+      case `1.6`          => "v1beta1"
+      case `1.7`          => "v1beta1"
+      case `1.8`          => "v1beta2"
+      case `1.9` | `1.10` => "v1"
     }
     endpoint / "apis" / "apps"  / apiVersion / "namespaces" / ns / "deployments"
   }
@@ -144,9 +155,9 @@ final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: 
 
   private def cronJobUri(ns: String): Uri = {
     val apiVersion = version match {
-      case `1.6` => "v2alpha1"
-      case `1.7` => "v2alpha1"
-      case `1.8` => "v1beta1"
+      case `1.6`                  => "v2alpha1"
+      case `1.7`                  => "v2alpha1"
+      case `1.8` | `1.9` | `1.10` => "v1beta1"
     }
     endpoint / "apis" / "batch" / apiVersion / "namespaces" / ns / "cronjobs"
   }
@@ -156,6 +167,12 @@ final class KubernetesClient(version: KubernetesVersion, endpoint: Uri, client: 
 }
 
 object KubernetesClient {
+  /** All pods in Kubernetes get a token mounted at this path.
+    * See https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
+    * for more info.
+    */
+  private val podTokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
   // Cascade deletes - deleting a Deployment should delete the associated ReplicaSet and Pods
   // See: https://kubernetes.io/docs/concepts/workloads/controllers/garbage-collection/
   private val cascadeDeletionPolicy = argonaut.Json(
@@ -193,6 +210,32 @@ object KubernetesJson {
     ))
   }
 
+  def volumeJson(volume: Volume): Json = argonaut.Json.jObject(volume match {
+    case Volume(id, _, sizeInMb) =>
+      JsonObject.fromTraversableOnce(List(
+        "name" := id,
+        "emptyDir" := argonaut.Json("sizeLimit" := s"${sizeInMb}M")
+      ))
+  })
+
+  def volumesJson(volumes: List[Volume]): JsonObject = volumes match {
+    case Nil     => JsonObject.empty
+    case v :: vs => JsonObject.single("volumes", (volumeJson(v) :: vs.map(volumeJson)).asJson)
+  }
+
+  def volumeMountJson(volume: Volume): Json = argonaut.Json.jObject(volume match {
+    case Volume(id, mountPath, _) =>
+      JsonObject.fromTraversableOnce(List(
+        "name" := id,
+        "mountPath" := mountPath.toString
+      ))
+  })
+
+  def volumeMountsJson(volumes: List[Volume]): JsonObject = volumes match {
+    case Nil => JsonObject.empty
+    case v :: vs => JsonObject.single("volumeMounts", (volumeMountJson(v) :: vs.map(volumeMountJson)).asJson)
+  }
+
   def deployment(
     namespace: String,
     stackName: StackName,
@@ -226,17 +269,17 @@ object KubernetesJson {
               "nelson"      := "true"
             )
           ),
-          "spec" := argonaut.Json(
-            "containers" := List(
-
-              argonaut.Json.jObject(combineJsonObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+          "spec" := argonaut.Json.jObject(combineJsonObjects(
+            argonaut.JsonObject.fromTraversableOnce(List("containers" := List(
+              argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
                 "name"      := stackName.toString,
                 "image"     := image.toString,
                 "env"       := plan.environment.bindings,
                 "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.toList))
-              )), resources(plan.environment.cpu, plan.environment.memory)), livenessProbe(plan.environment.healthChecks)))
-            )
-          )
+              )), volumeMountsJson(plan.environment.volumes), resources(plan.environment.cpu, plan.environment.memory), livenessProbe(plan.environment.healthChecks)))
+            ))),
+            volumesJson(plan.environment.volumes)
+          ))
         )
       )
     )
@@ -292,7 +335,7 @@ object KubernetesJson {
     image:     Image,
     plan:      Plan
   ): Json =
-    argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+    argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
       "kind"       := "Job",
       "metadata"   := argonaut.Json(
         "name"      := stackName.toString,
@@ -314,7 +357,7 @@ object KubernetesJson {
     val backoffLimit = JsonObject.single("backoffLimit", plan.environment.retries.getOrElse(3).asJson)
 
     JsonObject.fromTraversableOnce(List(
-      "spec" := argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+      "spec" := argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
         "completions"  := plan.environment.desiredInstances.getOrElse(1),
         "template"     := argonaut.Json(
           "metadata" := argonaut.Json(
@@ -326,20 +369,21 @@ object KubernetesJson {
               "nelson"      := "true"
             )
           ),
-          "spec" := argonaut.Json(
-            "containers" := List(
-              argonaut.Json.jObject(combineJsonObject(JsonObject.fromTraversableOnce(List(
+          "spec" := argonaut.Json.jObject(combineJsonObjects(
+            JsonObject.fromTraversableOnce(List("containers" := List(
+              argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
                 "name"  := stackName.toString,
                 "image" := image.toString,
                 "env"   := plan.environment.bindings
-              )), resources(plan.environment.cpu, plan.environment.memory)))
-            ),
+              )), volumeMountsJson(plan.environment.volumes), resources(plan.environment.cpu, plan.environment.memory)))
+            ))),
+            volumesJson(plan.environment.volumes)) :+
             // See: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#pod-backoff-failure-policy
             // This should be "OnFailure" but at the time of this writing this section said:
             // Note: Due to a known issue #54870, when the spec.template.spec.restartPolicy field is set to “OnFailure”,
             // the back-off limit may be ineffective. As a short-term workaround, set the restart policy for the embedded template to “Never”
             // https://github.com/kubernetes/kubernetes/issues/54870
-            "restartPolicy" := "Never"
+            ("restartPolicy" := "Never")
           )
         )
       )), backoffLimit))
@@ -411,8 +455,8 @@ object KubernetesJson {
     }
   }
 
-  private def combineJsonObject(x: JsonObject, y: JsonObject): JsonObject =
-    JsonObject.fromTraversableOnce(x.toList ++ y.toList)
+  private def combineJsonObjects(x: JsonObject, xs: JsonObject*): JsonObject =
+    JsonObject.fromTraversableOnce(x.toList ++ xs.toList.flatMap(_.toList))
 
   private def containerPortsJson(ports: List[Port]): List[Json] =
     ports.map { port =>

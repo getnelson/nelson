@@ -164,13 +164,6 @@ object Fixtures {
       rest <- Gen.listOfN(1, genManifestPort)
     } yield Manifest.Ports(default, rest)
 
-  val genManifestVolume: Gen[Manifest.Volume] =
-    for {
-      a <- alphaNumStr
-      b <- alphaNumStr
-      c <- Gen.oneOf(Seq("rw", "r"))
-    } yield Manifest.Volume(a,b,c)
-
   val genManifestDeploymentTarget: Gen[Manifest.DeploymentTarget] =
     for {
       a <- Gen.listOfN(10, alphaNumStr)

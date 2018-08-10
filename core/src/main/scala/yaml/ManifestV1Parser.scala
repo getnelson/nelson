@@ -28,6 +28,7 @@ import cats.data.{NonEmptyList, State, Validated, ValidatedNel}
 import cats.implicits._
 
 import java.net.URI
+import java.nio.file.Paths
 import java.util.{ArrayList => JList}
 
 import scala.beans.BeanProperty
@@ -126,6 +127,22 @@ object ManifestV1Parser {
   def validateInstances(i:Int): YamlValidation[Int] =
     validatePlanConstraints(i, invalidInstances)(i => i > 0 && i < 500)
 
+  def validateVolumes(volume: VolumeYaml): YamlValidation[Volume] = {
+    val name = Option(volume.name).toValidNel(missingVolumeName)
+
+    val mountPath =
+      Validated.catchNonFatal(Paths.get(volume.mountPath))
+        .leftMap(ex => invalidMountPath(volume.mountPath, ex.getMessage))
+        .toValidatedNel
+
+    val size =
+      Option(volume.size)
+        .toValidNel(missingVolumeSize)
+        .andThen(size => if (size > 0) size.valid else invalidVolumeSize(size).invalidNel)
+
+    (name, mountPath, size).mapN { case (n, mp, s) => Volume(n, mp, s) }
+  }
+
   def validateEphemeral(i: Int): YamlValidation[Int] =
     if (i < 101 || i > 10000)
       Validated.invalidNel(invalidEphemeralDisk(101, 10000, i))
@@ -162,7 +179,7 @@ object ManifestV1Parser {
         }
       }
 
-    Apply[YamlValidation].map14(
+    Apply[YamlValidation].map15(
       parseAlphaNumHyphen(raw.name, "plan.name"),
       validatedCPU,
       validatedMemory,
@@ -176,10 +193,11 @@ object ManifestV1Parser {
       Option(raw.schedule).traverse(s => parseSchedule(s)),
       Option(raw.expiration_policy).traverse(resolvePolicy),
       Option(raw.traffic_shift).traverse(validateTrafficShift),
+      raw.volumes.asScala.toList.traverse(validateVolumes),
       Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i))
     ) {
-      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n) =>
-        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n))
+      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o) =>
+        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o))
     }
   }
 
@@ -487,6 +505,7 @@ class PlanYaml {
   @BeanProperty var schedule: String = _
   @BeanProperty var expiration_policy: String = _
   @BeanProperty var traffic_shift: TrafficShiftYaml = _
+  @BeanProperty var volumes: JList[VolumeYaml] = new java.util.ArrayList
   @BeanProperty var ephemeral_disk: Int = -1
 }
 
@@ -507,6 +526,12 @@ class HealthCheckYaml {
 class PlanResourceYaml {
   @BeanProperty var ref: String = _
   @BeanProperty var uri: String = _
+}
+
+class VolumeYaml {
+  @BeanProperty var name: String = _
+  @BeanProperty var mountPath: String = _
+  @BeanProperty var size: Int = _
 }
 
 /* here be dragons, be **EXTREAMLY** careful with this, fair reader */

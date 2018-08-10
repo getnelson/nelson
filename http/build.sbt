@@ -68,7 +68,7 @@ prometheusVersion := sys.env.getOrElse("PROMETHEUS_VERSION", "1.4.1")
 
 dockerCommands ++= Seq(
   ExecCmd("RUN", "addgroup", "nelson"),
-  ExecCmd("RUN", "adduser", "-s", "/bin/false", "-G", "nelson", "-S", "-D", "-H", "nelson"),
+  ExecCmd("RUN", "adduser", "-s", "/bin/false", "-u", "1000", "-G", "nelson", "-S", "-D", "-H", "nelson"),
   ExecCmd("RUN", "ln", "-s", s"${(defaultLinuxInstallLocation in Docker).value}/bin/${normalizedName.value}", "/usr/local/bin/sbt"),
   ExecCmd("RUN", "chmod", "555", s"${(defaultLinuxInstallLocation in Docker).value}/bin/${normalizedName.value}"),
   ExecCmd("RUN", "chown", "-R", "nelson:nelson", s"${(defaultLinuxInstallLocation in Docker).value}"),
@@ -86,6 +86,8 @@ dockerCommands ++= {
     ExecCmd("RUN", "rm", "-rf", s"/tmp/${prometheusBase}", s"/tmp/${prometheusBase}.tar.gz")
   )
 }
+
+dockerCommands += Cmd("USER", "1000")
 
 scalaTestVersion := "3.0.5"
 
