@@ -34,7 +34,6 @@ import java.util.{ArrayList => JList}
 import scala.beans.BeanProperty
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
-import scala.util.control.NonFatal
 
 object ManifestV1Parser {
   type YamlValidation[A] = ValidatedNel[YamlError, A]
@@ -129,18 +128,19 @@ object ManifestV1Parser {
     validatePlanConstraints(i, invalidInstances)(i => i > 0 && i < 500)
 
   def validateVolumes(volume: VolumeYaml): YamlValidation[Volume] = {
-    val emptyDir = Option(volume.emptyDir)
+    val name = Option(volume.name).toValidNel(missingVolumeName)
 
-    val mountPath = try {
-      Validated.validNel(Paths.get(volume.mountPath))
-    } catch {
-      case NonFatal(ex) => Validated.invalidNel(invalidMountPath(volume.mountPath, ex.getMessage))
-    }
+    val mountPath =
+      Validated.catchNonFatal(Paths.get(volume.mountPath))
+        .leftMap(ex => invalidMountPath(volume.mountPath, ex.getMessage))
+        .toValidatedNel
 
-    emptyDir match {
-      case None => Validated.invalidNel(missingVolumeType)
-      case Some(ed) => mountPath.map(mp => Volume(volume.name, mp, VolumeType.EmptyDirectory(ed.size)))
-    }
+    val size =
+      Option(volume.size)
+        .toValidNel(missingVolumeSize)
+        .andThen(size => if (size > 0) size.valid else invalidVolumeSize(size).invalidNel)
+
+    (name, mountPath, size).mapN { case (n, mp, s) => Volume(n, mp, s) }
   }
 
   def validateEphemeral(i: Int): YamlValidation[Int] =
@@ -531,15 +531,6 @@ class PlanResourceYaml {
 class VolumeYaml {
   @BeanProperty var name: String = _
   @BeanProperty var mountPath: String = _
-
-  /* can't do sum types so we'll enumerate them all here and
-   * make sure only one is set at validation time..
-   */
-  @BeanProperty var emptyDir: EmptyDirYaml = _
-}
-
-class EmptyDirYaml {
-  /* size of the empty directory in MB */
   @BeanProperty var size: Int = _
 }
 

@@ -84,7 +84,7 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
           alertOptOuts = List(AlertOptOut("api_high_request_latency")),
           policy = Some(RetainLatestTwoMajor),
           healthChecks = List(HealthCheck("http-status","default","https",Some("v1/status"), 10.seconds, 2.seconds)),
-          volumes = List(Volume("an-empty-dir", Paths.get("/foo/bar"), VolumeType.EmptyDirectory(500)))
+          volumes = List(Volume("an-empty-dir", Paths.get("/foo/bar"), 500))
         )
       ),
       Plan(

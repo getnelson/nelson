@@ -111,8 +111,7 @@ plans:
     volumes:
       - name: an-empty-dir
         mountPath: /foo/bar
-        emptyDir:
-          size: 500
+        size: 500
 
   - name: qa-crawler-1
     schedule: once

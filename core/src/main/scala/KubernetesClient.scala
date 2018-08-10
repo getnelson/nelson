@@ -211,7 +211,7 @@ object KubernetesJson {
   }
 
   def volumeJson(volume: Volume): Json = argonaut.Json.jObject(volume match {
-    case Volume(id, _, VolumeType.EmptyDirectory(sizeInMb)) =>
+    case Volume(id, _, sizeInMb) =>
       JsonObject.fromTraversableOnce(List(
         "name" := id,
         "emptyDir" := argonaut.Json("sizeLimit" := s"${sizeInMb}M")

@@ -192,17 +192,8 @@ object Manifest {
     val defaultRef: String = "default"
   }
 
-  final case class Volume(
-    name: String,
-    mountPath: Path,
-    volumeType: VolumeType
-  )
-
-  sealed abstract class VolumeType extends Product with Serializable
-
-  object VolumeType {
-    final case class EmptyDirectory(sizeInMb: Int) extends VolumeType
-  }
+  /** An empty scratch volume to be mounted onto a container */
+  final case class Volume(name: String, mountPath: Path, size: Int)
 
   final case class AlertOptOut(ref: String)
 
