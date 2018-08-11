@@ -16,7 +16,9 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import cats.data.Kleisli
 import cats.effect.{Effect, IO}
+import cats.syntax.flatMap._
 import nelson.CatsHelpers._
 
 import fs2.{Scheduler, Stream}
@@ -29,9 +31,6 @@ import journal._
 import scala.sys.process.{Process => _, _}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-
-import scalaz.Kleisli
-import scalaz.syntax.monad._
 
 import Datacenter.StackName
 import Nelson.NelsonK
@@ -74,7 +73,7 @@ object Templates {
 
   /** Validate a template according to a template validation request */
   def validateTemplate(tv: TemplateValidation): NelsonK[ConsulTemplateResult] =
-    Kleisli.kleisli { cfg =>
+    Kleisli { cfg =>
       val dc = cfg.datacenters.headOption.getOrElse {
         // We should never see this. Nelson doesn't start without a datacenter.
         sys.error("Can't validate a template without a datacenter")
@@ -178,7 +177,7 @@ object Templates {
           // Something went wrong internally.  We need to clean up the template container.
           cleanup(scheduler, dockerConfig, containerName).attempt flatMap { _ => IO.raiseError(e) }
       }
-    }.join)
+    }.flatten)
 
     dockerCommand match {
       case Some(cmd) => run(cmd)

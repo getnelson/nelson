@@ -17,9 +17,8 @@
 package nelson
 
 import ca.mrvisser.sealerate
-import scalaz.NonEmptyList
-import scalaz.syntax.std.list._
-
+import cats.data.NonEmptyList
+import cats.syntax.list._
 
 sealed abstract class DeploymentStatus extends Product with Serializable
 
@@ -72,7 +71,7 @@ object DeploymentStatus {
   // Deployments with a routable status are included in the routing graph.
   // Ready is the common case and inidcates that a deployment is ready to receive traffic.
   // Deprecated deployments are included in routing graph until all upstreams have upgraded.
-  val routable = NonEmptyList(Ready,Deprecated)
+  val routable = NonEmptyList.of(Ready,Deprecated)
 
   private val stringToDeploymentStatus: Map[String, DeploymentStatus] =
     all.map(x => x.toString -> x).toMap

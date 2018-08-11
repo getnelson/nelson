@@ -16,10 +16,13 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import doobie.imports._
-import scalaz._,Scalaz._
-import storage.StoreOp
-import org.scalatest.{BeforeAndAfterEach}
+import nelson.storage.StoreOp
+
+import cats.implicits._
+
+import doobie.implicits._
+
+import org.scalatest.BeforeAndAfterEach
 
 class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
 
@@ -28,13 +31,13 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
 
   override def beforeEach: Unit = {
    (
-    sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run >>
-    sql"TRUNCATE TABLE loadbalancer_routes".update.run >>
-    sql"TRUNCATE TABLE loadbalancer_deployments".update.run >>
-    sql"TRUNCATE TABLE loadbalancers".update.run >>
-    sql"TRUNCATE TABLE releases".update.run >>
-    sql"TRUNCATE TABLE namespaces".update.run >>
-    sql"TRUNCATE TABLE datacenters".update.run >>
+    sql"SET REFERENTIAL_INTEGRITY FALSE; -- YOLO".update.run *>
+    sql"TRUNCATE TABLE loadbalancer_routes".update.run *>
+    sql"TRUNCATE TABLE loadbalancer_deployments".update.run *>
+    sql"TRUNCATE TABLE loadbalancers".update.run *>
+    sql"TRUNCATE TABLE releases".update.run *>
+    sql"TRUNCATE TABLE namespaces".update.run *>
+    sql"TRUNCATE TABLE datacenters".update.run *>
     sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run
   ).void.transact(stg.xa).unsafeRunSync()
   }

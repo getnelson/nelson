@@ -25,8 +25,10 @@ import nelson.scheduler.SchedulerOp
 import nelson.storage.StoreOp
 import nelson.vault.Vault
 
-import cats.~>
+import cats.{~>, Order}
+import cats.data.ValidatedNel
 import cats.effect.IO
+import cats.implicits._
 
 import com.amazonaws.regions.Region
 
@@ -34,19 +36,12 @@ import helm.ConsulOp
 
 import java.net.URI
 import java.time.Instant
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 
 import org.http4s.Uri
 
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.duration._
-
-import scalaz.{Order, ValidationNel}
-import scalaz.std.set._
-import scalaz.std.string._
-import scalaz.syntax.foldable._
-import scalaz.syntax.monoid._
-import scalaz.syntax.std.option._
 
 object Infrastructure {
 
@@ -82,10 +77,24 @@ object Infrastructure {
   final case class Kubernetes(
     endpoint: Uri,
     version: KubernetesVersion,
-    caCertPath: Path,
-    token: String,
-    timeout: Duration
+    timeout: Duration,
+    mode: KubernetesMode
   )
+
+  sealed abstract class KubernetesMode extends Product with Serializable {
+    def caCert: Path = this match {
+      // All pods in Kubernetes get a cert mounted at this path.
+      // See https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
+      // for more info.
+      case KubernetesMode.InCluster => Paths.get("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt")
+      case KubernetesMode.OutCluster(p, _) => p
+    }
+  }
+
+  object KubernetesMode {
+    final case object InCluster extends KubernetesMode
+    final case class OutCluster(caCertPath: Path, token: String) extends KubernetesMode
+  }
 
   final case class SplunkConfig(
     splunkUrl: String,
@@ -192,8 +201,7 @@ object Datacenter {
 
   object Namespace {
     implicit def namespaceOrder: Order[Namespace] =
-      Order[String].contramap[Namespace](_.datacenter) |+|
-      Order[String].contramap[Namespace](_.name.asString)
+      Order.whenEqual(Order.by(_.datacenter), Order.by(_.name.asString))
   }
 
   final case class Port(port: Int, name: String, protocol: String)
@@ -226,18 +234,25 @@ object Datacenter {
   }
   object Deployment {
     implicit val deploymentOrder: Order[Deployment] =
-      (Order[Version].contramap[Deployment](_.unit.version) |+|
-          Order[Instant].contramap[Deployment](_.deployTime))
+      Order.whenEqual(
+        Order.by(_.unit.version),
+        Order.by(_.deployTime)
+      )
 
     def filterByStackName(ds: Set[Deployment], sn: StackName): Set[Deployment] =
       ds.filter(_.stackName != sn)
 
     def getLatestVersion(ds: Set[Deployment]): Option[Version] =
-      ds.maximumBy(_.unit.version).headOption.map(_.unit.version)
+      ds.foldLeft(Option.empty[Version]) { (maxSoFar, current) =>
+        maxSoFar match {
+          case Some(version) => Some(version max current.unit.version)
+          case None          => Some(current.unit.version)
+        }
+      }
 
     def getLatestDeployment(ds: Set[Deployment]): Option[Deployment] = {
       if (ds.isEmpty) None
-      else Option(ds.reduceLeft((x,y) => if (deploymentOrder.greaterThanOrEqual(x, y)) x else y))
+      else Option(ds.reduceLeft((x,y) => if (x >= y) x else y))
     }
   }
 
@@ -250,8 +265,9 @@ object Datacenter {
   }
 
   object StackName {
-    implicit val stackNameOrder: Order[StackName] =
-      Order[String].contramap[StackName](_.toString)
+    implicit val stackNameOrder: Order[StackName] = Order.by(_.toString)
+
+    implicit val stackNameOrdering: Ordering[StackName] = stackNameOrder.toOrdering
 
     def parsePublic(str: String): Option[StackName] = {
       val parts = str.split("--")
@@ -262,8 +278,8 @@ object Datacenter {
       }
     }
 
-    def validate(str: String): ValidationNel[String, StackName] =
-      (parsePublic(str) \/> "Unable to parse StackName").validationNel
+    def validate(str: String): ValidatedNel[String, StackName] =
+      parsePublic(str).toValidNel("Unable to parse StackName")
   }
 
   final case class ServiceName(serviceType: UnitName, version: FeatureVersion) {
@@ -311,7 +327,7 @@ object Datacenter {
 
     // The deployment target for shift. In the common case the target is the to deployment.
     // In the case of a reverse then it's the from target as that's now the target being shifted to.
-    val deploymentTarget = reverse.cata(_ => from, to)
+    val deploymentTarget = reverse.fold(to)(_ => from)
 
     lazy val end = start.plusSeconds(duration.toSeconds)
 
@@ -327,17 +343,14 @@ object Datacenter {
      * the amount of time it will take to reverse to the start
      */
     def inProgress(ts: Instant): Boolean =
-      reverse.cata(
-        none = ts.isAfter(start) && ts.isBefore(end),
-        some = reverseStart => {
-          val rsMilli = reverseStart.toEpochMilli
-          val tsMilli = ts.toEpochMilli
-          val stMilli = start.toEpochMilli
-          val reverseTime = rsMilli - stMilli
-          val elapsed = tsMilli - rsMilli
-          elapsed < reverseTime
-        }
-      )
+      reverse.fold(ts.isAfter(start) && ts.isBefore(end)) { reverseStart =>
+        val rsMilli = reverseStart.toEpochMilli
+        val tsMilli = ts.toEpochMilli
+        val stMilli = start.toEpochMilli
+        val reverseTime = rsMilli - stMilli
+        val elapsed = tsMilli - rsMilli
+        elapsed < reverseTime
+      }
 
     /*
      * time is used by the traffic shifting policy to calculate the
@@ -346,16 +359,13 @@ object Datacenter {
      * the point when the reverse happened to the start
      */
     private def time(ts: Instant): Instant =
-      reverse.cata(
-        none = ts,
-        some = reverseStart => {
-          val rsMilli = reverseStart.toEpochMilli
-          val tsMilli = ts.toEpochMilli
-          val delta = tsMilli - rsMilli
-          val reverse = rsMilli - delta
-          Instant.ofEpochMilli(reverse)
-        }
-      )
+      reverse.fold(ts) { reverseStart =>
+        val rsMilli = reverseStart.toEpochMilli
+        val tsMilli = ts.toEpochMilli
+        val delta = tsMilli - rsMilli
+        val reverse = rsMilli - delta
+        Instant.ofEpochMilli(reverse)
+      }
   }
 
   final case class SingletonTarget(d: Deployment) extends Target {
@@ -377,8 +387,7 @@ object Datacenter {
     port: Int
   )
 
-  implicit val datacenterOrder: Order[Datacenter] =
-    Order[String].contramap[Datacenter](_.name)
+  implicit val datacenterOrder: Order[Datacenter] = Order.by(_.name)
 
   final case class StatusUpdate(stack: StackName,
                                 status: DeploymentStatus,

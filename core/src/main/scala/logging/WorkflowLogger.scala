@@ -27,9 +27,6 @@ import fs2.{io, text}
 
 import journal.Logger
 
-import scalaz.{~> => _, _}
-import scalaz.Scalaz._
-
 import java.nio.file.{Path,Files,StandardOpenOption}
 import java.time.Instant
 

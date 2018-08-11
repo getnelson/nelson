@@ -17,9 +17,9 @@
 package nelson
 
 import nelson.Manifest.UnitDef
-import scalaz.{@@,NonEmptyList}
-import scalaz.std.string._
-import scalaz.syntax.foldable1._
+import cats.data.NonEmptyList
+import cats.instances.string._
+import cats.syntax.reducible._
 
 abstract class NelsonError(msg: String) extends RuntimeException {
   override def getMessage: String = msg
@@ -80,10 +80,10 @@ final case class UnsatisfiedDeploymentRequirements(u: Manifest.UnitDef)
   extends NelsonError(s"the input unit did not satisfy the deployment requirements. unit was: $u")
 
 final case class MultipleErrors(errors: NonEmptyList[NelsonError])
-    extends NelsonError("Multiple errors: " + errors.foldMap1(_.getMessage))
+    extends NelsonError("Multiple errors: " + errors.reduceMap(_.getMessage))
 
 final case class MultipleValidationErrors(errors: NonEmptyList[NelsonError])
-  extends NelsonError("Validation errors: " + errors.foldMap1(e => s"${e.getMessage}. "))
+  extends NelsonError("Validation errors: " + errors.reduceMap(e => s"${e.getMessage}. "))
 
 final case class UnexpectedConsulResponse(resp: String)
     extends NelsonError(s"got an unexpected response from consul: $resp")
@@ -225,6 +225,10 @@ object YamlError {
   def invalidNamespace(n: String, reason: String): YamlError = InvalidNamespace(n,reason)
   def emptyList(name: String): YamlError = EmptyList(name)
   def invalidMetaLength(meta: String): YamlError = InvalidMetaLength(meta)
+  val missingVolumeName: YamlError = MissingVolumeName
+  def invalidMountPath(path: String, reason: String): YamlError = InvalidMountPath(path, reason)
+  val missingVolumeSize: YamlError = MissingVolumeSize
+  def invalidVolumeSize(request: Int): YamlError = InvalidVolumeSize(request)
 }
 
 private final case class InvalidExternalAddress(uri: String)
@@ -337,3 +341,15 @@ private final case class EmptyList(field: String)
 
 private final case class InvalidMetaLength(meta: String)
   extends YamlError(s"""meta ($meta) must less that or equal to 14 characters""")
+
+private final case object MissingVolumeName
+  extends YamlError(s"Missing volume name in volume manifest.")
+
+private final case class InvalidMountPath(path: String, reason: String)
+  extends YamlError(s"${path} is an invalid mount path: ${reason}.")
+
+private final case object MissingVolumeSize
+  extends YamlError("Missing volume size in volume manifest.")
+
+private final case class InvalidVolumeSize(request: Int)
+  extends YamlError(s"$request is an invalid volume disk request, must be > 0 (measured in megabytes).")

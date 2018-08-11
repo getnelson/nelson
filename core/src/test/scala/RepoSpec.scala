@@ -16,22 +16,21 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz.\/
 import org.scalacheck._, Prop._
 
 class RepoSpec extends Properties("Repo") {
   import RepoSpec._
 
   property("RepoAccess/String round trip") = forAll { (r: RepoAccess) =>
-    RepoAccess.fromString(r.toString) == \/.right(r)
+    RepoAccess.fromString(r.toString) == Right(r)
   }
 
   property("fromString is case-insensitive") = forAll { (r: RepoAccess) =>
-    RepoAccess.fromString(r.toString.toUpperCase) == \/.right(r)
+    RepoAccess.fromString(r.toString.toUpperCase) == Right(r)
   }
 
   property("fromString is an invalid repo access error for an unknown value") = {
-    RepoAccess.fromString("foo") == \/.left(InvalidRepoAccess("foo"))
+    RepoAccess.fromString("foo") == Left(InvalidRepoAccess("foo"))
   }
 }
 

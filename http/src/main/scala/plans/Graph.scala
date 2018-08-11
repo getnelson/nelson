@@ -22,10 +22,9 @@ import org.http4s.headers.`Content-Type`
 import org.http4s.dsl.io._
 import _root_.argonaut._, Argonaut._
 import cats.effect.IO
+import cats.data.OptionT
 import cats.free.Free
 import cats.implicits._
-import nelson.CatsHelpers._
-import scalaz.OptionT
 
 final case class Graph(config: NelsonConfig) extends Default {
   import nelson.Json._
@@ -41,7 +40,7 @@ final case class Graph(config: NelsonConfig) extends Default {
         ns  <- OptionT(storage.StoreOp.getNamespace(datacenter, name))
         gr  <- OptionT(getRoutingGraph(ns))
          graph = DependencyGraph(gr)
-       } yield graph.svg).run.foldMap(config.storage).attempt.flatMap {
+       } yield graph.svg).value.foldMap(config.storage).attempt.flatMap {
         case Left(e) => BadRequest(e.getMessage)
         case Right(None) => BadRequest("no such namespace found")
         case Right(Some(t)) => Ok(t).map(_.withContentType(`Content-Type`(MediaType.`image/svg+xml`)))

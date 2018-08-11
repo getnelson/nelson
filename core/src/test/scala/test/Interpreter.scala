@@ -17,34 +17,13 @@
 package nelson
 package test
 
-import cats.{~>, Monad}
+import cats.{~>, Monad, MonadError}
 import cats.free.{Coyoneda, Free}
 import cats.implicits._
 
-import scalaz.{Catchable, Forall}
-
-/**
- * TODO redefine this as Free over the following functor:
- *
-type S[F[_], M[_], A] = String \/ (Forall[({ type λ[α] = PartialFunction[F[α], (A, M[α])] })#λ], A)
-
-def functor[F[_], M[_]]: Functor[S[F, M, ?]] = new Functor[S[F, M, ?]] {
-
-  def map[A, B](fa: S[F, M, A])(f: A => B): S[F, M, B] = fa match {
-    case -\/(str) => -\/(str)
-
-    case \/-((pf, fail)) =>
-      val pf2 = new Forall[({ type λ[α] = PartialFunction[F[α], (B, M[α])] })#λ] {
-        def apply[C]: PartialFunction[F[C], (B, M[C])] =
-          pf.apply[C] andThen { case (a, mc) => (f(a), mc) }
-      }
-
-      val fail2 = f(fail)
-
-      \/-((pf2, fail2))
-  }
-}
- */
+/** An ad-hoc, informally-specified, bug-ridden, slow implementation of half of smock.
+  * https://github.com/djspiewak/smock
+  */
 sealed trait Interpreter[F[_], M[_], +S] {
   import Interpreter._
 
@@ -89,7 +68,7 @@ sealed trait Interpreter[F[_], M[_], +S] {
   // eff1 -> eff2 -> (eff3 -> eff5, eff4) -> eff6
   // expect(eff1) -> expect(eff2) -> (expect(eff3) -> expect(eff5), expect(eff4), expect(eff7)) -> expect(eff6)
 
-  def run[A](fc: Free[F, A])(implicit M: Monad[M], C: Catchable[M], T: TestFramework): M[A] = {
+  def run[A](fc: Free[F, A])(implicit M: Monad[M], C: MonadError[M, Throwable], T: TestFramework): M[A] = {
 
     // we need to cache these here to save off the call stack
     val earlyTermination =
@@ -122,7 +101,7 @@ sealed trait Interpreter[F[_], M[_], +S] {
                 s"unexpected early termination; last valid suspension: $a")
             } getOrElse earlyTermination
 
-            C.fail(t2)
+            C.raiseError(t2)
         }
 
       case Bind(ma, extend) =>
@@ -135,12 +114,12 @@ sealed trait Interpreter[F[_], M[_], +S] {
               suspensionTermination,
               s"unexpected suspension: ${cy.fi}")
 
-            C.fail(t2)
+            C.raiseError(t2)
 
           case Right(r) => M.pure(r)
         }
 
-      case Fail(t) => C.fail(t)
+      case Fail(t) => C.raiseError(t)
     }
 
     loop(this, fc.mapK(liftCoyoneda), None)
@@ -148,6 +127,13 @@ sealed trait Interpreter[F[_], M[_], +S] {
 }
 
 object Interpreter {
+  /** Inlined from Scalaz's Forall
+    * https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Forall.scala
+    */
+  trait Forall[F[_]] {
+    def apply[A]: F[A]
+  }
+
   def liftCoyoneda[F[_]]: F ~> Coyoneda[F, ?] = new (F ~> Coyoneda[F, ?]) {
     def apply[A](fa: F[A]): Coyoneda[F, A] = Coyoneda.lift(fa)
   }

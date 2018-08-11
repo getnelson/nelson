@@ -21,17 +21,15 @@ import nelson.cleanup.ExpirationPolicy
 import nelson.notifications.NotificationSubscriptions
 import nelson.storage.StoreOp
 
-import cats.~>
+import cats.{~>, Foldable, Monoid}
+import cats.data.{Kleisli, NonEmptyList, ValidatedNel}
 import cats.effect.IO
-import cats.syntax.applicativeError._
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import java.net.URI
+import java.nio.file.Path
 
 import scala.concurrent.duration._
-
-import scalaz.{~> => _, _}
-import scalaz.Scalaz._
 
 final case class Manifest(
   units: List[UnitDef],
@@ -117,6 +115,7 @@ object Manifest {
     schedule: Option[Schedule] = None,
     policy: Option[ExpirationPolicy] = None,
     trafficShift: Option[TrafficShift] = None,
+    volumes: List[Volume] = List.empty,
     ephemeralDisk: Option[Int] = None
   )
 
@@ -181,7 +180,7 @@ object Manifest {
   }
 
   final case class Ports(default: Port, others: List[Port]) {
-    def nel: NonEmptyList[Port] = NonEmptyList.nel(default, others)
+    def nel: NonEmptyList[Port] = NonEmptyList.of(default, others: _*)
   }
 
   final case class Port(ref: String, port: Int, protocol: String) {
@@ -193,11 +192,8 @@ object Manifest {
     val defaultRef: String = "default"
   }
 
-  final case class Volume(
-    mount: String,
-    source: String,
-    mode: String // rw, r
-  )
+  /** An empty scratch volume to be mounted onto a container */
+  final case class Volume(name: String, mountPath: Path, size: Int)
 
   final case class AlertOptOut(ref: String)
 
@@ -397,12 +393,17 @@ object Manifest {
     foldNamespaces(m,dcs,folder,a)
   }
 
-  def verifyDeployable(m: Manifest, dcs: Seq[Datacenter], storage: StoreOp ~> IO): IO[ValidationNel[NelsonError,Unit]] = {
-    val folder: (Datacenter,Namespace,Plan,UnitDef,List[IO[ValidationNel[NelsonError,Unit]]]) => List[IO[ValidationNel[NelsonError,Unit]]] =
+  def verifyDeployable(m: Manifest, dcs: Seq[Datacenter], storage: StoreOp ~> IO): IO[ValidatedNel[NelsonError,Unit]] = {
+    val folder: (Datacenter,Namespace,Plan,UnitDef,List[IO[ValidatedNel[NelsonError,Unit]]]) => List[IO[ValidatedNel[NelsonError,Unit]]] =
       (dc,ns,p,u,res) => StoreOp.verifyDeployable(dc.name, ns.name, u).foldMap(storage) ::  res
 
-    implicit val monoid: Monoid[ValidationNel[NelsonError, Unit]] =
-      Monoid.instance[ValidationNel[NelsonError, Unit]](_ +++ _, ().successNel)
+    implicit val monoid: Monoid[ValidatedNel[NelsonError, Unit]] =
+      new Monoid[ValidatedNel[NelsonError, Unit]] {
+        def combine(x: ValidatedNel[NelsonError, Unit], y: ValidatedNel[NelsonError, Unit]): ValidatedNel[NelsonError, Unit] =
+          x combine y
+
+        def empty: ValidatedNel[NelsonError, Unit] = ().validNel
+      }
 
     foldUnits(m, dcs, folder, Nil)
       .sequence

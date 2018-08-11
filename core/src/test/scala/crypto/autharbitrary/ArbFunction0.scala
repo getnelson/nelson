@@ -18,12 +18,10 @@ package nelson
 package crypto
 package autharbitrary
 
-import org.scalacheck._
-import scalaz.scalacheck.ScalaCheckBinding._
-import scalaz.syntax.functor._
+import org.scalacheck.Arbitrary
 
 object ArbFunction0 {
   /** This is available in more recent versions of scalacheck. */
   implicit def arbitraryFunction0[A](implicit arbA: Arbitrary[A]): Arbitrary[() => A] =
-    arbA.map(() => _)
+    Arbitrary(Arbitrary.arbitrary[A].map(() => _))
 }

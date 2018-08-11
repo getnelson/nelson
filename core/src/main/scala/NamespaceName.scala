@@ -16,8 +16,10 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import scalaz._, Scalaz._
+import cats.data.NonEmptyList
 import scala.annotation.tailrec
+import cats.Order
+import cats.instances.string._
 
 /*
  * Represents a fully qualified namespace path, where 'dev' is the parent
@@ -43,7 +45,7 @@ final case class NamespaceName(private val nel: NonEmptyList[String]) {
         case None => false
       }
 
-    other.parent.cata(p => go(p), false)
+    other.parent.fold(false)(go)
   }
 
   /*
@@ -65,30 +67,33 @@ final case class NamespaceName(private val nel: NonEmptyList[String]) {
 
 object NamespaceName {
 
-  def apply(root: String): NamespaceName = NamespaceName(NonEmptyList.nel(root, Nil))
+  def apply(root: String): NamespaceName = NamespaceName(NonEmptyList.of(root))
 
-  def apply(root: String, rest: List[String]): NamespaceName = NamespaceName(NonEmptyList.nel(root, rest))
+  def apply(root: String, rest: List[String]): NamespaceName = NamespaceName(NonEmptyList.of(root, rest: _*))
 
   private val alphaNumHyphen = """[a-z][a-z-/]*[a-z]""".r
-  def fromString(str: String): InvalidNamespaceName \/ NamespaceName = {
+  def fromString(str: String): Either[InvalidNamespaceName, NamespaceName] = {
     if (!alphaNumHyphen.pattern.matcher(str).matches || str.contains("//"))
-      -\/(InvalidNamespaceName(str))
+      Left(InvalidNamespaceName(str))
     else {
       val sp = str.split('/')
       val len = sp.length
       if (len == 0)
-        -\/(InvalidNamespaceName(str))
+        Left(InvalidNamespaceName(str))
       else {
         val root = sp.head // length checked above
         val tail = sp.toList.takeRight(len - 1)
-        \/-(NamespaceName(root, tail))
+        Right(NamespaceName(root, tail))
       }
     }
   }
 
-  def fromList(ls: List[String]): InvalidNamespaceName \/ NamespaceName =
+  def fromList(ls: List[String]): Either[InvalidNamespaceName, NamespaceName] =
     fromString(ls.mkString("/"))
 
   implicit val NamespaceNameOrder: Order[NamespaceName] =
-    Order[String].contramap[NamespaceName](_.asString)
+    Order.by(_.asString)
+
+  implicit val NamespaceNameordering: Ordering[NamespaceName] =
+    NamespaceNameOrder.toOrdering
 }

@@ -2,8 +2,6 @@ package nelson
 
 import cats.syntax.apply._
 
-import scalaz.@@
-
 import nelson.Datacenter.{Deployment, Namespace => DCNamespace}
 import nelson.DeploymentStatus.{Pending, Ready, Terminated, Warming}
 import nelson.Manifest.{Namespace => ManifestNamespace, Plan, UnitDef, Versioned}

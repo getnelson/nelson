@@ -20,16 +20,15 @@ import nelson.Datacenter.StackName
 import nelson.Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck,Route}
 import nelson.storage.StoreOp
 
-import cats.~>
+import cats.{~>, Foldable}
+import cats.data.{EitherT, Kleisli, ValidatedNel}
+import cats.data.Validated.{Valid, Invalid}
 import cats.effect.IO
-import nelson.CatsHelpers._
-
-import scalaz.{~> => _, _}
-import Scalaz._
+import cats.implicits._
 
 object ManifestValidator {
 
-  type Valid[A] = ValidationNel[NelsonError, A]
+  type Valid[A] = ValidatedNel[NelsonError, A]
 
   /**
    * A (potentially) deployable unit
@@ -54,16 +53,16 @@ object ManifestValidator {
 
   def validateUnitKind(unit: NelsonUnit, manifest: Manifest): Valid[Unit] = {
     // "name" meaning something in manifest.yml than in .nelson.yml is kind of gross and confusing :(
-    if (manifest.units.exists(_.name === unit.kind)) ().successNel
-    else ManifestUnitKindMismatch(unit.kind, manifest.units.map(_.name)).failureNel
+    if (manifest.units.exists(_.name === unit.kind)) ().validNel
+    else ManifestUnitKindMismatch(unit.kind, manifest.units.map(_.name)).invalidNel
   }
 
   def validate(str: String, units: List[NelsonUnit]): Nelson.NelsonK[Valid[Manifest]] =
     Kleisli { cfg =>
       parseManifestAndValidate(str, cfg) map {
-        case Success(m) =>
+        case Valid(m) =>
           units.traverse(u => validateUnitKind(u,m)).map(_ => m)
-        case f@Failure(_) =>
+        case f@Invalid(_) =>
           f
       }
     }
@@ -74,20 +73,19 @@ object ManifestValidator {
    * Validates that unit is declared in namespace
    */
   def validateOnCommit(un: UnitName, ns: NamespaceName, m: Manifest): Valid[Manifest] = {
-    import scalaz.std.anyVal._
     val namespace =
       if (!m.namespaces.exists(_.name == ns))
         DeploymentCommitFailed(
-          s"namespace ${ns.asString} is not declared in namespaces stanza of the manifest").failureNel
-    else ().successNel
+          s"namespace ${ns.asString} is not declared in namespaces stanza of the manifest").invalidNel
+    else ().validNel
 
     val unit =
       if (!m.namespaces.find(_.name == ns).exists(_.units.exists(_._1 == un)))
         DeploymentCommitFailed(
-          s"unit $un is not declared for namespace ${ns.asString}").failureNel
-    else ().successNel
+          s"unit $un is not declared for namespace ${ns.asString}").invalidNel
+    else ().validNel
 
-    (namespace +++ unit).map(_ => m)
+    (namespace combine unit).map(_ => m)
   }
 
   def validateLoadbalancer(lb: Loadbalancer,
@@ -99,50 +97,48 @@ object ManifestValidator {
     // character for version, for a total of 13. Giving the version some wiggle room for
     // a total of 15, so the max length of the name is 32 - 15
     def validateNameLength(lb: Manifest.Loadbalancer): Valid[Unit] =
-      if (lb.name.length <= 17) ().successNel
-      else InvalidLoadbalancerNameLength(lb.name).failureNel
+      if (lb.name.length <= 17) ().validNel
+      else InvalidLoadbalancerNameLength(lb.name).invalidNel
 
     def validateAllowedPorts(ps: Vector[Manifest.Port]): Valid[Unit] =
-      whiteList.cata(
-        some = allowed =>
-          ps.traverse_(p =>
-            if (allowed.ports.contains(p.port)) ().successNel
-            else InvalidLoadbalancerPort(p.port, allowed.ports).failureNel
-          ),
-        none = ().successNel
-      )
+      whiteList.fold[Valid[Unit]](().validNel) { allowed =>
+        ps.traverse_(p =>
+          if (allowed.ports.contains(p.port)) ().validNel
+          else InvalidLoadbalancerPort(p.port, allowed.ports).invalidNel
+        )
+      }
 
     def unitPortExists(u: UnitDef, r: Route): Boolean =
       u.name == r.destination.name &&
       u.ports.exists(_.nel.toList.exists(_.ref == r.destination.portReference))
 
     def validateExists(r: Route): Valid[Unit] =
-      if (units.exists(u => unitPortExists(u,r))) ().successNel
-      else UnknownBackendDestination(r, units.map(_.name)).failureNel
+      if (units.exists(u => unitPortExists(u,r))) ().validNel
+      else UnknownBackendDestination(r, units.map(_.name)).invalidNel
 
     // loadbalancers can define multiple routes but they must all go
     // to the same backened service
     def validateOneUnit(lb: Manifest.Loadbalancer): Valid[Unit] =
-      if (lb.routes.map(_.destination.name).distinct.length == 1) ().successNel
-      else InvalidRouteDefinition(lb.name).failureNel
+      if (lb.routes.map(_.destination.name).distinct.length == 1) ().validNel
+      else InvalidRouteDefinition(lb.name).invalidNel
 
-    validateNameLength(lb) +++
-    validateAllowedPorts(lb.routes.map(_.port)) +++
-    lb.routes.traverse_(validateExists) +++
+    validateNameLength(lb) combine
+    validateAllowedPorts(lb.routes.map(_.port)) combine
+    lb.routes.traverse_(validateExists) combine
     validateOneUnit(lb)
   }
 
   def validateHealthCheck(check: HealthCheck, unit: UnitDef): Valid[Unit] = {
-    val resolvePort: ValidationNel[NelsonError, Unit] =
-      if (unit.ports.exists(_.nel.toList.exists(_.ref == check.portRef))) ().successNel
-      else UnknownPortRef(check.portRef, unit.name).failureNel
+    val resolvePort: ValidatedNel[NelsonError, Unit] =
+      if (unit.ports.exists(_.nel.toList.exists(_.ref == check.portRef))) ().validNel
+      else UnknownPortRef(check.portRef, unit.name).invalidNel
 
-    val validatePathIfHttp: ValidationNel[NelsonError, Unit] =
+    val validatePathIfHttp: ValidatedNel[NelsonError, Unit] =
       if ((check.protocol == "http" || check.protocol == "https") && check.path.isEmpty)
-        MissingHealthCheckPath(check.protocol).failureNel
-      else ().successNel
+        MissingHealthCheckPath(check.protocol).invalidNel
+      else ().validNel
 
-    resolvePort +++ validatePathIfHttp
+    resolvePort combine validatePathIfHttp
   }
 
   def validateAlerts(unit: UnitDef, p: Plan): IO[Valid[Unit]] = {
@@ -158,41 +154,35 @@ object ManifestValidator {
     (for {
       // Provide a dummy namespace and version
       a <- EitherT(alerts.rewriteRules(unit, dummyStackName(unit), p.name, DummyNamespaceName, p.environment.alertOptOuts))
-      b <- EitherT(Promtool.validateRules(unit.name, a).map {
-        case Promtool.Valid =>
-          ().right
-        case i: Promtool.Invalid =>
-          (InvalidPrometheusRules(i.msg): NelsonError).left
+      b <- EitherT(Promtool.validateRules(unit.name, a).map[Either[NelsonError, Unit]] {
+        case Promtool.Valid      => Right(())
+        case i: Promtool.Invalid => Left(InvalidPrometheusRules(i.msg): NelsonError)
       })
-    } yield b).run.map(_.validationNel)
+    } yield b).value.map(_.toValidatedNel)
   }
 
   def validateResource(r: Resource, plan: Plan): Valid[Unit] =
-    plan.environment.resources.get(r.name).cata(
-      none = MissingResourceReference(r.name, plan).failureNel,
-      some = x => ().successNel)
+    plan.environment.resources.get(r.name).fold[Valid[Unit]](MissingResourceReference(r.name, plan).invalidNel)(_ => ().validNel)
 
   def validatePeriodic(unit: UnitDef, plan: Plan): Valid[Unit] =
     if (Manifest.isPeriodic(unit,plan))
-      plan.environment.trafficShift.cata(
-        some = _ => PeriodicUnitWithTrafficShift(unit.name).failureNel,
-        none = ().successNel)
+      plan.environment.trafficShift.fold[Valid[Unit]](().validNel)(_ => PeriodicUnitWithTrafficShift(unit.name).invalidNel)
     else
-      ().successNel
+      ().validNel
 
   def validateUnitNameLength(unit: UnitDef): Valid[Unit] =
     if(unit.name.length() > 41)
-      InvalidUnitNameLength(unit.name).failureNel
+      InvalidUnitNameLength(unit.name).invalidNel
     else
-      ().successNel
+      ().validNel
 
   def validateUnitNameChars(unit: UnitDef): Valid[Unit] = {
     val validName = "^[a-zA-Z0-9][a-zA-Z0-9-]{0,}[a-zA-Z0-9]$".r
     val string = unit.name
     if(!validName.pattern.matcher(string).matches)
-      InvalidUnitNameChars(string).failureNel
+      InvalidUnitNameChars(string).invalidNel
     else
-      ().successNel
+      ().validNel
     }
 
   def validateUnit(unit: UnitDef, plan: Plan): IO[Valid[Unit]] =
@@ -203,7 +193,7 @@ object ManifestValidator {
       d <- IO.pure(validatePeriodic(unit,plan))
       e <- IO.pure(validateUnitNameLength(unit))
       f <- IO.pure(validateUnitNameChars(unit))
-    } yield (a +++ b +++ c +++ d +++ e +++ f).map(_ => ())
+    } yield (a combine b combine c combine d combine e combine f).map(_ => ())
 
   def parseManifestAndValidate(str: String, cfg: NelsonConfig): IO[Valid[Manifest]] = {
 
@@ -220,14 +210,12 @@ object ManifestValidator {
     def validateReferencesDefaultNamespace(m: Manifest, defaultNamespace: NamespaceName): IO[Valid[Unit]] =
     IO.pure(
       m.namespaces.find(x => x.name == cfg.defaultNamespace)
-        .cata(
-          none = MissingDefaultNamespaceReference(cfg.defaultNamespace).failureNel,
-          some = n =>
-            if (m.units.forall {u => n.units.exists(_._1 == u.name)})
-              ().successNel
-            else
-              MissingIndividualDefaultNamespaceReference(cfg.defaultNamespace).failureNel
-        )
+        .fold[Valid[Unit]](MissingDefaultNamespaceReference(cfg.defaultNamespace).invalidNel) { n =>
+          if (m.units.forall {u => n.units.exists(_._1 == u.name)})
+            ().validNel
+          else
+            MissingIndividualDefaultNamespaceReference(cfg.defaultNamespace).invalidNel
+        }
     )
 
 
@@ -246,17 +234,17 @@ object ManifestValidator {
         b <- validateUnits(m, cfg.datacenters)
         c <- validateLoadbalancers(m, cfg.datacenters)
         d <- validateReferencesDefaultNamespace(m, cfg.defaultNamespace)
-      } yield (a +++ b +++ c +++ d).map(_ => m)
+      } yield (a combine b combine c combine d).map(_ => m)
 
       // We cannot do this validation in parallel with the above.
       // We rely on the assumptions the above validations afford us.
-      DisjunctionT(x.map(_.disjunction)).flatMap { m =>
+      EitherT(x.map(_.toEither)).flatMap { m =>
         CycleDetection.validateNoCycles(m, cfg)
-      }.run.map(x => x.validation.map(_ => m))
+      }.value.map(x => x.toValidated.map(_ => m))
     }
 
     yaml.ManifestParser.parse(str).fold(
-      e => IO(e.failure),
+      e => IO(e.invalid),
       m => validate(m)
     )
   }

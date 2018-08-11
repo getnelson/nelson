@@ -28,13 +28,10 @@ package object alerts {
   import nelson.Manifest._
   import nelson.Manifest.AlertOptOut
 
-  import cats.free.Free
   import cats.effect.IO
+  import cats.free.Free
 
   import helm.ConsulOp
-
-  import scalaz.{\/}
-  import scalaz.syntax.either._
 
   import journal.Logger
 
@@ -64,16 +61,14 @@ package object alerts {
     pc.copy(alerts = pc.alerts.filterNot(a => optedOut(a.alert)))
   }
 
-  def rewriteRules(unit: UnitDef, stackName: StackName, plan: PlanRef, ns: NamespaceName, outs: List[AlertOptOut]): IO[NelsonError \/ String] = {
+  def rewriteRules(unit: UnitDef, stackName: StackName, plan: PlanRef, ns: NamespaceName, outs: List[AlertOptOut]): IO[Either[NelsonError, String]] = {
     val pc = optedOutPrometheusConfig(unit, outs)
     for {
       rewriter <- RuleRewriter.autoDetect
-      result <- rewriter.rewriteRules(stackName, ns, plan, pc)
+      result   <- rewriter.rewriteRules(stackName, ns, plan, pc)
     } yield result match {
-      case RuleRewriter.Rewritten(s) =>
-        s.right
-      case RuleRewriter.Invalid(s) =>
-        InvalidPrometheusRules(s).left
+      case RuleRewriter.Rewritten(s) => Right(s)
+      case RuleRewriter.Invalid(s)   => Left(InvalidPrometheusRules(s))
     }
   }
 

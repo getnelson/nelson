@@ -18,11 +18,10 @@ package nelson
 package routing
 
 import Datacenter.{Deployment,LoadbalancerDeployment,StackName}
-import scalaz.{\/,Order}
-import scalaz.syntax.monoid._
-import java.time.Instant
+import cats.Order
+import cats.implicits._
 
-final case class RoutingNode(node: LoadbalancerDeployment \/ Deployment) {
+final case class RoutingNode(node: Either[LoadbalancerDeployment, Deployment]) {
   def stackName: StackName = node.fold(_.stackName, _.stackName)
   def deployment: Option[Deployment] = node.toOption
   def loadbalancer: Option[LoadbalancerDeployment] = node.swap.toOption
@@ -30,11 +29,13 @@ final case class RoutingNode(node: LoadbalancerDeployment \/ Deployment) {
 }
 
 object RoutingNode {
-  def apply(d: Deployment): RoutingNode = new RoutingNode(\/.right(d))
+  def apply(d: Deployment): RoutingNode = new RoutingNode(Right(d))
 
-  def apply(lb: LoadbalancerDeployment): RoutingNode = new RoutingNode(\/.left(lb))
+  def apply(lb: LoadbalancerDeployment): RoutingNode = new RoutingNode(Left(lb))
 
   implicit def routingNodeOrder: Order[RoutingNode] =
-    (Order[Version].contramap[RoutingNode](_.node.fold(_.loadbalancer.version.minVersion, _.unit.version)) |+|
-     Order[Instant].contramap[RoutingNode](_.node.fold(_.deployTime, _.deployTime)))
+    Order.whenEqual(
+      Order.by(_.node.fold(_.loadbalancer.version.minVersion, _.unit.version)),
+      Order.by(_.node.fold(_.deployTime, _.deployTime))
+    )
 }

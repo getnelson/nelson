@@ -37,14 +37,6 @@ class ConfigSpec extends FlatSpec with Matchers {
     dcs.length should equal (2)
   }
 
-  it should "fail if consul is not specified" in {
-    val cfg = read("nelson/datacenters-missing-consul.cfg").attempt.unsafeRunSync()
-    cfg.swap.exists { err =>
-      val msg = err.getMessage
-      msg == "No such key: infrastructure.consul.endpoint"
-    } should equal (true)
-  }
-
   it should "fail if domain is not specified" in {
     val cfg = read("nelson/datacenters-missing-domain.cfg").attempt.unsafeRunSync()
     cfg.swap.exists { err =>

@@ -24,15 +24,13 @@ import nelson.notifications.Notify
 import nelson.storage.{StoreOp, StoreOpF}
 
 import cats.~>
+import cats.data.{Kleisli, OptionT}
 import cats.effect.IO
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import io.prometheus.client.Counter
 
 import java.time.Instant
-
-import scalaz.{~> => _, _}
-import scalaz.Scalaz._
 
 /**
  * An Actionable is something that can be "acted" upon in the context
@@ -63,12 +61,12 @@ object Actionable {
       (for {
          u  <- OptionT(StoreOp.getUnit(unit.name, version))
          n  <- OptionT(StoreOp.getNamespace(dc.name, ns.name)) // gets a Datacetner.Namespace
-         id <- StoreOp.createDeployment(u.id, hash, n, unit.workflow.name, plan.name, policy.name).liftM[OptionT]
-         _  <- plan.environment.resources.map { case (name, uri) =>
+         id <- OptionT.liftF(StoreOp.createDeployment(u.id, hash, n, unit.workflow.name, plan.name, policy.name))
+         _  <- OptionT.liftF(plan.environment.resources.map { case (name, uri) =>
                 StoreOp.createDeploymentResource(id, name, uri)
-               }.toList.sequence.liftM[OptionT]
-         _  <- StoreOp.createDeploymentExpiration(id, exp).liftM[OptionT]
-       } yield id).run
+               }.toList.sequence)
+         _  <- OptionT.liftF(StoreOp.createDeploymentExpiration(id, exp))
+       } yield id).value
     }
 
     def action(unit: UnitDef @@ Versioned): Kleisli[IO, (NelsonConfig,ActionConfig), Unit] =
@@ -91,19 +89,18 @@ object Actionable {
           ()
         }
 
-        def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Throwable \/ Unit] =
+        def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Either[Throwable, Unit]] =
           unitw.workflow.deploy(id, hash, unit, plan, dc, ns).foldMap(t).attempt.flatMap(_.fold(
             e => (Workflow.syntax.status(id, DeploymentStatus.Failed,
-                    s"workflow failed because: ${e.getMessage}").foldMap(t) >>
-                  incCounter(deployFailureCounter)).attempt.map(_.toDisjunction),
-            s => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) >>
-                  incCounter(deploySuccessCounter)).attempt.map(_.toDisjunction)
+                    s"workflow failed because: ${e.getMessage}").foldMap(t) *>
+                  incCounter(deployFailureCounter)).attempt,
+            s => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) *>
+                  incCounter(deploySuccessCounter)).attempt
         ))
 
-        create(unit, dc, ns, plan, hash, exp, policy).foldMap(cfg.storage).flatMap(_.cata(
-          some = id => deploy(id)(dc.workflow).map(_ => ()),
-          none = incCounter(deployFailureCounter)
-        ))
+        create(unit, dc, ns, plan, hash, exp, policy).foldMap(cfg.storage).flatMap(_.fold(incCounter(deployFailureCounter)) { id =>
+          deploy(id)(dc.workflow).map(_ => ())
+        })
       }
   }
 
@@ -146,7 +143,7 @@ object Actionable {
           lbd <- StoreOp.findLoadbalancerDeployment(lb.name, major, nsd.id).foldMap(cfg.storage)
 
           // if loadbalancer exists resize, otherwise create
-          _   <- lbd.cata(l => resize(l)(t), launch(id, sn, lb.routes, nsd.id)(t))
+          _   <- lbd.fold(launch(id, sn, lb.routes, nsd.id)(t))(l => resize(l)(t))
         } yield ()
       }
   }

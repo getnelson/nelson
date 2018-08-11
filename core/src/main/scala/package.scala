@@ -18,11 +18,12 @@ import nelson.Manifest.{Loadbalancer, UnitDef, Versioned}
 import nelson.Nelson.NelsonK
 import nelson.Versionable.AllOps
 
-import scalaz.@@
 package object nelson {
 
   import argonaut.{Parse,DecodeJson}
 
+  import cats.Order
+  import cats.data.Kleisli
   import cats.effect.IO
 
   import fs2.{Scheduler, Stream}
@@ -35,9 +36,6 @@ package object nelson {
 
   import scala.concurrent.ExecutionContext
   import scala.concurrent.duration._
-
-  import scalaz.syntax.kleisli._
-  import scalaz.Order
 
   type ID = Long
   type GUID = String
@@ -56,6 +54,12 @@ package object nelson {
   type LoadbalancerRef = String
   type DNSName = String
   type DeploymentStatusString = String
+
+/** Copied and adapted from Scalaz's Tag implementation.
+  * https://github.com/scalaz/scalaz/blob/v7.1.17/core/src/main/scala/scalaz/package.scala
+  */
+  private[this] type Tagged[A, T] = { type Tag = T; type Self = A; }
+  type @@[T, Tag] = Tagged[T, Tag]
 
   /**
    * Given we're mostly parsing string results to task, make a simple decoder
@@ -85,7 +89,7 @@ package object nelson {
       IO.raiseError(err)
 
     def nfold[B](e: NelsonError)(f: A => B): NelsonK[B] =
-      tfold(e)(f).liftKleisli
+      Kleisli.liftF(tfold(e)(f))
 
     def tfold[B](e: NelsonError)(f: A => B): IO[B] =
       in.fold(fail[B](e))(a => IO(f(a)))
@@ -155,7 +159,7 @@ package object nelson {
   }
 
   private[nelson] implicit val orderInstant: Order[java.time.Instant] =
-    Order.order((i1, i2) => scalaz.Ordering.fromInt(i1.compareTo(i2)))
+    Order.from(_ compareTo _)
 
   def featureVersionFrom1or2DotString(versionString: String): Option[FeatureVersion] = {
     Version

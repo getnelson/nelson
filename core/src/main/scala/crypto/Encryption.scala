@@ -19,7 +19,6 @@ package crypto
 
 import AuthFailure._
 
-import scalaz._
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import java.security.AlgorithmParameters
@@ -34,12 +33,12 @@ final class EncryptionKey private(val bytes: ByteVector) {
 object EncryptionKey {
   val minBytes: Int = 16
 
-  def apply(bytes: ByteVector): InsufficientEncryptionKeyLength \/ EncryptionKey =
-    if (bytes.length >= minBytes) \/.right(new EncryptionKey(bytes))
-    else \/.left(InsufficientEncryptionKeyLength(actual = bytes.length, required = minBytes.toLong))
+  def apply(bytes: ByteVector): Either[InsufficientEncryptionKeyLength, EncryptionKey] =
+    if (bytes.length >= minBytes) Right(new EncryptionKey(bytes))
+    else Left(InsufficientEncryptionKeyLength(actual = bytes.length, required = minBytes.toLong))
 
   def unsafe(bytes: ByteVector): EncryptionKey =
-    apply(bytes).valueOr(e => throw new IllegalArgumentException(e.toString))
+    apply(bytes).fold(e => throw new IllegalArgumentException(e.toString), identity)
 }
 
 final class InitializationVector private(val bytes: ByteVector)
@@ -109,10 +108,10 @@ final class SafeHolderEncryption(holder: SafeHolder[Cipher]) extends Encryptor[A
       val algoParams = AlgorithmParameters.getInstance(Encryption.aes);
       algoParams.init(new IvParameterSpec(iv.bytes.toArray));
       cipher.init(mode.asInt, key.keySpec, algoParams)
-      \/.right(ByteVector.view(cipher.doFinal(data.toArray)))
+      Right(ByteVector.view(cipher.doFinal(data.toArray)))
     } catch {
       case e: Exception =>
-        \/.left(EncryptionError(mode, key.bytes.length, data.length, e))
+        Left(EncryptionError(mode, key.bytes.length, data.length, e))
     }
   }
 }

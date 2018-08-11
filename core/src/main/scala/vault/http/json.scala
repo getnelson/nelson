@@ -24,9 +24,7 @@ import argonaut.DecodeResultCats._
 import cats.instances.stream._
 import cats.syntax.foldable._
 
-import scalaz.{==>>}
-import scalaz.syntax.std.option._
-import scalaz.std.string._
+import scala.collection.immutable.SortedMap
 
 trait Json {
   import Vault._
@@ -69,9 +67,9 @@ trait Json {
     } yield Mount(path, tipe, desc, defaultLease, maxLease)
   }
 
-  implicit val jsonMountMap: DecodeJson[String ==>> Mount] = DecodeJson { c =>
-    def go(obj: JsonObject): DecodeResult[String ==>> Mount] =
-      obj.toMap.toStream.foldLeftM[DecodeResult, String ==>> Mount](==>>.empty) {
+  implicit val jsonMountMap: DecodeJson[SortedMap[String, Mount]] = DecodeJson { c =>
+    def go(obj: JsonObject): DecodeResult[SortedMap[String, Mount]] =
+      obj.toMap.toStream.foldLeftM[DecodeResult, SortedMap[String, Mount]](SortedMap.empty) {
         // mounts end with '/'. Starting circa vault-0.6.2, this response includes keys that aren't mounts. */ =>
         case (res, (jf,js)) if jf.endsWith("/") =>
           jsonMount(jf).decodeJson(js).flatMap(m => DecodeResult.ok(res + (jf -> m)))
@@ -79,7 +77,7 @@ trait Json {
           DecodeResult.ok(res)
       }
 
-    c.focus.obj.cata(go, DecodeResult.fail("expected mounts to be a JsonObject", c.history))
+    c.focus.obj.fold[DecodeResult[SortedMap[String, Mount]]](DecodeResult.fail("expected mounts to be a JsonObject", c.history))(go)
   }
 
   implicit val jsonRootToken: DecodeJson[RootToken] = implicitly[DecodeJson[String]].map(RootToken.apply)

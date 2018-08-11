@@ -23,12 +23,11 @@ import nelson.scheduler._
 object Json {
   import argonaut._, Argonaut._
   import argonaut.DecodeResultCats._
-  import cats.syntax.apply._
+  import cats.implicits._
 
   import Datacenter._
   import concurrent.duration._
   import health.HealthStatus
-  import scalaz._, Scalaz._
 
   implicit lazy val UriToJson: EncodeJson[URI] =
     implicitly[EncodeJson[String]].contramap(_.toString)
@@ -643,14 +642,6 @@ object Json {
    * Encode a map as a transposed JSON list of maps, such that each map has (klabel: key) and (vlabel: value) entries.
    */
   def encodeTransposeMap[K, V](klabel: Symbol, vlabel: Symbol)(implicit ek: EncodeJson[K], ev: EncodeJson[V]): EncodeJson[Map[K, V]] = EncodeJson { m =>
-    m.toList.map { case (k, v) =>
-      (vlabel.name := v.asJson) ->:
-      (klabel.name := k.asJson) ->:
-      jEmptyObject
-    }.asJson
-  }
-
-  def encodeTransposeZMap[K, V](klabel: Symbol, vlabel: Symbol)(implicit ek: EncodeJson[K], ev: EncodeJson[V]): EncodeJson[K ==>> V] = EncodeJson { m =>
     m.toList.map { case (k, v) =>
       (vlabel.name := v.asJson) ->:
       (klabel.name := k.asJson) ->:

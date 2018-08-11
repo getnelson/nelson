@@ -55,7 +55,7 @@ resolvers += "splunk-releases" at "http://splunk.artifactoryonline.com/splunk/ex
 
 libraryDependencies ++= Seq(
   "com.splunk.logging"         % "splunk-library-javalogging" % "1.5.2",
-  "org.http4s"                %% "http4s-argonaut61"          % V.http4sArgonaut61,
+  "org.http4s"                %% "http4s-argonaut"            % V.http4s,
   "org.http4s"                %% "http4s-dsl"                 % V.http4s,
   "org.http4s"                %% "http4s-blaze-server"        % V.http4s,
   "io.prometheus"              % "simpleclient_common"        % V.prometheus
@@ -68,7 +68,7 @@ prometheusVersion := sys.env.getOrElse("PROMETHEUS_VERSION", "1.4.1")
 
 dockerCommands ++= Seq(
   ExecCmd("RUN", "addgroup", "nelson"),
-  ExecCmd("RUN", "adduser", "-s", "/bin/false", "-G", "nelson", "-S", "-D", "-H", "nelson"),
+  ExecCmd("RUN", "adduser", "-s", "/bin/false", "-u", "1000", "-G", "nelson", "-S", "-D", "-H", "nelson"),
   ExecCmd("RUN", "ln", "-s", s"${(defaultLinuxInstallLocation in Docker).value}/bin/${normalizedName.value}", "/usr/local/bin/sbt"),
   ExecCmd("RUN", "chmod", "555", s"${(defaultLinuxInstallLocation in Docker).value}/bin/${normalizedName.value}"),
   ExecCmd("RUN", "chown", "-R", "nelson:nelson", s"${(defaultLinuxInstallLocation in Docker).value}"),
@@ -87,6 +87,8 @@ dockerCommands ++= {
   )
 }
 
-scalaTestVersion := "2.2.6"
+dockerCommands += Cmd("USER", "1000")
 
-scalaCheckVersion := "1.12.5"
+scalaTestVersion := "3.0.5"
+
+scalaCheckVersion := "1.13.5"

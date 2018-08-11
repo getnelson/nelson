@@ -25,15 +25,13 @@ import nelson.scheduler.SchedulerOp
 import nelson.storage.{StoreOp}
 import nelson.vault.Vault
 
-import cats.data.EitherK
+import cats.data.{EitherK, OptionT}
 import cats.free.Free
 import cats.implicits._
 
 import helm.ConsulOp
 
 import scala.concurrent.duration.FiniteDuration
-
-import scalaz.{Free => _, _}
 
 /**
  * Workflows must be defined in terms of a particular type of UnitDef
@@ -85,7 +83,6 @@ object Workflow {
     import Datacenter.StackName
     import Datacenter.ServiceName
     import Docker.RegistryURI
-    import CatsHelpers._
     import routing.{RoutingTable,Discovery}
 
     def pure[A](a: => A): WorkflowF[A] =
@@ -150,7 +147,7 @@ object Workflow {
         _    <- OptionT(StoreOp.createTrafficShift(ns.id, to, p, dur).map(Option(_)))
       } yield ()
 
-      prog.run.inject[WorkflowOp].map(_ => ())
+      prog.value.inject[WorkflowOp].map(_ => ())
     }
 
     def dockerOps(id: ID, unit: UnitDef, registry: RegistryURI): WorkflowF[Image] = {

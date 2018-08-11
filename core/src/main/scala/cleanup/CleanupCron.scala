@@ -20,8 +20,8 @@ package cleanup
 import nelson.Datacenter.Deployment
 import nelson.routing.RoutingTable
 
-import cats.syntax.apply._
 import cats.effect.{Effect, IO}
+import cats.implicits._
 import nelson.CatsHelpers._
 
 import fs2.{Scheduler, Stream}
@@ -33,9 +33,6 @@ import journal.Logger
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration._
-
-import scalaz._
-import Scalaz._
 
 final case class DeploymentCtx(deployment: Deployment, status: DeploymentStatus, exp: Option[Instant])
 
@@ -63,15 +60,15 @@ object CleanupCron {
   /* Gets all deployment (excluding terminated) and routing graph for each namespace within a Datacenter. */
   def getDeploymentsForDatacenter(dc: Datacenter): StoreOpF[Vector[CleanupRow]] =
     for {
-      _  <- log.debug(s"cleanup cron running for ${dc.name}").point[StoreOpF]
+      _  <- log.debug(s"cleanup cron running for ${dc.name}").pure[StoreOpF]
       ns <- StoreOp.listNamespacesForDatacenter(dc.name)
       gr <- RoutingTable.generateRoutingTables(dc.name)
-      ds <- ns.toVector.traverseM(ns => getDeploymentsForNamespace(ns))
+      ds <- ns.toVector.flatTraverse(ns => getDeploymentsForNamespace(ns))
     } yield ds.flatMap { case (ns, dcx) => gr.find(_._1 == ns).map(x => (dc,ns,dcx,x._2)) }
 
   /* Gets all deployments (excluding terminated) for all datacenters and namespaces */
   def getDeployments(cfg: NelsonConfig): IO[Vector[CleanupRow]] =
-    cfg.datacenters.toVector.traverseM(dc => getDeploymentsForDatacenter(dc)).foldMap(cfg.storage)
+    cfg.datacenters.toVector.flatTraverse(dc => getDeploymentsForDatacenter(dc)).foldMap(cfg.storage)
 
   def routable(d: DeploymentCtx): Boolean =
     routables.exists(_ == d.status)

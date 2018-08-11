@@ -85,20 +85,22 @@ package nelson
 
 
 trait RoutingFixtures {
-  import Datacenter.{Port=>_, _}
-  import Manifest._
-  import nelson.Datacenter.Namespace
+  import nelson.Datacenter.{Port => _, _}
   import nelson.Manifest.Deployable.Container
+  import nelson.Manifest.{Namespace => _, _}
+  import nelson.Util._
+  import nelson.Workflow.WorkflowF
+  import nelson.cleanup._
+  import nelson.notifications.NotificationSubscriptions
   import nelson.storage.{StoreOp, StoreOpF}
-  import scalaz.{~> => _, _}
+
+  import cats.Order
+  import cats.data.NonEmptyList
   import cats.implicits._
-  import Workflow.WorkflowF
-  import Deployment._
+
   import java.time.Instant
+
   import scala.concurrent.duration._
-  import cleanup._
-  import notifications.NotificationSubscriptions
-  import Util._
 
   def insertFixtures(name: String, namespaceName: String = "dev"): StoreOpF[Manifest.Namespace] = {
 
@@ -695,8 +697,8 @@ trait RoutingFixtures {
 
   def createManualInventoryShift(nsid: ID): StoreOpF[Unit] =
      for {
-       ds <- StoreOp.listDeploymentsForUnitByStatus(nsid, "inventory", NonEmptyList(DeploymentStatus.Ready))
-       i1 :: i2 :: Nil = ds.toList.sorted(Order[Deployment].toScalaOrdering)
+       ds <- StoreOp.listDeploymentsForUnitByStatus(nsid, "inventory", NonEmptyList.of(DeploymentStatus.Ready))
+       i1 :: i2 :: Nil = ds.toList.sorted(Order[Deployment].toOrdering)
        // We need to create a shift that lasts longer than our test, so our test runs during the shift
        id <- StoreOp.createTrafficShift(nsid, i2, LinearShiftPolicy, 365.days)
        _  <- StoreOp.startTrafficShift(i1.id, i2.id, Instant.now.minusSeconds(30))

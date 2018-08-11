@@ -20,7 +20,6 @@ import Manifest.{UnitDef,Versioned,Plan,TrafficShift}
 import Datacenter.{Namespace,Deployment}
 import Workflow.WorkflowF
 import cats.implicits._
-import scalaz.@@
 
 object Magnetar extends Workflow[Unit] {
   import Workflow.syntax._

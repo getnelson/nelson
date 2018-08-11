@@ -17,7 +17,6 @@
 package nelson
 package yaml
 
-import scalaz.\/
 import scala.util.parsing.combinator._
 
 object BackendDestinationParser {
@@ -27,7 +26,7 @@ object BackendDestinationParser {
    * Create a new instance for every usage, as the scala parsers are
    * not thread safe. This was not fixed until 2.12. See SI-4929
    */
-  def parse(input: String): Throwable \/ Manifest.BackendDestination =
+  def parse(input: String): Either[Throwable, Manifest.BackendDestination] =
     (new BackendDestinationParser).parse(input)
 }
 class BackendDestinationParser extends JavaTokenParsers {
@@ -42,10 +41,10 @@ class BackendDestinationParser extends JavaTokenParsers {
       case (u ~ _ ~ p) => Manifest.BackendDestination(u,p)
     }
 
-  def parse(input: String): Throwable \/ Manifest.BackendDestination =
+  def parse(input: String): Either[Throwable, Manifest.BackendDestination] =
     parseAll(parser, input) match {
-      case Success(result, _) => \/.right(result)
-      case Failure(msg, _) => \/.left(BackendDestinationParser.Error(msg))
-      case Error(msg, _) => \/.left(BackendDestinationParser.Error(msg))
+      case Success(result, _) => Right(result)
+      case Failure(msg, _) => Left(BackendDestinationParser.Error(msg))
+      case Error(msg, _) => Left(BackendDestinationParser.Error(msg))
     }
 }

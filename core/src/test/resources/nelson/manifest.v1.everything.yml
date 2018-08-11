@@ -108,6 +108,10 @@ plans:
       - ref: s3
         uri: http://s3.aws.com
     expiration_policy: retain-latest-two-major
+    volumes:
+      - name: an-empty-dir
+        mountPath: /foo/bar
+        size: 500
 
   - name: qa-crawler-1
     schedule: once

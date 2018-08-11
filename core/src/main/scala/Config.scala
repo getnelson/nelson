@@ -17,6 +17,7 @@
 package nelson
 
 import nelson.BannedClientsConfig.HttpUserAgent
+import nelson.Infrastructure.KubernetesMode
 import nelson.audit.{Auditor,AuditEvent}
 import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
@@ -29,8 +30,7 @@ import nelson.vault.http4s._
 
 import cats.~>
 import cats.effect.{Effect, IO}
-import cats.syntax.either._
-import nelson.CatsHelpers._
+import cats.implicits._
 
 import java.io.FileInputStream
 import java.nio.file.{Path, Paths}
@@ -48,8 +48,6 @@ import org.http4s.client.blaze._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
-
-import scalaz.Scalaz._
 
 /**
  *
@@ -529,20 +527,20 @@ object Config {
 
     def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
       def readSplunk: Option[Infrastructure.SplunkConfig] =
-        (kfg.lookup[String]("docker.splunk-url") |@| kfg.lookup[String]("docker.splunk-token")
-          )((x,y) => Infrastructure.SplunkConfig(x,y))
+        (kfg.lookup[String]("docker.splunk-url"), kfg.lookup[String]("docker.splunk-token")
+          ).mapN((x,y) => Infrastructure.SplunkConfig(x,y))
 
       def readLoggingImage: Option[Docker.Image] =
         kfg.lookup[String]("logging-sidecar")
           .flatMap(a => docker.Docker.Image.fromString(a).toOption)
 
-      (kfg.lookup[String]("endpoint") |@|
-       kfg.lookup[Duration]("timeout") |@|
-       kfg.lookup[String]("docker.user") |@|
-       kfg.lookup[String]("docker.password") |@|
-       kfg.lookup[String]("docker.host") |@|
+      (kfg.lookup[String]("endpoint"),
+       kfg.lookup[Duration]("timeout"),
+       kfg.lookup[String]("docker.user"),
+       kfg.lookup[String]("docker.password"),
+       kfg.lookup[String]("docker.host"),
        kfg.lookup[Int]("mhz-per-cpu")
-        )((a,b,c,d,e,g) => {
+        ).mapN((a,b,c,d,e,g) => {
           val splunk = readSplunk
           val loggingSidecar = readLoggingImage
           val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
@@ -550,16 +548,19 @@ object Config {
         })
     }
 
-    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] =
-      (kfg.lookup[String]("endpoint") |@|
-       kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString) |@|
-       kfg.lookup[String]("ca-cert").map(p => Paths.get(p)) |@|
-       kfg.lookup[String]("token") |@|
-       kfg.lookup[Duration]("timeout")
-      ) { (endpoint, version, caCert, token, timeout) =>
-        val uri = Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
-        Infrastructure.Kubernetes(uri, version, caCert, token, timeout)
+    def readKubernetesOutClusterParams(kfg: KConfig): Option[KubernetesMode] =
+      (kfg.lookup[String]("ca-cert").map(p => Paths.get(p)), kfg.lookup[String]("token")).mapN {
+        case (caCert, token) => KubernetesMode.OutCluster(caCert, token)
       }
+
+    def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] = for {
+      endpoint  <- kfg.lookup[String]("endpoint")
+      version   <- kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString)
+      timeout   <- kfg.lookup[Duration]("timeout")
+      inCluster <- kfg.lookup[Boolean]("in-cluster")
+      mode      <- if (inCluster) Some(KubernetesMode.InCluster) else readKubernetesOutClusterParams(kfg)
+      uri       =  Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
+    } yield Infrastructure.Kubernetes(uri, version, timeout, mode)
 
     def readNomadScheduler(kfg: KConfig): IO[SchedulerOp ~> IO] =
       readNomadInfrastructure(kfg) match {
@@ -600,14 +601,13 @@ object Config {
     def readKubernetesClient(kfg: KConfig): IO[KubernetesClient] = {
       val infra = for {
         kubernetes <- readKubernetesInfrastructure(kfg)
-        sslContext <- getKubernetesCert(kubernetes.caCertPath)
+        sslContext <- getKubernetesCert(kubernetes.mode.caCert)
       } yield (kubernetes, sslContext)
 
       infra match {
         case Some((kubernetes, sslContext)) =>
           http4sClient(kubernetes.timeout, sslContext = Some(sslContext)).map { httpClient =>
-            val tokenFileContents = scala.io.Source.fromFile(kubernetes.token).getLines.mkString("")
-            new KubernetesClient(kubernetes.version, kubernetes.endpoint, httpClient, tokenFileContents)
+            new KubernetesClient(kubernetes.version, kubernetes.endpoint, httpClient, kubernetes.mode)
           }
         case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
       }
@@ -616,28 +616,9 @@ object Config {
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
     def readDatacenter(id: String, kfg: KConfig): IO[Datacenter] = {
       val proxyCreds =
-        (kfg.lookup[String](s"proxy-credentials.username") |@|
+        (kfg.lookup[String](s"proxy-credentials.username"),
           kfg.lookup[String](s"proxy-credentials.password")
-        )((a,b) => Infrastructure.ProxyCredentials(a,b))
-
-      val consul = {
-        val a = kfg.require[String]("infrastructure.consul.endpoint")
-        val b = kfg.require[Duration]("infrastructure.consul.timeout")
-        val c = kfg.lookup[String]("infrastructure.consul.acl-token")
-        val d = kfg.lookup[String]("infrastructure.consul.username")
-        val e = kfg.lookup[String]("infrastructure.consul.password")
-        val client = http4sClient(b, 20)
-        val http4sConsul = (d,e) match {
-          case (None,None) => client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), consulClient))
-          case (Some(u),Some(pw)) =>
-            client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c,
-              Some(Infrastructure.Credentials(u,pw))), consulClient))
-          case _ =>
-            log.error("If you configure the datacenter to have a consul username, or consul password, it must have both.")
-            client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), consulClient))
-        }
-        http4sConsul.map(consulClient => PrometheusConsul(a, consulClient))
-      }
+        ).mapN((a,b) => Infrastructure.ProxyCredentials(a,b))
 
       val dockerClient = InstrumentedDockerClient(dockercfg.connection, new Docker(dockercfg, schedulerPool, ec))
 
@@ -657,29 +638,49 @@ object Config {
 
       val schedConfig = kfg.subconfig("infrastructure.scheduler")
 
-      val schedAndHealthChecker = schedConfig.lookup[String]("scheduler") match {
+      val components = schedConfig.lookup[String]("scheduler") match {
         case Some("nomad") =>
+          val consul = {
+            val a = kfg.require[String]("infrastructure.consul.endpoint")
+            val b = kfg.require[Duration]("infrastructure.consul.timeout")
+            val c = kfg.lookup[String]("infrastructure.consul.acl-token")
+            val d = kfg.lookup[String]("infrastructure.consul.username")
+            val e = kfg.lookup[String]("infrastructure.consul.password")
+            val client = http4sClient(b, 20)
+            val http4sConsul = (d,e) match {
+              case (None,None) => client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), consulClient))
+              case (Some(u),Some(pw)) =>
+                client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c,
+                  Some(Infrastructure.Credentials(u,pw))), consulClient))
+              case _ =>
+                log.error("If you configure the datacenter to have a consul username, or consul password, it must have both.")
+                client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), consulClient))
+            }
+            http4sConsul.map(consulClient => PrometheusConsul(a, consulClient))
+          }
+
           for {
             consulClient  <- consul
             sched         <- readNomadScheduler(schedConfig.subconfig("nomad"))
             healthChecker = health.Http4sConsulHealthClient(consulClient)
-          } yield (sched, healthChecker)
+          } yield (sched, healthChecker, consulClient)
+
         case Some("kubernetes") =>
           readKubernetesClient(schedConfig.subconfig("kubernetes")).map { client =>
-            (new scheduler.KubernetesHttp(client), health.KubernetesHealthClient(client))
+            (new scheduler.KubernetesHttp(client), health.KubernetesHealthClient(client), StubbedConsulClient)
           }
+
         case _ => IO.raiseError(new IllegalArgumentException(s"At least one scheduler must be defined per datacenter"))
       }
 
       val interpreters = for {
-        shc <- schedAndHealthChecker
-        (sched, healthChecker) = shc
-        cc  <- consul
-        vv  <- vault
+        comp <- components
+        (sched, healthChecker, consul) = comp
+        vv   <- vault
       } yield {
         Infrastructure.Interpreters(
           scheduler = sched,
-          consul = cc,
+          consul = consul,
           vault = vv,
           storage = stg,
           logger = logger,
@@ -732,13 +733,13 @@ object Config {
 
     val zones = readAvailabilityZones(kfg.subconfig("availability-zones"))
 
-    (kfg.lookup[String]("access-key-id") |@|
-     kfg.lookup[String]("secret-access-key") |@|
-     lookupRegion(kfg) |@|
-     kfg.lookup[String]("launch-configuration-name") |@|
-     kfg.lookup[List[String]]("elb-security-group-names") |@|
+    (kfg.lookup[String]("access-key-id"),
+     kfg.lookup[String]("secret-access-key"),
+     lookupRegion(kfg),
+     kfg.lookup[String]("launch-configuration-name"),
+     kfg.lookup[List[String]]("elb-security-group-names"),
      kfg.lookup[String]("image")
-    )((a,b,c,d,e,f) => Infrastructure.Aws(a,b,c,d,e.toSet,zones,f))
+    ).mapN((a,b,c,d,e,f) => Infrastructure.Aws(a,b,c,d,e.toSet,zones,f))
   }
 
   private def readNomad(cfg: KConfig): NomadConfig =
@@ -819,12 +820,9 @@ object Config {
       val name = splitted.head // yolo, but safe
       val maybeVersion = splitted.drop(1).headOption
 
-      maybeVersion.cata(
-        none = Option(HttpUserAgent(name, None)),
-        some = version =>
-        Version.fromString(version)
-          .map(version => HttpUserAgent(name, Some(version)))
-      )
+      maybeVersion.fold(Option(HttpUserAgent(name, None))) { version =>
+        Version.fromString(version).map(version => HttpUserAgent(name, Some(version)))
+      }
     }
     cfg.lookup[List[String]]("http-user-agents").map { agents =>
       val httpUserAgents: List[HttpUserAgent] = agents

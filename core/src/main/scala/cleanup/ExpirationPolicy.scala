@@ -26,8 +26,6 @@ import java.time.Instant
 
 import scala.concurrent.duration._
 
-import scalaz._,Scalaz._
-
 /*
  * An EpxirationPolicy defines a policy that given
  * a Deployment and RoutingGraph optionally returns
@@ -168,6 +166,7 @@ object ExpirationPolicyProcess {
   import nelson.Datacenter.{Namespace,Deployment}
   import nelson.storage.{StoreOp, StoreOpF}
   import cats.effect.IO
+  import cats.syntax.order._
   import fs2.{Pipe, Stream}
 
   private val logger = journal.Logger[ExpirationPolicyProcess.type]
@@ -178,8 +177,15 @@ object ExpirationPolicyProcess {
    * will have the same expiration policy.
    */
   def getLatestPolicy(deployments: Vector[Deployment]): Option[ExpirationPolicy] =
-    deployments.maximumBy(_.unit.version)
-      .flatMap(d => ExpirationPolicy.fromString(d.expirationPolicyRef))
+    deployments.foldLeft(Option.empty[Deployment]) { (maxSoFar, deployment) =>
+      maxSoFar match {
+        case Some(deployment2) =>
+          if (deployment2.unit.version >= deployment.unit.version) Some(deployment2)
+          else Some(deployment)
+        case None => Some(deployment)
+      }
+    }.flatMap(d => ExpirationPolicy.fromString(d.expirationPolicyRef))
+
   /*
    * Partitions routing graph by unit name
    */

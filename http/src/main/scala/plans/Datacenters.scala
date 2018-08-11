@@ -17,15 +17,16 @@
 package nelson
 package plans
 
+import _root_.argonaut._, Argonaut._
+
+import cats.effect.IO
+import cats.implicits._
+
 import org.http4s._
 import org.http4s.dsl.io._
 import org.http4s.argonaut._
 import org.http4s.headers.Location
-import _root_.argonaut._, Argonaut._
-import cats.effect.IO
-import nelson.CatsHelpers._
-import scalaz.{Applicative, \/}
-import scalaz.Scalaz._
+
 import java.time.Instant
 
 final case class Datacenters(config: NelsonConfig) extends Default {
@@ -151,7 +152,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
    case req @ GET -> Root /"v1" / "datacenters" / dcname / "graph" :? NsO(ns) & IsAuthenticated(_) =>
      ns.map(commaSeparatedStringToNamespace) match {
        case Some(ns) =>
-         Applicative[\/[InvalidNamespaceName, ?]].sequence(ns).fold(
+         ns.sequence.fold(
            e => BadRequest(e.getMessage),
            n => json(Nelson.getRoutingGraphs(dcname, n)))
        case None =>
@@ -171,10 +172,10 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
       val units = u
-      namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
+      namespace.toNel.toRight("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
-          ns => ns.sequenceU.fold(
+          ns => ns.sequence.fold(
             e => BadRequest(e.getMessage),
             n => json(Nelson.listDeployments(datacenters, n, statuses, units)))
         )
@@ -282,10 +283,10 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       val namespace = commaSeparatedStringToNamespace(ns)
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
-      namespace.toNel.toRightDisjunction("This endpoint requires a non-empty 'ns' parameter.")
+      namespace.toNel.toRight("This endpoint requires a non-empty 'ns' parameter.")
         .fold(
           e => BadRequest(e),
-          ns => ns.sequenceU.fold(
+          ns => ns.sequence.fold(
             e => BadRequest(e.getMessage),
             n => json(Nelson.listUnitsByStatus(datacenters, n, statuses)))
         )

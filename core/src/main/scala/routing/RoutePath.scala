@@ -18,9 +18,8 @@ package nelson
 package routing
 
 import Datacenter._
-
-import scalaz.Order
-import scalaz.std.string._
+import cats.Order
+import cats.instances.string._
 
 /**
  * A path to a particular port on a particular deployment, which is
@@ -33,6 +32,6 @@ import scalaz.std.string._
 final case class RoutePath(stack: Deployment, portName: String, protocol: String, port: Int, weight: Int)
 
 object RoutePath {
-  implicit val rpOrder: Order[RoutePath] = Order[String].contramap[RoutePath](_.stack.toString)
+  implicit val rpOrder: Order[RoutePath] = Order.by(_.stack.toString)
 }
 

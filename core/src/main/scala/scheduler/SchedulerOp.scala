@@ -18,7 +18,6 @@ package nelson
 package scheduler
 
 import cats.free.Free
-import scalaz.@@
 import docker.Docker.Image
 import Manifest.{Plan, UnitDef, Versioned}
 
