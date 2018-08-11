@@ -26,7 +26,11 @@ addCompilerPlugin(dependencies.kindprojector.plugin)
 
 scalacOptions += "-Ypartial-unification"
 
-baseURL in Hugo := new URI(s"https://getnelson.github.io/${githubRepoName.value}/")
+githubOrg := "getnelson"
+
+githubRepoName := "nelson"
+
+baseURL in Hugo := new URI(s"https://getnelson.io/")
 
 // dynamically generate a file here that can be automatically
 // imported by hugo as "site data". Doing this here so we don't

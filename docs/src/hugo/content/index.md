@@ -1008,7 +1008,7 @@ The best place to find the developers of Nelson is either the Gitter chat channe
 * [Mailing list](https://groups.google.com/forum/#!forum/nelson-users)
 * [Gitter](https://gitter.im/Verizon/nelson)
 
-If there are security issues you find with Nelson, please reach out to the <script type="text/javascript" src="/javascript/contact.js"></script> directly, and we will work with you on providing a fix into the project before announcing it publicly.
+If there are security issues you find with Nelson, please reach out to the team directly, and we will work with you on providing a fix into the project before announcing it publicly.
 
 <h2 id="community-contributing" data-subheading-of="community">Contributing</h2>
 
