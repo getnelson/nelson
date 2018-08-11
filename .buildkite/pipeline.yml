@@ -1,4 +1,7 @@
 ---
 steps:
-  - label: build
+  - label: ":hammer: build"
     command: .buildkite/pipeline.exec.sh
+    concurrency: 1
+    timeout_in_minutes: 20
+    branches: master
