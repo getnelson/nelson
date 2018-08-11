@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/ManifestValidator.scala" target="_blank">ManifestValidator.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/ManifestValidator.scala" target="_blank">ManifestValidator.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -129,7 +129,7 @@
 </p><div class="fullcomment"><div class="comment cmt"><p>A (potentially) deployable unit
 </p></div><dl class="paramcmts block"><dt class="param">kind</dt><dd class="cmt"><p>ex: <code>howdy-http</code></p></dd><dt class="param">name</dt><dd class="cmt"><p>ex: <code>howdy-http-0.4</code></p></dd></dl></div>
     </li><li name="nelson.ManifestValidator.Valid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]"></a>
+      <a id="Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]"></a>
       <a id="Valid[A]:Valid[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -137,10 +137,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Valid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Validation">Validation</span>[<span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <span class="extype" name="nelson.ManifestValidator.Valid.A">A</span>]</span>
+        <span class="name">Valid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.Validated">Validated</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <span class="extype" name="nelson.ManifestValidator.Valid.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ManifestValidator$@Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.ManifestValidator$@Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -420,18 +420,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.ManifestValidator#parseManifestAndValidate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseManifestAndValidate(str:String,cfg:nelson.NelsonConfig):scalaz.concurrent.Task[nelson.ManifestValidator.Valid[nelson.Manifest]]"></a>
-      <a id="parseManifestAndValidate(String,NelsonConfig):Task[Valid[Manifest]]"></a>
+      <a id="parseManifestAndValidate(str:String,cfg:nelson.NelsonConfig):cats.effect.IO[nelson.ManifestValidator.Valid[nelson.Manifest]]"></a>
+      <a id="parseManifestAndValidate(String,NelsonConfig):IO[Valid[Manifest]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseManifestAndValidate</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
+        <span class="name">parseManifestAndValidate</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ManifestValidator$@parseManifestAndValidate(str:String,cfg:nelson.NelsonConfig):scalaz.concurrent.Task[nelson.ManifestValidator.Valid[nelson.Manifest]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.ManifestValidator$@parseManifestAndValidate(str:String,cfg:nelson.NelsonConfig):cats.effect.IO[nelson.ManifestValidator.Valid[nelson.Manifest]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -479,7 +479,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validate</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="units">units: <span class="extype" name="scala.List">List</span>[<a href="ManifestValidator$$NelsonUnit.html" class="extype" name="nelson.ManifestValidator.NelsonUnit">NelsonUnit</a>]</span>)</span><span class="result">: <a href="Nelson$.html#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
+        <span class="name">validate</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="units">units: <span class="extype" name="scala.List">List</span>[<a href="ManifestValidator$$NelsonUnit.html" class="extype" name="nelson.ManifestValidator.NelsonUnit">NelsonUnit</a>]</span>)</span><span class="result">: <a href="Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.ManifestValidator$@validate(str:String,units:List[nelson.ManifestValidator.NelsonUnit]):nelson.Nelson.NelsonK[nelson.ManifestValidator.Valid[nelson.Manifest]]" title="Permalink" target="_top">
@@ -488,18 +488,18 @@
     </span>
       
     </li><li name="nelson.ManifestValidator#validateAlerts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateAlerts(unit:nelson.Manifest.UnitDef,p:nelson.Manifest.Plan):scalaz.concurrent.Task[nelson.ManifestValidator.Valid[Unit]]"></a>
-      <a id="validateAlerts(UnitDef,Plan):Task[Valid[Unit]]"></a>
+      <a id="validateAlerts(unit:nelson.Manifest.UnitDef,p:nelson.Manifest.Plan):cats.effect.IO[nelson.ManifestValidator.Valid[Unit]]"></a>
+      <a id="validateAlerts(UnitDef,Plan):IO[Valid[Unit]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateAlerts</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+        <span class="name">validateAlerts</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ManifestValidator$@validateAlerts(unit:nelson.Manifest.UnitDef,p:nelson.Manifest.Plan):scalaz.concurrent.Task[nelson.ManifestValidator.Valid[Unit]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.ManifestValidator$@validateAlerts(unit:nelson.Manifest.UnitDef,p:nelson.Manifest.Plan):cats.effect.IO[nelson.ManifestValidator.Valid[Unit]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -513,7 +513,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateHealthCheck</span><span class="params">(<span name="check">check: <a href="Manifest$$HealthCheck.html" class="extype" name="nelson.Manifest.HealthCheck">HealthCheck</a></span>, <span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">validateHealthCheck</span><span class="params">(<span name="check">check: <a href="Manifest$$HealthCheck.html" class="extype" name="nelson.Manifest.HealthCheck">HealthCheck</a></span>, <span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.ManifestValidator$@validateHealthCheck(check:nelson.Manifest.HealthCheck,unit:nelson.Manifest.UnitDef):nelson.ManifestValidator.Valid[Unit]" title="Permalink" target="_top">
@@ -522,18 +522,18 @@
     </span>
       
     </li><li name="nelson.ManifestValidator#validateLoadbalancer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateLoadbalancer(lb:nelson.Manifest.Loadbalancer,units:List[nelson.Manifest.UnitDef],whiteList:Option[nelson.ProxyPortWhitelist])(stg:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]):nelson.ManifestValidator.Valid[Unit]"></a>
-      <a id="validateLoadbalancer(Loadbalancer,List[UnitDef],Option[ProxyPortWhitelist])(~&gt;[StoreOp,Task]):Valid[Unit]"></a>
+      <a id="validateLoadbalancer(lb:nelson.Manifest.Loadbalancer,units:List[nelson.Manifest.UnitDef],whiteList:Option[nelson.ProxyPortWhitelist])(stg:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO]):nelson.ManifestValidator.Valid[Unit]"></a>
+      <a id="validateLoadbalancer(Loadbalancer,List[UnitDef],Option[ProxyPortWhitelist])(~&gt;[StoreOp,IO]):Valid[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateLoadbalancer</span><span class="params">(<span name="lb">lb: <a href="Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a></span>, <span name="units">units: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>]</span>, <span name="whiteList">whiteList: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="ProxyPortWhitelist.html" class="extype" name="nelson.ProxyPortWhitelist">ProxyPortWhitelist</a>]</span>)</span><span class="params">(<span name="stg">stg: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">validateLoadbalancer</span><span class="params">(<span name="lb">lb: <a href="Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a></span>, <span name="units">units: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>]</span>, <span name="whiteList">whiteList: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="ProxyPortWhitelist.html" class="extype" name="nelson.ProxyPortWhitelist">ProxyPortWhitelist</a>]</span>)</span><span class="params">(<span name="stg">stg: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ManifestValidator$@validateLoadbalancer(lb:nelson.Manifest.Loadbalancer,units:List[nelson.Manifest.UnitDef],whiteList:Option[nelson.ProxyPortWhitelist])(stg:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]):nelson.ManifestValidator.Valid[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.ManifestValidator$@validateLoadbalancer(lb:nelson.Manifest.Loadbalancer,units:List[nelson.Manifest.UnitDef],whiteList:Option[nelson.ProxyPortWhitelist])(stg:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO]):nelson.ManifestValidator.Valid[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -547,7 +547,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateOnCommit</span><span class="params">(<span name="un">un: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]</span>
+        <span class="name">validateOnCommit</span><span class="params">(<span name="un">un: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.ManifestValidator$@validateOnCommit(un:nelson.UnitName,ns:nelson.NamespaceName,m:nelson.Manifest):nelson.ManifestValidator.Valid[nelson.Manifest]" title="Permalink" target="_top">
@@ -564,7 +564,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validatePeriodic</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">validatePeriodic</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.ManifestValidator$@validatePeriodic(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan):nelson.ManifestValidator.Valid[Unit]" title="Permalink" target="_top">
@@ -581,7 +581,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateResource</span><span class="params">(<span name="r">r: <a href="Manifest$$Resource.html" class="extype" name="nelson.Manifest.Resource">Resource</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">validateResource</span><span class="params">(<span name="r">r: <a href="Manifest$$Resource.html" class="extype" name="nelson.Manifest.Resource">Resource</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.ManifestValidator$@validateResource(r:nelson.Manifest.Resource,plan:nelson.Manifest.Plan):nelson.ManifestValidator.Valid[Unit]" title="Permalink" target="_top">
@@ -590,18 +590,18 @@
     </span>
       
     </li><li name="nelson.ManifestValidator#validateUnit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateUnit(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan):scalaz.concurrent.Task[nelson.ManifestValidator.Valid[Unit]]"></a>
-      <a id="validateUnit(UnitDef,Plan):Task[Valid[Unit]]"></a>
+      <a id="validateUnit(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan):cats.effect.IO[nelson.ManifestValidator.Valid[Unit]]"></a>
+      <a id="validateUnit(UnitDef,Plan):IO[Valid[Unit]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateUnit</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+        <span class="name">validateUnit</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ManifestValidator$@validateUnit(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan):scalaz.concurrent.Task[nelson.ManifestValidator.Valid[Unit]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.ManifestValidator$@validateUnit(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan):cats.effect.IO[nelson.ManifestValidator.Valid[Unit]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -615,7 +615,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateUnitKind</span><span class="params">(<span name="unit">unit: <a href="ManifestValidator$$NelsonUnit.html" class="extype" name="nelson.ManifestValidator.NelsonUnit">NelsonUnit</a></span>, <span name="manifest">manifest: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">validateUnitKind</span><span class="params">(<span name="unit">unit: <a href="ManifestValidator$$NelsonUnit.html" class="extype" name="nelson.ManifestValidator.NelsonUnit">NelsonUnit</a></span>, <span name="manifest">manifest: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.ManifestValidator$@validateUnitKind(unit:nelson.ManifestValidator.NelsonUnit,manifest:nelson.Manifest):nelson.ManifestValidator.Valid[Unit]" title="Permalink" target="_top">
@@ -632,7 +632,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateUnitNameChars</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">validateUnitNameChars</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.ManifestValidator$@validateUnitNameChars(unit:nelson.Manifest.UnitDef):nelson.ManifestValidator.Valid[Unit]" title="Permalink" target="_top">
@@ -649,7 +649,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateUnitNameLength</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">validateUnitNameLength</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.ManifestValidator.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.ManifestValidator$@validateUnitNameLength(unit:nelson.Manifest.UnitDef):nelson.ManifestValidator.Valid[Unit]" title="Permalink" target="_top">

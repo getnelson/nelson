@@ -45,13 +45,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkflowLogger</span><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">WorkflowLogger</span><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/logging/WorkflowLogger.scala" target="_blank">WorkflowLogger.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/logging/WorkflowLogger.scala" target="_blank">WorkflowLogger.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="cats.effect.IO">IO</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.logging.WorkflowLogger"><span>WorkflowLogger</span></li><li class="in" name="scalaz.NaturalTransformation"><span>NaturalTransformation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.logging.WorkflowLogger"><span>WorkflowLogger</span></li><li class="in" name="cats.arrow.FunctionK"><span>FunctionK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.logging.WorkflowLogger#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(queue:scalaz.stream.async.mutable.Queue[(nelson.ID,String)],base:java.nio.file.Path):nelson.logging.WorkflowLogger"></a>
+      <a id="&lt;init&gt;(queue:fs2.async.mutable.Queue[cats.effect.IO,(nelson.ID,String)],base:java.nio.file.Path):nelson.logging.WorkflowLogger"></a>
       <a id="&lt;init&gt;:WorkflowLogger"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkflowLogger</span><span class="params">(<span name="queue">queue: <span class="extype" name="scalaz.stream.async.mutable.Queue">Queue</span>[(<a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a>, <span class="extype" name="scala.Predef.String">String</span>)]</span>, <span name="base">base: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span>
+        <span class="name">WorkflowLogger</span><span class="params">(<span name="queue">queue: <span class="extype" name="fs2.async.mutable.Queue">Queue</span>[<span class="extype" name="cats.effect.IO">IO</span>, (<a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a>, <span class="extype" name="scala.Predef.String">String</span>)]</span>, <span name="base">base: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.logging.WorkflowLogger@&lt;init&gt;(queue:scalaz.stream.async.mutable.Queue[(nelson.ID,String)],base:java.nio.file.Path):nelson.logging.WorkflowLogger" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@&lt;init&gt;(queue:fs2.async.mutable.Queue[cats.effect.IO,(nelson.ID,String)],base:java.nio.file.Path):nelson.logging.WorkflowLogger" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -165,23 +165,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="nelson.logging.WorkflowLogger#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[A](op:nelson.logging.LoggingOp[A]):scalaz.concurrent.Task[A]"></a>
-      <a id="apply[A](LoggingOp[A]):Task[A]"></a>
+    </li><li name="cats.arrow.FunctionK#and" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="and[H[_]](h:cats.arrow.FunctionK[F,H]):cats.arrow.FunctionK[F,[γ$4$]cats.data.Tuple2K[G,H,γ$4$]]"></a>
+      <a id="and[H[_]](FunctionK[LoggingOp,H]):FunctionK[LoggingOp,[γ$4$]Tuple2K[IO,H,γ$4$]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="op">op: <a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>[<span class="extype" name="nelson.logging.WorkflowLogger.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="nelson.logging.WorkflowLogger.apply.A">A</span>]</span>
+        <span class="name">and</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="cats.arrow.FunctionK.and.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, [γ$4$]<span class="extype" name="cats.data.Tuple2K">Tuple2K</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.arrow.FunctionK.and.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.logging.WorkflowLogger@apply[A](op:nelson.logging.LoggingOp[A]):scalaz.concurrent.Task[A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@and[H[_]](h:cats.arrow.FunctionK[F,H]):cats.arrow.FunctionK[F,[γ$4$]cats.data.Tuple2K[G,H,γ$4$]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.logging.WorkflowLogger">WorkflowLogger</a> → NaturalTransformation</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="cats.arrow.FunctionK#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[H[_]](f:cats.arrow.FunctionK[G,H]):cats.arrow.FunctionK[F,H]"></a>
+      <a id="andThen[H[_]](FunctionK[IO,H]):FunctionK[LoggingOp,H]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.arrow.FunctionK.andThen.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="cats.arrow.FunctionK.andThen.H">H</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@andThen[H[_]](f:cats.arrow.FunctionK[G,H]):cats.arrow.FunctionK[F,H]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.logging.WorkflowLogger#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](op:nelson.logging.LoggingOp[A]):cats.effect.IO[A]"></a>
+      <a id="apply[A](LoggingOp[A]):IO[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="op">op: <a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>[<span class="extype" name="nelson.logging.WorkflowLogger.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="nelson.logging.WorkflowLogger.apply.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@apply[A](op:nelson.logging.LoggingOp[A]):cats.effect.IO[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.logging.WorkflowLogger">WorkflowLogger</a> → FunctionK</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -222,23 +256,23 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scalaz.NaturalTransformation#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[E[_]](f:scalaz.~&gt;[E,F]):scalaz.~&gt;[E,G]"></a>
-      <a id="compose[E[_]](~&gt;[E,LoggingOp]):~&gt;[E,Task]"></a>
+    </li><li name="cats.arrow.FunctionK#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[E[_]](f:cats.arrow.FunctionK[E,F]):cats.arrow.FunctionK[E,G]"></a>
+      <a id="compose[E[_]](FunctionK[E,LoggingOp]):FunctionK[E,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.NaturalTransformation.compose.E">E</span>, <a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.NaturalTransformation.compose.E">E</span>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.compose.E">E</span>, <a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.compose.E">E</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.logging.WorkflowLogger@compose[E[_]](f:scalaz.~&gt;[E,F]):scalaz.~&gt;[E,G]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@compose[E[_]](f:cats.arrow.FunctionK[E,F]):cats.arrow.FunctionK[E,G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NaturalTransformation</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -348,18 +382,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.logging.WorkflowLogger#log" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="log(id:nelson.ID,line:String):scalaz.concurrent.Task[Unit]"></a>
-      <a id="log(ID,String):Task[Unit]"></a>
+      <a id="log(id:nelson.ID,line:String):cats.effect.IO[Unit]"></a>
+      <a id="log(ID,String):IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">log</span><span class="params">(<span name="id">id: <a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="line">line: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">log</span><span class="params">(<span name="id">id: <a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="line">line: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.logging.WorkflowLogger@log(id:nelson.ID,line:String):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@log(id:nelson.ID,line:String):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -415,53 +449,70 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.logging.WorkflowLogger#process" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="process:scalaz.stream.Process[scalaz.concurrent.Task,Unit]"></a>
-      <a id="process:Process[Task,Unit]"></a>
+    </li><li name="cats.arrow.FunctionK#or" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$1$]cats.data.EitherK[F,H,γ$1$],G]"></a>
+      <a id="or[H[_]](FunctionK[H,IO]):FunctionK[[γ$1$]EitherK[LoggingOp,H,γ$1$],IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">process</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">or</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[[γ$1$]<span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$1$">γ$1$</span>], <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.logging.WorkflowLogger@process:scalaz.stream.Process[scalaz.concurrent.Task,Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$1$]cats.data.EitherK[F,H,γ$1$],G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.logging.WorkflowLogger#process" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="process:fs2.Stream[cats.effect.IO,Unit]"></a>
+      <a id="process:Stream[IO,Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">process</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@process:fs2.Stream[cats.effect.IO,Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.logging.WorkflowLogger#read" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="read(id:nelson.ID,offset:Int):scalaz.concurrent.Task[List[String]]"></a>
-      <a id="read(ID,Int):Task[List[String]]"></a>
+      <a id="read(id:nelson.ID,offset:Int):cats.effect.IO[List[String]]"></a>
+      <a id="read(ID,Int):IO[List[String]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">read</span><span class="params">(<span name="id">id: <a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
+        <span class="name">read</span><span class="params">(<span name="id">id: <a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.logging.WorkflowLogger@read(id:nelson.ID,offset:Int):scalaz.concurrent.Task[List[String]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@read(id:nelson.ID,offset:Int):cats.effect.IO[List[String]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.logging.WorkflowLogger#setup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="setup():scalaz.concurrent.Task[Unit]"></a>
-      <a id="setup():Task[Unit]"></a>
+      <a id="setup():cats.effect.IO[Unit]"></a>
+      <a id="setup():IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setup</span><span class="params">()</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">setup</span><span class="params">()</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.logging.WorkflowLogger@setup():scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.logging.WorkflowLogger@setup():cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -578,8 +629,12 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scalaz.NaturalTransformation">
-              <h3>Inherited from <span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</h3>
+        <div class="parent" name="cats.arrow.FunctionK">
+              <h3>Inherited from <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

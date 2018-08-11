@@ -47,7 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/notifications/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/notifications/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -106,7 +106,7 @@
     </span>
       
     </li><li name="nelson.notifications.EmailServer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="EmailServerextends~&gt;[nelson.notifications.EmailOp,scalaz.concurrent.Task]"></a>
+      <a id="EmailServerextendscats.~&gt;[nelson.notifications.EmailOp,cats.effect.IO]"></a>
       <a id="EmailServer:EmailServer"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -114,10 +114,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="EmailServer.html"><span class="name">EmailServer</span></a><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="EmailOp.html" class="extype" name="nelson.notifications.EmailOp">EmailOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <a href="EmailServer.html"><span class="name">EmailServer</span></a><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="EmailOp.html" class="extype" name="nelson.notifications.EmailOp">EmailOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.notifications.package@EmailServerextends~&gt;[nelson.notifications.EmailOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.notifications.package@EmailServerextendscats.~&gt;[nelson.notifications.EmailOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -191,7 +191,7 @@
     </span>
       
     </li><li name="nelson.notifications.SlackHttp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SlackHttpextends~&gt;[nelson.notifications.SlackOp,scalaz.concurrent.Task]"></a>
+      <a id="SlackHttpextendscats.~&gt;[nelson.notifications.SlackOp,cats.effect.IO]"></a>
       <a id="SlackHttp:SlackHttp"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -199,10 +199,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="SlackHttp.html"><span class="name">SlackHttp</span></a><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <a href="SlackHttp.html"><span class="name">SlackHttp</span></a><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.notifications.package@SlackHttpextends~&gt;[nelson.notifications.SlackOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.notifications.package@SlackHttpextendscats.~&gt;[nelson.notifications.SlackOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -312,40 +312,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.notifications.package@SlackOp" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.notifications#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="run[F[_],A[_],B](i:scalaz.~&gt;[A,F],op:scalaz.Free.FreeC[A,B])(implicitevidence$1:scalaz.Monad[F]):F[B]"></a>
-      <a id="run[F[_],A[_],B](~&gt;[A,F],FreeC[A,B])(Monad[F]):F[B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="i">i: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="nelson.notifications.run.A">A</span>, <span class="extype" name="nelson.notifications.run.F">F</span>]</span>, <span name="op">op: <span class="extype" name="scalaz.Free.FreeC">FreeC</span>[<span class="extype" name="nelson.notifications.run.A">A</span>, <span class="extype" name="nelson.notifications.run.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.notifications.run.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.notifications.run.F">F</span>[<span class="extype" name="nelson.notifications.run.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.notifications.package@run[F[_],A[_],B](i:scalaz.~&gt;[A,F],op:scalaz.Free.FreeC[A,B])(implicitevidence$1:scalaz.Monad[F]):F[B]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.notifications#runOr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="runOr[F[_],A[_],B](i:Option[scalaz.~&gt;[A,F]],op:scalaz.Free.FreeC[A,B])(b:=&gt;F[B])(implicitevidence$2:scalaz.Monad[F]):F[B]"></a>
-      <a id="runOr[F[_],A[_],B](Option[~&gt;[A,F]],FreeC[A,B])(⇒F[B])(Monad[F]):F[B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">runOr</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="B">B</span>]</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="nelson.notifications.runOr.A">A</span>, <span class="extype" name="nelson.notifications.runOr.F">F</span>]]</span>, <span name="op">op: <span class="extype" name="scalaz.Free.FreeC">FreeC</span>[<span class="extype" name="nelson.notifications.runOr.A">A</span>, <span class="extype" name="nelson.notifications.runOr.B">B</span>]</span>)</span><span class="params">(<span name="b">b: ⇒ <span class="extype" name="nelson.notifications.runOr.F">F</span>[<span class="extype" name="nelson.notifications.runOr.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.notifications.runOr.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.notifications.runOr.F">F</span>[<span class="extype" name="nelson.notifications.runOr.B">B</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.notifications.package@runOr[F[_],A[_],B](i:Option[scalaz.~&gt;[A,F]],op:scalaz.Free.FreeC[A,B])(b:=&gt;F[B])(implicitevidence$2:scalaz.Monad[F]):F[B]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -45,11 +45,11 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Interpreters</span><span class="params">(<span name="git">git: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>, <span name="storage">storage: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>, <span name="slack">slack: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="notifications/SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]]</span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="notifications/EmailOp.html" class="extype" name="nelson.notifications.EmailOp">EmailOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Interpreters</span><span class="params">(<span name="git">git: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="storage">storage: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="slack">slack: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="notifications/SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]]</span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="notifications/EmailOp.html" class="extype" name="nelson.notifications.EmailOp">EmailOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Config.scala" target="_blank">Config.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Config.scala" target="_blank">Config.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Interpreters#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(git:scalaz.~&gt;[nelson.Github.GithubOp,scalaz.concurrent.Task],storage:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task],slack:Option[scalaz.~&gt;[nelson.notifications.SlackOp,scalaz.concurrent.Task]],email:Option[scalaz.~&gt;[nelson.notifications.EmailOp,scalaz.concurrent.Task]]):nelson.Interpreters"></a>
+      <a id="&lt;init&gt;(git:cats.~&gt;[nelson.Github.GithubOp,cats.effect.IO],storage:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO],slack:Option[cats.~&gt;[nelson.notifications.SlackOp,cats.effect.IO]],email:Option[cats.~&gt;[nelson.notifications.EmailOp,cats.effect.IO]]):nelson.Interpreters"></a>
       <a id="&lt;init&gt;:Interpreters"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Interpreters</span><span class="params">(<span name="git">git: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>, <span name="storage">storage: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>, <span name="slack">slack: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="notifications/SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]]</span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="notifications/EmailOp.html" class="extype" name="nelson.notifications.EmailOp">EmailOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]]</span>)</span>
+        <span class="name">Interpreters</span><span class="params">(<span name="git">git: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="storage">storage: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="slack">slack: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="notifications/SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]]</span>, <span name="email">email: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="notifications/EmailOp.html" class="extype" name="nelson.notifications.EmailOp">EmailOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Interpreters@&lt;init&gt;(git:scalaz.~&gt;[nelson.Github.GithubOp,scalaz.concurrent.Task],storage:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task],slack:Option[scalaz.~&gt;[nelson.notifications.SlackOp,scalaz.concurrent.Task]],email:Option[scalaz.~&gt;[nelson.notifications.EmailOp,scalaz.concurrent.Task]]):nelson.Interpreters" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Interpreters@&lt;init&gt;(git:cats.~&gt;[nelson.Github.GithubOp,cats.effect.IO],storage:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO],slack:Option[cats.~&gt;[nelson.notifications.SlackOp,cats.effect.IO]],email:Option[cats.~&gt;[nelson.notifications.EmailOp,cats.effect.IO]]):nelson.Interpreters" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -206,18 +206,18 @@
               
         </dd></dl></div>
     </li><li name="nelson.Interpreters#email" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="email:Option[scalaz.~&gt;[nelson.notifications.EmailOp,scalaz.concurrent.Task]]"></a>
-      <a id="email:Option[~&gt;[EmailOp,Task]]"></a>
+      <a id="email:Option[cats.~&gt;[nelson.notifications.EmailOp,cats.effect.IO]]"></a>
+      <a id="email:Option[~&gt;[EmailOp,IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">email</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="notifications/EmailOp.html" class="extype" name="nelson.notifications.EmailOp">EmailOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]]</span>
+        <span class="name">email</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="notifications/EmailOp.html" class="extype" name="nelson.notifications.EmailOp">EmailOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Interpreters@email:Option[scalaz.~&gt;[nelson.notifications.EmailOp,scalaz.concurrent.Task]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Interpreters@email:Option[cats.~&gt;[nelson.notifications.EmailOp,cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -280,18 +280,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.Interpreters#git" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="git:scalaz.~&gt;[nelson.Github.GithubOp,scalaz.concurrent.Task]"></a>
-      <a id="git:~&gt;[GithubOp,Task]"></a>
+      <a id="git:cats.~&gt;[nelson.Github.GithubOp,cats.effect.IO]"></a>
+      <a id="git:~&gt;[GithubOp,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">git</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">git</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Interpreters@git:scalaz.~&gt;[nelson.Github.GithubOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Interpreters@git:cats.~&gt;[nelson.Github.GithubOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -365,35 +365,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.Interpreters#slack" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="slack:Option[scalaz.~&gt;[nelson.notifications.SlackOp,scalaz.concurrent.Task]]"></a>
-      <a id="slack:Option[~&gt;[SlackOp,Task]]"></a>
+      <a id="slack:Option[cats.~&gt;[nelson.notifications.SlackOp,cats.effect.IO]]"></a>
+      <a id="slack:Option[~&gt;[SlackOp,IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">slack</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="notifications/SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]]</span>
+        <span class="name">slack</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="notifications/SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Interpreters@slack:Option[scalaz.~&gt;[nelson.notifications.SlackOp,scalaz.concurrent.Task]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Interpreters@slack:Option[cats.~&gt;[nelson.notifications.SlackOp,cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Interpreters#storage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="storage:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]"></a>
-      <a id="storage:~&gt;[StoreOp,Task]"></a>
+      <a id="storage:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO]"></a>
+      <a id="storage:~&gt;[StoreOp,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">storage</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">storage</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Interpreters@storage:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Interpreters@storage:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

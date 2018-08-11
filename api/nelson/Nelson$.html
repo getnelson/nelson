@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Nelson.scala" target="_blank">Nelson.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Nelson.scala" target="_blank">Nelson.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -125,7 +125,7 @@
     </span>
       
     </li><li name="nelson.Nelson.NelsonFK" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NelsonFK[F[_[_],_],U]=scalaz.Kleisli[[β$0$]F[scalaz.concurrent.Task,β$0$],nelson.NelsonConfig,U]"></a>
+      <a id="NelsonFK[F[_[_],_],U]=cats.data.Kleisli[[β$0$]F[cats.effect.IO,β$0$],nelson.NelsonConfig,U]"></a>
       <a id="NelsonFK[F[_[_],_],U]:NelsonFK[F,U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -133,16 +133,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">NelsonFK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="_">_</span>]</span></span>, <span name="U">U</span>]</span><span class="result"> = <span class="extype" name="scalaz.Kleisli">Kleisli</span>[[β$0$]<span class="extype" name="nelson.Nelson.NelsonFK.F">F</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.Nelson.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>], <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.NelsonFK.U">U</span>]</span>
+        <span class="name">NelsonFK</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="_">_</span>]</span></span>, <span name="U">U</span>]</span><span class="result"> = <span class="extype" name="cats.data.Kleisli">Kleisli</span>[[β$0$]<span class="extype" name="nelson.Nelson.NelsonFK.F">F</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.Nelson.&lt;refinement&gt;.Λ$.β$0$">β$0$</span>], <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.NelsonFK.U">U</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@NelsonFK[F[_[_],_],U]=scalaz.Kleisli[[β$0$]F[scalaz.concurrent.Task,β$0$],nelson.NelsonConfig,U]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@NelsonFK[F[_[_],_],U]=cats.data.Kleisli[[β$0$]F[cats.effect.IO,β$0$],nelson.NelsonConfig,U]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Nelson.NelsonK" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]"></a>
+      <a id="NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]"></a>
       <a id="NelsonK[U]:NelsonK[U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -150,20 +150,20 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">NelsonK</span><span class="tparams">[<span name="U">U</span>]</span><span class="result"> = <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.NelsonK.U">U</span>]</span>
+        <span class="name">NelsonK</span><span class="tparams">[<span name="U">U</span>]</span><span class="result"> = <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.NelsonK.U">U</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">NelsonK[U] provides us with a context that accepts a configuration and gives us a scalaz Task[U]
-NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and gives us an F[Task, U]
-   this gives us the flexibility of defining a monadic function that yields scalaz streams of
-   Task and U as emitted values (e.g.</p><div class="fullcomment"><div class="comment cmt"><p>NelsonK[U] provides us with a context that accepts a configuration and gives us a scalaz Task[U]
-NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and gives us an F[Task, U]
-   this gives us the flexibility of defining a monadic function that yields scalaz streams of
-   Task and U as emitted values (e.g. Process[Task, U], Sink[Task, U])
+      <p class="shortcomment cmt">NelsonK[U] provides us with a context that accepts a configuration and gives us a cats IO[U]
+NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and gives us an F[IO, U]
+   this gives us the flexibility of defining a monadic function that yields FS2 streams of
+   IO and U as emitted values (e.g.</p><div class="fullcomment"><div class="comment cmt"><p>NelsonK[U] provides us with a context that accepts a configuration and gives us a cats IO[U]
+NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and gives us an F[IO, U]
+   this gives us the flexibility of defining a monadic function that yields FS2 streams of
+   IO and U as emitted values (e.g. Stream[IO, U], Sink[IO, U])
 </p></div></div>
     </li><li name="nelson.Nelson.RecentStatistics" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="RecentStatisticsextendsProductwithSerializable"></a>
@@ -212,23 +212,6 @@ NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and give
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@StackSummaryextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Nelson.StorageK" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="StorageK[U]=scalaz.Kleisli[scalaz.concurrent.Task,scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task],U]"></a>
-      <a id="StorageK[U]:StorageK[U]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">StorageK</span><span class="tparams">[<span name="U">U</span>]</span><span class="result"> = <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>], <span class="extype" name="nelson.Nelson.StorageK.U">U</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@StorageK[U]=scalaz.Kleisli[scalaz.concurrent.Task,scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task],U]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -340,7 +323,7 @@ NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and give
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">commit</span><span class="params">(<span name="un">un: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="v">v: <a href="Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">commit</span><span class="params">(<span name="un">un: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="v">v: <a href="Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@commit(un:nelson.UnitName,v:nelson.Version,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -349,7 +332,7 @@ NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and give
     </span>
       
     </li><li name="nelson.Nelson#commit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="commit(un:nelson.UnitName,ns:nelson.NamespaceName,dcs:List[nelson.Datacenter],m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="commit(un:nelson.UnitName,ns:nelson.NamespaceName,dcs:List[nelson.Datacenter],m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned]):nelson.Nelson.NelsonK[Unit]"></a>
       <a id="commit(UnitName,NamespaceName,List[Datacenter],@@[Manifest,Versioned]):NelsonK[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -357,10 +340,10 @@ NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and give
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">commit</span><span class="params">(<span name="un">un: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="m">m: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">commit</span><span class="params">(<span name="un">un: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="m">m: <a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@commit(un:nelson.UnitName,ns:nelson.NamespaceName,dcs:List[nelson.Datacenter],m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@commit(un:nelson.UnitName,ns:nelson.NamespaceName,dcs:List[nelson.Datacenter],m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned]):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -374,7 +357,7 @@ NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and give
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">commitLoadbalancer</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="dcName">dcName: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">commitLoadbalancer</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="dcName">dcName: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@commitLoadbalancer(name:String,v:Int,dcName:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -391,7 +374,7 @@ NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and give
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">config</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>]</span>
+        <span class="name">config</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@config:nelson.Nelson.NelsonK[nelson.NelsonConfig]" title="Permalink" target="_top">
@@ -408,7 +391,7 @@ NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and give
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createDatacenters</span><span class="params">(<span name="list">list: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">createDatacenters</span><span class="params">(<span name="list">list: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@createDatacenters(list:List[nelson.Datacenter]):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -432,7 +415,7 @@ queries.</p><p>This function should only ever be called at bootup.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createDefaultNamespaceIfAbsent</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">createDefaultNamespaceIfAbsent</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@createDefaultNamespaceIfAbsent(dcs:List[nelson.Datacenter],ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -449,7 +432,7 @@ queries.</p><p>This function should only ever be called at bootup.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createHook</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Repo.html" class="extype" name="nelson.Repo">Repo</a>]</span>
+        <span class="name">createHook</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Repo.html" class="extype" name="nelson.Repo">Repo</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@createHook(session:nelson.Session,slug:nelson.Slug):nelson.Nelson.NelsonK[nelson.Repo]" title="Permalink" target="_top">
@@ -470,7 +453,7 @@ on the repo for this to successfully work.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createManualDeployment</span><span class="params">(<span name="s">s: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="m">m: <a href="Datacenter$$ManualDeployment.html" class="extype" name="nelson.Datacenter.ManualDeployment">ManualDeployment</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>]</span>
+        <span class="name">createManualDeployment</span><span class="params">(<span name="s">s: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="m">m: <a href="Datacenter$$ManualDeployment.html" class="extype" name="nelson.Datacenter.ManualDeployment">ManualDeployment</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@createManualDeployment(s:nelson.Session,m:nelson.Datacenter.ManualDeployment):nelson.Nelson.NelsonK[nelson.GUID]" title="Permalink" target="_top">
@@ -489,7 +472,7 @@ that was not deployed via Nelson (e.g. databases and other ops-infrastructure)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createSessionFromGithubToken</span><span class="params">(<span name="githubToken">githubToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Session.html" class="extype" name="nelson.Session">Session</a>]</span>
+        <span class="name">createSessionFromGithubToken</span><span class="params">(<span name="githubToken">githubToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Session.html" class="extype" name="nelson.Session">Session</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@createSessionFromGithubToken(githubToken:nelson.AccessToken):nelson.Nelson.NelsonK[nelson.Session]" title="Permalink" target="_top">
@@ -511,7 +494,7 @@ clients to obtain a token they can use when calling the Nelson API programatical
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createSessionFromOAuthCode</span><span class="params">(<span name="code">code: <a href="package.html#TempoaryAccessCode=String" class="extmbr" name="nelson.TempoaryAccessCode">TempoaryAccessCode</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Session.html" class="extype" name="nelson.Session">Session</a>]</span>
+        <span class="name">createSessionFromOAuthCode</span><span class="params">(<span name="code">code: <a href="package.html#TempoaryAccessCode=String" class="extmbr" name="nelson.TempoaryAccessCode">TempoaryAccessCode</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Session.html" class="extype" name="nelson.Session">Session</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@createSessionFromOAuthCode(code:nelson.TempoaryAccessCode):nelson.Nelson.NelsonK[nelson.Session]" title="Permalink" target="_top">
@@ -533,7 +516,7 @@ or out of band.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteHook</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">deleteHook</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@deleteHook(session:nelson.Session,slug:nelson.Slug):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -550,7 +533,7 @@ or out of band.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteLoadbalancerDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">deleteLoadbalancerDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@deleteLoadbalancerDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -567,7 +550,7 @@ or out of band.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deploy</span><span class="params">(<span name="actions">actions: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">deploy</span><span class="params">(<span name="actions">actions: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@deploy(actions:List[nelson.Manifest.Action]):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -584,7 +567,7 @@ or out of band.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deprecateService</span><span class="params">(<span name="sn">sn: <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">deprecateService</span><span class="params">(<span name="sn">sn: <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@deprecateService(sn:nelson.Datacenter.ServiceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -636,7 +619,7 @@ or out of band.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">expireService</span><span class="params">(<span name="sn">sn: <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">expireService</span><span class="params">(<span name="sn">sn: <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@expireService(sn:nelson.Datacenter.ServiceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -654,7 +637,7 @@ or out of band.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchDatacenterByName</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[(<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>])]]</span>
+        <span class="name">fetchDatacenterByName</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[(<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>])]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@fetchDatacenterByName(name:String):nelson.Nelson.NelsonK[Option[(nelson.Datacenter,Set[nelson.Datacenter.Namespace])]]" title="Permalink" target="_top">
@@ -672,7 +655,7 @@ that are avalible in that specific datacenter (if any).</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Nelson$$StackSummary.html" class="extype" name="nelson.Nelson.StackSummary">StackSummary</a>]]</span>
+        <span class="name">fetchDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Nelson$$StackSummary.html" class="extype" name="nelson.Nelson.StackSummary">StackSummary</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@fetchDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.StackSummary]]" title="Permalink" target="_top">
@@ -689,7 +672,7 @@ that are avalible in that specific datacenter (if any).</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchDeploymentStatuses</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="java.time.Instant">Instant</span>)]]</span>
+        <span class="name">fetchDeploymentStatuses</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="java.time.Instant">Instant</span>)]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@fetchDeploymentStatuses(guid:nelson.GUID):nelson.Nelson.NelsonK[List[(nelson.DeploymentStatus,Option[String],java.time.Instant)]]" title="Permalink" target="_top">
@@ -707,7 +690,7 @@ that are avalible in that specific datacenter (if any).</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchLoadbalancerDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Nelson$$LoadbalancerSummary.html" class="extype" name="nelson.Nelson.LoadbalancerSummary">LoadbalancerSummary</a>]]</span>
+        <span class="name">fetchLoadbalancerDeployment</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Nelson$$LoadbalancerSummary.html" class="extype" name="nelson.Nelson.LoadbalancerSummary">LoadbalancerSummary</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@fetchLoadbalancerDeployment(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.LoadbalancerSummary]]" title="Permalink" target="_top">
@@ -724,7 +707,7 @@ that are avalible in that specific datacenter (if any).</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchRawRepoManifest</span><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;master&quot;</span></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">fetchRawRepoManifest</span><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;master&quot;</span></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@fetchRawRepoManifest(token:nelson.AccessToken)(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[String]" title="Permalink" target="_top">
@@ -733,18 +716,18 @@ that are avalible in that specific datacenter (if any).</p>
     </span>
       
     </li><li name="nelson.Nelson#fetchRepoManifestAndValidateDeployable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[scalaz.ValidationNel[nelson.NelsonError,nelson.Manifest]]"></a>
-      <a id="fetchRepoManifestAndValidateDeployable(Slug,String):NelsonK[ValidationNel[NelsonError,Manifest]]"></a>
+      <a id="fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[cats.data.ValidatedNel[nelson.NelsonError,nelson.Manifest]]"></a>
+      <a id="fetchRepoManifestAndValidateDeployable(Slug,String):NelsonK[ValidatedNel[NelsonError,Manifest]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchRepoManifestAndValidateDeployable</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;master&quot;</span></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.ValidationNel">ValidationNel</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>, <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
+        <span class="name">fetchRepoManifestAndValidateDeployable</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;master&quot;</span></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="cats.data.ValidatedNel">ValidatedNel</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>, <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[scalaz.ValidationNel[nelson.NelsonError,nelson.Manifest]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[cats.data.ValidatedNel[nelson.NelsonError,nelson.Manifest]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -762,7 +745,7 @@ into a Manifest instance, and validates that it cab be deployed</p><p>Anything e
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchWorkflowLog</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>])]]</span>
+        <span class="name">fetchWorkflowLog</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>])]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@fetchWorkflowLog(guid:nelson.GUID,offset:Int):nelson.Nelson.NelsonK[Option[(Int,List[String])]]" title="Permalink" target="_top">
@@ -802,7 +785,7 @@ into a Manifest instance, and validates that it cab be deployed</p><p>Anything e
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">findDeploymentExpiration</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="java.time.Instant">Instant</span>]]</span>
+        <span class="name">findDeploymentExpiration</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="java.time.Instant">Instant</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@findDeploymentExpiration(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[java.time.Instant]]" title="Permalink" target="_top">
@@ -836,7 +819,7 @@ into a Manifest instance, and validates that it cab be deployed</p><p>Anything e
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getDeploymentsByDatacenter</span><span class="params">(<span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="f">f: (<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>) ⇒ <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.List">List</span>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]</span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]</span>
+        <span class="name">getDeploymentsByDatacenter</span><span class="params">(<span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="f">f: (<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>) ⇒ <a href="storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.List">List</span>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]</span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@getDeploymentsByDatacenter(dc:nelson.Datacenter,f:nelson.Datacenter.Namespace=&gt;nelson.storage.StoreOpF[List[nelson.Datacenter.Deployment]]):nelson.storage.StoreOpF[Set[nelson.Datacenter.Deployment]]" title="Permalink" target="_top">
@@ -853,7 +836,7 @@ into a Manifest instance, and validates that it cab be deployed</p><p>Anything e
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getLoadbalancerByGUID</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>]]</span>
+        <span class="name">getLoadbalancerByGUID</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@getLoadbalancerByGUID(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Datacenter.LoadbalancerDeployment]]" title="Permalink" target="_top">
@@ -870,7 +853,7 @@ into a Manifest instance, and validates that it cab be deployed</p><p>Anything e
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getOrCreateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a>]</span>
+        <span class="name">getOrCreateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@getOrCreateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.storage.StoreOpF[nelson.ID]" title="Permalink" target="_top">
@@ -879,18 +862,18 @@ into a Manifest instance, and validates that it cab be deployed</p><p>Anything e
     </span>
       
     </li><li name="nelson.Nelson#getRelease" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getRelease(id:Long):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
-      <a id="getRelease(Long):NelsonK[==&gt;&gt;[Released,List[ReleasedDeployment]]]"></a>
+      <a id="getRelease(id:Long):nelson.Nelson.NelsonK[scala.collection.immutable.SortedMap[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
+      <a id="getRelease(Long):NelsonK[SortedMap[Released,List[ReleasedDeployment]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getRelease</span><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
+        <span class="name">getRelease</span><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@getRelease(id:Long):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@getRelease(id:Long):nelson.Nelson.NelsonK[scala.collection.immutable.SortedMap[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -905,7 +888,7 @@ into a Manifest instance, and validates that it cab be deployed</p><p>Anything e
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getRoutingGraphs</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <span class="extype" name="scala.List">List</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="routing/package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>)]]</span>
+        <span class="name">getRoutingGraphs</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <span class="extype" name="scala.List">List</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="routing/package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>)]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@getRoutingGraphs(dc:nelson.DatacenterRef,ns:List[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.routing.RoutingGraph)]]" title="Permalink" target="_top">
@@ -924,7 +907,7 @@ default to all namespaces
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getRuntimeSummary</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Nelson$$RuntimeSummary.html" class="extype" name="nelson.Nelson.RuntimeSummary">RuntimeSummary</a>]]</span>
+        <span class="name">getRuntimeSummary</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Nelson$$RuntimeSummary.html" class="extype" name="nelson.Nelson.RuntimeSummary">RuntimeSummary</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@getRuntimeSummary(guid:nelson.GUID):nelson.Nelson.NelsonK[Option[nelson.Nelson.RuntimeSummary]]" title="Permalink" target="_top">
@@ -941,7 +924,7 @@ default to all namespaces
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getStatusOfReleaseUnit</span><span class="params">(<span name="s">s: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="u">u: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]]</span>
+        <span class="name">getStatusOfReleaseUnit</span><span class="params">(<span name="s">s: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="u">u: <a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@getStatusOfReleaseUnit(s:nelson.Slug,u:nelson.UnitName):nelson.Nelson.NelsonK[Option[nelson.DeploymentStatus]]" title="Permalink" target="_top">
@@ -953,7 +936,7 @@ for the specified unit only.</p><div class="fullcomment"><div class="comment cmt
 for the specified unit only. This is primarily used to power the SVG badging.</p><p>TIM: REALLY NEEDS CACHING TO SCALE; *PROBALLY* TOO EXPENSIVE RIGHT NOW.
 </p></div></div>
     </li><li name="nelson.Nelson#getVersionedManifestForRelease" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getVersionedManifestForRelease(r:nelson.Released):nelson.Nelson.NelsonK[scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]]"></a>
+      <a id="getVersionedManifestForRelease(r:nelson.Released):nelson.Nelson.NelsonK[nelson.@@[nelson.Manifest,nelson.Manifest.Versioned]]"></a>
       <a id="getVersionedManifestForRelease(Released):NelsonK[@@[Manifest,Versioned]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -961,10 +944,10 @@ for the specified unit only. This is primarily used to power the SVG badging.</p
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getVersionedManifestForRelease</span><span class="params">(<span name="r">r: <a href="Released.html" class="extype" name="nelson.Released">Released</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]]</span>
+        <span class="name">getVersionedManifestForRelease</span><span class="params">(<span name="r">r: <a href="Released.html" class="extype" name="nelson.Released">Released</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@getVersionedManifestForRelease(r:nelson.Released):nelson.Nelson.NelsonK[scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@getVersionedManifestForRelease(r:nelson.Released):nelson.Nelson.NelsonK[nelson.@@[nelson.Manifest,nelson.Manifest.Versioned]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -978,7 +961,7 @@ for the specified unit only. This is primarily used to power the SVG badging.</p
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handleRelease</span><span class="params">(<span name="e">e: <a href="Github$$ReleaseEvent.html" class="extype" name="nelson.Github.ReleaseEvent">ReleaseEvent</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">handleRelease</span><span class="params">(<span name="e">e: <a href="Github$$ReleaseEvent.html" class="extype" name="nelson.Github.ReleaseEvent">ReleaseEvent</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@handleRelease(e:nelson.Github.ReleaseEvent):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -1022,18 +1005,18 @@ that a new deployment needs to take place.</p>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.Nelson#lift" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="lift[F[_[_],_],U](f:nelson.NelsonConfig=&gt;F[scalaz.concurrent.Task,U]):scalaz.Kleisli[[β$1$]F[scalaz.concurrent.Task,β$1$],nelson.NelsonConfig,U]"></a>
-      <a id="lift[F[_[_],_],U]((NelsonConfig)⇒F[Task,U]):Kleisli[[β$1$]F[Task,β$1$],NelsonConfig,U]"></a>
+      <a id="lift[F[_[_],_],U](f:nelson.NelsonConfig=&gt;F[cats.effect.IO,U]):cats.data.Kleisli[[β$1$]F[cats.effect.IO,β$1$],nelson.NelsonConfig,U]"></a>
+      <a id="lift[F[_[_],_],U]((NelsonConfig)⇒F[IO,U]):Kleisli[[β$1$]F[IO,β$1$],NelsonConfig,U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">lift</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="_">_</span>]</span></span>, <span name="U">U</span>]</span><span class="params">(<span name="f">f: (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>) ⇒ <span class="extype" name="nelson.Nelson.lift.F">F</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.Nelson.lift.U">U</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.Kleisli">Kleisli</span>[[β$1$]<span class="extype" name="nelson.Nelson.lift.F">F</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.Nelson.&lt;refinement&gt;.Λ$.β$1$">β$1$</span>], <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.lift.U">U</span>]</span>
+        <span class="name">lift</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="_">_</span>]</span></span>, <span name="U">U</span>]</span><span class="params">(<span name="f">f: (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>) ⇒ <span class="extype" name="nelson.Nelson.lift.F">F</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.Nelson.lift.U">U</span>]</span>)</span><span class="result">: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[[β$1$]<span class="extype" name="nelson.Nelson.lift.F">F</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.Nelson.&lt;refinement&gt;.Λ$.β$1$">β$1$</span>], <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <span class="extype" name="nelson.Nelson.lift.U">U</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@lift[F[_[_],_],U](f:nelson.NelsonConfig=&gt;F[scalaz.concurrent.Task,U]):scalaz.Kleisli[[β$1$]F[scalaz.concurrent.Task,β$1$],nelson.NelsonConfig,U]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@lift[F[_[_],_],U](f:nelson.NelsonConfig=&gt;F[cats.effect.IO,U]):cats.data.Kleisli[[β$1$]F[cats.effect.IO,β$1$],nelson.NelsonConfig,U]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1048,7 +1031,7 @@ that a new deployment needs to take place.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listAuditEvents</span><span class="params">(<span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="releaseId">releaseId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a>]</span>, <span name="action">action: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="category">category: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[<a href="audit/AuditLog.html" class="extype" name="nelson.audit.AuditLog">AuditLog</a>]]</span>
+        <span class="name">listAuditEvents</span><span class="params">(<span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="releaseId">releaseId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a>]</span>, <span name="action">action: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="category">category: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[<a href="audit/AuditLog.html" class="extype" name="nelson.audit.AuditLog">AuditLog</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@listAuditEvents(limit:Long,offset:Long,releaseId:Option[Long],action:Option[String],category:Option[String]):nelson.Nelson.NelsonK[List[nelson.audit.AuditLog]]" title="Permalink" target="_top">
@@ -1057,7 +1040,7 @@ that a new deployment needs to take place.</p>
     </span>
       
     </li><li name="nelson.Nelson#listDatacenterDeployments" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="listDatacenterDeployments(dcName:String,ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]"></a>
+      <a id="listDatacenterDeployments(dcName:String,ns:cats.data.NonEmptyList[nelson.NamespaceName],status:cats.data.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]"></a>
       <a id="listDatacenterDeployments(String,NonEmptyList[NamespaceName],NonEmptyList[DeploymentStatus],Option[UnitName]):NelsonK[List[(Namespace,Deployment,DeploymentStatus)]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1065,10 +1048,10 @@ that a new deployment needs to take place.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listDatacenterDeployments</span><span class="params">(<span name="dcName">dcName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]]</span>
+        <span class="name">listDatacenterDeployments</span><span class="params">(<span name="dcName">dcName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ns">ns: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listDatacenterDeployments(dcName:String,ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listDatacenterDeployments(dcName:String,ns:cats.data.NonEmptyList[nelson.NamespaceName],status:cats.data.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1076,7 +1059,7 @@ that a new deployment needs to take place.</p>
 TIM: this probally wont scale, but its likley ok for the moment.
 </p></div></div>
     </li><li name="nelson.Nelson#listDatacenterUnitsByStatus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listDatacenterUnitsByStatus(dc:String,ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]"></a>
+      <a id="listDatacenterUnitsByStatus(dc:String,ns:cats.data.NonEmptyList[nelson.NamespaceName],status:cats.data.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]"></a>
       <a id="listDatacenterUnitsByStatus(String,NonEmptyList[NamespaceName],NonEmptyList[DeploymentStatus]):NelsonK[List[(Namespace,GUID,ServiceName)]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1084,34 +1067,34 @@ TIM: this probally wont scale, but its likley ok for the moment.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listDatacenterUnitsByStatus</span><span class="params">(<span name="dc">dc: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>, <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a>)]]</span>
+        <span class="name">listDatacenterUnitsByStatus</span><span class="params">(<span name="dc">dc: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ns">ns: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>, <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a>)]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listDatacenterUnitsByStatus(dc:String,ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listDatacenterUnitsByStatus(dc:String,ns:cats.data.NonEmptyList[nelson.NamespaceName],status:cats.data.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Nelson#listDatacenters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listDatacenters:nelson.Nelson.NelsonK[Map[nelson.Datacenter,Set[nelson.Datacenter.Namespace]]]"></a>
-      <a id="listDatacenters:NelsonK[Map[Datacenter,Set[Namespace]]]"></a>
+      <a id="listDatacenters(implicitec:scala.concurrent.ExecutionContext):nelson.Nelson.NelsonK[Map[nelson.Datacenter,Set[nelson.Datacenter.Namespace]]]"></a>
+      <a id="listDatacenters(ExecutionContext):NelsonK[Map[Datacenter,Set[Namespace]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listDatacenters</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Predef.Map">Map</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>]]]</span>
+        <span class="name">listDatacenters</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Predef.Map">Map</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listDatacenters:nelson.Nelson.NelsonK[Map[nelson.Datacenter,Set[nelson.Datacenter.Namespace]]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listDatacenters(implicitec:scala.concurrent.ExecutionContext):nelson.Nelson.NelsonK[Map[nelson.Datacenter,Set[nelson.Datacenter.Namespace]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">List all the datacenters Nelson is currently aware of, and return
 the namespaces associated with that datacenter.</p>
     </li><li name="nelson.Nelson#listDeployments" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listDeployments(dcs:List[String],ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]"></a>
+      <a id="listDeployments(dcs:List[String],ns:cats.data.NonEmptyList[nelson.NamespaceName],status:cats.data.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]"></a>
       <a id="listDeployments(List[String],NonEmptyList[NamespaceName],NonEmptyList[DeploymentStatus],Option[UnitName]):NelsonK[List[(DatacenterRef,Namespace,Deployment,DeploymentStatus)]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1119,10 +1102,10 @@ the namespaces associated with that datacenter.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listDeployments</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]]</span>
+        <span class="name">listDeployments</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="ns">ns: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listDeployments(dcs:List[String],ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listDeployments(dcs:List[String],ns:cats.data.NonEmptyList[nelson.NamespaceName],status:cats.data.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.Deployment,nelson.DeploymentStatus)]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1136,7 +1119,7 @@ the namespaces associated with that datacenter.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listDeploymentsWithDeprecatedDependencies</span><span class="params">(<span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#DependencyEdge=(nelson.routing.RoutingNode,nelson.routing.RoutingNode)" class="extmbr" name="nelson.DependencyEdge">DependencyEdge</a>]]</span>
+        <span class="name">listDeploymentsWithDeprecatedDependencies</span><span class="params">(<span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#DependencyEdge=(nelson.routing.RoutingNode,nelson.routing.RoutingNode)" class="extmbr" name="nelson.DependencyEdge">DependencyEdge</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@listDeploymentsWithDeprecatedDependencies(dc:nelson.Datacenter):nelson.Nelson.NelsonK[Vector[nelson.DependencyEdge]]" title="Permalink" target="_top">
@@ -1154,7 +1137,7 @@ the namespaces associated with that datacenter.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listDeploymentsWithDeprecatedDependencies</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#DependencyEdge=(nelson.routing.RoutingNode,nelson.routing.RoutingNode)" class="extmbr" name="nelson.DependencyEdge">DependencyEdge</a>]]</span>
+        <span class="name">listDeploymentsWithDeprecatedDependencies</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#DependencyEdge=(nelson.routing.RoutingNode,nelson.routing.RoutingNode)" class="extmbr" name="nelson.DependencyEdge">DependencyEdge</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@listDeploymentsWithDeprecatedDependencies:nelson.Nelson.NelsonK[Vector[nelson.DependencyEdge]]" title="Permalink" target="_top">
@@ -1164,7 +1147,7 @@ the namespaces associated with that datacenter.</p>
       <p class="shortcomment cmt">Lists all deployments accross datacenters and namspaces that depend on
 a deployment that is deprecated.</p>
     </li><li name="nelson.Nelson#listLoadbalancerDeployments" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listLoadbalancerDeployments(dc:nelson.DatacenterRef,ns:scalaz.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]"></a>
+      <a id="listLoadbalancerDeployments(dc:nelson.DatacenterRef,ns:cats.data.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]"></a>
       <a id="listLoadbalancerDeployments(DatacenterRef,NonEmptyList[NamespaceName]):NelsonK[List[(Namespace,LoadbalancerDeployment)]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1172,16 +1155,16 @@ a deployment that is deprecated.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listLoadbalancerDeployments</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>)]]</span>
+        <span class="name">listLoadbalancerDeployments</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>)]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listLoadbalancerDeployments(dc:nelson.DatacenterRef,ns:scalaz.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listLoadbalancerDeployments(dc:nelson.DatacenterRef,ns:cats.data.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Nelson#listLoadbalancers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listLoadbalancers(dcs:List[String],ns:scalaz.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]"></a>
+      <a id="listLoadbalancers(dcs:List[String],ns:cats.data.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]"></a>
       <a id="listLoadbalancers(List[String],NonEmptyList[NamespaceName]):NelsonK[List[(DatacenterRef,Namespace,LoadbalancerDeployment)]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1189,27 +1172,27 @@ a deployment that is deprecated.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listLoadbalancers</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>)]]</span>
+        <span class="name">listLoadbalancers</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="ns">ns: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>)]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listLoadbalancers(dcs:List[String],ns:scalaz.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listLoadbalancers(dcs:List[String],ns:cats.data.NonEmptyList[nelson.NamespaceName]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.Datacenter.LoadbalancerDeployment)]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Nelson#listReleases" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listReleases(limit:Option[Int]):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
-      <a id="listReleases(Option[Int]):NelsonK[==&gt;&gt;[Released,List[ReleasedDeployment]]]"></a>
+      <a id="listReleases(limit:Option[Int]):nelson.Nelson.NelsonK[scala.collection.immutable.SortedMap[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
+      <a id="listReleases(Option[Int]):NelsonK[SortedMap[Released,List[ReleasedDeployment]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listReleases</span><span class="params">(<span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
+        <span class="name">listReleases</span><span class="params">(<span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listReleases(limit:Option[Int]):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listReleases(limit:Option[Int]):nelson.Nelson.NelsonK[scala.collection.immutable.SortedMap[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1223,7 +1206,7 @@ a deployment that is deprecated.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listRepositories</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="owner">owner: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[<a href="Repo.html" class="extype" name="nelson.Repo">Repo</a>]]</span>
+        <span class="name">listRepositories</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>, <span name="owner">owner: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[<a href="Repo.html" class="extype" name="nelson.Repo">Repo</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@listRepositories(session:nelson.Session,owner:Option[String]):nelson.Nelson.NelsonK[List[nelson.Repo]]" title="Permalink" target="_top">
@@ -1234,27 +1217,25 @@ a deployment that is deprecated.</p>
                 <span class="name">@SuppressWarnings</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="nelson.Nelson#listRepositoryReleases" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="listRepositoryReleases(s:nelson.Slug):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
-      <a id="listRepositoryReleases(Slug):NelsonK[==&gt;&gt;[Released,List[ReleasedDeployment]]]"></a>
+    </li><li name="nelson.Nelson#listRepositoryReleases" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="listRepositoryReleases(s:nelson.Slug):nelson.Nelson.NelsonK[scala.collection.immutable.SortedMap[nelson.Released,List[nelson.ReleasedDeployment]]]"></a>
+      <a id="listRepositoryReleases(Slug):NelsonK[SortedMap[Released,List[ReleasedDeployment]]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listRepositoryReleases</span><span class="params">(<span name="s">s: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
+        <span class="name">listRepositoryReleases</span><span class="params">(<span name="s">s: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<a href="Released.html" class="extype" name="nelson.Released">Released</a>, <span class="extype" name="scala.List">List</span>[<a href="ReleasedDeployment.html" class="extype" name="nelson.ReleasedDeployment">ReleasedDeployment</a>]]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listRepositoryReleases(s:nelson.Slug):nelson.Nelson.NelsonK[scalaz.==&gt;&gt;[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listRepositoryReleases(s:nelson.Slug):nelson.Nelson.NelsonK[scala.collection.immutable.SortedMap[nelson.Released,List[nelson.ReleasedDeployment]]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">list releases this repository has had.</p><div class="fullcomment"><div class="comment cmt"><p>list releases this repository has had. Feels a little hack to be doing
-the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
-</p></div></div>
+      <p class="shortcomment cmt">list releases this repository has had.</p>
     </li><li name="nelson.Nelson#listUnitsByStatus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listUnitsByStatus(dcs:List[nelson.DatacenterRef],ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]"></a>
+      <a id="listUnitsByStatus(dcs:List[nelson.DatacenterRef],ns:cats.data.NonEmptyList[nelson.NamespaceName],status:cats.data.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]"></a>
       <a id="listUnitsByStatus(List[DatacenterRef],NonEmptyList[NamespaceName],NonEmptyList[DeploymentStatus]):NelsonK[List[(DatacenterRef,Namespace,GUID,ServiceName)]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1262,10 +1243,10 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listUnitsByStatus</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>]</span>, <span name="ns">ns: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>, <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a>)]]</span>
+        <span class="name">listUnitsByStatus</span><span class="params">(<span name="dcs">dcs: <span class="extype" name="scala.List">List</span>[<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>]</span>, <span name="ns">ns: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>]</span>, <span name="status">status: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[(<a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a>, <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>, <a href="Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a>)]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listUnitsByStatus(dcs:List[nelson.DatacenterRef],ns:scalaz.NonEmptyList[nelson.NamespaceName],status:scalaz.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@listUnitsByStatus(dcs:List[nelson.DatacenterRef],ns:cats.data.NonEmptyList[nelson.NamespaceName],status:cats.data.NonEmptyList[nelson.DeploymentStatus]):nelson.Nelson.NelsonK[List[(nelson.DatacenterRef,nelson.Datacenter.Namespace,nelson.GUID,nelson.Datacenter.ServiceName)]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1330,7 +1311,7 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">recentActivityStatistics</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Nelson$$RecentStatistics.html" class="extype" name="nelson.Nelson.RecentStatistics">RecentStatistics</a>]</span>
+        <span class="name">recentActivityStatistics</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Nelson$$RecentStatistics.html" class="extype" name="nelson.Nelson.RecentStatistics">RecentStatistics</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@recentActivityStatistics:nelson.Nelson.NelsonK[nelson.Nelson.RecentStatistics]" title="Permalink" target="_top">
@@ -1348,7 +1329,7 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">recursiveCreateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">recursiveCreateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@recursiveCreateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -1365,7 +1346,7 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">recursiveCreateSubordinateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">recursiveCreateSubordinateNamespace</span><span class="params">(<span name="dc">dc: <a href="package.html#DatacenterRef=String" class="extmbr" name="nelson.DatacenterRef">DatacenterRef</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@recursiveCreateSubordinateNamespace(dc:nelson.DatacenterRef,ns:nelson.NamespaceName):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -1382,7 +1363,7 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">redeploy</span><span class="params">(<span name="deploymentGuid">deploymentGuid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">redeploy</span><span class="params">(<span name="deploymentGuid">deploymentGuid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@redeploy(deploymentGuid:nelson.GUID):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
@@ -1399,7 +1380,7 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reverseTrafficShift</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Datacenter$$TrafficShift.html" class="extype" name="nelson.Datacenter.TrafficShift">TrafficShift</a>]</span>
+        <span class="name">reverseTrafficShift</span><span class="params">(<span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Datacenter$$TrafficShift.html" class="extype" name="nelson.Datacenter.TrafficShift">TrafficShift</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@reverseTrafficShift(guid:nelson.GUID):nelson.Nelson.NelsonK[nelson.Datacenter.TrafficShift]" title="Permalink" target="_top">
@@ -1408,7 +1389,7 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
     </span>
       
     </li><li name="nelson.Nelson#storeManifest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="storeManifest(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned],repoId:nelson.ID):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="storeManifest(m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned],repoId:nelson.ID):nelson.Nelson.NelsonK[Unit]"></a>
       <a id="storeManifest(@@[Manifest,Versioned],ID):NelsonK[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1416,10 +1397,10 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">storeManifest</span><span class="params">(<span name="m">m: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="repoId">repoId: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">storeManifest</span><span class="params">(<span name="m">m: <a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="repoId">repoId: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@storeManifest(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned],repoId:nelson.ID):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@storeManifest(m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned],repoId:nelson.ID):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1433,7 +1414,7 @@ the jiggery pokery with ==&gt;&gt; but whatever, its better than using Map.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">syncRepos</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>)</span><span class="result">: <a href="#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">syncRepos</span><span class="params">(<span name="session">session: <a href="Session.html" class="extype" name="nelson.Session">Session</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@syncRepos(session:nelson.Session):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">

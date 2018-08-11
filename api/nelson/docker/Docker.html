@@ -47,15 +47,15 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Docker</span><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">Docker</span><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The fugiest docker client around.
 Extreamly crude. Barely works.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/docker/Docker.scala" target="_blank">Docker.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/docker/Docker.scala" target="_blank">Docker.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -73,7 +73,7 @@ Extreamly crude. Barely works.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.docker.Docker"><span>Docker</span></li><li class="in" name="scalaz.NaturalTransformation"><span>NaturalTransformation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.docker.Docker"><span>Docker</span></li><li class="in" name="cats.arrow.FunctionK"><span>FunctionK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -93,7 +93,7 @@ Extreamly crude. Barely works.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.docker.Docker#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(cfg:nelson.DockerConfig):nelson.docker.Docker"></a>
+      <a id="&lt;init&gt;(cfg:nelson.DockerConfig,scheduler:java.util.concurrent.ScheduledExecutorService,ec:scala.concurrent.ExecutionContext):nelson.docker.Docker"></a>
       <a id="&lt;init&gt;:Docker"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -101,10 +101,10 @@ Extreamly crude. Barely works.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Docker</span><span class="params">(<span name="cfg">cfg: <a href="../DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a></span>)</span>
+        <span class="name">Docker</span><span class="params">(<span name="cfg">cfg: <a href="../DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a></span>, <span name="scheduler">scheduler: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.Docker@&lt;init&gt;(cfg:nelson.DockerConfig):nelson.docker.Docker" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.Docker@&lt;init&gt;(cfg:nelson.DockerConfig,scheduler:java.util.concurrent.ScheduledExecutorService,ec:scala.concurrent.ExecutionContext):nelson.docker.Docker" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -169,23 +169,57 @@ Extreamly crude. Barely works.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="nelson.docker.Docker#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[A](op:nelson.docker.DockerOp[A]):scalaz.concurrent.Task[A]"></a>
-      <a id="apply[A](DockerOp[A]):Task[A]"></a>
+    </li><li name="cats.arrow.FunctionK#and" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="and[H[_]](h:cats.arrow.FunctionK[F,H]):cats.arrow.FunctionK[F,[γ$4$]cats.data.Tuple2K[G,H,γ$4$]]"></a>
+      <a id="and[H[_]](FunctionK[DockerOp,H]):FunctionK[DockerOp,[γ$4$]Tuple2K[IO,H,γ$4$]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="op">op: <a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>[<span class="extype" name="nelson.docker.Docker.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="nelson.docker.Docker.apply.A">A</span>]</span>
+        <span class="name">and</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="cats.arrow.FunctionK.and.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, [γ$4$]<span class="extype" name="cats.data.Tuple2K">Tuple2K</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.arrow.FunctionK.and.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.Docker@apply[A](op:nelson.docker.DockerOp[A]):scalaz.concurrent.Task[A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.Docker@and[H[_]](h:cats.arrow.FunctionK[F,H]):cats.arrow.FunctionK[F,[γ$4$]cats.data.Tuple2K[G,H,γ$4$]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.docker.Docker">Docker</a> → NaturalTransformation</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="cats.arrow.FunctionK#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[H[_]](f:cats.arrow.FunctionK[G,H]):cats.arrow.FunctionK[F,H]"></a>
+      <a id="andThen[H[_]](FunctionK[IO,H]):FunctionK[DockerOp,H]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.arrow.FunctionK.andThen.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="cats.arrow.FunctionK.andThen.H">H</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.docker.Docker@andThen[H[_]](f:cats.arrow.FunctionK[G,H]):cats.arrow.FunctionK[F,H]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.docker.Docker#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](op:nelson.docker.DockerOp[A]):cats.effect.IO[A]"></a>
+      <a id="apply[A](DockerOp[A]):IO[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="op">op: <a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>[<span class="extype" name="nelson.docker.Docker.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="nelson.docker.Docker.apply.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.docker.Docker@apply[A](op:nelson.docker.DockerOp[A]):cats.effect.IO[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.docker.Docker">Docker</a> → FunctionK</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -226,23 +260,23 @@ Extreamly crude. Barely works.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scalaz.NaturalTransformation#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[E[_]](f:scalaz.~&gt;[E,F]):scalaz.~&gt;[E,G]"></a>
-      <a id="compose[E[_]](~&gt;[E,DockerOp]):~&gt;[E,Task]"></a>
+    </li><li name="cats.arrow.FunctionK#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[E[_]](f:cats.arrow.FunctionK[E,F]):cats.arrow.FunctionK[E,G]"></a>
+      <a id="compose[E[_]](FunctionK[E,DockerOp]):FunctionK[E,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.NaturalTransformation.compose.E">E</span>, <a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.NaturalTransformation.compose.E">E</span>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.compose.E">E</span>, <a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.compose.E">E</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.Docker@compose[E[_]](f:scalaz.~&gt;[E,F]):scalaz.~&gt;[E,G]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.Docker@compose[E[_]](f:cats.arrow.FunctionK[E,F]):cats.arrow.FunctionK[E,G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NaturalTransformation</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -278,35 +312,35 @@ Extreamly crude. Barely works.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.docker.Docker#exec" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="exec(command:String):scalaz.concurrent.Task[(Int,List[String])]"></a>
-      <a id="exec(String):Task[(Int,List[String])]"></a>
+      <a id="exec(command:String):cats.effect.IO[(Int,List[String])]"></a>
+      <a id="exec(String):IO[(Int,List[String])]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exec</span><span class="params">(<span name="command">command: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>])]</span>
+        <span class="name">exec</span><span class="params">(<span name="command">command: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.Docker@exec(command:String):scalaz.concurrent.Task[(Int,List[String])]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.Docker@exec(command:String):cats.effect.IO[(Int,List[String])]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="nelson.docker.Docker#extract" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="extract(unit:nelson.Manifest.UnitDef):scalaz.concurrent.Task[nelson.docker.Docker.Image]"></a>
-      <a id="extract(UnitDef):Task[Image]"></a>
+      <a id="extract(unit:nelson.Manifest.UnitDef):cats.effect.IO[nelson.docker.Docker.Image]"></a>
+      <a id="extract(UnitDef):IO[Image]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">extract</span><span class="params">(<span name="unit">unit: <a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>
+        <span class="name">extract</span><span class="params">(<span name="unit">unit: <a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.Docker@extract(unit:nelson.Manifest.UnitDef):scalaz.concurrent.Task[nelson.docker.Docker.Image]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.Docker@extract(unit:nelson.Manifest.UnitDef):cats.effect.IO[nelson.docker.Docker.Image]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -436,19 +470,36 @@ Extreamly crude. Barely works.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.docker.Docker#pull" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="pull(image:nelson.docker.Docker.Image):scalaz.concurrent.Task[(Int,List[nelson.docker.Docker.Pull.Output])]"></a>
-      <a id="pull(Image):Task[(Int,List[Output])]"></a>
+    </li><li name="cats.arrow.FunctionK#or" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$1$]cats.data.EitherK[F,H,γ$1$],G]"></a>
+      <a id="or[H[_]](FunctionK[H,IO]):FunctionK[[γ$1$]EitherK[DockerOp,H,γ$1$],IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pull</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<a href="Docker$$Pull$$Output.html" class="extype" name="nelson.docker.Docker.Pull.Output">Output</a>])]</span>
+        <span class="name">or</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[[γ$1$]<span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$1$">γ$1$</span>], <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.Docker@pull(image:nelson.docker.Docker.Image):scalaz.concurrent.Task[(Int,List[nelson.docker.Docker.Pull.Output])]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.Docker@or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$1$]cats.data.EitherK[F,H,γ$1$],G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.docker.Docker#pull" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pull(image:nelson.docker.Docker.Image):cats.effect.IO[(Int,List[nelson.docker.Docker.Pull.Output])]"></a>
+      <a id="pull(Image):IO[(Int,List[Output])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pull</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<a href="Docker$$Pull$$Output.html" class="extype" name="nelson.docker.Docker.Pull.Output">Output</a>])]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.docker.Docker@pull(image:nelson.docker.Docker.Image):cats.effect.IO[(Int,List[nelson.docker.Docker.Pull.Output])]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -471,18 +522,18 @@ Extreamly crude. Barely works.
     </span>
       
     </li><li name="nelson.docker.Docker#push" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="push(image:nelson.docker.Docker.Image):scalaz.concurrent.Task[(Int,List[nelson.docker.Docker.Push.Output])]"></a>
-      <a id="push(Image):Task[(Int,List[Output])]"></a>
+      <a id="push(image:nelson.docker.Docker.Image):cats.effect.IO[(Int,List[nelson.docker.Docker.Push.Output])]"></a>
+      <a id="push(Image):IO[(Int,List[Output])]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">push</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<a href="Docker$$Push$$Output.html" class="extype" name="nelson.docker.Docker.Push.Output">Output</a>])]</span>
+        <span class="name">push</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<a href="Docker$$Push$$Output.html" class="extype" name="nelson.docker.Docker.Push.Output">Output</a>])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.Docker@push(image:nelson.docker.Docker.Image):scalaz.concurrent.Task[(Int,List[nelson.docker.Docker.Push.Output])]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.Docker@push(image:nelson.docker.Docker.Image):cats.effect.IO[(Int,List[nelson.docker.Docker.Push.Output])]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -522,18 +573,18 @@ Extreamly crude. Barely works.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.docker.Docker#tag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="tag(src:nelson.docker.Docker.Image,tagged:nelson.docker.Docker.Image):scalaz.concurrent.Task[(Int,nelson.docker.Docker.Image)]"></a>
-      <a id="tag(Image,Image):Task[(Int,Image)]"></a>
+      <a id="tag(src:nelson.docker.Docker.Image,tagged:nelson.docker.Docker.Image):cats.effect.IO[(Int,nelson.docker.Docker.Image)]"></a>
+      <a id="tag(Image,Image):IO[(Int,Image)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tag</span><span class="params">(<span name="src">src: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="tagged">tagged: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>)]</span>
+        <span class="name">tag</span><span class="params">(<span name="src">src: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="tagged">tagged: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.Docker@tag(src:nelson.docker.Docker.Image,tagged:nelson.docker.Docker.Image):scalaz.concurrent.Task[(Int,nelson.docker.Docker.Image)]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.Docker@tag(src:nelson.docker.Docker.Image,tagged:nelson.docker.Docker.Image):cats.effect.IO[(Int,nelson.docker.Docker.Image)]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -633,8 +684,12 @@ Extreamly crude. Barely works.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scalaz.NaturalTransformation">
-              <h3>Inherited from <span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</h3>
+        <div class="parent" name="cats.arrow.FunctionK">
+              <h3>Inherited from <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

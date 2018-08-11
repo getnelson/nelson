@@ -53,7 +53,7 @@
 and can serialize a decoded token.
 </p></div><dl class="paramcmts block"><dt class="tparam">SerializedToken</dt><dd class="cmt"><p>the form of the serialized token
  (for example String for tokens that are base-64-encoded).</p></dd><dt class="tparam">DeserializedToken</dt><dd class="cmt"><p>the result of successful authentication
-   (for example an <code>AuthToken</code> or <code>User</code> model).</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/crypto/TokenAuthenticator.scala" target="_blank">TokenAuthenticator.scala</a></dd></dl><div class="toggleContainer block">
+   (for example an <code>AuthToken</code> or <code>User</code> model).</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/crypto/TokenAuthenticator.scala" target="_blank">TokenAuthenticator.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
@@ -108,7 +108,7 @@ and can serialize a decoded token.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">authenticate</span><span class="params">(<span name="token">token: <span class="extype" name="nelson.crypto.TokenAuthenticator.SerializedToken">SerializedToken</span></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="nelson.crypto.TokenAuthenticator.DeserializedToken">DeserializedToken</span>]</span>
+        <span class="name">authenticate</span><span class="params">(<span name="token">token: <span class="extype" name="nelson.crypto.TokenAuthenticator.SerializedToken">SerializedToken</span></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="nelson.crypto.TokenAuthenticator.DeserializedToken">DeserializedToken</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.crypto.TokenAuthenticator@authenticate(token:SerializedToken):nelson.crypto.AuthResult[DeserializedToken]" title="Permalink" target="_top">
@@ -117,18 +117,18 @@ and can serialize a decoded token.
     </span>
       
     </li><li name="nelson.crypto.TokenAuthenticator#serialize" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="serialize(token:DeserializedToken):scalaz.\/[String,SerializedToken]"></a>
-      <a id="serialize(DeserializedToken):\/[String,SerializedToken]"></a>
+      <a id="serialize(token:DeserializedToken):Either[String,SerializedToken]"></a>
+      <a id="serialize(DeserializedToken):Either[String,SerializedToken]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">serialize</span><span class="params">(<span name="token">token: <span class="extype" name="nelson.crypto.TokenAuthenticator.DeserializedToken">DeserializedToken</span></span>)</span><span class="result">: <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="nelson.crypto.TokenAuthenticator.SerializedToken">SerializedToken</span>]</span>
+        <span class="name">serialize</span><span class="params">(<span name="token">token: <span class="extype" name="nelson.crypto.TokenAuthenticator.DeserializedToken">DeserializedToken</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="nelson.crypto.TokenAuthenticator.SerializedToken">SerializedToken</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.crypto.TokenAuthenticator@serialize(token:DeserializedToken):scalaz.\/[String,SerializedToken]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.crypto.TokenAuthenticator@serialize(token:DeserializedToken):Either[String,SerializedToken]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

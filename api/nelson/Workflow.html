@@ -60,7 +60,7 @@ considerably. In addition, the output type <code>O</code> is intended to provide
 an opertunity for the workflow to output something more than just
 effects. For example, a workflow could accumulate a set of logs, or
 some reporting state - whatever - it doesnt matter.</p><p>Workflows define both setup (deploy) and teardown (detroy) workflow
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Workflow.scala" target="_blank">Workflow.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Workflow.scala" target="_blank">Workflow.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
@@ -107,7 +107,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="nelson.Workflow#deploy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="deploy(id:nelson.ID,hash:String,unit:scalaz.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[O]"></a>
+      <a id="deploy(id:nelson.ID,hash:String,unit:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[O]"></a>
       <a id="deploy(ID,String,@@[UnitDef,Versioned],Plan,Datacenter,Namespace):WorkflowF[O]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -115,10 +115,10 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deploy</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="unit">unit: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=scalaz.Free.FreeC[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="nelson.Workflow.O">O</span>]</span>
+        <span class="name">deploy</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="unit">unit: <a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="nelson.Workflow.O">O</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@deploy(id:nelson.ID,hash:String,unit:scalaz.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[O]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Workflow@deploy(id:nelson.ID,hash:String,unit:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[O]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -132,7 +132,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">destroy</span><span class="params">(<span name="d">d: <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=scalaz.Free.FreeC[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="nelson.Workflow.O">O</span>]</span>
+        <span class="name">destroy</span><span class="params">(<span name="d">d: <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="nelson.Workflow.O">O</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Workflow@destroy(d:nelson.Datacenter.Deployment,dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):nelson.Workflow.WorkflowF[O]" title="Permalink" target="_top">

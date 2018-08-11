@@ -54,7 +54,7 @@ or traffic shifting (yet!).</p><p>This workflow is named after the Canopus star 
 mythology. Canopus is a star in the Carina constellation, which in turn was once part of the
 Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>The name here is inspired by the existing use of astronomical names (see the Magnetar workflow),
 &quot;kubernetes&quot; which is Greek for helmsman, and Nelson's usage of the Argonaut library for J(a)SON parsing.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/workflows/Canopus.scala" target="_blank">Canopus.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/workflows/Canopus.scala" target="_blank">Canopus.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Workflow.html" class="extype" name="nelson.Workflow">Workflow</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -191,7 +191,7 @@ Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>
               
         </dd></dl></div>
     </li><li name="nelson.Canopus#deploy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="deploy(id:nelson.ID,hash:String,vunit:scalaz.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[Unit]"></a>
+      <a id="deploy(id:nelson.ID,hash:String,vunit:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[Unit]"></a>
       <a id="deploy(ID,String,@@[UnitDef,Versioned],Plan,Datacenter,Namespace):WorkflowF[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -199,10 +199,10 @@ Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deploy</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="vunit">vunit: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=scalaz.Free.FreeC[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">deploy</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="vunit">vunit: <a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Canopus$@deploy(id:nelson.ID,hash:String,vunit:scalaz.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Canopus$@deploy(id:nelson.ID,hash:String,vunit:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -216,7 +216,7 @@ Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">destroy</span><span class="params">(<span name="d">d: <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=scalaz.Free.FreeC[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">destroy</span><span class="params">(<span name="d">d: <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Canopus$@destroy(d:nelson.Datacenter.Deployment,dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):nelson.Workflow.WorkflowF[Unit]" title="Permalink" target="_top">

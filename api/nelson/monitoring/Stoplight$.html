@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/monitoring/Stoplight.scala" target="_blank">Stoplight.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/monitoring/Stoplight.scala" target="_blank">Stoplight.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -197,35 +197,35 @@
     </span>
       
     </li><li name="nelson.monitoring.Stoplight#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[A](gauge:io.prometheus.client.Gauge)(p:scalaz.stream.Process[scalaz.concurrent.Task,A]):scalaz.stream.Process[scalaz.concurrent.Task,A]"></a>
-      <a id="apply[A](Gauge)(Process[Task,A]):Process[Task,A]"></a>
+      <a id="apply[A](gauge:io.prometheus.client.Gauge)(p:fs2.Stream[cats.effect.IO,A]):fs2.Stream[cats.effect.IO,A]"></a>
+      <a id="apply[A](Gauge)(Stream[IO,A]):Stream[IO,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="gauge">gauge: <span class="extype" name="io.prometheus.client.Gauge">Gauge</span></span>)</span><span class="params">(<span name="p">p: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.monitoring.Stoplight.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.monitoring.Stoplight.apply.A">A</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="gauge">gauge: <span class="extype" name="io.prometheus.client.Gauge">Gauge</span></span>)</span><span class="params">(<span name="p">p: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.monitoring.Stoplight.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.monitoring.Stoplight.apply.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.Stoplight$@apply[A](gauge:io.prometheus.client.Gauge)(p:scalaz.stream.Process[scalaz.concurrent.Task,A]):scalaz.stream.Process[scalaz.concurrent.Task,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.Stoplight$@apply[A](gauge:io.prometheus.client.Gauge)(p:fs2.Stream[cats.effect.IO,A]):fs2.Stream[cats.effect.IO,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.monitoring.Stoplight#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[A](name:String)(p:scalaz.stream.Process[scalaz.concurrent.Task,A]):scalaz.stream.Process[scalaz.concurrent.Task,A]"></a>
-      <a id="apply[A](String)(Process[Task,A]):Process[Task,A]"></a>
+      <a id="apply[A](name:String)(p:fs2.Stream[cats.effect.IO,A]):fs2.Stream[cats.effect.IO,A]"></a>
+      <a id="apply[A](String)(Stream[IO,A]):Stream[IO,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="p">p: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.monitoring.Stoplight.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.monitoring.Stoplight.apply.A">A</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="p">p: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.monitoring.Stoplight.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.monitoring.Stoplight.apply.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.Stoplight$@apply[A](name:String)(p:scalaz.stream.Process[scalaz.concurrent.Task,A]):scalaz.stream.Process[scalaz.concurrent.Task,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.Stoplight$@apply[A](name:String)(p:fs2.Stream[cats.effect.IO,A]):fs2.Stream[cats.effect.IO,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

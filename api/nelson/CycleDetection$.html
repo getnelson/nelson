@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/CycleDetection.scala" target="_blank">CycleDetection.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/CycleDetection.scala" target="_blank">CycleDetection.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -108,7 +108,7 @@
     </span>
       
     </li><li name="nelson.CycleDetection.Valid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]"></a>
+      <a id="Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]"></a>
       <a id="Valid[A]:Valid[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -116,10 +116,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Valid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Validation">Validation</span>[<span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <span class="extype" name="nelson.CycleDetection.Valid.A">A</span>]</span>
+        <span class="name">Valid</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.Validated">Validated</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <span class="extype" name="nelson.CycleDetection.Valid.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.CycleDetection$@Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CycleDetection$@Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -231,7 +231,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collectViolations</span><span class="params">(<span name="u">u: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="reachables">reachables: <span class="extype" name="scala.List">List</span>[<a href="Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a>]</span>, <span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.CycleDetection.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">collectViolations</span><span class="params">(<span name="u">u: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="reachables">reachables: <span class="extype" name="scala.List">List</span>[<a href="Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a>]</span>, <span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.CycleDetection.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.CycleDetection$@collectViolations(u:nelson.Manifest.UnitDef,reachables:List[nelson.Datacenter.DCUnit],namespace:nelson.Datacenter.Namespace):nelson.CycleDetection.Valid[Unit]" title="Permalink" target="_top">
@@ -265,7 +265,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">detect</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>, <span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.CycleDetection.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+        <span class="name">detect</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>, <span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.CycleDetection.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.CycleDetection$@detect(m:nelson.Manifest,cfg:nelson.NelsonConfig):nelson.storage.StoreOpF[nelson.CycleDetection.Valid[Unit]]" title="Permalink" target="_top">
@@ -373,7 +373,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getNamespaceGraphs</span><span class="params">(<span name="ns">ns: <span class="extype" name="scala.List">List</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>]</span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="#ReverseRoutingGraph=nelson.routing.RoutingGraph" class="extmbr" name="nelson.CycleDetection.ReverseRoutingGraph">ReverseRoutingGraph</a>)]]</span>
+        <span class="name">getNamespaceGraphs</span><span class="params">(<span name="ns">ns: <span class="extype" name="scala.List">List</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>]</span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.List">List</span>[(<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="#ReverseRoutingGraph=nelson.routing.RoutingGraph" class="extmbr" name="nelson.CycleDetection.ReverseRoutingGraph">ReverseRoutingGraph</a>)]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.CycleDetection$@getNamespaceGraphs(ns:List[nelson.Datacenter.Namespace]):nelson.storage.StoreOpF[List[(nelson.Datacenter.Namespace,nelson.CycleDetection.ReverseRoutingGraph)]]" title="Permalink" target="_top">
@@ -390,7 +390,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getNamespaces</span><span class="params">(<span name="datacenters">datacenters: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="namespaces">namespaces: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a>]</span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.List">List</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>]]</span>
+        <span class="name">getNamespaces</span><span class="params">(<span name="datacenters">datacenters: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="namespaces">namespaces: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a>]</span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.List">List</span>[<a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.CycleDetection$@getNamespaces(datacenters:List[nelson.Datacenter],namespaces:List[nelson.Manifest.Namespace]):nelson.storage.StoreOpF[List[nelson.Datacenter.Namespace]]" title="Permalink" target="_top">
@@ -535,18 +535,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.CycleDetection#validateNoCycles" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateNoCycles(m:nelson.Manifest,cfg:nelson.NelsonConfig):scalaz.DisjunctionT[scalaz.concurrent.Task,scalaz.NonEmptyList[nelson.NelsonError],Unit]"></a>
-      <a id="validateNoCycles(Manifest,NelsonConfig):DisjunctionT[Task,NonEmptyList[NelsonError],Unit]"></a>
+      <a id="validateNoCycles(m:nelson.Manifest,cfg:nelson.NelsonConfig):cats.data.EitherT[cats.effect.IO,cats.data.NonEmptyList[nelson.NelsonError],Unit]"></a>
+      <a id="validateNoCycles(Manifest,NelsonConfig):EitherT[IO,NonEmptyList[NelsonError],Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateNoCycles</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>, <span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.DisjunctionT">DisjunctionT</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">validateNoCycles</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>, <span name="cfg">cfg: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="cats.data.EitherT">EitherT</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.CycleDetection$@validateNoCycles(m:nelson.Manifest,cfg:nelson.NelsonConfig):scalaz.DisjunctionT[scalaz.concurrent.Task,scalaz.NonEmptyList[nelson.NelsonError],Unit]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CycleDetection$@validateNoCycles(m:nelson.Manifest,cfg:nelson.NelsonConfig):cats.data.EitherT[cats.effect.IO,cats.data.NonEmptyList[nelson.NelsonError],Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -560,7 +560,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateUnitDeps</span><span class="params">(<span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="reachabilityGraph">reachabilityGraph: <a href="#ReverseRoutingGraph=nelson.routing.RoutingGraph" class="extmbr" name="nelson.CycleDetection.ReverseRoutingGraph">ReverseRoutingGraph</a></span>)</span><span class="params">(<span name="u">u: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.CycleDetection.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+        <span class="name">validateUnitDeps</span><span class="params">(<span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="reachabilityGraph">reachabilityGraph: <a href="#ReverseRoutingGraph=nelson.routing.RoutingGraph" class="extmbr" name="nelson.CycleDetection.ReverseRoutingGraph">ReverseRoutingGraph</a></span>)</span><span class="params">(<span name="u">u: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.CycleDetection.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.CycleDetection$@validateUnitDeps(namespace:nelson.Datacenter.Namespace,reachabilityGraph:nelson.CycleDetection.ReverseRoutingGraph)(u:nelson.Manifest.UnitDef):nelson.storage.StoreOpF[nelson.CycleDetection.Valid[Unit]]" title="Permalink" target="_top">
@@ -577,7 +577,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateUnitsInNamespace</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>, <span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="reachabilityGraph">reachabilityGraph: <a href="#ReverseRoutingGraph=nelson.routing.RoutingGraph" class="extmbr" name="nelson.CycleDetection.ReverseRoutingGraph">ReverseRoutingGraph</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="#Valid[A]=scalaz.ValidationNel[nelson.NelsonError,A]" class="extmbr" name="nelson.CycleDetection.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+        <span class="name">validateUnitsInNamespace</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>, <span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="reachabilityGraph">reachabilityGraph: <a href="#ReverseRoutingGraph=nelson.routing.RoutingGraph" class="extmbr" name="nelson.CycleDetection.ReverseRoutingGraph">ReverseRoutingGraph</a></span>)</span><span class="result">: <a href="storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="#Valid[A]=cats.data.ValidatedNel[nelson.NelsonError,A]" class="extmbr" name="nelson.CycleDetection.Valid">Valid</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.CycleDetection$@validateUnitsInNamespace(m:nelson.Manifest,namespace:nelson.Datacenter.Namespace,reachabilityGraph:nelson.CycleDetection.ReverseRoutingGraph):nelson.storage.StoreOpF[nelson.CycleDetection.Valid[Unit]]" title="Permalink" target="_top">

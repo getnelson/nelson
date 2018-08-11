@@ -53,7 +53,7 @@
 are output from the build process, and uploaded with the github
 release such that we know exactly what deployable we're dealing
 with for a given unit.</p><p>One release may have multiple units.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/yaml/DeployableParser.scala" target="_blank">DeployableParser.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/yaml/DeployableParser.scala" target="_blank">DeployableParser.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="../YamlParser.html" class="extype" name="nelson.YamlParser">YamlParser</a>[<a href="../Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -349,35 +349,35 @@ with for a given unit.</p><p>One release may have multiple units.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.yaml.DeployableParser#parse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parse(input:String):scalaz.\/[scalaz.NonEmptyList[nelson.NelsonError],nelson.Manifest.Deployable]"></a>
-      <a id="parse(String):\/[NonEmptyList[NelsonError],Deployable]"></a>
+      <a id="parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],nelson.Manifest.Deployable]"></a>
+      <a id="parse(String):Either[NonEmptyList[NelsonError],Deployable]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parse</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="../NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <a href="../Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a>]</span>
+        <span class="name">parse</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <a href="../Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.DeployableParser$@parse(input:String):scalaz.\/[scalaz.NonEmptyList[nelson.NelsonError],nelson.Manifest.Deployable]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.yaml.DeployableParser$@parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],nelson.Manifest.Deployable]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.yaml.DeployableParser">DeployableParser</a> → <a href="../YamlParser.html" class="extype" name="nelson.YamlParser">YamlParser</a></dd></dl></div>
-    </li><li name="nelson.YamlParser#parseTask" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parseTask(input:String):scalaz.concurrent.Task[A]"></a>
-      <a id="parseTask(String):Task[Deployable]"></a>
+    </li><li name="nelson.YamlParser#parseIO" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parseIO(input:String):cats.effect.IO[A]"></a>
+      <a id="parseIO(String):IO[Deployable]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseTask</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="../Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a>]</span>
+        <span class="name">parseIO</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="../Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.DeployableParser$@parseTask(input:String):scalaz.concurrent.Task[A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.yaml.DeployableParser$@parseIO(input:String):cats.effect.IO[A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

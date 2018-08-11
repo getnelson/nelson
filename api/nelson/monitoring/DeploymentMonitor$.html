@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/monitoring/DeploymentMonitor.scala" target="_blank">DeploymentMonitor.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/monitoring/DeploymentMonitor.scala" target="_blank">DeploymentMonitor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -240,52 +240,52 @@
               
         </dd></dl></div>
     </li><li name="nelson.monitoring.DeploymentMonitor#count" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="count(item:nelson.monitoring.DeploymentMonitor.MonitorActionItem):scalaz.concurrent.Task[Unit]"></a>
-      <a id="count(MonitorActionItem):Task[Unit]"></a>
+      <a id="count(item:nelson.monitoring.DeploymentMonitor.MonitorActionItem):cats.effect.IO[Unit]"></a>
+      <a id="count(MonitorActionItem):IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">count</span><span class="params">(<span name="item">item: <a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">count</span><span class="params">(<span name="item">item: <a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@count(item:nelson.monitoring.DeploymentMonitor.MonitorActionItem):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@count(item:nelson.monitoring.DeploymentMonitor.MonitorActionItem):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.monitoring.DeploymentMonitor#counterSink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="counterSink:scalaz.stream.Sink[scalaz.concurrent.Task,nelson.monitoring.DeploymentMonitor.MonitorActionItem]"></a>
-      <a id="counterSink:Sink[Task,MonitorActionItem]"></a>
+      <a id="counterSink:fs2.Sink[cats.effect.IO,nelson.monitoring.DeploymentMonitor.MonitorActionItem]"></a>
+      <a id="counterSink:Sink[IO,MonitorActionItem]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">counterSink</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]</span>
+        <span class="name">counterSink</span><span class="result">: <span class="extype" name="fs2.Sink">Sink</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@counterSink:scalaz.stream.Sink[scalaz.concurrent.Task,nelson.monitoring.DeploymentMonitor.MonitorActionItem]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@counterSink:fs2.Sink[cats.effect.IO,nelson.monitoring.DeploymentMonitor.MonitorActionItem]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.monitoring.DeploymentMonitor#drain" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="drain[A](cfg:nelson.NelsonConfig)(h:scalaz.stream.Process[scalaz.concurrent.Task,scala.concurrent.duration.Duration],w:nelson.Nelson.NelsonFK[scalaz.stream.Process,Seq[A]],s:scalaz.stream.Sink[scalaz.concurrent.Task,A],k:nelson.Nelson.NelsonFK[scalaz.stream.Sink,A]):scalaz.stream.Process[scalaz.concurrent.Task,Unit]"></a>
-      <a id="drain[A](NelsonConfig)(Process[Task,Duration],NelsonFK[Process,Seq[A]],Sink[Task,A],NelsonFK[Sink,A]):Process[Task,Unit]"></a>
+      <a id="drain[A](cfg:nelson.NelsonConfig)(h:fs2.Stream[cats.effect.IO,scala.concurrent.duration.Duration],w:nelson.Nelson.NelsonFK[fs2.Stream,Seq[A]],s:fs2.Sink[cats.effect.IO,A],k:nelson.Nelson.NelsonFK[fs2.Sink,A]):fs2.Stream[cats.effect.IO,Unit]"></a>
+      <a id="drain[A](NelsonConfig)(Stream[IO,Duration],NelsonFK[Stream,Seq[A]],Sink[IO,A],NelsonFK[Sink,A]):Stream[IO,Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">drain</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="params">(<span name="h">h: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>]</span>, <span name="w">w: <a href="../Nelson$.html#NelsonFK[F[_[_],_],U]=scalaz.Kleisli[[β$0$]F[scalaz.concurrent.Task,β$0$],nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonFK">NelsonFK</a>[<span class="extype" name="scalaz.stream.Process">Process</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="nelson.monitoring.DeploymentMonitor.drain.A">A</span>]]</span>, <span name="s">s: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.monitoring.DeploymentMonitor.drain.A">A</span>]</span>, <span name="k">k: <a href="../Nelson$.html#NelsonFK[F[_[_],_],U]=scalaz.Kleisli[[β$0$]F[scalaz.concurrent.Task,β$0$],nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonFK">NelsonFK</a>[<span class="extype" name="scalaz.stream.Sink">Sink</span>, <span class="extype" name="nelson.monitoring.DeploymentMonitor.drain.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">drain</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="params">(<span name="h">h: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>]</span>, <span name="w">w: <a href="../Nelson$.html#NelsonFK[F[_[_],_],U]=cats.data.Kleisli[[β$0$]F[cats.effect.IO,β$0$],nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonFK">NelsonFK</a>[<span class="extype" name="fs2.Stream">Stream</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="nelson.monitoring.DeploymentMonitor.drain.A">A</span>]]</span>, <span name="s">s: <span class="extype" name="fs2.Sink">Sink</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.monitoring.DeploymentMonitor.drain.A">A</span>]</span>, <span name="k">k: <a href="../Nelson$.html#NelsonFK[F[_[_],_],U]=cats.data.Kleisli[[β$0$]F[cats.effect.IO,β$0$],nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonFK">NelsonFK</a>[<span class="extype" name="fs2.Sink">Sink</span>, <span class="extype" name="nelson.monitoring.DeploymentMonitor.drain.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@drain[A](cfg:nelson.NelsonConfig)(h:scalaz.stream.Process[scalaz.concurrent.Task,scala.concurrent.duration.Duration],w:nelson.Nelson.NelsonFK[scalaz.stream.Process,Seq[A]],s:scalaz.stream.Sink[scalaz.concurrent.Task,A],k:nelson.Nelson.NelsonFK[scalaz.stream.Sink,A]):scalaz.stream.Process[scalaz.concurrent.Task,Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@drain[A](cfg:nelson.NelsonConfig)(h:fs2.Stream[cats.effect.IO,scala.concurrent.duration.Duration],w:nelson.Nelson.NelsonFK[fs2.Stream,Seq[A]],s:fs2.Sink[cats.effect.IO,A],k:nelson.Nelson.NelsonFK[fs2.Sink,A]):fs2.Stream[cats.effect.IO,Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -373,7 +373,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getHealth</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <a href="../health/HealthCheckOp$.html#HealthCheckF[A]=scalaz.Free.FreeC[nelson.health.HealthCheckOp,A]" class="extmbr" name="nelson.health.HealthCheckOp.HealthCheckF">HealthCheckF</a>[<span class="extype" name="scala.List">List</span>[<a href="../health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]]</span>
+        <span class="name">getHealth</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <a href="../health/HealthCheckOp$.html#HealthCheckF[A]=cats.free.Free[nelson.health.HealthCheckOp,A]" class="extmbr" name="nelson.health.HealthCheckOp.HealthCheckF">HealthCheckF</a>[<span class="extype" name="scala.List">List</span>[<a href="../health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@getHealth(dc:nelson.Datacenter,ns:nelson.NamespaceName,sn:nelson.Datacenter.StackName):nelson.health.HealthCheckOp.HealthCheckF[List[nelson.health.HealthStatus]]" title="Permalink" target="_top">
@@ -399,18 +399,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.monitoring.DeploymentMonitor#heartbeat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="heartbeat(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,scala.concurrent.duration.Duration]"></a>
-      <a id="heartbeat(NelsonConfig):Process[Task,Duration]"></a>
+      <a id="heartbeat(cfg:nelson.NelsonConfig):fs2.Stream[cats.effect.IO,scala.concurrent.duration.Duration]"></a>
+      <a id="heartbeat(NelsonConfig):Stream[IO,Duration]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">heartbeat</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>]</span>
+        <span class="name">heartbeat</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@heartbeat(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,scala.concurrent.duration.Duration]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@heartbeat(cfg:nelson.NelsonConfig):fs2.Stream[cats.effect.IO,scala.concurrent.duration.Duration]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -450,18 +450,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="nelson.monitoring.DeploymentMonitor#loop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="loop(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,Unit]"></a>
-      <a id="loop(NelsonConfig):Process[Task,Unit]"></a>
+      <a id="loop(cfg:nelson.NelsonConfig):fs2.Stream[cats.effect.IO,Unit]"></a>
+      <a id="loop(NelsonConfig):Stream[IO,Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">loop</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">loop</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@loop(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@loop(cfg:nelson.NelsonConfig):fs2.Stream[cats.effect.IO,Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -484,69 +484,69 @@
     </span>
       
     </li><li name="nelson.monitoring.DeploymentMonitor#monitorActionItem" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="monitorActionItem(dc:nelson.Datacenter,d:nelson.Datacenter.Deployment):scalaz.concurrent.Task[nelson.monitoring.DeploymentMonitor.MonitorActionItem]"></a>
-      <a id="monitorActionItem(Datacenter,Deployment):Task[MonitorActionItem]"></a>
+      <a id="monitorActionItem(dc:nelson.Datacenter,d:nelson.Datacenter.Deployment):cats.effect.IO[nelson.monitoring.DeploymentMonitor.MonitorActionItem]"></a>
+      <a id="monitorActionItem(Datacenter,Deployment):IO[MonitorActionItem]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">monitorActionItem</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]</span>
+        <span class="name">monitorActionItem</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@monitorActionItem(dc:nelson.Datacenter,d:nelson.Datacenter.Deployment):scalaz.concurrent.Task[nelson.monitoring.DeploymentMonitor.MonitorActionItem]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@monitorActionItem(dc:nelson.Datacenter,d:nelson.Datacenter.Deployment):cats.effect.IO[nelson.monitoring.DeploymentMonitor.MonitorActionItem]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.monitoring.DeploymentMonitor#monitorActionItems" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="monitorActionItems(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]"></a>
-      <a id="monitorActionItems(NelsonConfig):Task[List[MonitorActionItem]]"></a>
+      <a id="monitorActionItems(cfg:nelson.NelsonConfig):cats.effect.IO[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]"></a>
+      <a id="monitorActionItems(NelsonConfig):IO[List[MonitorActionItem]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">monitorActionItems</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.List">List</span>[<a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]]</span>
+        <span class="name">monitorActionItems</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.List">List</span>[<a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@monitorActionItems(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@monitorActionItems(cfg:nelson.NelsonConfig):cats.effect.IO[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.monitoring.DeploymentMonitor#monitorActionItemsByDatacenter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="monitorActionItemsByDatacenter(dc:nelson.Datacenter):scalaz.concurrent.Task[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]"></a>
-      <a id="monitorActionItemsByDatacenter(Datacenter):Task[List[MonitorActionItem]]"></a>
+      <a id="monitorActionItemsByDatacenter(dc:nelson.Datacenter):cats.effect.IO[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]"></a>
+      <a id="monitorActionItemsByDatacenter(Datacenter):IO[List[MonitorActionItem]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">monitorActionItemsByDatacenter</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.List">List</span>[<a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]]</span>
+        <span class="name">monitorActionItemsByDatacenter</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.List">List</span>[<a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@monitorActionItemsByDatacenter(dc:nelson.Datacenter):scalaz.concurrent.Task[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@monitorActionItemsByDatacenter(dc:nelson.Datacenter):cats.effect.IO[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.monitoring.DeploymentMonitor#monitorActionItemsByNamespace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="monitorActionItemsByNamespace(dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):scalaz.concurrent.Task[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]"></a>
-      <a id="monitorActionItemsByNamespace(Datacenter,Namespace):Task[List[MonitorActionItem]]"></a>
+      <a id="monitorActionItemsByNamespace(dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):cats.effect.IO[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]"></a>
+      <a id="monitorActionItemsByNamespace(Datacenter,Namespace):IO[List[MonitorActionItem]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">monitorActionItemsByNamespace</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.List">List</span>[<a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]]</span>
+        <span class="name">monitorActionItemsByNamespace</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.List">List</span>[<a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@monitorActionItemsByNamespace(dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):scalaz.concurrent.Task[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@monitorActionItemsByNamespace(dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):cats.effect.IO[List[nelson.monitoring.DeploymentMonitor.MonitorActionItem]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -577,7 +577,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">next</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]</span>
+        <span class="name">next</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@next(d:nelson.Datacenter.Deployment):nelson.storage.StoreOpF[Option[nelson.Datacenter.Deployment]]" title="Permalink" target="_top">
@@ -620,18 +620,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.monitoring.DeploymentMonitor#promote" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="promote(item:nelson.monitoring.DeploymentMonitor.MonitorActionItem)(auditor:nelson.audit.Auditor):scalaz.concurrent.Task[Unit]"></a>
-      <a id="promote(MonitorActionItem)(Auditor):Task[Unit]"></a>
+      <a id="promote(item:nelson.monitoring.DeploymentMonitor.MonitorActionItem)(auditor:nelson.audit.Auditor):cats.effect.IO[Unit]"></a>
+      <a id="promote(MonitorActionItem)(Auditor):IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">promote</span><span class="params">(<span name="item">item: <a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a></span>)</span><span class="params">(<span name="auditor">auditor: <a href="../audit/Auditor.html" class="extype" name="nelson.audit.Auditor">Auditor</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">promote</span><span class="params">(<span name="item">item: <a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a></span>)</span><span class="params">(<span name="auditor">auditor: <a href="../audit/Auditor.html" class="extype" name="nelson.audit.Auditor">Auditor</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@promote(item:nelson.monitoring.DeploymentMonitor.MonitorActionItem)(auditor:nelson.audit.Auditor):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@promote(item:nelson.monitoring.DeploymentMonitor.MonitorActionItem)(auditor:nelson.audit.Auditor):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -645,7 +645,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">promoteToReady</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">promoteToReady</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@promoteToReady(d:nelson.Datacenter.Deployment):nelson.storage.StoreOpF[Unit]" title="Permalink" target="_top">
@@ -654,18 +654,18 @@
     </span>
       
     </li><li name="nelson.monitoring.DeploymentMonitor#promotionSink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="promotionSink(cfg:nelson.NelsonConfig):scalaz.stream.Sink[scalaz.concurrent.Task,nelson.monitoring.DeploymentMonitor.MonitorActionItem]"></a>
-      <a id="promotionSink(NelsonConfig):Sink[Task,MonitorActionItem]"></a>
+      <a id="promotionSink(cfg:nelson.NelsonConfig):fs2.Sink[cats.effect.IO,nelson.monitoring.DeploymentMonitor.MonitorActionItem]"></a>
+      <a id="promotionSink(NelsonConfig):Sink[IO,MonitorActionItem]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">promotionSink</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]</span>
+        <span class="name">promotionSink</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="fs2.Sink">Sink</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="DeploymentMonitor$$MonitorActionItem.html" class="extype" name="nelson.monitoring.DeploymentMonitor.MonitorActionItem">MonitorActionItem</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@promotionSink(cfg:nelson.NelsonConfig):scalaz.stream.Sink[scalaz.concurrent.Task,nelson.monitoring.DeploymentMonitor.MonitorActionItem]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@promotionSink(cfg:nelson.NelsonConfig):fs2.Sink[cats.effect.IO,nelson.monitoring.DeploymentMonitor.MonitorActionItem]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -713,7 +713,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trafficShift</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../Datacenter$$TrafficShift.html" class="extype" name="nelson.Datacenter.TrafficShift">TrafficShift</a>]]</span>
+        <span class="name">trafficShift</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../Datacenter$$TrafficShift.html" class="extype" name="nelson.Datacenter.TrafficShift">TrafficShift</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.monitoring.DeploymentMonitor$@trafficShift(d:nelson.Datacenter.Deployment):nelson.storage.StoreOpF[Option[nelson.Datacenter.TrafficShift]]" title="Permalink" target="_top">

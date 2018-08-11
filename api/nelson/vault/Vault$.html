@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/vault/op.scala" target="_blank">op.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/vault/op.scala" target="_blank">op.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -278,7 +278,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Vault$$GetMounts$.html"><span class="name">GetMounts</span></a><span class="result"> extends <a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Vault$$GetMounts$.html"><span class="name">GetMounts</span></a><span class="result"> extends <a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@GetMounts" title="Permalink" target="_top">
@@ -386,7 +386,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createPolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="rules">rules: <span class="extype" name="scala.List">List</span>[<a href="Rule.html" class="extype" name="nelson.vault.Rule">Rule</a>]</span>)</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">createPolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="rules">rules: <span class="extype" name="scala.List">List</span>[<a href="Rule.html" class="extype" name="nelson.vault.Rule">Rule</a>]</span>)</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@createPolicy(name:String,rules:List[nelson.vault.Rule]):nelson.vault.VaultF[Unit]" title="Permalink" target="_top">
@@ -403,7 +403,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createToken</span><span class="params">(<span name="policies">policies: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]] = <span class="symbol">None</span></span>, <span name="renewable">renewable: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="ttl">ttl: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>] = <span class="symbol">None</span></span>, <span name="numUses">numUses: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a> = <span class="symbol">0L</span></span>)</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="Token.html" class="extype" name="nelson.vault.Token">Token</a>]</span>
+        <span class="name">createToken</span><span class="params">(<span name="policies">policies: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]] = <span class="symbol">None</span></span>, <span name="renewable">renewable: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>, <span name="ttl">ttl: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>] = <span class="symbol">None</span></span>, <span name="numUses">numUses: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a> = <span class="symbol">0L</span></span>)</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="Token.html" class="extype" name="nelson.vault.Token">Token</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@createToken(policies:Option[List[String]],renewable:Boolean,ttl:Option[scala.concurrent.duration.FiniteDuration],numUses:Long):nelson.vault.VaultF[nelson.vault.Token]" title="Permalink" target="_top">
@@ -420,7 +420,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deletePolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">deletePolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@deletePolicy(name:String):nelson.vault.VaultF[Unit]" title="Permalink" target="_top">
@@ -494,7 +494,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">get</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@get(path:String):nelson.vault.VaultF[String]" title="Permalink" target="_top">
@@ -520,18 +520,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.vault.Vault#getMounts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getMounts:nelson.vault.VaultF[scalaz.==&gt;&gt;[String,nelson.vault.Mount]]"></a>
-      <a id="getMounts:VaultF[==&gt;&gt;[String,Mount]]"></a>
+      <a id="getMounts:nelson.vault.VaultF[scala.collection.immutable.SortedMap[String,nelson.vault.Mount]]"></a>
+      <a id="getMounts:VaultF[SortedMap[String,Mount]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getMounts</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]]</span>
+        <span class="name">getMounts</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.vault.Vault$@getMounts:nelson.vault.VaultF[scalaz.==&gt;&gt;[String,nelson.vault.Mount]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.vault.Vault$@getMounts:nelson.vault.VaultF[scala.collection.immutable.SortedMap[String,nelson.vault.Mount]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -562,7 +562,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">initialize</span><span class="params">(<span name="masters">masters: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="quorum">quorum: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="InitialCreds.html" class="extype" name="nelson.vault.InitialCreds">InitialCreds</a>]</span>
+        <span class="name">initialize</span><span class="params">(<span name="masters">masters: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="quorum">quorum: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="InitialCreds.html" class="extype" name="nelson.vault.InitialCreds">InitialCreds</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@initialize(masters:Int,quorum:Int):nelson.vault.VaultF[nelson.vault.InitialCreds]" title="Permalink" target="_top">
@@ -579,7 +579,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInitialized</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+        <span class="name">isInitialized</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@isInitialized:nelson.vault.VaultF[Boolean]" title="Permalink" target="_top">
@@ -664,7 +664,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">seal</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">seal</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@seal:nelson.vault.VaultF[Unit]" title="Permalink" target="_top">
@@ -681,7 +681,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sealStatus</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="SealStatus.html" class="extype" name="nelson.vault.SealStatus">SealStatus</a>]</span>
+        <span class="name">sealStatus</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="SealStatus.html" class="extype" name="nelson.vault.SealStatus">SealStatus</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@sealStatus:nelson.vault.VaultF[nelson.vault.SealStatus]" title="Permalink" target="_top">
@@ -698,7 +698,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">set</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">set</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@set(path:String,value:String):nelson.vault.VaultF[Unit]" title="Permalink" target="_top">
@@ -749,7 +749,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unseal</span><span class="params">(<span name="key">key: <a href="package.html#MasterKey=String" class="extmbr" name="nelson.vault.MasterKey">MasterKey</a></span>)</span><span class="result">: <a href="package.html#VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="SealStatus.html" class="extype" name="nelson.vault.SealStatus">SealStatus</a>]</span>
+        <span class="name">unseal</span><span class="params">(<span name="key">key: <a href="package.html#MasterKey=String" class="extmbr" name="nelson.vault.MasterKey">MasterKey</a></span>)</span><span class="result">: <a href="package.html#VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" class="extmbr" name="nelson.vault.VaultF">VaultF</a>[<a href="SealStatus.html" class="extype" name="nelson.vault.SealStatus">SealStatus</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.vault.Vault$@unseal(key:nelson.vault.MasterKey):nelson.vault.VaultF[nelson.vault.SealStatus]" title="Permalink" target="_top">

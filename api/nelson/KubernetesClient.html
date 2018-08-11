@@ -53,7 +53,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A bare bones Kubernetes client used for impelementing a Kubernetes
 <a href="scheduler/SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">nelson.scheduler.SchedulerOp</a> and <span class="extype" name="nelson.loadbalancers.LoadBalancerOp">nelson.loadbalancers.LoadBalancerOp</span>.</p><p>This should really be a proper library.. at some point.</p><p>See: https://kubernetes.io/docs/api-reference/v1.8/
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/KubernetesClient.scala" target="_blank">KubernetesClient.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/KubernetesClient.scala" target="_blank">KubernetesClient.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -93,7 +93,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.KubernetesClient#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(endpoint:org.http4s.Uri,client:org.http4s.client.Client,serviceAccountToken:String):nelson.KubernetesClient"></a>
+      <a id="&lt;init&gt;(version:nelson.KubernetesVersion,endpoint:org.http4s.Uri,client:org.http4s.client.Client[cats.effect.IO],serviceAccountToken:String):nelson.KubernetesClient"></a>
       <a id="&lt;init&gt;:KubernetesClient"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -101,10 +101,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">KubernetesClient</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="client">client: <span class="extype" name="org.http4s.client.Client">Client</span></span>, <span name="serviceAccountToken">serviceAccountToken: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">KubernetesClient</span><span class="params">(<span name="version">version: <a href="KubernetesVersion.html" class="extype" name="nelson.KubernetesVersion">KubernetesVersion</a></span>, <span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="client">client: <span class="extype" name="org.http4s.client.Client">Client</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="serviceAccountToken">serviceAccountToken: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@&lt;init&gt;(endpoint:org.http4s.Uri,client:org.http4s.client.Client,serviceAccountToken:String):nelson.KubernetesClient" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@&lt;init&gt;(version:nelson.KubernetesVersion,endpoint:org.http4s.Uri,client:org.http4s.client.Client[cats.effect.IO],serviceAccountToken:String):nelson.KubernetesClient" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -210,171 +210,171 @@
               
         </dd></dl></div>
     </li><li name="nelson.KubernetesClient#createCronJob" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createCronJob(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan,cronExpr:String):scalaz.concurrent.Task[argonaut.Json]"></a>
-      <a id="createCronJob(String,StackName,Image,Plan,String):Task[argonaut.Json]"></a>
+      <a id="createCronJob(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan,cronExpr:String):cats.effect.IO[argonaut.Json]"></a>
+      <a id="createCronJob(String,StackName,Image,Plan,String):IO[argonaut.Json]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createCronJob</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stackName">stackName: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="image">image: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="cronExpr">cronExpr: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
+        <span class="name">createCronJob</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stackName">stackName: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="image">image: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="cronExpr">cronExpr: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@createCronJob(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan,cronExpr:String):scalaz.concurrent.Task[argonaut.Json]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@createCronJob(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan,cronExpr:String):cats.effect.IO[argonaut.Json]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#createDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createDeployment(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan,ports:Option[nelson.Manifest.Ports]):scalaz.concurrent.Task[argonaut.Json]"></a>
-      <a id="createDeployment(String,StackName,Image,Plan,Option[Ports]):Task[argonaut.Json]"></a>
+      <a id="createDeployment(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan,ports:Option[nelson.Manifest.Ports]):cats.effect.IO[argonaut.Json]"></a>
+      <a id="createDeployment(String,StackName,Image,Plan,Option[Ports]):IO[argonaut.Json]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createDeployment</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stackName">stackName: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="image">image: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="ports">ports: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Manifest$$Ports.html" class="extype" name="nelson.Manifest.Ports">Ports</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
+        <span class="name">createDeployment</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stackName">stackName: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="image">image: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="ports">ports: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Manifest$$Ports.html" class="extype" name="nelson.Manifest.Ports">Ports</a>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@createDeployment(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan,ports:Option[nelson.Manifest.Ports]):scalaz.concurrent.Task[argonaut.Json]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@createDeployment(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan,ports:Option[nelson.Manifest.Ports]):cats.effect.IO[argonaut.Json]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#createJob" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createJob(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan):scalaz.concurrent.Task[argonaut.Json]"></a>
-      <a id="createJob(String,StackName,Image,Plan):Task[argonaut.Json]"></a>
+      <a id="createJob(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan):cats.effect.IO[argonaut.Json]"></a>
+      <a id="createJob(String,StackName,Image,Plan):IO[argonaut.Json]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createJob</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stackName">stackName: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="image">image: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
+        <span class="name">createJob</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stackName">stackName: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="image">image: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@createJob(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan):scalaz.concurrent.Task[argonaut.Json]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@createJob(namespace:String,stackName:nelson.Datacenter.StackName,image:nelson.docker.Docker.Image,plan:nelson.Manifest.Plan):cats.effect.IO[argonaut.Json]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#createService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createService(namespace:String,stackName:nelson.Datacenter.StackName,ports:Option[nelson.Manifest.Ports]):scalaz.concurrent.Task[argonaut.Json]"></a>
-      <a id="createService(String,StackName,Option[Ports]):Task[argonaut.Json]"></a>
+      <a id="createService(namespace:String,stackName:nelson.Datacenter.StackName,ports:Option[nelson.Manifest.Ports]):cats.effect.IO[argonaut.Json]"></a>
+      <a id="createService(String,StackName,Option[Ports]):IO[argonaut.Json]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createService</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stackName">stackName: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="ports">ports: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Manifest$$Ports.html" class="extype" name="nelson.Manifest.Ports">Ports</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
+        <span class="name">createService</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stackName">stackName: <a href="Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="ports">ports: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Manifest$$Ports.html" class="extype" name="nelson.Manifest.Ports">Ports</a>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@createService(namespace:String,stackName:nelson.Datacenter.StackName,ports:Option[nelson.Manifest.Ports]):scalaz.concurrent.Task[argonaut.Json]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@createService(namespace:String,stackName:nelson.Datacenter.StackName,ports:Option[nelson.Manifest.Ports]):cats.effect.IO[argonaut.Json]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#cronJobSummary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cronJobSummary(namespace:String,name:String):scalaz.concurrent.Task[nelson.KubernetesJson.JobStatus]"></a>
-      <a id="cronJobSummary(String,String):Task[JobStatus]"></a>
+      <a id="cronJobSummary(namespace:String,name:String):cats.effect.IO[nelson.KubernetesJson.JobStatus]"></a>
+      <a id="cronJobSummary(String,String):IO[JobStatus]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">cronJobSummary</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="KubernetesJson$$JobStatus.html" class="extype" name="nelson.KubernetesJson.JobStatus">JobStatus</a>]</span>
+        <span class="name">cronJobSummary</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="KubernetesJson$$JobStatus.html" class="extype" name="nelson.KubernetesJson.JobStatus">JobStatus</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@cronJobSummary(namespace:String,name:String):scalaz.concurrent.Task[nelson.KubernetesJson.JobStatus]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@cronJobSummary(namespace:String,name:String):cats.effect.IO[nelson.KubernetesJson.JobStatus]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#deleteCronJob" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="deleteCronJob(namespace:String,name:String):scalaz.concurrent.Task[argonaut.Json]"></a>
-      <a id="deleteCronJob(String,String):Task[argonaut.Json]"></a>
+      <a id="deleteCronJob(namespace:String,name:String):cats.effect.IO[argonaut.Json]"></a>
+      <a id="deleteCronJob(String,String):IO[argonaut.Json]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteCronJob</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
+        <span class="name">deleteCronJob</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@deleteCronJob(namespace:String,name:String):scalaz.concurrent.Task[argonaut.Json]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@deleteCronJob(namespace:String,name:String):cats.effect.IO[argonaut.Json]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#deleteDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="deleteDeployment(namespace:String,name:String):scalaz.concurrent.Task[argonaut.Json]"></a>
-      <a id="deleteDeployment(String,String):Task[argonaut.Json]"></a>
+      <a id="deleteDeployment(namespace:String,name:String):cats.effect.IO[argonaut.Json]"></a>
+      <a id="deleteDeployment(String,String):IO[argonaut.Json]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteDeployment</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
+        <span class="name">deleteDeployment</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@deleteDeployment(namespace:String,name:String):scalaz.concurrent.Task[argonaut.Json]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@deleteDeployment(namespace:String,name:String):cats.effect.IO[argonaut.Json]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#deleteJob" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="deleteJob(namespace:String,name:String):scalaz.concurrent.Task[argonaut.Json]"></a>
-      <a id="deleteJob(String,String):Task[argonaut.Json]"></a>
+      <a id="deleteJob(namespace:String,name:String):cats.effect.IO[argonaut.Json]"></a>
+      <a id="deleteJob(String,String):IO[argonaut.Json]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteJob</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
+        <span class="name">deleteJob</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@deleteJob(namespace:String,name:String):scalaz.concurrent.Task[argonaut.Json]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@deleteJob(namespace:String,name:String):cats.effect.IO[argonaut.Json]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#deleteService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="deleteService(namespace:String,name:String):scalaz.concurrent.Task[argonaut.Json]"></a>
-      <a id="deleteService(String,String):Task[argonaut.Json]"></a>
+      <a id="deleteService(namespace:String,name:String):cats.effect.IO[argonaut.Json]"></a>
+      <a id="deleteService(String,String):IO[argonaut.Json]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteService</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
+        <span class="name">deleteService</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="argonaut.Json">argonaut.Json</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@deleteService(namespace:String,name:String):scalaz.concurrent.Task[argonaut.Json]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@deleteService(namespace:String,name:String):cats.effect.IO[argonaut.Json]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#deploymentSummary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="deploymentSummary(namespace:String,name:String):scalaz.concurrent.Task[nelson.KubernetesJson.DeploymentStatus]"></a>
-      <a id="deploymentSummary(String,String):Task[KubernetesJson.DeploymentStatus]"></a>
+      <a id="deploymentSummary(namespace:String,name:String):cats.effect.IO[nelson.KubernetesJson.DeploymentStatus]"></a>
+      <a id="deploymentSummary(String,String):IO[KubernetesJson.DeploymentStatus]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deploymentSummary</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="KubernetesJson$$DeploymentStatus.html" class="extype" name="nelson.KubernetesJson.DeploymentStatus">KubernetesJson.DeploymentStatus</a>]</span>
+        <span class="name">deploymentSummary</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="KubernetesJson$$DeploymentStatus.html" class="extype" name="nelson.KubernetesJson.DeploymentStatus">KubernetesJson.DeploymentStatus</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@deploymentSummary(namespace:String,name:String):scalaz.concurrent.Task[nelson.KubernetesJson.DeploymentStatus]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@deploymentSummary(namespace:String,name:String):cats.effect.IO[nelson.KubernetesJson.DeploymentStatus]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -488,35 +488,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.KubernetesClient#jobSummary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="jobSummary(namespace:String,name:String):scalaz.concurrent.Task[nelson.KubernetesJson.JobStatus]"></a>
-      <a id="jobSummary(String,String):Task[JobStatus]"></a>
+      <a id="jobSummary(namespace:String,name:String):cats.effect.IO[nelson.KubernetesJson.JobStatus]"></a>
+      <a id="jobSummary(String,String):IO[JobStatus]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">jobSummary</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="KubernetesJson$$JobStatus.html" class="extype" name="nelson.KubernetesJson.JobStatus">JobStatus</a>]</span>
+        <span class="name">jobSummary</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="KubernetesJson$$JobStatus.html" class="extype" name="nelson.KubernetesJson.JobStatus">JobStatus</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@jobSummary(namespace:String,name:String):scalaz.concurrent.Task[nelson.KubernetesJson.JobStatus]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@jobSummary(namespace:String,name:String):cats.effect.IO[nelson.KubernetesJson.JobStatus]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.KubernetesClient#listPods" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listPods(namespace:String,labelSelectors:Map[String,String]):scalaz.concurrent.Task[List[nelson.health.HealthStatus]]"></a>
-      <a id="listPods(String,Map[String,String]):Task[List[HealthStatus]]"></a>
+      <a id="listPods(namespace:String,labelSelectors:Map[String,String]):cats.effect.IO[List[nelson.health.HealthStatus]]"></a>
+      <a id="listPods(String,Map[String,String]):IO[List[HealthStatus]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listPods</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="labelSelectors">labelSelectors: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.List">List</span>[<a href="health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]]</span>
+        <span class="name">listPods</span><span class="params">(<span name="namespace">namespace: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="labelSelectors">labelSelectors: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.List">List</span>[<a href="health/HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.KubernetesClient@listPods(namespace:String,labelSelectors:Map[String,String]):scalaz.concurrent.Task[List[nelson.health.HealthStatus]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.KubernetesClient@listPods(namespace:String,labelSelectors:Map[String,String]):cats.effect.IO[List[nelson.health.HealthStatus]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -45,13 +45,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">SafeHolderEncryption</span><span class="result"> extends <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>] with <a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
+        <span class="name">SafeHolderEncryption</span><span class="result"> extends <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>] with <a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/crypto/Encryption.scala" target="_blank">Encryption.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/crypto/Encryption.scala" target="_blank">Encryption.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>], <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>], <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -214,7 +214,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">decrypt</span><span class="params">(<span name="data">data: <span class="extype" name="scodec.bits.ByteVector">ByteVector</span></span>, <span name="key">key: <a href="EncryptionKey.html" class="extype" name="nelson.crypto.EncryptionKey">EncryptionKey</a></span>, <span name="iv">iv: <a href="InitializationVector.html" class="extype" name="nelson.crypto.InitializationVector">InitializationVector</a></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.ByteVector">ByteVector</span>]</span>
+        <span class="name">decrypt</span><span class="params">(<span name="data">data: <span class="extype" name="scodec.bits.ByteVector">ByteVector</span></span>, <span name="key">key: <a href="EncryptionKey.html" class="extype" name="nelson.crypto.EncryptionKey">EncryptionKey</a></span>, <span name="iv">iv: <a href="InitializationVector.html" class="extype" name="nelson.crypto.InitializationVector">InitializationVector</a></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.ByteVector">ByteVector</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.crypto.SafeHolderEncryption@decrypt(data:scodec.bits.ByteVector,key:nelson.crypto.EncryptionKey,iv:nelson.crypto.InitializationVector):nelson.crypto.AuthResult[scodec.bits.ByteVector]" title="Permalink" target="_top">
@@ -231,7 +231,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">encrypt</span><span class="params">(<span name="data">data: <span class="extype" name="scodec.bits.ByteVector">ByteVector</span></span>, <span name="key">key: <a href="EncryptionKey.html" class="extype" name="nelson.crypto.EncryptionKey">EncryptionKey</a></span>, <span name="iv">iv: <a href="InitializationVector.html" class="extype" name="nelson.crypto.InitializationVector">InitializationVector</a></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.ByteVector">ByteVector</span>]</span>
+        <span class="name">encrypt</span><span class="params">(<span name="data">data: <span class="extype" name="scodec.bits.ByteVector">ByteVector</span></span>, <span name="key">key: <a href="EncryptionKey.html" class="extype" name="nelson.crypto.EncryptionKey">EncryptionKey</a></span>, <span name="iv">iv: <a href="InitializationVector.html" class="extype" name="nelson.crypto.InitializationVector">InitializationVector</a></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.ByteVector">ByteVector</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.crypto.SafeHolderEncryption@encrypt(data:scodec.bits.ByteVector,key:nelson.crypto.EncryptionKey,iv:nelson.crypto.InitializationVector):nelson.crypto.AuthResult[scodec.bits.ByteVector]" title="Permalink" target="_top">
@@ -441,7 +441,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">useCipher</span><span class="params">(<span name="data">data: <span class="extype" name="scodec.bits.ByteVector">ByteVector</span></span>, <span name="key">key: <a href="EncryptionKey.html" class="extype" name="nelson.crypto.EncryptionKey">EncryptionKey</a></span>, <span name="iv">iv: <a href="InitializationVector.html" class="extype" name="nelson.crypto.InitializationVector">InitializationVector</a></span>, <span name="mode">mode: <a href="CipherMode.html" class="extype" name="nelson.crypto.CipherMode">CipherMode</a></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.ByteVector">ByteVector</span>]</span>
+        <span class="name">useCipher</span><span class="params">(<span name="data">data: <span class="extype" name="scodec.bits.ByteVector">ByteVector</span></span>, <span name="key">key: <a href="EncryptionKey.html" class="extype" name="nelson.crypto.EncryptionKey">EncryptionKey</a></span>, <span name="iv">iv: <a href="InitializationVector.html" class="extype" name="nelson.crypto.InitializationVector">InitializationVector</a></span>, <span name="mode">mode: <a href="CipherMode.html" class="extype" name="nelson.crypto.CipherMode">CipherMode</a></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.ByteVector">ByteVector</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.crypto.SafeHolderEncryption@useCipher(data:scodec.bits.ByteVector,key:nelson.crypto.EncryptionKey,iv:nelson.crypto.InitializationVector,mode:nelson.crypto.CipherMode):nelson.crypto.AuthResult[scodec.bits.ByteVector]" title="Permalink" target="_top">
@@ -528,9 +528,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="nelson.crypto.Decryptor">
-              <h3>Inherited from <a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</h3>
+              <h3>Inherited from <a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</h3>
             </div><div class="parent" name="nelson.crypto.Encryptor">
-              <h3>Inherited from <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</h3>
+              <h3>Inherited from <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

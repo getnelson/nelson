@@ -45,11 +45,11 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Kubernetes</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Kubernetes</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="version">version: <a href="KubernetesVersion.html" class="extype" name="nelson.KubernetesVersion">KubernetesVersion</a></span>, <span name="caCertPath">caCertPath: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Datacenter.scala" target="_blank">Datacenter.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Datacenter.scala" target="_blank">Datacenter.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Infrastructure.Kubernetes#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration):nelson.Infrastructure.Kubernetes"></a>
+      <a id="&lt;init&gt;(endpoint:org.http4s.Uri,version:nelson.KubernetesVersion,caCertPath:java.nio.file.Path,token:String,timeout:scala.concurrent.duration.Duration):nelson.Infrastructure.Kubernetes"></a>
       <a id="&lt;init&gt;:Kubernetes"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Kubernetes</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>)</span>
+        <span class="name">Kubernetes</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="version">version: <a href="KubernetesVersion.html" class="extype" name="nelson.KubernetesVersion">KubernetesVersion</a></span>, <span name="caCertPath">caCertPath: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Kubernetes@&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration):nelson.Infrastructure.Kubernetes" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Infrastructure$$Kubernetes@&lt;init&gt;(endpoint:org.http4s.Uri,version:nelson.KubernetesVersion,caCertPath:java.nio.file.Path,token:String,timeout:scala.concurrent.duration.Duration):nelson.Infrastructure.Kubernetes" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -182,6 +182,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.Infrastructure.Kubernetes#caCertPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="caCertPath:java.nio.file.Path"></a>
+      <a id="caCertPath:Path"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">caCertPath</span><span class="result">: <span class="extype" name="java.nio.file.Path">Path</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Infrastructure$$Kubernetes@caCertPath:java.nio.file.Path" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -377,6 +394,40 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Infrastructure$$Kubernetes@timeout:scala.concurrent.duration.Duration" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Infrastructure.Kubernetes#token" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="token:String"></a>
+      <a id="token:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">token</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Infrastructure$$Kubernetes@token:String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Infrastructure.Kubernetes#version" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="version:nelson.KubernetesVersion"></a>
+      <a id="version:KubernetesVersion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">version</span><span class="result">: <a href="KubernetesVersion.html" class="extype" name="nelson.KubernetesVersion">KubernetesVersion</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Infrastructure$$Kubernetes@version:nelson.KubernetesVersion" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

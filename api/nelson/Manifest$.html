@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Manifest.scala" target="_blank">Manifest.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Manifest.scala" target="_blank">Manifest.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -101,7 +101,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Manifest$$Action.html"><span class="name">Action</span></a><span class="params">(<span name="config">config: <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a></span>, <span name="run">run: <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Manifest$$Action.html"><span class="name">Action</span></a><span class="params">(<span name="config">config: <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a></span>, <span name="run">run: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Manifest$@ActionextendsProductwithSerializable" title="Permalink" target="_top">
@@ -237,7 +237,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Manifest$$Environment.html"><span class="name">Environment</span></a><span class="params">(<span name="cpu">cpu: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>] = <span class="symbol">None</span></span>, <span name="memory">memory: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>] = <span class="symbol">None</span></span>, <span name="desiredInstances">desiredInstances: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">None</span></span>, <span name="retries">retries: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">None</span></span>, <span name="constraints">constraints: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Constraint.html" class="extype" name="nelson.Manifest.Constraint">Constraint</a>] = <span class="symbol">Nil</span></span>, <span name="alertOptOuts">alertOptOuts: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$AlertOptOut.html" class="extype" name="nelson.Manifest.AlertOptOut">AlertOptOut</a>] = <span class="symbol">Nil</span></span>, <span name="bindings">bindings: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$EnvironmentVariable.html" class="extype" name="nelson.Manifest.EnvironmentVariable">EnvironmentVariable</a>] = <span class="symbol">Nil</span></span>, <span name="healthChecks">healthChecks: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$HealthCheck.html" class="extype" name="nelson.Manifest.HealthCheck">HealthCheck</a>] = <span class="symbol">Nil</span></span>, <span name="resources">resources: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="java.net.URI">URI</span>] = <span class="symbol">Map.empty</span></span>, <span name="schedule">schedule: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Schedule.html" class="extype" name="nelson.Schedule">Schedule</a>] = <span class="symbol">None</span></span>, <span name="policy">policy: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="cleanup/ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a>] = <span class="symbol">None</span></span>, <span name="trafficShift">trafficShift: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Manifest$$TrafficShift.html" class="extype" name="nelson.Manifest.TrafficShift">TrafficShift</a>] = <span class="symbol">None</span></span>, <span name="ephemeralDisk">ephemeralDisk: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Manifest$$Environment.html"><span class="name">Environment</span></a><span class="params">(<span name="cpu">cpu: <a href="Manifest$$ResourceSpec.html" class="extype" name="nelson.Manifest.ResourceSpec">ResourceSpec</a> = <span class="symbol"><span class="name"><a href="Manifest$$ResourceSpec$.html">ResourceSpec.unspecified</a></span></span></span>, <span name="memory">memory: <a href="Manifest$$ResourceSpec.html" class="extype" name="nelson.Manifest.ResourceSpec">ResourceSpec</a> = <span class="symbol"><span class="name"><a href="Manifest$$ResourceSpec$.html">ResourceSpec.unspecified</a></span></span></span>, <span name="desiredInstances">desiredInstances: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">None</span></span>, <span name="retries">retries: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">None</span></span>, <span name="constraints">constraints: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Constraint.html" class="extype" name="nelson.Manifest.Constraint">Constraint</a>] = <span class="symbol">Nil</span></span>, <span name="alertOptOuts">alertOptOuts: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$AlertOptOut.html" class="extype" name="nelson.Manifest.AlertOptOut">AlertOptOut</a>] = <span class="symbol">Nil</span></span>, <span name="bindings">bindings: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$EnvironmentVariable.html" class="extype" name="nelson.Manifest.EnvironmentVariable">EnvironmentVariable</a>] = <span class="symbol">Nil</span></span>, <span name="healthChecks">healthChecks: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$HealthCheck.html" class="extype" name="nelson.Manifest.HealthCheck">HealthCheck</a>] = <span class="symbol">Nil</span></span>, <span name="resources">resources: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="java.net.URI">URI</span>] = <span class="symbol">Map.empty</span></span>, <span name="schedule">schedule: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Schedule.html" class="extype" name="nelson.Schedule">Schedule</a>] = <span class="symbol">None</span></span>, <span name="policy">policy: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="cleanup/ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a>] = <span class="symbol">None</span></span>, <span name="trafficShift">trafficShift: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Manifest$$TrafficShift.html" class="extype" name="nelson.Manifest.TrafficShift">TrafficShift</a>] = <span class="symbol">None</span></span>, <span name="ephemeralDisk">ephemeralDisk: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Manifest$@EnvironmentextendsProductwithSerializable" title="Permalink" target="_top">
@@ -428,6 +428,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Manifest$@ResourceextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Manifest.ResourceSpec" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ResourceSpecextendsProductwithSerializable"></a>
+      <a id="ResourceSpec:ResourceSpec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Manifest$$ResourceSpec.html"><span class="name">ResourceSpec</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Manifest$@ResourceSpecextendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -700,8 +717,25 @@ declares that the port exposed by <code>foo</code> unit with the reference
       </a>
     </span>
       
+    </li><li name="nelson.Manifest.ResourceSpec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ResourceSpec"></a>
+      <a id="ResourceSpec:ResourceSpec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Manifest$$ResourceSpec$.html"><span class="name">ResourceSpec</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Manifest$@ResourceSpec" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.Manifest#Versioned" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Versioned:scalaz.Tag.TagOf[nelson.Manifest.Versioned]"></a>
+      <a id="Versioned:nelson.Tag.TagOf[nelson.Manifest.Versioned]"></a>
       <a id="Versioned:TagOf[Versioned]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -709,10 +743,10 @@ declares that the port exposed by <code>foo</code> unit with the reference
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Versioned</span><span class="result">: <span class="extype" name="scalaz.Tag.TagOf">TagOf</span>[<a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>
+        <span class="name">Versioned</span><span class="result">: <a href="Tag$$TagOf.html" class="extype" name="nelson.Tag.TagOf">TagOf</a>[<a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Manifest$@Versioned:scalaz.Tag.TagOf[nelson.Manifest.Versioned]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Manifest$@Versioned:nelson.Tag.TagOf[nelson.Manifest.Versioned]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -968,7 +1002,7 @@ declares that the port exposed by <code>foo</code> unit with the reference
     </span>
       
     </li><li name="nelson.Manifest#loadbalancerActions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="loadbalancerActions(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned],dcs:Seq[nelson.Datacenter],f:(nelson.Datacenter,nelson.Manifest.Namespace,nelson.Manifest.Plan,nelson.Manifest.Loadbalancer)=&gt;Boolean):List[nelson.Manifest.Action]"></a>
+      <a id="loadbalancerActions(m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned],dcs:Seq[nelson.Datacenter],f:(nelson.Datacenter,nelson.Manifest.Namespace,nelson.Manifest.Plan,nelson.Manifest.Loadbalancer)=&gt;Boolean):List[nelson.Manifest.Action]"></a>
       <a id="loadbalancerActions(@@[Manifest,Versioned],Seq[Datacenter],(Datacenter,Namespace,Plan,Loadbalancer)⇒Boolean):List[Action]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -976,10 +1010,10 @@ declares that the port exposed by <code>foo</code> unit with the reference
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">loadbalancerActions</span><span class="params">(<span name="m">m: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="dcs">dcs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="f">f: (<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a>, <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a>, <a href="Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a>) ⇒ <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>
+        <span class="name">loadbalancerActions</span><span class="params">(<span name="m">m: <a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="dcs">dcs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="f">f: (<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a>, <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a>, <a href="Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a>) ⇒ <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Manifest$@loadbalancerActions(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned],dcs:Seq[nelson.Datacenter],f:(nelson.Datacenter,nelson.Manifest.Namespace,nelson.Manifest.Plan,nelson.Manifest.Loadbalancer)=&gt;Boolean):List[nelson.Manifest.Action]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Manifest$@loadbalancerActions(m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned],dcs:Seq[nelson.Datacenter],f:(nelson.Datacenter,nelson.Manifest.Namespace,nelson.Manifest.Plan,nelson.Manifest.Loadbalancer)=&gt;Boolean):List[nelson.Manifest.Action]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1053,18 +1087,18 @@ declares that the port exposed by <code>foo</code> unit with the reference
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.Manifest#saturateManifest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="saturateManifest(m:nelson.Manifest)(r:nelson.Github.Release):scalaz.concurrent.Task[scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]]"></a>
-      <a id="saturateManifest(Manifest)(Release):Task[@@[Manifest,Versioned]]"></a>
+      <a id="saturateManifest(m:nelson.Manifest)(r:nelson.Github.Release):cats.effect.IO[nelson.@@[nelson.Manifest,nelson.Manifest.Versioned]]"></a>
+      <a id="saturateManifest(Manifest)(Release):IO[@@[Manifest,Versioned]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">saturateManifest</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>)</span><span class="params">(<span name="r">r: <a href="Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]]</span>
+        <span class="name">saturateManifest</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>)</span><span class="params">(<span name="r">r: <a href="Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Manifest$@saturateManifest(m:nelson.Manifest)(r:nelson.Github.Release):scalaz.concurrent.Task[scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Manifest$@saturateManifest(m:nelson.Manifest)(r:nelson.Github.Release):cats.effect.IO[nelson.@@[nelson.Manifest,nelson.Manifest.Versioned]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1121,7 +1155,7 @@ declares that the port exposed by <code>foo</code> unit with the reference
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.Manifest#unitActions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unitActions(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned],dcs:Seq[nelson.Datacenter],f:(nelson.Datacenter,nelson.Manifest.Namespace,nelson.Manifest.Plan,nelson.Manifest.UnitDef)=&gt;Boolean):List[nelson.Manifest.Action]"></a>
+      <a id="unitActions(m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned],dcs:Seq[nelson.Datacenter],f:(nelson.Datacenter,nelson.Manifest.Namespace,nelson.Manifest.Plan,nelson.Manifest.UnitDef)=&gt;Boolean):List[nelson.Manifest.Action]"></a>
       <a id="unitActions(@@[Manifest,Versioned],Seq[Datacenter],(Datacenter,Namespace,Plan,UnitDef)⇒Boolean):List[Action]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1129,10 +1163,10 @@ declares that the port exposed by <code>foo</code> unit with the reference
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unitActions</span><span class="params">(<span name="m">m: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="dcs">dcs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="f">f: (<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a>, <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a>, <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>) ⇒ <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>
+        <span class="name">unitActions</span><span class="params">(<span name="m">m: <a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="dcs">dcs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="f">f: (<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a>, <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a>, <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>) ⇒ <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Manifest$@unitActions(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned],dcs:Seq[nelson.Datacenter],f:(nelson.Datacenter,nelson.Manifest.Namespace,nelson.Manifest.Plan,nelson.Manifest.UnitDef)=&gt;Boolean):List[nelson.Manifest.Action]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Manifest$@unitActions(m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned],dcs:Seq[nelson.Datacenter],f:(nelson.Datacenter,nelson.Manifest.Namespace,nelson.Manifest.Plan,nelson.Manifest.UnitDef)=&gt;Boolean):List[nelson.Manifest.Action]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1155,24 +1189,24 @@ declares that the port exposed by <code>foo</code> unit with the reference
     </span>
       
     </li><li name="nelson.Manifest#verifyDeployable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="verifyDeployable(m:nelson.Manifest,dcs:Seq[nelson.Datacenter],storage:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]):scalaz.concurrent.Task[scalaz.ValidationNel[nelson.NelsonError,Unit]]"></a>
-      <a id="verifyDeployable(Manifest,Seq[Datacenter],~&gt;[StoreOp,Task]):Task[ValidationNel[NelsonError,Unit]]"></a>
+      <a id="verifyDeployable(m:nelson.Manifest,dcs:Seq[nelson.Datacenter],storage:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO]):cats.effect.IO[cats.data.ValidatedNel[nelson.NelsonError,Unit]]"></a>
+      <a id="verifyDeployable(Manifest,Seq[Datacenter],~&gt;[StoreOp,IO]):IO[ValidatedNel[NelsonError,Unit]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">verifyDeployable</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>, <span name="dcs">dcs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="storage">storage: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scalaz.ValidationNel">ValidationNel</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+        <span class="name">verifyDeployable</span><span class="params">(<span name="m">m: <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a></span>, <span name="dcs">dcs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="storage">storage: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="cats.data.ValidatedNel">ValidatedNel</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Manifest$@verifyDeployable(m:nelson.Manifest,dcs:Seq[nelson.Datacenter],storage:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]):scalaz.concurrent.Task[scalaz.ValidationNel[nelson.NelsonError,Unit]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Manifest$@verifyDeployable(m:nelson.Manifest,dcs:Seq[nelson.Datacenter],storage:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO]):cats.effect.IO[cats.data.ValidatedNel[nelson.NelsonError,Unit]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Manifest#versionedUnits" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="versionedUnits(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]):List[scalaz.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned]]"></a>
+      <a id="versionedUnits(m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned]):List[nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned]]"></a>
       <a id="versionedUnits(@@[Manifest,Versioned]):List[@@[UnitDef,Versioned]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1180,10 +1214,10 @@ declares that the port exposed by <code>foo</code> unit with the reference
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">versionedUnits</span><span class="params">(<span name="m">m: <span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scalaz.@@">@@</span>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]]</span>
+        <span class="name">versionedUnits</span><span class="params">(<span name="m">m: <a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Manifest$@versionedUnits(m:scalaz.@@[nelson.Manifest,nelson.Manifest.Versioned]):List[scalaz.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Manifest$@versionedUnits(m:nelson.@@[nelson.Manifest,nelson.Manifest.Versioned]):List[nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

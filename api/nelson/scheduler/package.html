@@ -47,35 +47,13 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/scheduler/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
-          <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div></div>
+          <div id="comment" class="fullcommenttop"></div>
         
 
       <div id="mbrsel">
         <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
-        <div id="order">
-              <span class="filtertype">Ordering</span>
-              <ol>
-                
-                <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By Inheritance</span></li>
-              </ol>
-            </div>
-        <div id="ancestors">
-                <span class="filtertype">Inherited<br />
-                </span>
-                <ol id="linearization">
-                  <li class="in" name="nelson.scheduler"><span>scheduler</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-            <span class="filtertype"></span>
-            <ol>
-              <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show All</span></li>
-            </ol>
-          </div>
+        
+        
         <div id="visbl">
             <span class="filtertype">Visibility</span>
             <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
@@ -106,7 +84,7 @@
     </span>
       
     </li><li name="nelson.scheduler.KubernetesHttp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="KubernetesHttpextends~&gt;[nelson.scheduler.SchedulerOp,scalaz.concurrent.Task]"></a>
+      <a id="KubernetesHttpextendscats.~&gt;[nelson.scheduler.SchedulerOp,cats.effect.IO]"></a>
       <a id="KubernetesHttp:KubernetesHttp"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -114,17 +92,17 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="KubernetesHttp.html"><span class="name">KubernetesHttp</span></a><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <a href="KubernetesHttp.html"><span class="name">KubernetesHttp</span></a><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.package@KubernetesHttpextends~&gt;[nelson.scheduler.SchedulerOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.package@KubernetesHttpextendscats.~&gt;[nelson.scheduler.SchedulerOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">SchedulerOp interpreter that uses the Kubernetes API server.</p><div class="fullcomment"><div class="comment cmt"><p>SchedulerOp interpreter that uses the Kubernetes API server.</p><p>See: https://kubernetes.io/docs/api-reference/v1.8/
 </p></div></div>
     </li><li name="nelson.scheduler.NomadHttp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NomadHttpextends~&gt;[nelson.scheduler.SchedulerOp,scalaz.concurrent.Task]"></a>
+      <a id="NomadHttpextendscats.~&gt;[nelson.scheduler.SchedulerOp,cats.effect.IO]"></a>
       <a id="NomadHttp:NomadHttp"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -132,10 +110,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="NomadHttp.html"><span class="name">NomadHttp</span></a><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <a href="NomadHttp.html"><span class="name">NomadHttp</span></a><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.package@NomadHttpextends~&gt;[nelson.scheduler.SchedulerOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.package@NomadHttpextendscats.~&gt;[nelson.scheduler.SchedulerOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -207,7 +185,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="KubernetesHttp$.html"><span class="name">KubernetesHttp</span></a>
+        <a href="KubernetesHttp$.html"><span class="name">KubernetesHttp</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.scheduler.package@KubernetesHttp" title="Permalink" target="_top">
@@ -224,7 +202,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="NomadHttp$.html"><span class="name">NomadHttp</span></a>
+        <a href="NomadHttp$.html"><span class="name">NomadHttp</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.scheduler.package@NomadHttp" title="Permalink" target="_top">
@@ -266,23 +244,6 @@
       </a>
     </span>
       
-    </li><li name="nelson.scheduler#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="run[F[_],A](interpreter:scalaz.~&gt;[nelson.scheduler.SchedulerOp,F],op:nelson.scheduler.SchedulerOp.SchedulerF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]"></a>
-      <a id="run[F[_],A](~&gt;[SchedulerOp,F],SchedulerF[A])(Monad[F]):F[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="interpreter">interpreter: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="nelson.scheduler.run.F">F</span>]</span>, <span name="op">op: <a href="SchedulerOp$.html#SchedulerF[A]=scalaz.Free.FreeC[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<span class="extype" name="nelson.scheduler.run.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.scheduler.run.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.scheduler.run.F">F</span>[<span class="extype" name="nelson.scheduler.run.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.package@run[F[_],A](interpreter:scalaz.~&gt;[nelson.scheduler.SchedulerOp,F],op:nelson.scheduler.SchedulerOp.SchedulerF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li></ol>
             </div>
 
@@ -292,11 +253,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
-            </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
-            </div>
+        
         
         </div>
 

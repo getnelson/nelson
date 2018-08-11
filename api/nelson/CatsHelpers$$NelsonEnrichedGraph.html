@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ListOps - nelson.ScalazHelpers.ListOps</title>
-          <meta name="description" content="ListOps - nelson.ScalazHelpers.ListOps" />
-          <meta name="keywords" content="ListOps nelson.ScalazHelpers.ListOps" />
+          <title>NelsonEnrichedGraph - nelson.CatsHelpers.NelsonEnrichedGraph</title>
+          <meta name="description" content="NelsonEnrichedGraph - nelson.CatsHelpers.NelsonEnrichedGraph" />
+          <meta name="keywords" content="NelsonEnrichedGraph nelson.CatsHelpers.NelsonEnrichedGraph" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'nelson.ScalazHelpers$$ListOps';
+            var hash = 'nelson.CatsHelpers$$NelsonEnrichedGraph';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,11 +29,11 @@
         <body class="type">
       <div id="definition">
         <img alt="Class" src="../lib/class_big.png" />
-        <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a>.<a href="ScalazHelpers$.html" class="extype" name="nelson.ScalazHelpers">ScalazHelpers</a></p>
-        <h1>ListOps</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="ScalazHelpers$.html" class="extype" name="nelson.ScalazHelpers">package ScalazHelpers</a>
+        <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a>.<a href="CatsHelpers$.html" class="extype" name="nelson.CatsHelpers">CatsHelpers</a></p>
+        <h1>NelsonEnrichedGraph</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="CatsHelpers$.html" class="extype" name="nelson.CatsHelpers">package CatsHelpers</a>
           </div></span></h3><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,11 +45,11 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ListOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+        <span class="name">NelsonEnrichedGraph</span><span class="tparams">[<span name="N">N</span>, <span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/ScalazHelpers.scala" target="_blank">ScalazHelpers.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/CatsHelpers.scala" target="_blank">CatsHelpers.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.ScalazHelpers.ListOps"><span>ListOps</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.CatsHelpers.NelsonEnrichedGraph"><span>NelsonEnrichedGraph</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,19 +88,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="nelson.ScalazHelpers.ListOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(la:List[A]):nelson.ScalazHelpers.ListOps[A]"></a>
-      <a id="&lt;init&gt;:ListOps[A]"></a>
+              <ol><li name="nelson.CatsHelpers.NelsonEnrichedGraph#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(graph:quiver.Graph[N,A,B]):nelson.CatsHelpers.NelsonEnrichedGraph[N,A,B]"></a>
+      <a id="&lt;init&gt;:NelsonEnrichedGraph[N,A,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ListOps</span><span class="params">(<span name="la">la: <span class="extype" name="scala.List">List</span>[<span class="extype" name="nelson.ScalazHelpers.ListOps.A">A</span>]</span>)</span>
+        <span class="name">NelsonEnrichedGraph</span><span class="params">(<span name="graph">graph: <span class="extype" name="quiver.Graph">Graph</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.A">A</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.B">B</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@&lt;init&gt;(la:List[A]):nelson.ScalazHelpers.ListOps[A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@&lt;init&gt;(graph:quiver.Graph[N,A,B]):nelson.CatsHelpers.NelsonEnrichedGraph[N,A,B]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -126,7 +126,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -143,7 +143,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@##():Int" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@##():Int" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -160,7 +160,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -177,7 +177,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -194,11 +194,28 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@getClass():Class[_&lt;:AnyVal]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@getClass():Class[_&lt;:AnyVal]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
+    </li><li name="nelson.CatsHelpers.NelsonEnrichedGraph#graph" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="graph:quiver.Graph[N,A,B]"></a>
+      <a id="graph:Graph[N,A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">graph</span><span class="result">: <span class="extype" name="quiver.Graph">Graph</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.A">A</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@graph:quiver.Graph[N,A,B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -211,24 +228,24 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="nelson.ScalazHelpers.ListOps#la" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="la:List[A]"></a>
-      <a id="la:List[A]"></a>
+    </li><li name="nelson.CatsHelpers.NelsonEnrichedGraph#reachable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reachable(v:N):Vector[N]"></a>
+      <a id="reachable(N):Vector[N]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">la</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="nelson.ScalazHelpers.ListOps.A">A</span>]</span>
+        <span class="name">reachable</span><span class="params">(<span name="v">v: <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span></span>)</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@la:List[A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@reachable(v:N):Vector[N]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -245,24 +262,24 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@toString():String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@toString():String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="nelson.ScalazHelpers.ListOps#zgroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="zgroup[K](f:A=&gt;K)(implicitev:scalaz.Order[K]):scalaz.==&gt;&gt;[K,Set[A]]"></a>
-      <a id="zgroup[K]((A)⇒K)(Order[K]):==&gt;&gt;[K,Set[A]]"></a>
+    </li><li name="nelson.CatsHelpers.NelsonEnrichedGraph#xdfWith" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="xdfWith[C](vs:Seq[N],d:quiver.Context[N,A,B]=&gt;Seq[N],f:quiver.Context[N,A,B]=&gt;C):(Vector[nelson.CatsHelpers.Tree[C]],quiver.Graph[N,A,B])"></a>
+      <a id="xdfWith[C](Seq[N],(Context[N,A,B])⇒Seq[N],(Context[N,A,B])⇒C):(Vector[Tree[C]],Graph[N,A,B])"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">zgroup</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.ScalazHelpers.ListOps.A">A</span>) ⇒ <span class="extype" name="nelson.ScalazHelpers.ListOps.zgroup.K">K</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scalaz.Order">Order</span>[<span class="extype" name="nelson.ScalazHelpers.ListOps.zgroup.K">K</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="nelson.ScalazHelpers.ListOps.zgroup.K">K</span>, <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="nelson.ScalazHelpers.ListOps.A">A</span>]]</span>
+        <span class="name">xdfWith</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="vs">vs: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span>]</span>, <span name="d">d: (<span class="extype" name="quiver.Context">Context</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.A">A</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.B">B</span>]) ⇒ <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span>]</span>, <span name="f">f: (<span class="extype" name="quiver.Context">Context</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.A">A</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.B">B</span>]) ⇒ <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.xdfWith.C">C</span></span>)</span><span class="result">: (<span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="nelson.CatsHelpers.Tree">Tree</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.xdfWith.C">C</span>]], <span class="extype" name="quiver.Graph">Graph</span>[<span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.N">N</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.A">A</span>, <span class="extype" name="nelson.CatsHelpers.NelsonEnrichedGraph.B">B</span>])</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.ScalazHelpers$$ListOps@zgroup[K](f:A=&gt;K)(implicitev:scalaz.Order[K]):scalaz.==&gt;&gt;[K,Set[A]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CatsHelpers$$NelsonEnrichedGraph@xdfWith[C](vs:Seq[N],d:quiver.Context[N,A,B]=&gt;Seq[N],f:quiver.Context[N,A,B]=&gt;C):(Vector[nelson.CatsHelpers.Tree[C]],quiver.Graph[N,A,B])" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

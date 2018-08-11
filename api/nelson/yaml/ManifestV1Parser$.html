@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/yaml/ManifestV1Parser.scala" target="_blank">ManifestV1Parser.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/yaml/ManifestV1Parser.scala" target="_blank">ManifestV1Parser.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -91,7 +91,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="nelson.yaml.ManifestV1Parser.YamlValidation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]"></a>
+      <a id="YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]"></a>
       <a id="YamlValidation[A]:YamlValidation[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -99,10 +99,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">YamlValidation</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Validation">Validation</span>[<span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>], <span class="extype" name="nelson.yaml.ManifestV1Parser.YamlValidation.A">A</span>]</span>
+        <span class="name">YamlValidation</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.Validated">Validated</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>], <span class="extype" name="nelson.yaml.ManifestV1Parser.YamlValidation.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -399,18 +399,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.yaml.ManifestV1Parser#parse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parse(input:String):scalaz.\/[scalaz.NonEmptyList[nelson.NelsonError],nelson.Manifest]"></a>
-      <a id="parse(String):\/[NonEmptyList[NelsonError],Manifest]"></a>
+      <a id="parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],nelson.Manifest]"></a>
+      <a id="parse(String):Either[NonEmptyList[NelsonError],Manifest]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parse</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="../NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <a href="../Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]</span>
+        <span class="name">parse</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <a href="../Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parse(input:String):scalaz.\/[scalaz.NonEmptyList[nelson.NelsonError],nelson.Manifest]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],nelson.Manifest]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -424,7 +424,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseAlerting</span><span class="params">(<span name="unitName">unitName: <a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="rawAlerting">rawAlerting: <a href="AlertingYaml.html" class="extype" name="nelson.yaml.AlertingYaml">AlertingYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Alerting.html" class="extype" name="nelson.Manifest.Alerting">Alerting</a>]</span>
+        <span class="name">parseAlerting</span><span class="params">(<span name="unitName">unitName: <a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="rawAlerting">rawAlerting: <a href="AlertingYaml.html" class="extype" name="nelson.yaml.AlertingYaml">AlertingYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Alerting.html" class="extype" name="nelson.Manifest.Alerting">Alerting</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseAlerting(unitName:nelson.UnitName,rawAlerting:nelson.yaml.AlertingYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Alerting]" title="Permalink" target="_top">
@@ -441,7 +441,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseAlphaNumHyphen</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fieldName">fieldName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">parseAlphaNumHyphen</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fieldName">fieldName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseAlphaNumHyphen(str:String,fieldName:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]" title="Permalink" target="_top">
@@ -458,7 +458,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseDependency</span><span class="params">(<span name="dep">dep: <a href="DependencyYaml.html" class="extype" name="nelson.yaml.DependencyYaml">DependencyYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="../FeatureVersion.html" class="extype" name="nelson.FeatureVersion">FeatureVersion</a>)]</span>
+        <span class="name">parseDependency</span><span class="params">(<span name="dep">dep: <a href="DependencyYaml.html" class="extype" name="nelson.yaml.DependencyYaml">DependencyYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="../FeatureVersion.html" class="extype" name="nelson.FeatureVersion">FeatureVersion</a>)]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseDependency(dep:nelson.yaml.DependencyYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,nelson.FeatureVersion)]" title="Permalink" target="_top">
@@ -467,18 +467,18 @@
     </span>
       
     </li><li name="nelson.yaml.ManifestV1Parser#parseDuration" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseDuration(d:String):scalaz.\/[nelson.YamlError,scala.concurrent.duration.FiniteDuration]"></a>
-      <a id="parseDuration(String):\/[YamlError,FiniteDuration]"></a>
+      <a id="parseDuration(d:String):Either[nelson.YamlError,scala.concurrent.duration.FiniteDuration]"></a>
+      <a id="parseDuration(String):Either[YamlError,FiniteDuration]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseDuration</span><span class="params">(<span name="d">d: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.\/">\/</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>
+        <span class="name">parseDuration</span><span class="params">(<span name="d">d: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseDuration(d:String):scalaz.\/[nelson.YamlError,scala.concurrent.duration.FiniteDuration]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseDuration(d:String):Either[nelson.YamlError,scala.concurrent.duration.FiniteDuration]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -492,7 +492,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseEmailNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationEmailYaml.html" class="extype" name="nelson.yaml.NotificationEmailYaml">NotificationEmailYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
+        <span class="name">parseEmailNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationEmailYaml.html" class="extype" name="nelson.yaml.NotificationEmailYaml">NotificationEmailYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseEmailNotifications(raw:nelson.yaml.NotificationEmailYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]" title="Permalink" target="_top">
@@ -509,7 +509,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationYaml.html" class="extype" name="nelson.yaml.NotificationYaml">NotificationYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../notifications/NotificationSubscriptions.html" class="extype" name="nelson.notifications.NotificationSubscriptions">NotificationSubscriptions</a>]</span>
+        <span class="name">parseNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationYaml.html" class="extype" name="nelson.yaml.NotificationYaml">NotificationYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../notifications/NotificationSubscriptions.html" class="extype" name="nelson.notifications.NotificationSubscriptions">NotificationSubscriptions</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseNotifications(raw:nelson.yaml.NotificationYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.notifications.NotificationSubscriptions]" title="Permalink" target="_top">
@@ -518,7 +518,7 @@
     </span>
       
     </li><li name="nelson.yaml.ManifestV1Parser#parsePrometheusAlert" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parsePrometheusAlert(rawAlert:nelson.yaml.PrometheusAlertYaml):scalaz.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusAlert]]"></a>
+      <a id="parsePrometheusAlert(rawAlert:nelson.yaml.PrometheusAlertYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusAlert]]"></a>
       <a id="parsePrometheusAlert(PrometheusAlertYaml):State[Set[String],YamlValidation[PrometheusAlert]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -526,10 +526,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parsePrometheusAlert</span><span class="params">(<span name="rawAlert">rawAlert: <a href="PrometheusAlertYaml.html" class="extype" name="nelson.yaml.PrometheusAlertYaml">PrometheusAlertYaml</a></span>)</span><span class="result">: <span class="extype" name="scalaz.State">State</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusAlert.html" class="extype" name="nelson.Manifest.PrometheusAlert">PrometheusAlert</a>]]</span>
+        <span class="name">parsePrometheusAlert</span><span class="params">(<span name="rawAlert">rawAlert: <a href="PrometheusAlertYaml.html" class="extype" name="nelson.yaml.PrometheusAlertYaml">PrometheusAlertYaml</a></span>)</span><span class="result">: <span class="extype" name="cats.data.State">State</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusAlert.html" class="extype" name="nelson.Manifest.PrometheusAlert">PrometheusAlert</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parsePrometheusAlert(rawAlert:nelson.yaml.PrometheusAlertYaml):scalaz.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusAlert]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parsePrometheusAlert(rawAlert:nelson.yaml.PrometheusAlertYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusAlert]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -543,7 +543,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parsePrometheusAlerting</span><span class="params">(<span name="unitName">unitName: <a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="rawPrometheus">rawPrometheus: <a href="PrometheusConfigYaml.html" class="extype" name="nelson.yaml.PrometheusConfigYaml">PrometheusConfigYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusConfig.html" class="extype" name="nelson.Manifest.PrometheusConfig">PrometheusConfig</a>]</span>
+        <span class="name">parsePrometheusAlerting</span><span class="params">(<span name="unitName">unitName: <a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="rawPrometheus">rawPrometheus: <a href="PrometheusConfigYaml.html" class="extype" name="nelson.yaml.PrometheusConfigYaml">PrometheusConfigYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusConfig.html" class="extype" name="nelson.Manifest.PrometheusConfig">PrometheusConfig</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parsePrometheusAlerting(unitName:nelson.UnitName,rawPrometheus:nelson.yaml.PrometheusConfigYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusConfig]" title="Permalink" target="_top">
@@ -552,7 +552,7 @@
     </span>
       
     </li><li name="nelson.yaml.ManifestV1Parser#parsePrometheusRule" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parsePrometheusRule(rawRule:nelson.yaml.PrometheusRuleYaml):scalaz.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusRule]]"></a>
+      <a id="parsePrometheusRule(rawRule:nelson.yaml.PrometheusRuleYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusRule]]"></a>
       <a id="parsePrometheusRule(PrometheusRuleYaml):State[Set[String],YamlValidation[PrometheusRule]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -560,10 +560,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parsePrometheusRule</span><span class="params">(<span name="rawRule">rawRule: <a href="PrometheusRuleYaml.html" class="extype" name="nelson.yaml.PrometheusRuleYaml">PrometheusRuleYaml</a></span>)</span><span class="result">: <span class="extype" name="scalaz.State">State</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusRule.html" class="extype" name="nelson.Manifest.PrometheusRule">PrometheusRule</a>]]</span>
+        <span class="name">parsePrometheusRule</span><span class="params">(<span name="rawRule">rawRule: <a href="PrometheusRuleYaml.html" class="extype" name="nelson.yaml.PrometheusRuleYaml">PrometheusRuleYaml</a></span>)</span><span class="result">: <span class="extype" name="cats.data.State">State</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusRule.html" class="extype" name="nelson.Manifest.PrometheusRule">PrometheusRule</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parsePrometheusRule(rawRule:nelson.yaml.PrometheusRuleYaml):scalaz.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusRule]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parsePrometheusRule(rawRule:nelson.yaml.PrometheusRuleYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusRule]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -577,7 +577,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseResource</span><span class="params">(<span name="r">r: <a href="ResourceYaml.html" class="extype" name="nelson.yaml.ResourceYaml">ResourceYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Resource.html" class="extype" name="nelson.Manifest.Resource">Resource</a>]</span>
+        <span class="name">parseResource</span><span class="params">(<span name="r">r: <a href="ResourceYaml.html" class="extype" name="nelson.yaml.ResourceYaml">ResourceYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Resource.html" class="extype" name="nelson.Manifest.Resource">Resource</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseResource(r:nelson.yaml.ResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Resource]" title="Permalink" target="_top">
@@ -594,7 +594,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseSchedule</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Schedule.html" class="extype" name="nelson.Schedule">Schedule</a>]</span>
+        <span class="name">parseSchedule</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Schedule.html" class="extype" name="nelson.Schedule">Schedule</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseSchedule(str:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Schedule]" title="Permalink" target="_top">
@@ -611,7 +611,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseSlackNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationSlackYaml.html" class="extype" name="nelson.yaml.NotificationSlackYaml">NotificationSlackYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
+        <span class="name">parseSlackNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationSlackYaml.html" class="extype" name="nelson.yaml.NotificationSlackYaml">NotificationSlackYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseSlackNotifications(raw:nelson.yaml.NotificationSlackYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]" title="Permalink" target="_top">
@@ -628,7 +628,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseURI</span><span class="params">(<span name="raw">raw: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="java.net.URI">URI</span>]</span>
+        <span class="name">parseURI</span><span class="params">(<span name="raw">raw: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="java.net.URI">URI</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseURI(raw:String):nelson.yaml.ManifestV1Parser.YamlValidation[java.net.URI]" title="Permalink" target="_top">
@@ -645,7 +645,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resolvePolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../cleanup/ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a>]</span>
+        <span class="name">resolvePolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../cleanup/ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@resolvePolicy(name:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.cleanup.ExpirationPolicy]" title="Permalink" target="_top">
@@ -654,18 +654,18 @@
     </span>
       
     </li><li name="nelson.yaml.ManifestV1Parser#resolveWorkflow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resolveWorkflow(name:String):scalaz.ValidationNel[nelson.YamlError,nelson.Workflow[Unit]]"></a>
-      <a id="resolveWorkflow(String):ValidationNel[YamlError,Workflow[Unit]]"></a>
+      <a id="resolveWorkflow(name:String):cats.data.ValidatedNel[nelson.YamlError,nelson.Workflow[Unit]]"></a>
+      <a id="resolveWorkflow(String):ValidatedNel[YamlError,Workflow[Unit]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resolveWorkflow</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.ValidationNel">ValidationNel</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>, <a href="../Workflow.html" class="extype" name="nelson.Workflow">Workflow</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+        <span class="name">resolveWorkflow</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.data.ValidatedNel">ValidatedNel</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>, <a href="../Workflow.html" class="extype" name="nelson.Workflow">Workflow</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@resolveWorkflow(name:String):scalaz.ValidationNel[nelson.YamlError,nelson.Workflow[Unit]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@resolveWorkflow(name:String):cats.data.ValidatedNel[nelson.YamlError,nelson.Workflow[Unit]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -750,7 +750,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toHealthCheck</span><span class="params">(<span name="raw">raw: <a href="HealthCheckYaml.html" class="extype" name="nelson.yaml.HealthCheckYaml">HealthCheckYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$HealthCheck.html" class="extype" name="nelson.Manifest.HealthCheck">HealthCheck</a>]</span>
+        <span class="name">toHealthCheck</span><span class="params">(<span name="raw">raw: <a href="HealthCheckYaml.html" class="extype" name="nelson.yaml.HealthCheckYaml">HealthCheckYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$HealthCheck.html" class="extype" name="nelson.Manifest.HealthCheck">HealthCheck</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toHealthCheck(raw:nelson.yaml.HealthCheckYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.HealthCheck]" title="Permalink" target="_top">
@@ -767,7 +767,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toLoadbalancer</span><span class="params">(<span name="raw">raw: <a href="LoadbalancerYaml.html" class="extype" name="nelson.yaml.LoadbalancerYaml">LoadbalancerYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a>]</span>
+        <span class="name">toLoadbalancer</span><span class="params">(<span name="raw">raw: <a href="LoadbalancerYaml.html" class="extype" name="nelson.yaml.LoadbalancerYaml">LoadbalancerYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toLoadbalancer(raw:nelson.yaml.LoadbalancerYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Loadbalancer]" title="Permalink" target="_top">
@@ -784,7 +784,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toPlan</span><span class="params">(<span name="raw">raw: <a href="PlanYaml.html" class="extype" name="nelson.yaml.PlanYaml">PlanYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a>]</span>
+        <span class="name">toPlan</span><span class="params">(<span name="raw">raw: <a href="PlanYaml.html" class="extype" name="nelson.yaml.PlanYaml">PlanYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toPlan(raw:nelson.yaml.PlanYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Plan]" title="Permalink" target="_top">
@@ -801,7 +801,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toPlanResource</span><span class="params">(<span name="raw">raw: <a href="PlanResourceYaml.html" class="extype" name="nelson.yaml.PlanResourceYaml">PlanResourceYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="java.net.URI">URI</span>)]</span>
+        <span class="name">toPlanResource</span><span class="params">(<span name="raw">raw: <a href="PlanResourceYaml.html" class="extype" name="nelson.yaml.PlanResourceYaml">PlanResourceYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="java.net.URI">URI</span>)]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toPlanResource(raw:nelson.yaml.PlanResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,java.net.URI)]" title="Permalink" target="_top">
@@ -835,7 +835,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toUnit</span><span class="params">(<span name="raw">raw: <a href="UnitYaml.html" class="extype" name="nelson.yaml.UnitYaml">UnitYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>]</span>
+        <span class="name">toUnit</span><span class="params">(<span name="raw">raw: <a href="UnitYaml.html" class="extype" name="nelson.yaml.UnitYaml">UnitYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toUnit(raw:nelson.yaml.UnitYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.UnitDef]" title="Permalink" target="_top">
@@ -852,10 +852,27 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateCPU</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
+        <span class="name">validateCPU</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateCPU(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateCPURequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateCPURequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]"></a>
+      <a id="validateCPURequest(Double,Option[Double]):YamlValidation[ResourceSpec]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validateCPURequest</span><span class="params">(<span name="request">request: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>, <span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$ResourceSpec.html" class="extype" name="nelson.Manifest.ResourceSpec">ResourceSpec</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateCPURequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -869,7 +886,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateEphemeral</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">validateEphemeral</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateEphemeral(i:Int):nelson.yaml.ManifestV1Parser.YamlValidation[Int]" title="Permalink" target="_top">
@@ -886,7 +903,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateInstances</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">validateInstances</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateInstances(i:Int):nelson.yaml.ManifestV1Parser.YamlValidation[Int]" title="Permalink" target="_top">
@@ -903,10 +920,27 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateMemory</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
+        <span class="name">validateMemory</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateMemory(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateMemoryRequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateMemoryRequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]"></a>
+      <a id="validateMemoryRequest(Double,Option[Double]):YamlValidation[ResourceSpec]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validateMemoryRequest</span><span class="params">(<span name="request">request: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>, <span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$ResourceSpec.html" class="extype" name="nelson.Manifest.ResourceSpec">ResourceSpec</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateMemoryRequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -920,7 +954,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateMeta</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">validateMeta</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateMeta(s:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]" title="Permalink" target="_top">
@@ -937,7 +971,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validatePlanConstraints</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span></span>, <span name="e">e: (<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>) ⇒ <a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>]</span>
+        <span class="name">validatePlanConstraints</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span></span>, <span name="e">e: (<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>) ⇒ <a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validatePlanConstraints[A](n:A,e:A=&gt;nelson.YamlError)(f:A=&gt;Boolean)(implicitevidence$1:Numeric[A]):nelson.yaml.ManifestV1Parser.YamlValidation[A]" title="Permalink" target="_top">
@@ -954,7 +988,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateTrafficShift</span><span class="params">(<span name="raw">raw: <a href="TrafficShiftYaml.html" class="extype" name="nelson.yaml.TrafficShiftYaml">TrafficShiftYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$TrafficShift.html" class="extype" name="nelson.Manifest.TrafficShift">TrafficShift</a>]</span>
+        <span class="name">validateTrafficShift</span><span class="params">(<span name="raw">raw: <a href="TrafficShiftYaml.html" class="extype" name="nelson.yaml.TrafficShiftYaml">TrafficShiftYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$TrafficShift.html" class="extype" name="nelson.Manifest.TrafficShift">TrafficShift</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateTrafficShift(raw:nelson.yaml.TrafficShiftYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.TrafficShift]" title="Permalink" target="_top">
@@ -971,7 +1005,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateTrafficShiftDuration</span><span class="params">(<span name="dur">dur: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=scalaz.ValidationNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>
+        <span class="name">validateTrafficShiftDuration</span><span class="params">(<span name="dur">dur: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateTrafficShiftDuration(dur:String):nelson.yaml.ManifestV1Parser.YamlValidation[scala.concurrent.duration.FiniteDuration]" title="Permalink" target="_top">

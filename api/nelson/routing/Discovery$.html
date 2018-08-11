@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/routing/discovery.scala" target="_blank">discovery.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/routing/discovery.scala" target="_blank">discovery.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -99,7 +99,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Discovery$$DeploymentDiscovery.html"><span class="name">DeploymentDiscovery</span></a><span class="params">(<span name="defaultNamespace">defaultNamespace: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="domain">domain: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="namespaces">namespaces: <a href="package.html#DiscoveryTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Discovery$$DeploymentDiscovery.html"><span class="name">DeploymentDiscovery</span></a><span class="params">(<span name="defaultNamespace">defaultNamespace: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="domain">domain: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="namespaces">namespaces: <a href="package.html#DiscoveryTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.routing.Discovery$@DeploymentDiscoveryextendsProductwithSerializable" title="Permalink" target="_top">
@@ -282,7 +282,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">discoveryTable</span><span class="params">(<span name="rn">rn: <a href="RoutingNode.html" class="extype" name="nelson.routing.RoutingNode">RoutingNode</a></span>, <span name="rg">rg: <a href="package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a></span>)</span><span class="result">: <a href="package.html#DiscoveryTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a></span>
+        <span class="name">discoveryTable</span><span class="params">(<span name="rn">rn: <a href="RoutingNode.html" class="extype" name="nelson.routing.RoutingNode">RoutingNode</a></span>, <span name="rg">rg: <a href="package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a></span>)</span><span class="result">: <a href="package.html#DiscoveryTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.routing.Discovery$@discoveryTable(rn:nelson.routing.RoutingNode,rg:nelson.routing.RoutingGraph):nelson.routing.DiscoveryTables" title="Permalink" target="_top">
@@ -291,18 +291,18 @@
     </span>
       
     </li><li name="nelson.routing.Discovery#discoveryTables" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="discoveryTables[F[_]](graphs:F[(nelson.Datacenter.Namespace,nelson.routing.RoutingGraph)])(implicitevidence$1:scalaz.Foldable[F]):scalaz.==&gt;&gt;[(nelson.Datacenter.StackName,nelson.NamespaceName),nelson.routing.DiscoveryTables]"></a>
-      <a id="discoveryTables[F[_]](F[(Namespace,RoutingGraph)])(Foldable[F]):==&gt;&gt;[(StackName,NamespaceName),DiscoveryTables]"></a>
+      <a id="discoveryTables[F[_]](graphs:F[(nelson.Datacenter.Namespace,nelson.routing.RoutingGraph)])(implicitevidence$1:cats.Foldable[F]):scala.collection.immutable.SortedMap[(nelson.Datacenter.StackName,nelson.NamespaceName),nelson.routing.DiscoveryTables]"></a>
+      <a id="discoveryTables[F[_]](F[(Namespace,RoutingGraph)])(Foldable[F]):SortedMap[(StackName,NamespaceName),DiscoveryTables]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">discoveryTables</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="graphs">graphs: <span class="extype" name="nelson.routing.Discovery.discoveryTables.F">F</span>[(<a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>)]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Foldable">Foldable</span>[<span class="extype" name="nelson.routing.Discovery.discoveryTables.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[(<a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a>, <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>), <a href="package.html#DiscoveryTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a>]</span>
+        <span class="name">discoveryTables</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="graphs">graphs: <span class="extype" name="nelson.routing.Discovery.discoveryTables.F">F</span>[(<a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="package.html#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>)]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="cats.Foldable">Foldable</span>[<span class="extype" name="nelson.routing.Discovery.discoveryTables.F">F</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[(<a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a>, <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>), <a href="package.html#DiscoveryTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.routing.Discovery$@discoveryTables[F[_]](graphs:F[(nelson.Datacenter.Namespace,nelson.routing.RoutingGraph)])(implicitevidence$1:scalaz.Foldable[F]):scalaz.==&gt;&gt;[(nelson.Datacenter.StackName,nelson.NamespaceName),nelson.routing.DiscoveryTables]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.routing.Discovery$@discoveryTables[F[_]](graphs:F[(nelson.Datacenter.Namespace,nelson.routing.RoutingGraph)])(implicitevidence$1:cats.Foldable[F]):scala.collection.immutable.SortedMap[(nelson.Datacenter.StackName,nelson.NamespaceName),nelson.routing.DiscoveryTables]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -316,7 +316,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">encodeRT</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<a href="package.html#DiscoveryTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a>]</span>
+        <span class="name">encodeRT</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<a href="package.html#DiscoveryTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.routing.Discovery$@encodeRT:argonaut.EncodeJson[nelson.routing.DiscoveryTables]" title="Permalink" target="_top">
@@ -714,7 +714,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">writeDiscoveryInfoToConsul</span><span class="params">(<span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="domain">domain: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dt">dt: <a href="package.html#DiscoveryTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a></span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">writeDiscoveryInfoToConsul</span><span class="params">(<span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>, <span name="domain">domain: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dt">dt: <a href="package.html#DiscoveryTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" class="extmbr" name="nelson.routing.DiscoveryTables">DiscoveryTables</a></span>)</span><span class="result">: <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.routing.Discovery$@writeDiscoveryInfoToConsul(ns:nelson.NamespaceName,sn:nelson.Datacenter.StackName,domain:String,dt:nelson.routing.DiscoveryTables):helm.ConsulOp.ConsulOpF[Unit]" title="Permalink" target="_top">

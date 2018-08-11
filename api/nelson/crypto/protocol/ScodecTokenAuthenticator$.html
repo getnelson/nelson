@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/crypto/protocol/ScodecTokenAuthenticator.scala" target="_blank">ScodecTokenAuthenticator.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/crypto/protocol/ScodecTokenAuthenticator.scala" target="_blank">ScodecTokenAuthenticator.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -173,7 +173,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bitVectorFromBase64</span><span class="params">(<span name="base64">base64: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.BitVector">BitVector</span>]</span>
+        <span class="name">bitVectorFromBase64</span><span class="params">(<span name="base64">base64: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.BitVector">BitVector</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#nelson.crypto.protocol.ScodecTokenAuthenticator$@bitVectorFromBase64(base64:String):nelson.crypto.AuthResult[scodec.bits.BitVector]" title="Permalink" target="_top">
@@ -411,7 +411,7 @@ See {{https://github.com/scodec/scodec-bits/issues/32 the GitHub issue }}.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toAuthResult</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="attempt">attempt: <span class="extype" name="scodec.Attempt">Attempt</span>[<span class="extype" name="scodec.DecodeResult">DecodeResult</span>[<span class="extype" name="nelson.crypto.protocol.ScodecTokenAuthenticator.toAuthResult.A">A</span>]]</span>)</span><span class="result">: <a href="../package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="nelson.crypto.protocol.ScodecTokenAuthenticator.toAuthResult.A">A</span>]</span>
+        <span class="name">toAuthResult</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="attempt">attempt: <span class="extype" name="scodec.Attempt">Attempt</span>[<span class="extype" name="scodec.DecodeResult">DecodeResult</span>[<span class="extype" name="nelson.crypto.protocol.ScodecTokenAuthenticator.toAuthResult.A">A</span>]]</span>)</span><span class="result">: <a href="../package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="nelson.crypto.protocol.ScodecTokenAuthenticator.toAuthResult.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#nelson.crypto.protocol.ScodecTokenAuthenticator$@toAuthResult[A](attempt:scodec.Attempt[scodec.DecodeResult[A]]):nelson.crypto.AuthResult[A]" title="Permalink" target="_top">

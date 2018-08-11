@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/scheduler/SchedulerOp.scala" target="_blank">SchedulerOp.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/scheduler/SchedulerOp.scala" target="_blank">SchedulerOp.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -118,7 +118,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SchedulerOp$$Launch.html"><span class="name">Launch</span></a><span class="params">(<span name="i">i: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="a">a: <span class="extype" name="scalaz.@@">@@</span>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="../Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>[<span class="extype" name="scala.Predef.String">String</span>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="SchedulerOp$$Launch.html"><span class="name">Launch</span></a><span class="params">(<span name="i">i: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="a">a: <a href="../package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="../Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>[<span class="extype" name="scala.Predef.String">String</span>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.scheduler.SchedulerOp$@LaunchextendsSchedulerOp[String]withProductwithSerializable" title="Permalink" target="_top">
@@ -144,7 +144,7 @@
     </span>
       
     </li><li name="nelson.scheduler.SchedulerOp.SchedulerF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SchedulerF[A]=scalaz.Free.FreeC[nelson.scheduler.SchedulerOp,A]"></a>
+      <a id="SchedulerF[A]=cats.free.Free[nelson.scheduler.SchedulerOp,A]"></a>
       <a id="SchedulerF[A]:SchedulerF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -152,10 +152,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">SchedulerF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.scheduler.SchedulerOp.SchedulerF.A">A</span>]</span>
+        <span class="name">SchedulerF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="nelson.scheduler.SchedulerOp.SchedulerF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.SchedulerOp$@SchedulerF[A]=scalaz.Free.FreeC[nelson.scheduler.SchedulerOp,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.SchedulerOp$@SchedulerF[A]=cats.free.Free[nelson.scheduler.SchedulerOp,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -284,7 +284,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="#SchedulerF[A]=scalaz.Free.FreeC[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">delete</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="#SchedulerF[A]=cats.free.Free[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.scheduler.SchedulerOp$@delete(dc:nelson.Datacenter,d:nelson.Datacenter.Deployment):nelson.scheduler.SchedulerOp.SchedulerF[Unit]" title="Permalink" target="_top">
@@ -401,7 +401,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.scheduler.SchedulerOp#launch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="launch(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,a:scalaz.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,hash:String):nelson.scheduler.SchedulerOp.SchedulerF[String]"></a>
+      <a id="launch(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,a:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,hash:String):nelson.scheduler.SchedulerOp.SchedulerF[String]"></a>
       <a id="launch(Image,Datacenter,NamespaceName,@@[UnitDef,Versioned],Plan,String):SchedulerF[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -409,10 +409,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">launch</span><span class="params">(<span name="i">i: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="a">a: <span class="extype" name="scalaz.@@">@@</span>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="../Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#SchedulerF[A]=scalaz.Free.FreeC[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">launch</span><span class="params">(<span name="i">i: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="a">a: <a href="../package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="../Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#SchedulerF[A]=cats.free.Free[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.SchedulerOp$@launch(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,a:scalaz.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,hash:String):nelson.scheduler.SchedulerOp.SchedulerF[String]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.SchedulerOp$@launch(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,a:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,hash:String):nelson.scheduler.SchedulerOp.SchedulerF[String]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -477,7 +477,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">runningUnits</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="prefix">prefix: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="#SchedulerF[A]=scalaz.Free.FreeC[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<span class="extype" name="scala.Predef.Set">Set</span>[<a href="RunningUnit.html" class="extype" name="nelson.scheduler.RunningUnit">RunningUnit</a>]]</span>
+        <span class="name">runningUnits</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="prefix">prefix: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="#SchedulerF[A]=cats.free.Free[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<span class="extype" name="scala.Predef.Set">Set</span>[<a href="RunningUnit.html" class="extype" name="nelson.scheduler.RunningUnit">RunningUnit</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.scheduler.SchedulerOp$@runningUnits(dc:nelson.Datacenter,prefix:Option[String]):nelson.scheduler.SchedulerOp.SchedulerF[Set[nelson.scheduler.RunningUnit]]" title="Permalink" target="_top">
@@ -494,7 +494,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">summary</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <a href="#SchedulerF[A]=scalaz.Free.FreeC[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a>]]</span>
+        <span class="name">summary</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <a href="#SchedulerF[A]=cats.free.Free[nelson.scheduler.SchedulerOp,A]" class="extmbr" name="nelson.scheduler.SchedulerOp.SchedulerF">SchedulerF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.scheduler.SchedulerOp$@summary(dc:nelson.Datacenter,ns:nelson.NamespaceName,sn:nelson.Datacenter.StackName):nelson.scheduler.SchedulerOp.SchedulerF[Option[nelson.scheduler.DeploymentSummary]]" title="Permalink" target="_top">

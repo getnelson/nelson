@@ -47,7 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/loadbalancers/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/loadbalancers/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -106,7 +106,7 @@
     </span>
       
     </li><li name="nelson.loadbalancers.Aws" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Awsextends~&gt;[nelson.loadbalancers.LoadbalancerOp,scalaz.concurrent.Task]"></a>
+      <a id="Awsextendscats.~&gt;[nelson.loadbalancers.LoadbalancerOp,cats.effect.IO]"></a>
       <a id="Aws:Aws"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -114,10 +114,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Aws.html"><span class="name">Aws</span></a><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="LoadbalancerOp.html" class="extype" name="nelson.loadbalancers.LoadbalancerOp">LoadbalancerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <a href="Aws.html"><span class="name">Aws</span></a><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="LoadbalancerOp.html" class="extype" name="nelson.loadbalancers.LoadbalancerOp">LoadbalancerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.loadbalancers.package@Awsextends~&gt;[nelson.loadbalancers.LoadbalancerOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.loadbalancers.package@Awsextendscats.~&gt;[nelson.loadbalancers.LoadbalancerOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -208,7 +208,7 @@ to the outside world.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=scalaz.Free.FreeC[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">delete</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=cats.free.Free[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.loadbalancers.package@delete(lb:nelson.Datacenter.LoadbalancerDeployment,dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[Unit]" title="Permalink" target="_top">
@@ -242,7 +242,7 @@ to the outside world.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">launch</span><span class="params">(<span name="lb">lb: <a href="../Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a></span>, <span name="v">v: <a href="../MajorVersion.html" class="extype" name="nelson.MajorVersion">MajorVersion</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="pl">pl: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=scalaz.Free.FreeC[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">launch</span><span class="params">(<span name="lb">lb: <a href="../Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a></span>, <span name="v">v: <a href="../MajorVersion.html" class="extype" name="nelson.MajorVersion">MajorVersion</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="pl">pl: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=cats.free.Free[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.loadbalancers.package@launch(lb:nelson.Manifest.Loadbalancer,v:nelson.MajorVersion,dc:nelson.Datacenter,ns:nelson.NamespaceName,pl:nelson.Manifest.Plan,hash:String):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[String]" title="Permalink" target="_top">
@@ -310,27 +310,10 @@ to the outside world.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resize</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=scalaz.Free.FreeC[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">resize</span><span class="params">(<span name="lb">lb: <a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a></span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=cats.free.Free[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.loadbalancers.package@resize(lb:nelson.Datacenter.LoadbalancerDeployment,p:nelson.Manifest.Plan):nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[Unit]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.loadbalancers#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="run[F[_],A](interpreter:scalaz.~&gt;[nelson.loadbalancers.LoadbalancerOp,F],op:nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]"></a>
-      <a id="run[F[_],A](~&gt;[LoadbalancerOp,F],LoadbalancerF[A])(Monad[F]):F[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="interpreter">interpreter: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="LoadbalancerOp.html" class="extype" name="nelson.loadbalancers.LoadbalancerOp">LoadbalancerOp</a>, <span class="extype" name="nelson.loadbalancers.run.F">F</span>]</span>, <span name="op">op: <a href="LoadbalancerOp$.html#LoadbalancerF[A]=scalaz.Free.FreeC[nelson.loadbalancers.LoadbalancerOp,A]" class="extmbr" name="nelson.loadbalancers.LoadbalancerOp.LoadbalancerF">LoadbalancerF</a>[<span class="extype" name="nelson.loadbalancers.run.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.loadbalancers.run.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.loadbalancers.run.F">F</span>[<span class="extype" name="nelson.loadbalancers.run.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.loadbalancers.package@run[F[_],A](interpreter:scalaz.~&gt;[nelson.loadbalancers.LoadbalancerOp,F],op:nelson.loadbalancers.LoadbalancerOp.LoadbalancerF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -47,7 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/vault/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/vault/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -250,25 +250,8 @@ less privileged tokens.
       <p class="shortcomment cmt">An algebra which represents an operation interacting with a
 [HashiCorp Vault](https://www.vaultproject.io/docs/) server
 </p>
-    </li><li name="nelson.vault.VaultC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="VaultC[A]=scalaz.Coyoneda[nelson.vault.Vault,A]"></a>
-      <a id="VaultC[A]:VaultC[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">VaultC</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="nelson.vault.VaultC.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.vault.package@VaultC[A]=scalaz.Coyoneda[nelson.vault.Vault,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.vault.VaultF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]"></a>
+      <a id="VaultF[A]=cats.free.Free[nelson.vault.Vault,A]"></a>
       <a id="VaultF[A]:VaultF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -276,27 +259,10 @@ less privileged tokens.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">VaultF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.vault.VaultF.A">A</span>]</span>
+        <span class="name">VaultF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="nelson.vault.VaultF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.vault.package@VaultF[A]=scalaz.Free.FreeC[nelson.vault.Vault,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.vault.VaultFOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="VaultFOps[A]extendsAnyRef"></a>
-      <a id="VaultFOps[A]:VaultFOps[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="package$$VaultFOps.html"><span class="name">VaultFOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.vault.package@VaultFOps[A]extendsAnyRef" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.vault.package@VaultF[A]=cats.free.Free[nelson.vault.Vault,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/http/src/main/scala/Server.scala" target="_blank">Server.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/http/src/main/scala/Server.scala" target="_blank">Server.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -146,18 +146,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.Server#api" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="api(config:nelson.NelsonConfig):org.http4s.HttpService"></a>
-      <a id="api(NelsonConfig):HttpService"></a>
+      <a id="api(config:nelson.NelsonConfig):org.http4s.HttpService[cats.effect.IO]"></a>
+      <a id="api(NelsonConfig):HttpService[IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">api</span><span class="params">(<span name="config">config: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="org.http4s.HttpService">HttpService</span></span>
+        <span class="name">api</span><span class="params">(<span name="config">config: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <a href="../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Server$@api(config:nelson.NelsonConfig):org.http4s.HttpService" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Server$@api(config:nelson.NelsonConfig):org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -237,18 +237,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.Server#files" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="files(filePath:String):org.http4s.HttpService"></a>
-      <a id="files(String):HttpService"></a>
+      <a id="files(filePath:String):org.http4s.HttpService[cats.effect.IO]"></a>
+      <a id="files(String):HttpService[IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">files</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.http4s.HttpService">HttpService</span></span>
+        <span class="name">files</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Server$@files(filePath:String):org.http4s.HttpService" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Server$@files(filePath:String):org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -328,18 +328,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.Server#json500" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="json500(service:org.http4s.HttpService):org.http4s.HttpService"></a>
-      <a id="json500(HttpService):HttpService"></a>
+      <a id="json500(service:org.http4s.HttpService[cats.effect.IO]):org.http4s.HttpService[cats.effect.IO]"></a>
+      <a id="json500(HttpService[IO]):HttpService[IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">json500</span><span class="params">(<span name="service">service: <span class="extype" name="org.http4s.HttpService">HttpService</span></span>)</span><span class="result">: <span class="extype" name="org.http4s.HttpService">HttpService</span></span>
+        <span class="name">json500</span><span class="params">(<span name="service">service: <a href="../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <a href="../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Server$@json500(service:org.http4s.HttpService):org.http4s.HttpService" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Server$@json500(service:org.http4s.HttpService[cats.effect.IO]):org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -396,52 +396,52 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.Server#resources" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resources:org.http4s.HttpService"></a>
-      <a id="resources:HttpService"></a>
+      <a id="resources:org.http4s.HttpService[cats.effect.IO]"></a>
+      <a id="resources:HttpService[IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">resources</span><span class="result">: <span class="extype" name="org.http4s.HttpService">HttpService</span></span>
+        <span class="name">resources</span><span class="result">: <a href="../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Server$@resources:org.http4s.HttpService" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Server$@resources:org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Server#service" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="service(config:nelson.NelsonConfig):org.http4s.HttpService"></a>
-      <a id="service(NelsonConfig):HttpService"></a>
+      <a id="service(config:nelson.NelsonConfig):org.http4s.HttpService[cats.effect.IO]"></a>
+      <a id="service(NelsonConfig):HttpService[IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">service</span><span class="params">(<span name="config">config: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="org.http4s.HttpService">HttpService</span></span>
+        <span class="name">service</span><span class="params">(<span name="config">config: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <a href="../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Server$@service(config:nelson.NelsonConfig):org.http4s.HttpService" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Server$@service(config:nelson.NelsonConfig):org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Server#start" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="start(config:nelson.NelsonConfig):scalaz.concurrent.Task[org.http4s.server.Server]"></a>
-      <a id="start(NelsonConfig):Task[Server]"></a>
+      <a id="start(config:nelson.NelsonConfig):cats.effect.IO[org.http4s.server.Server[cats.effect.IO]]"></a>
+      <a id="start(NelsonConfig):IO[Server[IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">start</span><span class="params">(<span name="config">config: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.server.Server">Server</span>]</span>
+        <span class="name">start</span><span class="params">(<span name="config">config: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.server.Server">Server</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Server$@start(config:nelson.NelsonConfig):scalaz.concurrent.Task[org.http4s.server.Server]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Server$@start(config:nelson.NelsonConfig):cats.effect.IO[org.http4s.server.Server[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -481,18 +481,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.Server#ui" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ui(config:nelson.NelsonConfig):org.http4s.HttpService"></a>
-      <a id="ui(NelsonConfig):HttpService"></a>
+      <a id="ui(config:nelson.NelsonConfig):org.http4s.HttpService[cats.effect.IO]"></a>
+      <a id="ui(NelsonConfig):HttpService[IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ui</span><span class="params">(<span name="config">config: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="org.http4s.HttpService">HttpService</span></span>
+        <span class="name">ui</span><span class="params">(<span name="config">config: <a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <a href="../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Server$@ui(config:nelson.NelsonConfig):org.http4s.HttpService" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Server$@ui(config:nelson.NelsonConfig):org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

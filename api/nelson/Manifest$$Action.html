@@ -45,11 +45,11 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Action</span><span class="params">(<span name="config">config: <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a></span>, <span name="run">run: <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Action</span><span class="params">(<span name="config">config: <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a></span>, <span name="run">run: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Manifest.scala" target="_blank">Manifest.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Manifest.scala" target="_blank">Manifest.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Manifest.Action#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(config:nelson.Manifest.ActionConfig,run:scalaz.Kleisli[scalaz.concurrent.Task,(nelson.NelsonConfig,nelson.Manifest.ActionConfig),Unit]):nelson.Manifest.Action"></a>
+      <a id="&lt;init&gt;(config:nelson.Manifest.ActionConfig,run:cats.data.Kleisli[cats.effect.IO,(nelson.NelsonConfig,nelson.Manifest.ActionConfig),Unit]):nelson.Manifest.Action"></a>
       <a id="&lt;init&gt;:Action"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Action</span><span class="params">(<span name="config">config: <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a></span>, <span name="run">run: <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span>
+        <span class="name">Action</span><span class="params">(<span name="config">config: <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a></span>, <span name="run">run: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Manifest$$Action@&lt;init&gt;(config:nelson.Manifest.ActionConfig,run:scalaz.Kleisli[scalaz.concurrent.Task,(nelson.NelsonConfig,nelson.Manifest.ActionConfig),Unit]):nelson.Manifest.Action" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Manifest$$Action@&lt;init&gt;(config:nelson.Manifest.ActionConfig,run:cats.data.Kleisli[cats.effect.IO,(nelson.NelsonConfig,nelson.Manifest.ActionConfig),Unit]):nelson.Manifest.Action" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -348,18 +348,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.Manifest.Action#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="run:scalaz.Kleisli[scalaz.concurrent.Task,(nelson.NelsonConfig,nelson.Manifest.ActionConfig),Unit]"></a>
-      <a id="run:Kleisli[Task,(NelsonConfig,ActionConfig),Unit]"></a>
+      <a id="run:cats.data.Kleisli[cats.effect.IO,(nelson.NelsonConfig,nelson.Manifest.ActionConfig),Unit]"></a>
+      <a id="run:Kleisli[IO,(NelsonConfig,ActionConfig),Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">run</span><span class="result">: <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">run</span><span class="result">: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, (<a href="NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a>, <a href="Manifest$$ActionConfig.html" class="extype" name="nelson.Manifest.ActionConfig">ActionConfig</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Manifest$$Action@run:scalaz.Kleisli[scalaz.concurrent.Task,(nelson.NelsonConfig,nelson.Manifest.ActionConfig),Unit]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Manifest$$Action@run:cats.data.Kleisli[cats.effect.IO,(nelson.NelsonConfig,nelson.Manifest.ActionConfig),Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -23,13 +23,7 @@
       <div class="name">Vault</div>
       <div class="occurrences"><a href="../nelson/vault/package.html" class="extype" name="nelson.vault">vault</a> </div>
     </div><div class="entry">
-      <div class="name">VaultC</div>
-      <div class="occurrences"><a href="../nelson/vault/package.html" class="extype" name="nelson.vault">vault</a> </div>
-    </div><div class="entry">
       <div class="name">VaultF</div>
-      <div class="occurrences"><a href="../nelson/vault/package.html" class="extype" name="nelson.vault">vault</a> </div>
-    </div><div class="entry">
-      <div class="name">VaultFOps</div>
       <div class="occurrences"><a href="../nelson/vault/package.html" class="extype" name="nelson.vault">vault</a> </div>
     </div><div class="entry">
       <div class="name">VerifyDeployable</div>
@@ -68,6 +62,9 @@
       <div class="name">validateCPU</div>
       <div class="occurrences"><a href="../nelson/yaml/ManifestV1Parser$.html" class="extype" name="nelson.yaml.ManifestV1Parser">ManifestV1Parser</a> </div>
     </div><div class="entry">
+      <div class="name">validateCPURequest</div>
+      <div class="occurrences"><a href="../nelson/yaml/ManifestV1Parser$.html" class="extype" name="nelson.yaml.ManifestV1Parser">ManifestV1Parser</a> </div>
+    </div><div class="entry">
       <div class="name">validateEphemeral</div>
       <div class="occurrences"><a href="../nelson/yaml/ManifestV1Parser$.html" class="extype" name="nelson.yaml.ManifestV1Parser">ManifestV1Parser</a> </div>
     </div><div class="entry">
@@ -81,6 +78,9 @@
       <div class="occurrences"><a href="../nelson/ManifestValidator$.html" class="extype" name="nelson.ManifestValidator">ManifestValidator</a> </div>
     </div><div class="entry">
       <div class="name">validateMemory</div>
+      <div class="occurrences"><a href="../nelson/yaml/ManifestV1Parser$.html" class="extype" name="nelson.yaml.ManifestV1Parser">ManifestV1Parser</a> </div>
+    </div><div class="entry">
+      <div class="name">validateMemoryRequest</div>
       <div class="occurrences"><a href="../nelson/yaml/ManifestV1Parser$.html" class="extype" name="nelson.yaml.ManifestV1Parser">ManifestV1Parser</a> </div>
     </div><div class="entry">
       <div class="name">validateMeta</div>
@@ -162,7 +162,7 @@
       <div class="occurrences"><a href="../nelson/DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a> </div>
     </div><div class="entry">
       <div class="name">version</div>
-      <div class="occurrences"><a href="../nelson/BuildInfo$.html" class="extype" name="nelson.BuildInfo">BuildInfo</a> <a href="../nelson/Datacenter$$DCLoadbalancer.html" class="extype" name="nelson.Datacenter.DCLoadbalancer">DCLoadbalancer</a> <a href="../nelson/Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a> <a href="../nelson/Datacenter$$ManualDeployment.html" class="extype" name="nelson.Datacenter.ManualDeployment">ManualDeployment</a> <a href="../nelson/Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a> <a href="../nelson/Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a> <a href="../nelson/Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a> <a href="../nelson/Nelson$$CommitUnit.html" class="extype" name="nelson.Nelson.CommitUnit">CommitUnit</a> <a href="../nelson/Released.html" class="extype" name="nelson.Released">Released</a> <a href="../nelson/UnparsableReleaseVersion.html" class="extype" name="nelson.UnparsableReleaseVersion">UnparsableReleaseVersion</a> <a href="../nelson/Versionable.html" class="extype" name="nelson.Versionable">Versionable</a> <a href="../nelson/Versionable$$Ops.html" class="extype" name="nelson.Versionable.Ops">Ops</a> <a href="../nelson/crypto/AuthFailure$$UnsupportedTokenVersion.html" class="extype" name="nelson.crypto.AuthFailure.UnsupportedTokenVersion">UnsupportedTokenVersion</a> <a href="../nelson/loadbalancers/LoadbalancerOp$$LaunchLoadbalancer.html" class="extype" name="nelson.loadbalancers.LoadbalancerOp.LaunchLoadbalancer">LaunchLoadbalancer</a> <a href="../nelson/plans/Loadbalancers$$LoadbalancerLaunch.html" class="extype" name="nelson.plans.Loadbalancers.LoadbalancerLaunch">LoadbalancerLaunch</a> <a href="../nelson/storage/H2Storage$ReleaseRow.html" class="extype" name="nelson.storage.H2Storage.ReleaseRow">ReleaseRow</a> <a href="../nelson/storage/StoreOp$$CreateManualDeployment.html" class="extype" name="nelson.storage.StoreOp.CreateManualDeployment">CreateManualDeployment</a> <a href="../nelson/storage/StoreOp$$GetUnit.html" class="extype" name="nelson.storage.StoreOp.GetUnit">GetUnit</a> <a href="../nelson/storage/StoreOp$$KillRelease.html" class="extype" name="nelson.storage.StoreOp.KillRelease">KillRelease</a> <a href="../nelson/yaml/DeployableYamlVersion1.html" class="extype" name="nelson.yaml.DeployableYamlVersion1">DeployableYamlVersion1</a> </div>
+      <div class="occurrences"><a href="../nelson/BuildInfo$.html" class="extype" name="nelson.BuildInfo">BuildInfo</a> <a href="../nelson/Datacenter$$DCLoadbalancer.html" class="extype" name="nelson.Datacenter.DCLoadbalancer">DCLoadbalancer</a> <a href="../nelson/Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a> <a href="../nelson/Datacenter$$ManualDeployment.html" class="extype" name="nelson.Datacenter.ManualDeployment">ManualDeployment</a> <a href="../nelson/Datacenter$$ServiceName.html" class="extype" name="nelson.Datacenter.ServiceName">ServiceName</a> <a href="../nelson/Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a> <a href="../nelson/Infrastructure$$Kubernetes.html" class="extype" name="nelson.Infrastructure.Kubernetes">Kubernetes</a> <a href="../nelson/Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a> <a href="../nelson/Nelson$$CommitUnit.html" class="extype" name="nelson.Nelson.CommitUnit">CommitUnit</a> <a href="../nelson/Released.html" class="extype" name="nelson.Released">Released</a> <a href="../nelson/UnparsableReleaseVersion.html" class="extype" name="nelson.UnparsableReleaseVersion">UnparsableReleaseVersion</a> <a href="../nelson/Versionable.html" class="extype" name="nelson.Versionable">Versionable</a> <a href="../nelson/Versionable$$Ops.html" class="extype" name="nelson.Versionable.Ops">Ops</a> <a href="../nelson/crypto/AuthFailure$$UnsupportedTokenVersion.html" class="extype" name="nelson.crypto.AuthFailure.UnsupportedTokenVersion">UnsupportedTokenVersion</a> <a href="../nelson/loadbalancers/LoadbalancerOp$$LaunchLoadbalancer.html" class="extype" name="nelson.loadbalancers.LoadbalancerOp.LaunchLoadbalancer">LaunchLoadbalancer</a> <a href="../nelson/plans/Loadbalancers$$LoadbalancerLaunch.html" class="extype" name="nelson.plans.Loadbalancers.LoadbalancerLaunch">LoadbalancerLaunch</a> <a href="../nelson/storage/H2Storage$ReleaseRow.html" class="extype" name="nelson.storage.H2Storage.ReleaseRow">ReleaseRow</a> <a href="../nelson/storage/StoreOp$$CreateManualDeployment.html" class="extype" name="nelson.storage.StoreOp.CreateManualDeployment">CreateManualDeployment</a> <a href="../nelson/storage/StoreOp$$GetUnit.html" class="extype" name="nelson.storage.StoreOp.GetUnit">GetUnit</a> <a href="../nelson/storage/StoreOp$$KillRelease.html" class="extype" name="nelson.storage.StoreOp.KillRelease">KillRelease</a> <a href="../nelson/yaml/DeployableYamlVersion1.html" class="extype" name="nelson.yaml.DeployableYamlVersion1">DeployableYamlVersion1</a> </div>
     </div><div class="entry">
       <div class="name">versionDecode</div>
       <div class="occurrences"><a href="../nelson/routing/Discovery$.html" class="extype" name="nelson.routing.Discovery">Discovery</a> </div>

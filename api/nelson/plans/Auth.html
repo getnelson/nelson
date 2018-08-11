@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/http/src/main/scala/plans/Auth.scala" target="_blank">Auth.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/http/src/main/scala/plans/Auth.scala" target="_blank">Auth.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -291,18 +291,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.plans.Auth">Auth</a> → <a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="nelson.plans.Default#decode" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="decode[A](req:org.http4s.Request)(f:A=&gt;scalaz.concurrent.Task[org.http4s.Response])(implicitevidence$4:argonaut.DecodeJson[A]):scalaz.concurrent.Task[org.http4s.Response]"></a>
-      <a id="decode[A](Request)((A)⇒Task[Response])(DecodeJson[A]):Task[Response]"></a>
+      <a id="decode[A](req:org.http4s.Request[cats.effect.IO])(f:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$4:argonaut.DecodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
+      <a id="decode[A](Request[IO])((A)⇒IO[Response[IO]])(DecodeJson[A]):IO[Response[IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">decode</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="org.http4s.Request">Request</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.plans.Default.decode.A">A</span>) ⇒ <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<span class="extype" name="nelson.plans.Default.decode.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]</span>
+        <span class="name">decode</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="org.http4s.Request">Request</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.plans.Default.decode.A">A</span>) ⇒ <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<span class="extype" name="nelson.plans.Default.decode.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Auth@decode[A](req:org.http4s.Request)(f:A=&gt;scalaz.concurrent.Task[org.http4s.Response])(implicitevidence$4:argonaut.DecodeJson[A]):scalaz.concurrent.Task[org.http4s.Response]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Auth@decode[A](req:org.http4s.Request[cats.effect.IO])(f:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$4:argonaut.DecodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -365,18 +365,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.plans.Default#handleMessageFailure" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="handleMessageFailure(req:org.http4s.Request,mf:org.http4s.MessageFailure):scalaz.concurrent.Task[org.http4s.Response]"></a>
-      <a id="handleMessageFailure(Request,MessageFailure):Task[Response]"></a>
+      <a id="handleMessageFailure(req:org.http4s.Request[cats.effect.IO],mf:org.http4s.MessageFailure):cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
+      <a id="handleMessageFailure(Request[IO],MessageFailure):IO[Response[IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handleMessageFailure</span><span class="params">(<span name="req">req: <span class="extype" name="org.http4s.Request">Request</span></span>, <span name="mf">mf: <span class="extype" name="org.http4s.MessageFailure">MessageFailure</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]</span>
+        <span class="name">handleMessageFailure</span><span class="params">(<span name="req">req: <span class="extype" name="org.http4s.Request">Request</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="mf">mf: <span class="extype" name="org.http4s.MessageFailure">MessageFailure</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Auth@handleMessageFailure(req:org.http4s.Request,mf:org.http4s.MessageFailure):scalaz.concurrent.Task[org.http4s.Response]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Auth@handleMessageFailure(req:org.http4s.Request[cats.effect.IO],mf:org.http4s.MessageFailure):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -399,52 +399,52 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.plans.Default#json" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="json[A](a:nelson.Nelson.NelsonK[A])(implicitevidence$1:argonaut.EncodeJson[A]):scalaz.concurrent.Task[org.http4s.Response]"></a>
-      <a id="json[A](NelsonK[A])(EncodeJson[A]):Task[Response]"></a>
+      <a id="json[A](a:nelson.Nelson.NelsonK[A])(implicitevidence$1:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
+      <a id="json[A](NelsonK[A])(EncodeJson[A]):IO[Response[IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">json</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.json.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.json.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]</span>
+        <span class="name">json</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.json.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.json.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Auth@json[A](a:nelson.Nelson.NelsonK[A])(implicitevidence$1:argonaut.EncodeJson[A]):scalaz.concurrent.Task[org.http4s.Response]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Auth@json[A](a:nelson.Nelson.NelsonK[A])(implicitevidence$1:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="nelson.plans.Default#jsonF" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="jsonF[A](a:nelson.Nelson.NelsonK[A])(rf:A=&gt;scalaz.concurrent.Task[org.http4s.Response])(implicitevidence$2:argonaut.EncodeJson[A]):scalaz.concurrent.Task[org.http4s.Response]"></a>
-      <a id="jsonF[A](NelsonK[A])((A)⇒Task[Response])(EncodeJson[A]):Task[Response]"></a>
+      <a id="jsonF[A](a:nelson.Nelson.NelsonK[A])(rf:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$2:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
+      <a id="jsonF[A](NelsonK[A])((A)⇒IO[Response[IO]])(EncodeJson[A]):IO[Response[IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">jsonF</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>]</span>)</span><span class="params">(<span name="rf">rf: (<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>) ⇒ <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]</span>
+        <span class="name">jsonF</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>]</span>)</span><span class="params">(<span name="rf">rf: (<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>) ⇒ <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Auth@jsonF[A](a:nelson.Nelson.NelsonK[A])(rf:A=&gt;scalaz.concurrent.Task[org.http4s.Response])(implicitevidence$2:argonaut.EncodeJson[A]):scalaz.concurrent.Task[org.http4s.Response]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Auth@jsonF[A](a:nelson.Nelson.NelsonK[A])(rf:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$2:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="nelson.plans.Default#jsonHandler" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="jsonHandler[A](a:nelson.Nelson.NelsonK[A])(rf:Option[A=&gt;scalaz.concurrent.Task[org.http4s.Response]])(implicitevidence$3:argonaut.EncodeJson[A]):scalaz.concurrent.Task[org.http4s.Response]"></a>
-      <a id="jsonHandler[A](NelsonK[A])(Option[(A)⇒Task[Response]])(EncodeJson[A]):Task[Response]"></a>
+      <a id="jsonHandler[A](a:nelson.Nelson.NelsonK[A])(rf:Option[A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]]])(implicitevidence$3:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
+      <a id="jsonHandler[A](NelsonK[A])(Option[(A)⇒IO[Response[IO]]])(EncodeJson[A]):IO[Response[IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">jsonHandler</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>]</span>)</span><span class="params">(<span name="rf">rf: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[(<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>) ⇒ <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]</span>
+        <span class="name">jsonHandler</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>]</span>)</span><span class="params">(<span name="rf">rf: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[(<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>) ⇒ <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Auth@jsonHandler[A](a:nelson.Nelson.NelsonK[A])(rf:Option[A=&gt;scalaz.concurrent.Task[org.http4s.Response]])(implicitevidence$3:argonaut.EncodeJson[A]):scalaz.concurrent.Task[org.http4s.Response]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Auth@jsonHandler[A](a:nelson.Nelson.NelsonK[A])(rf:Option[A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]]])(implicitevidence$3:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -518,35 +518,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.plans.Default#redirectToLogin" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="redirectToLogin:scalaz.concurrent.Task[org.http4s.Response]"></a>
-      <a id="redirectToLogin:Task[Response]"></a>
+      <a id="redirectToLogin:cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
+      <a id="redirectToLogin:IO[Response[IO]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">redirectToLogin</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Response">Response</span>]</span>
+        <span class="name">redirectToLogin</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Auth@redirectToLogin:scalaz.concurrent.Task[org.http4s.Response]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Auth@redirectToLogin:cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="nelson.plans.Auth#service" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="service:org.http4s.HttpService"></a>
-      <a id="service:HttpService"></a>
+      <a id="service:org.http4s.HttpService[cats.effect.IO]"></a>
+      <a id="service:HttpService[IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">service</span><span class="result">: <span class="extype" name="org.http4s.HttpService">HttpService</span></span>
+        <span class="name">service</span><span class="result">: <a href="../../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Auth@service:org.http4s.HttpService" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Auth@service:org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

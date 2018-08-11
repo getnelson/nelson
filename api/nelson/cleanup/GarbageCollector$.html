@@ -52,7 +52,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The GarbageCollector is a process that periodically traverses the
 CleanupGraph and marks deployments as <code>garbage</code>. Any deployment that
 is marked as <code>garbage</code> becomes a candidate for cleanup.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/cleanup/GarbageCollector.scala" target="_blank">GarbageCollector.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/cleanup/GarbageCollector.scala" target="_blank">GarbageCollector.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -314,22 +314,22 @@ is marked as <code>garbage</code> becomes a candidate for cleanup.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.cleanup.GarbageCollector#mark" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mark(cfg:nelson.NelsonConfig):scalaz.stream.Channel[scalaz.concurrent.Task,nelson.cleanup.CleanupRow,nelson.cleanup.CleanupRow]"></a>
-      <a id="mark(NelsonConfig):Channel[Task,CleanupRow,CleanupRow]"></a>
+      <a id="mark(cfg:nelson.NelsonConfig):fs2.Pipe[cats.effect.IO,nelson.cleanup.CleanupRow,nelson.cleanup.CleanupRow]"></a>
+      <a id="mark(NelsonConfig):Pipe[IO,CleanupRow,CleanupRow]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">mark</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Channel">Channel</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>, <a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>]</span>
+        <span class="name">mark</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="fs2.Pipe">Pipe</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>, <a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.GarbageCollector$@mark(cfg:nelson.NelsonConfig):scalaz.stream.Channel[scalaz.concurrent.Task,nelson.cleanup.CleanupRow,nelson.cleanup.CleanupRow]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.GarbageCollector$@mark(cfg:nelson.NelsonConfig):fs2.Pipe[cats.effect.IO,nelson.cleanup.CleanupRow,nelson.cleanup.CleanupRow]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A Channel that captures the output of the ExpirationPolicy process.</p><div class="fullcomment"><div class="comment cmt"><p>A Channel that captures the output of the ExpirationPolicy process.
+      <p class="shortcomment cmt">A Pipe that captures the output of the ExpirationPolicy process.</p><div class="fullcomment"><div class="comment cmt"><p>A Pipe that captures the output of the ExpirationPolicy process.
 This should be run after the ExpirationPolicy process to guard
 against the case where the ExpirationPolicy process fails
 and GC eagerly marks deployments that it shouldn't.
@@ -343,7 +343,7 @@ and GC eagerly marks deployments that it shouldn't.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">markAsGarbage</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]</span>
+        <span class="name">markAsGarbage</span><span class="params">(<span name="d">d: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.cleanup.GarbageCollector$@markAsGarbage(d:nelson.Datacenter.Deployment):nelson.storage.StoreOpF[nelson.Datacenter.Deployment]" title="Permalink" target="_top">

@@ -47,14 +47,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">KubernetesHttp</span><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">KubernetesHttp</span><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>SchedulerOp interpreter that uses the Kubernetes API server.</p><p>See: https://kubernetes.io/docs/api-reference/v1.8/
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/scheduler/KubernetesHttp.scala" target="_blank">KubernetesHttp.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/scheduler/KubernetesHttp.scala" target="_blank">KubernetesHttp.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.scheduler.KubernetesHttp"><span>KubernetesHttp</span></li><li class="in" name="scalaz.NaturalTransformation"><span>NaturalTransformation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.scheduler.KubernetesHttp"><span>KubernetesHttp</span></li><li class="in" name="cats.arrow.FunctionK"><span>FunctionK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -168,23 +168,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="nelson.scheduler.KubernetesHttp#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[A](fa:nelson.scheduler.SchedulerOp[A]):scalaz.concurrent.Task[A]"></a>
-      <a id="apply[A](SchedulerOp[A]):Task[A]"></a>
+    </li><li name="cats.arrow.FunctionK#and" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="and[H[_]](h:cats.arrow.FunctionK[F,H]):cats.arrow.FunctionK[F,[γ$4$]cats.data.Tuple2K[G,H,γ$4$]]"></a>
+      <a id="and[H[_]](FunctionK[SchedulerOp,H]):FunctionK[SchedulerOp,[γ$4$]Tuple2K[IO,H,γ$4$]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>[<span class="extype" name="nelson.scheduler.KubernetesHttp.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="nelson.scheduler.KubernetesHttp.apply.A">A</span>]</span>
+        <span class="name">and</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="cats.arrow.FunctionK.and.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, [γ$4$]<span class="extype" name="cats.data.Tuple2K">Tuple2K</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.arrow.FunctionK.and.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.KubernetesHttp@apply[A](fa:nelson.scheduler.SchedulerOp[A]):scalaz.concurrent.Task[A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.KubernetesHttp@and[H[_]](h:cats.arrow.FunctionK[F,H]):cats.arrow.FunctionK[F,[γ$4$]cats.data.Tuple2K[G,H,γ$4$]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.scheduler.KubernetesHttp">KubernetesHttp</a> → NaturalTransformation</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="cats.arrow.FunctionK#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[H[_]](f:cats.arrow.FunctionK[G,H]):cats.arrow.FunctionK[F,H]"></a>
+      <a id="andThen[H[_]](FunctionK[IO,H]):FunctionK[SchedulerOp,H]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.arrow.FunctionK.andThen.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="cats.arrow.FunctionK.andThen.H">H</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.scheduler.KubernetesHttp@andThen[H[_]](f:cats.arrow.FunctionK[G,H]):cats.arrow.FunctionK[F,H]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.scheduler.KubernetesHttp#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](fa:nelson.scheduler.SchedulerOp[A]):cats.effect.IO[A]"></a>
+      <a id="apply[A](SchedulerOp[A]):IO[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="fa">fa: <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>[<span class="extype" name="nelson.scheduler.KubernetesHttp.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="nelson.scheduler.KubernetesHttp.apply.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.scheduler.KubernetesHttp@apply[A](fa:nelson.scheduler.SchedulerOp[A]):cats.effect.IO[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.scheduler.KubernetesHttp">KubernetesHttp</a> → FunctionK</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -225,36 +259,36 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scalaz.NaturalTransformation#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[E[_]](f:scalaz.~&gt;[E,F]):scalaz.~&gt;[E,G]"></a>
-      <a id="compose[E[_]](~&gt;[E,SchedulerOp]):~&gt;[E,Task]"></a>
+    </li><li name="cats.arrow.FunctionK#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[E[_]](f:cats.arrow.FunctionK[E,F]):cats.arrow.FunctionK[E,G]"></a>
+      <a id="compose[E[_]](FunctionK[E,SchedulerOp]):FunctionK[E,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.NaturalTransformation.compose.E">E</span>, <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.NaturalTransformation.compose.E">E</span>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.compose.E">E</span>, <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.compose.E">E</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.KubernetesHttp@compose[E[_]](f:scalaz.~&gt;[E,F]):scalaz.~&gt;[E,G]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.KubernetesHttp@compose[E[_]](f:cats.arrow.FunctionK[E,F]):cats.arrow.FunctionK[E,G]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NaturalTransformation</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
     </li><li name="nelson.scheduler.KubernetesHttp#delete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="delete(dc:nelson.Datacenter,deployment:nelson.Datacenter.Deployment):scalaz.concurrent.Task[Unit]"></a>
-      <a id="delete(Datacenter,Deployment):Task[Unit]"></a>
+      <a id="delete(dc:nelson.Datacenter,deployment:nelson.Datacenter.Deployment):cats.effect.IO[Unit]"></a>
+      <a id="delete(Datacenter,Deployment):IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="deployment">deployment: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">delete</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="deployment">deployment: <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.KubernetesHttp@delete(dc:nelson.Datacenter,deployment:nelson.Datacenter.Deployment):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.KubernetesHttp@delete(dc:nelson.Datacenter,deployment:nelson.Datacenter.Deployment):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -368,18 +402,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.scheduler.KubernetesHttp#launch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="launch(image:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,unit:nelson.Manifest.UnitDef,version:nelson.Version,plan:nelson.Manifest.Plan,hash:String):scalaz.concurrent.Task[String]"></a>
-      <a id="launch(Image,Datacenter,NamespaceName,UnitDef,Version,Plan,String):Task[String]"></a>
+      <a id="launch(image:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,unit:nelson.Manifest.UnitDef,version:nelson.Version,plan:nelson.Manifest.Plan,hash:String):cats.effect.IO[String]"></a>
+      <a id="launch(Image,Datacenter,NamespaceName,UnitDef,Version,Plan,String):IO[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">launch</span><span class="params">(<span name="image">image: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="unit">unit: <a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="version">version: <a href="../Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="plan">plan: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">launch</span><span class="params">(<span name="image">image: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="unit">unit: <a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="version">version: <a href="../Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="plan">plan: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.KubernetesHttp@launch(image:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,unit:nelson.Manifest.UnitDef,version:nelson.Version,plan:nelson.Manifest.Plan,hash:String):scalaz.concurrent.Task[String]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.KubernetesHttp@launch(image:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,unit:nelson.Manifest.UnitDef,version:nelson.Version,plan:nelson.Manifest.Plan,hash:String):cats.effect.IO[String]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -435,19 +469,36 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.scheduler.KubernetesHttp#summary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="summary(dc:nelson.Datacenter,ns:nelson.NamespaceName,stackName:nelson.Datacenter.StackName):scalaz.concurrent.Task[Option[nelson.scheduler.DeploymentSummary]]"></a>
-      <a id="summary(Datacenter,NamespaceName,StackName):Task[Option[DeploymentSummary]]"></a>
+    </li><li name="cats.arrow.FunctionK#or" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$1$]cats.data.EitherK[F,H,γ$1$],G]"></a>
+      <a id="or[H[_]](FunctionK[H,IO]):FunctionK[[γ$1$]EitherK[SchedulerOp,H,γ$1$],IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">summary</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="stackName">stackName: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a>]]</span>
+        <span class="name">or</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[[γ$1$]<span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$1$">γ$1$</span>], <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.KubernetesHttp@summary(dc:nelson.Datacenter,ns:nelson.NamespaceName,stackName:nelson.Datacenter.StackName):scalaz.concurrent.Task[Option[nelson.scheduler.DeploymentSummary]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.KubernetesHttp@or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$1$]cats.data.EitherK[F,H,γ$1$],G]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.scheduler.KubernetesHttp#summary" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="summary(dc:nelson.Datacenter,ns:nelson.NamespaceName,stackName:nelson.Datacenter.StackName):cats.effect.IO[Option[nelson.scheduler.DeploymentSummary]]"></a>
+      <a id="summary(Datacenter,NamespaceName,StackName):IO[Option[DeploymentSummary]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">summary</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="stackName">stackName: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.scheduler.KubernetesHttp@summary(dc:nelson.Datacenter,ns:nelson.NamespaceName,stackName:nelson.Datacenter.StackName):cats.effect.IO[Option[nelson.scheduler.DeploymentSummary]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -564,8 +615,12 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scalaz.NaturalTransformation">
-              <h3>Inherited from <span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</h3>
+        <div class="parent" name="cats.arrow.FunctionK">
+              <h3>Inherited from <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Github.scala" target="_blank">Github.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Github.scala" target="_blank">Github.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -312,7 +312,7 @@
     </span>
       
     </li><li name="nelson.Github.GithubHttp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GithubHttpextends~&gt;[nelson.Github.GithubOp,scalaz.concurrent.Task]"></a>
+      <a id="GithubHttpextendscats.~&gt;[nelson.Github.GithubOp,cats.effect.IO]"></a>
       <a id="GithubHttp:GithubHttp"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -320,10 +320,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Github$$GithubHttp.html"><span class="name">GithubHttp</span></a><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <a href="Github$$GithubHttp.html"><span class="name">GithubHttp</span></a><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$@GithubHttpextends~&gt;[nelson.Github.GithubOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$@GithubHttpextendscats.~&gt;[nelson.Github.GithubOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -345,25 +345,8 @@
       </a>
     </span>
       
-    </li><li name="nelson.Github.GithubOpC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GithubOpC[A]=scalaz.Coyoneda[nelson.Github.GithubOp,A]"></a>
-      <a id="GithubOpC[A]:GithubOpC[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">GithubOpC</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="nelson.Github.GithubOpC.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$@GithubOpC[A]=scalaz.Coyoneda[nelson.Github.GithubOp,A]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.Github.GithubOpF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GithubOpF[A]=scalaz.Free.FreeC[nelson.Github.GithubOp,A]"></a>
+      <a id="GithubOpF[A]=cats.free.Free[nelson.Github.GithubOp,A]"></a>
       <a id="GithubOpF[A]:GithubOpF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -371,10 +354,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">GithubOpF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.Github.GithubOpF.A">A</span>]</span>
+        <span class="name">GithubOpF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="nelson.Github.GithubOpF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$@GithubOpF[A]=scalaz.Free.FreeC[nelson.Github.GithubOp,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$@GithubOpF[A]=cats.free.Free[nelson.Github.GithubOp,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -442,7 +425,7 @@ reachable by github and is responding
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Github$$Release.html"><span class="name">Release</span></a><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="htmlUrl">htmlUrl: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="assets">assets: <span class="extype" name="scala.Seq">Seq</span>[<a href="Github$$Asset.html" class="extype" name="nelson.Github.Asset">Asset</a>]</span>, <span name="tagName">tagName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Github$$Release.html"><span class="name">Release</span></a><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="htmlUrl">htmlUrl: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="assets">assets: <span class="extype" name="scala.List">List</span>[<a href="Github$$Asset.html" class="extype" name="nelson.Github.Asset">Asset</a>]</span>, <span name="tagName">tagName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Github$@ReleaseextendsProductwithSerializable" title="Permalink" target="_top">
@@ -809,23 +792,6 @@ reachable by github and is responding
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.Github#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="run[F[_],A](interpreter:scalaz.~&gt;[nelson.Github.GithubOp,F],op:nelson.Github.GithubOpF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]"></a>
-      <a id="run[F[_],A](~&gt;[GithubOp,F],GithubOpF[A])(Monad[F]):F[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="interpreter">interpreter: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>, <span class="extype" name="nelson.Github.run.F">F</span>]</span>, <span name="op">op: <a href="#GithubOpF[A]=scalaz.Free.FreeC[nelson.Github.GithubOp,A]" class="extmbr" name="nelson.Github.GithubOpF">GithubOpF</a>[<span class="extype" name="nelson.Github.run.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.Github.run.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.Github.run.F">F</span>[<span class="extype" name="nelson.Github.run.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$@run[F[_],A](interpreter:scalaz.~&gt;[nelson.Github.GithubOp,F],op:nelson.Github.GithubOpF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

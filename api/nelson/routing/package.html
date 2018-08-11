@@ -47,7 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/routing/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/routing/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -89,7 +89,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="nelson.routing.DiscoveryTable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="DiscoveryTable=scalaz.==&gt;&gt;[nelson.routing.NamedService,scalaz.NonEmptyList[nelson.routing.RoutePath]]"></a>
+      <a id="DiscoveryTable=scala.collection.immutable.SortedMap[nelson.routing.NamedService,cats.data.NonEmptyList[nelson.routing.RoutePath]]"></a>
       <a id="DiscoveryTable:DiscoveryTable"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">DiscoveryTable</span><span class="result"> = <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="nelson.routing.NamedService">NamedService</span>, <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="RoutePath.html" class="extype" name="nelson.routing.RoutePath">RoutePath</a>]]</span>
+        <span class="name">DiscoveryTable</span><span class="result"> = <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<span class="extype" name="nelson.routing.NamedService">NamedService</span>, <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="RoutePath.html" class="extype" name="nelson.routing.RoutePath">RoutePath</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.routing.package@DiscoveryTable=scalaz.==&gt;&gt;[nelson.routing.NamedService,scalaz.NonEmptyList[nelson.routing.RoutePath]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.routing.package@DiscoveryTable=scala.collection.immutable.SortedMap[nelson.routing.NamedService,cats.data.NonEmptyList[nelson.routing.RoutePath]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -108,7 +108,7 @@
 port in a particular namespace
 </p>
     </li><li name="nelson.routing.DiscoveryTables" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="DiscoveryTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]"></a>
+      <a id="DiscoveryTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]"></a>
       <a id="DiscoveryTables:DiscoveryTables"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -116,16 +116,16 @@ port in a particular namespace
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">DiscoveryTables</span><span class="result"> = <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>, <a href="#DiscoveryTable=scalaz.==&gt;&gt;[nelson.routing.NamedService,scalaz.NonEmptyList[nelson.routing.RoutePath]]" class="extmbr" name="nelson.routing.DiscoveryTable">DiscoveryTable</a>]</span>
+        <span class="name">DiscoveryTables</span><span class="result"> = <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>, <a href="#DiscoveryTable=scala.collection.immutable.SortedMap[nelson.routing.NamedService,cats.data.NonEmptyList[nelson.routing.RoutePath]]" class="extmbr" name="nelson.routing.DiscoveryTable">DiscoveryTable</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.routing.package@DiscoveryTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.routing.package@DiscoveryTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.DiscoveryTable]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">A Discovery Table for each known namespace</p>
     </li><li name="nelson.routing.GraphBuild" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GraphBuild[A]=scalaz.RWST[nelson.storage.StoreOpF,nelson.routing.package.RoutingTables,List[String],nelson.routing.package.RoutingGraph,A]"></a>
+      <a id="GraphBuild[A]=cats.data.RWST[nelson.storage.StoreOpF,nelson.routing.package.RoutingTables,List[String],nelson.routing.package.RoutingGraph,A]"></a>
       <a id="GraphBuild[A]:GraphBuild[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -133,16 +133,16 @@ port in a particular namespace
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">GraphBuild</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.IndexedReaderWriterStateT">IndexedReaderWriterStateT</span>[<a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>, <a href="#RoutingTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.RoutingTable]" class="extmbr" name="nelson.routing.RoutingTables">RoutingTables</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <span class="extype" name="nelson.routing.GraphBuild.A">A</span>]</span>
+        <span class="name">GraphBuild</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</span>[<a href="../storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>, <a href="#RoutingTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.RoutingTable]" class="extmbr" name="nelson.routing.RoutingTables">RoutingTables</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <span class="extype" name="nelson.routing.GraphBuild.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.routing.package@GraphBuild[A]=scalaz.RWST[nelson.storage.StoreOpF,nelson.routing.package.RoutingTables,List[String],nelson.routing.package.RoutingGraph,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.routing.package@GraphBuild[A]=cats.data.RWST[nelson.storage.StoreOpF,nelson.routing.package.RoutingTables,List[String],nelson.routing.package.RoutingGraph,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.routing.GraphBuildT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GraphBuildT[F[_],A]=scalaz.RWST[F,nelson.routing.package.RoutingTables,List[String],nelson.routing.package.RoutingGraph,A]"></a>
+      <a id="GraphBuildT[F[_],A]=cats.data.RWST[F,nelson.routing.package.RoutingTables,List[String],nelson.routing.package.RoutingGraph,A]"></a>
       <a id="GraphBuildT[F[_],A]:GraphBuildT[F,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -150,10 +150,10 @@ port in a particular namespace
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">GraphBuildT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.IndexedReaderWriterStateT">IndexedReaderWriterStateT</span>[<span class="extype" name="nelson.routing.GraphBuildT.F">F</span>, <a href="#RoutingTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.RoutingTable]" class="extmbr" name="nelson.routing.RoutingTables">RoutingTables</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <span class="extype" name="nelson.routing.GraphBuildT.A">A</span>]</span>
+        <span class="name">GraphBuildT</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.IndexedReaderWriterStateT">IndexedReaderWriterStateT</span>[<span class="extype" name="nelson.routing.GraphBuildT.F">F</span>, <a href="#RoutingTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.RoutingTable]" class="extmbr" name="nelson.routing.RoutingTables">RoutingTables</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <span class="extype" name="nelson.routing.GraphBuildT.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.routing.package@GraphBuildT[F[_],A]=scalaz.RWST[F,nelson.routing.package.RoutingTables,List[String],nelson.routing.package.RoutingGraph,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.routing.package@GraphBuildT[F[_],A]=cats.data.RWST[F,nelson.routing.package.RoutingTables,List[String],nelson.routing.package.RoutingGraph,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -210,7 +210,7 @@ build both routing tables and discovery tables
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="RoutingNode.html"><span class="name">RoutingNode</span></a><span class="params">(<span name="node">node: <span class="extype" name="scalaz.\/">\/</span>[<a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>, <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="RoutingNode.html"><span class="name">RoutingNode</span></a><span class="params">(<span name="node">node: <span class="extype" name="scala.Either">Either</span>[<a href="../Datacenter$$LoadbalancerDeployment.html" class="extype" name="nelson.Datacenter.LoadbalancerDeployment">LoadbalancerDeployment</a>, <a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.routing.package@RoutingNodeextendsProductwithSerializable" title="Permalink" target="_top">
@@ -219,7 +219,7 @@ build both routing tables and discovery tables
     </span>
       
     </li><li name="nelson.routing.RoutingTable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RoutingTable=scalaz.==&gt;&gt;[nelson.routing.package.ServiceTarget,nelson.Datacenter.Target]"></a>
+      <a id="RoutingTable=scala.collection.immutable.SortedMap[nelson.routing.package.ServiceTarget,nelson.Datacenter.Target]"></a>
       <a id="RoutingTable:RoutingTable"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -227,10 +227,10 @@ build both routing tables and discovery tables
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">RoutingTable</span><span class="result"> = <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="#ServiceTarget=(nelson.UnitName,nelson.MajorVersion)" class="extmbr" name="nelson.routing.ServiceTarget">ServiceTarget</a>, <a href="../Datacenter$$Target.html" class="extype" name="nelson.Datacenter.Target">Target</a>]</span>
+        <span class="name">RoutingTable</span><span class="result"> = <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<a href="#ServiceTarget=(nelson.UnitName,nelson.MajorVersion)" class="extmbr" name="nelson.routing.ServiceTarget">ServiceTarget</a>, <a href="../Datacenter$$Target.html" class="extype" name="nelson.Datacenter.Target">Target</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.routing.package@RoutingTable=scalaz.==&gt;&gt;[nelson.routing.package.ServiceTarget,nelson.Datacenter.Target]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.routing.package@RoutingTable=scala.collection.immutable.SortedMap[nelson.routing.package.ServiceTarget,nelson.Datacenter.Target]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -239,7 +239,7 @@ this namespace, and looking for this service type, here is
 the current target
 </p>
     </li><li name="nelson.routing.RoutingTables" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RoutingTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.RoutingTable]"></a>
+      <a id="RoutingTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.RoutingTable]"></a>
       <a id="RoutingTables:RoutingTables"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -247,10 +247,10 @@ the current target
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">RoutingTables</span><span class="result"> = <span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>, <a href="#RoutingTable=scalaz.==&gt;&gt;[nelson.routing.package.ServiceTarget,nelson.Datacenter.Target]" class="extmbr" name="nelson.routing.RoutingTable">RoutingTable</a>]</span>
+        <span class="name">RoutingTables</span><span class="result"> = <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a>, <a href="#RoutingTable=scala.collection.immutable.SortedMap[nelson.routing.package.ServiceTarget,nelson.Datacenter.Target]" class="extmbr" name="nelson.routing.RoutingTable">RoutingTable</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.routing.package@RoutingTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.RoutingTable]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.routing.package@RoutingTables=scala.collection.immutable.SortedMap[nelson.NamespaceName,nelson.routing.package.RoutingTable]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -381,19 +381,19 @@ the current target
       </a>
     </span>
       
-    </li><li name="nelson.routing#graphBuild" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="graphBuild:scalaz.MonadReader[[r,α]scalaz.IndexedReaderWriterStateT[nelson.storage.StoreOpF,r,List[String],nelson.routing.package.RoutingGraph,nelson.routing.package.RoutingGraph,α],nelson.routing.package.RoutingTables]withscalaz.MonadState[[s,α]scalaz.IndexedReaderWriterStateT[nelson.storage.StoreOpF,nelson.routing.package.RoutingTables,List[String],s,s,α],nelson.routing.package.RoutingGraph]withscalaz.MonadListen[[w,α]scalaz.IndexedReaderWriterStateT[nelson.storage.StoreOpF,nelson.routing.package.RoutingTables,w,nelson.routing.package.RoutingGraph,nelson.routing.package.RoutingGraph,α],List[String]]"></a>
-      <a id="graphBuild:MonadReader[[r,α]IndexedReaderWriterStateT[StoreOpF,r,List[String],RoutingGraph,RoutingGraph,α],RoutingTables]withMonadState[[s,α]IndexedReaderWriterStateT[StoreOpF,RoutingTables,List[String],s,s,α],RoutingGraph]withMonadListen[[w,α]IndexedReaderWriterStateT[StoreOpF,RoutingTables,w,RoutingGraph,RoutingGraph,α],List[String]]"></a>
+    </li><li name="nelson.routing.graphBuild" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="graphBuild"></a>
+      <a id="graphBuild:graphBuild"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">graphBuild</span><span class="result">: <span class="extype" name="scalaz.MonadReader">MonadReader</span>[[r, α]<span class="extype" name="scalaz.IndexedReaderWriterStateT">IndexedReaderWriterStateT</span>[<a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>, <span class="extype" name="scalaz.ReaderWriterStateTInstances.&lt;refinement&gt;.λ.r">r</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <span class="extype" name="scalaz.ReaderWriterStateTInstances.&lt;refinement&gt;.λ.α">α</span>], <a href="#RoutingTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.RoutingTable]" class="extmbr" name="nelson.routing.RoutingTables">RoutingTables</a>] with <span class="extype" name="scalaz.MonadState">MonadState</span>[[s, α]<span class="extype" name="scalaz.IndexedReaderWriterStateT">IndexedReaderWriterStateT</span>[<a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>, <a href="#RoutingTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.RoutingTable]" class="extmbr" name="nelson.routing.RoutingTables">RoutingTables</a>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scalaz.ReaderWriterStateTInstances.&lt;refinement&gt;.f.s">s</span>, <span class="extype" name="scalaz.ReaderWriterStateTInstances.&lt;refinement&gt;.f.s">s</span>, <span class="extype" name="scalaz.ReaderWriterStateTInstances.&lt;refinement&gt;.f.α">α</span>], <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>] with <span class="extype" name="scalaz.MonadListen">MonadListen</span>[[w, α]<span class="extype" name="scalaz.IndexedReaderWriterStateT">IndexedReaderWriterStateT</span>[<a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>, <a href="#RoutingTables=scalaz.==&gt;&gt;[nelson.NamespaceName,nelson.routing.package.RoutingTable]" class="extmbr" name="nelson.routing.RoutingTables">RoutingTables</a>, <span class="extype" name="scalaz.ReaderWriterStateTInstances.&lt;refinement&gt;.f.w">w</span>, <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <a href="#RoutingGraph=quiver.Graph[nelson.routing.RoutingNode,Unit,nelson.routing.RoutePath]" class="extmbr" name="nelson.routing.RoutingGraph">RoutingGraph</a>, <span class="extype" name="scalaz.ReaderWriterStateTInstances.&lt;refinement&gt;.f.α">α</span>], <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
+        <a href="package$$graphBuild$.html"><span class="name">graphBuild</span></a>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.routing.package@graphBuild:scalaz.MonadReader[[r,α]scalaz.IndexedReaderWriterStateT[nelson.storage.StoreOpF,r,List[String],nelson.routing.package.RoutingGraph,nelson.routing.package.RoutingGraph,α],nelson.routing.package.RoutingTables]withscalaz.MonadState[[s,α]scalaz.IndexedReaderWriterStateT[nelson.storage.StoreOpF,nelson.routing.package.RoutingTables,List[String],s,s,α],nelson.routing.package.RoutingGraph]withscalaz.MonadListen[[w,α]scalaz.IndexedReaderWriterStateT[nelson.storage.StoreOpF,nelson.routing.package.RoutingTables,w,nelson.routing.package.RoutingGraph,nelson.routing.package.RoutingGraph,α],List[String]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.routing.package@graphBuild" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

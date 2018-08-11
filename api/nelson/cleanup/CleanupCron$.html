@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/cleanup/CleanupCron.scala" target="_blank">CleanupCron.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/cleanup/CleanupCron.scala" target="_blank">CleanupCron.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -260,18 +260,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.cleanup.CleanupCron#getDeployments" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getDeployments(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[Vector[nelson.cleanup.CleanupRow]]"></a>
-      <a id="getDeployments(NelsonConfig):Task[Vector[CleanupRow]]"></a>
+      <a id="getDeployments(cfg:nelson.NelsonConfig):cats.effect.IO[Vector[nelson.cleanup.CleanupRow]]"></a>
+      <a id="getDeployments(NelsonConfig):IO[Vector[CleanupRow]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getDeployments</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>]]</span>
+        <span class="name">getDeployments</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.CleanupCron$@getDeployments(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[Vector[nelson.cleanup.CleanupRow]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.CleanupCron$@getDeployments(cfg:nelson.NelsonConfig):cats.effect.IO[Vector[nelson.cleanup.CleanupRow]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -285,7 +285,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getDeploymentsForDatacenter</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>]]</span>
+        <span class="name">getDeploymentsForDatacenter</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.Vector">Vector</span>[<a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.cleanup.CleanupCron$@getDeploymentsForDatacenter(dc:nelson.Datacenter):nelson.storage.StoreOpF[Vector[nelson.cleanup.CleanupRow]]" title="Permalink" target="_top">
@@ -302,7 +302,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getDeploymentsForNamespace</span><span class="params">(<span name="ns">ns: <a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.Vector">Vector</span>[(<a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="DeploymentCtx.html" class="extype" name="nelson.cleanup.DeploymentCtx">DeploymentCtx</a>)]]</span>
+        <span class="name">getDeploymentsForNamespace</span><span class="params">(<span name="ns">ns: <a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="../storage/package.html#StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="scala.Vector">Vector</span>[(<a href="../Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a>, <a href="DeploymentCtx.html" class="extype" name="nelson.cleanup.DeploymentCtx">DeploymentCtx</a>)]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.cleanup.CleanupCron$@getDeploymentsForNamespace(ns:nelson.Datacenter.Namespace):nelson.storage.StoreOpF[Vector[(nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx)]]" title="Permalink" target="_top">
@@ -396,52 +396,52 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.cleanup.CleanupCron#pipeline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="pipeline(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,Unit]"></a>
-      <a id="pipeline(NelsonConfig):Process[Task,Unit]"></a>
+      <a id="pipeline(cfg:nelson.NelsonConfig)(implicitec:scala.concurrent.ExecutionContext):fs2.Stream[cats.effect.IO,Unit]"></a>
+      <a id="pipeline(NelsonConfig)(ExecutionContext):Stream[IO,Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pipeline</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">pipeline</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.CleanupCron$@pipeline(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.CleanupCron$@pipeline(cfg:nelson.NelsonConfig)(implicitec:scala.concurrent.ExecutionContext):fs2.Stream[cats.effect.IO,Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.cleanup.CleanupCron#process" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="process(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,nelson.cleanup.CleanupRow]"></a>
-      <a id="process(NelsonConfig):Process[Task,CleanupRow]"></a>
+      <a id="process(cfg:nelson.NelsonConfig):fs2.Stream[cats.effect.IO,nelson.cleanup.CleanupRow]"></a>
+      <a id="process(NelsonConfig):Stream[IO,CleanupRow]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">process</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>]</span>
+        <span class="name">process</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="package.html#CleanupRow=(nelson.Datacenter,nelson.Datacenter.Namespace,nelson.cleanup.DeploymentCtx,nelson.routing.RoutingGraph)" class="extmbr" name="nelson.cleanup.CleanupRow">CleanupRow</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.CleanupCron$@process(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,nelson.cleanup.CleanupRow]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.CleanupCron$@process(cfg:nelson.NelsonConfig):fs2.Stream[cats.effect.IO,nelson.cleanup.CleanupRow]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.cleanup.CleanupCron#refresh" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="refresh(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,scala.concurrent.duration.Duration]"></a>
-      <a id="refresh(NelsonConfig):Process[Task,Duration]"></a>
+      <a id="refresh(cfg:nelson.NelsonConfig):fs2.Stream[cats.effect.IO,scala.concurrent.duration.Duration]"></a>
+      <a id="refresh(NelsonConfig):Stream[IO,Duration]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">refresh</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>]</span>
+        <span class="name">refresh</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.CleanupCron$@refresh(cfg:nelson.NelsonConfig):scalaz.stream.Process[scalaz.concurrent.Task,scala.concurrent.duration.Duration]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.CleanupCron$@refresh(cfg:nelson.NelsonConfig):fs2.Stream[cats.effect.IO,scala.concurrent.duration.Duration]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

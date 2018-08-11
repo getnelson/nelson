@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Workflow.scala" target="_blank">Workflow.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Workflow.scala" target="_blank">Workflow.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -93,7 +93,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="nelson.Workflow.Op0" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Op0[A]=scalaz.Coproduct[nelson.docker.DockerOp,helm.ConsulOp,A]"></a>
+      <a id="Op0[A]=cats.data.EitherK[nelson.docker.DockerOp,helm.ConsulOp,A]"></a>
       <a id="Op0[A]:Op0[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -101,16 +101,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Op0</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="docker/DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="helm.ConsulOp">ConsulOp</span>, <span class="extype" name="nelson.Workflow.Op0.A">A</span>]</span>
+        <span class="name">Op0</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="docker/DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="helm.ConsulOp">ConsulOp</span>, <span class="extype" name="nelson.Workflow.Op0.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow$@Op0[A]=scalaz.Coproduct[nelson.docker.DockerOp,helm.ConsulOp,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Workflow$@Op0[A]=cats.data.EitherK[nelson.docker.DockerOp,helm.ConsulOp,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Workflow.Op1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Op1[A]=scalaz.Coproduct[nelson.logging.LoggingOp,nelson.Workflow.Op0,A]"></a>
+      <a id="Op1[A]=cats.data.EitherK[nelson.logging.LoggingOp,nelson.Workflow.Op0,A]"></a>
       <a id="Op1[A]:Op1[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -118,16 +118,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Op1</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="logging/LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <a href="#Op0[A]=scalaz.Coproduct[nelson.docker.DockerOp,helm.ConsulOp,A]" class="extmbr" name="nelson.Workflow.Op0">Op0</a>, <span class="extype" name="nelson.Workflow.Op1.A">A</span>]</span>
+        <span class="name">Op1</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="logging/LoggingOp.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a>, <a href="#Op0[A]=cats.data.EitherK[nelson.docker.DockerOp,helm.ConsulOp,A]" class="extmbr" name="nelson.Workflow.Op0">Op0</a>, <span class="extype" name="nelson.Workflow.Op1.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow$@Op1[A]=scalaz.Coproduct[nelson.logging.LoggingOp,nelson.Workflow.Op0,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Workflow$@Op1[A]=cats.data.EitherK[nelson.logging.LoggingOp,nelson.Workflow.Op0,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Workflow.Op2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Op2[A]=scalaz.Coproduct[nelson.storage.StoreOp,nelson.Workflow.Op1,A]"></a>
+      <a id="Op2[A]=cats.data.EitherK[nelson.storage.StoreOp,nelson.Workflow.Op1,A]"></a>
       <a id="Op2[A]:Op2[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -135,16 +135,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Op2</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <a href="#Op1[A]=scalaz.Coproduct[nelson.logging.LoggingOp,nelson.Workflow.Op0,A]" class="extmbr" name="nelson.Workflow.Op1">Op1</a>, <span class="extype" name="nelson.Workflow.Op2.A">A</span>]</span>
+        <span class="name">Op2</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <a href="#Op1[A]=cats.data.EitherK[nelson.logging.LoggingOp,nelson.Workflow.Op0,A]" class="extmbr" name="nelson.Workflow.Op1">Op1</a>, <span class="extype" name="nelson.Workflow.Op2.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow$@Op2[A]=scalaz.Coproduct[nelson.storage.StoreOp,nelson.Workflow.Op1,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Workflow$@Op2[A]=cats.data.EitherK[nelson.storage.StoreOp,nelson.Workflow.Op1,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Workflow.Op3" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Op3[A]=scalaz.Coproduct[nelson.WorkflowControlOp,nelson.Workflow.Op2,A]"></a>
+      <a id="Op3[A]=cats.data.EitherK[nelson.WorkflowControlOp,nelson.Workflow.Op2,A]"></a>
       <a id="Op3[A]:Op3[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -152,16 +152,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Op3</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="WorkflowControlOp.html" class="extype" name="nelson.WorkflowControlOp">WorkflowControlOp</a>, <a href="#Op2[A]=scalaz.Coproduct[nelson.storage.StoreOp,nelson.Workflow.Op1,A]" class="extmbr" name="nelson.Workflow.Op2">Op2</a>, <span class="extype" name="nelson.Workflow.Op3.A">A</span>]</span>
+        <span class="name">Op3</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="WorkflowControlOp.html" class="extype" name="nelson.WorkflowControlOp">WorkflowControlOp</a>, <a href="#Op2[A]=cats.data.EitherK[nelson.storage.StoreOp,nelson.Workflow.Op1,A]" class="extmbr" name="nelson.Workflow.Op2">Op2</a>, <span class="extype" name="nelson.Workflow.Op3.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow$@Op3[A]=scalaz.Coproduct[nelson.WorkflowControlOp,nelson.Workflow.Op2,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Workflow$@Op3[A]=cats.data.EitherK[nelson.WorkflowControlOp,nelson.Workflow.Op2,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Workflow.Op4" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Op4[A]=scalaz.Coproduct[nelson.vault.Vault,nelson.Workflow.Op3,A]"></a>
+      <a id="Op4[A]=cats.data.EitherK[nelson.vault.Vault,nelson.Workflow.Op3,A]"></a>
       <a id="Op4[A]:Op4[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -169,16 +169,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Op4</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="vault/Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <a href="#Op3[A]=scalaz.Coproduct[nelson.WorkflowControlOp,nelson.Workflow.Op2,A]" class="extmbr" name="nelson.Workflow.Op3">Op3</a>, <span class="extype" name="nelson.Workflow.Op4.A">A</span>]</span>
+        <span class="name">Op4</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="vault/Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <a href="#Op3[A]=cats.data.EitherK[nelson.WorkflowControlOp,nelson.Workflow.Op2,A]" class="extmbr" name="nelson.Workflow.Op3">Op3</a>, <span class="extype" name="nelson.Workflow.Op4.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow$@Op4[A]=scalaz.Coproduct[nelson.vault.Vault,nelson.Workflow.Op3,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Workflow$@Op4[A]=cats.data.EitherK[nelson.vault.Vault,nelson.Workflow.Op3,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Workflow.WorkflowF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="WorkflowF[A]=scalaz.Free.FreeC[nelson.Workflow.WorkflowOp,A]"></a>
+      <a id="WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]"></a>
       <a id="WorkflowF[A]:WorkflowF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -186,16 +186,16 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkflowF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="#WorkflowOp[A]=scalaz.Coproduct[nelson.scheduler.SchedulerOp,nelson.Workflow.Op4,A]" class="extmbr" name="nelson.Workflow.WorkflowOp">WorkflowOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.Workflow.WorkflowF.A">A</span>]</span>
+        <span class="name">WorkflowF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="#WorkflowOp[A]=cats.data.EitherK[nelson.scheduler.SchedulerOp,nelson.Workflow.Op4,A]" class="extmbr" name="nelson.Workflow.WorkflowOp">WorkflowOp</a>, <span class="extype" name="nelson.Workflow.WorkflowF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow$@WorkflowF[A]=scalaz.Free.FreeC[nelson.Workflow.WorkflowOp,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Workflow$@WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Workflow.WorkflowOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="WorkflowOp[A]=scalaz.Coproduct[nelson.scheduler.SchedulerOp,nelson.Workflow.Op4,A]"></a>
+      <a id="WorkflowOp[A]=cats.data.EitherK[nelson.scheduler.SchedulerOp,nelson.Workflow.Op4,A]"></a>
       <a id="WorkflowOp[A]:WorkflowOp[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -203,10 +203,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkflowOp</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coproduct">Coproduct</span>[<a href="scheduler/SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <a href="#Op4[A]=scalaz.Coproduct[nelson.vault.Vault,nelson.Workflow.Op3,A]" class="extmbr" name="nelson.Workflow.Op4">Op4</a>, <span class="extype" name="nelson.Workflow.WorkflowOp.A">A</span>]</span>
+        <span class="name">WorkflowOp</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="scheduler/SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>, <a href="#Op4[A]=cats.data.EitherK[nelson.vault.Vault,nelson.Workflow.Op3,A]" class="extmbr" name="nelson.Workflow.Op4">Op4</a>, <span class="extype" name="nelson.Workflow.WorkflowOp.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow$@WorkflowOp[A]=scalaz.Coproduct[nelson.scheduler.SchedulerOp,nelson.Workflow.Op4,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Workflow$@WorkflowOp[A]=cats.data.EitherK[nelson.scheduler.SchedulerOp,nelson.Workflow.Op4,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -485,23 +485,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.Workflow#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="run[A](wf:nelson.Workflow.WorkflowF[A])(trans:scalaz.~&gt;[nelson.Workflow.WorkflowOp,scalaz.concurrent.Task]):scalaz.concurrent.Task[A]"></a>
-      <a id="run[A](WorkflowF[A])(~&gt;[WorkflowOp,Task]):Task[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="wf">wf: <a href="#WorkflowF[A]=scalaz.Free.FreeC[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="nelson.Workflow.run.A">A</span>]</span>)</span><span class="params">(<span name="trans">trans: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="#WorkflowOp[A]=scalaz.Coproduct[nelson.scheduler.SchedulerOp,nelson.Workflow.Op4,A]" class="extmbr" name="nelson.Workflow.WorkflowOp">WorkflowOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="nelson.Workflow.run.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow$@run[A](wf:nelson.Workflow.WorkflowF[A])(trans:scalaz.~&gt;[nelson.Workflow.WorkflowOp,scalaz.concurrent.Task]):scalaz.concurrent.Task[A]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Templates.scala" target="_blank">Templates.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Templates.scala" target="_blank">Templates.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -452,18 +452,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.Templates#renderTemplate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="renderTemplate(scheduler:java.util.concurrent.ScheduledExecutorService,templateConfig:nelson.TemplateConfig,dockerConfig:nelson.DockerConfig,path:java.nio.file.Path,vaultToken:String,env:Map[String,String]):scalaz.concurrent.Task[nelson.Templates.ConsulTemplateResult]"></a>
-      <a id="renderTemplate(ScheduledExecutorService,TemplateConfig,DockerConfig,Path,String,Map[String,String]):Task[ConsulTemplateResult]"></a>
+      <a id="renderTemplate(ec:scala.concurrent.ExecutionContext,scheduler:java.util.concurrent.ScheduledExecutorService,templateConfig:nelson.TemplateConfig,dockerConfig:nelson.DockerConfig,path:java.nio.file.Path,vaultToken:String,env:Map[String,String]):cats.effect.IO[nelson.Templates.ConsulTemplateResult]"></a>
+      <a id="renderTemplate(ExecutionContext,ScheduledExecutorService,TemplateConfig,DockerConfig,Path,String,Map[String,String]):IO[ConsulTemplateResult]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">renderTemplate</span><span class="params">(<span name="scheduler">scheduler: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>, <span name="templateConfig">templateConfig: <a href="TemplateConfig.html" class="extype" name="nelson.TemplateConfig">TemplateConfig</a></span>, <span name="dockerConfig">dockerConfig: <a href="DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a></span>, <span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="vaultToken">vaultToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="env">env: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map.empty</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a>]</span>
+        <span class="name">renderTemplate</span><span class="params">(<span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>, <span name="scheduler">scheduler: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>, <span name="templateConfig">templateConfig: <a href="TemplateConfig.html" class="extype" name="nelson.TemplateConfig">TemplateConfig</a></span>, <span name="dockerConfig">dockerConfig: <a href="DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a></span>, <span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="vaultToken">vaultToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="env">env: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map.empty</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Templates$@renderTemplate(scheduler:java.util.concurrent.ScheduledExecutorService,templateConfig:nelson.TemplateConfig,dockerConfig:nelson.DockerConfig,path:java.nio.file.Path,vaultToken:String,env:Map[String,String]):scalaz.concurrent.Task[nelson.Templates.ConsulTemplateResult]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Templates$@renderTemplate(ec:scala.concurrent.ExecutionContext,scheduler:java.util.concurrent.ScheduledExecutorService,templateConfig:nelson.TemplateConfig,dockerConfig:nelson.DockerConfig,path:java.nio.file.Path,vaultToken:String,env:Map[String,String]):cats.effect.IO[nelson.Templates.ConsulTemplateResult]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -514,7 +514,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateTemplate</span><span class="params">(<span name="tv">tv: <a href="Templates$$TemplateValidation.html" class="extype" name="nelson.Templates.TemplateValidation">TemplateValidation</a></span>)</span><span class="result">: <a href="Nelson$.html#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a>]</span>
+        <span class="name">validateTemplate</span><span class="params">(<span name="tv">tv: <a href="Templates$$TemplateValidation.html" class="extype" name="nelson.Templates.TemplateValidation">TemplateValidation</a></span>)</span><span class="result">: <a href="Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Templates$@validateTemplate(tv:nelson.Templates.TemplateValidation):nelson.Nelson.NelsonK[nelson.Templates.ConsulTemplateResult]" title="Permalink" target="_top">

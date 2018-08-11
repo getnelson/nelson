@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/WorkflowControlOp.scala" target="_blank">WorkflowControlOp.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/WorkflowControlOp.scala" target="_blank">WorkflowControlOp.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -127,7 +127,7 @@
     </span>
       
     </li><li name="nelson.WorkflowControlOp.WorkflowControlF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="WorkflowControlF[A]=scalaz.Free.FreeC[nelson.WorkflowControlOp,A]"></a>
+      <a id="WorkflowControlF[A]=cats.free.Free[nelson.WorkflowControlOp,A]"></a>
       <a id="WorkflowControlF[A]:WorkflowControlF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -135,10 +135,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkflowControlF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="WorkflowControlOp.html" class="extype" name="nelson.WorkflowControlOp">WorkflowControlOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.WorkflowControlOp.WorkflowControlF.A">A</span>]</span>
+        <span class="name">WorkflowControlF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="WorkflowControlOp.html" class="extype" name="nelson.WorkflowControlOp">WorkflowControlOp</a>, <span class="extype" name="nelson.WorkflowControlOp.WorkflowControlF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.WorkflowControlOp$@WorkflowControlF[A]=scalaz.Free.FreeC[nelson.WorkflowControlOp,A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.WorkflowControlOp$@WorkflowControlF[A]=cats.free.Free[nelson.WorkflowControlOp,A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -284,7 +284,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fail</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="#WorkflowControlF[A]=scalaz.Free.FreeC[nelson.WorkflowControlOp,A]" class="extmbr" name="nelson.WorkflowControlOp.WorkflowControlF">WorkflowControlF</a>[<span class="extype" name="nelson.WorkflowControlOp.fail.A">A</span>]</span>
+        <span class="name">fail</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="#WorkflowControlF[A]=cats.free.Free[nelson.WorkflowControlOp,A]" class="extmbr" name="nelson.WorkflowControlOp.WorkflowControlF">WorkflowControlF</a>[<span class="extype" name="nelson.WorkflowControlOp.fail.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.WorkflowControlOp$@fail[A](t:Throwable):nelson.WorkflowControlOp.WorkflowControlF[A]" title="Permalink" target="_top">
@@ -426,7 +426,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pure</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: ⇒ <span class="extype" name="nelson.WorkflowControlOp.pure.A">A</span></span>)</span><span class="result">: <a href="#WorkflowControlF[A]=scalaz.Free.FreeC[nelson.WorkflowControlOp,A]" class="extmbr" name="nelson.WorkflowControlOp.WorkflowControlF">WorkflowControlF</a>[<span class="extype" name="nelson.WorkflowControlOp.pure.A">A</span>]</span>
+        <span class="name">pure</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: ⇒ <span class="extype" name="nelson.WorkflowControlOp.pure.A">A</span></span>)</span><span class="result">: <a href="#WorkflowControlF[A]=cats.free.Free[nelson.WorkflowControlOp,A]" class="extmbr" name="nelson.WorkflowControlOp.WorkflowControlF">WorkflowControlF</a>[<span class="extype" name="nelson.WorkflowControlOp.pure.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.WorkflowControlOp$@pure[A](a:=&gt;A):nelson.WorkflowControlOp.WorkflowControlF[A]" title="Permalink" target="_top">
@@ -469,18 +469,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.WorkflowControlOp#trans" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="trans:scalaz.~&gt;[nelson.WorkflowControlOp,scalaz.concurrent.Task]"></a>
-      <a id="trans:~&gt;[WorkflowControlOp,Task]"></a>
+      <a id="trans:cats.~&gt;[nelson.WorkflowControlOp,cats.effect.IO]"></a>
+      <a id="trans:~&gt;[WorkflowControlOp,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">trans</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="WorkflowControlOp.html" class="extype" name="nelson.WorkflowControlOp">WorkflowControlOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">trans</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="WorkflowControlOp.html" class="extype" name="nelson.WorkflowControlOp">WorkflowControlOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.WorkflowControlOp$@trans:scalaz.~&gt;[nelson.WorkflowControlOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.WorkflowControlOp$@trans:cats.~&gt;[nelson.WorkflowControlOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

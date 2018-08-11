@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/crypto/protocol/EncryptedCodec.scala" target="_blank">EncryptedCodec.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/crypto/protocol/EncryptedCodec.scala" target="_blank">EncryptedCodec.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -294,18 +294,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.crypto.protocol.EncryptedCodec#instance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="instance[A](target:scodec.Codec[A],key:nelson.crypto.EncryptionKey,encryptor:nelson.crypto.Encryptor[nelson.crypto.AuthResult],decryptor:nelson.crypto.Decryptor[nelson.crypto.AuthResult],nextNonce:scalaz.concurrent.Task[nelson.crypto.Nonce]):scodec.Codec[A]"></a>
-      <a id="instance[A](Codec[A],EncryptionKey,Encryptor[AuthResult],Decryptor[AuthResult],Task[Nonce]):Codec[A]"></a>
+      <a id="instance[A](target:scodec.Codec[A],key:nelson.crypto.EncryptionKey,encryptor:nelson.crypto.Encryptor[nelson.crypto.AuthResult],decryptor:nelson.crypto.Decryptor[nelson.crypto.AuthResult],nextNonce:cats.effect.IO[nelson.crypto.Nonce]):scodec.Codec[A]"></a>
+      <a id="instance[A](Codec[A],EncryptionKey,Encryptor[AuthResult],Decryptor[AuthResult],IO[Nonce]):Codec[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">instance</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="scodec.Codec">Codec</span>[<span class="extype" name="nelson.crypto.protocol.EncryptedCodec.instance.A">A</span>]</span>, <span name="key">key: <a href="../EncryptionKey.html" class="extype" name="nelson.crypto.EncryptionKey">EncryptionKey</a></span>, <span name="encryptor">encryptor: <a href="../Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="../package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>, <span name="decryptor">decryptor: <a href="../Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="../package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>, <span name="nextNonce">nextNonce: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="../Nonce.html" class="extype" name="nelson.crypto.Nonce">Nonce</a>]</span>)</span><span class="result">: <span class="extype" name="scodec.Codec">Codec</span>[<span class="extype" name="nelson.crypto.protocol.EncryptedCodec.instance.A">A</span>]</span>
+        <span class="name">instance</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="scodec.Codec">Codec</span>[<span class="extype" name="nelson.crypto.protocol.EncryptedCodec.instance.A">A</span>]</span>, <span name="key">key: <a href="../EncryptionKey.html" class="extype" name="nelson.crypto.EncryptionKey">EncryptionKey</a></span>, <span name="encryptor">encryptor: <a href="../Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="../package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>, <span name="decryptor">decryptor: <a href="../Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="../package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>, <span name="nextNonce">nextNonce: <span class="extype" name="cats.effect.IO">IO</span>[<a href="../Nonce.html" class="extype" name="nelson.crypto.Nonce">Nonce</a>]</span>)</span><span class="result">: <span class="extype" name="scodec.Codec">Codec</span>[<span class="extype" name="nelson.crypto.protocol.EncryptedCodec.instance.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.crypto.protocol.EncryptedCodec$@instance[A](target:scodec.Codec[A],key:nelson.crypto.EncryptionKey,encryptor:nelson.crypto.Encryptor[nelson.crypto.AuthResult],decryptor:nelson.crypto.Decryptor[nelson.crypto.AuthResult],nextNonce:scalaz.concurrent.Task[nelson.crypto.Nonce]):scodec.Codec[A]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.crypto.protocol.EncryptedCodec$@instance[A](target:scodec.Codec[A],key:nelson.crypto.EncryptionKey,encryptor:nelson.crypto.Encryptor[nelson.crypto.AuthResult],decryptor:nelson.crypto.Decryptor[nelson.crypto.AuthResult],nextNonce:cats.effect.IO[nelson.crypto.Nonce]):scodec.Codec[A]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

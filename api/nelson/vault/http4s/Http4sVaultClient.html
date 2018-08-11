@@ -45,13 +45,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Http4sVaultClient</span><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>] with <a href="Json.html" class="extype" name="nelson.vault.http4s.Json">Json</a></span>
+        <span class="name">Http4sVaultClient</span><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="cats.effect.IO">IO</span>] with <a href="Json.html" class="extype" name="nelson.vault.http4s.Json">Json</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/vault/http/Http4sVault.scala" target="_blank">Http4sVault.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/vault/http/Http4sVault.scala" target="_blank">Http4sVault.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Json.html" class="extype" name="nelson.vault.http4s.Json">Json</a>, <span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Json.html" class="extype" name="nelson.vault.http4s.Json">Json</a>, <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="cats.effect.IO">IO</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.vault.http4s.Http4sVaultClient"><span>Http4sVaultClient</span></li><li class="in" name="nelson.vault.http4s.Json"><span>Json</span></li><li class="in" name="scalaz.NaturalTransformation"><span>NaturalTransformation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.vault.http4s.Http4sVaultClient"><span>Http4sVaultClient</span></li><li class="in" name="nelson.vault.http4s.Json"><span>Json</span></li><li class="in" name="cats.arrow.FunctionK"><span>FunctionK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.vault.http4s.Http4sVaultClient#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(authToken:nelson.vault.Token,baseUri:org.http4s.Uri,client:org.http4s.client.Client):nelson.vault.http4s.Http4sVaultClient"></a>
+      <a id="&lt;init&gt;(authToken:nelson.vault.Token,baseUri:org.http4s.Uri,client:org.http4s.client.Client[cats.effect.IO]):nelson.vault.http4s.Http4sVaultClient"></a>
       <a id="&lt;init&gt;:Http4sVaultClient"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Http4sVaultClient</span><span class="params">(<span name="authToken">authToken: <a href="../Token.html" class="extype" name="nelson.vault.Token">Token</a></span>, <span name="baseUri">baseUri: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="client">client: <span class="extype" name="org.http4s.client.Client">Client</span></span>)</span>
+        <span class="name">Http4sVaultClient</span><span class="params">(<span name="authToken">authToken: <a href="../Token.html" class="extype" name="nelson.vault.Token">Token</a></span>, <span name="baseUri">baseUri: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="client">client: <span class="extype" name="org.http4s.client.Client">Client</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@&lt;init&gt;(authToken:nelson.vault.Token,baseUri:org.http4s.Uri,client:org.http4s.client.Client):nelson.vault.http4s.Http4sVaultClient" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@&lt;init&gt;(authToken:nelson.vault.Token,baseUri:org.http4s.Uri,client:org.http4s.client.Client[cats.effect.IO]):nelson.vault.http4s.Http4sVaultClient" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -166,39 +166,73 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.vault.http4s.Http4sVaultClient#addCreds" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="addCreds:org.http4s.Request=&gt;org.http4s.Request"></a>
-      <a id="addCreds:(Request)⇒Request"></a>
+      <a id="addCreds:org.http4s.Request[cats.effect.IO]=&gt;org.http4s.Request[cats.effect.IO]"></a>
+      <a id="addCreds:(Request[IO])⇒Request[IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">addCreds</span><span class="result">: (<span class="extype" name="org.http4s.Request">Request</span>) ⇒ <span class="extype" name="org.http4s.Request">Request</span></span>
+        <span class="name">addCreds</span><span class="result">: (<span class="extype" name="org.http4s.Request">Request</span>[<span class="extype" name="cats.effect.IO">IO</span>]) ⇒ <span class="extype" name="org.http4s.Request">Request</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@addCreds:org.http4s.Request=&gt;org.http4s.Request" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@addCreds:org.http4s.Request[cats.effect.IO]=&gt;org.http4s.Request[cats.effect.IO]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
-    </li><li name="nelson.vault.http4s.Http4sVaultClient#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[A](v:nelson.vault.Vault[A]):scalaz.concurrent.Task[A]"></a>
-      <a id="apply[A](Vault[A]):Task[A]"></a>
+    </li><li name="cats.arrow.FunctionK#and" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="and[H&lt;:&lt;?&gt;](h:&lt;?&gt;):cats.arrow.FunctionK[F,[γ$4$&lt;:&lt;?&gt;]cats.data.Tuple2K[G,H,γ$4$]]"></a>
+      <a id="and[H[_]](FunctionK[Vault,H]):FunctionK[Vault,[γ$4$]Tuple2K[IO,H,γ$4$]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="v">v: <a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<span class="extype" name="nelson.vault.http4s.Http4sVaultClient.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="nelson.vault.http4s.Http4sVaultClient.apply.A">A</span>]</span>
+        <span class="name">and</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="cats.arrow.FunctionK.and.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, [γ$4$]<span class="extype" name="cats.data.Tuple2K">Tuple2K</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.arrow.FunctionK.and.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$4$">γ$4$</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@apply[A](v:nelson.vault.Vault[A]):scalaz.concurrent.Task[A]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@and[H[_]](h:cats.arrow.FunctionK[F,H]):cats.arrow.FunctionK[F,[γ$4$]cats.data.Tuple2K[G,H,γ$4$]]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.vault.http4s.Http4sVaultClient">Http4sVaultClient</a> → NaturalTransformation</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="cats.arrow.FunctionK#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[H&lt;:&lt;?&gt;](f:&lt;?&gt;):cats.arrow.FunctionK[F,H]"></a>
+      <a id="andThen[H[_]](FunctionK[IO,H]):FunctionK[Vault,H]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.arrow.FunctionK.andThen.H">H</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="cats.arrow.FunctionK.andThen.H">H</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@andThen[H[_]](f:cats.arrow.FunctionK[G,H]):cats.arrow.FunctionK[F,H]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.vault.http4s.Http4sVaultClient#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](v:nelson.vault.Vault[A]):cats.effect.IO[A]"></a>
+      <a id="apply[A](Vault[A]):IO[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="v">v: <a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<span class="extype" name="nelson.vault.http4s.Http4sVaultClient.apply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="nelson.vault.http4s.Http4sVaultClient.apply.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@apply[A](v:nelson.vault.Vault[A]):cats.effect.IO[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.vault.http4s.Http4sVaultClient">Http4sVaultClient</a> → FunctionK</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -239,70 +273,70 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scalaz.NaturalTransformation#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[E&lt;:&lt;?&gt;](f:&lt;?&gt;):scalaz.~&gt;[E,G]"></a>
-      <a id="compose[E[_]](~&gt;[E,Vault]):~&gt;[E,Task]"></a>
+    </li><li name="cats.arrow.FunctionK#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[E&lt;:&lt;?&gt;](f:&lt;?&gt;):cats.arrow.FunctionK[E,G]"></a>
+      <a id="compose[E[_]](FunctionK[E,Vault]):FunctionK[E,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.NaturalTransformation.compose.E">E</span>, <a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.NaturalTransformation.compose.E">E</span>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">compose</span><span class="tparams">[<span name="E">E<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="f">f: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.compose.E">E</span>, <a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.compose.E">E</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@compose[E[_]](f:scalaz.~&gt;[E,F]):scalaz.~&gt;[E,G]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@compose[E[_]](f:cats.arrow.FunctionK[E,F]):cats.arrow.FunctionK[E,G]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NaturalTransformation</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
     </li><li name="nelson.vault.http4s.Http4sVaultClient#createPolicy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createPolicy(cp:nelson.vault.Vault.CreatePolicy):scalaz.concurrent.Task[Unit]"></a>
-      <a id="createPolicy(CreatePolicy):Task[Unit]"></a>
+      <a id="createPolicy(cp:nelson.vault.Vault.CreatePolicy):cats.effect.IO[Unit]"></a>
+      <a id="createPolicy(CreatePolicy):IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createPolicy</span><span class="params">(<span name="cp">cp: <a href="../Vault$$CreatePolicy.html" class="extype" name="nelson.vault.Vault.CreatePolicy">CreatePolicy</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">createPolicy</span><span class="params">(<span name="cp">cp: <a href="../Vault$$CreatePolicy.html" class="extype" name="nelson.vault.Vault.CreatePolicy">CreatePolicy</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@createPolicy(cp:nelson.vault.Vault.CreatePolicy):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@createPolicy(cp:nelson.vault.Vault.CreatePolicy):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.vault.http4s.Http4sVaultClient#createToken" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createToken(ct:nelson.vault.Vault.CreateToken):scalaz.concurrent.Task[nelson.vault.Token]"></a>
-      <a id="createToken(CreateToken):Task[Token]"></a>
+      <a id="createToken(ct:nelson.vault.Vault.CreateToken):cats.effect.IO[nelson.vault.Token]"></a>
+      <a id="createToken(CreateToken):IO[Token]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createToken</span><span class="params">(<span name="ct">ct: <a href="../Vault$$CreateToken.html" class="extype" name="nelson.vault.Vault.CreateToken">CreateToken</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="../Token.html" class="extype" name="nelson.vault.Token">Token</a>]</span>
+        <span class="name">createToken</span><span class="params">(<span name="ct">ct: <a href="../Vault$$CreateToken.html" class="extype" name="nelson.vault.Vault.CreateToken">CreateToken</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="../Token.html" class="extype" name="nelson.vault.Token">Token</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@createToken(ct:nelson.vault.Vault.CreateToken):scalaz.concurrent.Task[nelson.vault.Token]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@createToken(ct:nelson.vault.Vault.CreateToken):cats.effect.IO[nelson.vault.Token]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.vault.http4s.Http4sVaultClient#deletePolicy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="deletePolicy(name:String):scalaz.concurrent.Task[Unit]"></a>
-      <a id="deletePolicy(String):Task[Unit]"></a>
+      <a id="deletePolicy(name:String):cats.effect.IO[Unit]"></a>
+      <a id="deletePolicy(String):IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deletePolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">deletePolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@deletePolicy(name:String):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@deletePolicy(name:String):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -399,18 +433,18 @@
               
         </dd></dl></div>
     </li><li name="nelson.vault.http4s.Http4sVaultClient#get" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="get(path:String):scalaz.concurrent.Task[String]"></a>
-      <a id="get(String):Task[String]"></a>
+      <a id="get(path:String):cats.effect.IO[String]"></a>
+      <a id="get(String):IO[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">get</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@get(path:String):scalaz.concurrent.Task[String]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@get(path:String):cats.effect.IO[String]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -433,18 +467,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.vault.http4s.Http4sVaultClient#getMounts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="getMounts:scalaz.concurrent.Task[scalaz.==&gt;&gt;[String,nelson.vault.Mount]]"></a>
-      <a id="getMounts:Task[==&gt;&gt;[String,Mount]]"></a>
+      <a id="getMounts:cats.effect.IO[scala.collection.immutable.SortedMap[String,nelson.vault.Mount]]"></a>
+      <a id="getMounts:IO[SortedMap[String,Mount]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getMounts</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]]</span>
+        <span class="name">getMounts</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@getMounts:scalaz.concurrent.Task[scalaz.==&gt;&gt;[String,nelson.vault.Mount]]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@getMounts:cats.effect.IO[scala.collection.immutable.SortedMap[String,nelson.vault.Mount]]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -467,35 +501,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.vault.http4s.Http4sVaultClient#initialize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="initialize(init:nelson.vault.Initialization):scalaz.concurrent.Task[nelson.vault.InitialCreds]"></a>
-      <a id="initialize(Initialization):Task[InitialCreds]"></a>
+      <a id="initialize(init:nelson.vault.Initialization):cats.effect.IO[nelson.vault.InitialCreds]"></a>
+      <a id="initialize(Initialization):IO[InitialCreds]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">initialize</span><span class="params">(<span name="init">init: <a href="../Initialization.html" class="extype" name="nelson.vault.Initialization">Initialization</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="../InitialCreds.html" class="extype" name="nelson.vault.InitialCreds">InitialCreds</a>]</span>
+        <span class="name">initialize</span><span class="params">(<span name="init">init: <a href="../Initialization.html" class="extype" name="nelson.vault.Initialization">Initialization</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="../InitialCreds.html" class="extype" name="nelson.vault.InitialCreds">InitialCreds</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@initialize(init:nelson.vault.Initialization):scalaz.concurrent.Task[nelson.vault.InitialCreds]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@initialize(init:nelson.vault.Initialization):cats.effect.IO[nelson.vault.InitialCreds]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.vault.http4s.Http4sVaultClient#isInitialized" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="isInitialized:scalaz.concurrent.Task[Boolean]"></a>
-      <a id="isInitialized:Task[Boolean]"></a>
+      <a id="isInitialized:cats.effect.IO[Boolean]"></a>
+      <a id="isInitialized:IO[Boolean]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInitialized</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+        <span class="name">isInitialized</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@isInitialized:scalaz.concurrent.Task[Boolean]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@isInitialized:cats.effect.IO[Boolean]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -603,18 +637,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Json.html" class="extype" name="nelson.vault.http4s.Json">Json</a></dd></dl></div>
     </li><li name="nelson.vault.http4s.Json#jsonMountMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="jsonMountMap:argonaut.DecodeJson[scalaz.==&gt;&gt;[String,nelson.vault.Mount]]"></a>
-      <a id="jsonMountMap:DecodeJson[==&gt;&gt;[String,Mount]]"></a>
+      <a id="jsonMountMap:argonaut.DecodeJson[scala.collection.immutable.SortedMap[String,nelson.vault.Mount]]"></a>
+      <a id="jsonMountMap:DecodeJson[SortedMap[String,Mount]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">jsonMountMap</span><span class="result">: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]]</span>
+        <span class="name">jsonMountMap</span><span class="result">: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.SortedMap" class="extype" target="_top">SortedMap</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@jsonMountMap:argonaut.DecodeJson[scalaz.==&gt;&gt;[String,nelson.vault.Mount]]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@jsonMountMap:argonaut.DecodeJson[scala.collection.immutable.SortedMap[String,nelson.vault.Mount]]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -738,87 +772,104 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.vault.http4s.Http4sVaultClient#put" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="put(path:String,value:String):scalaz.concurrent.Task[Unit]"></a>
-      <a id="put(String,String):Task[Unit]"></a>
+    </li><li name="cats.arrow.FunctionK#or" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$1$]cats.data.EitherK[F,H,γ$1$],G]"></a>
+      <a id="or[H[_]](FunctionK[H,IO]):FunctionK[[γ$1$]EitherK[Vault,H,γ$1$],IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">put</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">or</span><span class="tparams">[<span name="H">H<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="h">h: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[[γ$1$]<span class="extype" name="cats.data.EitherK">EitherK</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="cats.arrow.FunctionK.or.H">H</span>, <span class="extype" name="cats.arrow.FunctionK.&lt;refinement&gt;.Λ$.γ$1$">γ$1$</span>], <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@put(path:String,value:String):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@or[H[_]](h:cats.arrow.FunctionK[H,G]):cats.arrow.FunctionK[[γ$1$]cats.data.EitherK[F,H,γ$1$],G]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.vault.http4s.Http4sVaultClient#put" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="put(path:String,value:String):cats.effect.IO[Unit]"></a>
+      <a id="put(String,String):IO[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">put</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@put(path:String,value:String):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.vault.http4s.Http4sVaultClient#req" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="req[T](req:scalaz.concurrent.Task[org.http4s.Request])(implicitevidence$1:argonaut.DecodeJson[T]):scalaz.concurrent.Task[T]"></a>
-      <a id="req[T](Task[Request])(DecodeJson[T]):Task[T]"></a>
+      <a id="req[T](req:cats.effect.IO[org.http4s.Request[cats.effect.IO]])(implicitevidence$1:argonaut.DecodeJson[T]):cats.effect.IO[T]"></a>
+      <a id="req[T](IO[Request[IO]])(DecodeJson[T]):IO[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">req</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Request">Request</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<span class="extype" name="nelson.vault.http4s.Http4sVaultClient.req.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="nelson.vault.http4s.Http4sVaultClient.req.T">T</span>]</span>
+        <span class="name">req</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Request">Request</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<span class="extype" name="nelson.vault.http4s.Http4sVaultClient.req.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="nelson.vault.http4s.Http4sVaultClient.req.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@req[T](req:scalaz.concurrent.Task[org.http4s.Request])(implicitevidence$1:argonaut.DecodeJson[T]):scalaz.concurrent.Task[T]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@req[T](req:cats.effect.IO[org.http4s.Request[cats.effect.IO]])(implicitevidence$1:argonaut.DecodeJson[T]):cats.effect.IO[T]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.vault.http4s.Http4sVaultClient#reqVoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="reqVoid(req:scalaz.concurrent.Task[org.http4s.Request]):scalaz.concurrent.Task[Unit]"></a>
-      <a id="reqVoid(Task[Request]):Task[Unit]"></a>
+      <a id="reqVoid(req:cats.effect.IO[org.http4s.Request[cats.effect.IO]]):cats.effect.IO[Unit]"></a>
+      <a id="reqVoid(IO[Request[IO]]):IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reqVoid</span><span class="params">(<span name="req">req: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="org.http4s.Request">Request</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">reqVoid</span><span class="params">(<span name="req">req: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Request">Request</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@reqVoid(req:scalaz.concurrent.Task[org.http4s.Request]):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@reqVoid(req:cats.effect.IO[org.http4s.Request[cats.effect.IO]]):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.vault.http4s.Http4sVaultClient#seal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="seal:scalaz.concurrent.Task[Unit]"></a>
-      <a id="seal:Task[Unit]"></a>
+      <a id="seal:cats.effect.IO[Unit]"></a>
+      <a id="seal:IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">seal</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">seal</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@seal:scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@seal:cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.vault.http4s.Http4sVaultClient#sealStatus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="sealStatus:scalaz.concurrent.Task[nelson.vault.SealStatus]"></a>
-      <a id="sealStatus:Task[SealStatus]"></a>
+      <a id="sealStatus:cats.effect.IO[nelson.vault.SealStatus]"></a>
+      <a id="sealStatus:IO[SealStatus]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sealStatus</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="../SealStatus.html" class="extype" name="nelson.vault.SealStatus">SealStatus</a>]</span>
+        <span class="name">sealStatus</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="../SealStatus.html" class="extype" name="nelson.vault.SealStatus">SealStatus</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@sealStatus:scalaz.concurrent.Task[nelson.vault.SealStatus]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@sealStatus:cats.effect.IO[nelson.vault.SealStatus]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -858,18 +909,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.vault.http4s.Http4sVaultClient#unseal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unseal(key:nelson.vault.MasterKey):scalaz.concurrent.Task[nelson.vault.SealStatus]"></a>
-      <a id="unseal(MasterKey):Task[SealStatus]"></a>
+      <a id="unseal(key:nelson.vault.MasterKey):cats.effect.IO[nelson.vault.SealStatus]"></a>
+      <a id="unseal(MasterKey):IO[SealStatus]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">unseal</span><span class="params">(<span name="key">key: <a href="../package.html#MasterKey=String" class="extmbr" name="nelson.vault.MasterKey">MasterKey</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="../SealStatus.html" class="extype" name="nelson.vault.SealStatus">SealStatus</a>]</span>
+        <span class="name">unseal</span><span class="params">(<span name="key">key: <a href="../package.html#MasterKey=String" class="extmbr" name="nelson.vault.MasterKey">MasterKey</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="../SealStatus.html" class="extype" name="nelson.vault.SealStatus">SealStatus</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@unseal(key:nelson.vault.MasterKey):scalaz.concurrent.Task[nelson.vault.SealStatus]" title="Permalink" target="_top">
+      <a href="../../../index.html#nelson.vault.http4s.Http4sVaultClient@unseal(key:nelson.vault.MasterKey):cats.effect.IO[nelson.vault.SealStatus]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -971,8 +1022,12 @@
         <div id="inheritedMembers">
         <div class="parent" name="nelson.vault.http4s.Json">
               <h3>Inherited from <a href="Json.html" class="extype" name="nelson.vault.http4s.Json">Json</a></h3>
-            </div><div class="parent" name="scalaz.NaturalTransformation">
-              <h3>Inherited from <span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</h3>
+            </div><div class="parent" name="cats.arrow.FunctionK">
+              <h3>Inherited from <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="../Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>, <span class="extype" name="cats.effect.IO">IO</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

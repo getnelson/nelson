@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Http4sConsul.scala" target="_blank">Http4sConsul.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Http4sConsul.scala" target="_blank">Http4sConsul.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -180,18 +180,18 @@
     </span>
       
     </li><li name="nelson.Http4sConsul#client" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="client(consul:nelson.Infrastructure.Consul,http4sClient:org.http4s.client.Client):scalaz.~&gt;[helm.ConsulOp,scalaz.concurrent.Task]"></a>
-      <a id="client(Consul,Client):~&gt;[ConsulOp,Task]"></a>
+      <a id="client(consul:nelson.Infrastructure.Consul,http4sClient:org.http4s.client.Client[cats.effect.IO]):cats.~&gt;[helm.ConsulOp,cats.effect.IO]"></a>
+      <a id="client(Consul,Client[IO]):~&gt;[ConsulOp,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">client</span><span class="params">(<span name="consul">consul: <a href="Infrastructure$$Consul.html" class="extype" name="nelson.Infrastructure.Consul">Consul</a></span>, <span name="http4sClient">http4sClient: <span class="extype" name="org.http4s.client.Client">Client</span></span>)</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="helm.ConsulOp">ConsulOp</span>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">client</span><span class="params">(<span name="consul">consul: <a href="Infrastructure$$Consul.html" class="extype" name="nelson.Infrastructure.Consul">Consul</a></span>, <span name="http4sClient">http4sClient: <span class="extype" name="org.http4s.client.Client">Client</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<span class="extype" name="helm.ConsulOp">ConsulOp</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Http4sConsul$@client(consul:nelson.Infrastructure.Consul,http4sClient:org.http4s.client.Client):scalaz.~&gt;[helm.ConsulOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Http4sConsul$@client(consul:nelson.Infrastructure.Consul,http4sClient:org.http4s.client.Client[cats.effect.IO]):cats.~&gt;[helm.ConsulOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -220,18 +220,18 @@
               
         </dd></dl></div>
     </li><li name="nelson.Http4sConsul#consulSink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="consulSink:scalaz.stream.Sink[scalaz.concurrent.Task,(nelson.Datacenter,helm.ConsulOp.ConsulOpF[Unit])]"></a>
-      <a id="consulSink:Sink[Task,(Datacenter,ConsulOpF[Unit])]"></a>
+      <a id="consulSink:fs2.Sink[cats.effect.IO,(nelson.Datacenter,helm.ConsulOp.ConsulOpF[Unit])]"></a>
+      <a id="consulSink:Sink[IO,(Datacenter,ConsulOpF[Unit])]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">consulSink</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, (<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>])]</span>
+        <span class="name">consulSink</span><span class="result">: <span class="extype" name="fs2.Sink">Sink</span>[<span class="extype" name="cats.effect.IO">IO</span>, (<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>])]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Http4sConsul$@consulSink:scalaz.stream.Sink[scalaz.concurrent.Task,(nelson.Datacenter,helm.ConsulOp.ConsulOpF[Unit])]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Http4sConsul$@consulSink:fs2.Sink[cats.effect.IO,(nelson.Datacenter,helm.ConsulOp.ConsulOpF[Unit])]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

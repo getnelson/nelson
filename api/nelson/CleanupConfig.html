@@ -45,11 +45,11 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">CleanupConfig</span><span class="params">(<span name="initialTTL">initialTTL: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="extendTTL">extendTTL: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="cleanupDelay">cleanupDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="sweeperDelay">sweeperDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">CleanupConfig</span><span class="params">(<span name="initialTTL">initialTTL: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="extendTTL">extendTTL: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="cleanupDelay">cleanupDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="sweeperDelay">sweeperDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Config.scala" target="_blank">Config.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Config.scala" target="_blank">Config.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.CleanupConfig#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(initialTTL:scala.concurrent.duration.Duration,extendTTL:scala.concurrent.duration.Duration,cleanupDelay:scala.concurrent.duration.Duration,sweeperDelay:scala.concurrent.duration.Duration):nelson.CleanupConfig"></a>
+      <a id="&lt;init&gt;(initialTTL:scala.concurrent.duration.Duration,extendTTL:scala.concurrent.duration.Duration,cleanupDelay:scala.concurrent.duration.FiniteDuration,sweeperDelay:scala.concurrent.duration.FiniteDuration):nelson.CleanupConfig"></a>
       <a id="&lt;init&gt;:CleanupConfig"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">CleanupConfig</span><span class="params">(<span name="initialTTL">initialTTL: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="extendTTL">extendTTL: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="cleanupDelay">cleanupDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="sweeperDelay">sweeperDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>)</span>
+        <span class="name">CleanupConfig</span><span class="params">(<span name="initialTTL">initialTTL: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="extendTTL">extendTTL: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="cleanupDelay">cleanupDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="sweeperDelay">sweeperDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.CleanupConfig@&lt;init&gt;(initialTTL:scala.concurrent.duration.Duration,extendTTL:scala.concurrent.duration.Duration,cleanupDelay:scala.concurrent.duration.Duration,sweeperDelay:scala.concurrent.duration.Duration):nelson.CleanupConfig" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CleanupConfig@&lt;init&gt;(initialTTL:scala.concurrent.duration.Duration,extendTTL:scala.concurrent.duration.Duration,cleanupDelay:scala.concurrent.duration.FiniteDuration,sweeperDelay:scala.concurrent.duration.FiniteDuration):nelson.CleanupConfig" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -183,18 +183,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.CleanupConfig#cleanupDelay" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cleanupDelay:scala.concurrent.duration.Duration"></a>
-      <a id="cleanupDelay:Duration"></a>
+      <a id="cleanupDelay:scala.concurrent.duration.FiniteDuration"></a>
+      <a id="cleanupDelay:FiniteDuration"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">cleanupDelay</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>
+        <span class="name">cleanupDelay</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.CleanupConfig@cleanupDelay:scala.concurrent.duration.Duration" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CleanupConfig@cleanupDelay:scala.concurrent.duration.FiniteDuration" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -382,18 +382,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.CleanupConfig#sweeperDelay" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="sweeperDelay:scala.concurrent.duration.Duration"></a>
-      <a id="sweeperDelay:Duration"></a>
+      <a id="sweeperDelay:scala.concurrent.duration.FiniteDuration"></a>
+      <a id="sweeperDelay:FiniteDuration"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">sweeperDelay</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>
+        <span class="name">sweeperDelay</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.CleanupConfig@sweeperDelay:scala.concurrent.duration.Duration" title="Permalink" target="_top">
+      <a href="../index.html#nelson.CleanupConfig@sweeperDelay:scala.concurrent.duration.FiniteDuration" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

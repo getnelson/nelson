@@ -47,7 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/storage/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/storage/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -89,7 +89,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="nelson.storage.H2Storage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="H2Storageextends~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]withProductwithSerializable"></a>
+      <a id="H2Storageextendscats.~&gt;[nelson.storage.StoreOp,cats.effect.IO]withProductwithSerializable"></a>
       <a id="H2Storage:H2Storage"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="H2Storage.html"><span class="name">H2Storage</span></a><span class="params">(<span name="xa">xa: <span class="extype" name="doobie.imports.Transactor">Transactor</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>)</span><span class="result"> extends <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="H2Storage.html"><span class="name">H2Storage</span></a><span class="params">(<span name="xa">xa: <span class="extype" name="doobie.Types.Transactor">doobie.Transactor</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="cats.effect.IO">IO</span>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.package@H2Storageextends~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]withProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.storage.package@H2Storageextendscats.~&gt;[nelson.storage.StoreOp,cats.effect.IO]withProductwithSerializable" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -123,7 +123,7 @@
     </span>
       
     </li><li name="nelson.storage.StoreOpF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]"></a>
+      <a id="StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]"></a>
       <a id="StoreOpF[A]:StoreOpF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -131,10 +131,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">StoreOpF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.storage.StoreOpF.A">A</span>]</span>
+        <span class="name">StoreOpF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="nelson.storage.StoreOpF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.package@StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.storage.package@StoreOpF[A]=cats.free.Free[nelson.storage.StoreOp,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -193,23 +193,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.storage.package@StoreOp" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.storage#run" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="run[F[_],A](interpreter:scalaz.~&gt;[nelson.storage.StoreOp,F],op:nelson.storage.package.StoreOpF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]"></a>
-      <a id="run[F[_],A](~&gt;[StoreOp,F],StoreOpF[A])(Monad[F]):F[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="interpreter">interpreter: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="nelson.storage.run.F">F</span>]</span>, <span name="op">op: <a href="#StoreOpF[A]=scalaz.Free.FreeC[nelson.storage.StoreOp,A]" class="extmbr" name="nelson.storage.StoreOpF">StoreOpF</a>[<span class="extype" name="nelson.storage.run.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="nelson.storage.run.F">F</span>]</span>)</span><span class="result">: <span class="extype" name="nelson.storage.run.F">F</span>[<span class="extype" name="nelson.storage.run.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.package@run[F[_],A](interpreter:scalaz.~&gt;[nelson.storage.StoreOp,F],op:nelson.storage.package.StoreOpF[A])(implicitevidence$1:scalaz.Monad[F]):F[A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/Json.scala" target="_blank">Json.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/Json.scala" target="_blank">Json.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -1174,23 +1174,6 @@ and un-typed worlds here... *sigh*.</p><p>TIM: this seems really hacky.
       </a>
     </span>
       
-    </li><li name="nelson.Json#encodeTransposeZMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="encodeTransposeZMap[K,V](klabel:Symbol,vlabel:Symbol)(implicitek:argonaut.EncodeJson[K],implicitev:argonaut.EncodeJson[V]):argonaut.EncodeJson[scalaz.==&gt;&gt;[K,V]]"></a>
-      <a id="encodeTransposeZMap[K,V](Symbol,Symbol)(EncodeJson[K],EncodeJson[V]):EncodeJson[==&gt;&gt;[K,V]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">encodeTransposeZMap</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="klabel">klabel: <span class="extype" name="scala.Symbol">Symbol</span></span>, <span name="vlabel">vlabel: <span class="extype" name="scala.Symbol">Symbol</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ek">ek: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.Json.encodeTransposeZMap.K">K</span>]</span>, <span name="ev">ev: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.Json.encodeTransposeZMap.V">V</span>]</span>)</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="scalaz.==&gt;&gt;">==&gt;&gt;</span>[<span class="extype" name="nelson.Json.encodeTransposeZMap.K">K</span>, <span class="extype" name="nelson.Json.encodeTransposeZMap.V">V</span>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Json$@encodeTransposeZMap[K,V](klabel:Symbol,vlabel:Symbol)(implicitek:argonaut.EncodeJson[K],implicitev:argonaut.EncodeJson[V]):argonaut.EncodeJson[scalaz.==&gt;&gt;[K,V]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -1402,7 +1385,7 @@ and un-typed worlds here... *sigh*.</p><p>TIM: this seems really hacky.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.Json#tagEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="tagEncoder[A,T](implicitea:argonaut.EncodeJson[A]):argonaut.EncodeJson[scalaz.@@[A,T]]"></a>
+      <a id="tagEncoder[A,T](implicitea:argonaut.EncodeJson[A]):argonaut.EncodeJson[nelson.@@[A,T]]"></a>
       <a id="tagEncoder[A,T](EncodeJson[A]):EncodeJson[@@[A,T]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1410,10 +1393,10 @@ and un-typed worlds here... *sigh*.</p><p>TIM: this seems really hacky.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tagEncoder</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ea">ea: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.Json.tagEncoder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="scalaz.@@">@@</span>[<span class="extype" name="nelson.Json.tagEncoder.A">A</span>, <span class="extype" name="nelson.Json.tagEncoder.T">T</span>]]</span>
+        <span class="name">tagEncoder</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ea">ea: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.Json.tagEncoder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<span class="extype" name="nelson.Json.tagEncoder.A">A</span>, <span class="extype" name="nelson.Json.tagEncoder.T">T</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Json$@tagEncoder[A,T](implicitea:argonaut.EncodeJson[A]):argonaut.EncodeJson[scalaz.@@[A,T]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Json$@tagEncoder[A,T](implicitea:argonaut.EncodeJson[A]):argonaut.EncodeJson[nelson.@@[A,T]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1453,7 +1436,7 @@ and un-typed worlds here... *sigh*.</p><p>TIM: this seems really hacky.
     </span>
       
     </li><li name="nelson.Json#taskGroupAllocationTasksEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="taskGroupAllocationTasksEncoder:argonaut.EncodeJson[Map[scalaz.@@[String,nelson.TaskName],(nelson.TaskStatus,List[nelson.TaskEvent])]]"></a>
+      <a id="taskGroupAllocationTasksEncoder:argonaut.EncodeJson[Map[nelson.@@[String,nelson.TaskName],(nelson.TaskStatus,List[nelson.TaskEvent])]]"></a>
       <a id="taskGroupAllocationTasksEncoder:EncodeJson[Map[@@[String,TaskName],(TaskStatus,List[TaskEvent])]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1461,10 +1444,10 @@ and un-typed worlds here... *sigh*.</p><p>TIM: this seems really hacky.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">taskGroupAllocationTasksEncoder</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scalaz.@@">@@</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="TaskName.html" class="extype" name="nelson.TaskName">TaskName</a>], (<a href="TaskStatus.html" class="extype" name="nelson.TaskStatus">TaskStatus</a>, <span class="extype" name="scala.List">List</span>[<a href="TaskEvent.html" class="extype" name="nelson.TaskEvent">TaskEvent</a>])]]</span>
+        <span class="name">taskGroupAllocationTasksEncoder</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="TaskName.html" class="extype" name="nelson.TaskName">TaskName</a>], (<a href="TaskStatus.html" class="extype" name="nelson.TaskStatus">TaskStatus</a>, <span class="extype" name="scala.List">List</span>[<a href="TaskEvent.html" class="extype" name="nelson.TaskEvent">TaskEvent</a>])]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Json$@taskGroupAllocationTasksEncoder:argonaut.EncodeJson[Map[scalaz.@@[String,nelson.TaskName],(nelson.TaskStatus,List[nelson.TaskEvent])]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Json$@taskGroupAllocationTasksEncoder:argonaut.EncodeJson[Map[nelson.@@[String,nelson.TaskName],(nelson.TaskStatus,List[nelson.TaskEvent])]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

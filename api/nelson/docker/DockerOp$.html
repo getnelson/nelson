@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/docker/DockerOp.scala" target="_blank">DockerOp.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/docker/DockerOp.scala" target="_blank">DockerOp.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -93,7 +93,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="nelson.docker.DockerOp.DockerF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="DockerF[A]=scalaz.Free.FreeC[nelson.docker.DockerOp,A]"></a>
+      <a id="DockerF[A]=cats.free.Free[nelson.docker.DockerOp,A]"></a>
       <a id="DockerF[A]:DockerF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -101,10 +101,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">DockerF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.docker.DockerOp.DockerF.A">A</span>]</span>
+        <span class="name">DockerF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="nelson.docker.DockerOp.DockerF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.docker.DockerOp$@DockerF[A]=scalaz.Free.FreeC[nelson.docker.DockerOp,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.docker.DockerOp$@DockerF[A]=cats.free.Free[nelson.docker.DockerOp,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -318,7 +318,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">extract</span><span class="params">(<span name="unit">unit: <a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="#DockerF[A]=scalaz.Free.FreeC[nelson.docker.DockerOp,A]" class="extmbr" name="nelson.docker.DockerOp.DockerF">DockerF</a>[<a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>
+        <span class="name">extract</span><span class="params">(<span name="unit">unit: <a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>)</span><span class="result">: <a href="#DockerF[A]=cats.free.Free[nelson.docker.DockerOp,A]" class="extmbr" name="nelson.docker.DockerOp.DockerF">DockerF</a>[<a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.docker.DockerOp$@extract(unit:nelson.Manifest.UnitDef):nelson.docker.DockerOp.DockerF[nelson.docker.Docker.Image]" title="Permalink" target="_top">
@@ -460,7 +460,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pull</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <a href="#DockerF[A]=scalaz.Free.FreeC[nelson.docker.DockerOp,A]" class="extmbr" name="nelson.docker.DockerOp.DockerF">DockerF</a>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<a href="Docker$$Pull$$Output.html" class="extype" name="nelson.docker.Docker.Pull.Output">Output</a>])]</span>
+        <span class="name">pull</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <a href="#DockerF[A]=cats.free.Free[nelson.docker.DockerOp,A]" class="extmbr" name="nelson.docker.DockerOp.DockerF">DockerF</a>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<a href="Docker$$Pull$$Output.html" class="extype" name="nelson.docker.Docker.Pull.Output">Output</a>])]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.docker.DockerOp$@pull(image:nelson.docker.Docker.Image):nelson.docker.DockerOp.DockerF[(Int,List[nelson.docker.Docker.Pull.Output])]" title="Permalink" target="_top">
@@ -477,7 +477,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">push</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <a href="#DockerF[A]=scalaz.Free.FreeC[nelson.docker.DockerOp,A]" class="extmbr" name="nelson.docker.DockerOp.DockerF">DockerF</a>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<a href="Docker$$Push$$Output.html" class="extype" name="nelson.docker.Docker.Push.Output">Output</a>])]</span>
+        <span class="name">push</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>)</span><span class="result">: <a href="#DockerF[A]=cats.free.Free[nelson.docker.DockerOp,A]" class="extmbr" name="nelson.docker.DockerOp.DockerF">DockerF</a>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <span class="extype" name="scala.List">List</span>[<a href="Docker$$Push$$Output.html" class="extype" name="nelson.docker.Docker.Push.Output">Output</a>])]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.docker.DockerOp$@push(image:nelson.docker.Docker.Image):nelson.docker.DockerOp.DockerF[(Int,List[nelson.docker.Docker.Push.Output])]" title="Permalink" target="_top">
@@ -511,7 +511,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tag</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="registry">registry: <a href="Docker$.html#RegistryURI=String" class="extmbr" name="nelson.docker.Docker.RegistryURI">RegistryURI</a></span>)</span><span class="result">: <a href="#DockerF[A]=scalaz.Free.FreeC[nelson.docker.DockerOp,A]" class="extmbr" name="nelson.docker.DockerOp.DockerF">DockerF</a>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>)]</span>
+        <span class="name">tag</span><span class="params">(<span name="image">image: <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="registry">registry: <a href="Docker$.html#RegistryURI=String" class="extmbr" name="nelson.docker.Docker.RegistryURI">RegistryURI</a></span>)</span><span class="result">: <a href="#DockerF[A]=cats.free.Free[nelson.docker.DockerOp,A]" class="extmbr" name="nelson.docker.DockerOp.DockerF">DockerF</a>[(<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>, <a href="Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>)]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.docker.DockerOp$@tag(image:nelson.docker.Docker.Image,registry:nelson.docker.Docker.RegistryURI):nelson.docker.DockerOp.DockerF[(Int,nelson.docker.Docker.Image)]" title="Permalink" target="_top">

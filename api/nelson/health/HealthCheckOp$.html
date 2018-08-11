@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/health/HealthCheckOp.scala" target="_blank">HealthCheckOp.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/health/HealthCheckOp.scala" target="_blank">HealthCheckOp.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -110,7 +110,7 @@
     </span>
       
     </li><li name="nelson.health.HealthCheckOp.HealthCheckF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="HealthCheckF[A]=scalaz.Free.FreeC[nelson.health.HealthCheckOp,A]"></a>
+      <a id="HealthCheckF[A]=cats.free.Free[nelson.health.HealthCheckOp,A]"></a>
       <a id="HealthCheckF[A]:HealthCheckF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -118,10 +118,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">HealthCheckF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="HealthCheckOp.html" class="extype" name="nelson.health.HealthCheckOp">HealthCheckOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.health.HealthCheckOp.HealthCheckF.A">A</span>]</span>
+        <span class="name">HealthCheckF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="HealthCheckOp.html" class="extype" name="nelson.health.HealthCheckOp">HealthCheckOp</a>, <span class="extype" name="nelson.health.HealthCheckOp.HealthCheckF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.health.HealthCheckOp$@HealthCheckF[A]=scalaz.Free.FreeC[nelson.health.HealthCheckOp,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.health.HealthCheckOp$@HealthCheckF[A]=cats.free.Free[nelson.health.HealthCheckOp,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -324,7 +324,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">health</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <a href="#HealthCheckF[A]=scalaz.Free.FreeC[nelson.health.HealthCheckOp,A]" class="extmbr" name="nelson.health.HealthCheckOp.HealthCheckF">HealthCheckF</a>[<span class="extype" name="scala.List">List</span>[<a href="HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]]</span>
+        <span class="name">health</span><span class="params">(<span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="sn">sn: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <a href="#HealthCheckF[A]=cats.free.Free[nelson.health.HealthCheckOp,A]" class="extmbr" name="nelson.health.HealthCheckOp.HealthCheckF">HealthCheckF</a>[<span class="extype" name="scala.List">List</span>[<a href="HealthStatus.html" class="extype" name="nelson.health.HealthStatus">HealthStatus</a>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.health.HealthCheckOp$@health(dc:nelson.Datacenter,ns:nelson.NamespaceName,sn:nelson.Datacenter.StackName):nelson.health.HealthCheckOp.HealthCheckF[List[nelson.health.HealthStatus]]" title="Permalink" target="_top">

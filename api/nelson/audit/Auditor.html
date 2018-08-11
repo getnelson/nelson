@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/audit/Auditor.scala" target="_blank">Auditor.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/audit/Auditor.scala" target="_blank">Auditor.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.audit.Auditor#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(queue:scalaz.stream.async.mutable.Queue[nelson.audit.AuditEvent[_]],defaultLogin:String):nelson.audit.Auditor"></a>
+      <a id="&lt;init&gt;(queue:fs2.async.mutable.Queue[cats.effect.IO,nelson.audit.AuditEvent[_]],defaultLogin:String):nelson.audit.Auditor"></a>
       <a id="&lt;init&gt;:Auditor"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Auditor</span><span class="params">(<span name="queue">queue: <span class="extype" name="scalaz.stream.async.mutable.Queue">Queue</span>[<a href="AuditEvent.html" class="extype" name="nelson.audit.AuditEvent">AuditEvent</a>[_]]</span>, <span name="defaultLogin">defaultLogin: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">Auditor</span><span class="params">(<span name="queue">queue: <span class="extype" name="fs2.async.mutable.Queue">Queue</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="AuditEvent.html" class="extype" name="nelson.audit.AuditEvent">AuditEvent</a>[_]]</span>, <span name="defaultLogin">defaultLogin: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.audit.Auditor@&lt;init&gt;(queue:scalaz.stream.async.mutable.Queue[nelson.audit.AuditEvent[_]],defaultLogin:String):nelson.audit.Auditor" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.audit.Auditor@&lt;init&gt;(queue:fs2.async.mutable.Queue[cats.effect.IO,nelson.audit.AuditEvent[_]],defaultLogin:String):nelson.audit.Auditor" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -183,18 +183,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.audit.Auditor#auditSink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="auditSink[A](action:nelson.audit.AuditAction)(implicitau:nelson.audit.Auditable[A]):scalaz.stream.Sink[scalaz.concurrent.Task,A]"></a>
-      <a id="auditSink[A](AuditAction)(Auditable[A]):Sink[Task,A]"></a>
+      <a id="auditSink[A](action:nelson.audit.AuditAction)(implicitau:nelson.audit.Auditable[A]):fs2.Sink[cats.effect.IO,A]"></a>
+      <a id="auditSink[A](AuditAction)(Auditable[A]):Sink[IO,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">auditSink</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="action">action: <a href="AuditAction.html" class="extype" name="nelson.audit.AuditAction">AuditAction</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="au">au: <a href="Auditable.html" class="extype" name="nelson.audit.Auditable">Auditable</a>[<span class="extype" name="nelson.audit.Auditor.auditSink.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="nelson.audit.Auditor.auditSink.A">A</span>]</span>
+        <span class="name">auditSink</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="action">action: <a href="AuditAction.html" class="extype" name="nelson.audit.AuditAction">AuditAction</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="au">au: <a href="Auditable.html" class="extype" name="nelson.audit.Auditable">Auditable</a>[<span class="extype" name="nelson.audit.Auditor.auditSink.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="fs2.Sink">Sink</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.audit.Auditor.auditSink.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.audit.Auditor@auditSink[A](action:nelson.audit.AuditAction)(implicitau:nelson.audit.Auditable[A]):scalaz.stream.Sink[scalaz.concurrent.Task,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.audit.Auditor@auditSink[A](action:nelson.audit.AuditAction)(implicitau:nelson.audit.Auditable[A]):fs2.Sink[cats.effect.IO,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -257,18 +257,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.audit.Auditor#errorSink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="errorSink:scalaz.stream.Sink[scalaz.concurrent.Task,Throwable]"></a>
-      <a id="errorSink:Sink[Task,Throwable]"></a>
+      <a id="errorSink:fs2.Sink[cats.effect.IO,Throwable]"></a>
+      <a id="errorSink:Sink[IO,Throwable]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">errorSink</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>
+        <span class="name">errorSink</span><span class="result">: <span class="extype" name="fs2.Sink">Sink</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.audit.Auditor@errorSink:scalaz.stream.Sink[scalaz.concurrent.Task,Throwable]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.audit.Auditor@errorSink:fs2.Sink[cats.effect.IO,Throwable]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -399,18 +399,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.audit.Auditor#process" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="process(stg:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]):scalaz.stream.Process[scalaz.concurrent.Task,Unit]"></a>
-      <a id="process(~&gt;[StoreOp,Task]):Process[Task,Unit]"></a>
+      <a id="process(stg:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO])(implicitec:scala.concurrent.ExecutionContext):fs2.Stream[cats.effect.IO,Unit]"></a>
+      <a id="process(~&gt;[StoreOp,IO])(ExecutionContext):Stream[IO,Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">process</span><span class="params">(<span name="stg">stg: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="../storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">process</span><span class="params">(<span name="stg">stg: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="../storage/StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.audit.Auditor@process(stg:scalaz.~&gt;[nelson.storage.StoreOp,scalaz.concurrent.Task]):scalaz.stream.Process[scalaz.concurrent.Task,Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.audit.Auditor@process(stg:cats.~&gt;[nelson.storage.StoreOp,cats.effect.IO])(implicitec:scala.concurrent.ExecutionContext):fs2.Stream[cats.effect.IO,Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -519,18 +519,18 @@
               
         </dd></dl></div>
     </li><li name="nelson.audit.Auditor#write" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="write[A](a:A,action:nelson.audit.AuditAction,releaseId:Option[Long],login:String)(implicitau:nelson.audit.Auditable[A]):scalaz.concurrent.Task[Unit]"></a>
-      <a id="write[A](A,AuditAction,Option[Long],String)(Auditable[A]):Task[Unit]"></a>
+      <a id="write[A](a:A,action:nelson.audit.AuditAction,releaseId:Option[Long],login:String)(implicitau:nelson.audit.Auditable[A]):cats.effect.IO[Unit]"></a>
+      <a id="write[A](A,AuditAction,Option[Long],String)(Auditable[A]):IO[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">write</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="nelson.audit.Auditor.write.A">A</span></span>, <span name="action">action: <a href="AuditAction.html" class="extype" name="nelson.audit.AuditAction">AuditAction</a></span>, <span name="releaseId">releaseId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a>] = <span class="symbol">None</span></span>, <span name="login">login: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">defaultLogin</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="au">au: <a href="Auditable.html" class="extype" name="nelson.audit.Auditable">Auditable</a>[<span class="extype" name="nelson.audit.Auditor.write.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">write</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="nelson.audit.Auditor.write.A">A</span></span>, <span name="action">action: <a href="AuditAction.html" class="extype" name="nelson.audit.AuditAction">AuditAction</a></span>, <span name="releaseId">releaseId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a>] = <span class="symbol">None</span></span>, <span name="login">login: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">defaultLogin</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="au">au: <a href="Auditable.html" class="extype" name="nelson.audit.Auditable">Auditable</a>[<span class="extype" name="nelson.audit.Auditor.write.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.audit.Auditor@write[A](a:A,action:nelson.audit.AuditAction,releaseId:Option[Long],login:String)(implicitau:nelson.audit.Auditable[A]):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.audit.Auditor@write[A](a:A,action:nelson.audit.AuditAction,releaseId:Option[Long],login:String)(implicitau:nelson.audit.Auditable[A]):cats.effect.IO[Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

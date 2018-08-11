@@ -49,7 +49,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -339,7 +339,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nfold</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="e">e: <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.BedazzledOpt.A">A</span>) ⇒ <span class="extype" name="nelson.BedazzledOpt.nfold.B">B</span></span>)</span><span class="result">: <a href="Nelson$.html#NelsonK[U]=scalaz.Kleisli[scalaz.concurrent.Task,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.BedazzledOpt.nfold.B">B</span>]</span>
+        <span class="name">nfold</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="e">e: <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.BedazzledOpt.A">A</span>) ⇒ <span class="extype" name="nelson.BedazzledOpt.nfold.B">B</span></span>)</span><span class="result">: <a href="Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.BedazzledOpt.nfold.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package$$BedazzledOpt@nfold[B](e:nelson.NelsonError)(f:A=&gt;B):nelson.Nelson.NelsonK[B]" title="Permalink" target="_top">
@@ -399,18 +399,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.BedazzledOpt#tfold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="tfold[B](e:nelson.NelsonError)(f:A=&gt;B):scalaz.concurrent.Task[B]"></a>
-      <a id="tfold[B](NelsonError)((A)⇒B):Task[B]"></a>
+      <a id="tfold[B](e:nelson.NelsonError)(f:A=&gt;B):cats.effect.IO[B]"></a>
+      <a id="tfold[B](NelsonError)((A)⇒B):IO[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tfold</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="e">e: <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.BedazzledOpt.A">A</span>) ⇒ <span class="extype" name="nelson.BedazzledOpt.tfold.B">B</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="nelson.BedazzledOpt.tfold.B">B</span>]</span>
+        <span class="name">tfold</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="e">e: <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.BedazzledOpt.A">A</span>) ⇒ <span class="extype" name="nelson.BedazzledOpt.tfold.B">B</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="nelson.BedazzledOpt.tfold.B">B</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.package$$BedazzledOpt@tfold[B](e:nelson.NelsonError)(f:A=&gt;B):scalaz.concurrent.Task[B]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.package$$BedazzledOpt@tfold[B](e:nelson.NelsonError)(f:A=&gt;B):cats.effect.IO[B]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

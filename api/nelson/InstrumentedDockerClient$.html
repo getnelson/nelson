@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">InstrumentedDockerClient</span>
+        <span class="name">InstrumentedDockerClient</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/InstrumentedDockerClient.scala" target="_blank">InstrumentedDockerClient.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/InstrumentedDockerClient.scala" target="_blank">InstrumentedDockerClient.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.InstrumentedDockerClient"><span>InstrumentedDockerClient</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.InstrumentedDockerClient"><span>InstrumentedDockerClient</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -148,18 +148,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.InstrumentedDockerClient#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(dockerInstance:String,interp:scalaz.~&gt;[nelson.docker.DockerOp,scalaz.concurrent.Task],metrics:nelson.Metrics):scalaz.~&gt;[nelson.docker.DockerOp,scalaz.concurrent.Task]"></a>
-      <a id="apply(String,~&gt;[DockerOp,Task],Metrics):~&gt;[DockerOp,Task]"></a>
+      <a id="apply(dockerInstance:String,interp:cats.~&gt;[nelson.docker.DockerOp,cats.effect.IO],metrics:nelson.Metrics):cats.~&gt;[nelson.docker.DockerOp,cats.effect.IO]"></a>
+      <a id="apply(String,~&gt;[DockerOp,IO],Metrics):~&gt;[DockerOp,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="dockerInstance">dockerInstance: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="interp">interp: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="docker/DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>, <span name="metrics">metrics: <a href="Metrics.html" class="extype" name="nelson.Metrics">Metrics</a> = <span class="symbol"><span class="name"><a href="Metrics$.html">Metrics.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<a href="docker/DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">apply</span><span class="params">(<span name="dockerInstance">dockerInstance: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="interp">interp: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="docker/DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="metrics">metrics: <a href="Metrics.html" class="extype" name="nelson.Metrics">Metrics</a> = <span class="symbol"><span class="name"><a href="Metrics$.html">Metrics.default</a></span></span></span>)</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="docker/DockerOp.html" class="extype" name="nelson.docker.DockerOp">DockerOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.InstrumentedDockerClient$@apply(dockerInstance:String,interp:scalaz.~&gt;[nelson.docker.DockerOp,scalaz.concurrent.Task],metrics:nelson.Metrics):scalaz.~&gt;[nelson.docker.DockerOp,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.InstrumentedDockerClient$@apply(dockerInstance:String,interp:cats.~&gt;[nelson.docker.DockerOp,cats.effect.IO],metrics:nelson.Metrics):cats.~&gt;[nelson.docker.DockerOp,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -475,7 +475,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

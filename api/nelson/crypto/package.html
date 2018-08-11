@@ -47,7 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/crypto/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/crypto/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -97,7 +97,7 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">AuthEnv</span><span class="result"> = <a href="AuthEnvironment.html" class="extype" name="nelson.crypto.AuthEnvironment">AuthEnvironment</a>[<a href="#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
+        <span class="name">AuthEnv</span><span class="result"> = <a href="AuthEnvironment.html" class="extype" name="nelson.crypto.AuthEnvironment">AuthEnvironment</a>[<a href="#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.crypto.package@AuthEnv=nelson.crypto.AuthEnvironment[nelson.crypto.package.AuthResult]" title="Permalink" target="_top">
@@ -150,7 +150,7 @@ to perform both functions.
     </span>
       <p class="shortcomment cmt">An error encountered during authentication.</p>
     </li><li name="nelson.crypto.AuthResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]"></a>
+      <a id="AuthResult[A]=Either[nelson.crypto.AuthFailure,A]"></a>
       <a id="AuthResult[A]:AuthResult[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -158,10 +158,10 @@ to perform both functions.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">AuthResult</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.\/">\/</span>[<a href="AuthFailure.html" class="extype" name="nelson.crypto.AuthFailure">AuthFailure</a>, <span class="extype" name="nelson.crypto.AuthResult.A">A</span>]</span>
+        <span class="name">AuthResult</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scala.util.Either">Either</span>[<a href="AuthFailure.html" class="extype" name="nelson.crypto.AuthFailure">AuthFailure</a>, <span class="extype" name="nelson.crypto.AuthResult.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.crypto.package@AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.crypto.package@AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -297,7 +297,7 @@ between thread (not thread-safe) like many java crypto objects, e.g. Cipher.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="SafeHolderEncryption.html"><span class="name">SafeHolderEncryption</span></a><span class="result"> extends <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>] with <a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
+        <a href="SafeHolderEncryption.html"><span class="name">SafeHolderEncryption</span></a><span class="result"> extends <a href="Encryptor.html" class="extype" name="nelson.crypto.Encryptor">Encryptor</a>[<a href="#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>] with <a href="Decryptor.html" class="extype" name="nelson.crypto.Decryptor">Decryptor</a>[<a href="#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.crypto.package@SafeHolderEncryptionextendsEncryptor[nelson.crypto.AuthResult]withDecryptor[nelson.crypto.AuthResult]" title="Permalink" target="_top">
@@ -314,7 +314,7 @@ between thread (not thread-safe) like many java crypto objects, e.g. Cipher.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="SafeHolderHmac.html"><span class="name">SafeHolderHmac</span></a><span class="result"> extends <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
+        <a href="SafeHolderHmac.html"><span class="name">SafeHolderHmac</span></a><span class="result"> extends <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.crypto.package@SafeHolderHmacextendsSigner[nelson.crypto.AuthResult]" title="Permalink" target="_top">

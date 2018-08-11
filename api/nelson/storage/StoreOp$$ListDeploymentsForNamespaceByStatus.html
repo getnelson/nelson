@@ -45,11 +45,11 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ListDeploymentsForNamespaceByStatus</span><span class="params">(<span name="ns">ns: <a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="statuses">statuses: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span><span class="result"> extends <a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>[<span class="extype" name="scala.Predef.Set">Set</span>[(<a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">ListDeploymentsForNamespaceByStatus</span><span class="params">(<span name="ns">ns: <a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="statuses">statuses: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span><span class="result"> extends <a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>[<span class="extype" name="scala.Predef.Set">Set</span>[(<a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/storage/op.scala" target="_blank">op.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/storage/op.scala" target="_blank">op.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>[<span class="extype" name="scala.Predef.Set">Set</span>[(<a href="../Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a>, <a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>)]], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.storage.StoreOp.ListDeploymentsForNamespaceByStatus#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(ns:nelson.ID,statuses:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.storage.StoreOp.ListDeploymentsForNamespaceByStatus"></a>
+      <a id="&lt;init&gt;(ns:nelson.ID,statuses:cats.data.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.storage.StoreOp.ListDeploymentsForNamespaceByStatus"></a>
       <a id="&lt;init&gt;:ListDeploymentsForNamespaceByStatus"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ListDeploymentsForNamespaceByStatus</span><span class="params">(<span name="ns">ns: <a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="statuses">statuses: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span>
+        <span class="name">ListDeploymentsForNamespaceByStatus</span><span class="params">(<span name="ns">ns: <a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="statuses">statuses: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>, <span name="unit">unit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.StoreOp$$ListDeploymentsForNamespaceByStatus@&lt;init&gt;(ns:nelson.ID,statuses:scalaz.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.storage.StoreOp.ListDeploymentsForNamespaceByStatus" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.storage.StoreOp$$ListDeploymentsForNamespaceByStatus@&lt;init&gt;(ns:nelson.ID,statuses:cats.data.NonEmptyList[nelson.DeploymentStatus],unit:Option[nelson.UnitName]):nelson.storage.StoreOp.ListDeploymentsForNamespaceByStatus" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -348,7 +348,7 @@
     </span>
       
     </li><li name="nelson.storage.StoreOp.ListDeploymentsForNamespaceByStatus#statuses" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="statuses:scalaz.NonEmptyList[nelson.DeploymentStatus]"></a>
+      <a id="statuses:cats.data.NonEmptyList[nelson.DeploymentStatus]"></a>
       <a id="statuses:NonEmptyList[DeploymentStatus]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -356,10 +356,10 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">statuses</span><span class="result">: <span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>
+        <span class="name">statuses</span><span class="result">: <span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.StoreOp$$ListDeploymentsForNamespaceByStatus@statuses:scalaz.NonEmptyList[nelson.DeploymentStatus]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.storage.StoreOp$$ListDeploymentsForNamespaceByStatus@statuses:cats.data.NonEmptyList[nelson.DeploymentStatus]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

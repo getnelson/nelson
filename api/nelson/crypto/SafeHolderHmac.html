@@ -45,7 +45,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">SafeHolderHmac</span><span class="result"> extends <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
+        <span class="name">SafeHolderHmac</span><span class="result"> extends <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</span>
       </span>
       </h4>
       
@@ -53,9 +53,9 @@
 reduce the overhead of initialization.</p><p>Caching a per-key <code>Mac</code> instead of just a thread-local <code>Mac</code> would remove
 the need to initialize the mac on each signature, but benchmarks show that
 it doesn't make a significant performance difference.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/crypto/Signer.scala" target="_blank">Signer.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/crypto/Signer.scala" target="_blank">Signer.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -377,7 +377,7 @@ it doesn't make a significant performance difference.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">signature</span><span class="params">(<span name="key">key: <a href="SignatureKey.html" class="extype" name="nelson.crypto.SignatureKey">SignatureKey</a></span>, <span name="data">data: <span class="extype" name="scodec.bits.ByteVector">ByteVector</span></span>, <span name="signatureLengthBytes">signatureLengthBytes: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.ByteVector">ByteVector</span>]</span>
+        <span class="name">signature</span><span class="params">(<span name="key">key: <a href="SignatureKey.html" class="extype" name="nelson.crypto.SignatureKey">SignatureKey</a></span>, <span name="data">data: <span class="extype" name="scodec.bits.ByteVector">ByteVector</span></span>, <span name="signatureLengthBytes">signatureLengthBytes: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>[<span class="extype" name="scodec.bits.ByteVector">ByteVector</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.crypto.SafeHolderHmac@signature(key:nelson.crypto.SignatureKey,data:scodec.bits.ByteVector,signatureLengthBytes:Int):nelson.crypto.AuthResult[scodec.bits.ByteVector]" title="Permalink" target="_top">
@@ -498,7 +498,7 @@ it doesn't make a significant performance difference.
 
         <div id="inheritedMembers">
         <div class="parent" name="nelson.crypto.Signer">
-              <h3>Inherited from <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="package.html#AuthResult[A]=scalaz.\/[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</h3>
+              <h3>Inherited from <a href="Signer.html" class="extype" name="nelson.crypto.Signer">Signer</a>[<a href="package.html#AuthResult[A]=Either[nelson.crypto.AuthFailure,A]" class="extmbr" name="nelson.crypto.AuthResult">AuthResult</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

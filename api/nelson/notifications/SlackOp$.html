@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/notifications/Slack.scala" target="_blank">Slack.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/notifications/Slack.scala" target="_blank">Slack.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -109,25 +109,8 @@
       </a>
     </span>
       
-    </li><li name="nelson.notifications.SlackOp.SlackOpC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SlackOpC[A]=scalaz.Coyoneda[nelson.notifications.SlackOp,A]"></a>
-      <a id="SlackOpC[A]:SlackOpC[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">SlackOpC</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="nelson.notifications.SlackOp.SlackOpC.A">A</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.notifications.SlackOp$@SlackOpC[A]=scalaz.Coyoneda[nelson.notifications.SlackOp,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.notifications.SlackOp.SlackOpF" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SlackOpF[A]=scalaz.Free.FreeC[nelson.notifications.SlackOp,A]"></a>
+      <a id="SlackOpF[A]=cats.free.Free[nelson.notifications.SlackOp,A]"></a>
       <a id="SlackOpF[A]:SlackOpF[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -135,10 +118,10 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">SlackOpF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[[x]<span class="extype" name="scalaz.Coyoneda">Coyoneda</span>[<a href="SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="scalaz.Free.&lt;refinement&gt;.f.x">x</span>], <span class="extype" name="nelson.notifications.SlackOp.SlackOpF.A">A</span>]</span>
+        <span class="name">SlackOpF</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.free.Free">Free</span>[<a href="SlackOp.html" class="extype" name="nelson.notifications.SlackOp">SlackOp</a>, <span class="extype" name="nelson.notifications.SlackOp.SlackOpF.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.notifications.SlackOp$@SlackOpF[A]=scalaz.Free.FreeC[nelson.notifications.SlackOp,A]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.notifications.SlackOp$@SlackOpF[A]=cats.free.Free[nelson.notifications.SlackOp,A]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -409,7 +392,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">send</span><span class="params">(<span name="channels">channels: <span class="extype" name="scala.List">List</span>[<a href="package.html#SlackChannel=String" class="extmbr" name="nelson.notifications.SlackChannel">SlackChannel</a>]</span>, <span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#SlackOpF[A]=scalaz.Free.FreeC[nelson.notifications.SlackOp,A]" class="extmbr" name="nelson.notifications.SlackOp.SlackOpF">SlackOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">send</span><span class="params">(<span name="channels">channels: <span class="extype" name="scala.List">List</span>[<a href="package.html#SlackChannel=String" class="extmbr" name="nelson.notifications.SlackChannel">SlackChannel</a>]</span>, <span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#SlackOpF[A]=cats.free.Free[nelson.notifications.SlackOp,A]" class="extmbr" name="nelson.notifications.SlackOp.SlackOpF">SlackOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.notifications.SlackOp$@send(channels:List[nelson.notifications.SlackChannel],msg:String):nelson.notifications.SlackOp.SlackOpF[Unit]" title="Permalink" target="_top">

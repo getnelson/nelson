@@ -57,7 +57,7 @@ and 2.) ensure we aren't progressively leaking resources over the long-term.</p>
 but will be tracked and counted by the end of the task.  The number of Unclaimed Resources will be recorded as a histogram, to allow
 us to have visibility of accumulation on such items.  In the event that we discover that the amount of Unclaimed Resources is increasing over time
 this is a possible indication that we have a major leakage signaling the need to modify the sweeper to be more aggressive.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/cleanup/Sweeper.scala" target="_blank">Sweeper.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/cleanup/Sweeper.scala" target="_blank">Sweeper.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -99,7 +99,7 @@ this is a possible indication that we have a major leakage signaling the need to
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="nelson.cleanup.Sweeper.SweeperHelmOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SweeperHelmOp=(nelson.Datacenter,scalaz.\/[nelson.cleanup.Sweeper.UnclaimedResources,helm.ConsulOp.ConsulOpF[Unit]])"></a>
+      <a id="SweeperHelmOp=(nelson.Datacenter,Either[nelson.cleanup.Sweeper.UnclaimedResources,helm.ConsulOp.ConsulOpF[Unit]])"></a>
       <a id="SweeperHelmOp:SweeperHelmOp"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -107,10 +107,10 @@ this is a possible indication that we have a major leakage signaling the need to
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">SweeperHelmOp</span><span class="result"> = (<a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scalaz.\/">\/</span>[<a href="Sweeper$$UnclaimedResources.html" class="extype" name="nelson.cleanup.Sweeper.UnclaimedResources">UnclaimedResources</a>, <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]])</span>
+        <span class="name">SweeperHelmOp</span><span class="result"> = (<a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <span class="extype" name="scala.Either">Either</span>[<a href="Sweeper$$UnclaimedResources.html" class="extype" name="nelson.cleanup.Sweeper.UnclaimedResources">UnclaimedResources</a>, <span class="extype" name="helm.ConsulOp.ConsulOpF">ConsulOpF</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]])</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.Sweeper$@SweeperHelmOp=(nelson.Datacenter,scalaz.\/[nelson.cleanup.Sweeper.UnclaimedResources,helm.ConsulOp.ConsulOpF[Unit]])" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.Sweeper$@SweeperHelmOp=(nelson.Datacenter,Either[nelson.cleanup.Sweeper.UnclaimedResources,helm.ConsulOp.ConsulOpF[Unit]])" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -124,7 +124,7 @@ this is a possible indication that we have a major leakage signaling the need to
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">SweeperHelmOps</span><span class="result"> = <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.List" class="extype" target="_top">List</a>[<a href="#SweeperHelmOp=(nelson.Datacenter,scalaz.\/[nelson.cleanup.Sweeper.UnclaimedResources,helm.ConsulOp.ConsulOpF[Unit]])" class="extmbr" name="nelson.cleanup.Sweeper.SweeperHelmOp">SweeperHelmOp</a>]</span>
+        <span class="name">SweeperHelmOps</span><span class="result"> = <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.collection.immutable.List" class="extype" target="_top">List</a>[<a href="#SweeperHelmOp=(nelson.Datacenter,Either[nelson.cleanup.Sweeper.UnclaimedResources,helm.ConsulOp.ConsulOpF[Unit]])" class="extmbr" name="nelson.cleanup.Sweeper.SweeperHelmOp">SweeperHelmOp</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.cleanup.Sweeper$@SweeperHelmOps=List[nelson.cleanup.Sweeper.SweeperHelmOp]" title="Permalink" target="_top">
@@ -242,18 +242,18 @@ this is a possible indication that we have a major leakage signaling the need to
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.cleanup.Sweeper#cleanupLeakedConsulDiscoveryKeys" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cleanupLeakedConsulDiscoveryKeys(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[nelson.cleanup.Sweeper.SweeperHelmOps]"></a>
-      <a id="cleanupLeakedConsulDiscoveryKeys(NelsonConfig):Task[SweeperHelmOps]"></a>
+      <a id="cleanupLeakedConsulDiscoveryKeys(cfg:nelson.NelsonConfig):cats.effect.IO[nelson.cleanup.Sweeper.SweeperHelmOps]"></a>
+      <a id="cleanupLeakedConsulDiscoveryKeys(NelsonConfig):IO[SweeperHelmOps]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">cleanupLeakedConsulDiscoveryKeys</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="#SweeperHelmOps=List[nelson.cleanup.Sweeper.SweeperHelmOp]" class="extmbr" name="nelson.cleanup.Sweeper.SweeperHelmOps">SweeperHelmOps</a>]</span>
+        <span class="name">cleanupLeakedConsulDiscoveryKeys</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="#SweeperHelmOps=List[nelson.cleanup.Sweeper.SweeperHelmOp]" class="extmbr" name="nelson.cleanup.Sweeper.SweeperHelmOps">SweeperHelmOps</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.Sweeper$@cleanupLeakedConsulDiscoveryKeys(cfg:nelson.NelsonConfig):scalaz.concurrent.Task[nelson.cleanup.Sweeper.SweeperHelmOps]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.Sweeper$@cleanupLeakedConsulDiscoveryKeys(cfg:nelson.NelsonConfig):cats.effect.IO[nelson.cleanup.Sweeper.SweeperHelmOps]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -458,35 +458,35 @@ this is a possible indication that we have a major leakage signaling the need to
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.cleanup.Sweeper#process" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="process(cfg:nelson.NelsonConfig)(implicitunclaimedResourceTracker:scalaz.Kleisli[scalaz.concurrent.Task,(nelson.Datacenter,Int),Unit]):scalaz.stream.Process[scalaz.concurrent.Task,Unit]"></a>
-      <a id="process(NelsonConfig)(Kleisli[Task,(Datacenter,Int),Unit]):Process[Task,Unit]"></a>
+      <a id="process(cfg:nelson.NelsonConfig)(implicitunclaimedResourceTracker:cats.data.Kleisli[cats.effect.IO,(nelson.Datacenter,Int),Unit]):fs2.Stream[cats.effect.IO,Unit]"></a>
+      <a id="process(NelsonConfig)(Kleisli[IO,(Datacenter,Int),Unit]):Stream[IO,Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">process</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="unclaimedResourceTracker">unclaimedResourceTracker: <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, (<a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">process</span><span class="params">(<span name="cfg">cfg: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="unclaimedResourceTracker">unclaimedResourceTracker: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, (<a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result">: <span class="extype" name="fs2.Stream">Stream</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.Sweeper$@process(cfg:nelson.NelsonConfig)(implicitunclaimedResourceTracker:scalaz.Kleisli[scalaz.concurrent.Task,(nelson.Datacenter,Int),Unit]):scalaz.stream.Process[scalaz.concurrent.Task,Unit]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.Sweeper$@process(cfg:nelson.NelsonConfig)(implicitunclaimedResourceTracker:cats.data.Kleisli[cats.effect.IO,(nelson.Datacenter,Int),Unit]):fs2.Stream[cats.effect.IO,Unit]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.cleanup.Sweeper#sweeperSink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="sweeperSink(implicitunclaimedResourceTracker:scalaz.Kleisli[scalaz.concurrent.Task,(nelson.Datacenter,Int),Unit]):scalaz.stream.Sink[scalaz.concurrent.Task,nelson.cleanup.Sweeper.SweeperHelmOp]"></a>
-      <a id="sweeperSink(Kleisli[Task,(Datacenter,Int),Unit]):Sink[Task,SweeperHelmOp]"></a>
+      <a id="sweeperSink(implicitunclaimedResourceTracker:cats.data.Kleisli[cats.effect.IO,(nelson.Datacenter,Int),Unit]):fs2.Sink[cats.effect.IO,nelson.cleanup.Sweeper.SweeperHelmOp]"></a>
+      <a id="sweeperSink(Kleisli[IO,(Datacenter,Int),Unit]):Sink[IO,SweeperHelmOp]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sweeperSink</span><span class="params">(<span class="implicit">implicit </span><span name="unclaimedResourceTracker">unclaimedResourceTracker: <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, (<a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="#SweeperHelmOp=(nelson.Datacenter,scalaz.\/[nelson.cleanup.Sweeper.UnclaimedResources,helm.ConsulOp.ConsulOpF[Unit]])" class="extmbr" name="nelson.cleanup.Sweeper.SweeperHelmOp">SweeperHelmOp</a>]</span>
+        <span class="name">sweeperSink</span><span class="params">(<span class="implicit">implicit </span><span name="unclaimedResourceTracker">unclaimedResourceTracker: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, (<a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>), <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result">: <span class="extype" name="fs2.Sink">Sink</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="#SweeperHelmOp=(nelson.Datacenter,Either[nelson.cleanup.Sweeper.UnclaimedResources,helm.ConsulOp.ConsulOpF[Unit]])" class="extmbr" name="nelson.cleanup.Sweeper.SweeperHelmOp">SweeperHelmOp</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.Sweeper$@sweeperSink(implicitunclaimedResourceTracker:scalaz.Kleisli[scalaz.concurrent.Task,(nelson.Datacenter,Int),Unit]):scalaz.stream.Sink[scalaz.concurrent.Task,nelson.cleanup.Sweeper.SweeperHelmOp]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.Sweeper$@sweeperSink(implicitunclaimedResourceTracker:cats.data.Kleisli[cats.effect.IO,(nelson.Datacenter,Int),Unit]):fs2.Sink[cats.effect.IO,nelson.cleanup.Sweeper.SweeperHelmOp]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -509,18 +509,18 @@ this is a possible indication that we have a major leakage signaling the need to
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.cleanup.Sweeper#timer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="timer:scalaz.~&gt;[scalaz.concurrent.Task,scalaz.concurrent.Task]"></a>
-      <a id="timer:~&gt;[Task,Task]"></a>
+      <a id="timer:cats.~&gt;[cats.effect.IO,cats.effect.IO]"></a>
+      <a id="timer:~&gt;[IO,IO]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">timer</span><span class="result">: <span class="extype" name="scalaz.~&gt;">~&gt;</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <span class="extype" name="scalaz.concurrent.Task">Task</span>]</span>
+        <span class="name">timer</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.cleanup.Sweeper$@timer:scalaz.~&gt;[scalaz.concurrent.Task,scalaz.concurrent.Task]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.cleanup.Sweeper$@timer:cats.~&gt;[cats.effect.IO,cats.effect.IO]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

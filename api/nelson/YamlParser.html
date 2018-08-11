@@ -51,7 +51,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/yaml/YamlParser.scala" target="_blank">YamlParser.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/yaml/YamlParser.scala" target="_blank">YamlParser.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
@@ -118,18 +118,18 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="nelson.YamlParser#parse" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="parse(input:String):scalaz.\/[scalaz.NonEmptyList[nelson.NelsonError],A]"></a>
-      <a id="parse(String):\/[NonEmptyList[NelsonError],A]"></a>
+      <a id="parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],A]"></a>
+      <a id="parse(String):Either[NonEmptyList[NelsonError],A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parse</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scalaz.NonEmptyList">NonEmptyList</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <span class="extype" name="nelson.YamlParser.A">A</span>]</span>
+        <span class="name">parse</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <span class="extype" name="nelson.YamlParser.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.YamlParser@parse(input:String):scalaz.\/[scalaz.NonEmptyList[nelson.NelsonError],A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.YamlParser@parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -389,19 +389,19 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.YamlParser#parseTask" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseTask(input:String):scalaz.concurrent.Task[A]"></a>
-      <a id="parseTask(String):Task[A]"></a>
+    </li><li name="nelson.YamlParser#parseIO" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseIO(input:String):cats.effect.IO[A]"></a>
+      <a id="parseIO(String):IO[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseTask</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<span class="extype" name="nelson.YamlParser.A">A</span>]</span>
+        <span class="name">parseIO</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="nelson.YamlParser.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.YamlParser@parseTask(input:String):scalaz.concurrent.Task[A]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.YamlParser@parseIO(input:String):cats.effect.IO[A]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

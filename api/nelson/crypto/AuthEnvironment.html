@@ -59,7 +59,7 @@ verification, set the verify key. Both can be set if the library user needs
 to perform both functions.
 </p></div><dl class="paramcmts block"><dt class="tparam">F</dt><dd class="cmt"><p>the context wrapping most of the results of the environment.
  For example, <code>F</code> is usually <code>AuthResult</code>, which means that an <code>F[A]</code>
- is either an <code>AuthFailure</code> or a successful <code>A</code>.</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/oss/nelson/blob/master/core/src/main/scala/crypto/AuthEnvironment.scala" target="_blank">AuthEnvironment.scala</a></dd></dl><div class="toggleContainer block">
+ is either an <code>AuthFailure</code> or a successful <code>A</code>.</p></dd></dl><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/example/test/blob/master/core/src/main/scala/crypto/AuthEnvironment.scala" target="_blank">AuthEnvironment.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -154,18 +154,18 @@ to perform both functions.
     </span>
       
     </li><li name="nelson.crypto.AuthEnvironment#nextNonce" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="nextNonce:scalaz.concurrent.Task[nelson.crypto.Nonce]"></a>
-      <a id="nextNonce:Task[Nonce]"></a>
+      <a id="nextNonce:cats.effect.IO[nelson.crypto.Nonce]"></a>
+      <a id="nextNonce:IO[Nonce]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nextNonce</span><span class="result">: <span class="extype" name="scalaz.concurrent.Task">Task</span>[<a href="Nonce.html" class="extype" name="nelson.crypto.Nonce">Nonce</a>]</span>
+        <span class="name">nextNonce</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="Nonce.html" class="extype" name="nelson.crypto.Nonce">Nonce</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.crypto.AuthEnvironment@nextNonce:scalaz.concurrent.Task[nelson.crypto.Nonce]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.crypto.AuthEnvironment@nextNonce:cats.effect.IO[nelson.crypto.Nonce]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
