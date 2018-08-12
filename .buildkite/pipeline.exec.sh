@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-sbt package
+# configure docker
+eval $(docker-machine env default)
 
+sbt test
