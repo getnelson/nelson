@@ -27,7 +27,7 @@ object CentralRequirementsPlugin extends AutoPlugin {
 
   override lazy val projectSettings = Seq(
     publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
-    sonatypeProfileName := "io.verizon",
+    sonatypeProfileName := "io.getnelson",
     pomExtra in Global := {
       <developers>
         <developer>
@@ -73,8 +73,8 @@ object CentralRequirementsPlugin extends AutoPlugin {
       </developers>
     },
     licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")),
-    homepage := Some(url("http://verizon.github.io/nelson/")),
-    scmInfo := Some(ScmInfo(url("https://github.com/verizon/nelson"),
-                                "git@github.com:verizon/nelson.git"))
+    homepage := Some(url("http://getnelson.io/")),
+    scmInfo := Some(ScmInfo(url("https://github.com/getnelson/nelson"),
+                                "git@github.com:getnelson/nelson.git"))
   )
 }

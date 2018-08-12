@@ -7,4 +7,8 @@ steps:
     timeout_in_minutes: 20
     branches: master
     env:
-      - TERM: xterm-256color
+      - TRAVIS: true # way hacky
+      - TRAVIS_COMMIT: "$BUILDKITE_COMMIT"
+      - TRAVIS_REPO_SLUG: getnelson/nelson
+      - TRAVIS_JOB_NUMBER: "1.1"
+      - TRAVIS_BUILD_NUMBER: "$BUILDKITE_BUILD_NUMBER"

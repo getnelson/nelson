@@ -3,4 +3,4 @@
 # configure docker
 eval $(docker-machine env default)
 
-sbt test
+sbt ++2.11.11 'release with-defaults'

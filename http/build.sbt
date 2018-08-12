@@ -25,7 +25,7 @@ addCompilerPlugin(dependencies.kindprojector.plugin)
 
 scalacOptions ++= List("-Ypartial-unification", "-Ywarn-value-discard")
 
-packageName in Docker := "verizon/nelson"
+packageName in Docker := "getnelson/nelson"
 
 version in Docker := version.value
 

@@ -15,7 +15,7 @@
 //:
 //: ----------------------------------------------------------------------------
 
-organization in Global := "io.verizon.nelson"
+organization in Global := "io.getnelson.nelson"
 
 scalaVersion in Global := "2.11.11"
 
