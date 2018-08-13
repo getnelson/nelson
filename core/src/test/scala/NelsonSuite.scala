@@ -180,11 +180,22 @@ trait NelsonSuite
   lazy val testInterpreters = Infrastructure.Interpreters(
     nomad,testConsul,testVault,stg,logger,testDocker,WorkflowControlOp.trans,healthI)
 
-  lazy val config = knobs.loadImmutable[IO](List(
-    Required(ClassPathResource("nelson/defaults.cfg")),
-    Required(ClassPathResource("nelson/nelson-test.cfg")),
-    Required(ClassPathResource("nelson/datacenters.cfg"))
-  )).flatMap(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _))
+  def isOSX: Boolean =
+    System.getProperty("os.name").toLowerCase.trim == "mac os x"
+
+  lazy val configFiles = {
+    val static = List(
+      Required(ClassPathResource("nelson/defaults.cfg")),
+      Required(ClassPathResource("nelson/nelson-test.cfg")),
+      Required(ClassPathResource("nelson/datacenters.cfg"))
+    )
+
+    if (isOSX){
+      static ++ List(Required(ClassPathResource("nelson/osx.cfg")))
+    } else static
+  }
+
+  lazy val config = knobs.loadImmutable[IO](configFiles).flatMap(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _))
     .unsafeRunSync()
     .copy( // Configure a minimal set of things in code. Otherwise, we want to test our config.
       database = dbConfig, // let each suite get its own h2
