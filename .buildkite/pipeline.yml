@@ -14,6 +14,8 @@ steps:
         user: builder
         always-pull: true
         environment:
+          - SONATYPE_USERNAME
+          - SONATYPE_PASSWORD
           - BUILDKITE_COMMIT
           - BUILDKITE_BRANCH
           - BUILDKITE_BUILD_NUMBER
