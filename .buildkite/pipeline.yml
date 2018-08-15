@@ -16,6 +16,7 @@ steps:
         environment:
           - SONATYPE_USERNAME
           - SONATYPE_PASSWORD
+          - GITHUB_TOKEN
           - BUILDKITE_COMMIT
           - BUILDKITE_BRANCH
           - BUILDKITE_BUILD_NUMBER
