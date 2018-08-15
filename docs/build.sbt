@@ -47,5 +47,5 @@ hugoGenerateData := {
 makeSite := makeSite.dependsOn(hugoGenerateData).value
 
 import com.typesafe.sbt.SbtGit.GitKeys.{gitBranch, gitRemoteRepo}
-// TIM: GITHUB_TOKEN is read from the .travis.yml environment
-gitRemoteRepo := "https://"+sys.env.get("GITHUB_TOKEN").getOrElse("anonymous")+"@github.com/getnelson/nelson.git"
+
+gitRemoteRepo := "git@github.com:getnelson/nelson.git"
