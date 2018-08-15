@@ -24,4 +24,6 @@ addSbtPlugin("io.spray"          % "sbt-revolver"         % "0.9.1")
 
 addSbtPlugin("io.verizon.build"  % "sbt-rig"              % "5.0.39")
 
+addSbtPlugin("org.xerial.sbt"    % "sbt-sonatype"  		  % "2.3")
+
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
