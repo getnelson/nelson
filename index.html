@@ -71,7 +71,7 @@
         <a href="//github.com/getnelson/nelson" class="btn btn-outline-inverse btn-lg">Source Code</a>
       </p>
       <p class="version">
-        Currently v0.10.9<br />
+        Currently v0.10.39<br />
       </p>
     </div>
     <a href="https://travis-ci.org/getnelson/nelson">
@@ -463,6 +463,50 @@ namespaces:
 </ul>
 
 <p>Now that you have your <code>.nelson.yml</code> as you want it, add the file to the <strong>root</strong> of your source repository, and commit it to the <code>master</code> branch. Nelson will look at the repositories&rsquo; <code>master</code> branch when it first attempts to validate your repository is something that is Nelson-compatible. You can check the validity of your manifest definition at anytime without checking in by using the Nelson CLI: <code>nelson lint manifest</code>.</p>
+
+<h2 id="user-guide-deployables" data-subheading-of="user-guide">Deployables</h2>
+
+<p>A Nelson-enabled repository signals a deployment to Nelson by making a <a href="https://help.github.com/articles/about-releases/">release</a>. This release serves two purposes: to ensure versioning so that the code and deployment history can be traced through GitHub, and to inform Nelson which units to deploy for that release. Where the manifest enumerates all the units and plans under the repository&rsquo;s purview, the deployables attached to a release tell Nelson which units to actually deploy for that release.</p>
+
+<p>Specifically, manifests describe a logical definition (e.g. a unit name) and deployables tie that logical definition to a physical one (e.g. a specific Docker image). This prevents the need to update the manifest everytime a version is bumped (frequent in a continuous delivery setting), whilst avoiding the need for a mutable tag like <code>latest</code>.</p>
+
+<p>The <a href="https://github.com/getnelson/slipway">Slipway</a> tool can help with both creating a deployable file as well as making the actual annotated release. It is available as a <a href="https://github.com/getnelson/slipway/releases">small statically linked binary</a> ready to be pulled and used in a CI pipeline.</p>
+
+<p>If you&rsquo;d like, the deployable file format is pretty simple and can be created without Slipway. Each file should be named as <code>&lt;unit name&gt;.deployable.yml</code> and look like:</p>
+
+<pre><code class="language-yaml">---
+name: &lt;unit name&gt;
+version: &lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;
+output:
+  kind: docker
+  image: &lt;docker image&gt;
+</code></pre>
+
+<p>The unit name and version in the file name and contents is what Nelson enters into its database - therefore the unit name in the filename should match the unit name in the contents which should match a unit name in the manifest. Because Nelson is version-aware, the same logical version cannot be deployed twice - the version must be incremented, though not necessarily sequential, with each new release.</p>
+
+<p>The Docker image tag typically matches the version, but it doesn&rsquo;t have to. Note that the provided Docker image is assumed to exist by the time the release (and therefore the deployment) is made, likely built and pushed by an earlier step in the CI pipeline. Nelson does little with the image string other than forward it to the backing scheduler.</p>
+
+<p>As an example, consider a manifest that contains <code>foo</code>, <code>bar</code>, and <code>baz</code> as units. To tell Nelson to deploy <code>foo</code> and <code>bar</code> for a release, something similar to the following would be attached to the release (likely with Slipway):</p>
+
+<p>In <code>foo.deployable.yml</code>:</p>
+
+<pre><code class="language-yaml">---
+name: foo
+version: 1.2.3
+output:
+  kind: docker
+  image: your.docker.com/repo/foo:1.2.0
+</code></pre>
+
+<p>In <code>bar.deployable.yml</code>:</p>
+
+<pre><code class="language-yaml">---
+name: bar
+version: 2.1.3
+output:
+  kind: docker
+  image: your.docker.com/repo/bar:2.1.3
+</code></pre>
 
 <h2 id="user-guide-credentials" data-subheading-of="user-guide">Credentials</h2>
 
@@ -1174,7 +1218,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.10.9</li>
+      <li>Currently v0.10.39</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/getnelson/nelson">GitHub</a></li>
