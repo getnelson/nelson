@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # configure docker
-eval $(docker-machine env default)
+export DOCKER_HOST=unix:///var/run/docker.sock
 
+# subvert the sbt-rig plugin
 export TRAVIS="true" # way hacky
 export TRAVIS_COMMIT="$BUILDKITE_COMMIT"
 export TRAVIS_REPO_SLUG="getnelson/nelson"
