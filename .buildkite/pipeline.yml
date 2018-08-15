@@ -17,6 +17,7 @@ steps:
           - BUILDKITE_COMMIT
           - BUILDKITE_BRANCH
           - BUILDKITE_BUILD_NUMBER
+          - COURSIER_PROGRESS=0
         mounts:
           - /var/run/docker.sock:/var/run/docker.sock
           - /var/lib/buildkite-agent/.docker:/home/builder/.docker
