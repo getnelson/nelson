@@ -4,7 +4,7 @@ steps:
     command: .buildkite/pipeline.exec.sh
     concurrency: 1
     concurrency_group: primary
-    timeout_in_minutes: 20
+    timeout_in_minutes: 45
     branches: master
     agents:
       os: linux
