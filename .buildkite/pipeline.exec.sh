@@ -17,8 +17,10 @@ if [ "$BUILDKITE_PULL_REQUEST" = 'false' ]; then
 	git checkout -qf "$BUILDKITE_BRANCH";
 fi
 
-# sbt ++2.11.11 'release with-defaults'
+# # sbt ++2.11.11 'release with-defaults'
 git tag "0.10.${BUILDKITE_BUILD_NUMBER}"
+
+echo "version in ThisBuild := \"0.10.${BUILDKITE_BUILD_NUMBER}\"" > version.sbt
 
 git push origin master:master
 
