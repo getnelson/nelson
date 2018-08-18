@@ -21,6 +21,7 @@ import java.time.Instant
 
 case class Blueprint(
   name: String,
+  description: Option[String],
   revision: Int,
   state: Blueprint.State,
   sha256: Sha256,

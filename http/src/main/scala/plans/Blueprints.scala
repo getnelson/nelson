@@ -27,6 +27,8 @@ import _root_.argonaut.DecodeResultCats._
 // import org.http4s.argonaut._
 
 object Blueprints {
+  import nelson.Json._
+
   /**
    *  {
    *    "hash": "xidfn4da"
@@ -47,10 +49,20 @@ object Blueprints {
        (c --\ "content").as[Base64].map(_.decoded)
       ).mapN((x,y,z) => BlueprintRequestJson(x,y,z))
     }
+
+  implicit val BlueprintEncoder: EncodeJson[Blueprint] =
+      EncodeJson((b: Blueprint) =>
+        ("name" := b.name) ->:
+        ("description" :=? b.description) ->?:
+        ("revision" := b.revision) ->:
+        ("state" := b.state.toString.toLowerCase) ->:
+        ("sha256" := b.sha256) ->:
+        ("created_at" := b.createdAt) ->:
+        jEmptyObject
+      )
 }
 
 final case class Blueprints(config: NelsonConfig) extends Default {
-  // import nelson.Json._
   import Blueprints._
 
   val service: HttpService[IO] = HttpService[IO] {
