@@ -17,7 +17,7 @@ package nelson
 
 // import cats.effect.IO
 import java.time.Instant
-import org.apache.commons.codec.digest.DigestUtils
+// import org.apache.commons.codec.digest.DigestUtils
 
 case class Blueprint(
   name: String,
@@ -40,7 +40,7 @@ object Blueprint {
   final object Deprecated extends State
   final object Invalid extends State
 
-  final case class Template(content: String){
-    val sha256: String = DigestUtils.sha256Hex(content)
-  }
+  // final case class Template(content: String){
+  //   val sha256: String = DigestUtils.sha256Hex(content)
+  // }
 }

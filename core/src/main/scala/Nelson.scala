@@ -350,11 +350,26 @@ object Nelson {
 
   //////////////////////// BLUEPRINTS ////////////////////////////
 
-  // def createBlueprint(name: String, description: String, template: Blueprint.Template): NelsonK[RecentStatistics] = {
-  //   // lookup blueprints based on `name`; if it exists extract revision number (use 0 where there's no )
-  //   // verify that the supplied SHA256 matches the content supplied
-  //   // increment revision number by 1 and insert new blueprint
-  // }
+  def fetchBlueprint(name: String): NelsonK[List[Blueprint]] = {
+    Kleisli { cfg =>
+      IO(List.empty[Blueprint])
+    }
+  }
+
+  def listBlueprints(): NelsonK[List[Blueprint]] = {
+    Kleisli { cfg =>
+      IO(List.empty[Blueprint])
+    }
+  }
+
+  def createBlueprint(name: String, description: String, template: String): NelsonK[Option[Blueprint]] = {
+    // lookup blueprints based on `name`; if it exists extract revision number (use 0 where there's no )
+    // verify that the supplied SHA256 matches the content supplied
+    // increment revision number by 1 and insert new blueprint
+    Kleisli { cfg =>
+      IO(None)
+    }
+  }
 
   //////////////////////// DATACENTERS ////////////////////////////
 
