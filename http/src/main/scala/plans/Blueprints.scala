@@ -80,7 +80,7 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      * List all the available blueprints
      */
     case GET -> Root / "v1" / "blueprints" & IsAuthenticated(session) =>
-      json(Nelson.listBlueprints())
+      json(Nelson.listBlueprints)
 
     /*
      * GET /v1/blueprints/gpu-accelerated-job
@@ -90,7 +90,10 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      * List all the available blueprints
      */
     case GET -> Root / "v1" / "blueprints" / keyAndRevision & IsAuthenticated(session) =>
-      json(Nelson.listBlueprints())
+      Blueprint.parseNamedRevision(keyAndRevision) match {
+        case Right((n,r)) => json(Nelson.fetchBlueprint(n,r))
+        case Left(_) => BadRequest(s"Unable to parse the supplied '${keyAndRevision}' blueprint reference.")
+      }
 
     /*
      * POST /v1/blueprints

@@ -17,6 +17,7 @@ package nelson
 
 // import cats.effect.IO
 import java.time.Instant
+import cats.syntax.either._
 // import org.apache.commons.codec.digest.DigestUtils
 
 case class Blueprint(
@@ -27,13 +28,29 @@ case class Blueprint(
   sha256: Sha256,
   template: String,
   createdAt: Instant = Instant.now
-)
+){
+  override def toString: String =
+    s"${name}@${revision.toString}"
+}
 
 object Blueprint {
+
+  def parseNamedRevision(serialized: String): Either[Throwable,(String, Revision)] =
+    serialized.split('@') match {
+      case Array(name, rstr) => Revision.fromString(rstr).map(x => (name,x))
+      case Array(name)       => Right((name, Blueprint.Revision.HEAD))
+    }
+
   sealed trait Revision
   object Revision {
     final object HEAD extends Revision
-    final case class Discrete(number: Int) extends Revision
+    final case class Discrete(number: Int) extends Revision {
+      override def toString: String = number.toString
+    }
+
+    def fromString(s: String): Either[Throwable,Revision] =
+      if (s.toUpperCase == HEAD.toString) Right(HEAD)
+      else Either.catchNonFatal(s.toInt).map(Discrete)
   }
 
   sealed trait State

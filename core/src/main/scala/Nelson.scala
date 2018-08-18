@@ -350,7 +350,7 @@ object Nelson {
 
   //////////////////////// BLUEPRINTS ////////////////////////////
 
-  def fetchBlueprint(name: String): NelsonK[List[Blueprint]] = {
+  def fetchBlueprint(name: String, revision: Blueprint.Revision): NelsonK[List[Blueprint]] = {
     Kleisli { cfg =>
       IO(List.empty[Blueprint])
     }
