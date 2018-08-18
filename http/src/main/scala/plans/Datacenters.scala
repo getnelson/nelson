@@ -18,10 +18,8 @@ package nelson
 package plans
 
 import _root_.argonaut._, Argonaut._
-
 import cats.effect.IO
 import cats.implicits._
-
 import org.http4s._
 import org.http4s.dsl.io._
 import org.http4s.argonaut._
