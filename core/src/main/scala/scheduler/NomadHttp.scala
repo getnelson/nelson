@@ -63,8 +63,6 @@ final class NomadHttp(
         launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()(scheduler, ec)
       case Summary(dc,_,sn) =>
         summary(dc,sn)
-      case RunningUnits(dc, prefix) =>
-        runningUnits(dc, prefix)
     }
 
   private def summary(dc: Datacenter, sn: Datacenter.StackName): IO[Option[DeploymentSummary]] = {

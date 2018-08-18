@@ -13,15 +13,8 @@ import cats.~>
 import cats.effect.IO
 import cats.syntax.apply._
 import cats.syntax.applicativeError._
-
-import journal.Logger
-
 import org.http4s.Status.NotFound
 import org.http4s.client.UnexpectedStatus
-
-object KubernetesHttp {
-  private val log = Logger[KubernetesHttp.type]
-}
 
 /**
  * SchedulerOp interpreter that uses the Kubernetes API server.
@@ -29,7 +22,6 @@ object KubernetesHttp {
  * See: https://kubernetes.io/docs/api-reference/v1.8/
  */
 final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO) {
-  import KubernetesHttp.log
 
   def apply[A](fa: SchedulerOp[A]): IO[A] = fa match {
     case Delete(dc, deployment) =>
@@ -38,13 +30,6 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
       launch(image, dc, ns, Versioned.unwrap(unit), unit.version, plan, hash)
     case Summary(dc, ns, stackName) =>
       summary(dc, ns, stackName)
-
-    // TODO: Legacy, no longer used
-    case RunningUnits(dc, prefix) =>
-      IO {
-        log.debug(s"KubernetesHttp RunningUnits(${dc}, ${prefix})")
-        Set.empty
-      }
   }
 
   def delete(dc: Datacenter, deployment: Deployment): IO[Unit] = {
