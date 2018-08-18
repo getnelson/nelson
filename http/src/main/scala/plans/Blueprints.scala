@@ -60,7 +60,7 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      * List all the available blueprints
      */
     case GET -> Root / "v1" / "blueprints" & IsAuthenticated(session) =>
-      Ok("not implemented yet")
+      json(List.empty[Blueprint])
 
     /*
      * GET /v1/blueprints/gpu-accelerated-job

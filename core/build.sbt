@@ -47,6 +47,7 @@ libraryDependencies ++= Seq(
   "ca.mrvisser"                %% "sealerate"                          % "0.0.4",
   "org.typelevel"              %% "cats-kernel-laws"                   % V.cats   % "test",
   "org.apache.commons"          % "commons-email"                      % "1.3.3",
+  "commons-codec"               % "commons-codec"                      % "1.11",
   "com.amazonaws"               % "aws-java-sdk-autoscaling"           % "1.11.25",
   "com.amazonaws"               % "aws-java-sdk-elasticloadbalancing"  % "1.11.25",
   "com.google.guava"            % "guava"                              % "20.0",
@@ -67,8 +68,6 @@ addCompilerPlugin(dependencies.macroparadise.plugin)
 
 initialCommands in console := """
 import nelson._
-val storage = new nelson.storage.H2Storage(DatabaseConfig("org.h2.Driver", s"jdbc:h2:file:/tmp/nelson.console.db;DATABASE_TO_UPPER=FALSE", None, None))
-storage.setup.run
 """
 
 buildInfoPackage := "nelson"

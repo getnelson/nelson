@@ -15,7 +15,32 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+// import cats.effect.IO
+import java.time.Instant
+import org.apache.commons.codec.digest.DigestUtils
+
+case class Blueprint(
+  name: String,
+  revision: Int,
+  state: Blueprint.State,
+  sha256: Sha256,
+  template: String,
+  createdAt: Instant = Instant.now
+)
+
 object Blueprint {
+  sealed trait Revision
+  final object HEAD extends Revision
+  final case class Discrete(number: Int)
+
   sealed trait State
   final object Pending extends State
+  final object Validating extends State
+  final object Active extends State
+  final object Deprecated extends State
+  final object Invalid extends State
+
+  final case class Template(content: String){
+    val sha256: String = DigestUtils.sha256Hex(content)
+  }
 }

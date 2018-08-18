@@ -348,6 +348,14 @@ object Nelson {
           )(x => IO.pure(Option(x)))
     }
 
+  //////////////////////// BLUEPRINTS ////////////////////////////
+
+  // def createBlueprint(name: String, description: String, template: Blueprint.Template): NelsonK[RecentStatistics] = {
+  //   // lookup blueprints based on `name`; if it exists extract revision number (use 0 where there's no )
+  //   // verify that the supplied SHA256 matches the content supplied
+  //   // increment revision number by 1 and insert new blueprint
+  // }
+
   //////////////////////// DATACENTERS ////////////////////////////
 
   final case class RecentStatistics(statusCounts: List[(String,Int)], mostDeployed: List[(String,Int)], leastDeployed: List[(String,Int)])
