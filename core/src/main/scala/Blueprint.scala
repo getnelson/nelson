@@ -22,7 +22,7 @@ import java.time.Instant
 case class Blueprint(
   name: String,
   description: Option[String],
-  revision: Int,
+  revision: Blueprint.Revision,
   state: Blueprint.State,
   sha256: Sha256,
   template: String,
@@ -31,15 +31,19 @@ case class Blueprint(
 
 object Blueprint {
   sealed trait Revision
-  final object HEAD extends Revision
-  final case class Discrete(number: Int)
+  object Revision {
+    final object HEAD extends Revision
+    final case class Discrete(number: Int) extends Revision
+  }
 
   sealed trait State
-  final object Pending extends State
-  final object Validating extends State
-  final object Active extends State
-  final object Deprecated extends State
-  final object Invalid extends State
+  object State {
+    final object Pending extends State
+    final object Validating extends State
+    final object Active extends State
+    final object Deprecated extends State
+    final object Invalid extends State
+  }
 
   // final case class Template(content: String){
   //   val sha256: String = DigestUtils.sha256Hex(content)

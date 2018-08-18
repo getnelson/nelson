@@ -50,6 +50,14 @@ object Blueprints {
       ).mapN((x,y,z) => BlueprintRequestJson(x,y,z))
     }
 
+  implicit val BlueprintRevisionEncoder: EncodeJson[Blueprint.Revision] =
+    EncodeJson((b: Blueprint.Revision) =>
+      b match {
+        case Blueprint.Revision.HEAD => jString("HEAD")
+        case Blueprint.Revision.Discrete(x) => jString(x.toString)
+      }
+    )
+
   implicit val BlueprintEncoder: EncodeJson[Blueprint] =
       EncodeJson((b: Blueprint) =>
         ("name" := b.name) ->:
@@ -82,7 +90,7 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      * List all the available blueprints
      */
     case GET -> Root / "v1" / "blueprints" / keyAndRevision & IsAuthenticated(session) =>
-      Ok("not implemented yet")
+      json(Nelson.listBlueprints())
 
     /*
      * POST /v1/blueprints
