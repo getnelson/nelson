@@ -37,8 +37,9 @@ object Blueprint {
 
   def parseNamedRevision(serialized: String): Either[Throwable,(String, Revision)] =
     serialized.split('@') match {
-      case Array(name, rstr) => Revision.fromString(rstr).map(x => (name,x))
-      case Array(name)       => Right((name, Blueprint.Revision.HEAD))
+      case Array(name, "HEAD") => Right((name, Blueprint.Revision.HEAD))
+      case Array(name, rstr)   => Revision.fromString(rstr).map(x => (name,x))
+      case Array(name)         => Right((name, Blueprint.Revision.HEAD))
     }
 
   sealed trait Revision
