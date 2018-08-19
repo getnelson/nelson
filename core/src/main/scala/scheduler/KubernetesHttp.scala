@@ -3,7 +3,7 @@ package scheduler
 
 import nelson.KubernetesJson.{DeploymentStatus, JobStatus}
 import nelson.Datacenter.{Deployment, StackName}
-import nelson.Manifest.{EnvironmentVariable, Plan, UnitDef, Versioned}
+import nelson.Manifest.{HealthCheck => HealthProbe, _}
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
 import argonaut._
@@ -74,14 +74,20 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
 
     val rootNs = ns.root.asString
     val response = schedule match {
-      case None        =>
-        (client.createDeployment(rootNs, stackName, image, newPlan, unit.ports), client.createService(rootNs, stackName, unit.ports)).mapN {
+      case None =>
+        val deploymentJson = KubernetesJson.deployment(rootNs, stackName, image, newPlan, unit.ports)
+        val serviceJson = KubernetesJson.service(rootNs, stackName, unit.ports)
+        (client.createDeployment(rootNs, deploymentJson), client.createService(rootNs, serviceJson)).mapN {
           case (deployment, service) => Json("deployment" := deployment, "service" := service)
         }
       case Some(sched) =>
         sched.toCron match {
-          case None           => client.createJob(rootNs, stackName, image, newPlan)
-          case Some(cronExpr) => client.createCronJob(rootNs, stackName, image, newPlan, cronExpr)
+          case None =>
+            val json = KubernetesJson.job(rootNs, stackName, image, newPlan)
+            client.createJob(rootNs, json)
+          case Some(cronExpr) =>
+            val json = KubernetesJson.cronJob(rootNs, stackName, image, newPlan, cronExpr)
+            client.createCronJob(rootNs, json)
         }
     }
 
@@ -138,4 +144,256 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
       completed = js.succeeded,
       failed    = js.failed
     )
+}
+
+object KubernetesJson {
+  val defaultCPU = 0.5
+  val defaultMemory = 512
+
+  def resources(cpu: ResourceSpec, memory: ResourceSpec): JsonObject = {
+    val (cpuRequest, cpuLimit) = cpu.fold(
+      (defaultCPU, defaultCPU),
+      limit => (limit, limit),
+      (request, limit) => (request, limit)
+    )
+    val (memoryRequest, memoryLimit) = memory.fold(
+      (s"${defaultMemory}M", s"${defaultMemory}M"),
+      limit => (s"${limit}M", s"${limit}M"),
+      (request, limit) => (s"${request}M", s"${limit}M")
+    )
+
+    JsonObject.single("resources", argonaut.Json(
+      "requests" := argonaut.Json(
+        "cpu"    := cpuRequest,
+        "memory" := memoryRequest
+      ),
+      "limits" := argonaut.Json(
+        "cpu"    := cpuLimit,
+        "memory" := memoryLimit
+      )
+    ))
+  }
+
+  def volumeJson(volume: Volume): Json = argonaut.Json.jObject(volume match {
+    case Volume(id, _, sizeInMb) =>
+      JsonObject.fromTraversableOnce(List(
+        "name" := id,
+        "emptyDir" := argonaut.Json("sizeLimit" := s"${sizeInMb}M")
+      ))
+  })
+
+  def volumesJson(volumes: List[Volume]): JsonObject = volumes match {
+    case Nil     => JsonObject.empty
+    case v :: vs => JsonObject.single("volumes", (volumeJson(v) :: vs.map(volumeJson)).asJson)
+  }
+
+  def volumeMountJson(volume: Volume): Json = argonaut.Json.jObject(volume match {
+    case Volume(id, mountPath, _) =>
+      JsonObject.fromTraversableOnce(List(
+        "name" := id,
+        "mountPath" := mountPath.toString
+      ))
+  })
+
+  def volumeMountsJson(volumes: List[Volume]): JsonObject = volumes match {
+    case Nil => JsonObject.empty
+    case v :: vs => JsonObject.single("volumeMounts", (volumeMountJson(v) :: vs.map(volumeMountJson)).asJson)
+  }
+
+  def deployment(
+    namespace: String,
+    stackName: StackName,
+    image:     Image,
+    plan:      Plan,
+    ports:     Option[Ports]
+  ): Json =
+    argonaut.Json(
+      "kind"       := "Deployment",
+      "metadata"   := argonaut.Json(
+        "name"      := stackName.toString,
+        "namespace" := namespace,
+        "labels"    := argonaut.Json(
+          "stackName"   := stackName.toString,
+          "serviceName" := stackName.serviceType,
+          "version"     := stackName.version.toString,
+          "nelson"      := "true"
+        )
+      ),
+      "spec" := argonaut.Json(
+        "replicas" := plan.environment.desiredInstances.getOrElse(1),
+        "selector" := argonaut.Json(
+          "matchLabels" := argonaut.Json("stackName" := stackName.toString)
+        ),
+        "template" := argonaut.Json(
+          "metadata" := argonaut.Json(
+            "labels" := argonaut.Json(
+              "stackName"   := stackName.toString,
+              "serviceName" := stackName.serviceType,
+              "version"     := stackName.version.toString,
+              "nelson"      := "true"
+            )
+          ),
+          "spec" := argonaut.Json.jObject(combineJsonObjects(
+            argonaut.JsonObject.fromTraversableOnce(List("containers" := List(
+              argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
+                "name"      := stackName.toString,
+                "image"     := image.toString,
+                "env"       := plan.environment.bindings,
+                "ports"     := containerPortsJson(ports.toList.flatMap(_.nel.toList))
+              )), volumeMountsJson(plan.environment.volumes), resources(plan.environment.cpu, plan.environment.memory), livenessProbe(plan.environment.healthChecks)))
+            ))),
+            volumesJson(plan.environment.volumes)
+          ))
+        )
+      )
+    )
+
+  def service(namespace: String, stackName: StackName, ports: Option[Ports]): Json =
+    argonaut.Json(
+      "kind"       := "Service",
+      "metadata"   := argonaut.Json(
+        "name"      := stackName.toString,
+        "namespace" := namespace,
+        "labels"    := argonaut.Json(
+          "stackName"   := stackName.toString,
+          "serviceName" := stackName.serviceType,
+          "version"     := stackName.version.toString,
+          "nelson"      := "true"
+        )
+      ),
+      "spec" := argonaut.Json(
+        "selector" := argonaut.Json("stackName" := stackName.toString),
+        "ports"    := servicePortsJson(ports.toList.flatMap(_.nel.toList)),
+        "type"     := "ClusterIP"
+      )
+    )
+
+  def cronJob(
+    namespace: String,
+    stackName: StackName,
+    image:     Image,
+    plan:      Plan,
+    cronExpr:  String
+  ): Json =
+    argonaut.Json(
+      "kind"       := "CronJob",
+      "metadata"   := argonaut.Json(
+        "name"      := stackName.toString,
+        "namespace" := namespace,
+        "labels"    := argonaut.Json(
+          "stackName"   := stackName.toString,
+          "serviceName" := stackName.serviceType,
+          "version"     := stackName.version.toString,
+          "nelson"      := "true"
+        )
+      ),
+      "spec" := argonaut.Json(
+        "schedule"    := cronExpr,
+        "jobTemplate" := argonaut.Json.jObject(jobSpecJson(stackName, image, plan))
+      )
+    )
+
+  def job(
+    namespace: String,
+    stackName: StackName,
+    image:     Image,
+    plan:      Plan
+  ): Json =
+    argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
+      "kind"       := "Job",
+      "metadata"   := argonaut.Json(
+        "name"      := stackName.toString,
+        "namespace" := namespace,
+        "labels"    := argonaut.Json(
+          "stackName"   := stackName.toString,
+          "serviceName" := stackName.serviceType,
+          "version"     := stackName.version.toString,
+          "nelson"      := "true"
+        )
+      )
+    )), jobSpecJson(stackName, image, plan)))
+
+  private def jobSpecJson(
+    stackName: StackName,
+    image:     Image,
+    plan:      Plan
+  ): JsonObject = {
+    val backoffLimit = JsonObject.single("backoffLimit", plan.environment.retries.getOrElse(3).asJson)
+
+    JsonObject.fromTraversableOnce(List(
+      "spec" := argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
+        "completions"  := plan.environment.desiredInstances.getOrElse(1),
+        "template"     := argonaut.Json(
+          "metadata" := argonaut.Json(
+            "name" := stackName.toString,
+            "labels" := argonaut.Json(
+              "stackName"   := stackName.toString,
+              "serviceName" := stackName.serviceType,
+              "version"     := stackName.version.toString,
+              "nelson"      := "true"
+            )
+          ),
+          "spec" := argonaut.Json.jObject(combineJsonObjects(
+            JsonObject.fromTraversableOnce(List("containers" := List(
+              argonaut.Json.jObject(combineJsonObjects(JsonObject.fromTraversableOnce(List(
+                "name"  := stackName.toString,
+                "image" := image.toString,
+                "env"   := plan.environment.bindings
+              )), volumeMountsJson(plan.environment.volumes), resources(plan.environment.cpu, plan.environment.memory)))
+            ))),
+            volumesJson(plan.environment.volumes)) :+
+            // See: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#pod-backoff-failure-policy
+            // This should be "OnFailure" but at the time of this writing this section said:
+            // Note: Due to a known issue #54870, when the spec.template.spec.restartPolicy field is set to “OnFailure”,
+            // the back-off limit may be ineffective. As a short-term workaround, set the restart policy for the embedded template to “Never”
+            // https://github.com/kubernetes/kubernetes/issues/54870
+            ("restartPolicy" := "Never")
+          )
+        )
+      )), backoffLimit))
+    ))
+  }
+
+  // HealthChecks in Nelson seem to correspond to Kubernetes liveness probes
+  // Kubernetes seems to only support one one liveness probe, so take the first one..
+  private def livenessProbe(healthChecks: List[HealthProbe]): JsonObject =
+    healthChecks.headOption match {
+      case None => JsonObject.empty
+      case Some(HealthProbe(_, portRef, _, path, interval, timeout)) =>
+        JsonObject.single("livenessProbe", argonaut.Json(
+          "httpGet" := argonaut.Json(
+            "path" := path.getOrElse("/"),
+            "port" := portRef
+          ),
+          "periodSeconds"  := interval.toSeconds,
+          "timeoutSeconds" := timeout.toSeconds
+        ))
+    }
+
+  private def combineJsonObjects(x: JsonObject, xs: JsonObject*): JsonObject =
+    JsonObject.fromTraversableOnce(x.toList ++ xs.toList.flatMap(_.toList))
+
+  private def containerPortsJson(ports: List[Port]): List[Json] =
+    ports.map { port =>
+      argonaut.Json(
+        "name"          := port.ref,
+        "containerPort" := port.port
+      )
+    }
+
+  private def servicePortsJson(ports: List[Port]): List[Json] =
+    ports.map { port =>
+      argonaut.Json(
+        "name"       := port.ref,
+        "port"       := port.port,
+        "targetPort" := port.port
+      )
+    }
+
+  private implicit val envVarEncoder: EncodeJson[EnvironmentVariable] =
+    EncodeJson { (ev: EnvironmentVariable) =>
+      ("name"  := ev.name)  ->:
+      ("value" := ev.value) ->:
+      jEmptyObject
+    }
 }
