@@ -122,7 +122,7 @@ The primary route for interacting with Nelson is via a command line client. The 
 If you just want to use nelson-cli, then run the following to install it:
 
 ```
-curl -GqL https://raw.githubusercontent.com/Verizon/nelson-cli/master/scripts/install | bash
+curl -GqL https://raw.githubusercontent.com/getnelson/nelson-cli/master/scripts/install | bash
 ```
 
 This script will download and install the latest version and put it on your `$PATH`. We do not endorse piping scripts from the wire to `bash`, and you should read the script before executing the command. It will:
@@ -636,7 +636,7 @@ When registering Nelson with Github, the exact domain on which the Nelson proces
 Once setup, Github will present you with a `client_id` and a `client_secret` for the application. These are needed by the Nelson configuration, along with a system OAuth token Nelson can use to execute asynchronous actions on the applications behalf (i.e. without direct user interaction). Run the following to generate the access token:
 
 ```
-curl -s https://raw.githubusercontent.com/Verizon/nelson/master/bin/generate-token | bash
+curl -s https://raw.githubusercontent.com/getnelson/nelson/master/bin/generate-token | bash
 ```
 
 If you have the Nelson source checked out locally on your development machine, then you can run `./bin/generate-token` if you would rather not pipe scripts from the internet to bash. The script will ask you a series of questions, and produce a OAuth token. This token - along with the `client_id` and `client_secret` - needs to be set in the Nelson configuration file like so:
@@ -800,7 +800,7 @@ nelson {
 }
 ```
 
-The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see [defaults.cfg](https://github.com/verizon/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg) in the source tree.
+The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see [defaults.cfg](https://github.com/getnelson/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg) in the source tree.
 
 <table class="table table-striped">
   <thead>
@@ -1051,7 +1051,7 @@ In order to obtain the credentials in your container runtime, it is typically ex
 The best place to find the developers of Nelson is either the Gitter chat channel or the Nelson mailing list.
 
 * [Mailing list](https://groups.google.com/forum/#!forum/nelson-users)
-* [Gitter](https://gitter.im/Verizon/nelson)
+* [Gitter](https://gitter.im/getnelson/nelson)
 
 If there are security issues you find with Nelson, please reach out to the team directly, and we will work with you on providing a fix into the project before announcing it publicly.
 
