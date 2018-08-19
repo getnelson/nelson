@@ -183,17 +183,11 @@ trait NelsonSuite
   def isOSX: Boolean =
     System.getProperty("os.name").toLowerCase.trim == "mac os x"
 
-  lazy val configFiles = {
-    val static = List(
-      Required(ClassPathResource("nelson/defaults.cfg")),
-      Required(ClassPathResource("nelson/nelson-test.cfg")),
-      Required(ClassPathResource("nelson/datacenters.cfg"))
-    )
-
-    if (isOSX){
-      static ++ List(Required(ClassPathResource("nelson/osx.cfg")))
-    } else static
-  }
+  lazy val configFiles = List(
+    Required(ClassPathResource("nelson/defaults.cfg")),
+    Required(ClassPathResource("nelson/nelson-test.cfg")),
+    Required(ClassPathResource("nelson/datacenters.cfg"))
+  )
 
   lazy val config = knobs.loadImmutable[IO](configFiles).flatMap(Config.readConfig(_, NelsonSuite.testHttp, TestStorage.xa _))
     .unsafeRunSync()
