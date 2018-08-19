@@ -34,6 +34,7 @@ libraryDependencies ++= Seq(
   "io.verizon.journal"         %% "core"                               % V.journal,
   "io.verizon.quiver"          %% "core"                               % "7.0.19",
   "org.yaml"                    % "snakeyaml"                          % "1.16",
+  "org.scalatra.scalate"       %% "scalate-core"                       % "1.9.0",
   "io.argonaut"                %% "argonaut"                           % "6.2.1",
   "io.argonaut"                %% "argonaut-cats"                      % "6.2.1",
   "io.prometheus"               % "simpleclient"                       % V.prometheus,
