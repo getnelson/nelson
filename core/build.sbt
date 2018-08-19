@@ -68,6 +68,8 @@ addCompilerPlugin(dependencies.macroparadise.plugin)
 
 initialCommands in console := """
 import nelson._
+val dbcfg = DatabaseConfig("org.h2.Driver", s"jdbc:h2:file:/tmp/nelson.console.db;DATABASE_TO_UPPER=FALSE", None, None, None)
+storage.Migrate.migrate(dbcfg).unsafeRunSync()
 """
 
 buildInfoPackage := "nelson"
