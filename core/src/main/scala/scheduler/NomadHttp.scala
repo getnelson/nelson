@@ -63,8 +63,6 @@ final class NomadHttp(
         launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()(scheduler, ec)
       case Summary(dc,_,sn) =>
         summary(dc,sn)
-      case RunningUnits(dc, prefix) =>
-        runningUnits(dc, prefix)
     }
 
   private def summary(dc: Datacenter, sn: Datacenter.StackName): IO[Option[DeploymentSummary]] = {
@@ -157,7 +155,6 @@ final class NomadHttp(
 object NomadJson {
   import argonaut._, Argonaut._
   import argonaut.EncodeJsonCats._
-  import argonaut.DecodeResultCats._
   import Infrastructure.Nomad
   import scala.concurrent.duration._
 
@@ -187,33 +184,6 @@ object NomadJson {
         p  <- (c --\ "ParentID").as[Option[String]]
       } yield RunningUnit(nm, st, p)
     })
-
-  implicit def taskEventDecoder: DecodeJson[TaskEvent] =
-    DecodeJson[TaskEvent](c => {
-      for {
-        m <- (c --\ "Message").as[Option[String]]
-        dm <- (c --\ "DriverMessage").as[Option[String]]
-      } yield TaskEvent(m getOrElse "", dm getOrElse "")
-    })
-
-  implicit def taskEventsDecoder: DecodeJson[TaskEvents] =
-    DecodeJson[TaskEvents](c => {
-      for {
-        s <- (c --\ "State").as[String].map(TaskStatus.fromString)
-        e <- (c --\ "Events").as[Option[List[TaskEvent]]]
-      } yield TaskEvents(s, e getOrElse List.empty)
-    })
-
-  // reference: https://www.nomadproject.io/docs/http/allocs.html
-  implicit def allocationDecoder: DecodeJson[TaskGroupAllocation] =
-    DecodeJson[TaskGroupAllocation](c => (
-      (c --\ "ID").as[String],
-      (c --\ "Name").as[String],
-      (c --\ "JobID").as[String],
-      (c --\ "TaskGroup").as[String],
-      (c --\ "TaskStates").as[Option[Map[String, TaskEvents]]]
-      ).mapN { case (i, n, j, g, s) => TaskGroupAllocation.build(i, n, j, g, s getOrElse Map.empty)}
-    )
 
   def dockerConfigJson(
     nomad: Nomad,

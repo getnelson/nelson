@@ -149,8 +149,6 @@ trait NelsonSuite
         IO.unit
       case Summary(dc,ns,sn) =>
         IO(None)
-      case RunningUnits(dc, prefix) =>
-        IO.pure(Set.empty)
     }
   }
 
