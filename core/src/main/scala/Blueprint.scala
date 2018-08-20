@@ -15,7 +15,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-// import cats.effect.IO
 import java.time.Instant
 import cats.syntax.either._
 
@@ -73,8 +72,4 @@ object Blueprint {
     final object Deprecated extends State
     final object Invalid extends State
   }
-
-  // final case class Template(content: String){
-  //   val sha256: String = DigestUtils.sha256Hex(content)
-  // }
 }

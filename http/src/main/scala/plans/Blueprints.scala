@@ -24,7 +24,6 @@ import org.http4s._
 import org.http4s.dsl.io._
 import _root_.argonaut.DecodeResultCats._
 import org.apache.commons.codec.digest.DigestUtils
-// import org.http4s.argonaut._
 
 object Blueprints {
   import nelson.Json._
