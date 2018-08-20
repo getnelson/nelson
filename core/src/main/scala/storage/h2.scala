@@ -1586,4 +1586,32 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     val query = sql"""DELETE FROM PUBLIC.loadbalancer_deployments WHERE id = ${lbid}"""
     query.update.run
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////// BLUEPRINTS ///////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////
+
+  def insertBlueprint(bp: Blueprint): ConnectionIO[ID] = {
+    val revisionQ =
+      sql"""
+        SELECT b.revision
+        FROM PUBLIC.blueprints b
+        WHERE b.name = ${bp.name}
+        ORDER BY b.revision DESC
+        LIMIT 1
+      """.query[Long].option
+
+    def insertB(revision: Long) =
+      sql"""
+        INSERT INTO PUBLIC.blueprints (name, description, sha256, revision, template, timestamp)
+        VALUES(${bp.name}, ${bp.description}, ${bp.sha256}, ${revision}, ${bp.template}, ${Instant.now()})
+      """.update.withUniqueGeneratedKeys[ID]("id")
+
+    for {
+      a <- revisionQ
+      c <- a.map(insertB).getOrElse(insertB(1))
+    } yield c
+  }
+
+
 }
