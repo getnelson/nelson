@@ -66,10 +66,20 @@ object Blueprint {
 
   sealed trait State
   object State {
-    final object Pending extends State
-    final object Validating extends State
-    final object Active extends State
-    final object Deprecated extends State
-    final object Invalid extends State
+    final object Pending extends State {
+      override def toString = "pending"
+    }
+    final object Validating extends State {
+      override def toString = "validating"
+    }
+    final object Active extends State {
+      override def toString = "active"
+    }
+    final object Deprecated extends State {
+      override def toString = "deprecated"
+    }
+    final object Invalid extends State {
+      override def toString = "invalid"
+    }
   }
 }
