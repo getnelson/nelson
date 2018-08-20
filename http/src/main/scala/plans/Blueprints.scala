@@ -23,31 +23,26 @@ import cats.implicits._
 import org.http4s._
 import org.http4s.dsl.io._
 import _root_.argonaut.DecodeResultCats._
-
+import org.apache.commons.codec.digest.DigestUtils
 // import org.http4s.argonaut._
 
 object Blueprints {
   import nelson.Json._
 
-  /**
-   *  {
-   *    "hash": "xidfn4da"
-   *    "name": "use-nvidia-1080ti",
-   *    "description": "only scheudle on nodes with nvida 1080ti hardware"
-   *    "content": "<base64 encoded template>"
-   *  }
-   */
   final case class BlueprintRequestJson(
     name: String,
-    description: String,
-    content: String)
+    description: Option[String],
+    sha256: Sha256,
+    template: String
+  )
 
   implicit val BlueprintRequestDecoder: DecodeJson[BlueprintRequestJson] =
     DecodeJson { c =>
       ((c --\ "name").as[String],
-       (c --\ "description").as[String],
-       (c --\ "content").as[Base64].map(_.decoded)
-      ).mapN((x,y,z) => BlueprintRequestJson(x,y,z))
+       (c --\ "description").as[Option[String]],
+       (c --\ "sha256").as[Sha256],
+       (c --\ "template").as[Base64].map(_.decoded)
+      ).mapN((w,x,y,z) => BlueprintRequestJson(w,x,y,z))
     }
 
   implicit val BlueprintRevisionEncoder: EncodeJson[Blueprint.Revision] =
@@ -72,6 +67,12 @@ object Blueprints {
 
 final case class Blueprints(config: NelsonConfig) extends Default {
   import Blueprints._
+
+  /* ensure that the the user-supplied template survived encode/decode */
+  def hasIntegrity(suppliedSha256: Sha256, template: String): Boolean = {
+    val computed = DigestUtils.sha256Hex(template)
+    computed == suppliedSha256
+  }
 
   val service: HttpService[IO] = HttpService[IO] {
     /*
@@ -101,10 +102,22 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      * Create or revise a new blueprint. Here we're using POST constantly as blueprints
      * are entirely immutable and there's no in-place mutation, but rather, discrete versions
      * are revised and all revisions are stored in perpetuity.
+     *
+     * {{{
+     *  {
+     *    "name": "use-nvidia-1080ti",
+     *    "description": "only scheudle on nodes with nvida 1080ti hardware"
+     *    "sha256": "1e34a423ebe1fafeda8277386ede3263b01357e490b124b69bc0bfb493e64140"
+     *    "template": "<base64 encoded template>"
+     *  }
+     * }}}
      */
     case req @ POST -> Root / "v1" / "blueprints" & IsAuthenticated(session) if IsAuthorized(session) =>
-      decode[BlueprintRequestJson](req){ ns =>
-        Ok("not implemented yet")
+      decode[BlueprintRequestJson](req){ bpr =>
+        if (hasIntegrity(bpr.sha256, bpr.template))
+          json(Nelson.createBlueprint(bpr.name, bpr.description, bpr.sha256, bpr.template))
+        else
+          BadRequest(s"The supplied Sha256 for decoded template content did not match the computed Sha256.")
       }
   }
 }

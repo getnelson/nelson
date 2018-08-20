@@ -18,7 +18,6 @@ package nelson
 // import cats.effect.IO
 import java.time.Instant
 import cats.syntax.either._
-// import org.apache.commons.codec.digest.DigestUtils
 
 case class Blueprint(
   name: String,
@@ -35,6 +34,17 @@ case class Blueprint(
 
 object Blueprint {
 
+  /**
+   * We will serialize references to blueprints with a simple delimited string:
+   * {{{
+   * # specifically fix to the 123 version of the `foo-bar` blueprint
+   * foo-bar@123
+   * # uses the latest (whatever revision that is) of a specified blueprint
+   * use-gpu-hardware@HEAD
+   * # equivilent to HEAD
+   * do-my-bidding
+   * }}}
+   */
   def parseNamedRevision(serialized: String): Either[Throwable,(String, Revision)] =
     serialized.split('@') match {
       case Array(name, "HEAD") => Right((name, Blueprint.Revision.HEAD))

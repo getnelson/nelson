@@ -18,7 +18,7 @@ ALTER TABLE IF EXISTS PUBLIC."blueprints"
   ADD CONSTRAINT PUBLIC."blueprints_pk" PRIMARY KEY("id");
 
 ALTER TABLE IF EXISTS "deployments"
-  ADD "blueprint_id" BIGINT NOT NULL;
+  ADD "blueprint_id" BIGINT;
 
 ALTER TABLE PUBLIC."deployments"
   ADD CONSTRAINT PUBLIC."deployments_have_blueprints"

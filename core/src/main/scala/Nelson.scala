@@ -20,13 +20,9 @@ import cats.data.{EitherT, Kleisli, NonEmptyList, OptionT, ValidatedNel}
 import cats.effect.IO
 import cats.implicits._
 import nelson.CatsHelpers._
-
 import fs2.async.parallelTraverse
-
 import java.time.Instant
-
 import journal.Logger
-
 import scala.collection.immutable.SortedMap
 
 object Nelson {
@@ -362,12 +358,13 @@ object Nelson {
     }
   }
 
-  def createBlueprint(name: String, description: String, template: String): NelsonK[Option[Blueprint]] = {
+  def createBlueprint(name: String, description: Option[String], suppliedSha256: Sha256, template: String): NelsonK[Option[Blueprint]] = {
     // lookup blueprints based on `name`; if it exists extract revision number (use 0 where there's no )
-    // verify that the supplied SHA256 matches the content supplied
     // increment revision number by 1 and insert new blueprint
     Kleisli { cfg =>
-      IO(None)
+      IO {
+        None
+      }
     }
   }
 
