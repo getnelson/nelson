@@ -54,7 +54,7 @@ object Blueprint {
 
   sealed trait Revision
   object Revision {
-    final object HEAD extends Revision
+    final case object HEAD extends Revision
     final case class Discrete(number: Long) extends Revision {
       override def toString: String = number.toString
     }
@@ -66,19 +66,19 @@ object Blueprint {
 
   sealed trait State
   object State {
-    final object Pending extends State {
+    final case object Pending extends State {
       override def toString = "pending"
     }
-    final object Validating extends State {
+    final case object Validating extends State {
       override def toString = "validating"
     }
-    final object Active extends State {
+    final case object Active extends State {
       override def toString = "active"
     }
-    final object Deprecated extends State {
+    final case object Deprecated extends State {
       override def toString = "deprecated"
     }
-    final object Invalid extends State {
+    final case object Invalid extends State {
       override def toString = "invalid"
     }
   }
