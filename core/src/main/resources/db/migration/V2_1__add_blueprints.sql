@@ -7,7 +7,7 @@ CREATE CACHED TABLE PUBLIC."blueprints"(
   "description" VARCHAR(255),
   "sha256" VARCHAR(64),
   "revision" BIGINT NOT NULL,
-  "template" BINARY NOT NULL,
+  "template" CLOB NOT NULL,
   "timestamp" BIGINT NOT NULL,
 );
 
