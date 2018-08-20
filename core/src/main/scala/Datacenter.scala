@@ -227,8 +227,9 @@ object Datacenter {
     workflow: WorkflowRef,
     plan: String,
     guid: GUID,
-    expirationPolicyRef: ExpirationPolicyRef
-  ){
+    expirationPolicyRef: ExpirationPolicyRef,
+    spec: Option[String]
+  ) {
     def nsid: ID = namespace.id
     def stackName: StackName = StackName(unit.name, unit.version, hash)
   }

@@ -4,6 +4,7 @@ package scheduler
 import nelson.KubernetesJson.{DeploymentStatus, JobStatus}
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Manifest.{HealthCheck => HealthProbe, _}
+import nelson.blueprint.Template
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
 import argonaut._
@@ -11,8 +12,7 @@ import argonaut.Argonaut._
 
 import cats.~>
 import cats.effect.IO
-import cats.syntax.apply._
-import cats.syntax.applicativeError._
+import cats.implicits._
 import org.http4s.Status.NotFound
 import org.http4s.client.UnexpectedStatus
 
@@ -26,13 +26,19 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
   def apply[A](fa: SchedulerOp[A]): IO[A] = fa match {
     case Delete(dc, deployment) =>
       delete(dc, deployment)
-    case Launch(image, dc, ns, unit, plan, hash) =>
-      launch(image, dc, ns, Versioned.unwrap(unit), unit.version, plan, hash)
+    case Launch(image, dc, ns, unit, plan, blueprint, hash) =>
+      launch(image, dc, ns, Versioned.unwrap(unit), unit.version, plan, blueprint, hash)
     case Summary(dc, ns, stackName) =>
       summary(dc, ns, stackName)
   }
 
-  def delete(dc: Datacenter, deployment: Deployment): IO[Unit] = {
+  def delete(dc: Datacenter, deployment: Deployment): IO[Unit] =
+    deployment.spec.fold(deleteDefault(dc, deployment)) { spec =>
+      // TODO: Delete via spec
+      Kubectl.delete(spec).void
+    }
+
+  def deleteDefault(dc: Datacenter, deployment: Deployment): IO[Unit] = {
     val rootNs = deployment.namespace.name.root.asString
     val name = deployment.stackName.toString
 
@@ -55,7 +61,13 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
     }
   }
 
-  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
+  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, blueprint: Option[Template], hash: String): IO[String] =
+    blueprint.fold(launchDefault(image, dc, ns, unit, version, plan, hash)) { template =>
+      // TODO..
+      Kubectl.apply(template.render(Map.empty))
+    }
+
+  def launchDefault(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
     val stackName = StackName(unit.name, version, hash)
     val env = plan.environment.bindings ++ List(
       EnvironmentVariable("NELSON_STACKNAME",        stackName.toString),

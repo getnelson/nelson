@@ -465,14 +465,14 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     for {
       u <- getUnitById(row._2)
       n <- getNamespaceByID(row._3)
-    } yield Deployment(row._1, u, row._4, n, row._5, row._6, row._7, row._8, row._9)
+    } yield Deployment(row._1, u, row._4, n, row._5, row._6, row._7, row._8, row._9, None) // TODO: Add interpolated blueprint spec
 
   def deploymentWithStatusFromRow(row: DeploymentWithStatusRow): ConnectionIO[(Deployment, DeploymentStatus)] =
     for {
       u <- getUnitById(row._2)
       n <- getNamespaceByID(row._3)
       s = DeploymentStatus.fromString(row._10)
-    } yield (Deployment(row._1, u, row._4, n, row._5, row._6, row._7, row._8, row._9), s)
+    } yield (Deployment(row._1, u, row._4, n, row._5, row._6, row._7, row._8, row._9, None), s) // TODO: Add interpolated blueprint spec
 
   def listUnitsByStatus(
     nsid: ID,

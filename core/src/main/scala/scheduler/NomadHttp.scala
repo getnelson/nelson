@@ -20,6 +20,7 @@ package scheduler
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
 import nelson.Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
+import nelson.blueprint.Template
 import nelson.docker.Docker
 import nelson.docker.Docker.Image
 
@@ -58,9 +59,9 @@ final class NomadHttp(
     co match {
       case Delete(dc,d) =>
         deleteUnitAndChildren(dc, d).retryExponentially()(scheduler, ec)
-      case Launch(i, dc, ns, u, p, hash) =>
+      case Launch(i, dc, ns, u, p, blueprint, hash) =>
         val unit = Manifest.Versioned.unwrap(u)
-        launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()(scheduler, ec)
+        launch(unit, hash, u.version, i, dc, ns, p, blueprint).retryExponentially()(scheduler, ec)
       case Summary(dc,_,sn) =>
         summary(dc,sn)
     }
@@ -94,6 +95,12 @@ final class NomadHttp(
     }
   }
 
+  private def delete(dc: Datacenter, d: Deployment): IO[Unit] =
+    d.spec.fold(deleteUnitAndChildren(dc, d)) { spec =>
+      // TODO: Delete via spec
+      deleteUnitAndChildren(dc, d)
+    }
+
   /*
    * Calls Nomad to delete the given unit and all child jobs
    */
@@ -125,13 +132,22 @@ final class NomadHttp(
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
-  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
-    def call(name: String, json: Json): IO[String] = {
-      log.debug(s"sending nomad the following payload: ${json.nospaces}")
-      val req = addCreds(dc, Request[IO](Method.POST, nomad.endpoint / "v1" / "job" / name))
-      client.expect[String](req.withBody(json))
+  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan, blueprint: Option[Template]): IO[String] =
+    blueprint.fold(launchDefault(u, hash, version, img, dc, ns, plan)) { template =>
+      launchDefault(u, hash, version, img, dc, ns, plan)
+      val sn = StackName(u.name, version, hash)
+      val name = buildName(sn)
+      // TODO: Actually do the interpolation
+      // TODO: Do we want to do validation here?
+      val spec = template.render(Map.empty)
+      Parse.decodeEither[Json](spec) match {
+        case Left(err) =>
+          IO.raiseError(new IllegalArgumentException(s"Rendered blueprint was not valid JSON, failed with error: '${err}', render: '${spec}'"))
+        case Right(json) => call(name, dc, json)
+      }
     }
 
+  private def launchDefault(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
     val sn = StackName(u.name, version, hash)
     val name = buildName(sn)
     val vars = plan.environment.bindings ::: List(
@@ -148,7 +164,13 @@ final class NomadHttp(
     ) ++ nomad.loggingImage.map(x => EnvironmentVariable("NELSON_LOGGING_IMAGE", x.toString)).toList
     val p = plan.copy(environment = plan.environment.copy(bindings = vars))
     val json = getJson(u,name,img,dc,ns,p)
-    call(name,json)
+    call(name, dc, json)
+  }
+
+  def call(name: String, dc: Datacenter, json: Json): IO[String] = {
+    log.debug(s"sending nomad the following payload: ${json.nospaces}")
+    val req = addCreds(dc, Request[IO](Method.POST, nomad.endpoint / "v1" / "job" / name))
+    client.expect[String](req.withBody(json))
   }
 }
 
