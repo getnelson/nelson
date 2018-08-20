@@ -346,27 +346,23 @@ object Nelson {
 
   //////////////////////// BLUEPRINTS ////////////////////////////
 
-  def fetchBlueprint(name: String, revision: Blueprint.Revision): NelsonK[List[Blueprint]] = {
+  def listBlueprints: NelsonK[List[Blueprint]] =
     Kleisli { cfg =>
       IO(List.empty[Blueprint])
     }
-  }
 
-  def listBlueprints(): NelsonK[List[Blueprint]] = {
+  def fetchBlueprint(name: String, revision: Blueprint.Revision): NelsonK[Option[Blueprint]] =
     Kleisli { cfg =>
-      IO(List.empty[Blueprint])
+      StoreOp.findBlueprint(name, revision).foldMap(cfg.storage)
     }
-  }
 
-  def createBlueprint(name: String, description: Option[String], suppliedSha256: Sha256, template: String): NelsonK[Option[Blueprint]] = {
-    // lookup blueprints based on `name`; if it exists extract revision number (use 0 where there's no )
-    // increment revision number by 1 and insert new blueprint
+  def createBlueprint(name: String, description: Option[String], sha: Sha256, template: String): NelsonK[Option[Blueprint]] =
     Kleisli { cfg =>
-      IO {
-        None
-      }
+      (for {
+        a <- StoreOp.insertBlueprint(name, description, sha, template)
+        b <- StoreOp.findBlueprint(name, Blueprint.Revision.HEAD)
+      } yield b).foldMap(cfg.storage)
     }
-  }
 
   //////////////////////// DATACENTERS ////////////////////////////
 

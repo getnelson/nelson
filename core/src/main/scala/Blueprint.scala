@@ -20,11 +20,12 @@ import java.time.Instant
 import cats.syntax.either._
 
 case class Blueprint(
+  guid: GUID,
   name: String,
   description: Option[String],
   revision: Blueprint.Revision,
   state: Blueprint.State,
-  sha256: Sha256,
+  sha256: Option[Sha256],
   template: String,
   createdAt: Instant = Instant.now
 ){
@@ -55,13 +56,13 @@ object Blueprint {
   sealed trait Revision
   object Revision {
     final object HEAD extends Revision
-    final case class Discrete(number: Int) extends Revision {
+    final case class Discrete(number: Long) extends Revision {
       override def toString: String = number.toString
     }
 
     def fromString(s: String): Either[Throwable,Revision] =
       if (s.toUpperCase == HEAD.toString) Right(HEAD)
-      else Either.catchNonFatal(s.toInt).map(Discrete)
+      else Either.catchNonFatal(s.toLong).map(Discrete)
   }
 
   sealed trait State
