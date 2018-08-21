@@ -6,6 +6,8 @@ steps:
     concurrency_group: primary
     timeout_in_minutes: 45
     branches: master
+    env:
+      - BUILDKITE_CLEAN_CHECKOUT: true
     agents:
       os: linux
     plugins:
@@ -22,6 +24,7 @@ steps:
           - BUILDKITE_BRANCH
           - BUILDKITE_BUILD_NUMBER
           - BUILDKITE_PULL_REQUEST
+          - BUILDKITE_CLEAN_CHECKOUT
         mounts:
           - /var/run/docker.sock:/var/run/docker.sock
           - /var/lib/buildkite-agent/.docker:/home/builder/.docker
