@@ -17,7 +17,7 @@
 package nelson
 package scheduler
 
-import nelson.blueprint.Blueprint
+import nelson.blueprint.Template
 import nelson.docker.Docker.Image
 import nelson.Manifest.{Plan, UnitDef, Versioned}
 
@@ -29,13 +29,13 @@ object SchedulerOp {
 
   final case class Delete(dc: Datacenter, d: Datacenter.Deployment) extends SchedulerOp[Unit]
 
-  final case class Launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, blueprint: Option[Blueprint], hash: String) extends SchedulerOp[String]
+  final case class Launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, blueprint: Option[Template], hash: String) extends SchedulerOp[String]
 
   final case class Summary(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends SchedulerOp[Option[DeploymentSummary]]
 
   type SchedulerF[A] = Free[SchedulerOp, A]
 
-  def launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, blueprint: Option[Blueprint], hash: String): SchedulerF[String] =
+  def launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, blueprint: Option[Template], hash: String): SchedulerF[String] =
     Free.liftF(Launch(i, dc, ns, a, p, blueprint, hash))
 
   def delete(dc: Datacenter, d: Datacenter.Deployment): SchedulerF[Unit] =

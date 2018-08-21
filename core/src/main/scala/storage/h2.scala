@@ -17,6 +17,8 @@
 package nelson
 package storage
 
+import nelson.blueprint.{Blueprint, Template}
+
 import argonaut._
 
 import cats.{~>, Order, Semigroup}
@@ -1605,7 +1607,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
    */
   def findBlueprint(name: String, revision: Blueprint.Revision): ConnectionIO[Option[Blueprint]] = {
     def blueprintFromRow(row: BlueprintRow): Blueprint =
-      Blueprint(row._1, row._2, row._3, Blueprint.Revision.Discrete(row._5), Blueprint.State.Active, row._4, row._6, row._7)
+      Blueprint(row._1, row._2, row._3, Blueprint.Revision.Discrete(row._5), Blueprint.State.Active, row._4, Template.load(s"${name}@${revision}", row._6), row._7)
 
     def getDiscrete(revision: Long) =
       sql"""

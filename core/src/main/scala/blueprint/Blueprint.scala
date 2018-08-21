@@ -1,36 +1,86 @@
-package nelson.blueprint
+//: ----------------------------------------------------------------------------
+//:
+//:   Licensed under the Apache License, Version 2.0 (the "License");
+//:   you may not use this file except in compliance with the License.
+//:   You may obtain a copy of the License at
+//:
+//:       http://www.apache.org/licenses/LICENSE-2.0
+//:
+//:   Unless required by applicable law or agreed to in writing, software
+//:   distributed under the License is distributed on an "AS IS" BASIS,
+//:   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//:   See the License for the specific language governing permissions and
+//:   limitations under the License.
+//:
+//: ----------------------------------------------------------------------------
+package nelson
+package blueprint
 
-import cats.Eq
+import java.time.Instant
+import cats.syntax.either._
 
-import org.fusesource.scalate.{Template, TemplateEngine, TemplateSource}
-
-final class Blueprint private(private val template: Template, override val toString: String) {
-  def render(substitutes: Map[String, String]): String =
-    // We get away with empty string here because we turn off
-    // caching in the template engine
-    Blueprint.engine.layout("", template, substitutes)
+case class Blueprint(
+  guid: GUID,
+  name: String,
+  description: Option[String],
+  revision: Blueprint.Revision,
+  state: Blueprint.State,
+  sha256: Option[Sha256],
+  template: Template,
+  createdAt: Instant = Instant.now
+) {
+  override def toString: String =
+    s"${name}@${revision.toString}"
 }
 
 object Blueprint {
-  /** Create a template from a raw string. */
-  def load(id: String, templateString: String): Blueprint = {
-    // NOTE: If TemplateEngine has caching on, it will use the id
-    // as the cache key. We also need to tack on '.mustache' here
-    // since Scalate uses the assumed extension to determine
-    // which backend to use :fire:
-    val source = TemplateSource.fromText(s"${id}.mustache", templateString)
-    val template = engine.load(source)
-    new Blueprint(template, templateString)
+
+  /**
+   * We will serialize references to blueprints with a simple delimited string:
+   * {{{
+   * # specifically fix to the 123 version of the `foo-bar` blueprint
+   * foo-bar@123
+   * # uses the latest (whatever revision that is) of a specified blueprint
+   * use-gpu-hardware@HEAD
+   * # equivilent to HEAD
+   * do-my-bidding
+   * }}}
+   */
+  def parseNamedRevision(serialized: String): Either[Throwable,(String, Revision)] =
+    serialized.split('@') match {
+      case Array(name, "HEAD") => Right((name, Blueprint.Revision.HEAD))
+      case Array(name, rstr)   => Revision.fromString(rstr).map(x => (name,x))
+      case Array(name)         => Right((name, Blueprint.Revision.HEAD))
+    }
+
+  sealed trait Revision
+  object Revision {
+    final case object HEAD extends Revision
+    final case class Discrete(number: Long) extends Revision {
+      override def toString: String = number.toString
+    }
+
+    def fromString(s: String): Either[Throwable,Revision] =
+      if (s.toUpperCase == HEAD.toString) Right(HEAD)
+      else Either.catchNonFatal(s.toLong).map(Discrete)
   }
 
-  private val engine = {
-    val te = new TemplateEngine()
-    te.allowReload  = false
-    te.allowCaching = false
-    te
-  }
-
-  implicit val nelsonBlueprintBlueprintInstances: Eq[Blueprint] = new Eq[Blueprint] {
-    def eqv(x: Blueprint, y: Blueprint): Boolean = x.toString == y.toString
+  sealed trait State
+  object State {
+    final case object Pending extends State {
+      override def toString = "pending"
+    }
+    final case object Validating extends State {
+      override def toString = "validating"
+    }
+    final case object Active extends State {
+      override def toString = "active"
+    }
+    final case object Deprecated extends State {
+      override def toString = "deprecated"
+    }
+    final case object Invalid extends State {
+      override def toString = "invalid"
+    }
   }
 }

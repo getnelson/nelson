@@ -16,6 +16,8 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
+import nelson.blueprint.Blueprint
+
 import cats.data.{EitherT, Kleisli, NonEmptyList, OptionT, ValidatedNel}
 import cats.effect.IO
 import cats.implicits._

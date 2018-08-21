@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{stack_name}}
+  namespace: {{namespace}}
+  labels:
+    stackName: {{stack_name}}
+    unitName: {{unit_name}}
+    version: {{version}}
+    nelson: true
+spec:
+  replicas: {{instances}}
+  selector:
+    matchLabels:
+      stackName: {{stack_name}}
+      nelson: true
+  template:
+    metadata:
+      labels:
+        stackName: {{stack_name}}
+        unitName: {{unit_name}}
+        version: {{version}}
+        nelson: true
+    spec:
+      containers:
+        name: {{stack_name}}
+        image: {{image}}
+        {{#ports}}
+        ports:
+        {{#ports_list}}
+        - name: {{port_name}}
+          containerPort: {{port_number}}
+        {{/ports_list}}
+        {{/ports}}
+        resources:
+          requests:
+            memory: {{memory_request}}M
+            cpu: {{cpu_request}}
+          limits:
+            memory: {{memory_limit}}M
+            cpu: {{cpu_limit}}
+        {{#health_check}}
+        livenessProbe:
+          httpGet:
+            path: {{health_check_path}}
+            port: {{health_check_port}}
+          periodSeconds: {{health_check_interval}}
+          timeoutSeconds: {{health_check_timeout}}
+        {{/health_check}}
+        {{#empty_volumes}}
+        volumeMounts:
+        {{#empty_volumes_list}}
+        - name: {{empty_volume_name}}
+          mountPath: {{empty_volume_mount_path}}
+        {{/empty_volumes_list}}
+        {{/empty_volumes}}
+      {{#empty_volumes}}
+      volumes:
+      {{#empty_volumes_list}}
+      - name: {{empty_volume_name}}
+        emptyDir: {}
+      {{/empty_volumes_list}}
+      {{/empty_volumes}}

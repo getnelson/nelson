@@ -20,7 +20,7 @@ package scheduler
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
 import nelson.Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
-import nelson.blueprint.Blueprint
+import nelson.blueprint.Template
 import nelson.docker.Docker
 import nelson.docker.Docker.Image
 
@@ -96,7 +96,7 @@ final class NomadHttp(
   }
 
   private def delete(dc: Datacenter, d: Deployment): IO[Unit] =
-    d.spec.fold(deleteUnitAndChildren(dc, d)) { spec =>
+    d.renderedBlueprint.fold(deleteUnitAndChildren(dc, d)) { spec =>
       // TODO: Delete via spec
       deleteUnitAndChildren(dc, d)
     }
@@ -132,7 +132,7 @@ final class NomadHttp(
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
-  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan, blueprint: Option[Blueprint]): IO[String] =
+  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan, blueprint: Option[Template]): IO[String] =
     blueprint.fold(launchDefault(u, hash, version, img, dc, ns, plan)) { template =>
       launchDefault(u, hash, version, img, dc, ns, plan)
       val sn = StackName(u.name, version, hash)

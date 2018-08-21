@@ -17,6 +17,8 @@
 package nelson
 package storage
 
+import nelson.blueprint.Blueprint
+
 import cats.data.{NonEmptyList, ValidatedNel}
 import cats.free.Free
 import cats.implicits._

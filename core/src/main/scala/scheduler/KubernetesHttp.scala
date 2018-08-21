@@ -4,7 +4,7 @@ package scheduler
 import nelson.KubernetesJson.{DeploymentStatus, JobStatus}
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Manifest.{HealthCheck => HealthProbe, _}
-import nelson.blueprint.Blueprint
+import nelson.blueprint.{Render, Template}
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
 import argonaut._
@@ -33,7 +33,7 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
   }
 
   def delete(dc: Datacenter, deployment: Deployment): IO[Unit] =
-    deployment.spec.fold(deleteDefault(dc, deployment)) { spec =>
+    deployment.renderedBlueprint.fold(deleteDefault(dc, deployment)) { spec =>
       // TODO: Delete via spec
       Kubectl.delete(spec).void
     }
@@ -61,10 +61,10 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
     }
   }
 
-  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, blueprint: Option[Blueprint], hash: String): IO[String] =
+  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, blueprint: Option[Template], hash: String): IO[String] =
     blueprint.fold(launchDefault(image, dc, ns, unit, version, plan, hash)) { template =>
-      // TODO..
-      Kubectl.apply(template.render(Map.empty))
+      val env = Render.makeEnv(ns.root.asString, StackName(unit.name, version, hash), image, plan, unit.ports)
+      Kubectl.apply(template.render(env))
     }
 
   def launchDefault(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
