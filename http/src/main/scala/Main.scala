@@ -19,15 +19,10 @@ package nelson
 import knobs._
 import java.io.File
 import java.util.concurrent.{Executors, ThreadFactory}
-
 import journal.Logger
-
 import cats.effect.IO
-
 import fs2.Stream
-
 import scala.concurrent.ExecutionContext
-
 import nelson.monitoring.{DeploymentMonitor, Stoplight, registerJvmMetrics}
 import nelson.http.MonitoringServer
 import nelson.storage.{Migrate, Hikari}

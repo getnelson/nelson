@@ -105,6 +105,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     case GetMostAndLeastDeployed(since, number, sortOrder) => getMostAndLeastDeployed(since, number, sortOrder).transact(xa)
     case FindLastReleaseDeploymentStatus(s, u) => findLastReleaseDeploymentStatus(s, u).transact(xa)
     case GetLatestReleaseForLoadbalancer(n, mv) => getLatestReleaseForLoadbalancer(n, mv).transact(xa)
+    case FindBlueprint(name, revision) => findBlueprint(name, revision).transact(xa)
+    case InsertBlueprint(name, description, sha, template) => insertBlueprint(name, description, sha, template).transact(xa)
   }
 
   implicit val metaVersion: Meta[Version] =
@@ -592,7 +594,6 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       ORDER BY id DESC
       LIMIT 1
     """
-
     select.query[Instant].option
   }
 
@@ -1585,5 +1586,69 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   def deleteLoadbalancerDeployment(lbid: ID): ConnectionIO[Int] = {
     val query = sql"""DELETE FROM PUBLIC.loadbalancer_deployments WHERE id = ${lbid}"""
     query.update.run
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////// BLUEPRINTS ///////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////
+
+  type BlueprintRow = (GUID, String, Option[String], Option[Sha256], Long, String, Instant)
+
+  /**
+   * Use cases exist for fetching a single, discrete revision of a blueprint and also
+   * generically fetching whatever the latest might be. In this way, we funnel all that
+   * through a single function that either uses a different constraint to get a single
+   * record, or in the latter case, sorts by descending revision and picks the head record.
+   */
+  def findBlueprint(name: String, revision: Blueprint.Revision): ConnectionIO[Option[Blueprint]] = {
+    def blueprintFromRow(row: BlueprintRow): Blueprint =
+      Blueprint(row._1, row._2, row._3, Blueprint.Revision.Discrete(row._5), Blueprint.State.Active, row._4, row._6, row._7)
+
+    def getDiscrete(revision: Long) =
+      sql"""
+        SELECT b.guid, b.name, b.description, b.sha256, b.revision, b.template, b.timestamp
+        FROM PUBLIC.blueprints AS b
+        WHERE b.name = ${name} AND revision = ${revision}
+        ORDER BY timestamp DESC
+        LIMIT 1
+      """.query[BlueprintRow].option
+
+    def getLatest =
+      sql"""
+        SELECT b.guid, b.name, b.description, b.sha256, b.revision, b.template, b.timestamp
+        FROM PUBLIC.blueprints AS b
+        WHERE b.name = ${name}
+        ORDER BY name ASC, revision DESC
+        LIMIT 1
+      """.query[BlueprintRow].option
+
+    val query = revision match {
+      case Blueprint.Revision.HEAD        => getLatest
+      case Blueprint.Revision.Discrete(n) => getDiscrete(n)
+    }
+
+    query.map(_.map(blueprintFromRow))
+  }
+
+  def insertBlueprint(name: String, description: Option[String], sha256: Sha256, template: String): ConnectionIO[ID] = {
+    val fetch =
+      sql"""
+        SELECT b.revision
+        FROM PUBLIC.blueprints b
+        WHERE b.name = ${name}
+        ORDER BY b.revision DESC
+        LIMIT 1
+      """.query[Long].option
+
+    def insertB(revision: Long) =
+      sql"""
+        INSERT INTO PUBLIC.blueprints (name, description, sha256, revision, template, timestamp)
+        VALUES(${name}, ${description}, ${sha256}, ${revision}, ${template}, ${Instant.now()})
+      """.update.withUniqueGeneratedKeys[ID]("id")
+
+    for {
+      a <- fetch
+      b <- a.map(last => insertB(last+1)).getOrElse(insertB(1))
+    } yield b
   }
 }

@@ -43,7 +43,8 @@ object Server {
     plans.Graph(config),
     plans.Datacenters(config),
     plans.Audit(config),
-    plans.Loadbalancers(config)
+    plans.Loadbalancers(config),
+    plans.Blueprints(config)
   ).foldLeft(HttpService.empty[IO])(_ <+> _.service)
 
   val resources: HttpService[IO] = Kleisli[OptionT[IO, ?], Request[IO], Response[IO]] {

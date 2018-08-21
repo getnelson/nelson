@@ -236,6 +236,16 @@ object StoreOp {
   def getLatestReleaseForLoadbalancer(name: String, mv: MajorVersion): StoreOpF[Option[Released]] =
     Free.liftF(GetLatestReleaseForLoadbalancer(name, mv))
 
+  ////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////// BLUEPRINTS ///////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////
+
+  def findBlueprint(name: String, revision: Blueprint.Revision): StoreOpF[Option[Blueprint]] =
+    Free.liftF(FindBlueprint(name, revision))
+
+  def insertBlueprint(name: String, description: Option[String], sha: Sha256, template: String): StoreOpF[ID] =
+    Free.liftF(InsertBlueprint(name, description, sha, template))
+
   final case class FindRepository(u: User, slug: Slug) extends StoreOp[Option[Repo]]
   final case class ListRepositories(u: User) extends StoreOp[List[Repo]]
   final case class ListRepositoriesWithOwner(u: User, owner: String) extends StoreOp[List[Repo]]
@@ -296,4 +306,6 @@ object StoreOp {
   final case class GetMostAndLeastDeployed(since: Long, number: Int, sortOrder: String) extends StoreOp[List[(String, Int)]]
   final case class FindLastReleaseDeploymentStatus(s: Slug, u: UnitName) extends StoreOp[Option[DeploymentStatus]]
   final case class GetLatestReleaseForLoadbalancer(name: String, mv: MajorVersion) extends StoreOp[Option[Released]]
+  final case class FindBlueprint(name: String, revision: Blueprint.Revision) extends StoreOp[Option[Blueprint]]
+  final case class InsertBlueprint(name: String, description: Option[String], sha: Sha256, template: String) extends StoreOp[ID]
 }

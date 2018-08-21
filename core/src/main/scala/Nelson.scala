@@ -20,13 +20,9 @@ import cats.data.{EitherT, Kleisli, NonEmptyList, OptionT, ValidatedNel}
 import cats.effect.IO
 import cats.implicits._
 import nelson.CatsHelpers._
-
 import fs2.async.parallelTraverse
-
 import java.time.Instant
-
 import journal.Logger
-
 import scala.collection.immutable.SortedMap
 
 object Nelson {
@@ -346,6 +342,26 @@ object Nelson {
       cfg.caches.stackStatusCache.get((s.owner, s.repository, u))
         .fold(storage.StoreOp.findLastReleaseDeploymentStatus(s,u).foldMap(cfg.storage)
           )(x => IO.pure(Option(x)))
+    }
+
+  //////////////////////// BLUEPRINTS ////////////////////////////
+
+  def listBlueprints: NelsonK[List[Blueprint]] =
+    Kleisli { cfg =>
+      IO(List.empty[Blueprint])
+    }
+
+  def fetchBlueprint(name: String, revision: Blueprint.Revision): NelsonK[Option[Blueprint]] =
+    Kleisli { cfg =>
+      StoreOp.findBlueprint(name, revision).foldMap(cfg.storage)
+    }
+
+  def createBlueprint(name: String, description: Option[String], sha: Sha256, template: String): NelsonK[Option[Blueprint]] =
+    Kleisli { cfg =>
+      (for {
+        a <- StoreOp.insertBlueprint(name, description, sha, template)
+        b <- StoreOp.findBlueprint(name, Blueprint.Revision.HEAD)
+      } yield b).foldMap(cfg.storage)
     }
 
   //////////////////////// DATACENTERS ////////////////////////////
