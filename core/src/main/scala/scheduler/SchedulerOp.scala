@@ -31,8 +31,6 @@ object SchedulerOp {
 
   final case class Summary(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends SchedulerOp[Option[DeploymentSummary]]
 
-  final case class RunningUnits(dc: Datacenter, prefix: Option[String]) extends SchedulerOp[Set[RunningUnit]]
-
   type SchedulerF[A] = Free[SchedulerOp, A]
 
   def launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String): SchedulerF[String] =
@@ -43,7 +41,4 @@ object SchedulerOp {
 
   def summary(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName): SchedulerF[Option[DeploymentSummary]] =
     Free.liftF(Summary(dc,ns,sn))
-
-  def runningUnits(dc: Datacenter, prefix: Option[String] = None): SchedulerF[Set[RunningUnit]] =
-    Free.liftF(RunningUnits(dc, prefix))
 }
