@@ -263,6 +263,23 @@ Aws to launch some infrastructure.
       </a>
     </span>
       
+    </li><li name="nelson.Blueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BlueprintextendsProductwithSerializable"></a>
+      <a id="Blueprint:Blueprint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Blueprint.html"><span class="name">Blueprint</span></a><span class="params">(<span name="guid">guid: <a href="#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="description">description: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="revision">revision: <a href="Blueprint$$Revision.html" class="extype" name="nelson.Blueprint.Revision">Revision</a></span>, <span name="state">state: <a href="Blueprint$$State.html" class="extype" name="nelson.Blueprint.State">State</a></span>, <span name="sha256">sha256: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="#Sha256=String" class="extmbr" name="nelson.Sha256">Sha256</a>]</span>, <span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="createdAt">createdAt: <span class="extype" name="java.time.Instant">Instant</span> = <span class="symbol">Instant.now</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@BlueprintextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.Cache" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Cache[K,V]extendsAnyRef"></a>
       <a id="Cache[K,V]:Cache[K,V]"></a>
@@ -1913,6 +1930,23 @@ Avalible options are (in order of access level, descending):
     </span>
       <p class="shortcomment cmt">this is the data that we store (encrypted) into the
 cookie stored on users browsers.</p>
+    </li><li name="nelson.Sha256" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Sha256=String"></a>
+      <a id="Sha256:Sha256"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Sha256</span><span class="result"> = <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@Sha256=String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.SlackConfig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SlackConfigextendsProductwithSerializable"></a>
       <a id="SlackConfig:SlackConfig"></a>
@@ -1995,40 +2029,6 @@ to canonically reference a repo within nelson.</p>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@TaskEventextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.TaskEvents" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TaskEventsextendsProductwithSerializable"></a>
-      <a id="TaskEvents:TaskEvents"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="TaskEvents.html"><span class="name">TaskEvents</span></a><span class="params">(<span name="taskStatus">taskStatus: <a href="TaskStatus.html" class="extype" name="nelson.TaskStatus">TaskStatus</a></span>, <span name="taskEvents">taskEvents: <span class="extype" name="scala.List">List</span>[<a href="TaskEvent.html" class="extype" name="nelson.TaskEvent">TaskEvent</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@TaskEventsextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.TaskGroupAllocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TaskGroupAllocationextendsProductwithSerializable"></a>
-      <a id="TaskGroupAllocation:TaskGroupAllocation"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="TaskGroupAllocation.html"><span class="name">TaskGroupAllocation</span></a><span class="params">(<span name="id">id: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="jobId">jobId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="taskGroup">taskGroup: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tasks">tasks: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="TaskName.html" class="extype" name="nelson.TaskName">TaskName</a>], (<a href="TaskStatus.html" class="extype" name="nelson.TaskStatus">TaskStatus</a>, <span class="extype" name="scala.List">List</span>[<a href="TaskEvent.html" class="extype" name="nelson.TaskEvent">TaskEvent</a>])]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@TaskGroupAllocationextendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2593,6 +2593,23 @@ http4s.</p></div></div>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@Base64" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Blueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Blueprint"></a>
+      <a id="Blueprint:Blueprint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Blueprint$.html"><span class="name">Blueprint</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@Blueprint" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -3297,23 +3314,6 @@ Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>
       <p class="shortcomment cmt">Copied, adapted, and minimized from Scalaz's Tag implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Copied, adapted, and minimized from Scalaz's Tag implementation.
 https://github.com/scalaz/scalaz/blob/v7.1.17/core/src/main/scala/scalaz/Tag.scala
 </p></div></div>
-    </li><li name="nelson.TaskGroupAllocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TaskGroupAllocation"></a>
-      <a id="TaskGroupAllocation:TaskGroupAllocation"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="TaskGroupAllocation$.html"><span class="name">TaskGroupAllocation</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@TaskGroupAllocation" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.TaskStatus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TaskStatus"></a>
       <a id="TaskStatus:TaskStatus"></a>

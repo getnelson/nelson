@@ -71,7 +71,7 @@
         <a href="//github.com/getnelson/nelson" class="btn btn-outline-inverse btn-lg">Source Code</a>
       </p>
       <p class="version">
-        Currently v0.10.63<br />
+        Currently v0.11.67<br />
       </p>
     </div>
     <a href="https://travis-ci.org/getnelson/nelson">
@@ -217,7 +217,7 @@
 
 <p>If you just want to use nelson-cli, then run the following to install it:</p>
 
-<pre><code>curl -GqL https://raw.githubusercontent.com/Verizon/nelson-cli/master/scripts/install | bash
+<pre><code>curl -GqL https://raw.githubusercontent.com/getnelson/nelson-cli/master/scripts/install | bash
 </code></pre>
 
 <p>This script will download and install the latest version and put it on your <code>$PATH</code>. We do not endorse piping scripts from the wire to <code>bash</code>, and you should read the script before executing the command. It will:</p>
@@ -728,7 +728,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
 
 <p>Once setup, Github will present you with a <code>client_id</code> and a <code>client_secret</code> for the application. These are needed by the Nelson configuration, along with a system OAuth token Nelson can use to execute asynchronous actions on the applications behalf (i.e. without direct user interaction). Run the following to generate the access token:</p>
 
-<pre><code>curl -s https://raw.githubusercontent.com/Verizon/nelson/master/bin/generate-token | bash
+<pre><code>curl -s https://raw.githubusercontent.com/getnelson/nelson/master/bin/generate-token | bash
 </code></pre>
 
 <p>If you have the Nelson source checked out locally on your development machine, then you can run <code>./bin/generate-token</code> if you would rather not pipe scripts from the internet to bash. The script will ask you a series of questions, and produce a OAuth token. This token - along with the <code>client_id</code> and <code>client_secret</code> - needs to be set in the Nelson configuration file like so:</p>
@@ -890,7 +890,7 @@ Nelson itself deploys as a docker container, so can be deployed pretty much anyw
 }
 </code></pre>
 
-<p>The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see <a href="https://github.com/verizon/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg">defaults.cfg</a> in the source tree.</p>
+<p>The following table gives an explanation of the configuration file sections and their purpose, but for a full explanation and all available configuration options please see <a href="https://github.com/getnelson/nelson/blob/master/core/src/main/resources/nelson/defaults.cfg">defaults.cfg</a> in the source tree.</p>
 
 <table class="table table-striped">
   <thead>
@@ -1147,7 +1147,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
 <ul>
 <li><a href="https://groups.google.com/forum/#!forum/nelson-users">Mailing list</a></li>
-<li><a href="https://gitter.im/Verizon/nelson">Gitter</a></li>
+<li><a href="https://gitter.im/getnelson/nelson">Gitter</a></li>
 </ul>
 
 <p>If there are security issues you find with Nelson, please reach out to the team directly, and we will work with you on providing a fix into the project before announcing it publicly.</p>
@@ -1218,7 +1218,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
     </p>
 
     <ul class="bs-docs-footer-links muted">
-      <li>Currently v0.10.63</li>
+      <li>Currently v0.11.67</li>
     
       <li>&middot;</li>
       <li><a href="https://github.com/getnelson/nelson">GitHub</a></li>
