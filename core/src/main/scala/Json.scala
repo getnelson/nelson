@@ -86,19 +86,6 @@ object Json {
     jEmptyObject
   )
 
-  implicit val taskGroupAllocationTasksEncoder: EncodeJson[Map[String @@ TaskName, (TaskStatus, List[TaskEvent])]] =
-    encodeTransposeMap[String @@ TaskName, (TaskStatus, List[TaskEvent])]('task_name, 'task_contents)
-
-  implicit val taskGroupAllocationEncoder: EncodeJson[TaskGroupAllocation] =
-    EncodeJson((a: TaskGroupAllocation) =>
-      ("job_id" := a.jobId) ->:
-      ("task_group" := a.taskGroup) ->:
-      ("tasks" := a.tasks) ->:
-      ("name" := a.name) ->:
-      ("id" := a.id) ->:
-      jEmptyObject
-    )
-
   implicit lazy val RoutingNodeEncoder: EncodeJson[routing.RoutingNode] =
     EncodeJson((rn: routing.RoutingNode) =>
       rn.node.fold(

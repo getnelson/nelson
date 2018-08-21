@@ -45,7 +45,6 @@ class InstrumentedNomadClient private (instance: String, interp: SchedulerOp ~> 
     case _: Launch => "launch"
     case _: Delete => "delete"
     case _: Summary => "summary"
-    case _: RunningUnits => "running_units"
   }
 }
 
