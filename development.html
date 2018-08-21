@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://getnelson.io/development.html">
+
+  <meta name="generator" content="Hugo 0.22.1" />
+
+  <title>Nelson</title>
+
+  
+  
+
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://getnelson.io/css/docs.min.css" rel="stylesheet">
+  <link href="https://getnelson.io/css/style.css" rel="stylesheet">
+  <link href="https://getnelson.io/css/style.blue.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
+  <script src="https://getnelson.io/js/docs.min.js"></script>
+</head>
+
+<body>
+
+  
+  <header class="navbar navbar-static-top bs-docs-nav" id="top">
+  <div class="container">
+    <div class="navbar-header" role="banner">
+      <a class="navbar-brand" href="https://getnelson.io/">Nelson</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        
+        
+        <li class="">
+          <a href="/reference.html">Reference</a>
+        </li>
+        
+        <li class="">
+          <a href="/development.html">Development</a>
+        </li>
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li>
+          <a href="https://github.com/getnelson/nelson">GitHub</a>
+        </li>
+        
+        <li>
+          <a href="https://getnelson.github.io/nelson/api/">API Docs</a>
+        </li>
+        
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+  
+
+  <div class="bs-docs-header" id="content">
+    <div class="container">
+      <h1>Development</h1>
+      <p></p>
+    </div>
+  </div>
+
+  <div class="container bs-docs-container">
+    <div class="row">
+      
+      <div class="col-md-9" role="main">
+        <article class="post-content">
+          <section class="bs-docs-section">
+            <h1 id="development" class="page-header">Development</h1>
+
+<p>Nelson is written in <a href="https://scala-lang.org">Scala</a>, and built using <a href="http://www.scala-sbt.org/">SBT</a>. You will need to install SBT locally before you can start working with the Nelson codebase. Please <a href="http://www.scala-sbt.org/0.13/docs/Setup.html">follow the install steps</a> to get setup.</p>
+
+<h2 id="running-locally" data-subheading-of="development">
+  Running Locally
+</h2>
+
+<p>Booting Nelson locally is fairly straightforward. First, obtain a <a href="https://github.com/settings/tokens">Personal Access Token for Github</a>. Once you have this, add it to your <code>~/.bash_profile</code> as the <code>GITHUB_TOKEN</code> environment variable</p>
+
+<p>In addition, you are required to add the following environment variables:</p>
+
+<pre><code># these can be randomly assigned strings
+export NELSON_GITHUB_SECRET=&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;
+export NELSON_GITHUB_TOKEN=&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;
+# the value here should be the PAT that you got from Github
+export GITHUB_TOKEN=&quot;XXXXXXXXXXXXXXXXXX&quot;
+</code></pre>
+
+<p>Next, add a line to your <code>/etc/hosts</code> such that you have a <code>nelson.local</code> domain pointing to your local loopback interface. This looks like:</p>
+
+<pre><code>127.0.0.1 nelson.local
+</code></pre>
+
+<p>This is the bare minimum required to run Nelson. You can then instruct Nelson to boot up by using the following command:</p>
+
+<pre><code>sbt http/reStart
+</code></pre>
+
+<p>Nelson will then boot up and be running on <code>http://nelson.local:9000</code>. Be aware that unless you have correctly configured a development OAuth application on Github for your local Nelson, you will get rejected from any activity related to Github. This is covered <a href="http://verizon.github.io/nelson/#install-authorize">in the operator guide</a> section of the Operator Guide.</p>
+
+<h2 id="development-dependencies" data-subheading-of="development">
+  Dependencies
+</h2>
+
+<p>By default, the local development configuration assumes you&rsquo;re running Nomad on the loopback address, <code>127.0.0.1</code>. If you wish to point to a remote Nomad cluster, then you must set the following environment variables:</p>
+
+<pre><code>export NOMAD_ADDR=XXXXXXXX
+export NELSON_NOMAD_DOCKER_HOST=XXXXXXXXXXXX
+# the following are required if your docker registry that the
+# remote cluster uses requires authentication
+export NELSON_NOMAD_DOCKER_USERNAME=XXXXXXXXXXXX
+export NELSON_NOMAD_DOCKER_PASSWORD=XXXXXXXXXXXX
+</code></pre>
+
+<p>Technically, you can run Nelson locally <strong>without</strong> the other system dependencies running locally - some functionality will of course not work. If the feature you&rsquo;re working on doesn&rsquo;t need those systems, please be aware your logs will contain errors reporting that those dependencies are not running. To remove these errors, install and run the following locally before booting Nelson.</p>
+
+<p>Do be aware that you could also run these dependencies as containers but it can often become tricky with the bridge networking. This is something that is certainly possible to overcome, but it&rsquo;s more hassle than most people want when getting setup.</p>
+
+<h3 id="development-dependencies-consul" class="linkable">
+  Consul
+</h3>
+
+<p>Install Consul with <code>brew install consul</code>, or by downloading and installing <a href="https://www.consul.io/downloads.html">here</a>. Next, modify the Nelson config at <code>&lt;project-dir&gt;/etc/development/http/http.dev.cfg</code>: in the <code>consul</code> config, update <code>endpoint</code> to be:</p>
+
+<pre><code>datacenters.&lt;yourdc&gt;.consul.endpoint = &quot;http://127.0.0.1:8500&quot;
+</code></pre>
+
+<p>Then, run the Consul binary with <code>consul agent -dev</code>.</p>
+
+<h3 id="development-dependencies-vault" class="linkable">
+  Vault
+</h3>
+
+<p>Install Vault with <code>brew install vault</code>, or by downloading and installing <a href="https://www.vaultproject.io/downloads.html">here</a>. Modify the Nelson config at <code>&lt;project-dir&gt;/etc/development/http/http.dev.cfg</code>: in the <code>vault</code> config, update <code>endpoint</code> to be</p>
+
+<pre><code>endpoint = &quot;http://127.0.0.1:8200&quot;
+</code></pre>
+
+<p>Then, run the Vault binary with <code>vault server -dev</code>.</p>
+
+<h3 id="overview-features" class="linkable">
+  Promtool
+</h3>
+
+<p>To run tests, you must have <code>promtool</code> available on your path. Developers on a Mac may run this script to fetch <code>promtool</code> and install to <code>/usr/local/bin</code>:</p>
+
+<pre><code class="language-sh">./bin/install-promtool
+</code></pre>
+
+<p>If you prefer to install this binary manually, then please fetch it <a href="https://prometheus.io/download/">from the prometheus site</a> and install at your favourite location on your <code>$PATH</code>.</p>
+
+<h2 id="development-conventions" data-subheading-of="development">
+  Conventions
+</h2>
+
+<p>There are a few conventions at play within the Nelson codebase:</p>
+
+<ul>
+<li><p><code>JSON</code> responses from the API should use <code>snake_case</code>. This is because not all client-side scripting languages (namely, JavaScript) can handle keys that have dashes.</p></li>
+
+<li><p>Any functions that are going to be called for user or event actions should reside in the <code>Nelson</code> object and have a <code>NelsonK[A]</code> return value (where <code>A</code> is the type you want to return). Functions in this object are meant to assemble results from various other sub-systems (e.g. <code>Github</code> and <code>Storage</code>) into something usable by clients of the API.</p></li>
+</ul>
+
+<h2 id="development-using-docker" data-subheading-of="development">
+  Using Docker
+</h2>
+
+<p>If you&rsquo;re running docker on OSX, it&rsquo;s possible that your boot2docker/docker-machine does not have enough entropy to run the container, as we&rsquo;re using SecureRandom. If this is the case, then you can run the following container to augment the random number generation usign the following:</p>
+
+<pre><code>docker pull harbur/haveged
+docker run --privileged -d harbur/haveged
+</code></pre>
+
+<p>Nelson can be started with the following command, assuming you&rsquo;re in the root of the Nelson source tree:</p>
+
+<pre><code class="language-shell">bin/run-with-docker
+</code></pre>
+
+<p>Where the <code>nelson.env</code> file looks like this (but with valid values, naturally):</p>
+
+<pre><code>NELSON_SECURITY_ENCRYPTION_KEY=xxxxxxxxxxxx
+NELSON_SECURITY_SIGNATURE_KEY=xxxxxxxxxxxx
+NELSON_GITHUB_SECRET=xxxxxxxxxxxx
+NELSON_GITHUB_CLIENT_ID=xxxxxxxxxxxx
+NELSON_DOMAIN=xxxxxxxxxxxx
+GITHUB_USER=xxxxxxxxxxxx
+GITHUB_TOKEN=xxxxxxxxxxxx
+</code></pre>
+
+<p>The session encryption, signing, and verification keys can be generated by running <code>bin/generate-keys</code>.  The below is an example.  Run this yourself!  Do not use these!  Do not share your signing key or encryption key!</p>
+
+<pre><code class="language-sh">export NELSON_SECURITY_ENCRYPTION_KEY=WWD4N/4oxgPmGlai/MW4Hw==
+export NELSON_SECURITY_SIGNATURE_KEY=YNhJUcF8ggQ7HoWkmGqaxw==
+</code></pre>
+
+<h2 id="development-database" data-subheading-of="development">Database</h2>
+
+<p>Nelson&rsquo;s primary data store is a H2 database. This deliberately doesn&rsquo;t scale past a single machine, and was an intentional design choice to limit complexity in the early phases of the project. With that being said, H2 is very capable, and for most users this will work extremely well. If Nelson were reaching the point where H2 on SSD drives were a bottleneck, you would be doing many thousand of deployments a second, which is exceedingly unlikely.</p>
+
+<p>If you start to contribute to Nelson, then its useful to understand the data schema, which is as follows:</p>
+
+<div class="clearing">
+  <img src="images/erd.png" width="100%" />
+</div>
+
+<p>As can be seen from the diagram, Nelson has a rather normalized structure. The authors have avoided denormalization of this schema where possible, as Nelson is not in the runtime hot path so the system does not suffer serious performance penalties from such a design; in short it will be able to scale far in excess of the query and write load Nelson actually receives.</p>
+
+<h2 id="development-known-issues" data-subheading-of="development">Known Issues</h2>
+
+<ol>
+<li><p>Upon receiving notification of a release event on Github, Nelson converts this to events published to its internal event stream (called <code>Pipeline</code>). <code>Pipeline</code> and messages on it, are not durable. If Nelson is processing a message (or has messages queued because of contention or existing backpressure), and an outage / upgrade or any reason that causes a halt to the JVM process, will loose said messages.</p></li>
+
+<li><p>Nelson does not have a high-availability data store. As mentioned above in the database section, this is typically not a problem, but should be a consideration. In the future, the authors may consider upgrading Nelson so it can cluster, but the expectation is that scaling-up will be more cost-effective than scaling-out for most users. Nelson will currently eat up several thousand deployments a minute, which is larger than most organizations will ever reach.</p></li>
+</ol>
+
+<h1 id="cli" class="page-header">Command Line</h1>
+
+<p>The <a href="https://github.com/getnelson/nelson-cli">Nelson CLI</a> is useful for debugging the Nelson API locally. Particularly useful are the client&rsquo;s <code>--debug</code> and <code>--debug-curl</code> flags. You can read about them in the <a href="http://verizon.github.io/nelson-cli/">client&rsquo;s documentation</a>. One option that you need to pay attention to for local usage is the <code>--disable-tls</code> flag on the <code>login</code> subcommand. To login to a local Nelson instance, you should run the following:</p>
+
+<pre><code>nelson login --disable-tls nelson.local:9000
+</code></pre>
+
+<p>It&rsquo;s important to note that to use the API locally, a change to the development config at <code>&lt;project-dir&gt;/etc/development/http/http.dev.cfg</code> is needed. Add the following line inside the <code>nelson.github</code> config:</p>
+
+<pre><code>organization-admins = [ &quot;&lt;your-github-handle-here&gt;&quot; ]
+</code></pre>
+
+<p>This ensures that when you login via the UI that you are specified as an admin and do not have limited access to the operations you can locally perform.</p>
+
+<h1 id="documentation" class="page-header">Documentation</h1>
+
+<p>There are a couple of options for testing documentation locally. First you need to install <a href="https://gohugo.io/">Hugo</a>, which is a single, native binary and just needs to be present on your <code>$PATH</code>.</p>
+
+<p>The most convenient method for viewing documentation locally is to run via SBT using the following command:</p>
+
+<pre><code>sbt docs/previewSite
+</code></pre>
+
+<p>This will open your default web browser with the documentation site, which is handy for locally viewing the docs. It does however <em>not</em> support dynamic reloading of pages when the source changes. Luckily this is supported by Hugo, and can easily be run with a script locally:</p>
+
+<pre><code>cd docs/src/hugo
+hugo server -w -b 127.0.0.1 -p 4000
+</code></pre>
+
+<p>Hugo will automatically refresh the page when the source files are changed, which can be very helpful when one is itterating on the documentation site over time.</p>
+
+          </section>
+        </article>
+      </div>
+      
+      <div class="col-md-3" role="complementary">
+  <div class="bs-docs-sidebar hidden-print">
+    <ul class="nav bs-docs-sidenav">
+    </ul>
+    <a class="back-to-top" href="#top">
+      <i class="glyphicon glyphicon-chevron-up"></i> Back to top
+    </a>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+  <footer class="bs-docs-footer" role="contentinfo">
+  <div class="container">
+    <p>
+      Built with &hearts; by the infrastructure engineering team.</p>
+    <p>
+      Documentation template by <a target="_blank" href="http://getbootstrap.com">Bootstrap team</a>,
+      adapted for use with <a target="_blank" href="https://gohugo.com">Hugo.</a>
+    </p>
+
+    <ul class="bs-docs-footer-links muted">
+      <li>Currently v0.11.70</li>
+    
+      <li>&middot;</li>
+      <li><a href="https://github.com/getnelson/nelson">GitHub</a></li>
+    
+      <li>&middot;</li>
+      <li><a href="https://getnelson.github.io/nelson/issues">Issues</a></li>
+    
+      <li>&middot;</li>
+      <li><a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a></li>
+    </ul>
+  </div>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.1.2/trianglify.min.js"></script>
+
+
+
+  <script>trianglify('#041F33', '#204d9b');</script>
+
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-57263411-7', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
+
