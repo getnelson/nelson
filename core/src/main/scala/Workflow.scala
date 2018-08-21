@@ -18,7 +18,7 @@ package nelson
 
 import nelson.Datacenter.{Deployment}
 import nelson.Manifest.{UnitDef,Versioned,Plan,AlertOptOut}
-import nelson.blueprint.Template
+import nelson.blueprint.Blueprint
 import nelson.docker.Docker.Image
 import nelson.docker.DockerOp
 import nelson.logging.LoggingOp
@@ -89,7 +89,7 @@ object Workflow {
     def pure[A](a: => A): WorkflowF[A] =
       WorkflowControlOp.pure(a).inject
 
-    def launch(i: Image, dc: Datacenter, ns: NamespaceName, u: UnitDef @@ Versioned, p: Plan, blueprint: Option[Template], hash: String): WorkflowF[String] =
+    def launch(i: Image, dc: Datacenter, ns: NamespaceName, u: UnitDef @@ Versioned, p: Plan, blueprint: Option[Blueprint], hash: String): WorkflowF[String] =
       SchedulerOp.launch(i, dc, ns, u, p, blueprint, hash).inject
 
     def delete(dc: Datacenter, d: Deployment): WorkflowF[Unit] =

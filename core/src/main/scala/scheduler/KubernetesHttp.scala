@@ -4,7 +4,7 @@ package scheduler
 import nelson.KubernetesJson.{DeploymentStatus, JobStatus}
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Manifest.{HealthCheck => HealthProbe, _}
-import nelson.blueprint.Template
+import nelson.blueprint.Blueprint
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
 import argonaut._
@@ -61,7 +61,7 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
     }
   }
 
-  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, blueprint: Option[Template], hash: String): IO[String] =
+  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, blueprint: Option[Blueprint], hash: String): IO[String] =
     blueprint.fold(launchDefault(image, dc, ns, unit, version, plan, hash)) { template =>
       // TODO..
       Kubectl.apply(template.render(Map.empty))

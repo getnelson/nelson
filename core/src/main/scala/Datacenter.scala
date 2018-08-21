@@ -228,7 +228,7 @@ object Datacenter {
     plan: String,
     guid: GUID,
     expirationPolicyRef: ExpirationPolicyRef,
-    spec: Option[String]
+    renderedBlueprint: Option[String]
   ) {
     def nsid: ID = namespace.id
     def stackName: StackName = StackName(unit.name, unit.version, hash)
