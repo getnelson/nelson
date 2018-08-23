@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,6 +26,12 @@ spec:
       containers:
         name: {{stack_name}}
         image: {{image}}
+        {{#envvars}}
+        env:
+          {{#envvars_list}}
+          {{envvar_name}}: {{envvar_value}}
+          {{/envvars_list}}
+        {{/envvars}}
         {{#ports}}
         ports:
         {{#ports_list}}
@@ -61,3 +68,27 @@ spec:
         emptyDir: {}
       {{/empty_volumes_list}}
       {{/empty_volumes}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{stack_name}}
+  namespace: {{namespace}}
+  labels:
+    stackName: {{stack_name}}
+    unitName: {{unit_name}}
+    version: {{version}}
+    nelson: true
+spec:
+  selector:
+    stackName: {{stack_name}}
+    nelson: true
+  {{#ports}}
+  ports:
+  {{#ports_list}}
+  - name: {{port_name}}
+    port: {{port_number}}
+    targetPort: {{port_number}}
+  {{/ports_list}}
+  {{/ports}}
+  type: ClusterIP

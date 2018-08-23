@@ -1,0 +1,56 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{stack_name}}
+  namespace: {{namespace}}
+  labels:
+    stackName: {{stack_name}}
+    unitName: {{unit_name}}
+    version: {{version}}
+    nelson: true
+spec:
+  schedule: {{schedule}}
+  jobTemplate:
+    spec:
+      completions: {{instances}}
+      backoffLimit: {{retries}}
+      template:
+        metadata:
+          name: {{stack_name}}
+          labels:
+            stackName: {{stack_name}}
+            unitName: {{unit_name}}
+            version: {{version}}
+            nelson: true
+        spec:
+          containers:
+            name: {{stack_name}}
+            image: {{image}}
+            {{#envvars}}
+            env:
+              {{#envvars_list}}
+              {{envvar_name}}: {{envvar_value}}
+              {{/envvars_list}}
+            {{/envvars}}
+            resources:
+              requests:
+                memory: {{memory_request}}M
+                cpu: {{cpu_request}}
+              limits:
+                memory: {{memory_limit}}M
+                cpu: {{cpu_limit}}
+            {{#empty_volumes}}
+            volumeMounts:
+            {{#empty_volumes_list}}
+            - name: {{empty_volume_name}}
+              mountPath: {{empty_volume_mount_path}}
+            {{/empty_volumes_list}}
+            {{/empty_volumes}}
+          {{#empty_volumes}}
+          volumes:
+          {{#empty_volumes_list}}
+          - name: {{empty_volume_name}}
+            emptyDir: {}
+          {{/empty_volumes_list}}
+          {{/empty_volumes}}
+          restartPolicy: Never
