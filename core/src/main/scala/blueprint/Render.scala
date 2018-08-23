@@ -3,66 +3,65 @@ package blueprint
 
 import nelson.Datacenter.StackName
 import nelson.Manifest._
+import nelson.blueprint.EnvValue._
 import nelson.docker.Docker.Image
 
 object Render {
-  def makeEnv(img: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, v: Version, p: Plan, hash: String): Map[String, Any] = {
+  def makeEnv(img: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, v: Version, p: Plan, hash: String): Map[String, EnvValue] = {
     import Render.keys._
 
     val sn = StackName(unit.name, v, hash)
 
     val baseEnv = Map(
-      (stackName, sn.toString),
-      (namespace, ns.root.asString),
-      (unitName, sn.serviceType),
-      (version, sn.version.toString),
-      (image, img.toString)
+      (stackName, StringValue(sn.toString)),
+      (namespace, StringValue(ns.root.asString)),
+      (unitName, StringValue(sn.serviceType)),
+      (version, StringValue(sn.version.toString)),
+      (image, StringValue(img.toString))
     )
 
     val jobEnv = fromOption(Manifest.getSchedule(unit, p).flatMap(_.toCron)) { cronExpr =>
-      Map((schedule, cronExpr))
+      Map((schedule, StringValue(cronExpr)))
     } ++ Map(
-      (instances, p.environment.desiredInstances.getOrElse(1).toString),
-      (retries, p.environment.retries.getOrElse(3).toString)
+      (instances, StringValue(p.environment.desiredInstances.getOrElse(1).toString)),
+      (retries, StringValue(p.environment.retries.getOrElse(3).toString))
     )
 
-    val instancesEnv = p.environment.desiredInstances
-
     val portsEnv = fromOption(unit.ports) { ps =>
-      val pl = ps.nel.toList.map(port => Map[String, Any]((portName, port.ref), (portNumber, port.port.toString)))
-      Map[String, Any]((ports, Map((portsList, pl))))
+      val pl = ps.nel.toList.map(port => MapValue(Map((portName, StringValue(port.ref)), (portNumber, StringValue(port.port.toString)))))
+      Map((ports, MapValue(Map((portsList, ListValue(pl))))))
     }
 
-    val resourceEnv = p.environment.cpu.fold[Map[String, Any]](
+    val resourceEnv = p.environment.cpu.fold(
       Map.empty,
-      limit => Map((cpuLimit, limit)),
-      (request, limit) => Map((cpuRequest, request.toString), (cpuLimit, limit.toString))
-    ) ++ p.environment.memory.fold[Map[String, Any]](
+      limit => Map((cpuLimit, StringValue(limit.toString))),
+      (request, limit) => Map((cpuRequest, StringValue(request.toString)), (cpuLimit, StringValue(limit.toString)))
+    ) ++ p.environment.memory.fold(
       Map.empty,
-      limit => Map((memoryLimit, limit)),
-      (request, limit) => Map((memoryRequest, request.toString), (memoryLimit, limit.toString))
+      limit => Map((memoryLimit, StringValue(limit.toString))),
+      (request, limit) => Map((memoryRequest, StringValue(request.toString)), (memoryLimit, StringValue(limit.toString)))
     )
 
     val volumesEnv = if (p.environment.volumes.nonEmpty) {
       val volumesList = p.environment.volumes.map {
-        case Volume(name, mountPath, size) => Map[String, Any](
-          (emptyVolumeMountName, name),
-          (emptyVolumeMountPath, mountPath.toString),
-          (emptyVolumeMountSize, size.toString)
-        )
+        case Volume(name, mountPath, size) => MapValue(Map(
+          (emptyVolumeMountName, StringValue(name)),
+          (emptyVolumeMountPath, StringValue(mountPath.toString)),
+          (emptyVolumeMountSize, StringValue(size.toString))
+        ))
       }
-      Map((emptyVolumes, Map((emptyVolumesList, volumesList))))
-    } else Map.empty[String, Any]
+      Map((emptyVolumes, MapValue(Map((emptyVolumesList, ListValue(volumesList))))))
+    } else Map.empty
 
     val livenessProbeEnv = fromOption(p.environment.healthChecks.headOption) {
       case HealthCheck(_, portRef, _, path, interval, timeout) =>
-        Map[String, Any](
-          (healthCheck, Map(
-            (healthCheckPath, path.getOrElse("/")),
-            (healthCheckPort, portRef.toString),
-            (healthCheckInterval, interval.toSeconds.toString),
-            (healthCheckTimeout, timeout.toSeconds.toString)
-          ))
+        Map(
+          (healthCheck, MapValue(Map(
+            (healthCheckPath, StringValue(path.getOrElse("/"))),
+            (healthCheckPort, StringValue(portRef.toString)),
+            (healthCheckInterval, StringValue(interval.toSeconds.toString)),
+            (healthCheckTimeout, StringValue(timeout.toSeconds.toString))
+          )))
         )
     }
 
@@ -76,14 +75,14 @@ object Render {
       EnvironmentVariable("NELSON_DOCKER_IMAGE", image.toString)
     )
     val envList = (p.environment.bindings ++ nelsonEnvs).map {
-      case EnvironmentVariable(name, value) => Map((envvarName, name), (envvarValue, value))
+      case EnvironmentVariable(name, value) => MapValue(Map((envvarName, StringValue(name)), (envvarValue, StringValue(value))))
     }
-    val envEnv = Map((envvars, Map((envvarsList, envList))))
+    val envEnv = Map((envvars, MapValue(Map((envvarsList, ListValue(envList))))))
 
-    baseEnv ++ jobEnv ++ portsEnv ++ resourceEnv ++ volumesEnv ++ livenessProbeEnv
+    baseEnv ++ jobEnv ++ portsEnv ++ resourceEnv ++ volumesEnv ++ livenessProbeEnv ++ envEnv
   }
 
-  private def fromOption[A](o: Option[A])(f: A => Map[String, Any]): Map[String, Any] = o.fold[Map[String, Any]](Map.empty)(f)
+  private def fromOption[A, V](o: Option[A])(f: A => Map[String, V]): Map[String, V] = o.fold(Map.empty[String, V])(f)
 
   object keys {
     // Unit/Deployment
