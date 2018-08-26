@@ -21,9 +21,10 @@ import nelson.Infrastructure.KubernetesMode
 import nelson.audit.{Auditor,AuditEvent}
 import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
+import nelson.health.KubernetesHealthClient
 import nelson.logging.{WorkflowLogger,LoggingOp}
 import nelson.notifications.{SlackHttp,SlackOp,EmailOp,EmailServer}
-import nelson.scheduler.SchedulerOp
+import nelson.scheduler.{KubernetesHttp, SchedulerOp}
 import nelson.storage.StoreOp
 import nelson.vault._
 import nelson.vault.http4s._
@@ -32,12 +33,9 @@ import cats.~>
 import cats.effect.{Effect, IO}
 import cats.implicits._
 
-import java.io.FileInputStream
 import java.nio.file.{Path, Paths}
-import java.security.SecureRandom
-import java.security.cert.{CertificateFactory, X509Certificate}
 import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService, ThreadFactory}
-import javax.net.ssl.{SSLContext, X509TrustManager}
+import javax.net.ssl.SSLContext
 
 import journal.Logger
 
@@ -47,7 +45,6 @@ import org.http4s.client.blaze._
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-import scala.util.control.NonFatal
 
 /**
  *
@@ -549,69 +546,21 @@ object Config {
     }
 
     def readKubernetesOutClusterParams(kfg: KConfig): Option[KubernetesMode] =
-      (kfg.lookup[String]("ca-cert").map(p => Paths.get(p)), kfg.lookup[String]("token")).mapN {
-        case (caCert, token) => KubernetesMode.OutCluster(caCert, token)
-      }
+      kfg.subconfig("kubeconfigs").env.unorderedTraverse { kubeconfigPath =>
+        kubeconfigPath.convertTo[String].map(Paths.get(_))
+      }.map(KubernetesMode.OutCluster(_))
 
     def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] = for {
-      endpoint  <- kfg.lookup[String]("endpoint")
-      version   <- kfg.lookup[String]("version").flatMap(KubernetesVersion.fromString)
-      timeout   <- kfg.lookup[Duration]("timeout")
       inCluster <- kfg.lookup[Boolean]("in-cluster")
       mode      <- if (inCluster) Some(KubernetesMode.InCluster) else readKubernetesOutClusterParams(kfg)
-      uri       =  Uri.fromString(endpoint).toOption.yolo(s"kubernetes.endpoint -- $endpoint -- is an invalid Uri")
-    } yield Infrastructure.Kubernetes(uri, version, timeout, mode)
+      timeout   <- kfg.lookup[FiniteDuration]("timeout")
+    } yield Infrastructure.Kubernetes(mode, timeout)
 
     def readNomadScheduler(kfg: KConfig): IO[SchedulerOp ~> IO] =
       readNomadInfrastructure(kfg) match {
         case Some(n) => http4sClient(n.timeout).map(client => new scheduler.NomadHttp(nomadcfg, n, client, schedulerPool, ec))
         case None    => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
       }
-
-    // Create a X509TrustManager that trusts a whitelist of certificates, similar to `curl --cacert`
-    def cacert(certs: Array[X509Certificate]): X509TrustManager =
-      new X509TrustManager {
-        def getAcceptedIssuers(): Array[X509Certificate] = certs
-        def checkClientTrusted(certs: Array[X509Certificate], authType: String): Unit = ()
-        def checkServerTrusted(certs: Array[X509Certificate], authType: String): Unit = ()
-      }
-
-    def getKubernetesCert(certPath: Path): Option[SSLContext] = {
-      val is = new FileInputStream(certPath.toString)
-      val x509Cert: Option[X509Certificate] = try {
-        val cf = CertificateFactory.getInstance("X.509")
-        cf.generateCertificate(is) match {
-          case c: X509Certificate => Some(c)
-          case _                  => None
-        }
-      } catch {
-        case NonFatal(_) => None
-      } finally {
-        is.close()
-      }
-
-      x509Cert.map { cert =>
-        val trustManager = cacert(Array(cert))
-        val sslContext = SSLContext.getInstance("TLS")
-        sslContext.init(null, Array(trustManager), new SecureRandom())
-        sslContext
-      }
-    }
-
-    def readKubernetesClient(kfg: KConfig): IO[KubernetesClient] = {
-      val infra = for {
-        kubernetes <- readKubernetesInfrastructure(kfg)
-        sslContext <- getKubernetesCert(kubernetes.mode.caCert)
-      } yield (kubernetes, sslContext)
-
-      infra match {
-        case Some((kubernetes, sslContext)) =>
-          http4sClient(kubernetes.timeout, sslContext = Some(sslContext)).map { httpClient =>
-            new KubernetesClient(kubernetes.version, kubernetes.endpoint, httpClient, kubernetes.mode)
-          }
-        case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
-      }
-    }
 
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
     def readDatacenter(id: String, kfg: KConfig): IO[Datacenter] = {
@@ -666,8 +615,11 @@ object Config {
           } yield (sched, healthChecker, consulClient)
 
         case Some("kubernetes") =>
-          readKubernetesClient(schedConfig.subconfig("kubernetes")).map { client =>
-            (new scheduler.KubernetesHttp(client), health.KubernetesHealthClient(client), StubbedConsulClient)
+          readKubernetesInfrastructure(schedConfig.subconfig("kubernetes")) match {
+            case Some(Infrastructure.Kubernetes(mode, timeout)) =>
+              val kubectl = new Kubectl(mode)
+              IO.pure((new KubernetesHttp(kubectl, timeout, ec, schedulerPool), new KubernetesHealthClient(kubectl, timeout), StubbedConsulClient))
+            case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
           }
 
         case _ => IO.raiseError(new IllegalArgumentException(s"At least one scheduler must be defined per datacenter"))

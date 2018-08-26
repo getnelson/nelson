@@ -1,7 +1,7 @@
 package nelson
 package scheduler
 
-import nelson.KubernetesJson.{DeploymentStatus, JobStatus}
+import nelson.CatsHelpers._
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Manifest.{HealthCheck => _, _}
 import nelson.blueprint.{DefaultBlueprints, Render, Template}
@@ -11,51 +11,51 @@ import nelson.scheduler.SchedulerOp._
 import cats.~>
 import cats.effect.IO
 import cats.implicits._
-import org.http4s.Status.NotFound
-import org.http4s.client.UnexpectedStatus
+
+import java.util.concurrent.ScheduledExecutorService
+
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * SchedulerOp interpreter that uses the Kubernetes API server.
  *
  * See: https://kubernetes.io/docs/api-reference/v1.8/
  */
-final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO) {
+final class KubernetesHttp(
+  kubectl: Kubectl,
+  timeout: FiniteDuration,
+  executionContext: ExecutionContext,
+  scheduledES: ScheduledExecutorService
+) extends (SchedulerOp ~> IO) {
+  private implicit val ec = executionContext
+  private implicit val ses = scheduledES
+
+  import KubernetesHttp._
 
   def apply[A](fa: SchedulerOp[A]): IO[A] = fa match {
     case Delete(dc, deployment) =>
-      delete(dc, deployment)
+      delete(dc, deployment).timed(timeout)
     case Launch(image, dc, ns, unit, plan, blueprint, hash) =>
-      launch(image, dc, ns, Versioned.unwrap(unit), unit.version, plan, blueprint, hash)
+      launch(image, dc, ns, Versioned.unwrap(unit), unit.version, plan, blueprint, hash).timed(timeout)
     case Summary(dc, ns, stackName) =>
-      summary(dc, ns, stackName)
+      summary(dc, ns, stackName).timed(timeout)
   }
 
-  def delete(dc: Datacenter, deployment: Deployment): IO[Unit] =
-    deployment.renderedBlueprint.fold(deleteDefault(dc, deployment)) { spec =>
-      Kubectl.delete(spec).void
-    }
+  def delete(dc: Datacenter, deployment: Deployment): IO[Unit] = {
+    val ns = deployment.namespace.name
+    val stack = deployment.stackName
 
-  def deleteDefault(dc: Datacenter, deployment: Deployment): IO[Unit] = {
-    val rootNs = deployment.namespace.name.root.asString
-    val name = deployment.stackName.toString
-
-    // Kubernetes has different endpoints for deployments, cron jobs, and jobs - given just
-    // the name we don't know which one it is so we try each one in turn, presumably the
-    // most common types first
-    val deleteService =
-      (client.deleteDeployment(rootNs, name), client.deleteService(rootNs, name)).mapN { case (_, _) => () }
-
-    deleteService.recoverWith {
-      case UnexpectedStatus(NotFound) =>
-        client.deleteCronJob(rootNs, name).map(_ => ()).recoverWith {
-          case UnexpectedStatus(NotFound) =>
-            client.deleteJob(rootNs, name).map(_ => ()).recoverWith {
-              // at this point swallow 404, as we're being asked to delete something that does not exist
-              // this can happen when a workflow fails and the cleanup process is subsequently called
-              case UnexpectedStatus(NotFound) => IO.unit
-            }
+    // We don't have enough information here to determine what exactly
+    // we're trying to delete so try each one in turn..
+    val fallback =
+      kubectl.deleteService(dc, ns, stack).void.recoverWith { case _ =>
+        kubectl.deleteCronJob(dc, ns, stack).void.recoverWith { case _ =>
+          kubectl.deleteJob(dc, ns, stack).void.recover { case _ => () }
         }
-    }
+      }
+
+    deployment.renderedBlueprint.fold(fallback)(spec => kubectl.delete(dc, spec).void)
   }
 
   def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, blueprint: Option[Template], hash: String): IO[String] = {
@@ -72,52 +72,12 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
     val template = blueprint.fold(fallback)(IO.pure)
     for {
       t <- template
-      r <- Kubectl.apply(t.render(env))
+      r <- kubectl.apply(dc, t.render(env))
     } yield r
   }
 
-  def summary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = {
-    // K8s has different endpoints for Deployment, CronJob, and Job, so we hit all of them until we find one
-    deploymentSummary(dc, ns, stackName).recoverWith {
-      case UnexpectedStatus(NotFound) =>
-        cronJobSummary(dc, ns, stackName).recoverWith {
-          case UnexpectedStatus(NotFound) =>
-            jobSummary(dc, ns, stackName).recoverWith {
-              case UnexpectedStatus(NotFound) => IO.pure(None)
-            }
-        }
-    }
-  }
+  def summary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = ???
 
-  private def deploymentSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = {
-    val rootNs = ns.root.asString
-
-    client.deploymentSummary(rootNs, stackName.toString).map {
-      case DeploymentStatus(availableReplicas, unavailableReplicas) =>
-        Some(DeploymentSummary(
-          running   = availableReplicas,
-          pending   = unavailableReplicas,
-          completed = None,
-          failed    = None
-        ))
-    }
-  }
-
-  private def cronJobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = {
-    val rootNs = ns.root.asString
-
-    client.cronJobSummary(rootNs, stackName.toString).map {
-      case js@JobStatus(_, _, _) => Some(jobStatusToSummary(js))
-    }
-  }
-
-  private def jobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = {
-    val rootNs = ns.root.asString
-
-    client.jobSummary(rootNs, stackName.toString).map {
-      case js@JobStatus(_, _, _) => Some(jobStatusToSummary(js))
-    }
-  }
 
   private def jobStatusToSummary(js: JobStatus): DeploymentSummary =
     DeploymentSummary(
@@ -126,4 +86,12 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
       completed = js.succeeded,
       failed    = js.failed
     )
+}
+
+object KubernetesHttp {
+  final case class JobStatus(
+    active:    Option[Int],
+    failed:    Option[Int],
+    succeeded: Option[Int]
+  )
 }

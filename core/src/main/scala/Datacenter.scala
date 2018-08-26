@@ -36,7 +36,7 @@ import helm.ConsulOp
 
 import java.net.URI
 import java.time.Instant
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 
 import org.http4s.Uri
 
@@ -75,25 +75,23 @@ object Infrastructure {
   )
 
   final case class Kubernetes(
-    endpoint: Uri,
-    version: KubernetesVersion,
-    timeout: Duration,
     mode: KubernetesMode
+  , timeout: FiniteDuration
   )
 
   sealed abstract class KubernetesMode extends Product with Serializable {
-    def caCert: Path = this match {
-      // All pods in Kubernetes get a cert mounted at this path.
-      // See https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
-      // for more info.
-      case KubernetesMode.InCluster => Paths.get("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt")
-      case KubernetesMode.OutCluster(p, _) => p
+    def environmentFor(datacenterName: String): List[(String, String)] = this match {
+      case KubernetesMode.InCluster => List.empty
+      case KubernetesMode.OutCluster(configs) =>
+        configs.get(datacenterName).fold[List[(String, String)]](List.empty) { kubeconfig =>
+          List(("KUBECONFIG", kubeconfig.toString))
+        }
     }
   }
 
   object KubernetesMode {
     final case object InCluster extends KubernetesMode
-    final case class OutCluster(caCertPath: Path, token: String) extends KubernetesMode
+    final case class OutCluster(configs: Map[String, Path]) extends KubernetesMode
   }
 
   final case class SplunkConfig(
