@@ -32,7 +32,6 @@ final class KubernetesHttp(client: KubernetesClient) extends (SchedulerOp ~> IO)
 
   def delete(dc: Datacenter, deployment: Deployment): IO[Unit] =
     deployment.renderedBlueprint.fold(deleteDefault(dc, deployment)) { spec =>
-      // TODO: Delete via spec
       Kubectl.delete(spec).void
     }
 
