@@ -69,9 +69,7 @@ object Infrastructure {
     dockerRepoUser: String,
     dockerRepoPassword: String,
     dockerRepoServerAddress: String,
-    loggingImage: Option[docker.Docker.Image],
-    mhzPerCPU: Int,
-    splunk: Option[SplunkConfig]
+    mhzPerCPU: Int
   )
 
   final case class Kubernetes(
@@ -93,11 +91,6 @@ object Infrastructure {
     final case object InCluster extends KubernetesMode
     final case class OutCluster(configs: Map[String, Path]) extends KubernetesMode
   }
-
-  final case class SplunkConfig(
-    splunkUrl: String,
-    splunkToken: String
-  )
 
   final case class Credentials(
     username: String,

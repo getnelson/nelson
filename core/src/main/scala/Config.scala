@@ -24,7 +24,7 @@ import nelson.docker.Docker
 import nelson.health.KubernetesHealthClient
 import nelson.logging.{WorkflowLogger,LoggingOp}
 import nelson.notifications.{SlackHttp,SlackOp,EmailOp,EmailServer}
-import nelson.scheduler.{KubernetesHttp, SchedulerOp}
+import nelson.scheduler.{KubernetesShell, SchedulerOp}
 import nelson.storage.StoreOp
 import nelson.vault._
 import nelson.vault.http4s._
@@ -523,25 +523,15 @@ object Config {
                                       logger: LoggingOp ~> IO): IO[List[Datacenter]] = {
 
     def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
-      def readSplunk: Option[Infrastructure.SplunkConfig] =
-        (kfg.lookup[String]("docker.splunk-url"), kfg.lookup[String]("docker.splunk-token")
-          ).mapN((x,y) => Infrastructure.SplunkConfig(x,y))
-
-      def readLoggingImage: Option[Docker.Image] =
-        kfg.lookup[String]("logging-sidecar")
-          .flatMap(a => docker.Docker.Image.fromString(a).toOption)
-
       (kfg.lookup[String]("endpoint"),
        kfg.lookup[Duration]("timeout"),
        kfg.lookup[String]("docker.user"),
        kfg.lookup[String]("docker.password"),
        kfg.lookup[String]("docker.host"),
        kfg.lookup[Int]("mhz-per-cpu")
-        ).mapN((a,b,c,d,e,g) => {
-          val splunk = readSplunk
-          val loggingSidecar = readLoggingImage
+        ).mapN((a,b,c,d,e,f) => {
           val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
-          Infrastructure.Nomad(uri,b,c,d,e,loggingSidecar,g,splunk)
+          Infrastructure.Nomad(uri,b,c,d,e,f)
         })
     }
 
@@ -620,7 +610,7 @@ object Config {
           readKubernetesInfrastructure(schedConfig.subconfig("kubernetes")) match {
             case Some(Infrastructure.Kubernetes(mode, timeout)) =>
               val kubectl = new Kubectl(mode)
-              IO.pure((new KubernetesHttp(kubectl, timeout, ec, schedulerPool), new KubernetesHealthClient(kubectl, timeout), StubbedConsulClient))
+              IO.pure((new KubernetesShell(kubectl, timeout, ec, schedulerPool), new KubernetesHealthClient(kubectl, timeout), StubbedConsulClient))
             case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
           }
 

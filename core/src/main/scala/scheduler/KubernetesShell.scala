@@ -22,7 +22,7 @@ import scala.concurrent.duration.FiniteDuration
  *
  * See: https://kubernetes.io/docs/api-reference/v1.8/
  */
-final class KubernetesHttp(
+final class KubernetesShell(
   kubectl: Kubectl,
   timeout: FiniteDuration,
   executionContext: ExecutionContext,

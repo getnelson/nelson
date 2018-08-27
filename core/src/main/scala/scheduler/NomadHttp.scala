@@ -161,7 +161,7 @@ final class NomadHttp(
       EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.limitOrElse(512D).toInt.toString),
       EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
       EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name))
-    ) ++ nomad.loggingImage.map(x => EnvironmentVariable("NELSON_LOGGING_IMAGE", x.toString)).toList
+    )
     val p = plan.copy(environment = plan.environment.copy(bindings = vars))
     val json = getJson(u,name,img,dc,ns,p)
     call(name, dc, json)
@@ -215,12 +215,8 @@ object NomadJson {
     name: String,
     ns: NamespaceName): argonaut.Json = {
 
-    val maybeLogging = nomad.splunk.map(splunk =>
-      List(dockerSplunkJson(name, ns, splunk.splunkUrl, splunk.splunkToken)))
-
     val maybePorts = ports.map(_.nel.map(p => argonaut.Json(p.ref := p.port)))
 
-    ("logging" :=? maybeLogging) ->?:
     ("port_map" :=? maybePorts) ->?: argonaut.Json(
     "image" := s"https://${container.toString}", // https:// required to work with private repo
     "network_mode" := nm.asString,
@@ -374,25 +370,6 @@ object NomadJson {
     )
   }
 
-  // logging sidecar needs port map for 8089
-  // TIM: this is kind of a hack and should probally be factored
-  // to a config option in future.
-  private val loggingPort = Ports(Port("splunk", 8089, "tcp"), Nil)
-
-  def loggingSidecarJson(nomad: Nomad, vars: List[EnvironmentVariable], name: String, ns: NamespaceName): Option[argonaut.Json] = {
-    nomad.loggingImage.map { image =>
-      argonaut.Json(
-        "Name"      := "logging_sidecar",
-        "Driver"    := "docker",
-        "Config"    := dockerConfigJson(nomad, image, Some(loggingPort), BridgeMode, name, ns),
-        "Services"  := argonaut.Json.jNull,
-        "Env"       := envJson(vars),
-        "Resources" := resourcesJson(800, 2000, Some(loggingPort)),
-        "LogConfig" := logJson(10,10)
-      )
-    }
-  }
-
   def job(name: String, unitName: UnitName, plan: Plan, i: Image, dc: Datacenter, schedule: Option[Schedule], ports: Option[Ports], ns: NamespaceName, nomad: Nomad, tags: Set[String]): Json = {
     val env = plan.environment
     val periodic = schedule.flatMap(_.toCron().map(periodicJson))
@@ -413,8 +390,7 @@ object NomadJson {
             "Count"         := env.desiredInstances.getOrElse(1),
             "RestartPolicy" := env.retries.map(restartJson).getOrElse(restartJson(3)), // if no retry specified, only try 3 times rather than 15.
             "EphemeralDisk" := ephemeralDiskJson(false,false,plan.environment.ephemeralDisk.getOrElse(101)),
-            "Tasks"         := (List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags)) ++
-                               loggingSidecarJson(nomad, env.bindings, name, ns))
+            "Tasks"         := List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags))
           )
         )
       )
