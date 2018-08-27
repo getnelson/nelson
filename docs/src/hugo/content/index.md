@@ -423,6 +423,8 @@ It is these kinds of actions and steps, when viewed together, that makeup a work
 
 At the time of writing, Workflows are codified inside of the Nelson codebase. This may change in future versions of Nelson to make it easier to customize without requiring a source change, but today, please visit the Gitter channel or email the <script src="javascript/contact.js"></script>.
 
+For more information on Blueprints, please [checkout the reference](reference.html#blueprints).
+
 <h3 id="user-guide-manifest-faw" class="linkable">Further Reading</h3>
 
 In conclusion, the manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:
