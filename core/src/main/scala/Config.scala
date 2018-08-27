@@ -608,11 +608,13 @@ object Config {
             http4sConsul.map(consulClient => PrometheusConsul(a, consulClient))
           }
 
-          for {
-            consulClient  <- consul
-            sched         <- readNomadScheduler(schedConfig.subconfig("nomad"))
-            healthChecker = health.Http4sConsulHealthClient(consulClient)
-          } yield (sched, healthChecker, consulClient)
+          // for {
+          //   consulClient  <- consul
+          //   sched         <- readNomadScheduler(schedConfig.subconfig("nomad"))
+          //   healthChecker = health.Http4sConsulHealthClient(consulClient)
+          // } yield (sched, healthChecker, consulClient)
+
+          IO.raiseError(NomadNotImplemented)
 
         case Some("kubernetes") =>
           readKubernetesInfrastructure(schedConfig.subconfig("kubernetes")) match {
