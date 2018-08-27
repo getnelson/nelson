@@ -329,8 +329,6 @@ units:
 
 plans:
   - name: default
-    workflow:
-      kind: canopus
 
 namespaces:
   - name: dev
@@ -353,8 +351,6 @@ units:
 plans:
 - name: dev-plan
   schedule: hourly
-  workflow:
-    kind: canopus
 
 namespaces:
 - name: dev
@@ -366,11 +362,70 @@ namespaces:
 
 Here the two units are similar, but the second defines a `schedule` under the plans stanza, which indicates that the unit is to be run periodically as a `job`.
 
-<h3 id="user-guide-manifest" class="linkable">Workflows</h3>
+<h3 id="user-guide-manifest-workflow-blueprints" class="linkable">Workflows & Blueprints</h3>
 
-The *Nelson* manifest enables the user to focus primarily on their own application and not worry about the specifics of runtime scheudling.
+The *Nelson* manifest enables the user to focus primarily on their own application and not worry about the specifics of runtime scheduling. Whilst this can be largely beneficial, it also presents a set of challenges as more often than not every organization has a different internal process with slight differences. To accommodate this, *Nelson* supports the concept of `Workflow` and `Blueprint`. 
 
-The manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:
+A `Blueprint` is a scheduler specification (for example, Kubernetes YAML document(s) or Nomad HCL) mustache template, which at deploy-time *Nelson* will interpolate with the runtime data (e.g. `StackName`), and submit that rendered output to the scheduler API in order to launch a stack. Whilst the author would hope that this powerful tool is carefully used, it provides the operators / admins of *Nelson* the flexibility to create deployment stacks that use whatever runtime setup they want. For example, Company X might wish to run their logging and routing as sidecars, with Kubernetes pods using particular node affinity, where as Company Y might want to instead just use node selectors for deployments and rely on some node global configuration. *Nelson* simply does not care.
+
+Conversely, a `Workflow` codifies the steps needed to interact with a given scheduling system (and related systems) to get a production-ready deployment. For example, consider the steps below we might manually take to create a deployment:
+
+* Create a stack-specific service account
+* Create a Vault auth principle for stack service account
+* Render blueprint and send to the scheduler
+* Wait for the stack to become ready
+* Setup alerting rules in prometheus
+
+It is these kinds of actions and steps, when viewed together, that makeup a workflow. There is never just a single system involved in operational orchestration. At the time of writing, Nelson supports a set of different workflows that support different runtime features:
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td align="center"><strong>&nbsp;</strong></td>
+      <td align="center"><strong>canopus</strong></td>
+      <td align="center"><strong>pulsar</strong></td>
+      <td align="center"><strong>magentar</strong></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><i>Docker</i></td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+    </tr>
+    <tr>
+      <td><i>Nomad</i></td>
+      <td></td>
+      <td></td>
+      <td align="center">✓</td>
+    </tr>
+    <tr>
+      <td><i>Kubernetes</i></td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><i>Vault</i></td>
+      <td></td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+    </tr>
+    <tr>
+      <td><i>Prometheus</i></td>
+      <td></td>
+      <td></td>
+      <td align="center">✓</td>
+    </tr>
+  </tbody>
+</table>
+
+At the time of writing, Workflows are codified inside of the Nelson codebase. This may change in future versions of Nelson to make it easier to customize without requiring a source change, but today, please visit the Gitter channel or email the <script src="javascript/contact.js"></script>.
+
+<h3 id="user-guide-manifest-faw" class="linkable">Further Reading</h3>
+
+In conclusion, the manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:
 
 * [How do I declare a dependency on another unit?](reference.html#manifest-unit-dependencies)
 * [How do I get alerted when my unit has a problem at runtime?](reference.html#manifest-unit-alerting)
