@@ -54,8 +54,12 @@ trait Workflow[O] {
 
 object Workflow {
 
-  // There's currently only one workflow implementation.
-  val workflows = List(Magnetar, Canopus)
+  // There's currently only two workflow implementation.
+  val workflows = List(
+    Magnetar, // docker + nomad + vault + prometheus
+    Canopus,  // docker + kubernetes
+    Pulsar    // docker + kubernetes + vault
+  )
 
   def fromString(s: String): Option[Workflow[Unit]] =
     workflows.find(_.name == s)
