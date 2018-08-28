@@ -103,8 +103,8 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
   "DeploymentMonitor" should "should properly generate monitor action items" in {
 
-    val dep1 = Deployment(1L, mkDcUnit(1L, "s0", Version(1, 0, 0)), "a", namespace, null, null, "plan-1", "guid-1", "retain-latest")
-    val dep2 = Deployment(1L, mkDcUnit(1L, "s1", Version(1, 0, 1)), "a", namespace, null, null, "plan-1", "guid-1", "retain-latest")
+    val dep1 = Deployment(1L, mkDcUnit(1L, "s0", Version(1, 0, 0)), "a", namespace, null, null, "plan-1", "guid-1", "retain-latest", None)
+    val dep2 = Deployment(1L, mkDcUnit(1L, "s1", Version(1, 0, 1)), "a", namespace, null, null, "plan-1", "guid-1", "retain-latest", None)
 
     val consulInterp = mkHealthOpWithMajorityHealthy(Map(
       dep1.stackName.toString -> HealthStatus("0", Passing, "node", None),
@@ -143,10 +143,10 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
   val now = java.time.Instant.now
 
-  val dep100 = Deployment(0L, mkDcUnit(0L, "service", Version(1, 0, 0)), "a", namespace, now.plusSeconds(1), "magnetar", "plan-1", "guid-1", "retain-latest")
-  val dep101 = Deployment(1L, mkDcUnit(1L, "service", Version(1, 0, 1)), "a", namespace, now.plusSeconds(2), "magnetar", "plan-1", "guid-1", "retain-latest")
-  val dep102 = Deployment(2L, mkDcUnit(2L, "service", Version(1, 0, 2)), "a", namespace, now.plusSeconds(3), "magnetar", "plan-1", "guid-1", "retain-latest")
-  val dep103 = Deployment(3L, mkDcUnit(3L, "service", Version(1, 0, 3)), "a", namespace, now.plusSeconds(4), "magnetar", "plan-1", "guid-1", "retain-latest")
+  val dep100 = Deployment(0L, mkDcUnit(0L, "service", Version(1, 0, 0)), "a", namespace, now.plusSeconds(1), "magnetar", "plan-1", "guid-1", "retain-latest", None)
+  val dep101 = Deployment(1L, mkDcUnit(1L, "service", Version(1, 0, 1)), "a", namespace, now.plusSeconds(2), "magnetar", "plan-1", "guid-1", "retain-latest", None)
+  val dep102 = Deployment(2L, mkDcUnit(2L, "service", Version(1, 0, 2)), "a", namespace, now.plusSeconds(3), "magnetar", "plan-1", "guid-1", "retain-latest", None)
+  val dep103 = Deployment(3L, mkDcUnit(3L, "service", Version(1, 0, 3)), "a", namespace, now.plusSeconds(4), "magnetar", "plan-1", "guid-1", "retain-latest", None)
 
   def mkTrafficShift(dur: FiniteDuration, start: Instant, reverse: Option[Instant]) =
     TrafficShift(
