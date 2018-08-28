@@ -610,7 +610,11 @@ object Config {
           readKubernetesInfrastructure(schedConfig.subconfig("kubernetes")) match {
             case Some(Infrastructure.Kubernetes(mode, timeout)) =>
               val kubectl = new Kubectl(mode)
-              IO.pure((new KubernetesShell(kubectl, timeout, ec, schedulerPool), new KubernetesHealthClient(kubectl, timeout), StubbedConsulClient))
+              IO.pure((
+                new KubernetesShell(kubectl, timeout, ec, schedulerPool),
+                new KubernetesHealthClient(kubectl, timeout, ec, schedulerPool),
+                StubbedConsulClient
+              ))
             case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
           }
 

@@ -2,8 +2,13 @@ package nelson
 
 import nelson.Datacenter.StackName
 import nelson.Infrastructure.KubernetesMode
+import nelson.health.{HealthCheck, HealthStatus, Passing, Failing, Unknown}
 
+import argonaut.{CursorHistory, DecodeJson, Parse}
+
+import cats.{Foldable, Monoid}
 import cats.effect.IO
+import cats.implicits._
 
 import fs2.Stream
 
@@ -46,8 +51,44 @@ final class Kubectl(mode: KubernetesMode) {
   def deleteCronJob(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[String] =
     deleteV1(dc, namespace.root.asString, "cronjob", stackName.toString).flatMap(_.output).map(_.mkString("\n"))
 
+  def getPods(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[List[HealthStatus]] = {
+    implicit val healthStatusDecoder = healthStatusDecodeJson
+    exec(dc, List("kubectl", "get", "pods", "-l", s"stackName=${stackName.toString}", "-o", "json"), emptyStdin)
+      .flatMap(_.output)
+      .flatMap { stdout =>
+        IO.fromEither(for {
+          json <- Parse.decodeEither[argonaut.Json](stdout.mkString("\n")).leftMap(kubectlJsonError)
+          items <- json.acursor.downField("items").as[List[HealthStatus]].result.leftMap(kubectlCursorError)
+        } yield items)
+      }
+  }
+
+  def getDeployment(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[DeploymentStatus] =
+    exec(dc, List("kubectl", "get", "deployment", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+      .flatMap(_.output)
+      .flatMap { stdout =>
+        IO.fromEither(Parse.decodeEither[DeploymentStatus](stdout.mkString("\n")).leftMap(kubectlJsonError))
+      }
+
+  def getCronJob(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[JobStatus] =
+    exec(dc, List("kubectl", "get", "job", "-l", s"stackName=${stackName.toString}", "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+      .flatMap(_.output)
+      .flatMap { stdout =>
+        IO.fromEither(for {
+          json <- Parse.decodeEither[argonaut.Json](stdout.mkString("\n")).leftMap(kubectlJsonError)
+          items <- json.acursor.downField("items").as[List[JobStatus]].result.leftMap(kubectlCursorError)
+        } yield Foldable[List].fold(items))
+      }
+
+  def getJob(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[JobStatus] =
+    exec(dc, List("kubectl", "get", "job", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+      .flatMap(_.output)
+      .flatMap { stdout =>
+        IO.fromEither(Parse.decodeEither[JobStatus](stdout.mkString("\n")).leftMap(kubectlJsonError))
+      }
+
   private def deleteV1(dc: Datacenter, namespace: String, objectType: String, name: String): IO[Output] =
-    exec(dc, List("kubectl", "delete", objectType, name, "-n", namespace), IO { new ByteArrayInputStream(Array.empty) })
+    exec(dc, List("kubectl", "delete", objectType, name, "-n", namespace), emptyStdin)
 
   private def exec(dc: Datacenter, cmd: List[String], stdin: IO[InputStream]): IO[Output] = {
     // We need the new cats-effect resource safety hotness..
@@ -76,4 +117,74 @@ object Kubectl {
   }
 
   final case class KubectlError(stderr: List[String]) extends Exception(stderr.mkString("\n"))
+
+  final case class JobStatus(
+    active:    Option[Int],
+    failed:    Option[Int],
+    succeeded: Option[Int]
+  )
+
+  object JobStatus {
+    implicit val nelsonKubectlJobStatusDecodeJson: DecodeJson[JobStatus] = DecodeJson { hcursor =>
+      val status = hcursor.downField("status")
+
+      for {
+        active <- status.downField("active").as[Option[Int]]
+        failed <- status.downField("failed").as[Option[Int]]
+        succeeded <- status.downField("succeeded").as[Option[Int]]
+      } yield JobStatus(active, failed, succeeded)
+    }
+
+    implicit val nelsonKubectlJobStatusMonoid: Monoid[JobStatus] = new Monoid[JobStatus] {
+      def combine(f1: JobStatus, f2: JobStatus): JobStatus =
+        JobStatus(
+          active = f1.active |+| f2.active,
+          failed = f1.failed |+| f2.failed,
+          succeeded = f1.succeeded |+| f2.succeeded
+        )
+
+      def empty: JobStatus = JobStatus(None, None, None)
+    }
+  }
+
+  final case class DeploymentStatus(
+    availableReplicas: Option[Int],
+    unavailableReplicas: Option[Int]
+  )
+
+  object DeploymentStatus {
+    implicit val nelsonKubectlDeploymentStatusDecodeJson: DecodeJson[DeploymentStatus] = DecodeJson { hcursor =>
+      val status = hcursor.downField("status")
+
+      for {
+        available <- status.downField("availableReplicas").as[Option[Int]]
+        unavailable <- status.downField("unavailableReplicas").as[Option[Int]]
+      } yield DeploymentStatus(available, unavailable)
+    }
+  }
+
+  val healthStatusDecodeJson: DecodeJson[HealthStatus] = DecodeJson(hcursor => for {
+    name <- hcursor.downField("metadata").downField("name").as[String]
+    conditions = hcursor.downField("status").downField("conditions").downAt(readyCondition)
+    status <- conditions.downField("status").as[String].map(parseReadyCondition)
+    details <- conditions.downField("message").as[Option[String]]
+    node <- hcursor.downField("spec").downField("nodeName").as[String]
+  } yield HealthStatus(name, status, node, details))
+
+  private def kubectlJsonError(parseError: String): KubectlError =
+    KubectlError(List(s"Error parsing kubectl JSON output: ${parseError}"))
+
+  private def kubectlCursorError(parseError: (String, CursorHistory)): KubectlError =
+    kubectlJsonError(s"Cursor error: ${parseError._1}")
+
+  private val emptyStdin: IO[InputStream] = IO { new ByteArrayInputStream(Array.empty) }
+
+  private def readyCondition(json: argonaut.Json): Boolean =
+    json.acursor.downField("type").as[String].map(_ == "Ready").toOption.getOrElse(false)
+
+  private def parseReadyCondition(s: String): HealthCheck = s match {
+    case "True"  => Passing
+    case "False" => Failing
+    case _       => Unknown
+  }
 }

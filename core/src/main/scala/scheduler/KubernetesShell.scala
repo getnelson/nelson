@@ -1,13 +1,14 @@
 package nelson
 package scheduler
 
-import nelson.CatsHelpers._
 import nelson.Datacenter.{Deployment, StackName}
+import nelson.Kubectl.{DeploymentStatus, JobStatus}
 import nelson.Manifest.{HealthCheck => _, _}
 import nelson.blueprint.{DefaultBlueprints, Render, Template}
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
 
+import nelson.CatsHelpers._
 import cats.~>
 import cats.effect.IO
 import cats.implicits._
@@ -28,10 +29,10 @@ final class KubernetesShell(
   executionContext: ExecutionContext,
   scheduledES: ScheduledExecutorService
 ) extends (SchedulerOp ~> IO) {
-  private implicit val ec = executionContext
-  private implicit val ses = scheduledES
+  import KubernetesShell._
 
-  import KubernetesHttp._
+  private implicit val kubernetesShellExecutionContext = executionContext
+  private implicit val kubernetesShellScheduledES = scheduledES
 
   def apply[A](fa: SchedulerOp[A]): IO[A] = fa match {
     case Delete(dc, deployment) =>
@@ -76,9 +77,32 @@ final class KubernetesShell(
     } yield r
   }
 
-  def summary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] = ???
+  def summary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
+    deploymentSummary(dc, ns, stackName).recoverWith { case _ =>
+      cronJobSummary(dc, ns, stackName).recoverWith { case _ =>
+        jobSummary(dc, ns, stackName).recover { case _ => None }
+      }
+    }
 
+  def deploymentSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
+    kubectl.getDeployment(dc, ns, stackName).map {
+      case DeploymentStatus(available, unavailable) =>
+        Some(DeploymentSummary(
+          running = available,
+          pending = unavailable,
+          completed = None,
+          failed = None
+        ))
+    }
 
+  def cronJobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
+    kubectl.getCronJob(dc, ns, stackName).map(js => Some(jobStatusToSummary(js)))
+
+  def jobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
+    kubectl.getJob(dc, ns, stackName).map(js => Some(jobStatusToSummary(js)))
+}
+
+object KubernetesShell {
   private def jobStatusToSummary(js: JobStatus): DeploymentSummary =
     DeploymentSummary(
       running   = js.active,
@@ -86,12 +110,4 @@ final class KubernetesShell(
       completed = js.succeeded,
       failed    = js.failed
     )
-}
-
-object KubernetesHttp {
-  final case class JobStatus(
-    active:    Option[Int],
-    failed:    Option[Int],
-    succeeded: Option[Int]
-  )
 }

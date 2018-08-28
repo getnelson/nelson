@@ -1,11 +1,27 @@
 package nelson
 package health
 
+import nelson.health.HealthCheckOp._
+
+import nelson.CatsHelpers._
 import cats.~>
 import cats.effect.IO
 
-import scala.concurrent.duration.Duration
+import java.util.concurrent.ScheduledExecutorService
 
-final class KubernetesHealthClient(kubectl: Kubectl, timeout: Duration) extends (HealthCheckOp ~> IO) {
-  def apply[A](fa: HealthCheckOp[A]): IO[A] = ???
+import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.ExecutionContext
+
+final class KubernetesHealthClient(
+  kubectl: Kubectl,
+  timeout: FiniteDuration,
+  executionContext: ExecutionContext,
+  scheduledES: ScheduledExecutorService
+) extends (HealthCheckOp ~> IO) {
+  private implicit val kubernetesShellExecutionContext = executionContext
+  private implicit val kubernetesShellScheduledES = scheduledES
+
+  def apply[A](fa: HealthCheckOp[A]): IO[A] = fa match {
+    case Health(dc, ns, stackName) => kubectl.getPods(dc, ns, stackName).timed(timeout)
+  }
 }
