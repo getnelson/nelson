@@ -1,0 +1,152 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{stack_name}}
+  namespace: {{namespace}}
+  labels:
+    stackName: {{stack_name}}
+    unitName: {{unit_name}}
+    version: {{version}}
+    nelson: true
+spec:
+  {{#desired_instances}}
+  replicas: {{desired_instances}}
+  {{/desired_instances}}
+  {{^desired_instances}}
+  replicas: 1
+  {{/desired_instances}}
+  selector:
+    matchLabels:
+      stackName: {{stack_name}}
+      nelson: true
+  template:
+    metadata:
+      labels:
+        stackName: {{stack_name}}
+        unitName: {{unit_name}}
+        version: {{version}}
+        nelson: true
+    spec:
+      containers:
+        name: {{stack_name}}
+        image: {{image}}
+        {{#envvars}}
+        env:
+          {{#envvars_list}}
+          {{envvar_name}}: {{envvar_value}}
+          {{/envvars_list}}
+        {{/envvars}}
+        {{! Hack around Scalate #196 }}
+        {{#ports}}
+        ports:
+        {{#ports_list}}
+        - name: {{port_name}}
+          containerPort: {{port_number}}
+        {{/ports_list}}
+        {{/ports}}
+        {{!
+        This comment serves as both a hack and actual docs.
+
+        The hack is Scalate currently seems to have a bug with indentation,
+        ticket filed: https://github.com/scalate/scalate/issues/196
+        Having some Mustache thing in between the lines in question seems
+        to insert whitespace in between and resets the indentation or something.
+
+        As for actual docs.. the dance with the guards is to implement what
+        used to be implemented in code, but with Mustache templating. Resource
+        requests are set like so:
+
+        1. If a memory request is specified, use that
+        2. If not, use the memory limit. This is the default behavior of Kubernetes
+           but we re-implement it here to keep the template clean.. or as clean as
+           a template can be.
+        3. If memory limit is not specified, use the (old) default values.
+        }}
+        resources:
+          requests:
+            {{#memory_request}}
+            memory: {{memory_request}}M
+            {{/memory_request}}
+            {{^memory_request}}
+            {{#memory_limit}}
+            memory: {{memory_limit}}M
+            {{/memory_limit}}
+            {{^memory_limit}}
+            memory: 512M
+            {{/memory_limit}}
+            {{/memory_request}}
+            {{#cpu_request}}
+            cpu: {{cpu_request}}
+            {{/cpu_request}}
+            {{^cpu_request}}
+            {{#cpu_limit}}
+            cpu: {{cpu_limit}}
+            {{/cpu_limit}}
+            {{^cpu_limit}}
+            cpu: 0.5
+            {{/cpu_limit}}
+            {{/cpu_request}}
+          {{! Hack around Scalate #196 }}
+          limits:
+            {{#memory_limit}}
+            memory: {{memory_limit}}M
+            {{/memory_limit}}
+            {{^memory_limit}}
+            memory: 512M
+            {{/memory_limit}}
+            {{#cpu_limit}}
+            cpu: {{cpu_limit}}
+            {{/cpu_limit}}
+            {{^cpu_limit}}
+            cpu: 0.5
+            {{/cpu_limit}}
+        {{! Hack around Scalate #196 }}
+        {{#health_check}}
+        livenessProbe:
+          httpGet:
+            path: {{health_check_path}}
+            port: {{health_check_port}}
+          periodSeconds: {{health_check_interval}}
+          timeoutSeconds: {{health_check_timeout}}
+        {{/health_check}}
+        {{! Hack around Scalate #196 }}
+        {{#empty_volumes}}
+        volumeMounts:
+        {{#empty_volumes_list}}
+        - name: {{empty_volume_mount_name}}
+          mountPath: {{empty_volume_mount_path}}
+        {{/empty_volumes_list}}
+        {{/empty_volumes}}
+      {{#empty_volumes}}
+      {{! Hack around Scalate #196 }}
+      volumes:
+      {{#empty_volumes_list}}
+      - name: {{empty_volume_mount_name}}
+        emptyDir: {}
+      {{/empty_volumes_list}}
+      {{/empty_volumes}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{stack_name}}
+  namespace: {{namespace}}
+  labels:
+    stackName: {{stack_name}}
+    unitName: {{unit_name}}
+    version: {{version}}
+    nelson: true
+spec:
+  selector:
+    stackName: {{stack_name}}
+    nelson: true
+  {{#ports}}
+  ports:
+  {{#ports_list}}
+  - name: {{port_name}}
+    port: {{port_number}}
+    targetPort: {{port_number}}
+  {{/ports_list}}
+  {{/ports}}
+  type: ClusterIP

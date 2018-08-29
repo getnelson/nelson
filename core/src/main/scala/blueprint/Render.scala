@@ -22,10 +22,11 @@ object Render {
 
     val jobEnv = fromOption(Manifest.getSchedule(unit, p).flatMap(_.toCron)) { cronExpr =>
       Map((schedule, StringValue(cronExpr)))
-    } ++ Map(
-      (instances, StringValue(p.environment.desiredInstances.getOrElse(1).toString)),
-      (retries, StringValue(p.environment.retries.getOrElse(3).toString))
-    )
+    } ++ fromOption(p.environment.desiredInstances) { instances =>
+      Map((desiredInstances, StringValue(instances.toString)))
+    } ++ fromOption(p.environment.retries) { r =>
+      Map((retries, StringValue(r.toString)))
+    }
 
     val portsEnv = fromOption(unit.ports) { ps =>
       val pl = ps.nel.toList.map(port => MapValue(Map((portName, StringValue(port.ref)), (portNumber, StringValue(port.port.toString)))))
@@ -66,13 +67,10 @@ object Render {
     }
 
     val nelsonEnvs = List(
-      EnvironmentVariable("NELSON_STACKNAME", stackName.toString),
       EnvironmentVariable("NELSON_DATACENTER", dc.name),
       EnvironmentVariable("NELSON_ENV", ns.root.asString),
       EnvironmentVariable("NELSON_NAMESPACE", ns.asString),
-      EnvironmentVariable("NELSON_DNS_ROOT", dc.domain.name),
-      EnvironmentVariable("NELSON_PLAN", p.name),
-      EnvironmentVariable("NELSON_DOCKER_IMAGE", image.toString)
+      EnvironmentVariable("NELSON_PLAN", p.name)
     )
     val envList = (p.environment.bindings ++ nelsonEnvs).map {
       case EnvironmentVariable(name, value) => MapValue(Map((envvarName, StringValue(name)), (envvarValue, StringValue(value))))
@@ -109,7 +107,7 @@ object Render {
     val memoryRequest = "memory_request"
     val memoryLimit = "memory_limit"
     val retries = "retries"
-    val instances = "instances"
+    val desiredInstances = "desired_instances"
     val schedule = "schedule"
 
     val emptyVolumes = "empty_volumes"
