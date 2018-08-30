@@ -536,9 +536,7 @@ object Config {
     }
 
     def readKubernetesOutClusterParams(kfg: KConfig): Option[KubernetesMode] =
-      kfg.subconfig("kubeconfigs").env.unorderedTraverse { kubeconfigPath =>
-        kubeconfigPath.convertTo[String].map(Paths.get(_))
-      }.map(KubernetesMode.OutCluster(_))
+      kfg.lookup[String]("kubeconfig").map(kubeconfig => KubernetesMode.OutCluster(Paths.get(kubeconfig)))
 
     def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] = for {
       inCluster <- kfg.lookup[Boolean]("in-cluster")

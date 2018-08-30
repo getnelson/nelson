@@ -22,6 +22,6 @@ final class KubernetesHealthClient(
   private implicit val kubernetesShellScheduledES = scheduledES
 
   def apply[A](fa: HealthCheckOp[A]): IO[A] = fa match {
-    case Health(dc, ns, stackName) => kubectl.getPods(dc, ns, stackName).timed(timeout)
+    case Health(dc, ns, stackName) => kubectl.getPods(ns, stackName).timed(timeout)
   }
 }

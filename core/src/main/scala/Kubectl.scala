@@ -21,39 +21,39 @@ import scala.collection.mutable.ListBuffer
 final class Kubectl(mode: KubernetesMode) {
   import Kubectl._
 
-  def apply(dc: Datacenter, payload: String): IO[String] = {
+  def apply(payload: String): IO[String] = {
     val input = IO { new ByteArrayInputStream(payload.getBytes(UTF_8)) }
     for {
-      result <- exec(dc, List("kubectl", "apply", "-f", "-"), input)
+      result <- exec(List("kubectl", "apply", "-f", "-"), input)
       output <- result.output
     } yield output.mkString("\n")
   }
 
-  def delete(dc: Datacenter, payload: String): IO[String] = {
+  def delete(payload: String): IO[String] = {
     val input = IO { new ByteArrayInputStream(payload.getBytes(UTF_8)) }
     for {
-      result <- exec(dc, List("kubectl", "delete", "-f", "-"), input)
+      result <- exec(List("kubectl", "delete", "-f", "-"), input)
       output <- result.output
     } yield output.mkString("\n")
   }
 
-  def deleteService(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[String] = {
+  def deleteService(namespace: NamespaceName, stackName: StackName): IO[String] = {
     val ns = namespace.root.asString
     for {
-      d <- deleteV1(dc, ns, "deployment", stackName.toString).flatMap(_.output)
-      s <- deleteV1(dc, ns, "service", stackName.toString).flatMap(_.output)
+      d <- deleteV1(ns, "deployment", stackName.toString).flatMap(_.output)
+      s <- deleteV1(ns, "service", stackName.toString).flatMap(_.output)
     } yield (d ++ s).mkString("\n")
   }
 
-  def deleteJob(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[String] =
-    deleteV1(dc, namespace.root.asString, "job", stackName.toString).flatMap(_.output).map(_.mkString("\n"))
+  def deleteJob(namespace: NamespaceName, stackName: StackName): IO[String] =
+    deleteV1(namespace.root.asString, "job", stackName.toString).flatMap(_.output).map(_.mkString("\n"))
 
-  def deleteCronJob(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[String] =
-    deleteV1(dc, namespace.root.asString, "cronjob", stackName.toString).flatMap(_.output).map(_.mkString("\n"))
+  def deleteCronJob(namespace: NamespaceName, stackName: StackName): IO[String] =
+    deleteV1(namespace.root.asString, "cronjob", stackName.toString).flatMap(_.output).map(_.mkString("\n"))
 
-  def getPods(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[List[HealthStatus]] = {
+  def getPods(namespace: NamespaceName, stackName: StackName): IO[List[HealthStatus]] = {
     implicit val healthStatusDecoder = healthStatusDecodeJson
-    exec(dc, List("kubectl", "get", "pods", "-l", s"stackName=${stackName.toString}", "-o", "json"), emptyStdin)
+    exec(List("kubectl", "get", "pods", "-l", s"stackName=${stackName.toString}", "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(for {
@@ -63,15 +63,15 @@ final class Kubectl(mode: KubernetesMode) {
       }
   }
 
-  def getDeployment(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[DeploymentStatus] =
-    exec(dc, List("kubectl", "get", "deployment", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+  def getDeployment(namespace: NamespaceName, stackName: StackName): IO[DeploymentStatus] =
+    exec(List("kubectl", "get", "deployment", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(Parse.decodeEither[DeploymentStatus](stdout.mkString("\n")).leftMap(kubectlJsonError))
       }
 
-  def getCronJob(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[JobStatus] =
-    exec(dc, List("kubectl", "get", "job", "-l", s"stackName=${stackName.toString}", "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+  def getCronJob(namespace: NamespaceName, stackName: StackName): IO[JobStatus] =
+    exec(List("kubectl", "get", "job", "-l", s"stackName=${stackName.toString}", "-n", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(for {
@@ -80,17 +80,17 @@ final class Kubectl(mode: KubernetesMode) {
         } yield Foldable[List].fold(items))
       }
 
-  def getJob(dc: Datacenter, namespace: NamespaceName, stackName: StackName): IO[JobStatus] =
-    exec(dc, List("kubectl", "get", "job", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+  def getJob(namespace: NamespaceName, stackName: StackName): IO[JobStatus] =
+    exec(List("kubectl", "get", "job", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(Parse.decodeEither[JobStatus](stdout.mkString("\n")).leftMap(kubectlJsonError))
       }
 
-  private def deleteV1(dc: Datacenter, namespace: String, objectType: String, name: String): IO[Output] =
-    exec(dc, List("kubectl", "delete", objectType, name, "-n", namespace), emptyStdin)
+  private def deleteV1(namespace: String, objectType: String, name: String): IO[Output] =
+    exec(List("kubectl", "delete", objectType, name, "-n", namespace), emptyStdin)
 
-  private def exec(dc: Datacenter, cmd: List[String], stdin: IO[InputStream]): IO[Output] = {
+  private def exec(cmd: List[String], stdin: IO[InputStream]): IO[Output] = {
     // We need the new cats-effect resource safety hotness..
     val pipeline = Stream.bracket(stdin)(is => {
       Stream.eval {
@@ -98,7 +98,7 @@ final class Kubectl(mode: KubernetesMode) {
           stdout <- IO(ListBuffer.empty[String])
           stderr <- IO(ListBuffer.empty[String])
           logger <- IO(ProcessLogger(sout => { stdout += sout; () }, serr => { stderr += serr; () }))
-          exitCode <- IO((Process(cmd, None, mode.environmentFor(dc.name): _*) #< is).run(logger).exitValue)
+          exitCode <- IO((Process(cmd, None, mode.environment: _*) #< is).run(logger).exitValue)
         } yield Output(stdout.toList, stderr.toList, exitCode)
       }
     }, is => IO(is.close()))

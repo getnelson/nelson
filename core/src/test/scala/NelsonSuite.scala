@@ -138,7 +138,7 @@ trait NelsonSuite
   }
 
   import scheduler._
-  lazy val nomad = new (SchedulerOp ~> IO) {
+  lazy val sched = new (SchedulerOp ~> IO) {
     import scheduler.SchedulerOp._
     def apply[A](op: SchedulerOp[A]) = op match {
       case Launch(i,dc,ns,unit,e,bp,hash) =>
@@ -176,7 +176,7 @@ trait NelsonSuite
   lazy val stg = TestStorage.storage(testName)
 
   lazy val testInterpreters = Infrastructure.Interpreters(
-    nomad,testConsul,testVault,stg,logger,testDocker,WorkflowControlOp.trans,healthI)
+    sched,testConsul,testVault,stg,logger,testDocker,WorkflowControlOp.trans,healthI)
 
   def isOSX: Boolean =
     System.getProperty("os.name").toLowerCase.trim == "mac os x"

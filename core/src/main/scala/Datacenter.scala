@@ -78,18 +78,15 @@ object Infrastructure {
   )
 
   sealed abstract class KubernetesMode extends Product with Serializable {
-    def environmentFor(datacenterName: String): List[(String, String)] = this match {
+    def environment: List[(String, String)] = this match {
       case KubernetesMode.InCluster => List.empty
-      case KubernetesMode.OutCluster(configs) =>
-        configs.get(datacenterName).fold[List[(String, String)]](List.empty) { kubeconfig =>
-          List(("KUBECONFIG", kubeconfig.toString))
-        }
+      case KubernetesMode.OutCluster(path) => List(("KUBECONFIG", path.toString))
     }
   }
 
   object KubernetesMode {
     final case object InCluster extends KubernetesMode
-    final case class OutCluster(configs: Map[String, Path]) extends KubernetesMode
+    final case class OutCluster(kubeconfig: Path) extends KubernetesMode
   }
 
   final case class Credentials(

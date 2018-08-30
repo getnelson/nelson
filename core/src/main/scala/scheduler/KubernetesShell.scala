@@ -50,13 +50,13 @@ final class KubernetesShell(
     // We don't have enough information here to determine what exactly
     // we're trying to delete so try each one in turn..
     val fallback =
-      kubectl.deleteService(dc, ns, stack).void.recoverWith { case _ =>
-        kubectl.deleteCronJob(dc, ns, stack).void.recoverWith { case _ =>
-          kubectl.deleteJob(dc, ns, stack).void.recover { case _ => () }
+      kubectl.deleteService(ns, stack).void.recoverWith { case _ =>
+        kubectl.deleteCronJob(ns, stack).void.recoverWith { case _ =>
+          kubectl.deleteJob(ns, stack).void.recover { case _ => () }
         }
       }
 
-    deployment.renderedBlueprint.fold(fallback)(spec => kubectl.delete(dc, spec).void)
+    deployment.renderedBlueprint.fold(fallback)(spec => kubectl.delete(spec).void)
   }
 
   def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, blueprint: Option[Template], hash: String): IO[String] = {
@@ -73,19 +73,19 @@ final class KubernetesShell(
     val template = blueprint.fold(fallback)(IO.pure)
     for {
       t <- template
-      r <- kubectl.apply(dc, t.render(env))
+      r <- kubectl.apply(t.render(env))
     } yield r
   }
 
   def summary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
-    deploymentSummary(dc, ns, stackName).recoverWith { case _ =>
-      cronJobSummary(dc, ns, stackName).recoverWith { case _ =>
-        jobSummary(dc, ns, stackName).recover { case _ => None }
+    deploymentSummary(ns, stackName).recoverWith { case _ =>
+      cronJobSummary(ns, stackName).recoverWith { case _ =>
+        jobSummary(ns, stackName).recover { case _ => None }
       }
     }
 
-  def deploymentSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
-    kubectl.getDeployment(dc, ns, stackName).map {
+  def deploymentSummary(ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
+    kubectl.getDeployment(ns, stackName).map {
       case DeploymentStatus(available, unavailable) =>
         Some(DeploymentSummary(
           running = available,
@@ -95,11 +95,11 @@ final class KubernetesShell(
         ))
     }
 
-  def cronJobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
-    kubectl.getCronJob(dc, ns, stackName).map(js => Some(jobStatusToSummary(js)))
+  def cronJobSummary(ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
+    kubectl.getCronJob(ns, stackName).map(js => Some(jobStatusToSummary(js)))
 
-  def jobSummary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
-    kubectl.getJob(dc, ns, stackName).map(js => Some(jobStatusToSummary(js)))
+  def jobSummary(ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
+    kubectl.getJob(ns, stackName).map(js => Some(jobStatusToSummary(js)))
 }
 
 object KubernetesShell {

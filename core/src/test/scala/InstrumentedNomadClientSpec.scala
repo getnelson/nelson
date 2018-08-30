@@ -24,7 +24,7 @@ import nelson.Datacenter._
 
 class InstrumentedNomadClientSpec extends FlatSpec with NelsonSuite {
   val reg = new CollectorRegistry
-  val client = InstrumentedNomadClient("test", nomad, Metrics(reg))
+  val client = InstrumentedNomadClient("test", sched, Metrics(reg))
   def getValue(name: String, labels: (String, String)*): Double =
     Option(reg.getSampleValue(name, labels.map(_._1).toArray, labels.map(_._2).toArray)).fold(0.0)(_.doubleValue)
 
