@@ -5,7 +5,7 @@ steps:
     concurrency: 1
     concurrency_group: primary
     timeout_in_minutes: 45
-    branches: master
+    branches: "master 0.10.x"
     agents:
       os: linux
     plugins:

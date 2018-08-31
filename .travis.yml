@@ -30,7 +30,7 @@ services:
 branches:
   only:
     - master
-    - 0.9.x
+    - 0.10.x
 
 install:
   - bin/install-promtool
