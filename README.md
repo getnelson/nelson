@@ -7,4 +7,4 @@
 [![codecov](https://codecov.io/gh/getnelson/nelson/branch/master/graph/badge.svg)](https://codecov.io/gh/getnelson/nelson)
 [![Maven Central](https://img.shields.io/maven-central/v/io.getnelson.nelson/core_2.11.svg)](http://repo1.maven.org/maven2/io/getnelson/nelson/core_2.11/)
 
-Command thy digital shipyard and move the fleet into the fray! Checkout [the documentation site for more details](https://getnelson.github.io/nelson/).
+Container-first cloud-native deployment! Checkout [the documentation site for more details](https://getnelson.io/).
