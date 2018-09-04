@@ -412,6 +412,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         d.plan,
         d.guid,
         d.expiration_policy,
+        d.rendered_blueprint,
         ds.state
       FROM PUBLIC.deployments AS d
       LEFT JOIN PUBLIC.deployment_statuses AS ds
