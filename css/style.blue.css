@@ -1,8 +1,8 @@
 /************************ background ************************/
 
 #content {
-  background: #023860;
-  background:linear-gradient(135deg, #023860, #1c57ce);
+  background: #041F33;
+  background:linear-gradient(135deg, #041F33, #3772AD);
 }
 
 /************************ nav ************************/
@@ -13,19 +13,19 @@
 .bs-docs-nav .navbar-nav>li>a:hover,
 .bs-docs-nav .navbar-nav>.active>a,
 .bs-docs-nav .navbar-nav>.active>a:hover {
-  color: #1c57ce;
+  color: #3772AD;
 }
 
 /************************ sidebar ************************/
 .bs-docs-sidebar .nav>li>a:hover,
 .bs-docs-sidebar .nav>li>a:focus {
-  color: #1c57ce;
+  color: #3772AD;
 }
 .bs-docs-sidebar .nav>.active>a,
 .bs-docs-sidebar .nav>.active:hover>a,
 .bs-docs-sidebar .nav>.active:focus>a {
-  border-left: 2px solid #1c57ce;
-  color: #1c57ce;
+  border-left: 2px solid #3772AD;
+  color: #3772AD;
 }
 
 /************************ masthead ************************/
@@ -38,5 +38,5 @@
 .btn-outline-inverse:hover,
 .btn-outline-inverse:focus,
 .btn-outline-inverse:active {
-  color: #1c57ce;
+  color: #3772AD;
 }

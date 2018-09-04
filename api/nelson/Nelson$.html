@@ -382,23 +382,6 @@ NelsonFK[F[_[_], _], U] provides a context that accepts a configuration and give
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="nelson.Nelson#createBlueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createBlueprint(name:String,description:Option[String],sha:nelson.Sha256,template:String):nelson.Nelson.NelsonK[Option[nelson.Blueprint]]"></a>
-      <a id="createBlueprint(String,Option[String],Sha256,String):NelsonK[Option[Blueprint]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">createBlueprint</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="description">description: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="sha">sha: <a href="package.html#Sha256=String" class="extmbr" name="nelson.Sha256">Sha256</a></span>, <span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Blueprint.html" class="extype" name="nelson.Blueprint">Blueprint</a>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@createBlueprint(name:String,description:Option[String],sha:nelson.Sha256,template:String):nelson.Nelson.NelsonK[Option[nelson.Blueprint]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.Nelson#createDatacenters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createDatacenters(list:List[nelson.Datacenter]):nelson.Nelson.NelsonK[Unit]"></a>
       <a id="createDatacenters(List[Datacenter]):NelsonK[Unit]"></a>
@@ -645,23 +628,6 @@ or out of band.
     </span>
       <p class="shortcomment cmt">Expires all deloyments for a service accross all datacenters and namepaces
 </p>
-    </li><li name="nelson.Nelson#fetchBlueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fetchBlueprint(name:String,revision:nelson.Blueprint.Revision):nelson.Nelson.NelsonK[Option[nelson.Blueprint]]"></a>
-      <a id="fetchBlueprint(String,Revision):NelsonK[Option[Blueprint]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fetchBlueprint</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="revision">revision: <a href="Blueprint$$Revision.html" class="extype" name="nelson.Blueprint.Revision">Revision</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Blueprint.html" class="extype" name="nelson.Blueprint">Blueprint</a>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@fetchBlueprint(name:String,revision:nelson.Blueprint.Revision):nelson.Nelson.NelsonK[Option[nelson.Blueprint]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.Nelson#fetchDatacenterByName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="fetchDatacenterByName(name:String):nelson.Nelson.NelsonK[Option[(nelson.Datacenter,Set[nelson.Datacenter.Namespace])]]"></a>
       <a id="fetchDatacenterByName(String):NelsonK[Option[(Datacenter,Set[Namespace])]]"></a>
@@ -1069,23 +1035,6 @@ that a new deployment needs to take place.</p>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Nelson$@listAuditEvents(limit:Long,offset:Long,releaseId:Option[Long],action:Option[String],category:Option[String]):nelson.Nelson.NelsonK[List[nelson.audit.AuditLog]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Nelson#listBlueprints" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="listBlueprints:nelson.Nelson.NelsonK[List[nelson.Blueprint]]"></a>
-      <a id="listBlueprints:NelsonK[List[Blueprint]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">listBlueprints</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.List">List</span>[<a href="Blueprint.html" class="extype" name="nelson.Blueprint">Blueprint</a>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@listBlueprints:nelson.Nelson.NelsonK[List[nelson.Blueprint]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
