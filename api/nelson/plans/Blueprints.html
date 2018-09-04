@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Default - nelson.plans.Default</title>
-          <meta name="description" content="Default - nelson.plans.Default" />
-          <meta name="keywords" content="Default nelson.plans.Default" />
+          <title>Blueprints - nelson.plans.Blueprints</title>
+          <meta name="description" content="Blueprints - nelson.plans.Blueprints" />
+          <meta name="keywords" content="Blueprints nelson.plans.Blueprints" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'nelson.plans.Default';
+            var hash = 'nelson.plans.Blueprints';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,12 +28,14 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img alt="Class" src="../../lib/class_big.png" />
+        <a href="Blueprints$.html" title="See companion object"><img alt="Class/Object" src="../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../package.html" class="extype" name="nelson">nelson</a>.<a href="package.html" class="extype" name="nelson.plans">plans</a></p>
-        <h1>Default</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="nelson.plans">package plans</a>
+        <h1><a href="Blueprints$.html" title="See companion object">Blueprints</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Blueprints$.html" title="See companion object">object Blueprints</a>
+            | <a href="package.html" class="extype" name="nelson.plans">package plans</a>
           </div></span></h3><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -41,21 +43,18 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Default</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Blueprints</span><span class="params">(<span name="config">config: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span><span class="result"> extends <a href="Default.html" class="extype" name="nelson.plans.Default">Default</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="nelson.plans.Default">Default</a></dd><dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/http/src/main/scala/plans/Default.scala" target="_blank">Default.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/http/src/main/scala/plans/Blueprints.scala" target="_blank">Blueprints.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="Audit.html" class="extype" name="nelson.plans.Audit">Audit</a>, <a href="Auth.html" class="extype" name="nelson.plans.Auth">Auth</a>, <a href="Blueprints.html" class="extype" name="nelson.plans.Blueprints">Blueprints</a>, <a href="Datacenters.html" class="extype" name="nelson.plans.Datacenters">Datacenters</a>, <a href="Graph.html" class="extype" name="nelson.plans.Graph">Graph</a>, <a href="Loadbalancers.html" class="extype" name="nelson.plans.Loadbalancers">Loadbalancers</a>, <a href="Misc.html" class="extype" name="nelson.plans.Misc">Misc</a>, <a href="Repos.html" class="extype" name="nelson.plans.Repos">Repos</a>, <a href="UI.html" class="extype" name="nelson.plans.UI">UI</a>, <a href="WebHooks.html" class="extype" name="nelson.plans.WebHooks">WebHooks</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -72,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.plans.Default"><span>Default</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.plans.Blueprints"><span>Blueprints</span></li><li class="in" name="nelson.plans.Default"><span>Default</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -91,19 +90,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="nelson.plans.Default#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():nelson.plans.Default"></a>
-      <a id="&lt;init&gt;:Default"></a>
+              <ol><li name="nelson.plans.Blueprints#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(config:nelson.NelsonConfig):nelson.plans.Blueprints"></a>
+      <a id="&lt;init&gt;:Blueprints"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Default</span><span class="params">()</span>
+        <span class="name">Blueprints</span><span class="params">(<span name="config">config: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@&lt;init&gt;():nelson.plans.Default" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@&lt;init&gt;(config:nelson.NelsonConfig):nelson.plans.Blueprints" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -113,98 +112,10 @@
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="scala.Equals#canEqual" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="canEqual(that:Any):Boolean"></a>
-      <a id="canEqual(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">canEqual</span><span class="params">(<span name="that">that: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@canEqual(that:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Equals</dd></dl></div>
-    </li><li name="nelson.plans.Default#config" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="config:nelson.NelsonConfig"></a>
-      <a id="config:NelsonConfig"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">config</span><span class="result">: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@config:nelson.NelsonConfig" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="scala.Product#productArity" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="productArity:Int"></a>
-      <a id="productArity:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">productArity</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@productArity:Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
-    </li><li name="scala.Product#productElement" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="productElement(n:Int):Any"></a>
-      <a id="productElement(Int):Any"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">productElement</span><span class="params">(<span name="n">n: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@productElement(n:Int):Any" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
-    </li><li name="nelson.plans.Default#service" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="service:org.http4s.HttpService[cats.effect.IO]"></a>
-      <a id="service:HttpService[IO]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">service</span><span class="result">: <a href="../../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@service:org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -217,7 +128,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -234,7 +145,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@##():Int" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@##():Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -251,7 +162,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -268,12 +179,12 @@
         <span class="name">CookieName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@CookieName:String" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@CookieName:String" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="nelson.plans.Default.IsAuthenticated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
+    </li><li name="nelson.plans.Default.IsAuthenticated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="IsAuthenticated"></a>
       <a id="IsAuthenticated:IsAuthenticated"></a>
       <h4 class="signature">
@@ -289,8 +200,8 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="nelson.plans.Default.IsAuthorized" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
+    </li><li name="nelson.plans.Default.IsAuthorized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="IsAuthorized"></a>
       <a id="IsAuthorized:IsAuthorized"></a>
       <h4 class="signature">
@@ -306,8 +217,8 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="nelson.plans.Default.NotAuthenticated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
+    </li><li name="nelson.plans.Default.NotAuthenticated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="NotAuthenticated"></a>
       <a id="NotAuthenticated:NotAuthenticated"></a>
       <h4 class="signature">
@@ -323,7 +234,7 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -336,7 +247,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -353,7 +264,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@clone():Object" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@clone():Object" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -364,6 +275,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="nelson.plans.Blueprints#config" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="config:nelson.NelsonConfig"></a>
+      <a id="config:NelsonConfig"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">config</span><span class="result">: <a href="../NelsonConfig.html" class="extype" name="nelson.NelsonConfig">NelsonConfig</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.plans.Blueprints@config:nelson.NelsonConfig" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.plans.Blueprints">Blueprints</a> → <a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="nelson.plans.Default#decode" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="decode[A](req:org.http4s.Request[cats.effect.IO])(f:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$4:argonaut.DecodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
       <a id="decode[A](Request[IO])((A)⇒IO[Response[IO]])(DecodeJson[A]):IO[Response[IO]]"></a>
@@ -376,11 +304,11 @@
         <span class="name">decode</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="org.http4s.Request">Request</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.plans.Default.decode.A">A</span>) ⇒ <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<span class="extype" name="nelson.plans.Default.decode.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@decode[A](req:org.http4s.Request[cats.effect.IO])(f:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$4:argonaut.DecodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@decode[A](req:org.http4s.Request[cats.effect.IO])(f:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$4:argonaut.DecodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -393,28 +321,11 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -427,7 +338,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@finalize():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -450,7 +361,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -467,28 +378,28 @@
         <span class="name">handleMessageFailure</span><span class="params">(<span name="req">req: <span class="extype" name="org.http4s.Request">Request</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="mf">mf: <span class="extype" name="org.http4s.MessageFailure">MessageFailure</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@handleMessageFailure(req:org.http4s.Request[cats.effect.IO],mf:org.http4s.MessageFailure):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@handleMessageFailure(req:org.http4s.Request[cats.effect.IO],mf:org.http4s.MessageFailure):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
+    </li><li name="nelson.plans.Blueprints#hasIntegrity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="hasIntegrity(suppliedSha256:nelson.Sha256,template:String):Boolean"></a>
+      <a id="hasIntegrity(Sha256,String):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hasIntegrity</span><span class="params">(<span name="suppliedSha256">suppliedSha256: <a href="../package.html#Sha256=String" class="extmbr" name="nelson.Sha256">Sha256</a></span>, <span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@hasIntegrity(suppliedSha256:nelson.Sha256,template:String):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -501,7 +412,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -518,11 +429,11 @@
         <span class="name">json</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.json.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.json.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@json[A](a:nelson.Nelson.NelsonK[A])(implicitevidence$1:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@json[A](a:nelson.Nelson.NelsonK[A])(implicitevidence$1:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="nelson.plans.Default#jsonF" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="jsonF[A](a:nelson.Nelson.NelsonK[A])(rf:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$2:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
       <a id="jsonF[A](NelsonK[A])((A)⇒IO[Response[IO]])(EncodeJson[A]):IO[Response[IO]]"></a>
@@ -535,11 +446,11 @@
         <span class="name">jsonF</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>]</span>)</span><span class="params">(<span name="rf">rf: (<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>) ⇒ <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.jsonF.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@jsonF[A](a:nelson.Nelson.NelsonK[A])(rf:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$2:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@jsonF[A](a:nelson.Nelson.NelsonK[A])(rf:A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]])(implicitevidence$2:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="nelson.plans.Default#jsonHandler" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="jsonHandler[A](a:nelson.Nelson.NelsonK[A])(rf:Option[A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]]])(implicitevidence$3:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
       <a id="jsonHandler[A](NelsonK[A])(Option[(A)⇒IO[Response[IO]]])(EncodeJson[A]):IO[Response[IO]]"></a>
@@ -552,11 +463,11 @@
         <span class="name">jsonHandler</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="../Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>]</span>)</span><span class="params">(<span name="rf">rf: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[(<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>) ⇒ <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<span class="extype" name="nelson.plans.Default.jsonHandler.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@jsonHandler[A](a:nelson.Nelson.NelsonK[A])(rf:Option[A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]]])(implicitevidence$3:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@jsonHandler[A](a:nelson.Nelson.NelsonK[A])(rf:Option[A=&gt;cats.effect.IO[org.http4s.Response[cats.effect.IO]]])(implicitevidence$3:argonaut.EncodeJson[A]):cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="nelson.plans.Default#log" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="log:journal.Logger"></a>
       <a id="log:Logger"></a>
@@ -569,11 +480,11 @@
         <span class="name">log</span><span class="result">: <span class="extype" name="journal.Logger">Logger</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@log:journal.Logger" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@log:journal.Logger" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -586,7 +497,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -603,7 +514,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@notify():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@notify():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -620,45 +531,11 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Product#productIterator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="productIterator:Iterator[Any]"></a>
-      <a id="productIterator:Iterator[Any]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">productIterator</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@productIterator:Iterator[Any]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
-    </li><li name="scala.Product#productPrefix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="productPrefix:String"></a>
-      <a id="productPrefix:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">productPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@productPrefix:String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
     </li><li name="nelson.plans.Default#redirectToLogin" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="redirectToLogin:cats.effect.IO[org.http4s.Response[cats.effect.IO]]"></a>
       <a id="redirectToLogin:IO[Response[IO]]"></a>
@@ -671,11 +548,28 @@
         <span class="name">redirectToLogin</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@redirectToLogin:cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@redirectToLogin:cats.effect.IO[org.http4s.Response[cats.effect.IO]]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
+    </li><li name="nelson.plans.Blueprints#service" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="service:org.http4s.HttpService[cats.effect.IO]"></a>
+      <a id="service:HttpService[IO]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">service</span><span class="result">: <a href="../../org/http4s/package.html#HttpService[F[_]]=cats.data.Kleisli[[β$0$]cats.data.OptionT[F,β$0$],org.http4s.Request[F],org.http4s.Response[F]]" class="extmbr" name="org.http4s.HttpService">HttpService</a>[<span class="extype" name="cats.effect.IO">IO</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.plans.Blueprints@service:org.http4s.HttpService[cats.effect.IO]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.plans.Blueprints">Blueprints</a> → <a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -688,28 +582,11 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@toString():String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -722,7 +599,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@wait():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@wait():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -745,7 +622,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -768,7 +645,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.plans.Default@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.plans.Blueprints@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -788,7 +665,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
+        <div class="parent" name="nelson.plans.Default">
+              <h3>Inherited from <a href="Default.html" class="extype" name="nelson.plans.Default">Default</a></h3>
+            </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Workflow - nelson.Workflow</title>
-          <meta name="description" content="Workflow - nelson.Workflow" />
-          <meta name="keywords" content="Workflow nelson.Workflow" />
+          <title>Pending - nelson.Blueprint.State.Pending</title>
+          <meta name="description" content="Pending - nelson.Blueprint.State.Pending" />
+          <meta name="keywords" content="Pending nelson.Blueprint.State.Pending" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'nelson.Workflow';
+            var hash = 'nelson.Blueprint$$State$$Pending$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,16 +26,14 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <a href="Workflow$.html" title="See companion object"><img alt="Trait/Object" src="../lib/trait_to_object_big.png" /></a>
-        <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a></p>
-        <h1><a href="Workflow$.html" title="See companion object">Workflow</a></h1><h3><span class="morelinks"><div>
-            Related Docs:
-            <a href="Workflow$.html" title="See companion object">object Workflow</a>
-            | <a href="package.html" class="extype" name="nelson">package nelson</a>
+        <img alt="Object" src="../lib/object_big.png" />
+        <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a>.<a href="Blueprint$.html" class="extype" name="nelson.Blueprint">Blueprint</a>.<a href="Blueprint$$State$.html" class="extype" name="nelson.Blueprint.State">State</a></p>
+        <h1>Pending</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="Blueprint$$State$.html" class="extype" name="nelson.Blueprint.State">package State</a>
           </div></span></h3><span class="permalink">
-      <a href="../index.html#nelson.Workflow" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -44,29 +42,17 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Workflow</span><span class="tparams">[<span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">Pending</span><span class="result"> extends <a href="Blueprint$$State.html" class="extype" name="nelson.Blueprint.State">State</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Workflows must be defined in terms of a particular type of UnitDef
-they target, and an output of the workflow. By having a workflow
-specilized to a particular type of unit, we avoid having to have
-'uber workflows' that need to handle every possible type of unit,
-which reduces the implementation complexity of a given workflow quite
-considerably. In addition, the output type <code>O</code> is intended to provide
-an opertunity for the workflow to output something more than just
-effects. For example, a workflow could accumulate a set of logs, or
-some reporting state - whatever - it doesnt matter.</p><p>Workflows define both setup (deploy) and teardown (detroy) workflow
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/core/src/main/scala/Workflow.scala" target="_blank">Workflow.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/core/src/main/scala/Blueprint.scala" target="_blank">Blueprint.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="Canopus$.html" class="extype" name="nelson.Canopus">Canopus</a>, <a href="Magnetar$.html" class="extype" name="nelson.Magnetar">Magnetar</a>, <a href="Pulsar$.html" class="extype" name="nelson.Pulsar">Pulsar</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="Blueprint$$State.html" class="extype" name="nelson.Blueprint.State">State</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -83,7 +69,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.Workflow"><span>Workflow</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.Blueprint.State.Pending"><span>Pending</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="nelson.Blueprint.State"><span>State</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -104,64 +90,10 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="nelson.Workflow#deploy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="deploy(id:nelson.ID,hash:String,unit:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[O]"></a>
-      <a id="deploy(ID,String,@@[UnitDef,Versioned],Plan,Datacenter,Namespace):WorkflowF[O]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">deploy</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="unit">unit: <a href="package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Manifest$$Namespace.html" class="extype" name="nelson.Manifest.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="nelson.Workflow.O">O</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@deploy(id:nelson.ID,hash:String,unit:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,dc:nelson.Datacenter,ns:nelson.Manifest.Namespace):nelson.Workflow.WorkflowF[O]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Workflow#destroy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="destroy(d:nelson.Datacenter.Deployment,dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):nelson.Workflow.WorkflowF[O]"></a>
-      <a id="destroy(Deployment,Datacenter,Namespace):WorkflowF[O]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">destroy</span><span class="params">(<span name="d">d: <a href="Datacenter$$Deployment.html" class="extype" name="nelson.Datacenter.Deployment">Deployment</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="nelson.Workflow.O">O</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@destroy(d:nelson.Datacenter.Deployment,dc:nelson.Datacenter,ns:nelson.Datacenter.Namespace):nelson.Workflow.WorkflowF[O]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Workflow#name" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="name:nelson.WorkflowRef"></a>
-      <a id="name:WorkflowRef"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">name</span><span class="result">: <a href="package.html#WorkflowRef=String" class="extmbr" name="nelson.WorkflowRef">WorkflowRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@name:nelson.WorkflowRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
@@ -174,7 +106,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -191,7 +123,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@##():Int" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@##():Int" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -208,7 +140,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -225,7 +157,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -242,7 +174,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@clone():Object" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@clone():Object" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -265,7 +197,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -282,7 +214,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -299,7 +231,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@finalize():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@finalize():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -322,24 +254,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@hashCode():Int" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -356,7 +271,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -373,7 +288,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -390,7 +305,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@notify():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@notify():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -407,7 +322,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -424,12 +339,12 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="nelson.Blueprint.State.Pending#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -441,11 +356,11 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@toString():String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@toString():String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.Blueprint.State.Pending">Pending</a> → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -458,7 +373,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@wait():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@wait():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -481,7 +396,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -504,7 +419,7 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Workflow@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Blueprint$$State$$Pending$@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -524,7 +439,17 @@ some reporting state - whatever - it doesnt matter.</p><p>Workflows define both 
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
+            </div><div class="parent" name="nelson.Blueprint.State">
+              <h3>Inherited from <a href="Blueprint$$State.html" class="extype" name="nelson.Blueprint.State">State</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></h3>

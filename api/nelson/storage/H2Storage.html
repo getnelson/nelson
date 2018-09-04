@@ -127,6 +127,23 @@
       </a>
     </span>
       
+    </li><li name="nelson.storage.H2Storage.BlueprintRow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BlueprintRow=(nelson.GUID,String,Option[String],Option[nelson.Sha256],Long,String,java.time.Instant)"></a>
+      <a id="BlueprintRow:BlueprintRow"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">BlueprintRow</span><span class="result"> = (<a href="../package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a>, <span class="extype" name="scala.Predef.String">String</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../package.html#Sha256=String" class="extmbr" name="nelson.Sha256">Sha256</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="java.time.Instant">Instant</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.H2Storage@BlueprintRow=(nelson.GUID,String,Option[String],Option[nelson.Sha256],Long,String,java.time.Instant)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.storage.H2Storage.DeploymentRow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DeploymentRow=(nelson.ID,nelson.ID,nelson.ID,String,java.time.Instant,nelson.WorkflowRef,nelson.PlanRef,nelson.GUID,nelson.ExpirationPolicyRef)"></a>
       <a id="DeploymentRow:DeploymentRow"></a>
@@ -812,6 +829,28 @@ for namespaces. We never want two datacenters with the same name.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="nelson.storage.H2Storage#findBlueprint" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="findBlueprint(name:String,revision:nelson.Blueprint.Revision):doobie.ConnectionIO[Option[nelson.Blueprint]]"></a>
+      <a id="findBlueprint(String,Revision):doobie.ConnectionIO[Option[Blueprint]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">findBlueprint</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="revision">revision: <a href="../Blueprint$$Revision.html" class="extype" name="nelson.Blueprint.Revision">Revision</a></span>)</span><span class="result">: <span class="extype" name="doobie.free.Types.ConnectionIO">doobie.ConnectionIO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../Blueprint.html" class="extype" name="nelson.Blueprint">Blueprint</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.H2Storage@findBlueprint(name:String,revision:nelson.Blueprint.Revision):doobie.ConnectionIO[Option[nelson.Blueprint]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Use cases exist for fetching a single, discrete revision of a blueprint and also
+generically fetching whatever the latest might be.</p><div class="fullcomment"><div class="comment cmt"><p>Use cases exist for fetching a single, discrete revision of a blueprint and also
+generically fetching whatever the latest might be. In this way, we funnel all that
+through a single function that either uses a different constraint to get a single
+record, or in the latter case, sorts by descending revision and picks the head record.
+</p></div></div>
     </li><li name="nelson.storage.H2Storage#findDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="findDeployment(stackName:nelson.Datacenter.StackName):doobie.ConnectionIO[Option[nelson.Datacenter.Deployment]]"></a>
       <a id="findDeployment(StackName):doobie.ConnectionIO[Option[Deployment]]"></a>
@@ -1286,6 +1325,23 @@ will try to find the latest matching deployment
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.storage.H2Storage@getUnitResources(id:nelson.ID):doobie.ConnectionIO[Set[String]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.storage.H2Storage#insertBlueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="insertBlueprint(name:String,description:Option[String],sha256:nelson.Sha256,template:String):doobie.ConnectionIO[nelson.ID]"></a>
+      <a id="insertBlueprint(String,Option[String],Sha256,String):doobie.ConnectionIO[ID]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">insertBlueprint</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="description">description: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="sha256">sha256: <a href="../package.html#Sha256=String" class="extmbr" name="nelson.Sha256">Sha256</a></span>, <span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="doobie.free.Types.ConnectionIO">doobie.ConnectionIO</span>[<a href="../package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.H2Storage@insertBlueprint(name:String,description:Option[String],sha256:nelson.Sha256,template:String):doobie.ConnectionIO[nelson.ID]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
