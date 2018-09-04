@@ -10,7 +10,9 @@ export DOCKER_HOST=unix:///var/run/docker.sock
 export TRAVIS="true" # way hacky
 export TRAVIS_COMMIT="$BUILDKITE_COMMIT"
 export TRAVIS_REPO_SLUG="getnelson/nelson"
-export TRAVIS_JOB_NUMBER="1.1"
+# NOTE(timperrett): crazy hack;
+# for more info see: https://github.com/Verizon/sbt-rig/blob/master/src/main/scala/DocsPlugin.scala#L113
+export TRAVIS_JOB_NUMBER="1.999"
 export TRAVIS_BUILD_NUMBER="$BUILDKITE_BUILD_NUMBER"
 
 if [ "$BUILDKITE_PULL_REQUEST" = 'false' ]; then
