@@ -10,7 +10,7 @@
   </appender>
 
   <!-- nelson -->
-  <logger name="nelson" level="OFF" />
+  <logger name="nelson" level="DEBUG" />
 
   <!-- Temporary while we're debugging a hang -->
   <logger name="TestInterruptor" level="INFO" />
