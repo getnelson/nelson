@@ -64,7 +64,18 @@ object Blueprints {
         ("created_at" := b.createdAt) ->:
         jEmptyObject
       )
+
+  implicit val BlueprintProofEncoder: CodecJson[BlueprintProof] = CodecJson(
+    (r: BlueprintProof) => ("content" := Base64(r.content).asJson) ->: jEmptyObject,
+    c => for {
+      content <- (c --\ "content").as[Base64].map(_.decoded)
+    } yield BlueprintProof(content)
+  )
 }
+
+final case class BlueprintProof(
+  content: String
+)
 
 final case class Blueprints(config: NelsonConfig) extends Default {
   import Blueprints._
@@ -96,6 +107,25 @@ final case class Blueprints(config: NelsonConfig) extends Default {
         case Right((n,r)) => json(Nelson.fetchBlueprint(n,r))
         case Left(_) => BadRequest(s"Unable to parse the supplied '${keyAndRevision}' blueprint reference.")
       }
+
+    /*
+     * POST /v1/blueprints/proof
+     *
+     * Provide a blueprint template and have Nelson render it with example data
+     * for development purposes. This makes itterating on a blueprint much more
+     * seamless and does not require a full deployment cycle.
+     *
+     * {{{
+     *  {
+     *    "content": "<base64 encoded template>"
+     *  }
+     * }}}
+     */
+    case req @ POST -> Root / "v1" / "blueprints" / "proof" & IsAuthenticated(session) => {
+      decode[BlueprintProof](req){ proof =>
+        json(Nelson.proofBlueprint(proof.content))
+      }
+    }
 
     /*
      * POST /v1/blueprints

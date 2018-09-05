@@ -178,9 +178,6 @@ trait NelsonSuite
   lazy val testInterpreters = Infrastructure.Interpreters(
     sched,testConsul,testVault,stg,logger,testDocker,WorkflowControlOp.trans,healthI)
 
-  def isOSX: Boolean =
-    System.getProperty("os.name").toLowerCase.trim == "mac os x"
-
   lazy val configFiles = List(
     Required(ClassPathResource("nelson/defaults.cfg")),
     Required(ClassPathResource("nelson/nelson-test.cfg")),

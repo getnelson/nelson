@@ -16,13 +16,17 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import _root_.argonaut._
+import _root_.argonaut._, Argonaut._
 import java.nio.charset.StandardCharsets
 
 final case class Base64(decoded: String) extends AnyVal
 
 object Base64 {
   private val base64Decoder = java.util.Base64.getDecoder
+  private val base64Encoder = java.util.Base64.getEncoder
+
+  implicit val encodeBase64: EncodeJson[Base64] = EncodeJson(s =>
+    jString(new String(base64Encoder.encode(s.decoded.getBytes("UTF-8")), StandardCharsets.UTF_8)))
 
   implicit val decodeBase64: DecodeJson[Base64] = DecodeJson.optionDecoder(
     _.string.flatMap(s =>
