@@ -28,14 +28,15 @@ libraryDependencies ++= Seq(
   "org.typelevel"              %% "cats-core"                          % V.cats,
   "org.typelevel"              %% "cats-effect"                        % V.catsEffect,
   "org.typelevel"              %% "cats-free"                          % V.cats,
-  "io.verizon.helm"            %% "core"                               % "3.0.82",
-  "io.verizon.helm"            %% "http4s"                             % "3.0.82",
+  "io.verizon.helm"            %% "core"                               % V.helm,
+  "io.verizon.helm"            %% "http4s"                             % V.helm,
   "io.verizon.knobs"           %% "core"                               % V.knobs,
   "io.verizon.journal"         %% "core"                               % V.journal,
   "io.verizon.quiver"          %% "core"                               % "7.0.19",
-  "org.yaml"                    % "snakeyaml"                          % "1.16",
-  "io.argonaut"                %% "argonaut"                           % "6.2.1",
-  "io.argonaut"                %% "argonaut-cats"                      % "6.2.1",
+  "org.yaml"                    % "snakeyaml"                          % "1.20",
+  "org.scalatra.scalate"       %% "scalate-core"                       % "1.9.0",
+  "io.argonaut"                %% "argonaut"                           % V.argonaut,
+  "io.argonaut"                %% "argonaut-cats"                      % V.argonaut,
   "io.prometheus"               % "simpleclient"                       % V.prometheus,
   "io.prometheus"               % "simpleclient_hotspot"               % V.prometheus,
   "org.tpolecat"               %% "doobie-core"                        % V.doobie,
@@ -57,7 +58,7 @@ libraryDependencies ++= Seq(
   "org.http4s"                 %% "http4s-argonaut"                    % V.http4s,
   "org.http4s"                 %% "http4s-blaze-client"                % V.http4s,
   "com.whisk"                  %% "docker-testkit-scalatest"           % V.dockerit % "test",
-  "com.whisk"                  %% "docker-testkit-impl-docker-java"    % V.dockerit % "test"
+  "com.whisk"                  %% "docker-testkit-impl-spotify"        % V.dockerit % "test"
 )
 
 addCompilerPlugin(dependencies.kindprojector.plugin)

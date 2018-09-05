@@ -47,7 +47,7 @@ trait Json {
         jEmptyObject
       })
 
-    jSingleObject("rules",
+    jSingleObject("policy",
       jString( // So, yeah, rules is embedded HCL/JSON as a string.
         jSingleObject("path", jObjectFields(cp.rules.map(path): _*)).nospaces))
   }

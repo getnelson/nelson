@@ -14,7 +14,7 @@
 
   <!-- Temporary while we're debugging a hang -->
   <logger name="TestInterruptor" level="INFO" />
-  
+
   <!-- other -->
   <logger name="com.ning.http.client" level="OFF" />
 

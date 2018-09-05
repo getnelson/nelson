@@ -18,9 +18,8 @@ package nelson
 package vault
 package http4s
 
-import com.github.dockerjava.core.DefaultDockerClientConfig
-import com.github.dockerjava.netty.NettyDockerCmdExecFactory
-import com.whisk.docker.impl.dockerjava.{Docker, DockerJavaExecutorFactory}
+import com.spotify.docker.client.{DefaultDockerClient, DockerClient}
+import com.whisk.docker.impl.spotify.SpotifyDockerFactory
 import com.whisk.docker._
 import journal.Logger
 import scala.io.Source
@@ -28,21 +27,22 @@ import scala.io.Source
 trait DockerVaultService extends DockerKit {
   private[this] val logger = Logger[DockerVaultService]
 
-  override implicit val dockerFactory: DockerFactory = new DockerJavaExecutorFactory(
-    new Docker(DefaultDockerClientConfig.createDefaultConfigBuilder().build(),
-      factory = new NettyDockerCmdExecFactory()))
+  private val client: DockerClient = DefaultDockerClient.fromEnv().build()
+  override implicit val dockerFactory: DockerFactory = new SpotifyDockerFactory(client)
 
   val consulContainer =
-    DockerContainer("consul:0.7.0", name = Some("consul"))
+    DockerContainer("consul:1.2.2", name = Some("consul"))
       .withPorts(8500 -> Some(8500))
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"consul: $s")))
-      .withReadyChecker(DockerReadyChecker.LogLineContains("agent: Synced"))
+      // NOTE(timperrett): for some reason, this no longer works for consul
+      // despite trying a range of different things.
+      // .withReadyChecker(DockerReadyChecker.LogLineContains("Consul agent running!"))
 
   private val vaultLocalConfig =
     Source.fromInputStream(getClass.getResourceAsStream("/vault.hcl")).mkString
 
   val vaultContainer =
-    DockerContainer("vault:0.6.2", name = Some("vault"))
+    DockerContainer("vault:0.10.4", name = Some("vault"))
       .withPorts(8200 -> Some(8200))
       .withEnv(s"VAULT_LOCAL_CONFIG=$vaultLocalConfig")
       .withLinks(ContainerLink(consulContainer, "consul"))

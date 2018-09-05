@@ -30,7 +30,7 @@ object YamlParser {
     Either.catchNonFatal {
       val constructor = new Constructor(implicitly[ClassTag[A]].runtimeClass)
       val yaml = new Yaml(constructor)
-      yaml.load(input).asInstanceOf[A]
+      yaml.load[A](input)
     } leftMap (t => YamlError.loadError(t.getMessage))
 }
 abstract class YamlParser[A] {
