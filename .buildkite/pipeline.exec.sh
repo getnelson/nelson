@@ -4,7 +4,7 @@ git config --global user.email "team@getnelson.io"
 git config --global user.name "Nelson Team"
 
 # configure docker
-export DOCKER_HOST=unix:///var/run/docker.sock
+# export DOCKER_HOST=unix:///var/run/docker.sock
 
 # subvert the sbt-rig plugin
 export TRAVIS="true" # way hacky
