@@ -123,7 +123,7 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      */
     case req @ POST -> Root / "v1" / "blueprints" / "proof" & IsAuthenticated(session) => {
       decode[BlueprintProof](req){ proof =>
-        json(Nelson.proofBlueprint(proof.content))
+        json(Nelson.proofBlueprint(proof.content).map(BlueprintProof(_)))
       }
     }
 
