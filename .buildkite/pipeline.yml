@@ -15,6 +15,7 @@ steps:
         image: getnelson/build-env:unstable
         user: builder
         always-pull: true
+        network: host
         environment:
           - SONATYPE_USERNAME
           - SONATYPE_PASSWORD
