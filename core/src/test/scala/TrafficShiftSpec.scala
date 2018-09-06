@@ -74,9 +74,9 @@ class TrafficShiftSpec extends FlatSpec with Matchers {
   val ns = Datacenter.Namespace(0L, NamespaceName("dev"), "dev")
 
   val d1 = Deployment(0L, DCUnit(0L, "foo", Version(1,1,1),"",Set.empty,Set.empty,Set.empty),
-            "hash", ns, Instant.now, "magnetar", "default", "guid", "retain-latest")
+            "hash", ns, Instant.now, "magnetar", "default", "guid", "retain-latest", None)
   val d2=  Deployment(1L, DCUnit(0L, "foo", Version(1,1,2),"",Set.empty,Set.empty,Set.empty),
-            "hash", ns, Instant.now, "magnetar", "default", "guid", "retain-latest")
+            "hash", ns, Instant.now, "magnetar", "default", "guid", "retain-latest", None)
 
   behavior of "traffic shift inProgress"
 

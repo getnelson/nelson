@@ -183,6 +183,8 @@ final case class InvalidUnitNameLength(name: String)
 final case class InvalidUnitNameChars(name: String)
   extends NelsonError(s"$name contains invalid characters. Unit names can only include hyphens, A-Z, a-z, 0-9 where the unit name starts and ends with an alpha-numeric character.")
 
+final object NomadNotImplemented extends NelsonError(s"Nelson 0.11.x+ currently does not support Nomad. If you are interested in using Nelson with Nomad please file an issue on GitHub: https://github.com/getnelson/nelson/ or reach out to us on Gitter: https://gitter.im/getnelson/nelson")
+
 ////////////////////////// YAML ERRORS ///////////////////////////////
 
 abstract class YamlError(msg: String) extends NelsonError(msg)

@@ -20,6 +20,7 @@ package scheduler
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
 import nelson.Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
+import nelson.blueprint.Template
 import nelson.docker.Docker
 import nelson.docker.Docker.Image
 
@@ -58,9 +59,9 @@ final class NomadHttp(
     co match {
       case Delete(dc,d) =>
         deleteUnitAndChildren(dc, d).retryExponentially()(scheduler, ec)
-      case Launch(i, dc, ns, u, p, hash) =>
+      case Launch(i, dc, ns, u, p, blueprint, hash) =>
         val unit = Manifest.Versioned.unwrap(u)
-        launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()(scheduler, ec)
+        launch(unit, hash, u.version, i, dc, ns, p, blueprint).retryExponentially()(scheduler, ec)
       case Summary(dc,_,sn) =>
         summary(dc,sn)
     }
@@ -94,6 +95,12 @@ final class NomadHttp(
     }
   }
 
+  private def delete(dc: Datacenter, d: Deployment): IO[Unit] =
+    d.renderedBlueprint.fold(deleteUnitAndChildren(dc, d)) { spec =>
+      // TODO: Delete via spec
+      deleteUnitAndChildren(dc, d)
+    }
+
   /*
    * Calls Nomad to delete the given unit and all child jobs
    */
@@ -125,13 +132,22 @@ final class NomadHttp(
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
-  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
-    def call(name: String, json: Json): IO[String] = {
-      log.debug(s"sending nomad the following payload: ${json.nospaces}")
-      val req = addCreds(dc, Request[IO](Method.POST, nomad.endpoint / "v1" / "job" / name))
-      client.expect[String](req.withBody(json))
+  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan, blueprint: Option[Template]): IO[String] =
+    blueprint.fold(launchDefault(u, hash, version, img, dc, ns, plan)) { template =>
+      launchDefault(u, hash, version, img, dc, ns, plan)
+      val sn = StackName(u.name, version, hash)
+      val name = buildName(sn)
+      // TODO: Actually do the interpolation
+      // TODO: Do we want to do validation here?
+      val spec = template.render(Map.empty)
+      Parse.decodeEither[Json](spec) match {
+        case Left(err) =>
+          IO.raiseError(new IllegalArgumentException(s"Rendered blueprint was not valid JSON, failed with error: '${err}', render: '${spec}'"))
+        case Right(json) => call(name, dc, json)
+      }
     }
 
+  private def launchDefault(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
     val sn = StackName(u.name, version, hash)
     val name = buildName(sn)
     val vars = plan.environment.bindings ::: List(
@@ -145,10 +161,16 @@ final class NomadHttp(
       EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.limitOrElse(512D).toInt.toString),
       EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
       EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name))
-    ) ++ nomad.loggingImage.map(x => EnvironmentVariable("NELSON_LOGGING_IMAGE", x.toString)).toList
+    )
     val p = plan.copy(environment = plan.environment.copy(bindings = vars))
     val json = getJson(u,name,img,dc,ns,p)
-    call(name,json)
+    call(name, dc, json)
+  }
+
+  def call(name: String, dc: Datacenter, json: Json): IO[String] = {
+    log.debug(s"sending nomad the following payload: ${json.nospaces}")
+    val req = addCreds(dc, Request[IO](Method.POST, nomad.endpoint / "v1" / "job" / name))
+    client.expect[String](req.withBody(json))
   }
 }
 
@@ -193,12 +215,8 @@ object NomadJson {
     name: String,
     ns: NamespaceName): argonaut.Json = {
 
-    val maybeLogging = nomad.splunk.map(splunk =>
-      List(dockerSplunkJson(name, ns, splunk.splunkUrl, splunk.splunkToken)))
-
     val maybePorts = ports.map(_.nel.map(p => argonaut.Json(p.ref := p.port)))
 
-    ("logging" :=? maybeLogging) ->?:
     ("port_map" :=? maybePorts) ->?: argonaut.Json(
     "image" := s"https://${container.toString}", // https:// required to work with private repo
     "network_mode" := nm.asString,
@@ -352,25 +370,6 @@ object NomadJson {
     )
   }
 
-  // logging sidecar needs port map for 8089
-  // TIM: this is kind of a hack and should probally be factored
-  // to a config option in future.
-  private val loggingPort = Ports(Port("splunk", 8089, "tcp"), Nil)
-
-  def loggingSidecarJson(nomad: Nomad, vars: List[EnvironmentVariable], name: String, ns: NamespaceName): Option[argonaut.Json] = {
-    nomad.loggingImage.map { image =>
-      argonaut.Json(
-        "Name"      := "logging_sidecar",
-        "Driver"    := "docker",
-        "Config"    := dockerConfigJson(nomad, image, Some(loggingPort), BridgeMode, name, ns),
-        "Services"  := argonaut.Json.jNull,
-        "Env"       := envJson(vars),
-        "Resources" := resourcesJson(800, 2000, Some(loggingPort)),
-        "LogConfig" := logJson(10,10)
-      )
-    }
-  }
-
   def job(name: String, unitName: UnitName, plan: Plan, i: Image, dc: Datacenter, schedule: Option[Schedule], ports: Option[Ports], ns: NamespaceName, nomad: Nomad, tags: Set[String]): Json = {
     val env = plan.environment
     val periodic = schedule.flatMap(_.toCron().map(periodicJson))
@@ -391,8 +390,7 @@ object NomadJson {
             "Count"         := env.desiredInstances.getOrElse(1),
             "RestartPolicy" := env.retries.map(restartJson).getOrElse(restartJson(3)), // if no retry specified, only try 3 times rather than 15.
             "EphemeralDisk" := ephemeralDiskJson(false,false,plan.environment.ephemeralDisk.getOrElse(101)),
-            "Tasks"         := (List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags)) ++
-                               loggingSidecarJson(nomad, env.bindings, name, ns))
+            "Tasks"         := List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags))
           )
         )
       )

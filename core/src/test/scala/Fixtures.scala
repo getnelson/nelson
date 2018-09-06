@@ -419,7 +419,7 @@ object Fixtures {
       d <- choose(1,10000)
       e <- genInstant
       f <- alphaNumStr
-    } yield Datacenter.Deployment(a.toLong,b,c,Datacenter.Namespace(1, NamespaceName("dev"), "dc"),e,"manual","default",f,"retain-always")
+    } yield Datacenter.Deployment(a.toLong,b,c,Datacenter.Namespace(1, NamespaceName("dev"), "dc"),e,"manual","default",f,"retain-always",None)
 
   val genTrafficShiftPolicy: Gen[TrafficShiftPolicy] =
     Gen.oneOf(TrafficShiftPolicy.policies.toSeq)

@@ -27,10 +27,11 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
   import nelson.docker.Docker.Image
   import nelson.Manifest._
 
-  val nomad = Infrastructure.Nomad(org.http4s.Uri.uri("http://endpoint:8080"),
+  val nomad = Infrastructure.Nomad(
+    org.http4s.Uri.uri("http://endpoint:8080"),
     1.second, "user", "pass", "addy",
-    Some(docker.Docker.Image("logging-sidecar", "0.0.1")), 2300,
-    Some(Infrastructure.SplunkConfig("splunkUrl", "splunkToken")))
+    2300
+  )
 
   val image = Image("image", None, None)
 
@@ -41,7 +42,7 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
 
   val ports = Ports(Port("http",8080,"http"), Nil)
 
-  it should "generate docker config json with ports and logging" in {
+  it should "generate docker config json with ports" in {
     val name = "myjobname"
     val json = NomadJson.dockerConfigJson(nomad, image, Some(ports), NomadJson.BridgeMode, name, NamespaceName("dev"))
 
@@ -54,30 +55,13 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
         "password" := "pass",
         "server_address":= "addy",
         "SSL" := true
-      )),
-      "logging" := List(Json(
-        "type" := "splunk",
-        "config" := List(Json(
-          "splunk-url" := nomad.splunk.get.splunkUrl,
-          "splunk-sourcetype" := name,
-          "splunk-index" := "dev",
-          "splunk-token" := nomad.splunk.get.splunkToken
-        ))
       ))
     ))
   }
 
-  it should "not generate logging sidecar if ommited" in {
-    val nomad2 = nomad.copy(loggingImage = None)
-    val ns = NamespaceName("qa")
-    val json = NomadJson.loggingSidecarJson(nomad2, env.bindings, "logging-sidecar", ns)
-
-    json should be (None)
-  }
-
-  it should "generate docker config json without ports and logging" in {
+  it should "generate docker config json without ports" in {
     val name="myjobname"
-    val json = NomadJson.dockerConfigJson(nomad.copy(splunk = None), image, None, NomadJson.BridgeMode, name, NamespaceName("dev"))
+    val json = NomadJson.dockerConfigJson(nomad, image, None, NomadJson.BridgeMode, name, NamespaceName("dev"))
     json should equal (Json(
       "image" := "https://image",
       "network_mode" := "bridge",
@@ -215,16 +199,7 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
           "password" := "pass",
           "server_address":= "addy",
           "SSL" := true
-         )),
-        "logging" := List(argonaut.Json(
-          "type" := "splunk",
-          "config" := List(argonaut.Json (
-            "splunk-url" := nomad.splunk.get.splunkUrl,
-            "splunk-sourcetype" := "name--1-0-0--abcdef12",
-            "splunk-index" := "qa",
-            "splunk-token" := nomad.splunk.get.splunkToken
-          ))
-        ))
+         ))
       ),
       "Vault" := Json(
         "ChangeSignal" := "",
@@ -269,15 +244,6 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
           "password" := "pass",
           "server_address":= "addy",
           "SSL" := true
-        )),
-        "logging" := List(argonaut.Json(
-          "type" := "splunk",
-          "config" := List(argonaut.Json (
-            "splunk-url" := nomad.splunk.get.splunkUrl,
-            "splunk-sourcetype" := "name--1-0-0--abcdef12",
-            "splunk-index" := "qa",
-            "splunk-token" := nomad.splunk.get.splunkToken
-          ))
         ))
       ),
       "Vault" := Json(

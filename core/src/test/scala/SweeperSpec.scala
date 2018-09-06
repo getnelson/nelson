@@ -58,7 +58,7 @@ class SweeperSpec extends NelsonSuite {
 
   def dep(id: nelson.ID, name: String, hash: String, namespace: Namespace) : Deployment =
     Deployment(id, DCUnit(id, name, Version(1, 0, 0), "", Set.empty, Set.empty, Set.empty),
-      hash, namespace, null, null, s"plan-$hash", s"guid-$hash", "retain-latest")
+      hash, namespace, null, null, s"plan-$hash", s"guid-$hash", "retain-latest", None)
 
 
   "The Sweeper" should "Only delete entres that don't have stack names in the routing graph and track unclaimedResource" in {

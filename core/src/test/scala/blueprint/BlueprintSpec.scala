@@ -15,6 +15,7 @@
 //:
 //: ----------------------------------------------------------------------------
 package nelson
+package blueprint
 
 class BlueprintSpec extends NelsonSuite {
   import Blueprint.Revision

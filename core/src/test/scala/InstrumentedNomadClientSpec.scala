@@ -24,7 +24,7 @@ import nelson.Datacenter._
 
 class InstrumentedNomadClientSpec extends FlatSpec with NelsonSuite {
   val reg = new CollectorRegistry
-  val client = InstrumentedNomadClient("test", nomad, Metrics(reg))
+  val client = InstrumentedNomadClient("test", sched, Metrics(reg))
   def getValue(name: String, labels: (String, String)*): Double =
     Option(reg.getSampleValue(name, labels.map(_._1).toArray, labels.map(_._2).toArray)).fold(0.0)(_.doubleValue)
 
@@ -37,7 +37,7 @@ class InstrumentedNomadClientSpec extends FlatSpec with NelsonSuite {
     def value = getValue("nomad_requests_latency_seconds_count", "nomad_op" -> "delete", "nomad_instance" -> "test")
     val before = value
     val now = java.time.Instant.now
-    val d = Deployment(4L, DCUnit(4L,"foo",Version(2,1,0),"",Set.empty,Set.empty,Set.empty),"e",ns,now,"pulsar","plan","guid","retain-active")
+    val d = Deployment(4L, DCUnit(4L,"foo",Version(2,1,0),"",Set.empty,Set.empty,Set.empty),"e",ns,now,"pulsar","plan","guid","retain-active",None)
     SchedulerOp.delete(config.datacenters.head, d).foldMap(client).unsafeRunSync()
     val after = value
     after should equal (before + 1.0)

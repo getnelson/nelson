@@ -17,6 +17,8 @@
 package nelson
 package plans
 
+import nelson.blueprint.Blueprint
+
 import _root_.argonaut._, Argonaut._
 import cats.effect.IO
 import cats.implicits._

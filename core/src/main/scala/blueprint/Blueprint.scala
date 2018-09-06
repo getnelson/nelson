@@ -14,6 +14,7 @@
 //:
 //: ----------------------------------------------------------------------------
 package nelson
+package blueprint
 
 import java.time.Instant
 import cats.syntax.either._
@@ -25,9 +26,9 @@ case class Blueprint(
   revision: Blueprint.Revision,
   state: Blueprint.State,
   sha256: Option[Sha256],
-  template: String,
+  template: Template,
   createdAt: Instant = Instant.now
-){
+) {
   override def toString: String =
     s"${name}@${revision.toString}"
 }

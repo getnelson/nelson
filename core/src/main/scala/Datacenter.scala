@@ -36,7 +36,7 @@ import helm.ConsulOp
 
 import java.net.URI
 import java.time.Instant
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 
 import org.http4s.Uri
 
@@ -69,37 +69,25 @@ object Infrastructure {
     dockerRepoUser: String,
     dockerRepoPassword: String,
     dockerRepoServerAddress: String,
-    loggingImage: Option[docker.Docker.Image],
-    mhzPerCPU: Int,
-    splunk: Option[SplunkConfig]
+    mhzPerCPU: Int
   )
 
   final case class Kubernetes(
-    endpoint: Uri,
-    version: KubernetesVersion,
-    timeout: Duration,
     mode: KubernetesMode
+  , timeout: FiniteDuration
   )
 
   sealed abstract class KubernetesMode extends Product with Serializable {
-    def caCert: Path = this match {
-      // All pods in Kubernetes get a cert mounted at this path.
-      // See https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod
-      // for more info.
-      case KubernetesMode.InCluster => Paths.get("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt")
-      case KubernetesMode.OutCluster(p, _) => p
+    def environment: List[(String, String)] = this match {
+      case KubernetesMode.InCluster => List.empty
+      case KubernetesMode.OutCluster(path) => List(("KUBECONFIG", path.toString))
     }
   }
 
   object KubernetesMode {
     final case object InCluster extends KubernetesMode
-    final case class OutCluster(caCertPath: Path, token: String) extends KubernetesMode
+    final case class OutCluster(kubeconfig: Path) extends KubernetesMode
   }
-
-  final case class SplunkConfig(
-    splunkUrl: String,
-    splunkToken: String
-  )
 
   final case class Credentials(
     username: String,
@@ -227,8 +215,9 @@ object Datacenter {
     workflow: WorkflowRef,
     plan: String,
     guid: GUID,
-    expirationPolicyRef: ExpirationPolicyRef
-  ){
+    expirationPolicyRef: ExpirationPolicyRef,
+    renderedBlueprint: Option[String]
+  ) {
     def nsid: ID = namespace.id
     def stackName: StackName = StackName(unit.name, unit.version, hash)
   }

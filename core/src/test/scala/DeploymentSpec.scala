@@ -41,12 +41,12 @@ class DeploymentFlatSpec extends FlatSpec with Matchers {
 
   val ns = Datacenter.Namespace(1L, NamespaceName("devel"), "dc")
   val now = java.time.Instant.now
-  val d = Deployment(4L, DCUnit(4L,"foo",Version(2,1,0),"",Set.empty,Set.empty,Set.empty),"e",ns,now,"pulsar","plan","guid","retain-active")
+  val d = Deployment(4L, DCUnit(4L,"foo",Version(2,1,0),"",Set.empty,Set.empty,Set.empty),"e",ns,now,"pulsar","plan","guid","retain-active",None)
   val ds = Set(
-    Deployment(0L, DCUnit(0L,"foo",Version(1,1,1),"",Set.empty,Set.empty,Set.empty),"a",ns,now,"pulsar","plan","guid","retain-active"),
-    Deployment(1L, DCUnit(1L,"foo",Version(1,1,2),"",Set.empty,Set.empty,Set.empty),"b",ns,now,"pulsar","plan","guid","retain-active"),
-    Deployment(2L, DCUnit(2L,"foo",Version(1,2,1),"",Set.empty,Set.empty,Set.empty),"c",ns,now,"pulsar","plan","guid","retain-active"),
-    Deployment(3L, DCUnit(3L,"foo",Version(2,0,0),"",Set.empty,Set.empty,Set.empty),"d",ns,now,"pulsar","plan","guid","retain-active"),
+    Deployment(0L, DCUnit(0L,"foo",Version(1,1,1),"",Set.empty,Set.empty,Set.empty),"a",ns,now,"pulsar","plan","guid","retain-active",None),
+    Deployment(1L, DCUnit(1L,"foo",Version(1,1,2),"",Set.empty,Set.empty,Set.empty),"b",ns,now,"pulsar","plan","guid","retain-active",None),
+    Deployment(2L, DCUnit(2L,"foo",Version(1,2,1),"",Set.empty,Set.empty,Set.empty),"c",ns,now,"pulsar","plan","guid","retain-active",None),
+    Deployment(3L, DCUnit(3L,"foo",Version(2,0,0),"",Set.empty,Set.empty,Set.empty),"d",ns,now,"pulsar","plan","guid","retain-active",None),
     d
   )
 

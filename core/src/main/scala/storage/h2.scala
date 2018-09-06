@@ -17,6 +17,8 @@
 package nelson
 package storage
 
+import nelson.blueprint.{Blueprint, Template}
+
 import argonaut._
 
 import cats.{~>, Order, Semigroup}
@@ -37,6 +39,7 @@ import scala.collection.immutable.SortedMap
 import scala.concurrent.duration.{FiniteDuration,MILLISECONDS}
 
 final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
+  import H2Storage._
   import StoreOp._
   import Datacenter._
   import nelson.audit.{AuditLog,AuditEvent,AuditAction,AuditCategory}
@@ -202,7 +205,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       .query[String]
       .to[List].map(_.toSet)
 
-  type DeploymentRow = (ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef)
+  type DeploymentRow = (ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef, Option[String])
 
   /**
    *
@@ -219,7 +222,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
                             d.workflow,
                             d.plan,
                             d.guid,
-                            d.expiration_policy
+                            d.expiration_policy,
+                            d.rendered_blueprint
                      FROM PUBLIC.deployments d
                      JOIN PUBLIC.units u ON u.id = d.unit_id
                      LEFT JOIN PUBLIC.deployment_statuses AS ds
@@ -252,7 +256,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
                  d.workflow,
                  d.plan,
                  d.guid,
-                 d.expiration_policy
+                 d.expiration_policy,
+                 d.rendered_blueprint
             FROM PUBLIC.deployments d
             JOIN PUBLIC.units u ON u.id = d.unit_id
             WHERE u.name = ${stackName.serviceType}
@@ -276,7 +281,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
                             workflow,
                             plan,
                             guid,
-                            expiration_policy
+                            expiration_policy,
+                            rendered_blueprint
                      FROM PUBLIC.deployments
                      WHERE datacenter=${dc}
                   """.query[DeploymentRow].stream.compile.toList
@@ -364,7 +370,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
             workflow,
             plan,
             guid,
-            expiration_policy
+            expiration_policy,
+            rendered_blueprint
         FROM PUBLIC.deployments
         WHERE id = ${id}
         ORDER BY id DESC
@@ -381,13 +388,14 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
             workflow,
             plan,
             guid,
-            expiration_policy
+            expiration_policy,
+            rendered_blueprint
         FROM PUBLIC.deployments
         WHERE guid = ${guid}
         ORDER BY id DESC
       """.query[DeploymentRow].stream.compile.toList).map(_.headOption)
 
-  type DeploymentWithStatusRow = (ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef, DeploymentStatusString)
+  type DeploymentWithStatusRow = (ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef, Option[String], DeploymentStatusString)
 
   def listDeploymentsForNamespaceByStatus(ns: ID, stats: NonEmptyList[DeploymentStatus], unit: Option[UnitName] = None): ConnectionIO[Set[(Deployment, DeploymentStatus)]] = {
     //  See http://tpolecat.github.io/doobie-0.2.3/05-Parameterized.html#dealing-with-in-clauses
@@ -404,6 +412,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         d.plan,
         d.guid,
         d.expiration_policy,
+        d.rendered_blueprint,
         ds.state
       FROM PUBLIC.deployments AS d
       LEFT JOIN PUBLIC.deployment_statuses AS ds
@@ -427,6 +436,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         d.plan,
         d.guid,
         d.expiration_policy,
+        d.rendered_blueprint,
         ds.state
       FROM PUBLIC.deployments AS d
       LEFT JOIN PUBLIC.deployment_statuses AS ds
@@ -465,14 +475,14 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     for {
       u <- getUnitById(row._2)
       n <- getNamespaceByID(row._3)
-    } yield Deployment(row._1, u, row._4, n, row._5, row._6, row._7, row._8, row._9)
+    } yield Deployment(row._1, u, row._4, n, row._5, row._6, row._7, row._8, row._9, row._10)
 
   def deploymentWithStatusFromRow(row: DeploymentWithStatusRow): ConnectionIO[(Deployment, DeploymentStatus)] =
     for {
       u <- getUnitById(row._2)
       n <- getNamespaceByID(row._3)
-      s = DeploymentStatus.fromString(row._10)
-    } yield (Deployment(row._1, u, row._4, n, row._5, row._6, row._7, row._8, row._9), s)
+      s = DeploymentStatus.fromString(row._11)
+    } yield (Deployment(row._1, u, row._4, n, row._5, row._6, row._7, row._8, row._9, row._10), s)
 
   def listUnitsByStatus(
     nsid: ID,
@@ -1018,20 +1028,15 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       } yield (k,o)
     }
 
-  type TrafficShiftRow =
-    (String,Instant,FiniteDuration,Option[Instant],
-     ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef,
-     ID, ID, ID, String, Instant, WorkflowRef, PlanRef, GUID, ExpirationPolicyRef)
-
-  private def trafficShiftFromRow(row: TrafficShiftRow): ConnectionIO[Datacenter.TrafficShift] = {
-    val (ref,st,dur,rev,
-         fid,fuid,fns,fhash,fdt,fwf,fp,fguid,fexp,
-         tid,tuid,tns,thash,tdt,twf,tp,tguid,texp) = row
-    for {
-      f <- deploymentFromRow((fid,fuid,fns,fhash,fdt,fwf,fp,fguid,fexp))
-      t <- deploymentFromRow((tid,tuid,tns,thash,tdt,twf,tp,tguid,texp))
-      b <- TrafficShiftPolicy.fromString(ref).yolo(s"can't parse traffic shift policy $ref").pure[ConnectionIO]
-    } yield TrafficShift(f, t, b, st, dur, rev)
+  private def trafficShiftFromRow(row: TrafficShiftRow): ConnectionIO[Datacenter.TrafficShift] = row match {
+    case TrafficShiftRow(ref,st,dur,rev,
+                         fid,fuid,fns,fhash,fdt,fwf,fp,fguid,fexp,frb,
+                         tid,tuid,tns,thash,tdt,twf,tp,tguid,texp,trb) =>
+      for {
+        f <- deploymentFromRow((fid,fuid,fns,fhash,fdt,fwf,fp,fguid,fexp,frb))
+        t <- deploymentFromRow((tid,tuid,tns,thash,tdt,twf,tp,tguid,texp,trb))
+        b <- TrafficShiftPolicy.fromString(ref).yolo(s"can't parse traffic shift policy $ref").pure[ConnectionIO]
+      } yield TrafficShift(f, t, b, st, dur, rev)
   }
 
   // Returns the most recent traffic shift for a given service name.
@@ -1041,8 +1046,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     val likeVersion = s"${sn.version.major}.%"
     val sql = (fr"""
        SELECT tb.policy, tbs.start_time, tb.duration, tbr.reverse_time,
-           fd.id, fu.id, fd.namespace_id, fd.hash, fd.deploy_time,fd.workflow, fd.plan, fd.guid, fd.expiration_policy,
-           td.id, tu.id, td.namespace_id, td.hash, td.deploy_time,td.workflow, td.plan, td.guid, td.expiration_policy
+           fd.id, fu.id, fd.namespace_id, fd.hash, fd.deploy_time,fd.workflow, fd.plan, fd.guid, fd.expiration_policy, fd.rendered_blueprint,
+           td.id, tu.id, td.namespace_id, td.hash, td.deploy_time,td.workflow, td.plan, td.guid, td.expiration_policy, td.rendered_blueprint
        FROM PUBLIC.traffic_shifts tb
        JOIN PUBLIC.traffic_shift_start tbs ON tbs.traffic_shift_id = tb.id
        LEFT OUTER JOIN PUBLIC.traffic_shift_reverse tbr ON tbr.traffic_shift_id = tb.id
@@ -1084,7 +1089,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
             d.workflow,
             d.plan,
             d.guid,
-            d.expiration_policy
+            d.expiration_policy,
+            d.rendered_blueprint
      FROM PUBLIC.deployments d
      JOIN PUBLIC.units u on d.unit_id = u.id
      JOIN PUBLIC.deployment_statuses ds on ds.deployment_id = d.id
@@ -1602,7 +1608,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
    */
   def findBlueprint(name: String, revision: Blueprint.Revision): ConnectionIO[Option[Blueprint]] = {
     def blueprintFromRow(row: BlueprintRow): Blueprint =
-      Blueprint(row._1, row._2, row._3, Blueprint.Revision.Discrete(row._5), Blueprint.State.Active, row._4, row._6, row._7)
+      Blueprint(row._1, row._2, row._3, Blueprint.Revision.Discrete(row._5), Blueprint.State.Active, row._4, Template.load(s"${name}@${revision}", row._6), row._7)
 
     def getDiscrete(revision: Long) =
       sql"""
@@ -1651,4 +1657,34 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       b <- a.map(last => insertB(last+1)).getOrElse(insertB(1))
     } yield b
   }
+}
+
+object H2Storage {
+  final case class TrafficShiftRow(
+    policy: String,
+    startTime: Instant,
+    duration: FiniteDuration,
+    reverseTime: Option[Instant],
+    sourceDeploymentId: ID,
+    sourceUnitId: ID,
+    sourceNamespaceId: ID,
+    sourceHash: String,
+    sourceDeploymentTime: Instant,
+    sourceWorkflow: WorkflowRef,
+    sourcePlan: PlanRef,
+    sourceGuid: GUID,
+    sourceExpirationPolicy: ExpirationPolicyRef,
+    sourceRenderedBlueprint: Option[String],
+    targetDeploymentId: ID,
+    targetUnitId: ID,
+    targetNamespaceId: ID,
+    targetHash: String,
+    targetDeploymentTime: Instant,
+    targetWorkflow: WorkflowRef,
+    targetPlan: PlanRef,
+    targetGuid: GUID,
+    targetExpirationPolicy: ExpirationPolicyRef,
+    targetRenderedBlueprint: Option[String]
+  )
+
 }

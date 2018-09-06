@@ -61,7 +61,7 @@ class ExpirationPolicySpec extends NelsonSuite with BeforeAndAfterEach with Prop
     hash: String = "hash", deployTime: Instant = NOW) = {
     val namespace = Datacenter.Namespace(1L, NamespaceName("dev"), "dc")
     val dc = DCUnit(id,name,version,"",Set.empty,Set.empty,Set.empty)
-    Deployment(id,dc,hash,namespace,deployTime,"quasar","plan","guid",policy.name)
+    Deployment(id,dc,hash,namespace,deployTime,"quasar","plan","guid",policy.name,None)
   }
 
   private def NOW = java.time.Instant.now
