@@ -366,6 +366,41 @@ object Nelson {
       } yield b).foldMap(cfg.storage)
     }
 
+  def proofBlueprint(templateContent: String): NelsonK[String] = {
+    import blueprint.{Template, EnvValue, Render}
+    import Manifest._
+    Kleisli { cfg =>
+      val unitName = "example"
+      val version = Version(1, 4, 54)
+      val image = docker.Docker.Image(unitName, Some(version.toFeatureVersion.toString), None)
+      val unit = UnitDef(unitName, "",
+          Map("database" -> FeatureVersion(1,2)),
+          Set.empty,
+          Alerting.empty,
+          Magnetar,
+          Some(Ports(Port("default", 1, "http"), Nil)),
+          Some(Deployable(unitName, version, Deployable.Container(image.toString))),
+          Set("some-tag")
+      )
+      val proofingData: Map[String, EnvValue] =
+        Render.makeEnv(
+          image,
+          cfg.datacenters.head,
+          NamespaceName("dev"),
+          unit,
+          version,
+          Manifest.Plan.default,
+          randomAlphaNumeric(8)
+        )
+      // NOTE: using random identifier here simply so that
+      // even if template engine has caching engaged, we
+      // always get a fresh result (cache busting FTW).
+      // This is only ever desirable for proofing purposes.
+      val template = Template.load(randomAlphaNumeric(12), templateContent)
+      IO(template.render(proofingData))
+    }
+  }
+
   //////////////////////// DATACENTERS ////////////////////////////
 
   final case class RecentStatistics(statusCounts: List[(String,Int)], mostDeployed: List[(String,Int)], leastDeployed: List[(String,Int)])
