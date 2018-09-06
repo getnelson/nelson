@@ -10,7 +10,7 @@
   </appender>
 
   <!-- nelson -->
-  <logger name="nelson" level="DEBUG" />
+  <logger name="nelson" level="OFF" />
 
   <!-- Temporary while we're debugging a hang -->
   <logger name="TestInterruptor" level="INFO" />
@@ -18,7 +18,7 @@
   <!-- other -->
   <logger name="com.ning.http.client" level="OFF" />
 
-  <root level="INFO">
+  <root level="OFF">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>
