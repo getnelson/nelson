@@ -63,6 +63,9 @@ libraryDependencies ++= Seq(
 
 mainClass in run := Some("nelson.Main")
 
+val kubectlVersion = SettingKey[String]("kubectl-version", "The version of kubectl to install")
+kubectlVersion := sys.env.getOrElse("KUBECTL_VERSION", "1.10.5")
+
 val prometheusVersion = SettingKey[String]("prometheus-version", "The version of Prometheus to install")
 prometheusVersion := sys.env.getOrElse("PROMETHEUS_VERSION", "1.4.1")
 
@@ -73,6 +76,12 @@ dockerCommands ++= Seq(
   ExecCmd("RUN", "chmod", "555", s"${(defaultLinuxInstallLocation in Docker).value}/bin/${normalizedName.value}"),
   ExecCmd("RUN", "chown", "-R", "nelson:nelson", s"${(defaultLinuxInstallLocation in Docker).value}"),
   ExecCmd("RUN", "apk", "add", "--update-cache", "bash", "graphviz", "wget", "libc6-compat", "docker")
+)
+
+// Install kubectl for the Kubernetes scheduler implementation
+dockerCommands ++= Seq(
+  ExecCmd("RUN", "wget", "--retry-connrefused", "--waitretry", "1", "--read-timeout", "10", "--timeout", "15", "-t", "5", s"https://storage.googleapis.com/kubernetes-release/release/v${kubectlVersion.value}/bin/linux/amd64/kubectl", "-P", "/usr/local/bin"),
+  ExecCmd("RUN", "chmod", "+x", "/usr/local/bin/kubectl")
 )
 
 // Install promtool.  It needs to be on the PATH for validation.
