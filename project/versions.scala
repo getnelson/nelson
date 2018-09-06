@@ -24,7 +24,9 @@ object V {
   val knobs            = "6.0.33"
   val prometheus       = "0.0.21"
   val scodec           = "1.9.0"
-  val dockerit         = "0.9.5"
+  val dockerit         = "0.9.8"
+  val helm             = "3.0.82"
+  val argonaut         = "6.2.1"
 
   val fs2              = "0.10.4"
   val catsEffect       = "0.10.1"

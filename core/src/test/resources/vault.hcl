@@ -14,10 +14,7 @@
 //:   limitations under the License.
 //:
 //: ----------------------------------------------------------------------------
-backend "consul" {
-  address = "consul:8500"
-  path = "vault"
-}
+storage "inmem" {}
 
 listener "tcp" {
   address = "0.0.0.0:8200"
