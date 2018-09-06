@@ -4,7 +4,7 @@ git config --global user.email "team@getnelson.io"
 git config --global user.name "Nelson Team"
 
 # configure docker to use the remote tcp endpoint
-export DOCKER_HOST="tcp://127.0.0.1:2375"
+export DOCKER_HOST="tcp://0.0.0.0:2375"
 
 # subvert the sbt-rig plugin
 export TRAVIS="true" # way hacky
