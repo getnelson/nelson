@@ -104,6 +104,7 @@ trait NelsonSuite
       case Vault.DeletePolicy(_) => ()
       case Vault.GetMounts => SortedMap.empty
       case _: Vault.CreateToken => vault.Token("aaaaaaaa-bbbb-cccc-dddddddddddd")
+      case _: Vault.CreateKubernetesRole => ()
     })
   }
 

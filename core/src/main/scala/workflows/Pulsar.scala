@@ -17,6 +17,10 @@ object Pulsar extends Workflow[Unit] {
   val name: WorkflowRef = "pulsar"
 
   def deploy(id: ID, hash: String, vunit: UnitDef @@ Versioned, p: Plan, dc: Datacenter, ns: ManifestNamespace): WorkflowF[Unit] = {
+    val unit = Manifest.Versioned.unwrap(vunit)
+    val sn = Datacenter.StackName(unit.name, vunit.version, hash)
+    val rs = unit.dependencies.keys.toSet ++ unit.resources.map(_.name)
+
     // When the workflow is completed, we typically want to set the deployment to "Warming", so that once
     // consul indicates the deployment to be passing the health check, we can promote to "Ready" (via the
     // DeploymentMonitor background process).  However, units without ports are not registered in consul, and
@@ -29,6 +33,12 @@ object Pulsar extends Workflow[Unit] {
     for {
       i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
       _ <- status(id, Pending, "Pulsar workflow about to start")
+      //// write the policies to vault
+      _  <- logToFile(id, s"writing policy to vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}")
+      _  <- writePolicyToVault(cfg = dc.policy, sn = sn, ns = ns.name, rs = rs)
+      //// create a vault k8s auth role
+      _  <- logToFile(id, s"writing k8s auth role to vault...")
+      // _  <- writeKubernetesRoleToVault(dc = dc, sn = sn, ns = ns.name)
       _ <- logToFile(id, s"Instructing ${dc.name}'s scheduler to handle service container")
       l <- launch(i, dc, ns.name, vunit, p, None, hash)
       _ <- debug(s"Scheduler responded with: ${l}")

@@ -105,7 +105,7 @@ trait Json {
     jEmptyObject
   }
 
-  implicit val jsonCreateKubernetesRole: EncodeJson[CreateKubernetesRole] = 
+  implicit val jsonCreateKubernetesRole: EncodeJson[CreateKubernetesRole] =
     EncodeJson { kr =>
       ("bound_service_account_names" := kr.serviceAccountNames) ->:
       ("bound_service_account_namespaces" := kr.seviceAccountNamespaces) ->:

@@ -77,7 +77,4 @@ object Magnetar extends Workflow[Unit] {
     delete(dc,d) *>
     status(d.id, Terminated, s"Decommissioning deployment ${sn} in ${dc.name}")
   }
-
-  private def vaultLoggingFields(sn: Datacenter.StackName, ns: NamespaceName, dcName: String): String =
-    s"namespace=${ns} unit=${sn.serviceType} policy=${vault.policies.policyName(sn, ns)} datacenter=${dcName}"
 }
