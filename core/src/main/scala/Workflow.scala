@@ -24,7 +24,7 @@ import nelson.docker.DockerOp
 import nelson.logging.LoggingOp
 import nelson.scheduler.SchedulerOp
 import nelson.storage.{StoreOp}
-import nelson.vault.Vault
+import nelson.vault.{Vault,policies}
 
 import cats.data.{EitherK, OptionT}
 import cats.free.Free

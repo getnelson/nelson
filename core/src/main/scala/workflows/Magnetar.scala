@@ -79,5 +79,5 @@ object Magnetar extends Workflow[Unit] {
   }
 
   private def vaultLoggingFields(sn: Datacenter.StackName, ns: NamespaceName, dcName: String): String =
-    s"namespace=${ns} unit=${sn.serviceType} policy=${policies.policyName(sn, ns)} datacenter=${dcName}"
+    s"namespace=${ns} unit=${sn.serviceType} policy=${vault.policies.policyName(sn, ns)} datacenter=${dcName}"
 }
