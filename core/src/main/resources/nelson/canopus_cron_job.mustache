@@ -1,13 +1,13 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{stack_name}}
-  namespace: {{namespace}}
+  name: "{{stack_name}}"
+  namespace: "{{namespace}}"
   labels:
-    stackName: {{stack_name}}
-    unitName: {{unit_name}}
-    version: {{version}}
-    nelson: true
+    stackName: "{{stack_name}}"
+    unitName: "{{unit_name}}"
+    version: "{{version}}"
+    nelson: "true"
 spec:
   {{!
   'schedule' isn't always populated, for cleanliness we're
@@ -15,7 +15,7 @@ spec:
   used when it's detected to be a cron job in which case
   'schedule' is populated.
   }}
-  schedule: {{schedule}}
+  schedule: "{{schedule}}"
   jobTemplate:
     spec:
       {{#desired_instances}}
@@ -32,21 +32,22 @@ spec:
       {{/retries}}
       template:
         metadata:
-          name: {{stack_name}}
+          name: "{{stack_name}}"
           labels:
-            stackName: {{stack_name}}
-            unitName: {{unit_name}}
-            version: {{version}}
-            nelson: true
+            stackName: "{{stack_name}}"
+            unitName: "{{unit_name}}"
+            version: "{{version}}"
+            nelson: "true"
         spec:
           containers:
-            name: {{stack_name}}
-            image: {{image}}
+          - name: "{{stack_name}}"
+            image: "{{image}}"
             {{#envvars}}
             env:
-              {{#envvars_list}}
-              {{envvar_name}}: {{envvar_value}}
-              {{/envvars_list}}
+            {{#envvars_list}}
+            - name: "{{envvar_name}}"
+              value: "{{envvar_value}}"
+            {{/envvars_list}}
             {{/envvars}}
             {{!
             This comment serves as both a hack and actual docs.
@@ -69,14 +70,14 @@ spec:
             resources:
               requests:
                 {{#memory_request}}
-                memory: {{memory_request}}M
+                memory: "{{memory_request}}M"
                 {{/memory_request}}
                 {{^memory_request}}
                 {{#memory_limit}}
-                memory: {{memory_limit}}M
+                memory: "{{memory_limit}}M"
                 {{/memory_limit}}
                 {{^memory_limit}}
-                memory: 512M
+                memory: "512M"
                 {{/memory_limit}}
                 {{/memory_request}}
                 {{#cpu_request}}
@@ -93,10 +94,10 @@ spec:
               {{! Hack around Scalate #196 }}
               limits:
                 {{#memory_limit}}
-                memory: {{memory_limit}}M
+                memory: "{{memory_limit}}M"
                 {{/memory_limit}}
                 {{^memory_limit}}
-                memory: 512M
+                memory: "512M"
                 {{/memory_limit}}
                 {{#cpu_limit}}
                 cpu: {{cpu_limit}}
@@ -104,19 +105,21 @@ spec:
                 {{^cpu_limit}}
                 cpu: 0.5
                 {{/cpu_limit}}
+            {{! Hack around Scalate #196 }}
             {{#empty_volumes}}
             volumeMounts:
             {{#empty_volumes_list}}
-            - name: {{empty_volume_mount_name}}
-              mountPath: {{empty_volume_mount_path}}
+            - name: "{{empty_volume_mount_name}}"
+              mountPath: "{{empty_volume_mount_path}}"
             {{/empty_volumes_list}}
             {{/empty_volumes}}
           {{#empty_volumes}}
           {{! Hack around Scalate #196 }}
           volumes:
           {{#empty_volumes_list}}
-          - name: {{empty_volume_mount_name}}
+          - name: "{{empty_volume_mount_name}}"
             emptyDir: {}
           {{/empty_volumes_list}}
           {{/empty_volumes}}
-          restartPolicy: Never
+          {{! Hack around Scalate #196 }}
+          restartPolicy: "Never"
