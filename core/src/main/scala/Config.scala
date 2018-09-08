@@ -50,7 +50,7 @@ import scala.concurrent.duration._
  *
  */
 final case class GithubConfig(
-  domain: Option[String],
+  domain: Option[Uri],
   clientId: String,
   clientSecret: String,
   redirectUri: String,
@@ -62,38 +62,49 @@ final case class GithubConfig(
 ){
   def isEnterprise: Boolean = domain.nonEmpty
 
-  val oauth =
-    "https://"+ domain.fold("github.com")(identity)
+  val oauth = domain match {
+    case None => Uri.uri("https://github.com")
+    case Some(uri) => uri
+  }
 
-  val api =
-    "https://"+ domain.fold("api.github.com")(_+"/api/v3")
+  val api = domain match {
+    case None => Uri.uri("https://api.github.com")
+    case Some(uri) => uri / "api" / "v3"
+  }
 
-  val tokenEndpoint =
-    s"${oauth}/login/oauth/access_token"
+  val tokenEndpoint = oauth / "login" / "oauth" / "access_token"
 
-  val loginEndpoint =
-    s"${oauth}/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURI(redirectUri)}&scope=${scope}"
+  val loginEndpoint = {
+    val queryParams = Map(
+      ("client_id", List(clientId)),
+      ("redirect_uri", List(encodeURI(redirectUri))),
+      ("scope", List(scope))
+    )
+    (oauth / "login" / "oauth" / "authorize").setQueryParams(queryParams)
+  }
 
-  val userEndpoint =
-    s"${api}/user"
+  val userEndpoint = api / "user"
 
-  val userOrgsEndpoint =
-    s"${userEndpoint}/orgs"
+  val userOrgsEndpoint = userEndpoint / "orgs"
 
-  def orgEndpoint(login: String) =
-    s"${api}/orgs/${login}"
+  def orgEndpoint(login: String) = api / "orgs" / login
 
-  def repoEndpoint(page: Int = 1) =
-    s"${api}/user/repos?affiliation=owner,organization_member&visibility=all&direction=asc&page=${page}"
+  def repoEndpoint(page: Int = 1) = {
+    val queryParams = Map(
+      ("affiliation", List("owner", "organization_member")),
+      ("visibility", List("all")),
+      ("direction", List("asc")),
+      ("page", List(page.toString))
+    )
 
-  def webhookEndpoint(slug: Slug) =
-    s"${api}/repos/${slug}/hooks"
+    (api / "user" / "repos").setQueryParams(queryParams)
+  }
 
-  def contentsEndpoint(slug: Slug, path: String) =
-    s"${api}/repos/${slug}/contents/${path}"
+  def webhookEndpoint(slug: Slug) = api / "repos" / slug.toString / "hooks"
 
-  def releaseEndpoint(slug: Slug, releaseId: Long) =
-    s"${api}/repos/${slug}/releases/${releaseId}"
+  def contentsEndpoint(slug: Slug, path: String) = api / "repos" / slug.toString / "contents" / path
+
+  def releaseEndpoint(slug: Slug, releaseId: Long) = api / "repos" / slug.toString / "releases" / releaseId.toString
 
   private [nelson] def encodeURI(uri: String): String =
     java.net.URLEncoder.encode(uri, "UTF-8")
@@ -189,7 +200,7 @@ final case class WorkflowLoggerConfig(
 )
 
 final case class SlackConfig(
-  webhook: String,
+  webhook: Uri,
   username: String
 )
 
@@ -211,7 +222,6 @@ final case class ExpirationPolicyConfig(
 )
 
 import java.net.URI
-import dispatch.Http
 import fs2.async.boundedQueue
 import fs2.async.mutable.Queue
 
@@ -326,7 +336,7 @@ final case class NelsonConfig(
   pipeline: PipelineConfig,
   audit: AuditConfig,
   template: TemplateConfig,
-  http: Http,
+  http: Client[IO],
   pools: Pools,
   interpreters: Interpreters,
   workflowLogger: WorkflowLogger,
@@ -375,24 +385,20 @@ object Config {
 
   private[this] val log = Logger[Config.type]
 
-  def readConfig(cfg: KConfig, http: Http, xa: DatabaseConfig => Transactor[IO]): IO[NelsonConfig] = {
+  def readConfig(cfg: KConfig, http: Client[IO], xa: DatabaseConfig => Transactor[IO]): IO[NelsonConfig] = {
     // TIM: Don't turn this on for any deployed version; it will dump all the credentials
     // into the log, so be careful.
     // log.debug("configured with the following knobs:")
     // log.debug(cfg.toString)
 
-    val timeout = cfg.require[Duration]("nelson.timeout")
-
-    val http0: Http = http.configure(
-      _.setAllowPoolingConnection(true)
-      .setConnectionTimeoutInMs(timeout.toMillis.toInt))
+    val timeout = cfg.require[FiniteDuration]("nelson.timeout")
 
     val pools = Pools.default
 
     val nomadcfg = readNomad(cfg.subconfig("nelson.nomad"))
 
     val gitcfg = readGithub(cfg.subconfig("nelson.github"))
-    val git = new Github.GithubHttp(gitcfg, http0)
+    val git = new Github.GithubHttp(gitcfg, http, timeout, pools.defaultExecutor)
 
     val workflowConf = readWorkflowLogger(cfg.subconfig("nelson.workflow-logger"))
     val workflowlogger =
@@ -729,7 +735,7 @@ object Config {
 
   private def readGithub(cfg: KConfig): GithubConfig =
     GithubConfig(
-      domain = cfg.lookup[String]("domain"),
+      domain = cfg.lookup[String]("domain").map(Uri.unsafeFromString),
       clientId = cfg.require[String]("client-id"),
       clientSecret = cfg.require[String]("client-secret"),
       redirectUri = cfg.require[String]("redirect-uri"),
@@ -742,7 +748,7 @@ object Config {
 
   private def readSlack(cfg: KConfig): Option[SlackConfig] = {
     for {
-      w <- cfg.lookup[String]("webhook-url")
+      w <- cfg.lookup[String]("webhook-url").flatMap(raw => Uri.fromString(raw).toOption)
       u <- cfg.lookup[String]("username")
     } yield SlackConfig(w,u)
   }

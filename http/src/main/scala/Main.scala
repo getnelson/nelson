@@ -16,17 +16,24 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import knobs._
-import java.io.File
-import java.util.concurrent.{Executors, ThreadFactory}
-import journal.Logger
-import cats.effect.IO
-import fs2.Stream
-import scala.concurrent.ExecutionContext
 import nelson.monitoring.{DeploymentMonitor, Stoplight, registerJvmMetrics}
 import nelson.http.MonitoringServer
 import nelson.storage.{Migrate, Hikari}
-import dispatch.Http
+
+import cats.effect.IO
+
+import fs2.Stream
+
+import java.io.File
+import java.util.concurrent.{Executors, ThreadFactory}
+
+import journal.Logger
+
+import knobs._
+
+import org.http4s.client.blaze.{BlazeClientConfig, Http1Client}
+
+import scala.concurrent.ExecutionContext
 
 object Main {
   private val log = Logger[this.type]
@@ -44,10 +51,14 @@ object Main {
 
     val file = new File(args.headOption.getOrElse("/opt/application/conf/nelson.cfg"))
 
+    val httpClientConfig = BlazeClientConfig.defaultConfig
+    val httpClient = Http1Client[IO](httpClientConfig)
+
     def readConfig = for {
       defaults  <- knobs.loadImmutable[IO](Required(ClassPathResource("nelson/defaults.cfg")) :: Nil)
       overrides <- knobs.loadImmutable[IO](Optional(FileResource(file)(configThreadPool)) :: Nil)
-      config    <- Config.readConfig(defaults ++ overrides, Http, Hikari.build _)
+      client    <- httpClient
+      config    <- Config.readConfig(defaults ++ overrides, client, Hikari.build _)
     } yield config
 
     val cfg = readConfig.unsafeRunSync()

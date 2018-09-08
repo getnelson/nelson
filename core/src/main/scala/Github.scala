@@ -16,12 +16,18 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import cats.ApplicativeError
 import cats.effect.IO
 
 import ca.mrvisser.sealerate
 
 import java.net.URI
+
+import org.http4s.{Request => HttpRequest, Response => HttpResponse, argonaut => _, _}
+import org.http4s.argonaut._
+import org.http4s.client.{Client, UnexpectedStatus}
+
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.FiniteDuration
 
 object Github {
 
@@ -101,7 +107,7 @@ object Github {
     id: Long,
     name: String,
     state: String,
-    url: String,
+    url: Uri,
     content: Option[String] = None
   )
 
@@ -224,176 +230,164 @@ object Github {
     }
   }
 
-  final class GithubHttp(cfg: GithubConfig, http: dispatch.Http) extends (GithubOp ~> IO) {
-    import java.net.URI
-    import dispatch._, Defaults._
-    import nelson.Json._
+  final class GithubHttp(
+    cfg: GithubConfig,
+    client: Client[IO],
+    timeout: FiniteDuration,
+    ec: ExecutionContext
+  ) extends (GithubOp ~> IO) {
     import Interpreter._
-    import fs2.async.parallelTraverse
+    import nelson.Json._
+
+    import argonaut.DecodeJson
+    import argonaut.Argonaut._
     import cats.instances.list._
+    import cats.syntax.applicativeError._
+    import fs2.async.parallelTraverse
+    import org.http4s.syntax.string._
+
+    implicit val githubHttpExecutionContext: ExecutionContext = ec
+
+    implicit def argonautEntityDecoder[A: DecodeJson]: EntityDecoder[IO, A] =
+      jsonOf[IO, A]
 
     def apply[A](in: GithubOp[A]): IO[A] = in match {
-
       case GetAccessToken(fromCode: String) =>
-        val req: IO[String] = {
-          val r = (url(cfg.tokenEndpoint) << Map(
-            "client_id" -> cfg.clientId,
-            "client_secret" -> cfg.clientSecret,
-            "code" -> fromCode)).addHeader("Accept","application/json")
-          IO.fromFuture(IO(http(r OK as.String)))
-        }
-        req.flatMap(fromJson[AccessToken])
+        val json = argonaut.Json(
+          "client-id" := cfg.clientId,
+          "client_secret" := cfg.clientSecret,
+          "code" := fromCode
+        )
+        val request = HttpRequest[IO](Method.POST, cfg.tokenEndpoint)
+          .putHeaders(Header("Accept", "application/json"))
+          .withBody(json)
+
+        client.expect[AccessToken](request)
 
       case GetUser(token: AccessToken) =>
-        for {
-          resp <- fetch(cfg.userEndpoint, token)
-          user <- fromJson[Github.User](resp)
-        } yield user
+        val request = HttpRequest[IO](Method.GET, cfg.userEndpoint).token(token)
+        client.expect[Github.User](request)
 
       case GetUserOrgKeys(token: AccessToken) =>
-        for {
-          resp <- fetch(cfg.userOrgsEndpoint, token)
-          orgs <- fromJson[List[Github.OrgKey]](resp)
-        } yield orgs
+        val request = HttpRequest[IO](Method.GET, cfg.userOrgsEndpoint).token(token)
+        client.expect[List[Github.OrgKey]](request)
 
       case GetOrganizations(keys: List[Github.OrgKey], t: AccessToken) =>
-        parallelTraverse(keys)(key => fetch(cfg.orgEndpoint(key.slug), t).flatMap(fromJson[Organization]))
+        parallelTraverse(keys) { key =>
+          val request = HttpRequest[IO](Method.GET, cfg.orgEndpoint(key.slug)).token(t)
+          client.expect[Organization](request)
+        }
 
       case GetReleaseAssetContent(asset: Github.Asset, t: AccessToken) =>
-        val req = url(asset.url)
-          .addHeader("Accept","application/octet-stream")
-          .setFollowRedirects(false) // TIM: doing this deliberately, such that github.com's s3 storage works.
+        val request = HttpRequest[IO](Method.GET, asset.url)
+          .putHeaders(Header("Accept", "application/octet-stream"))
           .token(t)
+
+        val handler: HttpResponse[IO] => IO[String] = response => {
+          response.headers.get("location".ci) match {
+            case None => IO.raiseError(UnexpectedGithubResponse("fetching release asset contents", "location"))
+            case Some(Header(_, loc)) => IO.pure(loc)
+          }
+        }
+
         for {
-          a <- IO.fromFuture(IO(http(req > as.Response(x => x.getHeader("location")))))
-          b <- IO.fromFuture(IO(http(url(a) OK as.String)))
+          a <- client.fetch(request)(handler)
+          b <- client.expect[String](a)
         } yield asset.copy(content = Option(b))
 
       case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
-        for {
-          resp <- fetch(cfg.releaseEndpoint(slug, releaseId), t)
-          rel  <- fromJson[Github.Release](resp)
-        } yield rel
+        val request = HttpRequest[IO](Method.GET, cfg.releaseEndpoint(slug, releaseId)).token(t)
+        client.expect[Github.Release](request)
 
       case GetUserRepositories(t: AccessToken) =>
-        def go(uri: URI)(accum: List[Repo]): List[Repo] = {
-          val r = url(uri.toString).token(t)
-          val io = for {
-            a <- IO.fromFuture(IO(http(r OkWithPagination as.String)))
-            b <- fromJson[List[Repo]](a._1)
-          } yield (b,a._2)
-          // going to say this is ok, due to surrounding task...
-          // it feels hella janky though.
-          val (repos,links) = io.unsafeRunSync()
-          links.get(Next) match {
-            case Some(u) => go(u)(accum ++ repos)
-            case None    => accum ++ repos
-          }
+        def go(uri: Uri)(accum: List[Repo]): IO[List[Repo]] = {
+          val req = HttpRequest[IO](Method.GET, uri).token(t)
+          for {
+            resp <- client.fetch(req)(paginationHandler)
+            (reposJson, links) = resp
+            repos <- reposJson.as[List[Repo]]
+
+            accum0 = accum ++ repos
+            reposList <- links.get(Next).fold(IO.pure(accum0))(next => go(next)(accum0))
+          } yield reposList
         }
-        IO(go(new URI(cfg.repoEndpoint(page = 1)))(Nil))
+        go(cfg.repoEndpoint(page = 1))(Nil)
 
       case GetFileFromRepository(slug: Slug, path: String, tagOrBranch: String, t: AccessToken) =>
-        val r = url(cfg.contentsEndpoint(slug,path))
-          .addQueryParameter("ref", java.net.URLEncoder.encode(tagOrBranch, "UTF-8"))
-          .token(t)
-        for {
-          resp <- IO.fromFuture(IO(http(r OkWithErrors as.String).option))
-          cont <- resp.fold(
-            IO.pure(Option.empty[Github.Contents]))(x => fromJson[Github.Contents](x).map(Option(_))
-          )
-        } yield cont
+        val queryParams = Map(("ref", List(java.net.URLEncoder.encode(tagOrBranch, "UTF-8"))))
+        val uri = cfg.contentsEndpoint(slug, path).setQueryParams(queryParams)
+        val req = HttpRequest[IO](Method.GET, uri).token(t)
+        client.expect[Github.Contents](req).map(Option(_)).handleError(_ => None)
 
       case GetRepoWebHooks(slug: Slug, t: AccessToken) =>
-        val r = url(cfg.webhookEndpoint(slug)).token(t)
-        for {
-          resp <- IO.fromFuture(IO(http(r OkWithErrors as.String).option)) // returns 404 when repo has no webhooks
-          wk   <- resp.fold(
-            IO.pure(List.empty[Github.WebHook]))(x => fromJson[List[Github.WebHook]](x))
-        } yield wk
+        val req = HttpRequest[IO](Method.GET, cfg.webhookEndpoint(slug)).token(t)
+        client.expect[List[Github.WebHook]](req).handleError(_ => List.empty)
 
       case PostRepoWebHook(slug: Slug, hook: Github.WebHook, t: AccessToken) =>
         import argonaut._, Argonaut._
-        val json: String = hook.asJson.nospaces
-        val req = url(cfg.webhookEndpoint(slug))
+        val req = HttpRequest[IO](Method.POST, cfg.webhookEndpoint(slug))
           .token(t)
-          .setContentType("application/json", "UTF-8") << json
-        for {
-          resp <- IO.fromFuture(IO(http(req OK as.String)))
-          wh   <- fromJson[Github.WebHook](resp)
-        } yield wh
+          .withBody(hook.asJson)
+        client.expect[Github.WebHook](req)
 
       case DeleteRepoWebHook(slug: Slug, id: Long, t: AccessToken) =>
-        ApplicativeError[IO, Throwable].recover(IO.fromFuture(IO(http(url(s"${cfg.webhookEndpoint(slug)}/$id").DELETE.token(t) OK as.String))).map(_ => ())) {
-          // swallow 404, as we're being asked to delete something that does not exist
-          case StatusCode(404) => ()
+        // Apparently this only compiles if I inline everything into one expression
+        // Breaking out the request into a variable makes scalac complain IO[Unit] is not <: IO[A], love it
+        client.expect[String](HttpRequest[IO](Method.DELETE, cfg.webhookEndpoint(slug) / id.toString).token(t)).map(_ => ()).recover {
+          case UnexpectedStatus(Status.NotFound) => ()
         }
     }
 
 
     /////////////////////////// INTERNALS ///////////////////////////
 
-    private def fetch(endpoint: String, t: AccessToken): IO[String] =
-      IO.fromFuture(IO(http(url(endpoint).token(t) OK as.String)))
-
     case class GithubApiError(code: Int, body: String)
-      extends Exception("Unexpected response status: %d".format(code))
+        extends Exception("Unexpected response status: %d".format(code))
 
-    import com.ning.http.client.{Response,AsyncCompletionHandler}
-    import collection.JavaConverters._
+    case class UnexpectedGithubResponse(context: String, message: String)
+        extends Exception(s"Unexpected response from Github when ${context}: ${message}")
 
-    class OkWithPaginationHandler[A](f: Response => A) extends AsyncCompletionHandler[(A, Map[Step,URI])] {
-      def onCompleted(response: Response): (A,Map[Step,URI]) = {
-        if (response.getStatusCode / 100 == 2) {
-          val links: Map[Step,URI] =
-            Option(response.getHeaders("Link"))
-              .map(_.asScala.toList)
-              .flatMap(_.headOption)
-              .getOrElse("") // TIM: this is hacky, urgh.
-              .split(",")
-              .foldLeft(List.empty[(Step,URI)])((a,b) =>
-                a ++ (if (b.isEmpty) List.empty else tuplize(b).toList)
-              ).toMap
+    import cats.syntax.either._
 
-          (f(response), links)
-        } else {
-          throw GithubApiError(response.getStatusCode, response.getResponseBody)
-        }
+    def paginationHandler(response: HttpResponse[IO]): IO[(HttpResponse[IO], Map[Step, Uri])] =
+      if (response.status.code / 100 == 2) {
+        val links = response.headers.get("Link".ci)
+          .map(_.value)
+          .getOrElse("") // TIM: this is hacky, urgh. ADELBERT: i agree
+          .split(",")
+          .foldLeft(List.empty[(Step, Uri)])((a,b) =>
+            a ++ (if (b.isEmpty) List.empty else tuplize(b).toList)
+          ).toMap
+        IO.pure((response, links))
+      } else {
+        val statusCode = response.status.code
+        val body = response.bodyAsText.compile.toList
+        for {
+          b <- body
+          r <- IO.raiseError[(HttpResponse[IO], Map[Step, Uri])](GithubApiError(statusCode, b.mkString("")))
+        } yield r
       }
 
-      /**
-      * for splitting the github links header output
-      */
-      private[nelson] def tuplize(in: String): Option[(Step, URI)] = {
-        val Array(uri,rel) = in.split(";")
-        val linkr = "<(.*)>".r
-        val relr  = "rel=\"(.*)\"".r
+    /**
+    * for splitting the github links header output
+    */
+    private[nelson] def tuplize(in: String): Option[(Step, Uri)] = {
+      val Array(uri,rel) = in.split(";")
+      val linkr = "<(.*)>".r
+      val relr  = "rel=\"(.*)\"".r
 
-        val ouri = linkr.replaceFirstIn(uri, "$1").trim
-        val orel = relr.replaceFirstIn(rel, "$1").trim
+      val ouri = linkr.replaceFirstIn(uri, "$1").trim
+      val orel = relr.replaceFirstIn(rel, "$1").trim
 
-        Step.fromString(orel).map(_ -> new URI(ouri))
-      }
+      for {
+        step <- Step.fromString(orel)
+        uri  <- Uri.fromString(ouri).toOption
+      } yield (step, uri)
     }
 
-    class OkWithErrors[A](f: Response => A) extends AsyncCompletionHandler[A] {
-      def onCompleted(response: Response): A = {
-        if (response.getStatusCode / 100 == 2){
-          f(response)
-        } else {
-          throw GithubApiError(response.getStatusCode, response.getResponseBody)
-        }
-      }
-    }
-
-    implicit class MyRequestHandlerTupleBuilder(req: Req) {
-      def OkWithErrors[T](f: Response => T) =
-        (req.toRequest, new OkWithErrors(f))
-      def OkWithPagination[T](f: Response => T) =
-        (req.toRequest, new OkWithPaginationHandler(f))
-    }
-
-    implicit class BedazzledReq(r: Req){
-      def token(t: AccessToken): Req = r.addHeader("Authorization",s"token ${t.value}")
+    implicit class BedazzledRequest(r: HttpRequest[IO]){
+      def token(t: AccessToken): HttpRequest[IO] =
+        r.withHeaders(Headers(Header("Authorization", s"token ${t.value}")))
     }
   }
 

@@ -24,6 +24,8 @@ object Json {
   import argonaut._, Argonaut._
   import argonaut.DecodeResultCats._
   import cats.implicits._
+  import org.http4s.Uri
+  import org.http4s.argonaut._
 
   import Datacenter._
   import concurrent.duration._
@@ -379,7 +381,7 @@ object Json {
       ("id" := asset.id) ->:
       ("name" := asset.name) ->:
       ("state" := asset.state) ->:
-      ("url" := asset.url) ->:
+      ("url" := asset.url.toString) ->:
       ("content" := asset.content) ->:
       jEmptyObject
     )
@@ -523,7 +525,7 @@ object Json {
       ((c --\ "id").as[Long],
         (c --\ "name").as[String],
         (c --\ "state").as[String],
-        (c --\ "url").as[String]
+        (c --\ "url").as[Uri]
       ).mapN((x,y,z,w) => Github.Asset(x,y,z,w))
     )
 
