@@ -1,3 +1,19 @@
+//: ----------------------------------------------------------------------------
+//: Copyright (C) 2018 Verizon.  All Rights Reserved.
+//:
+//:   Licensed under the Apache License, Version 2.0 (the "License");
+//:   you may not use this file except in compliance with the License.
+//:   You may obtain a copy of the License at
+//:
+//:       http://www.apache.org/licenses/LICENSE-2.0
+//:
+//:   Unless required by applicable law or agreed to in writing, software
+//:   distributed under the License is distributed on an "AS IS" BASIS,
+//:   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//:   See the License for the specific language governing permissions and
+//:   limitations under the License.
+//:
+//: ----------------------------------------------------------------------------
 package nelson
 
 import cats.syntax.apply._
@@ -11,7 +27,7 @@ import nelson.docker.DockerOp
 
 /**
  * Kubernetes deployment workflow that deploys and deletes units, whilst provisioning
- * authentication roles in Vault so that Kubernetes pods can talk to Vault.
+ * authentication roles in Vault so that Kubernetes pods can talk to Vault at runtime.
  */
 object Pulsar extends Workflow[Unit] {
   val name: WorkflowRef = "pulsar"
@@ -33,12 +49,12 @@ object Pulsar extends Workflow[Unit] {
     for {
       i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
       _ <- status(id, Pending, "Pulsar workflow about to start")
-      //// write the policies to vault
-      _  <- logToFile(id, s"writing policy to vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}")
+      //// write the policies to Vault
+      _  <- logToFile(id, s"Writing policy to vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}")
       _  <- writePolicyToVault(cfg = dc.policy, sn = sn, ns = ns.name, rs = rs)
-      //// create a vault k8s auth role
-      _  <- logToFile(id, s"writing k8s auth role to vault...")
-      // _  <- writeKubernetesRoleToVault(dc = dc, sn = sn, ns = ns.name)
+      //// create a Vault kubernetes auth role
+      _  <- logToFile(id, s"Writing Kubernetes auth role '${sn.toString}' to Vault...")
+      _  <- writeKubernetesRoleToVault(dc = dc, sn = sn, ns = ns.name)
       _ <- logToFile(id, s"Instructing ${dc.name}'s scheduler to handle service container")
       l <- launch(i, dc, ns.name, vunit, p, None, hash)
       _ <- debug(s"Scheduler responded with: ${l}")
