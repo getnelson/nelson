@@ -31,7 +31,7 @@ import journal.Logger
 
 import knobs._
 
-import org.http4s.client.blaze.{BlazeClientConfig, Http1Client}
+import org.http4s.client.blaze.Http1Client
 
 import scala.concurrent.ExecutionContext
 
@@ -51,14 +51,10 @@ object Main {
 
     val file = new File(args.headOption.getOrElse("/opt/application/conf/nelson.cfg"))
 
-    val httpClientConfig = BlazeClientConfig.defaultConfig
-    val httpClient = Http1Client[IO](httpClientConfig)
-
     def readConfig = for {
       defaults  <- knobs.loadImmutable[IO](Required(ClassPathResource("nelson/defaults.cfg")) :: Nil)
       overrides <- knobs.loadImmutable[IO](Optional(FileResource(file)(configThreadPool)) :: Nil)
-      client    <- httpClient
-      config    <- Config.readConfig(defaults ++ overrides, client, Hikari.build _)
+      config    <- Config.readConfig(defaults ++ overrides, cfg => Http1Client[IO](cfg), Hikari.build _)
     } yield config
 
     val cfg = readConfig.unsafeRunSync()

@@ -31,7 +31,7 @@ import knobs._
 
 import scala.collection.immutable.SortedMap
 
-import org.http4s.client.blaze.Http1Client
+import org.http4s.client.blaze.{BlazeClientConfig, Http1Client}
 
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 
@@ -193,5 +193,5 @@ trait NelsonSuite
 }
 
 object NelsonSuite {
-  val testHttp = Http1Client[IO]().unsafeRunSync()
+  val testHttp = (_: BlazeClientConfig) => Http1Client[IO]()
 }

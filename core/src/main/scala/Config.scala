@@ -385,20 +385,21 @@ object Config {
 
   private[this] val log = Logger[Config.type]
 
-  def readConfig(cfg: KConfig, http: Client[IO], xa: DatabaseConfig => Transactor[IO]): IO[NelsonConfig] = {
+  def readConfig(cfg: KConfig, httpBuilder: BlazeClientConfig => IO[Client[IO]], xa: DatabaseConfig => Transactor[IO]): IO[NelsonConfig] = {
     // TIM: Don't turn this on for any deployed version; it will dump all the credentials
     // into the log, so be careful.
     // log.debug("configured with the following knobs:")
     // log.debug(cfg.toString)
 
     val timeout = cfg.require[FiniteDuration]("nelson.timeout")
+    val http = httpBuilder(BlazeClientConfig.defaultConfig.copy(requestTimeout = timeout))
 
     val pools = Pools.default
 
     val nomadcfg = readNomad(cfg.subconfig("nelson.nomad"))
 
     val gitcfg = readGithub(cfg.subconfig("nelson.github"))
-    val git = new Github.GithubHttp(gitcfg, http, timeout, pools.defaultExecutor)
+    val git = http.map(client => new Github.GithubHttp(gitcfg, client, timeout, pools.defaultExecutor))
 
     val workflowConf = readWorkflowLogger(cfg.subconfig("nelson.workflow-logger"))
     val workflowlogger =
@@ -408,7 +409,10 @@ object Config {
     val databasecfg = readDatabase(cfg.subconfig("nelson.database"))
     val storage = new nelson.storage.H2Storage(xa(databasecfg))
 
-    val slack = readSlack(cfg.subconfig("nelson.slack")).map(new SlackHttp(_, http))
+    val slack = for {
+      client <- http
+      slack <- IO.pure(readSlack(cfg.subconfig("nelson.slack")).map(new SlackHttp(_, client)))
+    } yield slack
 
     val email = readEmail(cfg.subconfig("nelson.email")).map(new EmailServer(_))
 
@@ -445,6 +449,9 @@ object Config {
 
       audit      =  readAudit(cfg.subconfig("nelson.audit"))
       auditQueue <- boundedQueue[IO, AuditEvent[_]](audit.bufferLimit)(Effect[IO], pools.defaultExecutor)
+      httpClient <- http
+      gitClient  <- git
+      slackClient <- slack
     } yield {
       NelsonConfig(
         git                = gitcfg,
@@ -461,9 +468,9 @@ object Config {
         pipeline           = pipeline,
         audit              = audit,
         template           = readTemplate(cfg),
-        http               = http,
+        http               = httpClient,
         pools              = pools,
-        interpreters       = Interpreters(git,storage,slack,email),
+        interpreters       = Interpreters(gitClient,storage,slackClient,email),
         workflowLogger     = wflogger,
         bannedClients      = readBannedClients(cfg.subconfig("nelson.banned-clients")),
         ui                 = readUI(cfg.subconfig("nelson.ui")),
