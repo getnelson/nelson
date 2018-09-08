@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{stack_name}}
-  namespace: {{namespace}}
+  name: "{{stack_name}}"
+  namespace: "{{namespace}}"
   labels:
-    stackName: {{stack_name}}
-    unitName: {{unit_name}}
-    version: {{version}}
-    nelson: true
+    stackName: "{{stack_name}}"
+    unitName: "{{unit_name}}"
+    version: "{{version}}"
+    nelson: "true"
 spec:
   {{#desired_instances}}
   replicas: {{desired_instances}}
@@ -18,30 +18,31 @@ spec:
   {{/desired_instances}}
   selector:
     matchLabels:
-      stackName: {{stack_name}}
-      nelson: true
+      stackName: "{{stack_name}}"
+      nelson: "true"
   template:
     metadata:
       labels:
-        stackName: {{stack_name}}
-        unitName: {{unit_name}}
-        version: {{version}}
-        nelson: true
+        stackName: "{{stack_name}}"
+        unitName: "{{unit_name}}"
+        version: "{{version}}"
+        nelson: "true"
     spec:
       containers:
-        name: {{stack_name}}
-        image: {{image}}
+      - name: "{{stack_name}}"
+        image: "{{image}}"
         {{#envvars}}
         env:
-          {{#envvars_list}}
-          {{envvar_name}}: {{envvar_value}}
-          {{/envvars_list}}
+        {{#envvars_list}}
+        - name: "{{envvar_name}}"
+          value: "{{envvar_value}}"
+        {{/envvars_list}}
         {{/envvars}}
         {{! Hack around Scalate #196 }}
         {{#ports}}
         ports:
         {{#ports_list}}
-        - name: {{port_name}}
+        - name: "{{port_name}}"
           containerPort: {{port_number}}
         {{/ports_list}}
         {{/ports}}
@@ -66,14 +67,14 @@ spec:
         resources:
           requests:
             {{#memory_request}}
-            memory: {{memory_request}}M
+            memory: "{{memory_request}}M"
             {{/memory_request}}
             {{^memory_request}}
             {{#memory_limit}}
-            memory: {{memory_limit}}M
+            memory: "{{memory_limit}}M"
             {{/memory_limit}}
             {{^memory_limit}}
-            memory: 512M
+            memory: "512M"
             {{/memory_limit}}
             {{/memory_request}}
             {{#cpu_request}}
@@ -90,10 +91,10 @@ spec:
           {{! Hack around Scalate #196 }}
           limits:
             {{#memory_limit}}
-            memory: {{memory_limit}}M
+            memory: "{{memory_limit}}M"
             {{/memory_limit}}
             {{^memory_limit}}
-            memory: 512M
+            memory: "512M"
             {{/memory_limit}}
             {{#cpu_limit}}
             cpu: {{cpu_limit}}
@@ -105,7 +106,7 @@ spec:
         {{#health_check}}
         livenessProbe:
           httpGet:
-            path: {{health_check_path}}
+            path: "{{health_check_path}}"
             port: {{health_check_port}}
           periodSeconds: {{health_check_interval}}
           timeoutSeconds: {{health_check_timeout}}
@@ -114,39 +115,40 @@ spec:
         {{#empty_volumes}}
         volumeMounts:
         {{#empty_volumes_list}}
-        - name: {{empty_volume_mount_name}}
-          mountPath: {{empty_volume_mount_path}}
+        - name: "{{empty_volume_mount_name}}"
+          mountPath: "{{empty_volume_mount_path}}"
         {{/empty_volumes_list}}
         {{/empty_volumes}}
       {{#empty_volumes}}
       {{! Hack around Scalate #196 }}
       volumes:
       {{#empty_volumes_list}}
-      - name: {{empty_volume_mount_name}}
+      - name: "{{empty_volume_mount_name}}"
         emptyDir: {}
       {{/empty_volumes_list}}
       {{/empty_volumes}}
+{{! Hack around Scalate #196 }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{stack_name}}
-  namespace: {{namespace}}
+  name: "{{stack_name}}"
+  namespace: "{{namespace}}"
   labels:
-    stackName: {{stack_name}}
-    unitName: {{unit_name}}
-    version: {{version}}
-    nelson: true
+    stackName: "{{stack_name}}"
+    unitName: "{{unit_name}}"
+    version: "{{version}}"
+    nelson: "true"
 spec:
   selector:
-    stackName: {{stack_name}}
-    nelson: true
+    stackName: "{{stack_name}}"
+    nelson: "true"
   {{#ports}}
   ports:
   {{#ports_list}}
-  - name: {{port_name}}
+  - name: "{{port_name}}"
     port: {{port_number}}
     targetPort: {{port_number}}
   {{/ports_list}}
   {{/ports}}
-  type: ClusterIP
+  type: "ClusterIP"
