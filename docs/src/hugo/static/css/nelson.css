@@ -1,0 +1,92 @@
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: 0.5px;
+  color: #323d47;
+  font-weight: 300;
+  font-family: 'Barlow', sans-serif;
+}
+
+body, p, small {
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.jumbotron, section.divider {
+  min-height: 300px;
+}
+
+.jumbosplash {
+  padding-top: 6em;
+  padding-bottom: 6em;
+}
+
+.primary {
+  margin-top: 60px;
+}
+
+nav {
+  font-weight: 600;
+}
+.navbar {
+  min-height: 56px;
+}
+
+aside ul {
+  list-style: none;
+}
+aside ul li {
+  padding-top: 1em;
+}
+article {
+  margin-bottom: 50px;
+}
+article hr {
+  margin-top: 50px;
+  margin-bottom: 40px;
+  height: 1px;
+}
+article p, article section p {
+  line-height: 1.8em;
+}
+
+footer {
+  padding-top: 2em;
+  text-align: center;
+  color: white;
+}
+
+.bg-blue-5, .bg-blue-5 h1, .bg-blue-5 h2, .bg-blue-5 h3 {
+  background-color: #448aff;
+  color: white;
+}
+.bg-blue-4 {
+  background-color: #47c7ff;
+}
+.bg-white {
+  background-color: white;
+}
+
+.btn-primary {
+  background-color: #2979ff;
+}
+.btn-lg {
+  letter-spacing: 0.1em;
+  padding: 1.2em !important;
+}
+
+.splash {
+  min-height: 400px;
+  text-align: center;
+}
+.spash-logo {
+  padding-top: 50px;
+}
+.tagline {
+  line-height: 2.2em;
+}
+
+h2.semibold {
+  font-weight: 600;
+}
+.lead {
+  font-size: 20px;
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ partial "head.html" . }}
+
+  <body>
+    <!-- navigation -->
+    {{ partial "top_nav.html" . }}
+    <!-- e/o navigation -->
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+          <aside class="col-md-2">
+            <ul>
+              {{ $currentPage := . }}
+              {{ range .Site.Menus.introduction }}
+                {{ $.IsMenuCurrent "introduction" . }}
+                  
+              <li><a href="{{ .URL }}">&raquo; {{ .Title }}</a></li>
+              {{ end }}
+            </ul>
+          </aside>
+
+          <article class="col-md-9 offset-md-1">
+
+            {{ .Content }}
+
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    {{ partial "footer.html" . }}
+
+  </body>
+</html>
