@@ -68,7 +68,7 @@ package object nelson {
    */
   def fromJson[A : DecodeJson](in: String): IO[A] =
     Parse.decodeEither[A](in)
-         .fold(s => IO.raiseError(new RuntimeException(s)), IO(_))
+         .fold(s => IO.raiseError(new RuntimeException(s)), IO.pure(_))
 
   implicit def versionableOps[A: Versionable](a: A): AllOps[A] = Versionable.ops.toAllVersionableOps[A](a)
 

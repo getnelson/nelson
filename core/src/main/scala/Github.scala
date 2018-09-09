@@ -25,12 +25,12 @@ import java.net.URI
 import org.http4s.{Request => HttpRequest, Response => HttpResponse, argonaut => _, _}
 import org.http4s.argonaut._
 import org.http4s.client.{Client, UnexpectedStatus}
+import org.http4s.headers.Location
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
 object Github {
-
   final case class WebHook(
     id: Long,
     name: String,
@@ -242,6 +242,7 @@ object Github {
     import argonaut.DecodeJson
     import argonaut.Argonaut._
     import cats.instances.list._
+    import cats.instances.string._
     import cats.syntax.applicativeError._
     import fs2.async.parallelTraverse
     import org.http4s.syntax.string._
@@ -254,7 +255,7 @@ object Github {
     def apply[A](in: GithubOp[A]): IO[A] = in match {
       case GetAccessToken(fromCode: String) =>
         val json = argonaut.Json(
-          "client-id" := cfg.clientId,
+          "client_id" := cfg.clientId,
           "client_secret" := cfg.clientSecret,
           "code" := fromCode
         )
@@ -283,17 +284,18 @@ object Github {
           .putHeaders(Header("Accept", "application/octet-stream"))
           .token(t)
 
-        val handler: HttpResponse[IO] => IO[String] = response => {
-          response.headers.get("location".ci) match {
-            case None => IO.raiseError(UnexpectedGithubResponse("fetching release asset contents", "location"))
-            case Some(Header(_, loc)) => IO.pure(loc)
+        val handler: HttpResponse[IO] => IO[Uri] = response => {
+          response.headers.get(Location) match {
+            case None => IO.raiseError(UnexpectedGithubResponse("fetching release asset contents", "missing location header"))
+            case Some(Location(loc)) => IO.pure(loc)
           }
         }
 
         for {
-          a <- client.fetch(request)(handler)
-          b <- client.expect[String](a)
-        } yield asset.copy(content = Option(b))
+          assetLocation <- client.fetch(request)(handler)
+          assetRequest  = HttpRequest[IO](Method.GET, assetLocation)
+          assetContents <- client.fetch(assetRequest)(_.bodyAsText.compile.foldMonoid)
+        } yield asset.copy(content = Option(assetContents))
 
       case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
         val request = HttpRequest[IO](Method.GET, cfg.releaseEndpoint(slug, releaseId)).token(t)
@@ -304,9 +306,7 @@ object Github {
           val req = HttpRequest[IO](Method.GET, uri).token(t)
           for {
             resp <- client.fetch(req)(paginationHandler)
-            (reposJson, links) = resp
-            repos <- reposJson.as[List[Repo]]
-
+            (repos, links) = resp
             accum0 = accum ++ repos
             reposList <- links.get(Next).fold(IO.pure(accum0))(next => go(next)(accum0))
           } yield reposList
@@ -349,46 +349,49 @@ object Github {
 
     import cats.syntax.either._
 
-    def paginationHandler(response: HttpResponse[IO]): IO[(HttpResponse[IO], Map[Step, Uri])] =
+    def paginationHandler(response: HttpResponse[IO]): IO[(List[Repo], Map[Step, Uri])] =
       if (response.status.code / 100 == 2) {
-        val links = response.headers.get("Link".ci)
-          .map(_.value)
-          .getOrElse("") // TIM: this is hacky, urgh. ADELBERT: i agree
-          .split(",")
-          .foldLeft(List.empty[(Step, Uri)])((a,b) =>
-            a ++ (if (b.isEmpty) List.empty else tuplize(b).toList)
-          ).toMap
-        IO.pure((response, links))
+        val empty = Map.empty[Step, Uri]
+        val repos = response.as[List[Repo]]
+
+        val links = response.headers.get("Link".ci).map(_.value).fold(empty) { value =>
+          value.split(",").foldLeft(empty) { (map, repoLink) =>
+            map ++ parseLink(repoLink).fold(empty)(Map(_))
+          }.toMap
+        }
+
+        repos.map((_, links))
       } else {
         val statusCode = response.status.code
-        val body = response.bodyAsText.compile.toList
         for {
-          b <- body
-          r <- IO.raiseError[(HttpResponse[IO], Map[Step, Uri])](GithubApiError(statusCode, b.mkString("")))
+          b <- response.bodyAsText.compile.foldSemigroup
+          r <- IO.raiseError[(List[Repo], Map[Step, Uri])](GithubApiError(statusCode, b.mkString("")))
         } yield r
       }
 
     /**
     * for splitting the github links header output
     */
-    private[nelson] def tuplize(in: String): Option[(Step, Uri)] = {
-      val Array(uri,rel) = in.split(";")
-      val linkr = "<(.*)>".r
-      val relr  = "rel=\"(.*)\"".r
+    private[nelson] def parseLink(in: String): Option[(Step, Uri)] = {
+      if (in.nonEmpty) {
+        val Array(uri,rel) = in.split(";")
+        val linkr = "<(.*)>".r
+        val relr  = "rel=\"(.*)\"".r
 
-      val ouri = linkr.replaceFirstIn(uri, "$1").trim
-      val orel = relr.replaceFirstIn(rel, "$1").trim
+        val ouri = linkr.replaceFirstIn(uri, "$1").trim
+        val orel = relr.replaceFirstIn(rel, "$1").trim
 
-      for {
-        step <- Step.fromString(orel)
-        uri  <- Uri.fromString(ouri).toOption
-      } yield (step, uri)
+        for {
+          step <- Step.fromString(orel)
+          uri  <- Uri.fromString(ouri).toOption
+        } yield (step, uri)
+      } else None
     }
+  }
 
-    implicit class BedazzledRequest(r: HttpRequest[IO]){
-      def token(t: AccessToken): HttpRequest[IO] =
-        r.withHeaders(Headers(Header("Authorization", s"token ${t.value}")))
-    }
+  implicit class BedazzledRequest(val r: HttpRequest[IO]) extends AnyVal {
+    def token(t: AccessToken): HttpRequest[IO] =
+      r.putHeaders(Header("Authorization", s"token ${t.value}"))
   }
 
   object Interpreter {

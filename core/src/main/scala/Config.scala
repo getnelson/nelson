@@ -64,12 +64,12 @@ final case class GithubConfig(
 
   val oauth = domain match {
     case None => Uri.uri("https://github.com")
-    case Some(uri) => uri
+    case Some(uri) => Uri.unsafeFromString(s"https://${uri.toString}")
   }
 
   val api = domain match {
     case None => Uri.uri("https://api.github.com")
-    case Some(uri) => uri / "api" / "v3"
+    case Some(uri) => Uri.unsafeFromString(s"https://${(uri / "api" / "v3").toString}")
   }
 
   val tokenEndpoint = oauth / "login" / "oauth" / "access_token"
@@ -91,7 +91,7 @@ final case class GithubConfig(
 
   def repoEndpoint(page: Int = 1) = {
     val queryParams = Map(
-      ("affiliation", List("owner", "organization_member")),
+      ("affiliation", List("owner,organization_member")),
       ("visibility", List("all")),
       ("direction", List("asc")),
       ("page", List(page.toString))
@@ -100,11 +100,11 @@ final case class GithubConfig(
     (api / "user" / "repos").setQueryParams(queryParams)
   }
 
-  def webhookEndpoint(slug: Slug) = api / "repos" / slug.toString / "hooks"
+  def webhookEndpoint(slug: Slug) = api / "repos" / slug.owner / slug.repository / "hooks"
 
-  def contentsEndpoint(slug: Slug, path: String) = api / "repos" / slug.toString / "contents" / path
+  def contentsEndpoint(slug: Slug, path: String) = api / "repos" / slug.owner / slug.repository / "contents" / path
 
-  def releaseEndpoint(slug: Slug, releaseId: Long) = api / "repos" / slug.toString / "releases" / releaseId.toString
+  def releaseEndpoint(slug: Slug, releaseId: Long) = api / "repos" / slug.owner / slug.repository / "releases" / releaseId.toString
 
   private [nelson] def encodeURI(uri: String): String =
     java.net.URLEncoder.encode(uri, "UTF-8")
@@ -399,7 +399,6 @@ object Config {
     val nomadcfg = readNomad(cfg.subconfig("nelson.nomad"))
 
     val gitcfg = readGithub(cfg.subconfig("nelson.github"))
-    val git = http.map(client => new Github.GithubHttp(gitcfg, client, timeout, pools.defaultExecutor))
 
     val workflowConf = readWorkflowLogger(cfg.subconfig("nelson.workflow-logger"))
     val workflowlogger =
@@ -408,11 +407,6 @@ object Config {
 
     val databasecfg = readDatabase(cfg.subconfig("nelson.database"))
     val storage = new nelson.storage.H2Storage(xa(databasecfg))
-
-    val slack = for {
-      client <- http
-      slack <- IO.pure(readSlack(cfg.subconfig("nelson.slack")).map(new SlackHttp(_, client)))
-    } yield slack
 
     val email = readEmail(cfg.subconfig("nelson.email")).map(new EmailServer(_))
 
@@ -450,8 +444,8 @@ object Config {
       audit      =  readAudit(cfg.subconfig("nelson.audit"))
       auditQueue <- boundedQueue[IO, AuditEvent[_]](audit.bufferLimit)(Effect[IO], pools.defaultExecutor)
       httpClient <- http
-      gitClient  <- git
-      slackClient <- slack
+      gitClient  = new Github.GithubHttp(gitcfg, httpClient, timeout, pools.defaultExecutor)
+      slackClient = readSlack(cfg.subconfig("nelson.slack")).map(new SlackHttp(_, httpClient))
     } yield {
       NelsonConfig(
         git                = gitcfg,
