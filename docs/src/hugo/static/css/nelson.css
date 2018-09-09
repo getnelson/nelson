@@ -30,12 +30,23 @@ nav {
   min-height: 56px;
 }
 
-aside ul {
+aside ol {
   list-style: none;
 }
-aside ul li {
+aside ol li {
   padding-top: 1em;
 }
+ol.sub-menu {
+  padding: 0;
+  margin-left: 15px;
+}
+li > ol.sub-menu > li {
+  display: none;
+}
+li.active > ol.sub-menu > li {
+  display: block;
+}
+
 article {
   margin-bottom: 50px;
 }

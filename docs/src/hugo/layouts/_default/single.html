@@ -13,18 +13,33 @@
       <div class="container primary">
         <div class="row">
           <aside class="col-md-2">
-            <ul>
+            <ol>
               {{ $currentPage := . }}
-              {{ range .Site.Menus.introduction }}
-                {{ $.IsMenuCurrent "introduction" . }}
-                  
-              <li><a href="{{ .URL }}">&raquo; {{ .Title }}</a></li>
+              {{ range $name, $menu := .Site.Menus.main }}
+                  {{ if .HasChildren }}
+                      <li class="{{if or ($currentPage.IsMenuCurrent "main" .) ($currentPage.HasMenuCurrent "main" .) }}active{{ end }}">
+                        <a href="{{ .URL }}">{{ if ($currentPage.IsMenuCurrent "main" .) }}&raquo;{{ end }} {{ .Name }}</span></a>
+                        <ol class="sub-menu">
+                            {{ range .Children }}
+                                <li class="{{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}">
+                                    <a href="{{ .URL }}">{{ if ($currentPage.IsMenuCurrent "main" .) }}&raquo;{{ end }} {{ .Name }}</a>
+                                </li>
+                            {{ end }}
+                        </ol>
+                      </li>
+                  {{ else }}
+                      <li>
+                          <a href="{{ .URL }}">{{ if ($currentPage.IsMenuCurrent "main" .) }}&raquo;{{ end }} {{ .Name }}</a>
+                      </li>
+                  {{ end }}
               {{ end }}
-            </ul>
+          </ol>
           </aside>
 
           <article class="col-md-9 offset-md-1">
-
+            {{ if and (gt .WordCount 400 ) (ne .Params.toc "false") }}
+            {{ .TableOfContents }}
+            {{ end }}
             {{ .Content }}
 
           </article>

@@ -1,7 +1,14 @@
-+++
-layout  = "single"
-title   = "Tutorials"
-+++
+---
+layout: single
+title: Tutorials
+name: Tutorials
+menu:
+  main:
+    identifier: tutorial
+    name: Tutorials
+    url: /tutorial/index.html
+    weight: 3
+---
 
 # Tutorials
 

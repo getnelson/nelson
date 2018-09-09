@@ -9,8 +9,8 @@
 
     <title>{{ $.Param "project_name" }}</title>
 
-    <link href="{{ .Site.BaseURL }}css/material.min.css" rel="stylesheet">
-    <link href="{{ .Site.BaseURL }}css/material.min.css.map" rel="stylesheet">
-    <link href="{{ .Site.BaseURL }}css/nelson.css" rel="stylesheet">
+    <link href="{{ .Site.BaseURL }}css/material.min.css?{{ now | md5 }}" rel="stylesheet">
+    <link href="{{ .Site.BaseURL }}css/material.min.css.map?{{ now | md5 }}" rel="stylesheet">
+    <link href="{{ .Site.BaseURL }}css/nelson.css?{{ now | md5 }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
 </head>

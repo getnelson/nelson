@@ -27,20 +27,4 @@ menu:
       title: Code
       url: https://github.com/getnelson/nelson
       weight: 4
-  introduction:
-    - identifier: introduction-what
-      title: What is Nelson?
-      url: /introduction/index.html
-      weight: 1
-    - identifier: introduction-usecase
-      title: Use Cases
-      url: /introduction/use-cases.html
-      weight: 2
-    - identifier: introduction-competitors
-      title: Competitors
-      url: /introduction/use-cases.html
-      weight: 3
-    - identifier: introduction-getting-started
-      title: Getting Started
-      url: /introduction/getting-started/index.html
-      weight: 4
+
