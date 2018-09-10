@@ -12,7 +12,7 @@
 
       <div class="container primary">
         <div class="row">
-          <aside class="col-md-2">
+          <aside class="col-md-3">
             <ol>
               {{ $currentPage := . }}
               {{ range $name, $menu := .Site.Menus.main }}
@@ -36,9 +36,9 @@
           </ol>
           </aside>
 
-          <article class="col-md-9 offset-md-1">
-            {{ if and (gt .WordCount 400 ) (ne .Params.toc "false") }}
-            {{ .TableOfContents }}
+          <article class="col-md-9">
+            {{ if (ne .Params.toc "false") }}
+              {{ .TableOfContents }}
             {{ end }}
             {{ .Content }}
 
