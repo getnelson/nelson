@@ -26,6 +26,12 @@ aside ol {
 aside ol li {
   padding-top: 1em;
 }
+aside ol li a {
+  color: grey;
+}
+aside ol li.highlight a, .highlight {
+  color: #ff4081;
+}
 ol.sub-menu {
   padding: 0;
   margin-left: 15px;
@@ -38,6 +44,18 @@ li.active > ol.sub-menu > li {
 }
 
 /**************************** ARTICLE ****************************/
+
+nav#TableOfContents {
+  padding-top: 1.3em;
+}
+nav#TableOfContents ul, nav#TableOfContents ol {
+  list-style: none;
+  padding-top: 0.4em;
+}
+nav#TableOfContents ul li, nav#TableOfContents ol li {
+  padding-top: 0.4em;
+  padding-bottom: 0.4em;
+}
 
 article {
   margin-bottom: 50px;
@@ -145,4 +163,6 @@ h2.semibold {
 }
 .lead {
   font-size: 20px;
+  padding-top: 0.5em;
+  padding-bottom: 2em;
 }

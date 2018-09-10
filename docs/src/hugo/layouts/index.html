@@ -19,9 +19,17 @@
                 <img src="/img/nelson-with-background-and-text.svg" height="140px" />
                 <h2 class="tagline">Automated, multi-region container deployment</h2>
                 <p>
-                  <a class="btn btn-primary btn-lg" href="#" role="button">Getting Started</a>
+                  <a class="btn btn-primary btn-lg" href="/introduction/" role="button">Getting Started</a>
                   &nbsp;
-                  <a class="btn btn-light btn-lg" href="#" role="button">Download {{ $.Param "version" }}</a>
+                  <a class="btn btn-light btn-lg"
+                     href="https://hub.docker.com/r/getnelson/nelson/tags/"
+                     target="_blank"
+                     role="button">Download
+                  {{ with .Site.Data.global }}
+                    {{ .release_version }}
+                  {{ else }}
+                    {{ $.Site.Params.version }}
+                  {{ end }}</a>
                 </p>
               </div>
 
@@ -35,17 +43,29 @@
           <div class="row">
             <div class="col-md-12">
               <h2 class="semibold">Container-first Orchestration</h2>
-              <p class="lead">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+              <p class="lead">
+                Nelson is a cutting edge orchestration engine that empowers users to focus on building their products, whilst providing operators with the safety and confidence user applications are meeting the organizationl best practices.
+              </p>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
-              <h2>Heading</h2>
+              <h2>Container Native</h2>
               <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
               <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
             </div>
             <div class="col-md-6">
-              <h2>Heading</h2>
+              <h2>Scheduler Agnostic</h2>
+              <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+              <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+            </div>
+            <div class="col-md-6">
+              <h2>Immutable Deployments</h2>
+              <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+              <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+            </div>
+            <div class="col-md-6">
+              <h2>Secure By Default</h2>
               <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
               <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
             </div>

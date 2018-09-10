@@ -1,6 +1,19 @@
 ---
 layout: "single"
 toc: "false"
+title: REST API
+preamble: >
+  The Nelson service provides a fairly extensive HTTP API. Most endpoints accept and return `application/json` representations. As the API is quite extensive (every action Nelson takes has an API), this document has been broken down into a set of logical sections outlined below:
+contents:
+- Overview
+- Auditing
+- Datacenters
+- Load Balancers
+- Misc
+- Repositories
+- Stacks
+- Units
+- Webhooks
 menu:
   main:
     identifier: docs-api
@@ -10,27 +23,7 @@ menu:
     weight: 6
 ---
 
-# REST API
-
-The Nelson service provides a fairly extensive HTTP API. Most endpoints accept and return `application/json` representations. As the API is quite extensive (every action Nelson takes has an API), this document has been broken down into a set of logical sections outlined below:
-
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#api-overview">Introduction</a></li>
-    <li><a href="#api-audit">Auditing</a></li>
-    <li><a href="#api-datacenters">Datacenters</a></li>
-    <li><a href="#api-lbs">Load Balancers</a></li>
-    <li><a href="#api-misc">Misc</a></li>
-    <li><a href="#api-repos">Repositories</a></li>
-    <li><a href="#api-stacks">Stacks</a></li>
-    <li><a href="#api-units">Units</a></li>
-    <li><a href="#api-webhooks">Webhooks</a></li>
-  </ul>
-</nav>
-
-<hr />
-
-<h2 id="api-overview" data-subheading-of="api">Overview</h2>
+## Overview
 
 This section describes some common themes in the Nelson API.
 
@@ -143,7 +136,7 @@ Nelson endpoints attempt to be good HTTP citizens and return appropriate 4xx sta
 
 <hr />
 
-<h2 id="api-audit" data-subheading-of="api">Auditing</h2>
+## Auditing
 
 <ol>
   <li><a href="#api-audit-list">List Events</a></li>
@@ -194,7 +187,7 @@ GET /v1/audit
 
 <hr />
 
-<h2 id="api-datacenters" data-subheading-of="api">Datacenters</h2>
+## Datacenters
 
 <ol>
   <li><a href="#api-datacenters-list">List Datacenters</a></li>
@@ -313,7 +306,7 @@ Successful completion of this operation yields a `200` with empty response body.
 
 <hr />
 
-<h2 id="api-lbs" data-subheading-of="api">Load Balancers</h2>
+## Load Balancers
 
 <ol>
   <li><a href="#api-lbs-list">List Load Balancers</a></li>
@@ -430,7 +423,7 @@ Successful completion of this operation yields a `200` with empty response body.
 
 <hr />
 
-<h2 id="api-misc" data-subheading-of="api">Misc</h2>
+## Misc
 
 <ol>
   <li><a href="#api-misc-sync">Sync User Profile</a></li>
@@ -592,7 +585,7 @@ GET /v1/cleanup-policies
 
 <hr />
 
-<h2 id="api-repos" data-subheading-of="api">Repositories</h2>
+## Repositories
 
 <ol>
   <li><a href="#api-repos-list">List Repositories</a></li>
@@ -741,7 +734,7 @@ DELETE /v1/repos/:org/:repo/hook
 
 <hr />
 
-<h2 id="api-stacks" data-subheading-of="api">Stacks</h2>
+## Stacks
 
 <ol>
   <li><a href="#api-stacks-list">List Stacks</a></li>
@@ -997,7 +990,7 @@ GET /v1/deployments/:guid/logs
 
 <hr />
 
-<h2 id="api-units" data-subheading-of="api">Units</h2>
+## Units
 
 Units blah blah blah blah blah blah blah blah blah blah blah
 
@@ -1040,7 +1033,7 @@ POST /v1/units/deprecate
 
 <hr />
 
-<h2 id="api-webhooks" data-subheading-of="api">Webhooks</h2>
+## Webhooks
 
 <ol>
   <li><a href="#api-webhooks-github">Github Listener</a></li>

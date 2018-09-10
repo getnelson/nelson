@@ -1,6 +1,15 @@
 ---
 layout: "single"
 toc: "false"
+title: Command Line
+preamble: >
+  For installation instructions, see the [user guide](/getting-started/install.html) section. This reference covers the set of operations supplied by the CLI.
+contents:
+- System Operations
+- Datacenter Operations
+- Unit Operations
+- Stack Operations
+- Tips
 menu:
   main:
     identifier: docs-cli
@@ -9,12 +18,6 @@ menu:
     url: /documentation/cli.html
     weight: 5
 ---
-
-# Command Line
-
-For installation instructions, see the [user guide](index.html#user-guide) section. This reference covers the set of operations supplied by the CLI.
-
-<hr />
 
 ## System Operations
 

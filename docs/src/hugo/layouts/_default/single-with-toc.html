@@ -21,15 +21,7 @@
             <p>{{ . | markdownify }}</p>
             {{ end }}
 
-            {{ with .Params.contents }}
-              <nav id="TableOfContents">
-                <ol>
-                {{ range $item := . }}
-                  <li><a href="#{{ . | urlize }}">{{ . }}</a></li>
-                {{ end }}
-                </ol>
-              </nav>
-            {{ end }}
+            {{ .TableOfContents }}
 
             <hr />
 

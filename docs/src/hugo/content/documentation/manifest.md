@@ -2,7 +2,15 @@
 layout: "single"
 toc: "false"
 title: Manifest Settings
-name: Manifest Settings
+preamble: >
+  The manifest is the primary method to control parameters about your deployment: what it should be called, how big it should be, where it should be deployed too etc etc.
+contents:
+- Datacenters
+- Load Balancers
+- Namespaces
+- Plans
+- Notifications
+- Units
 menu:
   main:
     identifier: docs-manifest
@@ -12,11 +20,7 @@ menu:
     weight: 5
 ---
 
-# Manifest Settings
-
-The manifest is the primary method to control parameters about your deployment: what it should be called, how big it should be, where it should be deployed too etc etc.
-
-<h2 id="datacenters" data-subheading-of="manifest">Datacenters</h2>
+## Datacenters
 
 Given that not all resources may be available in all datacenters, *Nelson* understands that you may at times want to be picky about which particular datacenters you deploy your *units* into. With this in mind, *Nelson* supplies the ability to whitelist and blacklist certain datacenters.
 
@@ -360,7 +364,7 @@ notifications:
       - devops
 ```
 
-<h2 id="units" data-subheading-of="manifest">Units</h2>
+<h2 id="manifest-units" data-subheading-of="manifest">Units</h2>
 
 A "unit" is a generic, atomic item of work that Nelson will attempt to push through one of its workflows (more on workflows later). Any given Unit represents something that can be deployed as a container, but that has distinct parameters and requirements.
 

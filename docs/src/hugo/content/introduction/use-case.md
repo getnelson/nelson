@@ -2,7 +2,12 @@
 layout: "single"
 toc: "false"
 title: "Use Cases"
-name: "Use Cases"
+preamble: >
+  Nelson is designed to handle a specific set of use-cases; understanding these use-cases will allow you to understand if Nelson is a good fit for the challenges you face in your organization.
+contents:
+- Policy Management
+- Thing Two
+- Thing Three
 menu:
   main:
     parent: intro
@@ -12,9 +17,17 @@ menu:
     weight: 2
 ---
 
-# Use Cases
+# Policy Management
 
-Firstly, they are quite different tools - its fair to say that in some sense they are achieving similar end goals, but the manner in which they do that is very different. From the high-level, you can consider Nelson a highly-composable automator of organizational best practices. Users are freed from having to concern themselves with things like “how do I ship logs” - it just happens based on the administrators setup. Likewise, there’s a strong “bring your own”, lego brick approach to CI, security, schedulers etc. This provides the minimal vendor lock-in, whilst allowing mixed-mode runtimes (e.g. part Mesos, part k8s) that span multiple geographies. If you want to know what your entire service fleet globally looks like, Nelson can tell you.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum.
+
+# Thing Two
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum.
+
+# Thing Three
+
+From the high-level, you can consider Nelson a highly-composable automator of organizational best practices. Users are freed from having to concern themselves with things like “how do I ship logs” - it just happens based on the administrators setup. Likewise, there’s a strong “bring your own”, lego brick approach to CI, security, schedulers etc. This provides the minimal vendor lock-in, whilst allowing mixed-mode runtimes (e.g. part Mesos, part k8s) that span multiple geographies. If you want to know what your entire service fleet globally looks like, Nelson can tell you.
 
 Some of the primary Nelson features are:
 
