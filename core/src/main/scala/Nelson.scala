@@ -115,7 +115,6 @@ object Nelson {
         github <- Github.Request.listUserRepositories(session.github).foldMap(cfg.github)
         repos   = github.filterNot(r => blacklist(cfg.git.organizationBlacklist)(r.slug.owner)).map(augment(nelson)(_))
         delete  = diff(nelson, github)
-
         _ <- (insertRepos(repos) >> deleteRepos(delete)).foldMap(cfg.storage)
       } yield ()
     }

@@ -23,6 +23,7 @@ object GitFixtures {
   import nelson.Json._
   import argonaut._, Argonaut._
   import Util._
+  import org.http4s.Uri
 
   val interpreter = Interpreter()
 
@@ -42,7 +43,7 @@ object GitFixtures {
 
   val orgs = List(Organization(0L, Some("name"),"slug",new java.net.URI("avatar")))
 
-  val asset = Asset(0, "manifest.deployable.v1.b.yml", "", "", Some("content"))
+  val asset = Asset(0, "manifest.deployable.v1.b.yml", "", Uri.unsafeFromString(""), Some("content"))
 
   val contents:IO[Option[Contents]] =
     loadResourceAsString("/nelson/dependencies.bar_2.0.0.yml").map { c =>
@@ -56,7 +57,7 @@ object GitFixtures {
     List(Asset(119,
      "example-howdy.deployable.yml",
      "uploaded",
-     "https://github.example.com/api/v3/repos/tim/howdy/releases/assets/119",
+     Uri.unsafeFromString("https://github.example.com/api/v3/repos/tim/howdy/releases/assets/119"),
      None)
     ),
     "0.13.17"

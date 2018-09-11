@@ -44,7 +44,6 @@ libraryDependencies ++= Seq(
   "org.tpolecat"               %% "doobie-hikari"                      % V.doobie,
   "org.spire-math"             %% "spire"                              % "0.11.0",
   "org.flywaydb"                % "flyway-core"                        % "3.2.1",
-  "net.databinder.dispatch"    %% "dispatch-core"                      % "0.11.2",
   "ca.mrvisser"                %% "sealerate"                          % "0.0.4",
   "org.typelevel"              %% "cats-kernel-laws"                   % V.cats   % "test",
   "org.apache.commons"          % "commons-email"                      % "1.3.3",

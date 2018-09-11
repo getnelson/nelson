@@ -22,7 +22,10 @@ import cats.effect.IO
 import cats.free.Free
 import cats.implicits._
 
-import dispatch._, Defaults._
+import org.http4s.Method.POST
+import org.http4s.Request
+import org.http4s.argonaut._
+import org.http4s.client.Client
 
 sealed abstract class SlackOp[A] extends Product with Serializable
 
@@ -36,19 +39,19 @@ object SlackOp {
     Free.liftF(SendSlackNotification(channels, msg))
 }
 
-final class SlackHttp(cfg: SlackConfig, http: Http) extends (SlackOp ~> IO) {
+final class SlackHttp(cfg: SlackConfig, client: Client[IO]) extends (SlackOp ~> IO) {
   import argonaut._, Argonaut._
   import SlackOp._
 
   def apply[A](op: SlackOp[A]): IO[A] = op match {
     case SendSlackNotification(channels, msg) =>
-      channels.traverse(channel => send(channel,msg)).map(_ => ())
+      channels.traverse_(channel => send(channel,msg))
   }
 
   def send(channel: String, msg: String): IO[Unit] = {
-    val json = Json("channel" := "#"+channel, "text" := msg, "username" := cfg.username).asJson.nospaces
-    val req = url(cfg.webhook).setContentType("application/json", "UTF-8") << json
-    IO.fromFuture(IO(http(req OK as.String))).map(_ => ())
+    val json = Json("channel" := "#"+channel, "text" := msg, "username" := cfg.username)
+    val request = Request[IO](POST, cfg.webhook).withBody(json)
+    client.expect[String](request).map(_ => ())
   }
 }
 

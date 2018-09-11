@@ -113,14 +113,8 @@ abstract class Default extends Product with Serializable { self =>
       IsAuthenticated.unapply(req).isEmpty
   }
 
-  protected def redirectToLogin: IO[Response[IO]] = {
-    Uri.fromString(config.git.loginEndpoint).fold(
-      e => {
-        InternalServerError(s"Invalid login endpoint is configured: ${e.details}")
-      },
-      s => Found(Location(s))
-    )
-  }
+  protected def redirectToLogin: IO[Response[IO]] =
+    Found(Location(config.git.loginEndpoint))
 }
 
 object ClientValidation {

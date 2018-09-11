@@ -20,8 +20,6 @@ import cats.~>
 import cats.effect.IO
 import cats.implicits._
 
-import dispatch.Http
-
 import nelson.notifications.{SlackOp,EmailOp}
 
 import doobie._
@@ -29,11 +27,11 @@ import doobie.implicits._
 
 import helm.{ConsulOp, HealthCheckResponse}
 
-import java.util.concurrent.{Executors, ThreadFactory}
-
 import knobs._
 
 import scala.collection.immutable.SortedMap
+
+import org.http4s.client.blaze.{BlazeClientConfig, Http1Client}
 
 import org.scalatest.{FlatSpec,Matchers,BeforeAndAfterAll}
 
@@ -195,22 +193,5 @@ trait NelsonSuite
 }
 
 object NelsonSuite {
-  val testHttp = {
-    // Creating a new HTTP client per suite is gruesomely expensive,
-    // even if we shut down after every suite.  Using the global one
-    // fails because it uses non-daemon threads, and we have no hook
-    // to shut them down.  So we create a global HTTP client here for
-    // tests, with a daemon-threaded executor, to work around the lack
-    // of a shutdown.
-    //
-    // The better answer is to finish stripping out Dispatch.
-    val executor = Executors.newCachedThreadPool(new ThreadFactory {
-      def newThread(r: Runnable) = {
-        val t = new Thread(r, "AsyncHttpClient-Callback")
-        t.setDaemon(true)
-        t
-      }
-    })
-    (new Http).configure(_.setExecutorService(executor))
-  }
+  val testHttp = (_: BlazeClientConfig) => Http1Client[IO]()
 }
