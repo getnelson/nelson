@@ -138,6 +138,8 @@ footer {
 
 .jumbotron, section.divider {
   min-height: 300px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .jumbosplash {
@@ -165,4 +167,8 @@ h2.semibold {
   font-size: 20px;
   padding-top: 0.5em;
   padding-bottom: 2em;
+}
+.logorow {
+  padding-top: 0px;
+  padding-bottom: 40px;
 }

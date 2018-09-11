@@ -42,32 +42,36 @@
         <div class="container">
           <div class="row">
             <div class="col-md-12">
-              <h2 class="semibold">Container-first Orchestration</h2>
+              <h2 class="semibold">Open-source, Container-first Orchestration</h2>
               <p class="lead">
-                Nelson is a cutting edge orchestration engine that empowers users to focus on building their products, whilst providing operators with the safety and confidence user applications are meeting the organizationl best practices.
+                Nelson is a cutting edge orchestration engine that empowers users to focus on building their products, whilst providing operators with the safety and confidence user applications are meeting the organizationl best practices. Having its roots in type-theory and academic research, Nelson fuses field experience with formal rigor to make deployments something that "just works".
               </p>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
-              <h2>Container Native</h2>
-              <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-              <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+              <h2>Immutable Deployments</h2>
+              <p>Nelson takes immutable infrastructure to the next level: each and every deployment is fixed for its lifetime, and upgrades are conducted by migrating traffic between versions. This enables powerful production-testing and experimentation.</p>
+              <!-- <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p> -->
             </div>
             <div class="col-md-6">
               <h2>Scheduler Agnostic</h2>
-              <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-              <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+              <p>Users face a plethora of choices when it comes to picking a scheduler - you may even be running multiple kinds of scheduler. Nelson enables operators to focus on scheduling (without lossing power), whilst users focus on shipping their product.</p>
             </div>
-            <div class="col-md-6">
-              <h2>Immutable Deployments</h2>
-              <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-              <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+            <div class="col-md-6" style="padding-top: 2em;">
+              <h2>Git-centric</h2>
+              <p>Out of the box integration with Github (SaaS and Enterprise versions) means Nelson already integrates into the workflow you know and love. Simply create a project release on Github and Nelson will distribute and run your program container.</p>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" style="padding-top: 2em;">
               <h2>Secure By Default</h2>
-              <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-              <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+              <p>The easy thing should also be the safe thing. Nelson has security baked-in: every stack launched with Nelson has unique Vault policies, with ephemeral, rotating credentials that are unique per-container.</p>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-2 offset-md-5" style="padding-top: 3em;">
+                  <a class="btn btn-secondary" href="/introduction/" role="button">Getting Started</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -77,18 +81,35 @@
         <section class="divider">
           <div class="row">
             <div class="col-md-12">
-              <h2 class="semibold">Container-first Orchestration</h2>
-              <p class="lead">Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+              <h2 class="semibold">Seamless Multi-Cloud</h2>
+              <p class="lead">Nelson makes multi-datacenter, multi-region deployments trivial. By integrating with scheduling substrates, the runtime fabric is all Nelson needs to know about. Run Kubernetes on Google Compute Engine whilst you run Hashicorp Nomad on bare-metal in your company datacenter - Nelson will ensure that workloads are placed, tracked and sunset where-ever they may be. </p>
+            </div>
+          </div>
+          <div class="row logorow">
+            <div class="col-md-1 offset-md-1">
+              <img src="/img/logo-github.svg" class="img-fluid" />
+            </div>
+            <div class="col-md-1 offset-md-1">
+              <img src="/img/logo-kubernetes.png" class="img-fluid" />
+            </div>
+            <div class="col-md-1 offset-md-1">
+              <img src="/img/logo-nomad.png" class="img-fluid" />
+            </div>
+            <div class="col-md-2 offset-md-1">
+              <img src="/img/logo-amazon.png" class="img-fluid" />
+            </div>
+            <div class="col-md-2 offset-md-1">
+              <img src="/img/logo-vault.png" height="70px" />
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
-              <h2>Heading</h2>
-              <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+              <h2>Container Native</h2>
+              <p>Nelson was built from the ground up to work with containers. Nelson will take images from your build system and replicate them to your datacenter environment automatically - perfect for multi-region deployment scenarios.</p>
             </div>
             <div class="col-md-6">
-              <h2>Heading</h2>
-              <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+              <h2>Impartial CI</h2>
+              <p>Use whatever Continuous Integration (CI) system you want! The Nelson team believes you should be able to compose your technology stack however you see fit; there is no perscription to couple major systems infrastructure components.</p>
             </div>
           </div>
         </section>
@@ -99,14 +120,13 @@
           <div class="row">
 
             <div class="col-md-4">
-              <h2>Heading</h2>
-              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+              <h2>Topological Graph</h2>
+              <p>Distributed systems are fundimentally graphs. Nelson embraces this and models your entire system topology as a graph, allowing the system to know which systems interact, and what exposure any given system represents.</p>
               <!-- <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p> -->
             </div>
             <div class="col-md-4">
-              <h2>Heading</h2>
-              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-              <!-- <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p> -->
+              <h2>Self-Service</h2>
+              <p>From day zero, Nelson was designed with self-service, devops-style workflows in mind for end users. For those parts that cannot be delegated to end-users, operators are well catered for with a set of APIs that enable full control over schudling, secrets and more.</p>
             </div>
             <div class="col-md-4">
               <h2>Heading</h2>
