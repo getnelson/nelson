@@ -110,6 +110,21 @@ object Vault {
     numUses: Long = 0L
   ): VaultF[Token] = Free.liftF(CreateToken(policies, renewable, ttl, numUses))
 
+  def createKubernetesRole(
+    roleName: String,
+    authClusterName: String,
+    serviceAccountNames: List[String],
+    seviceAccountNamespaces: List[String],
+    defaultLeaseTTL: Option[FiniteDuration],
+    maxLeaseTTL: Option[FiniteDuration],
+    policies: Option[List[String]]
+  ): VaultF[Unit] = Free.liftF(CreateKubernetesRole(
+    roleName, authClusterName,
+    serviceAccountNames,
+    seviceAccountNamespaces,
+    defaultLeaseTTL, maxLeaseTTL,
+    policies))
+
   case object IsInitialized extends Vault[Boolean]
   final case class Initialize(init: Initialization) extends Vault[InitialCreds]
   final case class Unseal(key: MasterKey) extends Vault[SealStatus]
@@ -121,5 +136,13 @@ object Vault {
   final case class CreatePolicy(name: String, rules: List[Rule]) extends Vault[Unit]
   final case class DeletePolicy(name: String) extends Vault[Unit]
   final case class CreateToken(policies: Option[List[String]], renewable: Boolean, ttl: Option[FiniteDuration], numUses: Long = 0L) extends Vault[Token]
+  final case class CreateKubernetesRole(
+    authClusterName: String,
+    roleName: String,
+    serviceAccountNames: List[String],
+    seviceAccountNamespaces: List[String],
+    defaultLeaseTTL: Option[FiniteDuration],
+    maxLeaseTTL: Option[FiniteDuration],
+    policies: Option[List[String]]) extends Vault[Unit]
 }
 

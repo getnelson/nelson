@@ -15,11 +15,11 @@
 //:
 //: ----------------------------------------------------------------------------
 package nelson
+package vault
 
 import org.scalatest.{Matchers,FlatSpec,Inspectors}
 import policies._
 import nelson.test._
-import vault._
 
 import cats.effect.IO
 

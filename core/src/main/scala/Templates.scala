@@ -35,6 +35,7 @@ import scala.concurrent.duration._
 import Datacenter.StackName
 import Nelson.NelsonK
 import Metrics.default.{consulTemplateContainerCleanupFailuresTotal, consulTemplateContainersRunning, consulTemplateRunsDurationSeconds, consulTemplateRunsFailuresTotal}
+import vault.policies
 
 object Templates {
   import java.util.concurrent.ScheduledExecutorService

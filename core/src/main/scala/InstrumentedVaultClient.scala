@@ -52,6 +52,7 @@ class InstrumentedVaultClient private (instance: String, interp: Vault ~> IO, me
     case _: CreatePolicy => "createPolicy"
     case _: DeletePolicy => "deletePolicy"
     case _: CreateToken => "createToken"
+    case _: CreateKubernetesRole => "createKubernetesRole"
   }
 }
 
