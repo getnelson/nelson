@@ -8,13 +8,12 @@ menu:
   main:
     identifier: intro
     url: /introduction/
-    name: Introduction
     weight: 1
 ---
 
 # What is Nelson?
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet. Sed pulvinar iaculis magna at feugiat. Quisque luctus nec lectus vitae pharetra. Cras euismod pharetra augue ac consequat. Integer id euismod lectus, non cursus ligula. Nunc lorem dolor, condimentum nec nunc non, hendrerit ullamcorper tellus. Sed tortor nibh, mollis eget euismod ac, tempor a eros. Etiam feugiat odio ac interdum pellentesque. Nam dignissim, ipsum ut vehicula interdum, justo dui accumsan felis, in maximus diam justo tristique tellus.
+Nelson is a system for continuously deploying containers, and automatically managing their lifecycle. An application lifecycle refers to starting an application and then later wanting to replace that same application with say, a newer version. Nelson provides the plumbing to make that happen automatically: you simply focus on shipping changes to your repository, and Nelson orchestrates the launching, running, and eventual sunset of a given application revision.
 
 ## Git-centric
 
@@ -58,6 +57,6 @@ The authors of *Nelson* full appreciate that these constraints require more engi
 
 Nelson is not a monolithic solution that solves all problems. Nelson follows the classic unix philosphy: it is highly composable with other tools, which allows the system to be non-perscriptive, whilst still itself delivering value. There are a few scenarios which were very deliberitly ignored:
 
-+ Nelson does not support ad-hoc deployments: users cannot deploy random unversioned containers from their desktop; this is a feature not a bug.
++ Nelson does not support ad-hoc deployments: users cannot deploy random, unversioned containers from their desktop; this is a very deliberate design feature.
 
 + Nelson works best in a poly-repo environment, where builds focus on small, atomic units. Nelson can work with explicit tagging and releasing for those with a mono-repo style of source control, but it will almost certianly require some propietary tooling - this will always be out of scope for Nelson and its ecosystem.

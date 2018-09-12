@@ -31,7 +31,9 @@
               </nav>
             {{ end }}
 
+            {{ if (gt .WordCount 20 ) }}
             <hr />
+            {{ end }}
 
             {{ .Content }}
           </article>

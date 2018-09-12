@@ -14,7 +14,6 @@ menu:
   main:
     identifier: docs-cli
     parent: docs
-    name: Command Line
     url: /documentation/cli.html
     weight: 5
 ---

@@ -18,7 +18,6 @@ menu:
   main:
     identifier: docs-api
     parent: docs
-    name: REST API
     url: /documentation/api.html
     weight: 6
 ---

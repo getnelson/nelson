@@ -12,7 +12,6 @@ menu:
   main:
     parent: intro
     identifier: intro-use-case
-    name: Use Cases
     url: /introduction/use-case.html
     weight: 2
 ---

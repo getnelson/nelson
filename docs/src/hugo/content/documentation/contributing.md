@@ -2,7 +2,7 @@
 layout: "single"
 title: Contributing
 preamble: >
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet. Sed pulvinar iaculis magna at feugiat. Quisque luctus nec lectus vitae pharetra. Cras euismod pharetra augue ac consequat.
+  Contributions to Nelson are very much welcome! If you're considering contributing to the project, feel free to swing by the [gitter chat room](https://gitter.im/getnelson/nelson) to disucss the changes before hand (perhaps someone else is already working on your issue!). Alternitivly, please [file an issue](https://github.com/getnelson/nelson/issues) and one of the Nelson team will endevour to get back to you as soon as possible. The sections below outline some of the conventions and useful information for Nelson developers.
 contents:
 - Development
 - Command Line
@@ -11,7 +11,6 @@ menu:
   main:
     identifier: docs-contributing
     parent: docs
-    name: Contributing
     url: /documentation/contributing.html
     weight: 7
 ---

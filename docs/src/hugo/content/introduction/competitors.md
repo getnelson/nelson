@@ -10,7 +10,6 @@ menu:
   main:
     parent: 'intro'
     identifier: intro-competitors
-    name: Competitors
     url: /introduction/competitors.html
     weight: 3
 ---

@@ -102,6 +102,21 @@ pre {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+.clearing {
+  width: 100%;
+  /*background-color: red;*/
+  padding: 0.8em 0 0.8em 0;
+  border-top: 1px #eee solid;
+  border-bottom: 1px #eee solid;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  text-align: center;
+}
+.clearing small {
+  clear: both;
+  display: block;
+  padding-top: 1.5em;
+}
 
 /**************************** FOOTER ****************************/
 

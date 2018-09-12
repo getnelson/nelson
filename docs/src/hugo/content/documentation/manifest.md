@@ -15,7 +15,6 @@ menu:
   main:
     identifier: docs-manifest
     parent: docs
-    name: Manifest Settings
     url: /documentation/manifest.html
     weight: 5
 ---
