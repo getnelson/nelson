@@ -1,5 +1,5 @@
 ---
-layout: "single"
+layout: "single-with-toc"
 title: Manifests
 preamble: >
   blah

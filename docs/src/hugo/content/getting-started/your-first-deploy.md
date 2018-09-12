@@ -1,5 +1,5 @@
 ---
-layout: "single"
+layout: "single-with-toc"
 title: Your first deployment
 preamble: >
   One of the core tenets of the Nelson philosophy is that all changes are checked into source code - nothing should be actioned out of band, in an entirely untrackable manner. Nelson requires users define a manifest file and check it into the root of the repository. This file is called `.nelson.yml` (note the preceding `.` since it is a UNIX dotfile).
