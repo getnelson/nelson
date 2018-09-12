@@ -163,6 +163,7 @@ footer {
 }
 .primary {
   margin-top: 60px;
+  min-height: 500px;
 }
 
 .splash {
