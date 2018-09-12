@@ -24,7 +24,7 @@ import nelson.docker.DockerOp
 import nelson.logging.LoggingOp
 import nelson.scheduler.SchedulerOp
 import nelson.storage.{StoreOp}
-import nelson.vault.Vault
+import nelson.vault.{Vault,policies}
 
 import cats.data.{EitherK, OptionT}
 import cats.free.Free
@@ -135,6 +135,20 @@ object Workflow {
     def deletePolicyFromVault(sn: StackName, ns: NamespaceName): WorkflowF[Unit] =
       policies.deletePolicy(sn, ns).inject
 
+    /*
+     * Here we are essentially doing the equivilent of the following vault
+     * CLI execution:
+     *
+     * vault write auth/<cluster>/role/<stackname> \
+     *   bound_service_account_names=<stackname> \
+     *   bound_service_account_namespaces=<namespace> \
+     *   policies=<stackname>
+     */
+    def writeKubernetesRoleToVault(dc: Datacenter, sn: StackName, ns: NamespaceName): WorkflowF[Unit] =
+      Vault.createKubernetesRole(sn.toString, dc.name,
+          List(sn.toString), List(ns.asString),
+          None, None, Some(List(sn.toString))).inject
+
     def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Datacenter): WorkflowF[Unit] =
       for {
         d  <- StoreOp.getDeployment(id).inject[WorkflowOp]
@@ -182,5 +196,8 @@ object Workflow {
         _ <- handleDockerLogs(c) { case e: PushError => e }
       } yield b._2
     }
+
+    def vaultLoggingFields(sn: Datacenter.StackName, ns: NamespaceName, dcName: String): String =
+      s"namespace=${ns} unit=${sn.serviceType} policy=${vault.policies.policyName(sn, ns)} datacenter=${dcName}"
   }
 }

@@ -104,4 +104,14 @@ trait Json {
     ("num_uses" := ct.numUses) ->:
     jEmptyObject
   }
+
+  implicit val jsonCreateKubernetesRole: EncodeJson[CreateKubernetesRole] =
+    EncodeJson { kr =>
+      ("bound_service_account_names" := kr.serviceAccountNames) ->:
+      ("bound_service_account_namespaces" := kr.seviceAccountNamespaces) ->:
+      ("ttl" :?= kr.defaultLeaseTTL.map(d => s"${d.toMillis}ms")) ->?:
+      ("max_ttl" :?= kr.maxLeaseTTL.map(d => s"${d.toMillis}ms")) ->?:
+      ("policies" :?= kr.policies) ->?:
+      jEmptyObject
+    }
 }

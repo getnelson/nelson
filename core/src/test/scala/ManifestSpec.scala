@@ -17,6 +17,7 @@
 package nelson
 
 import cats.implicits._
+import org.http4s.Uri
 import org.scalacheck._, Prop._
 
 object ManifestSpec extends Properties("manifest") with RoutingFixtures {
@@ -110,7 +111,7 @@ class ManifestManualSpec extends NelsonSuite {
       d  = Github.Asset(
         id = 45,
         name = "example-howdy.deployable.yml",
-        url = "",
+        url = Uri.unsafeFromString(""),
         state = "",
         content = Some(c)
       )
@@ -140,7 +141,7 @@ class ManifestManualSpec extends NelsonSuite {
       asset = Github.Asset(
         id = 45,
         name = "example-howdy.deployable.yaml", // this is what is being tested - note .yaml instead of .yml
-        url = "",
+        url = Uri.unsafeFromString(""),
         state = "",
         content = Some(contents)
       )

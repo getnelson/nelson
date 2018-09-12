@@ -15,6 +15,7 @@
 //:
 //: ----------------------------------------------------------------------------
 package nelson
+package vault
 
 import nelson.Datacenter.StackName
 
@@ -23,9 +24,7 @@ import cats.effect.IO
 
 import fs2.Stream
 
-import vault._
-
-package object policies {
+object policies {
 
   val DenySysRule =
     Rule("sys/*", policy = Some("deny"), capabilities = Nil)

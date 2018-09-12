@@ -46,17 +46,18 @@ final class Http4sVaultClient(authToken: Token,
   val v1BaseUri = baseUri / "v1"
 
   def apply[A](v: Vault[A]): IO[A] = v match {
-    case IsInitialized          => isInitialized
-    case Initialize(init)       => initialize(init)
-    case GetSealStatus          => sealStatus
-    case Seal                   => seal
-    case Unseal(key)            => unseal(key)
-    case Get(path)              => get(path)
-    case Set(path, value)       => put(path,value)
-    case cp @ CreatePolicy(_,_) => createPolicy(cp)
-    case DeletePolicy(name)     => deletePolicy(name)
-    case GetMounts              => getMounts
-    case ct: CreateToken        => createToken(ct)
+    case IsInitialized            => isInitialized
+    case Initialize(init)         => initialize(init)
+    case GetSealStatus            => sealStatus
+    case Seal                     => seal
+    case Unseal(key)              => unseal(key)
+    case Get(path)                => get(path)
+    case Set(path, value)         => put(path,value)
+    case cp @ CreatePolicy(_,_)   => createPolicy(cp)
+    case DeletePolicy(name)       => deletePolicy(name)
+    case GetMounts                => getMounts
+    case ct: CreateToken          => createToken(ct)
+    case kr: CreateKubernetesRole => createKubernetesRole(kr)
   }
 
   val log = Logger[this.type]
@@ -133,4 +134,7 @@ final class Http4sVaultClient(authToken: Token,
         case None => IO.raiseError(new RuntimeException("No auth/client_token in create token response"))
       }
     }
+
+  def createKubernetesRole(ckr: CreateKubernetesRole): IO[Unit] =
+    reqVoid(Request(POST, v1BaseUri / "auth" / ckr.authClusterName / "role" / ckr.roleName).withBody(ckr.asJson))
 }
