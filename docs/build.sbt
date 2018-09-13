@@ -30,7 +30,10 @@ githubOrg := "getnelson"
 
 githubRepoName := "nelson"
 
-baseURL in Hugo := new URI(s"https://getnelson.io/")
+baseURL in Hugo := {
+  if (isTravisBuild.value) new URI(s"https://getnelson.io/")
+  else new URI(s"http://127.0.0.1:${previewFixedPort.value.getOrElse(1313)}/")
+}
 
 // dynamically generate a file here that can be automatically
 // imported by hugo as "site data". Doing this here so we don't
@@ -47,6 +50,5 @@ hugoGenerateData := {
 makeSite := makeSite.dependsOn(hugoGenerateData).value
 
 import com.typesafe.sbt.SbtGit.GitKeys.{gitBranch, gitRemoteRepo}
-// TIM: GITHUB_TOKEN is read from the .travis.yml environment
-// gitRemoteRepo := "https://"+sys.env.get("GITHUB_TOKEN").getOrElse("anonymous")+"@github.com/getnelson/nelson.git"
+
 gitRemoteRepo := "git@github.com:getnelson/nelson.git"

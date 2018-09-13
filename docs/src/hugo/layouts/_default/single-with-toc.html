@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ partial "head.html" . }}
+
+  <body>
+    <!-- navigation -->
+    {{ partial "top_nav.html" . }}
+    <!-- e/o navigation -->
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+          {{ partial "aside.html" . }}
+
+          <article class="col-md-9">
+            <h1>{{ .Title }}</h1>
+
+            {{ with .Params.preamble }}
+            <p>{{ . | markdownify }}</p>
+            {{ end }}
+
+            {{ .TableOfContents }}
+
+            <hr />
+
+            {{ .Content }}
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    {{ partial "footer.html" . }}
+
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<aside class="col-md-3">
+  <ol>
+    {{ $currentPage := . }}
+    {{ range $name, $menu := .Site.Menus.main }}
+        {{ if .HasChildren }}
+            <li class="{{if or ($currentPage.IsMenuCurrent "main" .) ($currentPage.HasMenuCurrent "main" .) }}active{{ end }}">
+              <a href="{{ .URL }}" class="{{ if $currentPage.IsMenuCurrent "main" . }}highlight{{ end }}">{{ .Page.Title }}</span></a>
+              <ol class="sub-menu">
+                  {{ range .Children }}
+                      <li class="{{ if $currentPage.IsMenuCurrent "main" . }}highlight{{ end }}">
+                          <a href="{{ .URL }}">{{ .Page.Title }}</a>
+                      </li>
+                  {{ end }}
+              </ol>
+            </li>
+        {{ else }}
+            <li>
+                <a href="{{ .URL }}">{{ .Name }}</a>
+            </li>
+        {{ end }}
+    {{ end }}
+</ol>
+</aside>

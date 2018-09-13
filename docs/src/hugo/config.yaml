@@ -1,27 +1,37 @@
 ---
 uglyurls: true
-theme: hugo-bootstrap-doc
 params:
-  project_name: Nelson
-  project_tagline: Automated, multi-region container deployment
+  project_name: Nelson – Cloud-native container deployment
   github_host: github.com
   github_repository: getnelson/nelson
   travis_url: https://travis-ci.org/getnelson/nelson
   license: Apache 2.0
   license_url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.9.x # can be overriden by site data `global.json`
+  version: 0.11.x # can be overriden by site data `global.json`
   google_analytics: UA-57263411-7
-  header:
-    # blue | green | orange | purple | red
-    color: blue
-    trianglify: true
-  header_links:
-    - title: GitHub
+menu:
+  nav:
+    - identifier: nav-intro
+      title: Introduction
+      url: /introduction/
+      weight: 1
+    - identifier: nav-gs
+      title: Getting Started
+      url: /getting-started/
+      weight: 2
+    # - identifier: nav-tutorials
+    #   title: Tutorial
+    #   url: /tutorial/
+    #   weight: 3
+    - identifier: nav-documentation
+      title: Documentation
+      url: /documentation/
+      weight: 4
+    - identifier: nav-scaladoc
+      title: Scaladoc
+      url: /api/
+      weight: 5
+    - identifier: nav-github
+      title: Code
       url: https://github.com/getnelson/nelson
-    - title: API Docs
-      url: https://getnelson.github.io/nelson/api/
-  footer_links:
-    - title: GitHub
-      url: https://github.com/getnelson/nelson
-    - title: Issues
-      url: https://getnelson.github.io/nelson/issues
+      weight: 6

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ partial "head.html" . }}
+
+  <body>
+    <!-- navigation -->
+    {{ partial "top_nav.html" . }}
+    <!-- e/o navigation -->
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+          {{ partial "aside.html" . }}
+
+          <article class="col-md-9">
+            <h1>{{ .Title }}</h1>
+
+            {{ with .Params.preamble }}
+            <p>{{ . | markdownify }}</p>
+            {{ end }}
+
+            {{ with .Params.contents }}
+              <nav id="TableOfContents">
+                <ol>
+                {{ range $item := . }}
+                  <li><a href="#{{ . | urlize }}">{{ . }}</a></li>
+                {{ end }}
+                </ol>
+              </nav>
+            {{ end }}
+
+            {{ if (gt .WordCount 20 ) }}
+            <hr />
+            {{ end }}
+
+            {{ .Content }}
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    {{ partial "footer.html" . }}
+
+  </body>
+</html>

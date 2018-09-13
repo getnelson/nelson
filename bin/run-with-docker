@@ -24,4 +24,4 @@ docker run -i -t --rm \
   -v "$DIR/../etc/classpath/revolver/logback.xml":/opt/application/conf/logback.xml \
   -v "$DIR/../etc/development/docker/nelson.cfg":/opt/application/conf/nelson.cfg \
   -v "$DIR/../db":/opt/application/db \
-  verizon/nelson:latest
+  getnelson/nelson:latest

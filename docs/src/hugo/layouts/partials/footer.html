@@ -1,0 +1,30 @@
+
+<div class="jumbotron bg-dark">
+  <footer class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <p>
+          Built with &hearts; by the Nelson engineering team.
+        </p>
+        <p>
+          Currently v{{ with .Site.Data.global }}
+                    {{ .release_version }}
+                  {{ else }}
+                    {{ $.Site.Params.version }}
+                  {{ end }}
+          &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
+          &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
+          &middot; <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>
+          &middot; <script type="text/javascript" src="/js/contact.js"></script>
+        </p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="/js/material.min.js"></script>
+{{ if not .IsHome }}
+<script src="/js/nelson.js"></script>
+{{ end }}
