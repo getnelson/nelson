@@ -35,6 +35,10 @@ class Http4sVaultSpec extends FlatSpec
 {
   override val StopContainersTimeout = 15.seconds
 
+  override def dockerContainers =
+    if (sys.env.get("BUILDKITE").isEmpty) consulContainer :: vaultContainer :: super.dockerContainers
+    else super.dockerContainers
+
   // i'm expecting protocol://ip:port
   def parseDockerHost(url: String): Option[String] = {
     val parts = url.split(":")
