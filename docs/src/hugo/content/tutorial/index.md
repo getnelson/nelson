@@ -5,12 +5,12 @@ name: Tutorials
 contents:
 - Using Slipway
 - Using Vault PKI
-menu:
-  main:
-    identifier: tutorial
-    name: Tutorials
-    url: /tutorial/index.html
-    weight: 3
+#menu:
+#  main:
+#    identifier: tutorial
+#    name: Tutorials
+#    url: /tutorial/index.html
+#    weight: 3
 ---
 
 ## Using Slipway

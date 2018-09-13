@@ -6,12 +6,12 @@ preamble: >
 #contents:
 #- Command Line
 #- Server
-menu:
-  main:
-    parent: gs
-    identifier: gs-manifest
-    url: /getting-started/manifest.html
-    weight: 3
+#menu:
+#  main:
+#    parent: gs
+#    identifier: gs-manifest
+#    url: /getting-started/manifest.html
+#    weight: 3
 ---
 
 ## Units

@@ -6,12 +6,12 @@ preamble: >
 #contents:
 #- Command Line
 #- Server
-menu:
-  main:
-    parent: gs
-    identifier: gs-firstdeploy
-    url: /getting-started/your-first-deploy.html
-    weight: 2
+#menu:
+#  main:
+#    parent: gs
+#    identifier: gs-firstdeploy
+#    url: /getting-started/your-first-deploy.html
+#    weight: 2
 ---
 
 ## Container

@@ -19,10 +19,10 @@ menu:
       title: Getting Started
       url: /getting-started/
       weight: 2
-    - identifier: nav-tutorials
-      title: Tutorial
-      url: /tutorial/
-      weight: 3
+    # - identifier: nav-tutorials
+    #   title: Tutorial
+    #   url: /tutorial/
+    #   weight: 3
     - identifier: nav-documentation
       title: Documentation
       url: /documentation/

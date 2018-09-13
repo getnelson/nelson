@@ -8,12 +8,12 @@ contents:
 - Policy Management
 - Thing Two
 - Thing Three
-menu:
-  main:
-    parent: intro
-    identifier: intro-use-case
-    url: /introduction/use-case.html
-    weight: 2
+#menu:
+#  main:
+#    parent: intro
+#    identifier: intro-use-case
+#    url: /introduction/use-case.html
+#    weight: 2
 ---
 
 # Policy Management
