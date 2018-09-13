@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://getnelson.io/favicon.ico">
+
+    <meta name="generator" content="Hugo 0.48" />
+
+    <title>Nelson – Cloud-native container deployment</title>
+
+    <link href="https://getnelson.io/css/material.min.css?edf2006c9072e3c321621256e3cbb480" rel="stylesheet">
+    
+    <link href="https://getnelson.io/css/nelson.css?deee1f3873648522c19ae4a64fb09ac9" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+
+
+  <body>
+    
+    
+<nav class="navbar navbar-expand-md navbar-light bg-blue-5">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="/img/nelson-without-background.svg" width="30" height="30" class="d-inline-block align-top" alt="" />
+      &nbsp;
+      Nelson
+    </a>
+    <ul class="navbar-nav mr-auto">
+      
+      
+      <li class="nav-item active">
+        <a class="nav-link" href="/introduction/">Introduction</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/getting-started/">Getting Started</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/documentation/">Documentation</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/api/">Scaladoc</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+    
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+          <aside class="col-md-3">
+  <ol>
+    
+    
+        
+            <li>
+                <a href="/introduction/">Introduction</a>
+            </li>
+        
+    
+        
+            <li class="">
+              <a href="/getting-started/index.html" class="">Getting Started</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/getting-started/install.html">Install</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/deployables.html">Deployables</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/blueprints.html">Blueprints</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/lifecycle.html">Lifecycle</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/next.html">Further Reading</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+        
+            <li class="">
+              <a href="/documentation/" class="">Documentation</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/documentation/cli.html">Command Line</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/manifest.html">Manifest Settings</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/operator.html">Operator Guide</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/api.html">REST API</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/contributing.html">Contributing</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/credits.html">Credits</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+</ol>
+</aside>
+
+          <article class="col-md-9">
+            <h1>Introduction</h1>
+
+            
+            <p>Welcome to the Nelson documentation - firstly, thanks for taking the time to look into the project. This section contains information about what Nelson is, and the kinds of problems it can solve. If you&rsquo;re looking for practical user documentation, please <a href="/documentation/">look at the detailed documentation</a> instead.</p>
+            
+
+            <nav id="TableOfContents">
+<ul>
+<li><a href="#what-is-nelson">What is Nelson?</a>
+<ul>
+<li><a href="#git-centric">Git-centric</a></li>
+<li><a href="#safe-and-secure">Safe and Secure</a></li>
+<li><a href="#consistent">Consistent</a></li>
+</ul></li>
+<li><a href="#what-nelson-is-not">What Nelson Is Not</a></li>
+</ul>
+</nav>
+
+            <hr />
+
+            
+
+<h1 id="what-is-nelson">What is Nelson?</h1>
+
+<p>Nelson is a system for continuously deploying containers, and automatically managing their lifecycle. An application lifecycle refers to starting an application and then later wanting to replace that same application with say, a newer version. Nelson provides the plumbing to make that happen automatically: you simply focus on shipping changes to your repository, and Nelson orchestrates the launching, running, and eventual sunset of a given application revision.</p>
+
+<h2 id="git-centric">Git-centric</h2>
+
+<p>Everything must be versioned. Nelson adopts a hardline position on configuration and changes made to systems at runtime: with two explicit exceptions, no application shall change its operable configuration. This means that your configuration is code and should be checked in along with your application. This includes the declarative manifest file that Nelson uses to receive its instructions. If you need configuration changes, modify it, check it in and redeploy.</p>
+
+<p>Adopting this approach has several discrete advantages:</p>
+
+<ul>
+<li><p>Reduced deployment risk: by deploying smaller sets of changes more frequently, you can know exactly what change set went into a particular version. There are several development workflows available with Nelson; you can choose your deployment cadence and the amount of code that goes into a specific release.</p></li>
+
+<li><p>Container images used at runtime are essentially inert and the container registry / image store does not need to be tightly secured, because no private information or system secrets are in the container a-priori.</p></li>
+
+<li><p>Every single change to the system has an audit trail, thanks to Git.</p></li>
+</ul>
+
+<h2 id="safe-and-secure">Safe and Secure</h2>
+
+<p>Runtime containers does not hold any credentials or other secret material until the very moment they are launched by the scheduler. The credentials given to the container dictate the access permissions the container has, and Nelson automatically provisions access policies based on what information it was told about the deployment. This has some nice properties:</p>
+
+<ul>
+<li><p>You cannot interact with a system or resource that you did not tell Nelson about.</p></li>
+
+<li><p>System auditing is a breeze: query the graph to see what applications use which secure resources.</p></li>
+
+<li><p>In the event of a compormised system, simply instruct nelson to redeploy the affected system(s) and the new deployment will have an entirely new set of credentials and the old permissions and policies will all be revoked and deleted.</p></li>
+</ul>
+
+<p>Practically speaking, credentials are sourced from <a href="https://www.vaultproject.io/">Vault</a> (or a KMS of your choosing), and then mounted to a <code>tempfs</code> attached to the container (an in-memory filesystem). You can only source credentials from Vault, for which you have a valid Vault Policy. These policies are dynamically generated by Nelson, and provisioned for you automatically at deployment time, and deleted automatically when the deployment is later torn down.</p>
+
+<h2 id="consistent">Consistent</h2>
+
+<p>By virtue of the fact that <em>Nelson</em> is orchestrating application deployments over potentially many target datacenters, it is important to realize that there is a subsequent lack of transactionality in the operations <em>Nelson</em> takes. This is most apparent when deploying a new revision of a particular system: application code can never assume it is a &ldquo;singleton&rdquo; or in some way special, as the minimum number of versions running - even if it&rsquo;s for a very short time - will be greater than one. <em>Nelson</em> will <em>eventually</em> deliver on its promise and make one revision the primary revision of a system by cleaning up the others, depending on the particular circumstances, that process might not be immediate, and is most certainly not atomic.</p>
+
+<p>This means that application creators have the following constraints:</p>
+
+<ol>
+<li><p>Applications which require singleton behavior can either choose to implement application-layer leader election, or use convergent data structures to make sure that all overlapping changes will always commute.</p></li>
+
+<li><p>Data corruption can - and will - eventually happen and applications need to be able to recover from this. Typically this means checkpointing data writes to limit the blast radius of any potential corruption (more appropriate for batch-style processes), engineering teams should properly evaluate the possibility for corruption and recovery in their particular use case.</p></li>
+</ol>
+
+<p>The authors of <em>Nelson</em> full appreciate that these constraints require more engineering work. However, by applying these constraints it means <em>Nelson</em> can provide a guarantee around several critical behaviors, and set the right expectation from the start about application lifecycle. Moreover, these constraints represent best practice from a distributed systems perspective, and acknowledge the reality of discrete, interactive systems.</p>
+
+<hr />
+
+<h1 id="what-nelson-is-not">What Nelson Is Not</h1>
+
+<p>Nelson is not a monolithic solution that solves all problems. Nelson follows the classic unix philosphy: it is highly composable with other tools, which allows the system to be non-perscriptive, whilst still itself delivering value. There are a few scenarios which were very deliberitly ignored:</p>
+
+<ul>
+<li><p>Nelson does not support ad-hoc deployments: users cannot deploy random, unversioned containers from their desktop; this is a very deliberate design feature.</p></li>
+
+<li><p>Nelson works best in a poly-repo environment, where builds focus on small, atomic units. Nelson can work with explicit tagging and releasing for those with a mono-repo style of source control, but it will almost certianly require some propietary tooling - this will always be out of scope for Nelson and its ecosystem.</p></li>
+</ul>
+
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    
+<div class="jumbotron bg-dark">
+  <footer class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <p>
+          Built with &hearts; by the Nelson engineering team.
+        </p>
+        <p>
+          Currently v
+                    0.11.93
+                  
+          &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
+          &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
+          &middot; <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>
+          &middot; <script type="text/javascript" src="/js/contact.js"></script>
+        </p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="/js/material.min.js"></script>
+
+<script src="/js/nelson.js"></script>
+
+
+  </body>
+</html>

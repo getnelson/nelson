@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Kubernetes</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="version">version: <a href="KubernetesVersion.html" class="extype" name="nelson.KubernetesVersion">KubernetesVersion</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="mode">mode: <a href="Infrastructure$$KubernetesMode.html" class="extype" name="nelson.Infrastructure.KubernetesMode">KubernetesMode</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Kubernetes</span><span class="params">(<span name="mode">mode: <a href="Infrastructure$$KubernetesMode.html" class="extype" name="nelson.Infrastructure.KubernetesMode">KubernetesMode</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Infrastructure.Kubernetes#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(endpoint:org.http4s.Uri,version:nelson.KubernetesVersion,timeout:scala.concurrent.duration.Duration,mode:nelson.Infrastructure.KubernetesMode):nelson.Infrastructure.Kubernetes"></a>
+      <a id="&lt;init&gt;(mode:nelson.Infrastructure.KubernetesMode,timeout:scala.concurrent.duration.FiniteDuration):nelson.Infrastructure.Kubernetes"></a>
       <a id="&lt;init&gt;:Kubernetes"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Kubernetes</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="version">version: <a href="KubernetesVersion.html" class="extype" name="nelson.KubernetesVersion">KubernetesVersion</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="mode">mode: <a href="Infrastructure$$KubernetesMode.html" class="extype" name="nelson.Infrastructure.KubernetesMode">KubernetesMode</a></span>)</span>
+        <span class="name">Kubernetes</span><span class="params">(<span name="mode">mode: <a href="Infrastructure$$KubernetesMode.html" class="extype" name="nelson.Infrastructure.KubernetesMode">KubernetesMode</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Kubernetes@&lt;init&gt;(endpoint:org.http4s.Uri,version:nelson.KubernetesVersion,timeout:scala.concurrent.duration.Duration,mode:nelson.Infrastructure.KubernetesMode):nelson.Infrastructure.Kubernetes" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Infrastructure$$Kubernetes@&lt;init&gt;(mode:nelson.Infrastructure.KubernetesMode,timeout:scala.concurrent.duration.FiniteDuration):nelson.Infrastructure.Kubernetes" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -205,23 +205,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="nelson.Infrastructure.Kubernetes#endpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="endpoint:org.http4s.Uri"></a>
-      <a id="endpoint:Uri"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">endpoint</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Kubernetes@endpoint:org.http4s.Uri" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -382,35 +365,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.Infrastructure.Kubernetes#timeout" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="timeout:scala.concurrent.duration.Duration"></a>
-      <a id="timeout:Duration"></a>
+      <a id="timeout:scala.concurrent.duration.FiniteDuration"></a>
+      <a id="timeout:FiniteDuration"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">timeout</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>
+        <span class="name">timeout</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Kubernetes@timeout:scala.concurrent.duration.Duration" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Infrastructure.Kubernetes#version" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="version:nelson.KubernetesVersion"></a>
-      <a id="version:KubernetesVersion"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">version</span><span class="result">: <a href="KubernetesVersion.html" class="extype" name="nelson.KubernetesVersion">KubernetesVersion</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Kubernetes@version:nelson.KubernetesVersion" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Infrastructure$$Kubernetes@timeout:scala.concurrent.duration.FiniteDuration" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

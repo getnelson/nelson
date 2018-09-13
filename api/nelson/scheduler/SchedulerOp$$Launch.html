@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Launch</span><span class="params">(<span name="i">i: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="a">a: <a href="../package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="../Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>[<span class="extype" name="scala.Predef.String">String</span>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Launch</span><span class="params">(<span name="i">i: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="a">a: <a href="../package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="../Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="blueprint">blueprint: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../blueprint/Template.html" class="extype" name="nelson.blueprint.Template">Template</a>]</span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">SchedulerOp</a>[<span class="extype" name="scala.Predef.String">String</span>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.scheduler.SchedulerOp.Launch#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,a:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,hash:String):nelson.scheduler.SchedulerOp.Launch"></a>
+      <a id="&lt;init&gt;(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,a:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,blueprint:Option[nelson.blueprint.Template],hash:String):nelson.scheduler.SchedulerOp.Launch"></a>
       <a id="&lt;init&gt;:Launch"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Launch</span><span class="params">(<span name="i">i: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="a">a: <a href="../package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="../Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">Launch</span><span class="params">(<span name="i">i: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="a">a: <a href="../package.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="../Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="blueprint">blueprint: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../blueprint/Template.html" class="extype" name="nelson.blueprint.Template">Template</a>]</span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.scheduler.SchedulerOp$$Launch@&lt;init&gt;(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,a:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,hash:String):nelson.scheduler.SchedulerOp.Launch" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.scheduler.SchedulerOp$$Launch@&lt;init&gt;(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,a:nelson.@@[nelson.Manifest.UnitDef,nelson.Manifest.Versioned],p:nelson.Manifest.Plan,blueprint:Option[nelson.blueprint.Template],hash:String):nelson.scheduler.SchedulerOp.Launch" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -199,6 +199,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.scheduler.SchedulerOp.Launch#blueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="blueprint:Option[nelson.blueprint.Template]"></a>
+      <a id="blueprint:Option[Template]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">blueprint</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../blueprint/Template.html" class="extype" name="nelson.blueprint.Template">Template</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.scheduler.SchedulerOp$$Launch@blueprint:Option[nelson.blueprint.Template]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>

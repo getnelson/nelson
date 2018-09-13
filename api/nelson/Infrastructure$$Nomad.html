@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Nomad</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="dockerRepoUser">dockerRepoUser: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoPassword">dockerRepoPassword: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoServerAddress">dockerRepoServerAddress: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loggingImage">loggingImage: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>, <span name="mhzPerCPU">mhzPerCPU: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="splunk">splunk: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Infrastructure$$SplunkConfig.html" class="extype" name="nelson.Infrastructure.SplunkConfig">SplunkConfig</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Nomad</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="dockerRepoUser">dockerRepoUser: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoPassword">dockerRepoPassword: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoServerAddress">dockerRepoServerAddress: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="mhzPerCPU">mhzPerCPU: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Infrastructure.Nomad#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration,dockerRepoUser:String,dockerRepoPassword:String,dockerRepoServerAddress:String,loggingImage:Option[nelson.docker.Docker.Image],mhzPerCPU:Int,splunk:Option[nelson.Infrastructure.SplunkConfig]):nelson.Infrastructure.Nomad"></a>
+      <a id="&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration,dockerRepoUser:String,dockerRepoPassword:String,dockerRepoServerAddress:String,mhzPerCPU:Int):nelson.Infrastructure.Nomad"></a>
       <a id="&lt;init&gt;:Nomad"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Nomad</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="dockerRepoUser">dockerRepoUser: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoPassword">dockerRepoPassword: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoServerAddress">dockerRepoServerAddress: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loggingImage">loggingImage: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>, <span name="mhzPerCPU">mhzPerCPU: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="splunk">splunk: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Infrastructure$$SplunkConfig.html" class="extype" name="nelson.Infrastructure.SplunkConfig">SplunkConfig</a>]</span>)</span>
+        <span class="name">Nomad</span><span class="params">(<span name="endpoint">endpoint: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="dockerRepoUser">dockerRepoUser: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoPassword">dockerRepoPassword: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dockerRepoServerAddress">dockerRepoServerAddress: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="mhzPerCPU">mhzPerCPU: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Nomad@&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration,dockerRepoUser:String,dockerRepoPassword:String,dockerRepoServerAddress:String,loggingImage:Option[nelson.docker.Docker.Image],mhzPerCPU:Int,splunk:Option[nelson.Infrastructure.SplunkConfig]):nelson.Infrastructure.Nomad" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Infrastructure$$Nomad@&lt;init&gt;(endpoint:org.http4s.Uri,timeout:scala.concurrent.duration.Duration,dockerRepoUser:String,dockerRepoPassword:String,dockerRepoServerAddress:String,mhzPerCPU:Int):nelson.Infrastructure.Nomad" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -347,23 +347,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="nelson.Infrastructure.Nomad#loggingImage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="loggingImage:Option[nelson.docker.Docker.Image]"></a>
-      <a id="loggingImage:Option[Image]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">loggingImage</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Nomad@loggingImage:Option[nelson.docker.Docker.Image]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.Infrastructure.Nomad#mhzPerCPU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="mhzPerCPU:Int"></a>
       <a id="mhzPerCPU:Int"></a>
@@ -432,23 +415,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.Infrastructure.Nomad#splunk" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="splunk:Option[nelson.Infrastructure.SplunkConfig]"></a>
-      <a id="splunk:Option[SplunkConfig]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">splunk</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Infrastructure$$SplunkConfig.html" class="extype" name="nelson.Infrastructure.SplunkConfig">SplunkConfig</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Nomad@splunk:Option[nelson.Infrastructure.SplunkConfig]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

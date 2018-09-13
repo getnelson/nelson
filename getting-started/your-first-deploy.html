@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://getnelson.io/favicon.ico">
+
+    <meta name="generator" content="Hugo 0.48" />
+
+    <title>Nelson – Cloud-native container deployment</title>
+
+    <link href="https://getnelson.io/css/material.min.css?486320230a9cf98d5673a9800715acfa" rel="stylesheet">
+    
+    <link href="https://getnelson.io/css/nelson.css?6c62e24ed383996a0506ca0db9751bc4" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+
+
+  <body>
+    
+    
+<nav class="navbar navbar-expand-md navbar-light bg-blue-5">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="/img/nelson-without-background.svg" width="30" height="30" class="d-inline-block align-top" alt="" />
+      &nbsp;
+      Nelson
+    </a>
+    <ul class="navbar-nav mr-auto">
+      
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/introduction/">Introduction</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/getting-started/">Getting Started</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/documentation/">Documentation</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/api/">Scaladoc</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+    
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+          <aside class="col-md-3">
+  <ol>
+    
+    
+        
+            <li>
+                <a href="/introduction/">Introduction</a>
+            </li>
+        
+    
+        
+            <li class="">
+              <a href="/getting-started/index.html" class="">Getting Started</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/getting-started/install.html">Install</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/deployables.html">Deployables</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/blueprints.html">Blueprints</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/lifecycle.html">Lifecycle</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/next.html">Further Reading</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+        
+            <li class="">
+              <a href="/documentation/" class="">Documentation</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/documentation/cli.html">Command Line</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/manifest.html">Manifest Settings</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/operator.html">Operator Guide</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/api.html">REST API</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/contributing.html">Contributing</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/credits.html">Credits</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+</ol>
+</aside>
+
+          <article class="col-md-9">
+            <h1>Your first deployment</h1>
+
+            
+            <p>One of the core tenets of the Nelson philosophy is that all changes are checked into source code - nothing should be actioned out of band, in an entirely untrackable manner. Nelson requires users define a manifest file and check it into the root of the repository. This file is called <code>.nelson.yml</code> (note the preceding <code>.</code> since it is a UNIX dotfile).</p>
+            
+
+            <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#container">Container</a></li>
+<li><a href="#manifest">Manifest</a></li>
+<li><a href="#enable-the-repo">Enable the repo</a></li>
+<li><a href="#integrate-ci">Integrate CI</a></li>
+</ul></li>
+</ul>
+</nav>
+
+            <hr />
+
+            
+
+<h2 id="container">Container</h2>
+
+<p>TODO: show how to make a basic container and publish with slipway</p>
+
+<h2 id="manifest">Manifest</h2>
+
+<p>This file contains the application <code>unit</code> definitions, along with any additional configuration for monitoring, alerting and scaling those units. Consider a simple example that launches a Hello World service:</p>
+
+<pre><code class="language-yaml">---
+units:
+  - name: hello-world
+    description: &gt;
+      very simple example service that says
+      hello world when the index resource is
+      called via http
+    ports:
+      - default-&gt;9000/http
+
+plans:
+  - name: default
+
+namespaces:
+  - name: dev
+    units:
+      - ref: hello-world
+      - plans:
+         - default
+</code></pre>
+
+<p>This is the simplest <code>.nelson.yml</code> that one could define for a unit that exposes a service on port 9000. It declares a unit called <code>hello-world</code>, and then exposes a port. This is an example of a unit that is typically referred to as a service. By comparison, units that are intended to be run periodically define a <code>schedule</code>. Such a unit is typically referred to as a job. Below is a simple example of a unit that is run hourly:</p>
+
+<pre><code class="language-yaml">---
+units:
+- name: hello-world
+  description: &gt;
+    very simple example job that prints
+    hello world and exits right away
+
+plans:
+- name: dev-plan
+  schedule: hourly
+
+namespaces:
+- name: dev
+  units:
+  - ref: howdy
+    plans:
+    - dev-plan
+</code></pre>
+
+<p>Here the two units are similar, but the second defines a <code>schedule</code> under the plans stanza, which indicates that the unit is to be run periodically as a <code>job</code>.</p>
+
+<h2 id="enable-the-repo">Enable the repo</h2>
+
+<p>TODO: show how to enable the repo</p>
+
+<h2 id="integrate-ci">Integrate CI</h2>
+
+<p>TODO: show how to use slipway</p>
+
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    
+<div class="jumbotron bg-dark">
+  <footer class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <p>
+          Built with &hearts; by the Nelson engineering team.
+        </p>
+        <p>
+          Currently v
+                    0.11.93
+                  
+          &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
+          &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
+          &middot; <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>
+          &middot; <script type="text/javascript" src="/js/contact.js"></script>
+        </p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="/js/material.min.js"></script>
+
+<script src="/js/nelson.js"></script>
+
+
+  </body>
+</html>

@@ -47,7 +47,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Deployment</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="unit">unit: <a href="Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="deployTime">deployTime: <span class="extype" name="java.time.Instant">Instant</span></span>, <span name="workflow">workflow: <a href="package.html#WorkflowRef=String" class="extmbr" name="nelson.WorkflowRef">WorkflowRef</a></span>, <span name="plan">plan: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="expirationPolicyRef">expirationPolicyRef: <a href="package.html#ExpirationPolicyRef=String" class="extmbr" name="nelson.ExpirationPolicyRef">ExpirationPolicyRef</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Deployment</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="unit">unit: <a href="Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="deployTime">deployTime: <span class="extype" name="java.time.Instant">Instant</span></span>, <span name="workflow">workflow: <a href="package.html#WorkflowRef=String" class="extmbr" name="nelson.WorkflowRef">WorkflowRef</a></span>, <span name="plan">plan: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="expirationPolicyRef">expirationPolicyRef: <a href="package.html#ExpirationPolicyRef=String" class="extmbr" name="nelson.ExpirationPolicyRef">ExpirationPolicyRef</a></span>, <span name="renderedBlueprint">renderedBlueprint: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -91,7 +91,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Datacenter.Deployment#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(id:nelson.ID,unit:nelson.Datacenter.DCUnit,hash:String,namespace:nelson.Datacenter.Namespace,deployTime:java.time.Instant,workflow:nelson.WorkflowRef,plan:String,guid:nelson.GUID,expirationPolicyRef:nelson.ExpirationPolicyRef):nelson.Datacenter.Deployment"></a>
+      <a id="&lt;init&gt;(id:nelson.ID,unit:nelson.Datacenter.DCUnit,hash:String,namespace:nelson.Datacenter.Namespace,deployTime:java.time.Instant,workflow:nelson.WorkflowRef,plan:String,guid:nelson.GUID,expirationPolicyRef:nelson.ExpirationPolicyRef,renderedBlueprint:Option[String]):nelson.Datacenter.Deployment"></a>
       <a id="&lt;init&gt;:Deployment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -99,10 +99,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Deployment</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="unit">unit: <a href="Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="deployTime">deployTime: <span class="extype" name="java.time.Instant">Instant</span></span>, <span name="workflow">workflow: <a href="package.html#WorkflowRef=String" class="extmbr" name="nelson.WorkflowRef">WorkflowRef</a></span>, <span name="plan">plan: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="expirationPolicyRef">expirationPolicyRef: <a href="package.html#ExpirationPolicyRef=String" class="extmbr" name="nelson.ExpirationPolicyRef">ExpirationPolicyRef</a></span>)</span>
+        <span class="name">Deployment</span><span class="params">(<span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="unit">unit: <a href="Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="namespace">namespace: <a href="Datacenter$$Namespace.html" class="extype" name="nelson.Datacenter.Namespace">Namespace</a></span>, <span name="deployTime">deployTime: <span class="extype" name="java.time.Instant">Instant</span></span>, <span name="workflow">workflow: <a href="package.html#WorkflowRef=String" class="extmbr" name="nelson.WorkflowRef">WorkflowRef</a></span>, <span name="plan">plan: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="guid">guid: <a href="package.html#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="expirationPolicyRef">expirationPolicyRef: <a href="package.html#ExpirationPolicyRef=String" class="extmbr" name="nelson.ExpirationPolicyRef">ExpirationPolicyRef</a></span>, <span name="renderedBlueprint">renderedBlueprint: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Datacenter$$Deployment@&lt;init&gt;(id:nelson.ID,unit:nelson.Datacenter.DCUnit,hash:String,namespace:nelson.Datacenter.Namespace,deployTime:java.time.Instant,workflow:nelson.WorkflowRef,plan:String,guid:nelson.GUID,expirationPolicyRef:nelson.ExpirationPolicyRef):nelson.Datacenter.Deployment" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Datacenter$$Deployment@&lt;init&gt;(id:nelson.ID,unit:nelson.Datacenter.DCUnit,hash:String,namespace:nelson.Datacenter.Namespace,deployTime:java.time.Instant,workflow:nelson.WorkflowRef,plan:String,guid:nelson.GUID,expirationPolicyRef:nelson.ExpirationPolicyRef,renderedBlueprint:Option[String]):nelson.Datacenter.Deployment" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -464,6 +464,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Datacenter$$Deployment@plan:String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Datacenter.Deployment#renderedBlueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="renderedBlueprint:Option[String]"></a>
+      <a id="renderedBlueprint:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">renderedBlueprint</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Datacenter$$Deployment@renderedBlueprint:Option[String]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

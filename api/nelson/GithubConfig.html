@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">GithubConfig</span><span class="params">(<span name="domain">domain: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="clientId">clientId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectUri">redirectUri: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="systemAccessToken">systemAccessToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>, <span name="systemUsername">systemUsername: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="organizationBlacklist">organizationBlacklist: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="organizationAdminList">organizationAdminList: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">GithubConfig</span><span class="params">(<span name="domain">domain: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="org.http4s.Uri">Uri</span>]</span>, <span name="clientId">clientId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectUri">redirectUri: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="systemAccessToken">systemAccessToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>, <span name="systemUsername">systemUsername: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="organizationBlacklist">organizationBlacklist: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="organizationAdminList">organizationAdminList: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.GithubConfig#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(domain:Option[String],clientId:String,clientSecret:String,redirectUri:String,scope:String,systemAccessToken:nelson.AccessToken,systemUsername:String,organizationBlacklist:List[String],organizationAdminList:List[String]):nelson.GithubConfig"></a>
+      <a id="&lt;init&gt;(domain:Option[org.http4s.Uri],clientId:String,clientSecret:String,redirectUri:String,scope:String,systemAccessToken:nelson.AccessToken,systemUsername:String,organizationBlacklist:List[String],organizationAdminList:List[String]):nelson.GithubConfig"></a>
       <a id="&lt;init&gt;:GithubConfig"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">GithubConfig</span><span class="params">(<span name="domain">domain: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="clientId">clientId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectUri">redirectUri: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="systemAccessToken">systemAccessToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>, <span name="systemUsername">systemUsername: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="organizationBlacklist">organizationBlacklist: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="organizationAdminList">organizationAdminList: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
+        <span class="name">GithubConfig</span><span class="params">(<span name="domain">domain: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="org.http4s.Uri">Uri</span>]</span>, <span name="clientId">clientId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectUri">redirectUri: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="systemAccessToken">systemAccessToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>, <span name="systemUsername">systemUsername: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="organizationBlacklist">organizationBlacklist: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="organizationAdminList">organizationAdminList: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@&lt;init&gt;(domain:Option[String],clientId:String,clientSecret:String,redirectUri:String,scope:String,systemAccessToken:nelson.AccessToken,systemUsername:String,organizationBlacklist:List[String],organizationAdminList:List[String]):nelson.GithubConfig" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@&lt;init&gt;(domain:Option[org.http4s.Uri],clientId:String,clientSecret:String,redirectUri:String,scope:String,systemAccessToken:nelson.AccessToken,systemUsername:String,organizationBlacklist:List[String],organizationAdminList:List[String]):nelson.GithubConfig" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -166,18 +166,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.GithubConfig#api" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="api:String"></a>
-      <a id="api:String"></a>
+      <a id="api:org.http4s.Uri"></a>
+      <a id="api:Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">api</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">api</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@api:String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@api:org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -257,35 +257,35 @@
               
         </dd></dl></div>
     </li><li name="nelson.GithubConfig#contentsEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contentsEndpoint(slug:nelson.Slug,path:String):String"></a>
-      <a id="contentsEndpoint(Slug,String):String"></a>
+      <a id="contentsEndpoint(slug:nelson.Slug,path:String):org.http4s.Uri"></a>
+      <a id="contentsEndpoint(Slug,String):Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contentsEndpoint</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">contentsEndpoint</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@contentsEndpoint(slug:nelson.Slug,path:String):String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@contentsEndpoint(slug:nelson.Slug,path:String):org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.GithubConfig#domain" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="domain:Option[String]"></a>
-      <a id="domain:Option[String]"></a>
+      <a id="domain:Option[org.http4s.Uri]"></a>
+      <a id="domain:Option[Uri]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">domain</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">domain</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="org.http4s.Uri">Uri</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@domain:Option[String]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@domain:Option[org.http4s.Uri]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -382,18 +382,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.GithubConfig#loginEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="loginEndpoint:String"></a>
-      <a id="loginEndpoint:String"></a>
+      <a id="loginEndpoint:org.http4s.Uri"></a>
+      <a id="loginEndpoint:Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">loginEndpoint</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">loginEndpoint</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@loginEndpoint:String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@loginEndpoint:org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -450,35 +450,35 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.GithubConfig#oauth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="oauth:String"></a>
-      <a id="oauth:String"></a>
+      <a id="oauth:org.http4s.Uri"></a>
+      <a id="oauth:Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">oauth</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">oauth</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@oauth:String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@oauth:org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.GithubConfig#orgEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="orgEndpoint(login:String):String"></a>
-      <a id="orgEndpoint(String):String"></a>
+      <a id="orgEndpoint(login:String):org.http4s.Uri"></a>
+      <a id="orgEndpoint(String):Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">orgEndpoint</span><span class="params">(<span name="login">login: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">orgEndpoint</span><span class="params">(<span name="login">login: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@orgEndpoint(login:String):String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@orgEndpoint(login:String):org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -535,35 +535,35 @@
     </span>
       
     </li><li name="nelson.GithubConfig#releaseEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="releaseEndpoint(slug:nelson.Slug,releaseId:Long):String"></a>
-      <a id="releaseEndpoint(Slug,Long):String"></a>
+      <a id="releaseEndpoint(slug:nelson.Slug,releaseId:Long):org.http4s.Uri"></a>
+      <a id="releaseEndpoint(Slug,Long):Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">releaseEndpoint</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="releaseId">releaseId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">releaseEndpoint</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="releaseId">releaseId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@releaseEndpoint(slug:nelson.Slug,releaseId:Long):String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@releaseEndpoint(slug:nelson.Slug,releaseId:Long):org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.GithubConfig#repoEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="repoEndpoint(page:Int):String"></a>
-      <a id="repoEndpoint(Int):String"></a>
+      <a id="repoEndpoint(page:Int):org.http4s.Uri"></a>
+      <a id="repoEndpoint(Int):Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">repoEndpoint</span><span class="params">(<span name="page">page: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">1</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">repoEndpoint</span><span class="params">(<span name="page">page: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">1</span></span>)</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@repoEndpoint(page:Int):String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@repoEndpoint(page:Int):org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -637,52 +637,52 @@
     </span>
       
     </li><li name="nelson.GithubConfig#tokenEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="tokenEndpoint:String"></a>
-      <a id="tokenEndpoint:String"></a>
+      <a id="tokenEndpoint:org.http4s.Uri"></a>
+      <a id="tokenEndpoint:Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">tokenEndpoint</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">tokenEndpoint</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@tokenEndpoint:String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@tokenEndpoint:org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.GithubConfig#userEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="userEndpoint:String"></a>
-      <a id="userEndpoint:String"></a>
+      <a id="userEndpoint:org.http4s.Uri"></a>
+      <a id="userEndpoint:Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">userEndpoint</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">userEndpoint</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@userEndpoint:String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@userEndpoint:org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.GithubConfig#userOrgsEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="userOrgsEndpoint:String"></a>
-      <a id="userOrgsEndpoint:String"></a>
+      <a id="userOrgsEndpoint:org.http4s.Uri"></a>
+      <a id="userOrgsEndpoint:Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">userOrgsEndpoint</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">userOrgsEndpoint</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@userOrgsEndpoint:String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@userOrgsEndpoint:org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -757,18 +757,18 @@
               
         </dd></dl></div>
     </li><li name="nelson.GithubConfig#webhookEndpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="webhookEndpoint(slug:nelson.Slug):String"></a>
-      <a id="webhookEndpoint(Slug):String"></a>
+      <a id="webhookEndpoint(slug:nelson.Slug):org.http4s.Uri"></a>
+      <a id="webhookEndpoint(Slug):Uri"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">webhookEndpoint</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">webhookEndpoint</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result">: <span class="extype" name="org.http4s.Uri">Uri</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.GithubConfig@webhookEndpoint(slug:nelson.Slug):String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.GithubConfig@webhookEndpoint(slug:nelson.Slug):org.http4s.Uri" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

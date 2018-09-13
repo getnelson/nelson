@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Github.GithubHttp#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(cfg:nelson.GithubConfig,http:dispatch.Http):nelson.Github.GithubHttp"></a>
+      <a id="&lt;init&gt;(cfg:nelson.GithubConfig,client:org.http4s.client.Client[cats.effect.IO],timeout:scala.concurrent.duration.FiniteDuration,ec:scala.concurrent.ExecutionContext):nelson.Github.GithubHttp"></a>
       <a id="&lt;init&gt;:GithubHttp"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">GithubHttp</span><span class="params">(<span name="cfg">cfg: <a href="GithubConfig.html" class="extype" name="nelson.GithubConfig">GithubConfig</a></span>, <span name="http">http: <span class="extype" name="dispatch.Http">Http</span></span>)</span>
+        <span class="name">GithubHttp</span><span class="params">(<span name="cfg">cfg: <a href="GithubConfig.html" class="extype" name="nelson.GithubConfig">GithubConfig</a></span>, <span name="client">client: <span class="extype" name="org.http4s.client.Client">Client</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GithubHttp@&lt;init&gt;(cfg:nelson.GithubConfig,http:dispatch.Http):nelson.Github.GithubHttp" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$GithubHttp@&lt;init&gt;(cfg:nelson.GithubConfig,client:org.http4s.client.Client[cats.effect.IO],timeout:scala.concurrent.duration.FiniteDuration,ec:scala.concurrent.ExecutionContext):nelson.Github.GithubHttp" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -110,24 +110,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="nelson.Github.GithubHttp.BedazzledReq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="BedazzledReqextendsAnyRef"></a>
-      <a id="BedazzledReq:BedazzledReq"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="Github$$GithubHttp$BedazzledReq.html"><span class="name">BedazzledReq</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GithubHttp@BedazzledReqextendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Github.GithubHttp.GithubApiError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="nelson.Github.GithubHttp.GithubApiError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GithubApiErrorextendsExceptionwithProductwithSerializable"></a>
       <a id="GithubApiError:GithubApiError"></a>
       <h4 class="signature">
@@ -144,53 +127,19 @@
       </a>
     </span>
       
-    </li><li name="nelson.Github.GithubHttp.MyRequestHandlerTupleBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MyRequestHandlerTupleBuilderextendsAnyRef"></a>
-      <a id="MyRequestHandlerTupleBuilder:MyRequestHandlerTupleBuilder"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="Github$$GithubHttp$MyRequestHandlerTupleBuilder.html"><span class="name">MyRequestHandlerTupleBuilder</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GithubHttp@MyRequestHandlerTupleBuilderextendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Github.GithubHttp.OkWithErrors" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OkWithErrors[A]extendsAsyncCompletionHandler[A]"></a>
-      <a id="OkWithErrors[A]:OkWithErrors[A]"></a>
+    </li><li name="nelson.Github.GithubHttp.UnexpectedGithubResponse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnexpectedGithubResponseextendsExceptionwithProductwithSerializable"></a>
+      <a id="UnexpectedGithubResponse:UnexpectedGithubResponse"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Github$$GithubHttp$OkWithErrors.html"><span class="name">OkWithErrors</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="com.ning.http.client.AsyncCompletionHandler">AsyncCompletionHandler</span>[<span class="extype" name="nelson.Github.GithubHttp.OkWithErrors.A">A</span>]</span>
+        <a href="Github$$GithubHttp$UnexpectedGithubResponse.html"><span class="name">UnexpectedGithubResponse</span></a><span class="params">(<span name="context">context: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GithubHttp@OkWithErrors[A]extendsAsyncCompletionHandler[A]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Github.GithubHttp.OkWithPaginationHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OkWithPaginationHandler[A]extendsAsyncCompletionHandler[(A,Map[nelson.Github.Interpreter.Step,java.net.URI])]"></a>
-      <a id="OkWithPaginationHandler[A]:OkWithPaginationHandler[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="Github$$GithubHttp$OkWithPaginationHandler.html"><span class="name">OkWithPaginationHandler</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="com.ning.http.client.AsyncCompletionHandler">AsyncCompletionHandler</span>[(<span class="extype" name="nelson.Github.GithubHttp.OkWithPaginationHandler.A">A</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<a href="Github$$Interpreter$$Step.html" class="extype" name="nelson.Github.Interpreter.Step">Step</a>, <span class="extype" name="java.net.URI">URI</span>])]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GithubHttp@OkWithPaginationHandler[A]extendsAsyncCompletionHandler[(A,Map[nelson.Github.Interpreter.Step,java.net.URI])]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$GithubHttp@UnexpectedGithubResponseextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -304,6 +253,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.Github.GithubHttp">GithubHttp</a> → FunctionK</dd></dl></div>
+    </li><li name="nelson.Github.GithubHttp#argonautEntityDecoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="argonautEntityDecoder[A](implicitevidence$1:argonaut.DecodeJson[A]):org.http4s.EntityDecoder[cats.effect.IO,A]"></a>
+      <a id="argonautEntityDecoder[A](DecodeJson[A]):EntityDecoder[IO,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">argonautEntityDecoder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<span class="extype" name="nelson.Github.GithubHttp.argonautEntityDecoder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="org.http4s.EntityDecoder">EntityDecoder</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="nelson.Github.GithubHttp.argonautEntityDecoder.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$$GithubHttp@argonautEntityDecoder[A](implicitevidence$1:argonaut.DecodeJson[A]):org.http4s.EntityDecoder[cats.effect.IO,A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -435,6 +401,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Github.GithubHttp#githubHttpExecutionContext" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="githubHttpExecutionContext:scala.concurrent.ExecutionContext"></a>
+      <a id="githubHttpExecutionContext:ExecutionContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">githubHttpExecutionContext</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$$GithubHttp@githubHttpExecutionContext:scala.concurrent.ExecutionContext" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -537,6 +520,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FunctionK</dd></dl></div>
+    </li><li name="nelson.Github.GithubHttp#paginationHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="paginationHandler(response:org.http4s.Response[cats.effect.IO]):cats.effect.IO[(List[nelson.Repo],Map[nelson.Github.Interpreter.Step,org.http4s.Uri])]"></a>
+      <a id="paginationHandler(Response[IO]):IO[(List[Repo],Map[Step,Uri])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">paginationHandler</span><span class="params">(<span name="response">response: <span class="extype" name="org.http4s.Response">Response</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[(<span class="extype" name="scala.List">List</span>[<a href="Repo.html" class="extype" name="nelson.Repo">Repo</a>], <span class="extype" name="scala.Predef.Map">Map</span>[<a href="Github$$Interpreter$$Step.html" class="extype" name="nelson.Github.Interpreter.Step">Step</a>, <span class="extype" name="org.http4s.Uri">Uri</span>])]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$$GithubHttp@paginationHandler(response:org.http4s.Response[cats.effect.IO]):cats.effect.IO[(List[nelson.Repo],Map[nelson.Github.Interpreter.Step,org.http4s.Uri])]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

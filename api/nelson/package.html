@@ -263,23 +263,6 @@ Aws to launch some infrastructure.
       </a>
     </span>
       
-    </li><li name="nelson.Blueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="BlueprintextendsProductwithSerializable"></a>
-      <a id="Blueprint:Blueprint"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Blueprint.html"><span class="name">Blueprint</span></a><span class="params">(<span name="guid">guid: <a href="#GUID=String" class="extmbr" name="nelson.GUID">GUID</a></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="description">description: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="revision">revision: <a href="Blueprint$$Revision.html" class="extype" name="nelson.Blueprint.Revision">Revision</a></span>, <span name="state">state: <a href="Blueprint$$State.html" class="extype" name="nelson.Blueprint.State">State</a></span>, <span name="sha256">sha256: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="#Sha256=String" class="extmbr" name="nelson.Sha256">Sha256</a>]</span>, <span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="createdAt">createdAt: <span class="extype" name="java.time.Instant">Instant</span> = <span class="symbol">Instant.now</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@BlueprintextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.Cache" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Cache[K,V]extendsAnyRef"></a>
       <a id="Cache[K,V]:Cache[K,V]"></a>
@@ -785,7 +768,7 @@ API is subset of what Google's Guava libraries is providing
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="GithubConfig.html"><span class="name">GithubConfig</span></a><span class="params">(<span name="domain">domain: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="clientId">clientId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectUri">redirectUri: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="systemAccessToken">systemAccessToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>, <span name="systemUsername">systemUsername: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="organizationBlacklist">organizationBlacklist: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="organizationAdminList">organizationAdminList: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="GithubConfig.html"><span class="name">GithubConfig</span></a><span class="params">(<span name="domain">domain: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="org.http4s.Uri">Uri</span>]</span>, <span name="clientId">clientId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="clientSecret">clientSecret: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="redirectUri">redirectUri: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scope">scope: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="systemAccessToken">systemAccessToken: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>, <span name="systemUsername">systemUsername: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="organizationBlacklist">organizationBlacklist: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="organizationAdminList">organizationAdminList: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@GithubConfigextendsProductwithSerializable" title="Permalink" target="_top">
@@ -1150,39 +1133,19 @@ API is subset of what Google's Guava libraries is providing
       </a>
     </span>
       
-    </li><li name="nelson.KubernetesClient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="KubernetesClientextendsAnyRef"></a>
-      <a id="KubernetesClient:KubernetesClient"></a>
+    </li><li name="nelson.Kubectl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KubectlextendsAnyRef"></a>
+      <a id="Kubectl:Kubectl"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="KubernetesClient.html"><span class="name">KubernetesClient</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="Kubectl.html"><span class="name">Kubectl</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.package@KubernetesClientextendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A bare bones Kubernetes client used for impelementing a Kubernetes
-<a href="scheduler/SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">nelson.scheduler.SchedulerOp</a> and <span class="extype" name="nelson.loadbalancers.LoadBalancerOp">nelson.loadbalancers.LoadBalancerOp</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A bare bones Kubernetes client used for impelementing a Kubernetes
-<a href="scheduler/SchedulerOp.html" class="extype" name="nelson.scheduler.SchedulerOp">nelson.scheduler.SchedulerOp</a> and <span class="extype" name="nelson.loadbalancers.LoadBalancerOp">nelson.loadbalancers.LoadBalancerOp</span>.</p><p>This should really be a proper library.. at some point.</p><p>See: https://kubernetes.io/docs/api-reference/v1.8/
-</p></div></div>
-    </li><li name="nelson.KubernetesVersion" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="KubernetesVersionextendsProductwithSerializable"></a>
-      <a id="KubernetesVersion:KubernetesVersion"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="KubernetesVersion.html"><span class="name">KubernetesVersion</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@KubernetesVersionextendsProductwithSerializable" title="Permalink" target="_top">
+      <a href="../index.html#nelson.package@KubectlextendsAnyRef" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1553,7 +1516,7 @@ API is subset of what Google's Guava libraries is providing
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="NelsonConfig.html"><span class="name">NelsonConfig</span></a><span class="params">(<span name="git">git: <a href="GithubConfig.html" class="extype" name="nelson.GithubConfig">GithubConfig</a></span>, <span name="network">network: <a href="NetworkConfig.html" class="extype" name="nelson.NetworkConfig">NetworkConfig</a></span>, <span name="security">security: <a href="SecurityConfig.html" class="extype" name="nelson.SecurityConfig">SecurityConfig</a></span>, <span name="database">database: <a href="DatabaseConfig.html" class="extype" name="nelson.DatabaseConfig">DatabaseConfig</a></span>, <span name="dockercfg">dockercfg: <a href="DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a></span>, <span name="nomadcfg">nomadcfg: <a href="NomadConfig.html" class="extype" name="nelson.NomadConfig">NomadConfig</a></span>, <span name="manifest">manifest: <a href="ManifestConfig.html" class="extype" name="nelson.ManifestConfig">ManifestConfig</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="cleanup">cleanup: <a href="CleanupConfig.html" class="extype" name="nelson.CleanupConfig">CleanupConfig</a></span>, <span name="deploymentMonitor">deploymentMonitor: <a href="DeploymentMonitorConfig.html" class="extype" name="nelson.DeploymentMonitorConfig">DeploymentMonitorConfig</a></span>, <span name="datacenters">datacenters: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="pipeline">pipeline: <a href="PipelineConfig.html" class="extype" name="nelson.PipelineConfig">PipelineConfig</a></span>, <span name="audit">audit: <a href="AuditConfig.html" class="extype" name="nelson.AuditConfig">AuditConfig</a></span>, <span name="template">template: <a href="TemplateConfig.html" class="extype" name="nelson.TemplateConfig">TemplateConfig</a></span>, <span name="http">http: <span class="extype" name="dispatch.Http">Http</span></span>, <span name="pools">pools: <a href="Pools.html" class="extype" name="nelson.Pools">Pools</a></span>, <span name="interpreters">interpreters: <a href="Interpreters.html" class="extype" name="nelson.Interpreters">Interpreters</a></span>, <span name="workflowLogger">workflowLogger: <a href="logging/WorkflowLogger.html" class="extype" name="nelson.logging.WorkflowLogger">WorkflowLogger</a></span>, <span name="bannedClients">bannedClients: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="BannedClientsConfig.html" class="extype" name="nelson.BannedClientsConfig">BannedClientsConfig</a>]</span>, <span name="ui">ui: <a href="UIConfig.html" class="extype" name="nelson.UIConfig">UIConfig</a></span>, <span name="proxyPortWhitelist">proxyPortWhitelist: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="ProxyPortWhitelist.html" class="extype" name="nelson.ProxyPortWhitelist">ProxyPortWhitelist</a>]</span>, <span name="defaultNamespace">defaultNamespace: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="expirationPolicy">expirationPolicy: <a href="ExpirationPolicyConfig.html" class="extype" name="nelson.ExpirationPolicyConfig">ExpirationPolicyConfig</a></span>, <span name="discoveryDelay">discoveryDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="queue">queue: <span class="extype" name="fs2.async.mutable.Queue">Queue</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>, <span name="auditQueue">auditQueue: <span class="extype" name="fs2.async.mutable.Queue">Queue</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="audit/AuditEvent.html" class="extype" name="nelson.audit.AuditEvent">AuditEvent</a>[_]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="NelsonConfig.html"><span class="name">NelsonConfig</span></a><span class="params">(<span name="git">git: <a href="GithubConfig.html" class="extype" name="nelson.GithubConfig">GithubConfig</a></span>, <span name="network">network: <a href="NetworkConfig.html" class="extype" name="nelson.NetworkConfig">NetworkConfig</a></span>, <span name="security">security: <a href="SecurityConfig.html" class="extype" name="nelson.SecurityConfig">SecurityConfig</a></span>, <span name="database">database: <a href="DatabaseConfig.html" class="extype" name="nelson.DatabaseConfig">DatabaseConfig</a></span>, <span name="dockercfg">dockercfg: <a href="DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a></span>, <span name="nomadcfg">nomadcfg: <a href="NomadConfig.html" class="extype" name="nelson.NomadConfig">NomadConfig</a></span>, <span name="manifest">manifest: <a href="ManifestConfig.html" class="extype" name="nelson.ManifestConfig">ManifestConfig</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>, <span name="cleanup">cleanup: <a href="CleanupConfig.html" class="extype" name="nelson.CleanupConfig">CleanupConfig</a></span>, <span name="deploymentMonitor">deploymentMonitor: <a href="DeploymentMonitorConfig.html" class="extype" name="nelson.DeploymentMonitorConfig">DeploymentMonitorConfig</a></span>, <span name="datacenters">datacenters: <span class="extype" name="scala.List">List</span>[<a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a>]</span>, <span name="pipeline">pipeline: <a href="PipelineConfig.html" class="extype" name="nelson.PipelineConfig">PipelineConfig</a></span>, <span name="audit">audit: <a href="AuditConfig.html" class="extype" name="nelson.AuditConfig">AuditConfig</a></span>, <span name="template">template: <a href="TemplateConfig.html" class="extype" name="nelson.TemplateConfig">TemplateConfig</a></span>, <span name="http">http: <span class="extype" name="org.http4s.client.Client">Client</span>[<span class="extype" name="cats.effect.IO">IO</span>]</span>, <span name="pools">pools: <a href="Pools.html" class="extype" name="nelson.Pools">Pools</a></span>, <span name="interpreters">interpreters: <a href="Interpreters.html" class="extype" name="nelson.Interpreters">Interpreters</a></span>, <span name="workflowLogger">workflowLogger: <a href="logging/WorkflowLogger.html" class="extype" name="nelson.logging.WorkflowLogger">WorkflowLogger</a></span>, <span name="bannedClients">bannedClients: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="BannedClientsConfig.html" class="extype" name="nelson.BannedClientsConfig">BannedClientsConfig</a>]</span>, <span name="ui">ui: <a href="UIConfig.html" class="extype" name="nelson.UIConfig">UIConfig</a></span>, <span name="proxyPortWhitelist">proxyPortWhitelist: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="ProxyPortWhitelist.html" class="extype" name="nelson.ProxyPortWhitelist">ProxyPortWhitelist</a>]</span>, <span name="defaultNamespace">defaultNamespace: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="expirationPolicy">expirationPolicy: <a href="ExpirationPolicyConfig.html" class="extype" name="nelson.ExpirationPolicyConfig">ExpirationPolicyConfig</a></span>, <span name="discoveryDelay">discoveryDelay: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="queue">queue: <span class="extype" name="fs2.async.mutable.Queue">Queue</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="Manifest$$Action.html" class="extype" name="nelson.Manifest.Action">Action</a>]</span>, <span name="auditQueue">auditQueue: <span class="extype" name="fs2.async.mutable.Queue">Queue</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="audit/AuditEvent.html" class="extype" name="nelson.audit.AuditEvent">AuditEvent</a>[_]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@NelsonConfigextendsProductwithSerializable" title="Permalink" target="_top">
@@ -1956,7 +1919,7 @@ cookie stored on users browsers.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SlackConfig.html"><span class="name">SlackConfig</span></a><span class="params">(<span name="webhook">webhook: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="username">username: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="SlackConfig.html"><span class="name">SlackConfig</span></a><span class="params">(<span name="webhook">webhook: <span class="extype" name="org.http4s.Uri">Uri</span></span>, <span name="username">username: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@SlackConfigextendsProductwithSerializable" title="Permalink" target="_top">
@@ -2597,23 +2560,6 @@ http4s.</p></div></div>
       </a>
     </span>
       
-    </li><li name="nelson.Blueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Blueprint"></a>
-      <a id="Blueprint:Blueprint"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Blueprint$.html"><span class="name">Blueprint</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@Blueprint" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.BuildInfo" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="BuildInfo"></a>
       <a id="BuildInfo:BuildInfo"></a>
@@ -2904,53 +2850,19 @@ Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>
       </a>
     </span>
       
-    </li><li name="nelson.KubernetesClient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="KubernetesClient"></a>
-      <a id="KubernetesClient:KubernetesClient"></a>
+    </li><li name="nelson.Kubectl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Kubectl"></a>
+      <a id="Kubectl:Kubectl"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="KubernetesClient$.html"><span class="name">KubernetesClient</span></a>
+        <a href="Kubectl$.html"><span class="name">Kubectl</span></a>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.package@KubernetesClient" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.KubernetesJson" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="KubernetesJson"></a>
-      <a id="KubernetesJson:KubernetesJson"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="KubernetesJson$.html"><span class="name">KubernetesJson</span></a>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@KubernetesJson" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.KubernetesVersion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="KubernetesVersion"></a>
-      <a id="KubernetesVersion:KubernetesVersion"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="KubernetesVersion$.html"><span class="name">KubernetesVersion</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@KubernetesVersion" title="Permalink" target="_top">
+      <a href="../index.html#nelson.package@Kubectl" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -3108,6 +3020,23 @@ Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>
       </a>
     </span>
       
+    </li><li name="nelson.NomadNotImplemented" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NomadNotImplemented"></a>
+      <a id="NomadNotImplemented:NomadNotImplemented"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NomadNotImplemented$.html"><span class="name">NomadNotImplemented</span></a><span class="result"> extends <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@NomadNotImplemented" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.Pipeline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Pipeline"></a>
       <a id="Pipeline:Pipeline"></a>
@@ -3176,7 +3105,7 @@ Argo constellation, named after the ship used by Jason and the Argonauts.</p><p>
       </a>
     </span>
       <p class="shortcomment cmt">Kubernetes deployment workflow that deploys and deletes units, whilst provisioning
-authentication roles in Vault so that Kubernetes pods can talk to Vault.</p>
+authentication roles in Vault so that Kubernetes pods can talk to Vault at runtime.</p>
     </li><li name="nelson.Released" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Released"></a>
       <a id="Released:Released"></a>
@@ -3536,6 +3465,23 @@ only support Prometheus.
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@audit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.blueprint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="blueprint"></a>
+      <a id="blueprint:blueprint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="blueprint/package.html"><span class="name">blueprint</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@blueprint" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

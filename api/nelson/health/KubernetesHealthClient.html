@@ -42,16 +42,16 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
-        <span class="kind">case class</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">KubernetesHealthClient</span><span class="params">(<span name="client">client: <a href="../KubernetesClient.html" class="extype" name="nelson.KubernetesClient">KubernetesClient</a></span>)</span><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="HealthCheckOp.html" class="extype" name="nelson.health.HealthCheckOp">HealthCheckOp</a>, <span class="extype" name="cats.effect.IO">IO</span>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">KubernetesHealthClient</span><span class="result"> extends <span class="extype" name="cats.~&gt;">~&gt;</span>[<a href="HealthCheckOp.html" class="extype" name="nelson.health.HealthCheckOp">HealthCheckOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/core/src/main/scala/health/KubernetesHealthClient.scala" target="_blank">KubernetesHealthClient.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="HealthCheckOp.html" class="extype" name="nelson.health.HealthCheckOp">HealthCheckOp</a>, <span class="extype" name="cats.effect.IO">IO</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="HealthCheckOp.html" class="extype" name="nelson.health.HealthCheckOp">HealthCheckOp</a>, <span class="extype" name="cats.effect.IO">IO</span>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.health.KubernetesHealthClient"><span>KubernetesHealthClient</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="cats.arrow.FunctionK"><span>FunctionK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.health.KubernetesHealthClient"><span>KubernetesHealthClient</span></li><li class="in" name="cats.arrow.FunctionK"><span>FunctionK</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.health.KubernetesHealthClient#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(client:nelson.KubernetesClient):nelson.health.KubernetesHealthClient"></a>
+      <a id="&lt;init&gt;(kubectl:nelson.Kubectl,timeout:scala.concurrent.duration.FiniteDuration,executionContext:scala.concurrent.ExecutionContext,scheduledES:java.util.concurrent.ScheduledExecutorService):nelson.health.KubernetesHealthClient"></a>
       <a id="&lt;init&gt;:KubernetesHealthClient"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">KubernetesHealthClient</span><span class="params">(<span name="client">client: <a href="../KubernetesClient.html" class="extype" name="nelson.KubernetesClient">KubernetesClient</a></span>)</span>
+        <span class="name">KubernetesHealthClient</span><span class="params">(<span name="kubectl">kubectl: <a href="../Kubectl.html" class="extype" name="nelson.Kubectl">Kubectl</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>, <span name="scheduledES">scheduledES: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.health.KubernetesHealthClient@&lt;init&gt;(client:nelson.KubernetesClient):nelson.health.KubernetesHealthClient" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.health.KubernetesHealthClient@&lt;init&gt;(kubectl:nelson.Kubectl,timeout:scala.concurrent.duration.FiniteDuration,executionContext:scala.concurrent.ExecutionContext,scheduledES:java.util.concurrent.ScheduledExecutorService):nelson.health.KubernetesHealthClient" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -233,23 +233,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="nelson.health.KubernetesHealthClient#client" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="client:nelson.KubernetesClient"></a>
-      <a id="client:KubernetesClient"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">client</span><span class="result">: <a href="../KubernetesClient.html" class="extype" name="nelson.KubernetesClient">KubernetesClient</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.health.KubernetesHealthClient@client:nelson.KubernetesClient" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -307,6 +290,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.health.KubernetesHealthClient@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -343,6 +343,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#nelson.health.KubernetesHealthClient@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.health.KubernetesHealthClient@hashCode():Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -449,6 +466,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.health.KubernetesHealthClient@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -527,11 +561,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Product">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
-            </div><div class="parent" name="cats.arrow.FunctionK">
+        <div class="parent" name="cats.arrow.FunctionK">
               <h3>Inherited from <span class="extype" name="cats.arrow.FunctionK">FunctionK</span>[<a href="HealthCheckOp.html" class="extype" name="nelson.health.HealthCheckOp">HealthCheckOp</a>, <span class="extype" name="cats.effect.IO">IO</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>

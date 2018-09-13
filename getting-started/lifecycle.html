@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://getnelson.io/favicon.ico">
+
+    <meta name="generator" content="Hugo 0.48" />
+
+    <title>Nelson – Cloud-native container deployment</title>
+
+    <link href="https://getnelson.io/css/material.min.css?f0b9d0930a5605534159b8d3e9a043e4" rel="stylesheet">
+    
+    <link href="https://getnelson.io/css/nelson.css?6c63db9b5b790252183cc75f43fe6dd1" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+
+
+  <body>
+    
+    
+<nav class="navbar navbar-expand-md navbar-light bg-blue-5">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="/img/nelson-without-background.svg" width="30" height="30" class="d-inline-block align-top" alt="" />
+      &nbsp;
+      Nelson
+    </a>
+    <ul class="navbar-nav mr-auto">
+      
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/introduction/">Introduction</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/getting-started/">Getting Started</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/documentation/">Documentation</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/api/">Scaladoc</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+    
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+          <aside class="col-md-3">
+  <ol>
+    
+    
+        
+            <li>
+                <a href="/introduction/">Introduction</a>
+            </li>
+        
+    
+        
+            <li class="active">
+              <a href="/getting-started/index.html" class="">Getting Started</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/getting-started/install.html">Install</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/deployables.html">Deployables</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/blueprints.html">Blueprints</a>
+                      </li>
+                  
+                      <li class="highlight">
+                          <a href="/getting-started/lifecycle.html">Lifecycle</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/next.html">Further Reading</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+        
+            <li class="">
+              <a href="/documentation/" class="">Documentation</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/documentation/cli.html">Command Line</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/manifest.html">Manifest Settings</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/operator.html">Operator Guide</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/api.html">REST API</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/contributing.html">Contributing</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/credits.html">Credits</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+</ol>
+</aside>
+
+          <article class="col-md-9">
+            <h1>Lifecycle</h1>
+
+            
+            <p>xxxxxx</p>
+            
+
+            
+
+            
+            <hr />
+            
+
+            
+
+<p>Every stack that gets deployed using Nelson is living on borrowed time. Everything will be removed at some point in the future, as the deployment environment &ldquo;churns&rdquo; with new versions, and older versions are phased out over time. This principle is baked into Nelson, as every single stack has an associated expiry time. With this in mind, each and every stack moves through a variety of states during its lifetime. The figure below details these states:</p>
+
+<div class="clearing">
+  <img src="/img/stack-states.png" />
+  <small><em>Figure 2.0: stack states</em></small>
+</div>
+
+<p>At first glance this appears overwhelming, as there are many states. Some of these states will be temporary for your particular stack deployment, but nonetheless, this is the complete picture. The following table enumerates the states and their associated transitions:</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td width="17%"><strong>From</strong></td>
+      <td width="17%"><strong>To</strong></td>
+      <td><strong>Description</strong></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>pending</code></td>
+      <td><code>deploying</code></td>
+      <td>Internally, Nelson queues workflow execution, and if the maximum number of workflows are currently executing it will buffer tasks in memory until resources are available to execute the requested workflow. Once the workflow starts executing the stack will move into the <code>deploying</code> state.</td>
+    </tr>
+    <tr>
+      <td><code>deploying</code></td>
+      <td><code>failed</code></td>
+      <td>In the event the workflow being executed fails for some reason - whatever the cause - the workflow moves the stack into the <code>failed</code> state so that Nelson knows that this stack did not get to a healthy point in its lifecycle, and is pending proper termination.</td>
+    </tr>
+    <tr>
+      <td><code>deploying</code></td>
+      <td><code>warming</code></td>
+      <td>Once a stack gets started by Nelson, there is an optional chance to send synthetic traffic to the deployed stack to warm the process. This is common in JVM-based systems, where the JIT needs warming before production traffic is rolled onto the deployment, otherwise users may notice perceptible latency in request handling for entirely technical reasons. This state is optional, and the manner in which its implemented is entirely workflow dependent.</td>
+    </tr>
+    <tr>
+      <td><code>warming</code></td>
+      <td><code>ready</code></td>
+      <td>Once warmed (if applicable) the deployment moves into the <code>ready</code> state. This is the steady state for any given stack, regardless of unit type, and regardless of the operational health of a system (from a monitoring perspective), Nelson will perceive the stack as logically ready.</td>
+    </tr>
+    <tr>
+      <td><code>ready</code></td>
+      <td><code>deprecated</code></td>
+      <td>Over time, a particular development team for a given system might want to phase out an older version of their system, for some technical reason (e.g. in order to make a completely incompatible API change or upgrade user data in a backward compatible manner). In order to do this a development team will first need to ensure that all consumers of their API have moved to a newer version. Nelson provides the concept of "deprecation" to do this - a deprecated service cannot be depended on by subsequent deployments, once it has been marked as deprecated. Systems that were already deployed will continue to use the deprecated service until such time as they themselves are phased out and upgraded with newer stacks. </td>
+    </tr>
+    <tr>
+      <td><code>ready</code></td>
+      <td><code>garbage</code></td>
+      <td>Over time different services may be refactored and altered in a variety of ways. This can often lead to orphaned service versions that just waste resources on the cluster, so to avoid this Nelson actively figures out what stacks depend on what other stacks, and transitions stacks to the <code>garbage</code> state if nobody is calling that stack.</td>
+    </tr>
+    <tr>
+      <td><code>deprecated</code></td>
+      <td><code>garbage</code></td>
+      <td>Once no other stack depends on the deprecated stack, it will move to the <code>garbage</code> state.</td>
+    </tr>
+    <tr>
+      <td><code>garbage</code></td>
+      <td><code>terminated</code></td>
+      <td>For any stack that is residing in the garbage state, there is a grace period of 24hrs for which that stack will be left running, and after the grace period the garbage is taken out and stacks are fully terminated and removed from the cluster. Terminated stacks are entirely stopped and consume zero resources on the cluster.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="warming-grace">Warming Grace</h3>
+
+<p>When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternatively it might just take a while for the application to fully initialize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration <code>nelson.cleanup.initial-deployment-time-to-live</code> Knobs property.</p>
+
+<p>In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthy application cannot have traffic routed to it, and serves no useful purpose in the wider runtime.</p>
+
+<p>If you expose ports, you <strong>must</strong> bind them with something. Nelson controls the cadence in which it checks stack states with Consul via the <code>nelson.readiness-delay</code>, which is intervals of 3 minutes by default.</p>
+
+<h3 id="garbage-collection">Garbage Collection</h3>
+
+<p>A key part of application lifecycle is the ability to cleanup application stacks that are no longer needed. Users can specify an <code>expiration_policy</code> for any Nelson <code>unit</code>, and whilst these policies provide a variety of semantics (detailed below), there&rsquo;s a common decision tree executed to figure out which policy to apply and when. Figure 2.1 details this algorithm:</p>
+
+<div class="clearing">
+  <img src="/img/cleanup.png" width="65%" />
+  <small><em>Figure 2.1: cleanup decision tree</em></small>
+</div>
+
+<p>In practice the &ldquo;Evaluate Policy&rdquo; decision block is one of the following policies - which can be selected by the user. The first and most common policy is <code>retain-active</code>. This is the default for any unit that exposes one or more network ports.</p>
+
+<p>Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (<code>F 1.3</code> in the diagram) is deployed which no longer requires its previous dependency <code>G 1.0</code>, both <code>F 1.1</code> and <code>G 1.0</code> are declared unnecessary garbage, and scheduled for removal.</p>
+
+<div class="clearing">
+  <img src="/img/dependencies-upgrade.png" width="40%" />
+  <small><em>Figure 2.2: retain active</em></small>
+</div>
+
+<p>Where <code>retain-active</code> shines is that its exceedingly automatic: all the while another application needs your service(s), Nelson will keep it running and automatically manage the traffic shifting to any revisions that might come along.</p>
+
+<p>A somewhat similar but more aggressive strategy is <code>retain-latest</code>. Whilst this may appear similar to <code>retain-active</code>, <code>retain-latest</code> will <em>always</em> tear down everything except the latest revision of an application. Typically this tends to be useful for jobs (spark streaming or spark batch for example) but it is exceedingly dangerous for services that evolve over time, as <code>retain-latest</code> forces all your users up to the very latest revision, when they could well not be ready for a breaking API change (e.g. 1.0 vs 2.0).</p>
+
+<div class="clearing">
+  <img src="/img/cleanup-policies-retain-latest.png" width="60%" />
+  <small><em>Figure 2.3: retain two major versions</em></small>
+</div>
+
+<p>A more moderate policy for jobs would be <code>retain-latest-two-major</code> or <code>retain-latest-two-feature</code>. These policies allow you to keep existing versions of your code operational, whilst adding new versions.</p>
+
+<div class="clearing">
+  <img src="/img/cleanup-policies-two-feature.png" width="60%" />
+  <small><em>Figure 2.4: retain latest two feature versions</em></small>
+</div>
+
+<p>These policies are typically used for jobs where you want to actively compare and contrast two different types of output (the one you&rsquo;re currently using vs the next - a typical function in analyzing ML model evolution).</p>
+
+<div class="clearing">
+  <img src="/img/cleanup-policies-two-major.png" width="60%" />
+  <small><em>Figure 2.5: retain latest two major versions</em></small>
+</div>
+
+<p>Cleanup policies in Nelson can be explored with <code>nelson system cleanup-policies</code> from the CLI. If you believe there are additional use cases not covered by the default policies, please <a href="#community">enter the community</a> and let us know what you think is missing.</p>
+
+<p>Any time Nelson executes or actions a cleanup policy - or inaction causes a state transition - it will be recorded in the <a href="#install-auditing">auditing system</a>, so you can be aware of exactly what Nelson did on your behalf.</p>
+
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    
+<div class="jumbotron bg-dark">
+  <footer class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <p>
+          Built with &hearts; by the Nelson engineering team.
+        </p>
+        <p>
+          Currently v
+                    0.11.93
+                  
+          &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
+          &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
+          &middot; <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>
+          &middot; <script type="text/javascript" src="/js/contact.js"></script>
+        </p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="/js/material.min.js"></script>
+
+<script src="/js/nelson.js"></script>
+
+
+  </body>
+</html>

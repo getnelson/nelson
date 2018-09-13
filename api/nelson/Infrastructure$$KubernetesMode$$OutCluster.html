@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">OutCluster</span><span class="params">(<span name="caCertPath">caCertPath: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Infrastructure$$KubernetesMode.html" class="extype" name="nelson.Infrastructure.KubernetesMode">KubernetesMode</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">OutCluster</span><span class="params">(<span name="kubeconfig">kubeconfig: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span><span class="result"> extends <a href="Infrastructure$$KubernetesMode.html" class="extype" name="nelson.Infrastructure.KubernetesMode">KubernetesMode</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Infrastructure.KubernetesMode.OutCluster#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(caCertPath:java.nio.file.Path,token:String):nelson.Infrastructure.KubernetesMode.OutCluster"></a>
+      <a id="&lt;init&gt;(kubeconfig:java.nio.file.Path):nelson.Infrastructure.KubernetesMode.OutCluster"></a>
       <a id="&lt;init&gt;:OutCluster"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">OutCluster</span><span class="params">(<span name="caCertPath">caCertPath: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="token">token: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">OutCluster</span><span class="params">(<span name="kubeconfig">kubeconfig: <span class="extype" name="java.nio.file.Path">Path</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$KubernetesMode$$OutCluster@&lt;init&gt;(caCertPath:java.nio.file.Path,token:String):nelson.Infrastructure.KubernetesMode.OutCluster" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Infrastructure$$KubernetesMode$$OutCluster@&lt;init&gt;(kubeconfig:java.nio.file.Path):nelson.Infrastructure.KubernetesMode.OutCluster" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -182,40 +182,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="nelson.Infrastructure.KubernetesMode#caCert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="caCert:java.nio.file.Path"></a>
-      <a id="caCert:Path"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">caCert</span><span class="result">: <span class="extype" name="java.nio.file.Path">Path</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$KubernetesMode$$OutCluster@caCert:java.nio.file.Path" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Infrastructure$$KubernetesMode.html" class="extype" name="nelson.Infrastructure.KubernetesMode">KubernetesMode</a></dd></dl></div>
-    </li><li name="nelson.Infrastructure.KubernetesMode.OutCluster#caCertPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="caCertPath:java.nio.file.Path"></a>
-      <a id="caCertPath:Path"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">caCertPath</span><span class="result">: <span class="extype" name="java.nio.file.Path">Path</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$KubernetesMode$$OutCluster@caCertPath:java.nio.file.Path" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -239,6 +205,23 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="nelson.Infrastructure.KubernetesMode#environment" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="environment:List[(String,String)]"></a>
+      <a id="environment:List[(String,String)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">environment</span><span class="result">: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Infrastructure$$KubernetesMode$$OutCluster@environment:List[(String,String)]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Infrastructure$$KubernetesMode.html" class="extype" name="nelson.Infrastructure.KubernetesMode">KubernetesMode</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -313,6 +296,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.Infrastructure.KubernetesMode.OutCluster#kubeconfig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="kubeconfig:java.nio.file.Path"></a>
+      <a id="kubeconfig:Path"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kubeconfig</span><span class="result">: <span class="extype" name="java.nio.file.Path">Path</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Infrastructure$$KubernetesMode$$OutCluster@kubeconfig:java.nio.file.Path" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -381,23 +381,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.Infrastructure.KubernetesMode.OutCluster#token" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="token:String"></a>
-      <a id="token:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">token</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$KubernetesMode$$OutCluster@token:String" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
