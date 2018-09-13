@@ -52,3 +52,5 @@ makeSite := makeSite.dependsOn(hugoGenerateData).value
 import com.typesafe.sbt.SbtGit.GitKeys.{gitBranch, gitRemoteRepo}
 
 gitRemoteRepo := "git@github.com:getnelson/nelson.git"
+
+includeFilter := ("*.html" | "*.svg" | "*.png" | "*.js" | "*.css" | "*.gif" | "CNAME")
