@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="https://getnelson.io/favicon.ico">
+    <link rel="icon" href="https://getnelson.io/favicon.ico" type="image/x-icon">
 
     <meta name="generator" content="Hugo 0.48" />
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?69d8c59d05de95d10801ef8d2239e882" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?7ff0544c9a332d401144bb41e12acb7d" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?e91223ce64c289577c8d09dcec1af2c7" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?222a55bd6f49b2b15aa576d03638dc8e" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -23,7 +23,7 @@
   <body>
     
     
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="/">
       <img src="/img/nelson-without-background.svg?sanitize=true" width="30" height="30" class="d-inline-block align-top" alt="" />
@@ -66,7 +66,7 @@
           <div class="row splash">
             <div class="col-md-8 offset-md-2">
               <div class="spash-logo">
-                <img src="/img/nelson-with-background-and-text.svg?sanitize=true" height="140px" />
+                <img src="/img/nelson-with-background-and-text.svg?sanitize=true" />
                 <h2 class="tagline">Automated, multi-region container deployment</h2>
                 <p>
                   <a class="btn btn-primary btn-lg" href="/introduction/" role="button">Getting Started</a>
@@ -76,7 +76,7 @@
                      target="_blank"
                      role="button">Download
                   
-                    0.11.102
+                    0.11.103
                   </a>
                 </p>
               </div>
@@ -89,7 +89,7 @@
       <div class="jumbotron jumbosplash bg-blue-5">
         <div class="container">
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 splash-lead-row">
               <h2 class="semibold">Open-source, Container-first Orchestration</h2>
               <p class="lead">
                 Nelson fuses years of field experience with rigorous formal methods to provide a continuous delivery system that "just works". Users are empowered to focus on building their products, whilst operators gain guarentees that applications are meeting the organizationl best practices.
@@ -97,19 +97,19 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 splash-pod">
               <h2>Immutable Deployments</h2>
               <p>Built from the ground-up to support immutable infrastructure: every deployment and dependency is explicitly and semantically versioned, allowing Nelson to have full knowledge of the deployment graph, enabling easy traffic shifting, production testing and experimentation.</p>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 splash-pod">
               <h2>Scheduler Agnostic</h2>
               <p>Users face a plethora of choices when it comes to picking a scheduler - you may even be running multiple kinds of scheduler. Nelson enables operators to focus on scheduling (without lossing power), whilst users focus on shipping their product.</p>
             </div>
-            <div class="col-md-6" style="padding-top: 2em;">
+            <div class="col-md-6 splash-pod" style="padding-top: 2em;">
               <h2>Git-centric</h2>
               <p>Out of the box integration with Github (SaaS and Enterprise versions) means Nelson already integrates into the workflow you know and love. Simply create a project release on Github and Nelson will distribute and run your program container.</p>
             </div>
-            <div class="col-md-6" style="padding-top: 2em;">
+            <div class="col-md-6 splash-pod" style="padding-top: 2em;">
               <h2>Secure By Default</h2>
               <p>The easy thing should also be the safe thing. Nelson has security baked-in: every stack launched with Nelson has unique security policies, with ephemeral, rotating credentials that are unique per-container.</p>
             </div>
@@ -143,18 +143,18 @@
               <img src="/img/logo-nomad.png" class="img-fluid" />
             </div>
             <div class="col-md-2 offset-md-1">
-              <img src="/img/logo-amazon.png" class="img-fluid" />
+              <img src="/img/logo-amazon.png" class="img-fluid aws" />
             </div>
             <div class="col-md-2 offset-md-1">
-              <img src="/img/logo-vault.png" height="70px" />
+              <img src="/img/logo-vault.png" class="vault" />
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 splash-pod">
               <h2>Container Native</h2>
               <p>Nelson was built from the ground up to work with containers. Nelson will take images from your build system and replicate them to your datacenter environment automatically - perfect for multi-region deployment scenarios.</p>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 splash-pod">
               <h2>Impartial CI</h2>
               <p>Use whatever Continuous Integration (CI) system you want! The Nelson team believes you should be able to compose your technology stack however you see fit; there is no perscription to couple major systems infrastructure components.</p>
             </div>
@@ -166,15 +166,15 @@
         <div class="container">
           <div class="row">
 
-            <div class="col-md-4">
-              <h2>Topological Graph</h2>
-              <p>Distributed systems are fundamentally graphs. Nelson embraces this and models your entire system topology as a graph, allowing the system to know which systems interact, and what exposure any given system represents.</p>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-4 splash-pod">
               <h2>Self-Service</h2>
               <p>From day zero, Nelson was designed with self-service, devops-style workflows in mind for end users. For those parts that cannot be delegated to end-users, operators are well catered for with a set of APIs that enable full control over schudling, secrets and more.</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 splash-pod">
+              <h2>Topologies</h2>
+              <p>Distributed systems are fundamentally graphs. Nelson embraces this and models your entire system topology as a graph, allowing the system to know which systems interact, and what exposure any given system represents.</p>
+            </div>
+            <div class="col-md-4 splash-pod">
               <h2>Community</h2>
               <p>Contributors to the Nelson product span a wide gamut: from Fortune 15 companies to hyper-growth internet companies, Nelson's growing ecosystem is vibrant and friendly. There has never been a better time to get involved!</p>
             </div>
@@ -195,7 +195,7 @@
         </p>
         <p>
           Currently v
-                    0.11.102
+                    0.11.103
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
