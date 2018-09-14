@@ -148,6 +148,9 @@ footer {
   letter-spacing: 0.1em;
   padding: 1.2em !important;
 }
+.btn-home {
+  min-width: 150px;
+}
 
 /**************************** HOME PAGE ****************************/
 
