@@ -176,6 +176,9 @@ footer {
 .spash-logo {
   padding-top: 50px;
 }
+.splash-logo img {
+  height: 140px;
+}
 .tagline {
   line-height: 2.2em;
 }
@@ -190,4 +193,65 @@ h2.semibold {
 .logorow {
   padding-top: 0px;
   padding-bottom: 40px;
+}
+.logorow img {
+  height: auto;
+  max-width: 160%;
+}
+.logorow img.vault {
+  height: auto;
+  max-width: 60%;
+}
+.logorow img.aws {
+  height: auto;
+  max-width: 130%;
+}
+
+/* iPad in landscape */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px)
+and (orientation : landscape){
+
+.tagline {
+  font-size: 1.7rem;
+}
+.splash-logo img {
+  height: 120px;
+}
+
+}
+
+/* iPad in portrait */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+
+.tagline {
+  font-size: 1.2rem;
+  line-height: 2.8em;
+}
+.splash-logo img {
+  height: 100px !important;
+}
+.splash-lead-row .semibold {
+  font-size: 2.2em;
+}
+.splash-pod h2 {
+  font-size: 1.9em;
+}
+.logorow img {
+  height: auto;
+  max-width: 210%;
+}
+.logorow img.vault {
+  height: auto;
+  max-width: 60%;
+}
+.logorow img.aws {
+  height: auto;
+  max-width: 130%;
+}
+
 }
