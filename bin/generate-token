@@ -118,4 +118,4 @@ token=$(echo "$RESULT" | jq '.token')
 
 echo -e "${COLOR_CYAN}Your generated token is ${token}."
 echo -e "Set this value into nelson.github.access-token."
-echo -e "Refer to the Nelson documentation for more information: verizon.github.io/nelson/#instalation-github${COLOR_NC}"
+echo -e "Refer to the Nelson documentation for more information: getnelson.io/documentation/${COLOR_NC}"
