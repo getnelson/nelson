@@ -259,11 +259,17 @@ object Github {
           "client_secret" := cfg.clientSecret,
           "code" := fromCode
         )
+
         val request = HttpRequest[IO](Method.POST, cfg.tokenEndpoint)
           .putHeaders(Header("Accept", "application/json"))
           .withBody(json)
 
-        client.expect[AccessToken](request)
+        val handler: HttpResponse[IO] => IO[AccessToken] = response => for {
+          raw <- response.bodyAsText.compile.foldSemigroup
+          actuallyDecoded <- response.as[AccessToken]
+        } yield actuallyDecoded
+
+        client.fetch(request)(handler)
 
       case GetUser(token: AccessToken) =>
         val request = HttpRequest[IO](Method.GET, cfg.userEndpoint).token(token)
@@ -337,7 +343,6 @@ object Github {
           case UnexpectedStatus(Status.NotFound) => ()
         }
     }
-
 
     /////////////////////////// INTERNALS ///////////////////////////
 
