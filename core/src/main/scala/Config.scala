@@ -77,7 +77,7 @@ final case class GithubConfig(
   val loginEndpoint = {
     val queryParams = Map(
       ("client_id", List(clientId)),
-      ("redirect_uri", List(encodeURI(redirectUri))),
+      ("redirect_uri", List(redirectUri)),
       ("scope", List(scope))
     )
     (oauth / "login" / "oauth" / "authorize").setQueryParams(queryParams)
