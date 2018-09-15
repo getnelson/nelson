@@ -50,7 +50,7 @@ As can be seen from the diagram, Nelson has a rather normalized structure. The a
 
 ## Command Line
 
-The [Nelson CLI](https://github.com/getnelson/nelson-cli) is useful for debugging the Nelson API locally. Particularly useful are the client's `--debug` and `--debug-curl` flags. You can read about them in the [client's documentation](http://verizon.github.io/nelson-cli/). One option that you need to pay attention to for local usage is the `--disable-tls` flag on the `login` subcommand. To login to a local Nelson instance, you should run the following:
+The [Nelson CLI](https://github.com/getnelson/nelson-cli) is useful for debugging the Nelson API locally. Particularly useful are the client's `--debug` and `--debug-curl` flags. You can read about them in the [client's documentation](https://github.com/getnelson/nelson-cli#getting-started). One option that you need to pay attention to for local usage is the `--disable-tls` flag on the `login` subcommand. To login to a local Nelson instance, you should run the following:
 
 ```
 nelson login --disable-tls nelson.local:9000
