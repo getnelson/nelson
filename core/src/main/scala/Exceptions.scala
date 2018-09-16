@@ -231,7 +231,11 @@ object YamlError {
   def invalidMountPath(path: String, reason: String): YamlError = InvalidMountPath(path, reason)
   val missingVolumeSize: YamlError = MissingVolumeSize
   def invalidVolumeSize(request: Int): YamlError = InvalidVolumeSize(request)
+  def invalidBlueprintReference(blueprintRef: String): YamlError = InvalidBlueprintReference(blueprintRef)
 }
+
+private final case class InvalidBlueprintReference(ref: String)
+  extends YamlError(s"specified blueprint reference '${ref}' is not valid. Must be of the form thing@HEAD or thing@3")
 
 private final case class InvalidExternalAddress(uri: String)
   extends YamlError(s"specified uri '$uri' is not a valid URI. Must be of the form: protocol://host:port")

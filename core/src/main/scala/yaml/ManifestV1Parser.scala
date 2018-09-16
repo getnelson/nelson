@@ -22,6 +22,7 @@ import nelson.YamlError._
 import nelson.YamlParser.fromYaml
 import nelson.cleanup.{ExpirationPolicy}
 import nelson.notifications._
+import nelson.blueprint.Blueprint
 
 import cats.Apply
 import cats.data.{NonEmptyList, State, Validated, ValidatedNel}
@@ -162,9 +163,16 @@ object ManifestV1Parser {
     ).toValidatedNel
 
   def validateTrafficShift(raw: TrafficShiftYaml): YamlValidation[TrafficShift] =
-    (TrafficShiftPolicy.fromString(raw.policy).toValidNel(YamlError.invalidTrafficShiftPolicy(raw.policy)), validateTrafficShiftDuration(raw.duration)).mapN(TrafficShift)
+    (TrafficShiftPolicy.fromString(raw.policy).toValidNel(YamlError.invalidTrafficShiftPolicy(raw.policy)), 
+      validateTrafficShiftDuration(raw.duration)).mapN(TrafficShift)
+
+  // def validateWorkflow(raw: WorkflowYaml): YamlValidation[Workflow[Unit]] =
+  //   resolveWorkflow(raw.kind)
 
   def toPlan(raw: PlanYaml): YamlValidation[Plan] = {
+    println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.")
+    println(raw.workflow)
+    println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     val validatedCPU =
       Option(raw.cpu).filter(_ > 0).traverse(validateCPU).andThen { cpuLimit =>
         Option(raw.cpu_request).filter(_ > 0).traverse(validateCPURequest(_, cpuLimit)).map { cpuBounds =>
@@ -179,7 +187,13 @@ object ManifestV1Parser {
         }
       }
 
-    Apply[YamlValidation].map15(
+    val validateBlueprint =
+      Option(raw.workflow).traverse(x =>
+        Blueprint.parseNamedRevision(x.blueprint)
+          .fold(_ => None, x => Some(Left(x)))
+            .toValidNel(YamlError.invalidBlueprintReference(x.blueprint)))
+
+    Apply[YamlValidation].map17(
       parseAlphaNumHyphen(raw.name, "plan.name"),
       validatedCPU,
       validatedMemory,
@@ -194,10 +208,12 @@ object ManifestV1Parser {
       Option(raw.expiration_policy).traverse(resolvePolicy),
       Option(raw.traffic_shift).traverse(validateTrafficShift),
       raw.volumes.asScala.toList.traverse(validateVolumes),
-      Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i))
+      Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i)),
+      Option(raw.workflow).traverse(x => resolveWorkflow(x.kind)),
+      validateBlueprint
     ) {
-      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o) =>
-        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o))
+      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) =>
+        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q))
     }
   }
 
@@ -507,6 +523,12 @@ class PlanYaml {
   @BeanProperty var traffic_shift: TrafficShiftYaml = _
   @BeanProperty var volumes: JList[VolumeYaml] = new java.util.ArrayList
   @BeanProperty var ephemeral_disk: Int = -1
+  @BeanProperty var workflow: WorkflowYaml = _
+}
+
+class WorkflowYaml {
+  @BeanProperty var kind: String = _
+  @BeanProperty var blueprint: String = _
 }
 
 class TrafficShiftYaml {

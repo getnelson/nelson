@@ -49,7 +49,7 @@ object Actionable {
   /*
    * A Versioned UnitDef Actionable runs a prescribed Workflow, which will
    * launch the unit into a given datacenter using a scheduler such as
-   * Nomad.
+   * Nomad or Kubernetes.
    */
   implicit val UnitDefActionable = new Actionable[UnitDef @@ Versioned] {
     import Manifest.{Namespace,Plan}

@@ -20,6 +20,7 @@ import nelson.Manifest._
 import nelson.cleanup.ExpirationPolicy
 import nelson.notifications.NotificationSubscriptions
 import nelson.storage.StoreOp
+import nelson.blueprint.Blueprint
 
 import cats.{~>, Foldable, Monoid}
 import cats.data.{Kleisli, NonEmptyList, ValidatedNel}
@@ -116,7 +117,9 @@ object Manifest {
     policy: Option[ExpirationPolicy] = None,
     trafficShift: Option[TrafficShift] = None,
     volumes: List[Volume] = List.empty,
-    ephemeralDisk: Option[Int] = None
+    ephemeralDisk: Option[Int] = None,
+    workflow: Option[Workflow[Unit]] = None,
+    blueprint: Option[Either[BlueprintRef, Blueprint]] = None
   )
 
   final case class Namespace(

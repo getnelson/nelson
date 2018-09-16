@@ -154,6 +154,9 @@ plans:
       - FOO=foo-prod
       - QUX=qux-prod
     expiration_policy: retain-latest-two-feature
+    workflow:
+      kind: pulsar
+      blueprint: qux@HEAD
 
   - name: lb-plan
     instances:
