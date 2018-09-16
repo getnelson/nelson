@@ -166,13 +166,7 @@ object ManifestV1Parser {
     (TrafficShiftPolicy.fromString(raw.policy).toValidNel(YamlError.invalidTrafficShiftPolicy(raw.policy)), 
       validateTrafficShiftDuration(raw.duration)).mapN(TrafficShift)
 
-  // def validateWorkflow(raw: WorkflowYaml): YamlValidation[Workflow[Unit]] =
-  //   resolveWorkflow(raw.kind)
-
   def toPlan(raw: PlanYaml): YamlValidation[Plan] = {
-    println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.")
-    println(raw.workflow)
-    println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     val validatedCPU =
       Option(raw.cpu).filter(_ > 0).traverse(validateCPU).andThen { cpuLimit =>
         Option(raw.cpu_request).filter(_ > 0).traverse(validateCPURequest(_, cpuLimit)).map { cpuBounds =>
@@ -187,6 +181,9 @@ object ManifestV1Parser {
         }
       }
 
+    // at this point, we do not have access to the database so we can only
+    // check that the specified blueprint is syntactically valid. The manifest
+    // validator will hydrate the reference into a Blueprint proper.
     val validateBlueprint =
       Option(raw.workflow).traverse(x =>
         Blueprint.parseNamedRevision(x.blueprint)
