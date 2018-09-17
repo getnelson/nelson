@@ -286,7 +286,7 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   it should "correctly parse a plan containing a blueprint reference" in {
     // note that at this point, the blueprint may not exist; the parser only
     // cares for syntax / form correctness. see manifest validator for validation.
-    val mf = loadManifest("/nelson/manifest.v1.blueprint-missing.yml").isRight should equal (true)
+    loadManifest("/nelson/manifest.v1.blueprint-missing.yml").isRight should equal (true)
   }
 
 }
