@@ -378,7 +378,6 @@ object Nelson {
           Map("database" -> FeatureVersion(1,2)),
           Set.empty,
           Alerting.empty,
-          Magnetar,
           Some(Ports(Port("default", 1, "http"), Nil)),
           Some(Deployable(unitName, version, Deployable.Container(image.toString))),
           Set("some-tag")

@@ -53,16 +53,9 @@ object Manifest {
     dependencies: Map[String, FeatureVersion],
     resources: Set[Resource],
     alerting: Alerting,
-    workflow: Workflow[Unit],
     ports: Option[Ports],
     deployable: Option[Deployable],
-    meta: Set[String],
-    // maintained for backwards compatibility (manifest).
-    // these fields are also defined in the plan.
-    // if they are absent in the plan then fallback to
-    // what's defined here, otherwise use a sensible default
-    schedule: Option[Schedule] = None,
-    policy: Option[ExpirationPolicy] = None
+    meta: Set[String]
   )
 
   final case class Plan(
@@ -71,7 +64,7 @@ object Manifest {
   )
 
   object Plan {
-    val default = Plan("default", Environment())
+    val default = Plan("default", Environment(workflow = Magnetar))
   }
 
   sealed abstract class ResourceSpec extends Product with Serializable {
@@ -118,7 +111,7 @@ object Manifest {
     trafficShift: Option[TrafficShift] = None,
     volumes: List[Volume] = List.empty,
     ephemeralDisk: Option[Int] = None,
-    workflow: Option[Workflow[Unit]] = None,
+    workflow: Workflow[Unit] = Magnetar,
     blueprint: Option[Either[BlueprintRef, Blueprint]] = None
   )
 
@@ -286,13 +279,13 @@ object Manifest {
   )
 
   def isPeriodic(unit: UnitDef, plan: Plan): Boolean =
-    unit.schedule.isDefined || plan.environment.schedule.isDefined
+    plan.environment.schedule.isDefined
 
   def getSchedule(unit: UnitDef, plan: Plan): Option[Schedule] =
-    plan.environment.schedule orElse unit.schedule
+    plan.environment.schedule
 
   def getExpirationPolicy(unit: UnitDef, plan: Plan): Option[cleanup.ExpirationPolicy] =
-    plan.environment.policy orElse unit.policy
+    plan.environment.policy
 
   def toAction[A](a: A, dc: Datacenter, ns: Namespace, p: Plan, n: NotificationSubscriptions)(implicit A: Actionable[A]): Action = {
     val hash = randomAlphaNumeric(desiredLength = 8) // create a unique hash for this deployment

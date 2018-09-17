@@ -61,7 +61,7 @@ object Actionable {
       (for {
          u  <- OptionT(StoreOp.getUnit(unit.name, version))
          n  <- OptionT(StoreOp.getNamespace(dc.name, ns.name)) // gets a Datacetner.Namespace
-         id <- OptionT.liftF(StoreOp.createDeployment(u.id, hash, n, unit.workflow.name, plan.name, policy.name))
+         id <- OptionT.liftF(StoreOp.createDeployment(u.id, hash, n, plan.environment.workflow.name, plan.name, policy.name))
          _  <- OptionT.liftF(plan.environment.resources.map { case (name, uri) =>
                 StoreOp.createDeploymentResource(id, name, uri)
                }.toList.sequence)
@@ -90,7 +90,7 @@ object Actionable {
         }
 
         def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Either[Throwable, Unit]] =
-          unitw.workflow.deploy(id, hash, unit, plan, dc, ns).foldMap(t).attempt.flatMap(_.fold(
+          plan.environment.workflow.deploy(id, hash, unit, plan, dc, ns).foldMap(t).attempt.flatMap(_.fold(
             e => (Workflow.syntax.status(id, DeploymentStatus.Failed,
                     s"workflow failed because: ${e.getMessage}").foldMap(t) *>
                   incCounter(deployFailureCounter)).attempt,

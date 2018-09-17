@@ -47,7 +47,7 @@ class AlertSpec extends FlatSpec
 
   val nsRef = "qa"
   val alertKey = alertingKey(stackName)
-  val unit = UnitDef("http", "", Map.empty, Set.empty, alerting, Magnetar, None, None, Set.empty)
+  val unit = UnitDef("http", "", Map.empty, Set.empty, alerting, None, None, Set.empty)
 
   "alertingKey" should "be v2/:stackName" in {
     alertKey should equal ("nelson/alerting/v2/howdy-http--0-2-3--abcd1234")

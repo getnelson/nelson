@@ -206,7 +206,7 @@ object ManifestV1Parser {
       Option(raw.traffic_shift).traverse(validateTrafficShift),
       raw.volumes.asScala.toList.traverse(validateVolumes),
       Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i)),
-      Option(raw.workflow).traverse(x => resolveWorkflow(x.kind)),
+      Option(raw.workflow).map(x => resolveWorkflow(x.kind)).getOrElse(Validated.valid(nelson.Magnetar)),
       validateBlueprint
     ) {
       case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) =>
@@ -260,18 +260,15 @@ object ManifestV1Parser {
     def validateJList[A, B](field: String, raw: JList[A], f: A => YamlValidation[B]): YamlValidation[List[B]] =
       Option(raw).fold[YamlValidation[List[B]]](Validated.invalidNel(emptyList(field)))(_.asScala.toList.traverse(f))
 
-    Apply[YamlValidation].map11(
+    Apply[YamlValidation].map8(
       Option(raw.name).toValidNel(missingProperty("unit.name")),
       Option(raw.description).toValidNel(missingProperty("unit.description")),
       validateJList("unit.dependencies", raw.dependencies, parseDependency _).map(_.toMap),
       validateJList("unit.resources", raw.resources, parseResource _).map(_.toSet),
       parseAlerting(raw.name, raw.alerting),
-      resolveWorkflow(raw.workflow),
       Option(raw.ports).filter(_.size > 0).traverse(p => mkPorts(p.asScala.toList)),
       Validated.valid(None),
-      validateJList("unit.meta", raw.meta, validateMeta _).map(_.toSet),
-      Option(raw.schedule).traverse(s => parseSchedule(s)),
-      Option(raw.expiration_policy).traverse(resolvePolicy)
+      validateJList("unit.meta", raw.meta, validateMeta _).map(_.toSet)
     )(UnitDef.apply)
   }
 
@@ -492,9 +489,6 @@ class UnitYaml {
   @BeanProperty var resources: JList[ResourceYaml] = new java.util.ArrayList
   @BeanProperty var meta: JList[String] = new java.util.ArrayList
   @BeanProperty var alerting: AlertingYaml = new AlertingYaml
-  @BeanProperty var workflow: String = "magnetar"
-  @BeanProperty var schedule: String = _
-  @BeanProperty var expiration_policy: String = _
 }
 
 class LoadbalancerYaml {
@@ -524,7 +518,7 @@ class PlanYaml {
 }
 
 class WorkflowYaml {
-  @BeanProperty var kind: String = _
+  @BeanProperty var kind: String = "magnetar"
   @BeanProperty var blueprint: String = _
 }
 

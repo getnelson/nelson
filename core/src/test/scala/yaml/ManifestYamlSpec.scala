@@ -40,10 +40,8 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
               ports = Some(Ports(Port("default", 8080, "http"), Port("monitoring", 7390, "tcp") :: Nil)),
               dependencies = Map("inventory" -> FeatureVersion(1,4), "cassandra" -> FeatureVersion(1,0)),
               resources = Set(Manifest.Resource("s3", Some("description of s3"))),
-              workflow = Magnetar,
               deployable = None,
               meta = Set("foo","bar"),
-              policy = Some(RetainActive),
               alerting = Alerting(
                 PrometheusConfig(
                   alerts = List(
@@ -61,11 +59,9 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
               description = "crawler description",
               dependencies = Map("db.example" -> FeatureVersion(1,0)),
               resources = Set.empty,
-              workflow = Magnetar,
               ports = None,
               deployable = None,
               meta = Set.empty[String],
-              schedule = Some(Schedule(Once)),
               alerting = Alerting(
                 PrometheusConfig(
                   alerts = List(
@@ -85,7 +81,8 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
           alertOptOuts = List(AlertOptOut("api_high_request_latency")),
           policy = Some(RetainLatestTwoMajor),
           healthChecks = List(HealthCheck("http-status","default","https",Some("v1/status"), 10.seconds, 2.seconds)),
-          volumes = List(Volume("an-empty-dir", Paths.get("/foo/bar"), 500))
+          volumes = List(Volume("an-empty-dir", Paths.get("/foo/bar"), 500)),
+          workflow = Magnetar
         )
       ),
       Plan(
@@ -101,7 +98,8 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
             EnvironmentVariable("FOO","foo-1"),
             EnvironmentVariable("QUX","qux-1")
           ),
-          ephemeralDisk = Some(200)
+          ephemeralDisk = Some(200),
+          workflow = Magnetar
         )
       ),
       Plan(
@@ -131,14 +129,15 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
             EnvironmentVariable("FOO","foo-prod"),
             EnvironmentVariable("QUX","qux-prod")
           ),
-          workflow = Some(Pulsar),
+          workflow = Pulsar,
           blueprint = Some(Left(("qux", Blueprint.Revision.HEAD)))
         )
       ),
       Plan(
         name = "lb-plan",
         environment = Environment(
-          desiredInstances = Some(4)
+          desiredInstances = Some(4),
+          workflow = Magnetar
         )
       )
     ),

@@ -43,7 +43,7 @@ class ReleaseDBSpec extends NelsonSuite with BeforeAndAfterEach {
   }
 
   it should "find release even if there's no deployment for unit / version" in {
-    val unit = Manifest.UnitDef("foo", "", Map.empty, Set.empty, Manifest.Alerting.empty, Magnetar,
+    val unit = Manifest.UnitDef("foo", "", Map.empty, Set.empty, Manifest.Alerting.empty,
               None, Some(Manifest.Deployable("foo", uv , Manifest.Deployable.Container(""))), Set.empty[String])
     StoreOp.addUnit(Manifest.Versioned(unit), 9999L).foldMap(config.storage).unsafeRunSync()
     val release = StoreOp.findReleasedByUnitNameAndVersion("foo", uv).foldMap(config.storage)

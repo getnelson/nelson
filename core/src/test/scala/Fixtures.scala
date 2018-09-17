@@ -181,7 +181,6 @@ object Fixtures {
       ports = Some(c),
       dependencies = Map.empty,
       resources = Set.empty,
-      workflow = Magnetar,
       alerting = Manifest.Alerting.empty,
       deployable = None,
       meta = Set.empty[String]

@@ -228,7 +228,6 @@ trait RoutingFixtures {
                           Map("inventory" -> FeatureVersion(1,2)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"),Nil)),
                           Some(Deployable("ab", Version(2,2,2), Container(""))),
                           Set.empty[String]
@@ -245,7 +244,6 @@ trait RoutingFixtures {
                           Map("inventory" -> FeatureVersion(1,2)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("ab", Version(2,2,1), Container(""))),
                           Set.empty[String]
@@ -262,7 +260,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("foo", Version(1,10,100), Container(""))),
                           Set.empty[String]
@@ -279,7 +276,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("foo", Version(2,0,0), Container(""))),
                           Set.empty[String]
@@ -296,7 +292,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("search", Version(2,2,2), Container(""))),
                           Set.empty[String]
@@ -313,7 +308,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("inventory", Version(1,2,2), Container(""))),
                           Set.empty[String]
@@ -330,7 +324,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("inventory", Version(1,2,3), Container(""))),
                           Set.empty[String]
@@ -350,7 +343,6 @@ trait RoutingFixtures {
                                "search" -> FeatureVersion(2,2)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("conductor", Version(1,1,1), Container(""))),
                           Set.empty[String]
@@ -369,7 +361,6 @@ trait RoutingFixtures {
                               "search" -> FeatureVersion(2,2)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           None,
                           Set.empty[String]
@@ -386,7 +377,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           None,
                           Some(Deployable("job", Version(3,0,0), Container(""))),
                           Set.empty[String]
@@ -403,7 +393,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           None,
                           Some(Deployable("job", Version(3,1,0), Container(""))),
                           Set.empty[String]
@@ -420,7 +409,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           None,
                           Some(Deployable("job", Version(3,1,1), Container(""))),
                           Set.empty[String]
@@ -437,7 +425,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           None,
                           Some(Deployable("job", Version(4,1,0), Container(""))),
                           Set.empty[String]
@@ -454,7 +441,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           None,
                           Some(Deployable("crawler", Version(5,1,0), Container(""))),
                           Set.empty[String]
@@ -471,7 +457,6 @@ trait RoutingFixtures {
                           Map.empty,
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("search", Version(1,1,0), Container(""))),
                           Set.empty[String]
@@ -488,7 +473,6 @@ trait RoutingFixtures {
                           Map("search" -> FeatureVersion(1,1)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           None,
                           Set.empty[String]
@@ -505,7 +489,6 @@ trait RoutingFixtures {
                           Map("service-b" -> FeatureVersion(6,1)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("service-a", Version(6,0,0), Container(""))),
                           Set.empty[String]
@@ -522,7 +505,6 @@ trait RoutingFixtures {
                           Map("service-c" -> FeatureVersion(6,2)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("service-b", Version(6,1,0), Container(""))),
                           Set.empty[String]
@@ -539,7 +521,6 @@ trait RoutingFixtures {
                           Map("foo" -> FeatureVersion(1,10)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("service-c", Version(6,2,0), Container(""))),
                           Set.empty[String]
@@ -556,7 +537,6 @@ trait RoutingFixtures {
                           Map("foo" -> FeatureVersion(1,10)),
                           Set.empty,
                           Alerting.empty,
-                          Magnetar,
                           Some(Ports(Port("default", 1, "http"), Nil)),
                           Some(Deployable("service-c", Version(6,2,1), Container(""))),
                           Set.empty[String]
