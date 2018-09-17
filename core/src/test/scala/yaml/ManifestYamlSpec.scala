@@ -283,4 +283,10 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
     hasError(mf, "parse failed! field unit.meta is not a valid alphanumeric hyphen string: a.b.c\nmeta (toooooooooooo-looooooong) must less that or equal to 14 characters")
   }
 
+  it should "correctly parse a plan containing a blueprint reference" in {
+    // note that at this point, the blueprint may not exist; the parser only
+    // cares for syntax / form correctness. see manifest validator for validation.
+    val mf = loadManifest("/nelson/manifest.v1.blueprint-missing.yml").isRight should equal (true)
+  }
+
 }

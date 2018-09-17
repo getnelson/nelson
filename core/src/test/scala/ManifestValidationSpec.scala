@@ -63,6 +63,16 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   }
 
   behavior of "manifest validator:"
+
+  it should "reject a manifest with a plan containing a missing blueprint" in {
+    val out = (for {
+      a <- Util.loadResourceAsString("/nelson/manifest.v1.blueprint-missing.yml")
+      b <- ManifestValidator.parseManifestAndValidate(a, config)
+    } yield b).unsafeRunSync()
+
+    val Invalid(x) = out
+  }
+
   it should "accept a valid nelson unit" in {
 
     Util.loadResourceAsString("/nelson/manifest.v1.minimal.yml").map{ manifest =>

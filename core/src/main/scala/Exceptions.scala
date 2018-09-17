@@ -183,6 +183,9 @@ final case class InvalidUnitNameLength(name: String)
 final case class InvalidUnitNameChars(name: String)
   extends NelsonError(s"$name contains invalid characters. Unit names can only include hyphens, A-Z, a-z, 0-9 where the unit name starts and ends with an alpha-numeric character.")
 
+final case class UnknownBlueprintReference(ref: String, revision: blueprint.Blueprint.Revision)
+  extends NelsonError(s"the blueprint '${ref}@${revision.toString}' does not exist in the database; be sure you have specified the correct name and revision")
+
 final object NomadNotImplemented extends NelsonError(s"Nelson 0.11.x+ currently does not support Nomad. If you are interested in using Nelson with Nomad please file an issue on GitHub: https://github.com/getnelson/nelson/ or reach out to us on Gitter: https://gitter.im/getnelson/nelson")
 
 ////////////////////////// YAML ERRORS ///////////////////////////////
