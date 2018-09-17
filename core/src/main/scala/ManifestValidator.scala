@@ -227,27 +227,36 @@ object ManifestValidator {
       }
     }
 
-    def validateBlueprints(m: Manifest): IO[Valid[Unit]] = {
-      m.plans.foldLeft(IO.pure(List.empty[Valid[Unit]])) { (res, plan) =>
-        val result: IO[Valid[Unit]] = plan.environment.blueprint match {
+    def validateBlueprints(m: Manifest): IO[(Valid[Unit], List[Plan])] = {
+      val foooo: IO[List[Valid[Plan]]] = m.plans.foldLeft(IO.pure(List.empty[Valid[Plan]])) { (res, plan) =>
+        val result: IO[Valid[Plan]] = plan.environment.blueprint match {
           // supplied manifest held a manifest reference
           case Some(Left((ref,revision))) => {
             storage.StoreOp.findBlueprint(ref, revision)
               .foldMap(cfg.storage)
-              .map { x =>
-                if (x.nonEmpty) ().validNel
+              .map { bp =>
+                if (bp.nonEmpty) plan.copy(
+                  environment = plan.environment.copy(
+                    blueprint = bp.map(Right(_)))).validNel
                 else UnknownBlueprintReference(ref, revision).invalidNel
               }
           }
           // supplied manifest already held a full blueprint
-          case Some(Right(bp)) => IO.pure(().validNel)
+          case Some(Right(bp)) => IO.pure(plan.validNel)
           // supplied manfiest did not specify a blueprint
           // so it will recieve the default when the workflow
           // executes
-          case None            => IO.pure(().validNel)
+          case None            => IO.pure(plan.validNel)
         }
         (result, res).mapN(_ :: _)
-      }.map(l => Foldable[List].fold(l))
+      }
+
+      for {
+        a <- foooo
+        b  = Foldable[List].fold(a.map(_.map(_ => ())))
+        c  = a.traverse(_.toList).flatMap(identity)
+        d <- IO.pure((b, c))
+      } yield d
     }
 
     def validate(m: Manifest): IO[Valid[Manifest]] = {
@@ -257,7 +266,7 @@ object ManifestValidator {
         c <- validateLoadbalancers(m, cfg.datacenters)
         d <- validateReferencesDefaultNamespace(m, cfg.defaultNamespace)
         e <- validateBlueprints(m)
-      } yield (a combine b combine c combine d combine e).map(_ => m)
+      } yield (a combine b combine c combine d combine e._1).map(_ => m.copy(plans = e._2))
 
       // We cannot do this validation in parallel with the above.
       // We rely on the assumptions the above validations afford us.
