@@ -185,8 +185,6 @@ object ManifestValidator {
       ().validNel
     }
 
-  // def validatePlanBlueprint(b: Either[BlueprintRef, Blueprint]): Valid[]
-
   def validateUnit(unit: UnitDef, plan: Plan): IO[Valid[Unit]] =
     for {
       a <- validateAlerts(unit, plan)
@@ -195,7 +193,6 @@ object ManifestValidator {
       d <- IO.pure(validatePeriodic(unit,plan))
       e <- IO.pure(validateUnitNameLength(unit))
       f <- IO.pure(validateUnitNameChars(unit))
-      // g <- validateBlueprint
     } yield (a combine b combine c combine d combine e combine f)
 
   def parseManifestAndValidate(str: String, cfg: NelsonConfig): IO[Valid[Manifest]] = {
