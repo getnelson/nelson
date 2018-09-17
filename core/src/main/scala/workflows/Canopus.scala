@@ -37,7 +37,7 @@ object Canopus extends Workflow[Unit] {
       i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
       _ <- status(id, Pending, "Canopus workflow about to start")
       _ <- logToFile(id, s"Instructing ${dc.name}'s scheduler to handle service container")
-      l <- launch(i, dc, ns.name, vunit, p, None, hash)
+      l <- launch(i, dc, ns.name, vunit, p, hash)
       _ <- debug(s"Scheduler responded with: ${l}")
       _ <- status(id, getStatus(Manifest.Versioned.unwrap(vunit), p), "=====> Canopus workflow completed <=====")
     } yield ()
