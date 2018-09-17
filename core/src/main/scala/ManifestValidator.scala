@@ -185,6 +185,8 @@ object ManifestValidator {
       ().validNel
     }
 
+  // def validatePlanBlueprint(b: Either[BlueprintRef, Blueprint]): Valid[]
+
   def validateUnit(unit: UnitDef, plan: Plan): IO[Valid[Unit]] =
     for {
       a <- validateAlerts(unit, plan)
@@ -193,7 +195,8 @@ object ManifestValidator {
       d <- IO.pure(validatePeriodic(unit,plan))
       e <- IO.pure(validateUnitNameLength(unit))
       f <- IO.pure(validateUnitNameChars(unit))
-    } yield (a combine b combine c combine d combine e combine f).map(_ => ())
+      // g <- validateBlueprint
+    } yield (a combine b combine c combine d combine e combine f)
 
   def parseManifestAndValidate(str: String, cfg: NelsonConfig): IO[Valid[Manifest]] = {
 
@@ -208,24 +211,36 @@ object ManifestValidator {
     }
 
     def validateReferencesDefaultNamespace(m: Manifest, defaultNamespace: NamespaceName): IO[Valid[Unit]] =
-    IO.pure(
-      m.namespaces.find(x => x.name == cfg.defaultNamespace)
-        .fold[Valid[Unit]](MissingDefaultNamespaceReference(cfg.defaultNamespace).invalidNel) { n =>
-          if (m.units.forall {u => n.units.exists(_._1 == u.name)})
-            ().validNel
-          else
-            MissingIndividualDefaultNamespaceReference(cfg.defaultNamespace).invalidNel
-        }
-    )
-
+      IO.pure(
+        m.namespaces.find(x => x.name == cfg.defaultNamespace)
+          .fold[Valid[Unit]](MissingDefaultNamespaceReference(cfg.defaultNamespace).invalidNel) { n =>
+            if (m.units.forall {u => n.units.exists(_._1 == u.name)})
+              ().validNel
+            else
+              MissingIndividualDefaultNamespaceReference(cfg.defaultNamespace).invalidNel
+          }
+      )
 
     def validateLoadbalancers(m: Manifest, dcs: Seq[Datacenter]): IO[Valid[Unit]] = {
       IO {
-        m.loadbalancers.foldLeft(Nil : List[Valid[Unit]])((res,lb) =>
+        m.loadbalancers.foldLeft(Nil: List[Valid[Unit]])((res,lb) =>
           validateLoadbalancer(lb, m.units, cfg.proxyPortWhitelist)(cfg.storage) :: res)
           .sequence
           .map(l => Foldable[List].fold(l))
       }
+    }
+
+    def validateBlueprints(m: Manifest): IO[Valid[Unit]] = {
+      m.plans.foldLeft(Nil: List[Valid[Unit]])((res, plan) =>
+        (plan.environment.blueprint match {
+          case Some(Left((ref,revision))) => {
+            // storage.StoreOp.findBlueprint(ref, revision).foldMap(cfg.storage)
+            IO.pure(().validNel)
+          }//().validNel
+          case Some(Right(bp)) => IO.pure(().validNel)
+          case None            => IO.pure(().validNel)
+        }) :: res
+      ).sequence.map(l => Foldable[List].fold(l))
     }
 
     def validate(m: Manifest): IO[Valid[Manifest]] = {
