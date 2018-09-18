@@ -2,7 +2,7 @@
 layout: "single-with-toc"
 title: "Install"
 preamble: >
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet.
+  Nelson is made up of two primary components: the server and the client. This guide shows you how to install and configure both of these, along with useful tools from the broader Nelson eco-system.
 contents:
 - Nelson Command Line
 - Slipway Command Line
