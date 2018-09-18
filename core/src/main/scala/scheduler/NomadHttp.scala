@@ -391,7 +391,6 @@ object NomadJson {
             "Name"          := name,
             "Count"         := env.desiredInstances.getOrElse(1),
             "RestartPolicy" := env.retries.map(restartJson).getOrElse(restartJson(3)), // if no retry specified, only try 3 times rather than 15.
-            "EphemeralDisk" := ephemeralDiskJson(false,false,plan.environment.ephemeralDisk.getOrElse(101)),
             "Tasks"         := List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags))
           )
         )

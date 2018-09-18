@@ -255,8 +255,7 @@ object ManifestValidator {
         a <- foooo
         b  = Foldable[List].fold(a.map(_.map(_ => ())))
         c  = a.traverse(_.toList).flatMap(identity)
-        d <- IO.pure((b, c))
-      } yield d
+      } yield (b, c)
     }
 
     def validate(m: Manifest): IO[Valid[Manifest]] = {

@@ -64,7 +64,7 @@ object Manifest {
   )
 
   object Plan {
-    val default = Plan("default", Environment(workflow = Magnetar))
+    val default = Plan("default", Environment(workflow = Pulsar))
   }
 
   sealed abstract class ResourceSpec extends Product with Serializable {
@@ -110,7 +110,6 @@ object Manifest {
     policy: Option[ExpirationPolicy] = None,
     trafficShift: Option[TrafficShift] = None,
     volumes: List[Volume] = List.empty,
-    ephemeralDisk: Option[Int] = None,
     workflow: Workflow[Unit] = Magnetar,
     blueprint: Option[Either[BlueprintRef, Blueprint]] = None
   )

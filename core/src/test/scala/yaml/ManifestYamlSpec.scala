@@ -98,7 +98,6 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
             EnvironmentVariable("FOO","foo-1"),
             EnvironmentVariable("QUX","qux-1")
           ),
-          ephemeralDisk = Some(200),
           workflow = Magnetar
         )
       ),

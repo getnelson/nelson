@@ -224,7 +224,6 @@ object YamlError {
   def invalidMemoryBound(request: Double, limit: Double): YamlError = InvalidMemoryBound(request, limit)
   val missingMemoryLimit: YamlError = MissingMemoryLimit
   def invalidInstances(d: Int): YamlError = InvalidInstances(d)
-  def invalidEphemeralDisk(min: Int, max: Int, request: Int): YamlError = InvalidEphemeralDisk(min, max, request)
   def invalidTrafficShiftPolicy(name: String): YamlError = InvalidTrafficShift(name)
   def invalidTrafficShiftDuration(dur: String): YamlError = InvalidTrafficShiftDuration(dur)
   def invalidNamespace(n: String, reason: String): YamlError = InvalidNamespace(n,reason)
@@ -332,9 +331,6 @@ private final case object MissingMemoryLimit
 
 private final case class InvalidInstances(d: Int)
     extends YamlError(s"$d is an invalid instances request, must be between 0 and 500")
-
-private final case class InvalidEphemeralDisk(min: Int, max: Int, request: Int)
-    extends YamlError(s"$request is an invalid ephemeral disk request, must be between $min and $max")
 
 private final case class InvalidTrafficShift(name: String)
   extends YamlError(s"'$name' is not a valid traffic shift policy.")

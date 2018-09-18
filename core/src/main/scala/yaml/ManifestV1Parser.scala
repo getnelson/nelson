@@ -144,12 +144,6 @@ object ManifestV1Parser {
     (name, mountPath, size).mapN { case (n, mp, s) => Volume(n, mp, s) }
   }
 
-  def validateEphemeral(i: Int): YamlValidation[Int] =
-    if (i < 101 || i > 10000)
-      Validated.invalidNel(invalidEphemeralDisk(101, 10000, i))
-    else
-      Validated.validNel(i)
-
   def parseDuration(d: String): Either[YamlError, FiniteDuration] =
     Either.catchNonFatal {
       val dur = Duration(d)
@@ -190,7 +184,7 @@ object ManifestV1Parser {
           .fold(_ => None, x => Some(Left(x)))
             .toValidNel(YamlError.invalidBlueprintReference(x.blueprint)))
 
-    Apply[YamlValidation].map17(
+    Apply[YamlValidation].map16(
       parseAlphaNumHyphen(raw.name, "plan.name"),
       validatedCPU,
       validatedMemory,
@@ -205,12 +199,11 @@ object ManifestV1Parser {
       Option(raw.expiration_policy).traverse(resolvePolicy),
       Option(raw.traffic_shift).traverse(validateTrafficShift),
       raw.volumes.asScala.toList.traverse(validateVolumes),
-      Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i)),
       Option(raw.workflow).map(x => resolveWorkflow(x.kind)).getOrElse(Validated.valid(nelson.Magnetar)),
       validateBlueprint
     ) {
-      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) =>
-        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q))
+      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) =>
+        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o,p))
     }
   }
 
@@ -513,12 +506,11 @@ class PlanYaml {
   @BeanProperty var expiration_policy: String = _
   @BeanProperty var traffic_shift: TrafficShiftYaml = _
   @BeanProperty var volumes: JList[VolumeYaml] = new java.util.ArrayList
-  @BeanProperty var ephemeral_disk: Int = -1
   @BeanProperty var workflow: WorkflowYaml = _
 }
 
 class WorkflowYaml {
-  @BeanProperty var kind: String = "magnetar"
+  @BeanProperty var kind: String = Pulsar.name
   @BeanProperty var blueprint: String = _
 }
 

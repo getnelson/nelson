@@ -118,7 +118,6 @@ plans:
     retries: 2
     instances:
       desired: 1
-    ephemeral_disk: 200
     environment:
       - FOO=foo-1
       - QUX=qux-1
