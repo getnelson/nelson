@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?ed3644855bfcd30024c60537cef2a8e4" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?a3da3acf9f7257b712c8201e945313e2" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?cf1a1a21aecb54018b7a799b27a16ad8" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?a92911990fa59f01f95e1a56d0b583fa" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -67,8 +67,15 @@
     
     
         
-            <li>
-                <a href="/introduction/">Introduction</a>
+            <li class="">
+              <a href="/introduction/" class="">Introduction</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/introduction/use-case.html">Use Cases</a>
+                      </li>
+                  
+              </ol>
             </li>
         
     
@@ -202,7 +209,7 @@
 
 <h2 id="command-line">Command Line</h2>
 
-<p>The <a href="https://github.com/getnelson/nelson-cli">Nelson CLI</a> is useful for debugging the Nelson API locally. Particularly useful are the client&rsquo;s <code>--debug</code> and <code>--debug-curl</code> flags. You can read about them in the <a href="http://verizon.github.io/nelson-cli/">client&rsquo;s documentation</a>. One option that you need to pay attention to for local usage is the <code>--disable-tls</code> flag on the <code>login</code> subcommand. To login to a local Nelson instance, you should run the following:</p>
+<p>The <a href="https://github.com/getnelson/nelson-cli">Nelson CLI</a> is useful for debugging the Nelson API locally. Particularly useful are the client&rsquo;s <code>--debug</code> and <code>--debug-curl</code> flags. You can read about them in the <a href="https://github.com/getnelson/nelson-cli#getting-started">client&rsquo;s documentation</a>. One option that you need to pay attention to for local usage is the <code>--disable-tls</code> flag on the <code>login</code> subcommand. To login to a local Nelson instance, you should run the following:</p>
 
 <pre><code>nelson login --disable-tls nelson.local:9000
 </code></pre>
@@ -250,7 +257,7 @@ hugo server -w -b 127.0.0.1 -p 4000
         </p>
         <p>
           Currently v
-                    0.11.105
+                    0.11.106
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>

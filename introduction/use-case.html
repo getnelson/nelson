@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?2b43e2fd317483ceb6c1e7e2e641e7dc" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?1858ed1b30a8a3280b68e09ba722b3fb" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?0465e32dda256cb57a724fc9903bee72" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?28421056f22e868d9a90ecf0bc71da4f" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -67,8 +67,15 @@
     
     
         
-            <li>
-                <a href="/introduction/">Introduction</a>
+            <li class="active">
+              <a href="/introduction/" class="">Introduction</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="highlight">
+                          <a href="/introduction/use-case.html">Use Cases</a>
+                      </li>
+                  
+              </ol>
             </li>
         
     
@@ -141,66 +148,40 @@
             <h1>Use Cases</h1>
 
             
-            <p>Nelson is designed to handle a specific set of use-cases; understanding these use-cases will allow you to understand if Nelson is a good fit for the challenges you face in your organization.</p>
+            <p>Nelson is designed to handle a specific set of use-cases; comprehending these use-cases will allow you to understand if Nelson is a good fit for the challenges you are looking to solve.</p>
             
 
-            
-              <nav id="TableOfContents">
-                <ol>
-                
-                  <li><a href="#policy-management">Policy Management</a></li>
-                
-                  <li><a href="#thing-two">Thing Two</a></li>
-                
-                  <li><a href="#thing-three">Thing Three</a></li>
-                
-                </ol>
-              </nav>
-            
+            <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#deployment">Deployment</a></li>
+<li><a href="#dependency-graph">Dependency Graph</a></li>
+<li><a href="#policy-management">Policy Management</a></li>
+<li><a href="#unopinionated-ci">Unopinionated CI</a></li>
+</ul></li>
+</ul>
+</nav>
 
-            
             <hr />
-            
 
             
 
-<h1 id="policy-management">Policy Management</h1>
+<h2 id="deployment">Deployment</h2>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum.</p>
+<p>At its core, Nelson is a system that deploys containers to scheudlers like Kubernetes and Nomad. This alone however does not make Nelson unique: those tools provide a means to deploy containers in a myriad of different ways, and theirin lies the source of a great deal of friction. Scheduler interfaces expose a discrete set of trade-offs to the user, and more often than not they make hard things easier, but easy things hard. This is typically not what most organizations are looking for: easy things should be easy. Nelson provides users a simple interface to deploy the What, Where and How of their deployment.</p>
 
-<h1 id="thing-two">Thing Two</h1>
+<h2 id="dependency-graph">Dependency Graph</h2>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum.</p>
+<p>Topographical security auditing: can answer questions like “show me all the systems available at the edge”, or “show me all systems that use system X”. Every action conducted against Nelson is also stored in an audit trail, so you always know what user did what action, even if that user is Nelson itself (for example, why did Nelson destroy system X).</p>
 
-<h1 id="thing-three">Thing Three</h1>
+<h2 id="policy-management">Policy Management</h2>
 
-<p>From the high-level, you can consider Nelson a highly-composable automator of organizational best practices. Users are freed from having to concern themselves with things like “how do I ship logs” - it just happens based on the administrators setup. Likewise, there’s a strong “bring your own”, lego brick approach to CI, security, schedulers etc. This provides the minimal vendor lock-in, whilst allowing mixed-mode runtimes (e.g. part Mesos, part k8s) that span multiple geographies. If you want to know what your entire service fleet globally looks like, Nelson can tell you.</p>
+<p>Automatic policy management with Vault. When you launch something onto a cluster, there is nearly always the problem of policy management and a process flow (often manual) that involves security to sign off and approval for systems accessing certain credentials. Nelson automates this workflow by generating and deploying policies on a per-stack basis. This makes it easy to reason about orphan policies (they don&rsquo;t exist because Nelson cleans them up).</p>
 
-<p>Some of the primary Nelson features are:</p>
+<h2 id="unopinionated-ci">Unopinionated CI</h2>
 
-<ul>
-<li><p>Deployment against a scheduler of your choice (presently, Nomad + Kube - there was an internal Mesos implementation as well that was never open-sourced; the mechanism is entirely pluggable though. The community has an ECS implementation as well so I hear)</p></li>
-
-<li><p>Automatic policy management with Vault. When you launch something onto a cluster, there is nearly always the problem of policy management and a process flow (often manual) that involves security to sign off and approval for systems accessing certain credentials. Nelson automates this workflow by generating and deploying policies on a per-stack basis. This makes it easy to reason about orphan policies (they don&rsquo;t exist because Nelson cleans them up)</p></li>
-
-<li><p>Lifecycle management for all systems deployed; when a system isn’t logically being used it will be cleaned up. I talk about this in more depth in this presentation: <a href="https://www.youtube.com/watch?v=lTIvKZHedJQ">https://www.youtube.com/watch?v=lTIvKZHedJQ</a></p></li>
-
-<li><p>Topographical security auditing: can answer questions like “show me all the systems available at the edge”, or “show me all systems that use system X”. Every action conducted against Nelson is also stored in an audit trail, so you always know what user did what action, even if that user is Nelson itself (for example, why did Nelson destroy system X).</p></li>
-</ul>
-
-<p>What you’ll notice here is that Nelson is not providing the following:</p>
-
-<ul>
-<li>No code build or coverage reporting</li>
-<li>No prescription on your CI system (compared to say, JenkinsX which monolithically couples everything from CI to runtime)</li>
-<li>Strong opinions on how you test and release your code.</li>
-<li>Strong opinions on how your runtime traffic control should work.</li>
-<li>No opinions on how to scale your systems (automatically or otherwise).</li>
-<li>Manual approval workflows.</li>
-<li>Integration into VM-centric workflows (e.g. built-in VM baking).</li>
-</ul>
-
-<p>In this way, Nelson is a very light, container-first platform by comparison - it provides a high-level description of the system you wish to deploy, and then handles the tedium around that. Nelson is not in the runtime hot path, so outages don&rsquo;t matter (those only prevent you deploying more new stuff). Likewise, Nelson is highly compassable - at Verizon we built continuous testing and experimentation systems as discrete, complimentary systems (sadly we never got to open-source those, but the learnings were highly reusable).</p>
+<p>Nelson does not put any constraints on the CI system you choose to use. Jenkins, Travis, etc&hellip; use whatever you want! This is a crucial design choice as it means that Nelson is not trying to own other parts of your system, making it easier to integrate into multi-team, multi-CI workflows.</p>
 
           </article>
 
@@ -219,7 +200,7 @@
         </p>
         <p>
           Currently v
-                    0.11.105
+                    0.11.106
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>

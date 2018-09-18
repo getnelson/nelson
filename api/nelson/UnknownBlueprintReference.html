@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>NelsonError - nelson.NelsonError</title>
-          <meta name="description" content="NelsonError - nelson.NelsonError" />
-          <meta name="keywords" content="NelsonError nelson.NelsonError" />
+          <title>UnknownBlueprintReference - nelson.UnknownBlueprintReference</title>
+          <meta name="description" content="UnknownBlueprintReference - nelson.UnknownBlueprintReference" />
+          <meta name="keywords" content="UnknownBlueprintReference nelson.UnknownBlueprintReference" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'nelson.NelsonError';
+            var hash = 'nelson.UnknownBlueprintReference';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,10 +30,10 @@
       <div id="definition">
         <img alt="Class" src="../lib/class_big.png" />
         <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a></p>
-        <h1>NelsonError</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>UnknownBlueprintReference</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="nelson">package nelson</a>
           </div></span></h3><span class="permalink">
-      <a href="../index.html#nelson.NelsonError" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -41,21 +41,18 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">NelsonError</span><span class="result"> extends <span class="extype" name="scala.RuntimeException">RuntimeException</span></span>
+        <span class="name">UnknownBlueprintReference</span><span class="params">(<span name="ref">ref: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="revision">revision: <a href="blueprint/Blueprint$$Revision.html" class="extype" name="nelson.blueprint.Blueprint.Revision">Revision</a></span>)</span><span class="result"> extends <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/core/src/main/scala/Exceptions.scala" target="_blank">Exceptions.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="java.lang.RuntimeException">RuntimeException</span>, <span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="CyclicDependency.html" class="extype" name="nelson.CyclicDependency">CyclicDependency</a>, <a href="DeploymentCommitFailed.html" class="extype" name="nelson.DeploymentCommitFailed">DeploymentCommitFailed</a>, <a href="DeprecatedDependency.html" class="extype" name="nelson.DeprecatedDependency">DeprecatedDependency</a>, <a href="ExceededLimitRange.html" class="extype" name="nelson.ExceededLimitRange">ExceededLimitRange</a>, <a href="FailedDockerExtraction.html" class="extype" name="nelson.FailedDockerExtraction">FailedDockerExtraction</a>, <a href="FailedDockerOperation.html" class="extype" name="nelson.FailedDockerOperation">FailedDockerOperation</a>, <a href="FailedLoadbalancerDeploy.html" class="extype" name="nelson.FailedLoadbalancerDeploy">FailedLoadbalancerDeploy</a>, <a href="FailedWorkflow.html" class="extype" name="nelson.FailedWorkflow">FailedWorkflow</a>, <a href="InvalidDockerImage.html" class="extype" name="nelson.InvalidDockerImage">InvalidDockerImage</a>, <a href="InvalidGrant.html" class="extype" name="nelson.InvalidGrant">InvalidGrant</a>, <a href="InvalidLoadbalancer.html" class="extype" name="nelson.InvalidLoadbalancer">InvalidLoadbalancer</a>, <a href="InvalidLoadbalancerNameLength.html" class="extype" name="nelson.InvalidLoadbalancerNameLength">InvalidLoadbalancerNameLength</a>, <a href="InvalidLoadbalancerPort.html" class="extype" name="nelson.InvalidLoadbalancerPort">InvalidLoadbalancerPort</a>, <a href="InvalidNamespaceName.html" class="extype" name="nelson.InvalidNamespaceName">InvalidNamespaceName</a>, <a href="InvalidPrometheusRules.html" class="extype" name="nelson.InvalidPrometheusRules">InvalidPrometheusRules</a>, <a href="InvalidRepoAccess.html" class="extype" name="nelson.InvalidRepoAccess">InvalidRepoAccess</a>, <a href="InvalidRouteDefinition.html" class="extype" name="nelson.InvalidRouteDefinition">InvalidRouteDefinition</a>, <a href="InvalidSlug.html" class="extype" name="nelson.InvalidSlug">InvalidSlug</a>, <a href="InvalidTrafficShiftReverse.html" class="extype" name="nelson.InvalidTrafficShiftReverse">InvalidTrafficShiftReverse</a>, <a href="InvalidUnitNameChars.html" class="extype" name="nelson.InvalidUnitNameChars">InvalidUnitNameChars</a>, <a href="InvalidUnitNameLength.html" class="extype" name="nelson.InvalidUnitNameLength">InvalidUnitNameLength</a>, <a href="LoadbalancerNotFound.html" class="extype" name="nelson.LoadbalancerNotFound">LoadbalancerNotFound</a>, <a href="ManifestUnitKindMismatch.html" class="extype" name="nelson.ManifestUnitKindMismatch">ManifestUnitKindMismatch</a>, <a href="ManualDeployFailed.html" class="extype" name="nelson.ManualDeployFailed">ManualDeployFailed</a>, <a href="MisconfiguredDatacenter.html" class="extype" name="nelson.MisconfiguredDatacenter">MisconfiguredDatacenter</a>, <a href="MissingDefaultNamespaceReference.html" class="extype" name="nelson.MissingDefaultNamespaceReference">MissingDefaultNamespaceReference</a>, <a href="MissingDependency.html" class="extype" name="nelson.MissingDependency">MissingDependency</a>, <a href="MissingDeployment.html" class="extype" name="nelson.MissingDeployment">MissingDeployment</a>, <a href="MissingHealthCheckPath.html" class="extype" name="nelson.MissingHealthCheckPath">MissingHealthCheckPath</a>, <a href="MissingIndividualDefaultNamespaceReference.html" class="extype" name="nelson.MissingIndividualDefaultNamespaceReference">MissingIndividualDefaultNamespaceReference</a>, <a href="MissingReleaseAssets.html" class="extype" name="nelson.MissingReleaseAssets">MissingReleaseAssets</a>, <a href="MissingReleaseForDeployment.html" class="extype" name="nelson.MissingReleaseForDeployment">MissingReleaseForDeployment</a>, <a href="MissingResourceReference.html" class="extype" name="nelson.MissingResourceReference">MissingResourceReference</a>, <a href="MultipleErrors.html" class="extype" name="nelson.MultipleErrors">MultipleErrors</a>, <a href="MultipleValidationErrors.html" class="extype" name="nelson.MultipleValidationErrors">MultipleValidationErrors</a>, <a href="NamespaceCreateFailed.html" class="extype" name="nelson.NamespaceCreateFailed">NamespaceCreateFailed</a>, <a href="NoTargetDatacenters$.html" class="extype" name="nelson.NoTargetDatacenters">NoTargetDatacenters</a>, <a href="NomadNotImplemented$.html" class="extype" name="nelson.NomadNotImplemented">NomadNotImplemented</a>, <a href="PeriodicUnitWithTrafficShift.html" class="extype" name="nelson.PeriodicUnitWithTrafficShift">PeriodicUnitWithTrafficShift</a>, <a href="ProblematicDeployable.html" class="extype" name="nelson.ProblematicDeployable">ProblematicDeployable</a>, <a href="ProblematicRepoManifest.html" class="extype" name="nelson.ProblematicRepoManifest">ProblematicRepoManifest</a>, <a href="RepoNotFound.html" class="extype" name="nelson.RepoNotFound">RepoNotFound</a>, <a href="UnexpectedConsulResponse.html" class="extype" name="nelson.UnexpectedConsulResponse">UnexpectedConsulResponse</a>, <a href="UnexpectedMissingHook.html" class="extype" name="nelson.UnexpectedMissingHook">UnexpectedMissingHook</a>, <a href="UnknownBackendDestination.html" class="extype" name="nelson.UnknownBackendDestination">UnknownBackendDestination</a>, <a href="UnknownBlueprintReference.html" class="extype" name="nelson.UnknownBlueprintReference">UnknownBlueprintReference</a>, <a href="UnknownDatacenter.html" class="extype" name="nelson.UnknownDatacenter">UnknownDatacenter</a>, <a href="UnknownNamespace.html" class="extype" name="nelson.UnknownNamespace">UnknownNamespace</a>, <a href="UnknownPortRef.html" class="extype" name="nelson.UnknownPortRef">UnknownPortRef</a>, <a href="UnparsableReleaseVersion.html" class="extype" name="nelson.UnparsableReleaseVersion">UnparsableReleaseVersion</a>, <a href="UnsatisfiedDeploymentRequirements.html" class="extype" name="nelson.UnsatisfiedDeploymentRequirements">UnsatisfiedDeploymentRequirements</a>, <a href="YamlError.html" class="extype" name="nelson.YamlError">YamlError</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>, <span class="extype" name="java.lang.RuntimeException">RuntimeException</span>, <span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -72,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.NelsonError"><span>NelsonError</span></li><li class="in" name="java.lang.RuntimeException"><span>RuntimeException</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.UnknownBlueprintReference"><span>UnknownBlueprintReference</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="nelson.NelsonError"><span>NelsonError</span></li><li class="in" name="java.lang.RuntimeException"><span>RuntimeException</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -91,19 +88,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="nelson.NelsonError#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(msg:String):nelson.NelsonError"></a>
-      <a id="&lt;init&gt;:NelsonError"></a>
+              <ol><li name="nelson.UnknownBlueprintReference#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(ref:String,revision:nelson.blueprint.Blueprint.Revision):nelson.UnknownBlueprintReference"></a>
+      <a id="&lt;init&gt;:UnknownBlueprintReference"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">NelsonError</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">UnknownBlueprintReference</span><span class="params">(<span name="ref">ref: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="revision">revision: <a href="blueprint/Blueprint$$Revision.html" class="extype" name="nelson.blueprint.Blueprint.Revision">Revision</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@&lt;init&gt;(msg:String):nelson.NelsonError" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@&lt;init&gt;(ref:String,revision:nelson.blueprint.Blueprint.Revision):nelson.UnknownBlueprintReference" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -129,7 +126,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -146,7 +143,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@##():Int" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@##():Int" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -163,7 +160,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -180,7 +177,7 @@
         <span class="name">addSuppressed</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@addSuppressed(x$1:Throwable):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@addSuppressed(x$1:Throwable):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -197,7 +194,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -214,7 +211,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@clone():Object" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@clone():Object" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -237,28 +234,11 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="java.lang.Throwable#fillInStackTrace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fillInStackTrace():Throwable"></a>
       <a id="fillInStackTrace():Throwable"></a>
@@ -271,7 +251,7 @@
         <span class="name">fillInStackTrace</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@fillInStackTrace():Throwable" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@fillInStackTrace():Throwable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -288,7 +268,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@finalize():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@finalize():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -311,7 +291,7 @@
         <span class="name">getCause</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@getCause():Throwable" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@getCause():Throwable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -328,7 +308,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -345,7 +325,7 @@
         <span class="name">getLocalizedMessage</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@getLocalizedMessage():String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@getLocalizedMessage():String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -362,11 +342,11 @@
         <span class="name">getMessage</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@getMessage():String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@getMessage():String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="nelson.NelsonError">NelsonError</a> → Throwable</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a> → Throwable</dd></dl></div>
     </li><li name="java.lang.Throwable#getStackTrace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getStackTrace():Array[StackTraceElement]"></a>
       <a id="getStackTrace():Array[StackTraceElement]"></a>
@@ -379,7 +359,7 @@
         <span class="name">getStackTrace</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@getStackTrace():Array[StackTraceElement]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@getStackTrace():Array[StackTraceElement]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -396,28 +376,11 @@
         <span class="name">getSuppressed</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="java.lang.Throwable">Throwable</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@getSuppressed():Array[Throwable]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@getSuppressed():Array[Throwable]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@hashCode():Int" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="java.lang.Throwable#initCause" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="initCause(x$1:Throwable):Throwable"></a>
       <a id="initCause(Throwable):Throwable"></a>
@@ -430,7 +393,7 @@
         <span class="name">initCause</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@initCause(x$1:Throwable):Throwable" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@initCause(x$1:Throwable):Throwable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -447,7 +410,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -464,7 +427,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -481,7 +444,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@notify():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@notify():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -498,7 +461,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -515,7 +478,7 @@
         <span class="name">printStackTrace</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.io.PrintWriter">PrintWriter</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@printStackTrace(x$1:java.io.PrintWriter):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@printStackTrace(x$1:java.io.PrintWriter):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -532,7 +495,7 @@
         <span class="name">printStackTrace</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.io.PrintStream">PrintStream</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@printStackTrace(x$1:java.io.PrintStream):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@printStackTrace(x$1:java.io.PrintStream):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -549,11 +512,45 @@
         <span class="name">printStackTrace</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@printStackTrace():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@printStackTrace():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
+    </li><li name="nelson.UnknownBlueprintReference#ref" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ref:String"></a>
+      <a id="ref:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ref</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.UnknownBlueprintReference@ref:String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.UnknownBlueprintReference#revision" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="revision:nelson.blueprint.Blueprint.Revision"></a>
+      <a id="revision:Revision"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">revision</span><span class="result">: <a href="blueprint/Blueprint$$Revision.html" class="extype" name="nelson.blueprint.Blueprint.Revision">Revision</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.UnknownBlueprintReference@revision:nelson.blueprint.Blueprint.Revision" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="java.lang.Throwable#setStackTrace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setStackTrace(x$1:Array[StackTraceElement]):Unit"></a>
       <a id="setStackTrace(Array[StackTraceElement]):Unit"></a>
@@ -566,7 +563,7 @@
         <span class="name">setStackTrace</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@setStackTrace(x$1:Array[StackTraceElement]):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@setStackTrace(x$1:Array[StackTraceElement]):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -583,7 +580,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -600,7 +597,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@toString():String" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@toString():String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -617,7 +614,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@wait():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@wait():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -640,7 +637,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -663,7 +660,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NelsonError@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.UnknownBlueprintReference@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -683,7 +680,15 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="java.lang.RuntimeException">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
+            </div><div class="parent" name="nelson.NelsonError">
+              <h3>Inherited from <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a></h3>
+            </div><div class="parent" name="java.lang.RuntimeException">
               <h3>Inherited from <span class="extype" name="java.lang.RuntimeException">RuntimeException</span></h3>
             </div><div class="parent" name="java.lang.Exception">
               <h3>Inherited from <span class="extype" name="java.lang.Exception">Exception</span></h3>
