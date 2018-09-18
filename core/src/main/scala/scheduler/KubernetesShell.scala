@@ -74,10 +74,11 @@ final class KubernetesShell(
     // a hydrated blueprint (i.e. passes manifest validation and exists
     // in the database) so we simply take the supplied plan and extract
     // the `Blueprint`, and `Template` in turn.
-    val template = plan.environment.blueprint
-      .flatMap(_.right.toOption)
-      .map(_.template)
-      .fold(fallback)(IO.pure)
+    val template = plan.environment.blueprint match {
+      case Some(Left(_)) => IO.raiseError(new IllegalArgumentException(s"Internal error occured: un-hydrated blueprint passed to scheduler!"))
+      case Some(Right(bp)) => IO.pure(bp.template)
+      case None => fallback
+    }
 
     for {
       t <- template

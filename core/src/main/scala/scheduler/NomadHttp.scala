@@ -131,23 +131,27 @@ final class NomadHttp(
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
-  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] =
-    plan.environment.blueprint
-      .flatMap(_.right.toOption)
-      .map(_.template)
-      .fold(launchDefault(u, hash, version, img, dc, ns, plan)) { template =>
+  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
+    val template = plan.environment.blueprint match {
+      case Some(Left(_)) => IO.raiseError(new IllegalArgumentException(s"Internal error occured: un-hydrated blueprint passed to scheduler!"))
+      case Some(Right(bp)) => IO.pure(bp.template)
+      case None => IO.raiseError(new IllegalArgumentException(s"Internal error occured: there is currently no support for a default Nomad blueprint!"))
+    }
+
+    template.flatMap { t =>
       launchDefault(u, hash, version, img, dc, ns, plan)
       val sn = StackName(u.name, version, hash)
       val name = buildName(sn)
       // TODO: Actually do the interpolation
       // TODO: Do we want to do validation here?
-      val spec = template.render(Map.empty)
+      val spec = t.render(Map.empty)
       Parse.decodeEither[Json](spec) match {
         case Left(err) =>
           IO.raiseError(new IllegalArgumentException(s"Rendered blueprint was not valid JSON, failed with error: '${err}', render: '${spec}'"))
         case Right(json) => call(name, dc, json)
       }
     }
+  }
 
   private def launchDefault(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
     val sn = StackName(u.name, version, hash)
