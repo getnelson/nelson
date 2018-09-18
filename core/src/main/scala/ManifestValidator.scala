@@ -228,7 +228,7 @@ object ManifestValidator {
     }
 
     def validateBlueprints(m: Manifest): IO[(Valid[Unit], List[Plan])] = {
-      val foooo: IO[List[Valid[Plan]]] = m.plans.foldLeft(IO.pure(List.empty[Valid[Plan]])) { (res, plan) =>
+      val plans: IO[List[Valid[Plan]]] = m.plans.foldLeft(IO.pure(List.empty[Valid[Plan]])) { (res, plan) =>
         val result: IO[Valid[Plan]] = plan.environment.blueprint match {
           // supplied manifest held a manifest reference
           case Some(Left((ref,revision))) => {
@@ -254,7 +254,7 @@ object ManifestValidator {
       for {
         a <- plans
         b  = Foldable[List].fold(a.map(_.map(_ => ())))
-        c  = a.flatTraverse(_.toList)
+        c  = a.traverse(_.toList).flatMap(identity)
       } yield (b, c)
     }
 
