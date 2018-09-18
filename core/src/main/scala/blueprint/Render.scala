@@ -67,6 +67,7 @@ object Render {
     }
 
     val nelsonEnvs = List(
+      EnvironmentVariable("NELSON_DNS_ROOT", dc.domain.name),
       EnvironmentVariable("NELSON_DATACENTER", dc.name),
       EnvironmentVariable("NELSON_ENV", ns.root.asString),
       EnvironmentVariable("NELSON_NAMESPACE", ns.asString),
