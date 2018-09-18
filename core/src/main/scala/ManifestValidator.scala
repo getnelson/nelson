@@ -252,9 +252,9 @@ object ManifestValidator {
       }
 
       for {
-        a <- foooo
+        a <- plans
         b  = Foldable[List].fold(a.map(_.map(_ => ())))
-        c  = a.traverse(_.toList).flatMap(identity)
+        c  = a.flatTraverse(_.toList)
       } yield (b, c)
     }
 
