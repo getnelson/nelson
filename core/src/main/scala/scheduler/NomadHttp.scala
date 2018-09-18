@@ -20,7 +20,6 @@ package scheduler
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
 import nelson.Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
-import nelson.blueprint.Template
 import nelson.docker.Docker
 import nelson.docker.Docker.Image
 
@@ -59,9 +58,9 @@ final class NomadHttp(
     co match {
       case Delete(dc,d) =>
         deleteUnitAndChildren(dc, d).retryExponentially()(scheduler, ec)
-      case Launch(i, dc, ns, u, p, blueprint, hash) =>
+      case Launch(i, dc, ns, u, p, hash) =>
         val unit = Manifest.Versioned.unwrap(u)
-        launch(unit, hash, u.version, i, dc, ns, p, blueprint).retryExponentially()(scheduler, ec)
+        launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()(scheduler, ec)
       case Summary(dc,_,sn) =>
         summary(dc,sn)
     }
@@ -132,8 +131,11 @@ final class NomadHttp(
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
-  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan, blueprint: Option[Template]): IO[String] =
-    blueprint.fold(launchDefault(u, hash, version, img, dc, ns, plan)) { template =>
+  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] =
+    plan.environment.blueprint
+      .flatMap(_.right.toOption)
+      .map(_.template)
+      .fold(launchDefault(u, hash, version, img, dc, ns, plan)) { template =>
       launchDefault(u, hash, version, img, dc, ns, plan)
       val sn = StackName(u.name, version, hash)
       val name = buildName(sn)
@@ -389,7 +391,6 @@ object NomadJson {
             "Name"          := name,
             "Count"         := env.desiredInstances.getOrElse(1),
             "RestartPolicy" := env.retries.map(restartJson).getOrElse(restartJson(3)), // if no retry specified, only try 3 times rather than 15.
-            "EphemeralDisk" := ephemeralDiskJson(false,false,plan.environment.ephemeralDisk.getOrElse(101)),
             "Tasks"         := List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags))
           )
         )

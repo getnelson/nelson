@@ -38,11 +38,14 @@ object Blueprint {
   /**
    * We will serialize references to blueprints with a simple delimited string:
    * {{{
-   * # specifically fix to the 123 version of the `foo-bar` blueprint
+    *
+   * ==>> specifically fix to the 123 version of the `foo-bar` blueprint
    * foo-bar@123
-   * # uses the latest (whatever revision that is) of a specified blueprint
+   *
+   * ==>> uses the latest (whatever revision that is) of a specified blueprint
    * use-gpu-hardware@HEAD
-   * # equivilent to HEAD
+   *
+   * ==>> equivilent to HEAD
    * do-my-bidding
    * }}}
    */

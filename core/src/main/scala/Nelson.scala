@@ -244,17 +244,19 @@ object Nelson {
       g   <- fetchRelease(e)
       v   <- fetchRepoManifestAndValidateDeployable(e.slug, g.tagName)
       m   <- Kleisli.liftF(v.fold(e => IO.raiseError(MultipleValidationErrors(e)), m => IO.pure(m)))
+      // take the deployable and modify the manifest to incorporate the release info
       ms  <- Kleisli.liftF(Manifest.saturateManifest(m)(g))
     } yield ms
   }
 
-  private def fetchRelease(e: Github.ReleaseEvent): NelsonK[Github.Release] = Kleisli { cfg =>
-    val t = cfg.git.systemAccessToken
+  private def fetchRelease(e: Github.ReleaseEvent): NelsonK[Github.Release] =
+    Kleisli { cfg =>
+      val t = cfg.git.systemAccessToken
 
-    Github.Request.fetchRelease(e.slug, e.id)(t).foldMap(cfg.github)
-      .ensure(MissingReleaseAssets(e))(_.assets.nonEmpty)
-      .retryExponentially(2.seconds, 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
-  }
+      Github.Request.fetchRelease(e.slug, e.id)(t).foldMap(cfg.github)
+        .ensure(MissingReleaseAssets(e))(_.assets.nonEmpty)
+        .retryExponentially(2.seconds, 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
+    }
 
   def deploy(actions: List[Manifest.Action]): NelsonK[Unit] =
     Kleisli(cfg => actions.traverse_(a => cfg.queue.enqueue1(a)))
@@ -376,7 +378,6 @@ object Nelson {
           Map("database" -> FeatureVersion(1,2)),
           Set.empty,
           Alerting.empty,
-          Magnetar,
           Some(Ports(Port("default", 1, "http"), Nil)),
           Some(Deployable(unitName, version, Deployable.Container(image.toString))),
           Set("some-tag")

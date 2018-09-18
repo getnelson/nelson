@@ -44,6 +44,7 @@ package object nelson {
   type DeploymentHash = String
   type TempoaryAccessCode = String
   type WorkflowRef = String
+  type BlueprintRef = (String, blueprint.Blueprint.Revision)
   type DatacenterRef = String
   type StatusMessage = String
   type DependencyEdge = (routing.RoutingNode, routing.RoutingNode)

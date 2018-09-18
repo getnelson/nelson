@@ -4,7 +4,7 @@ package scheduler
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Kubectl.{DeploymentStatus, JobStatus}
 import nelson.Manifest.{HealthCheck => _, _}
-import nelson.blueprint.{DefaultBlueprints, Render, Template}
+import nelson.blueprint.{DefaultBlueprints, Render}
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
 
@@ -37,8 +37,8 @@ final class KubernetesShell(
   def apply[A](fa: SchedulerOp[A]): IO[A] = fa match {
     case Delete(dc, deployment) =>
       delete(dc, deployment).timed(timeout)
-    case Launch(image, dc, ns, unit, plan, blueprint, hash) =>
-      launch(image, dc, ns, Versioned.unwrap(unit), unit.version, plan, blueprint, hash).timed(timeout)
+    case Launch(image, dc, ns, unit, plan, hash) =>
+      launch(image, dc, ns, Versioned.unwrap(unit), unit.version, plan, hash).timed(timeout)
     case Summary(dc, ns, stackName) =>
       summary(dc, ns, stackName).timed(timeout)
   }
@@ -59,7 +59,7 @@ final class KubernetesShell(
     deployment.renderedBlueprint.fold(fallback)(spec => kubectl.delete(spec).void)
   }
 
-  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, blueprint: Option[Template], hash: String): IO[String] = {
+  def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
     val env = Render.makeEnv(image, dc, ns, unit, version, plan, hash)
 
     val fallback = Manifest.getSchedule(unit, plan) match {
@@ -70,7 +70,15 @@ final class KubernetesShell(
       }
     }
 
-    val template = blueprint.fold(fallback)(IO.pure)
+    // NOTE: by this point in the system, we know we're dealing with
+    // a hydrated blueprint (i.e. passes manifest validation and exists
+    // in the database) so we simply take the supplied plan and extract
+    // the `Blueprint`, and `Template` in turn.
+    val template = plan.environment.blueprint
+      .flatMap(_.right.toOption)
+      .map(_.template)
+      .fold(fallback)(IO.pure)
+
     for {
       t <- template
       r <- kubectl.apply(t.render(env))

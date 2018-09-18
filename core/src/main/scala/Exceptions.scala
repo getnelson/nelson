@@ -183,6 +183,9 @@ final case class InvalidUnitNameLength(name: String)
 final case class InvalidUnitNameChars(name: String)
   extends NelsonError(s"$name contains invalid characters. Unit names can only include hyphens, A-Z, a-z, 0-9 where the unit name starts and ends with an alpha-numeric character.")
 
+final case class UnknownBlueprintReference(ref: String, revision: blueprint.Blueprint.Revision)
+  extends NelsonError(s"the blueprint '${ref}@${revision.toString}' does not exist in the database; be sure you have specified the correct name and revision")
+
 final object NomadNotImplemented extends NelsonError(s"Nelson 0.11.x+ currently does not support Nomad. If you are interested in using Nelson with Nomad please file an issue on GitHub: https://github.com/getnelson/nelson/ or reach out to us on Gitter: https://gitter.im/getnelson/nelson")
 
 ////////////////////////// YAML ERRORS ///////////////////////////////
@@ -221,7 +224,6 @@ object YamlError {
   def invalidMemoryBound(request: Double, limit: Double): YamlError = InvalidMemoryBound(request, limit)
   val missingMemoryLimit: YamlError = MissingMemoryLimit
   def invalidInstances(d: Int): YamlError = InvalidInstances(d)
-  def invalidEphemeralDisk(min: Int, max: Int, request: Int): YamlError = InvalidEphemeralDisk(min, max, request)
   def invalidTrafficShiftPolicy(name: String): YamlError = InvalidTrafficShift(name)
   def invalidTrafficShiftDuration(dur: String): YamlError = InvalidTrafficShiftDuration(dur)
   def invalidNamespace(n: String, reason: String): YamlError = InvalidNamespace(n,reason)
@@ -231,7 +233,11 @@ object YamlError {
   def invalidMountPath(path: String, reason: String): YamlError = InvalidMountPath(path, reason)
   val missingVolumeSize: YamlError = MissingVolumeSize
   def invalidVolumeSize(request: Int): YamlError = InvalidVolumeSize(request)
+  def invalidBlueprintReference(blueprintRef: String): YamlError = InvalidBlueprintReference(blueprintRef)
 }
+
+private final case class InvalidBlueprintReference(ref: String)
+  extends YamlError(s"specified blueprint reference '${ref}' is not valid. Must be of the form thing@HEAD or thing@3")
 
 private final case class InvalidExternalAddress(uri: String)
   extends YamlError(s"specified uri '$uri' is not a valid URI. Must be of the form: protocol://host:port")
@@ -325,9 +331,6 @@ private final case object MissingMemoryLimit
 
 private final case class InvalidInstances(d: Int)
     extends YamlError(s"$d is an invalid instances request, must be between 0 and 500")
-
-private final case class InvalidEphemeralDisk(min: Int, max: Int, request: Int)
-    extends YamlError(s"$request is an invalid ephemeral disk request, must be between $min and $max")
 
 private final case class InvalidTrafficShift(name: String)
   extends YamlError(s"'$name' is not a valid traffic shift policy.")

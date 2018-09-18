@@ -22,6 +22,7 @@ import nelson.YamlError._
 import nelson.YamlParser.fromYaml
 import nelson.cleanup.{ExpirationPolicy}
 import nelson.notifications._
+import nelson.blueprint.Blueprint
 
 import cats.Apply
 import cats.data.{NonEmptyList, State, Validated, ValidatedNel}
@@ -143,12 +144,6 @@ object ManifestV1Parser {
     (name, mountPath, size).mapN { case (n, mp, s) => Volume(n, mp, s) }
   }
 
-  def validateEphemeral(i: Int): YamlValidation[Int] =
-    if (i < 101 || i > 10000)
-      Validated.invalidNel(invalidEphemeralDisk(101, 10000, i))
-    else
-      Validated.validNel(i)
-
   def parseDuration(d: String): Either[YamlError, FiniteDuration] =
     Either.catchNonFatal {
       val dur = Duration(d)
@@ -162,7 +157,8 @@ object ManifestV1Parser {
     ).toValidatedNel
 
   def validateTrafficShift(raw: TrafficShiftYaml): YamlValidation[TrafficShift] =
-    (TrafficShiftPolicy.fromString(raw.policy).toValidNel(YamlError.invalidTrafficShiftPolicy(raw.policy)), validateTrafficShiftDuration(raw.duration)).mapN(TrafficShift)
+    (TrafficShiftPolicy.fromString(raw.policy).toValidNel(YamlError.invalidTrafficShiftPolicy(raw.policy)), 
+      validateTrafficShiftDuration(raw.duration)).mapN(TrafficShift)
 
   def toPlan(raw: PlanYaml): YamlValidation[Plan] = {
     val validatedCPU =
@@ -179,7 +175,16 @@ object ManifestV1Parser {
         }
       }
 
-    Apply[YamlValidation].map15(
+    // at this point, we do not have access to the database so we can only
+    // check that the specified blueprint is syntactically valid. The manifest
+    // validator will hydrate the reference into a Blueprint proper.
+    val validateBlueprint =
+      Option(raw.workflow).traverse(x =>
+        Blueprint.parseNamedRevision(x.blueprint)
+          .fold(_ => None, x => Some(Left(x)))
+            .toValidNel(YamlError.invalidBlueprintReference(x.blueprint)))
+
+    Apply[YamlValidation].map16(
       parseAlphaNumHyphen(raw.name, "plan.name"),
       validatedCPU,
       validatedMemory,
@@ -194,10 +199,11 @@ object ManifestV1Parser {
       Option(raw.expiration_policy).traverse(resolvePolicy),
       Option(raw.traffic_shift).traverse(validateTrafficShift),
       raw.volumes.asScala.toList.traverse(validateVolumes),
-      Option(raw.ephemeral_disk).filter(_ > 0).traverse(i => validateEphemeral(i))
+      Option(raw.workflow).map(x => resolveWorkflow(x.kind)).getOrElse(Validated.valid(nelson.Magnetar)),
+      validateBlueprint
     ) {
-      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o) =>
-        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o))
+      case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) =>
+        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o,p))
     }
   }
 
@@ -247,18 +253,15 @@ object ManifestV1Parser {
     def validateJList[A, B](field: String, raw: JList[A], f: A => YamlValidation[B]): YamlValidation[List[B]] =
       Option(raw).fold[YamlValidation[List[B]]](Validated.invalidNel(emptyList(field)))(_.asScala.toList.traverse(f))
 
-    Apply[YamlValidation].map11(
+    Apply[YamlValidation].map8(
       Option(raw.name).toValidNel(missingProperty("unit.name")),
       Option(raw.description).toValidNel(missingProperty("unit.description")),
       validateJList("unit.dependencies", raw.dependencies, parseDependency _).map(_.toMap),
       validateJList("unit.resources", raw.resources, parseResource _).map(_.toSet),
       parseAlerting(raw.name, raw.alerting),
-      resolveWorkflow(raw.workflow),
       Option(raw.ports).filter(_.size > 0).traverse(p => mkPorts(p.asScala.toList)),
       Validated.valid(None),
-      validateJList("unit.meta", raw.meta, validateMeta _).map(_.toSet),
-      Option(raw.schedule).traverse(s => parseSchedule(s)),
-      Option(raw.expiration_policy).traverse(resolvePolicy)
+      validateJList("unit.meta", raw.meta, validateMeta _).map(_.toSet)
     )(UnitDef.apply)
   }
 
@@ -479,9 +482,6 @@ class UnitYaml {
   @BeanProperty var resources: JList[ResourceYaml] = new java.util.ArrayList
   @BeanProperty var meta: JList[String] = new java.util.ArrayList
   @BeanProperty var alerting: AlertingYaml = new AlertingYaml
-  @BeanProperty var workflow: String = "magnetar"
-  @BeanProperty var schedule: String = _
-  @BeanProperty var expiration_policy: String = _
 }
 
 class LoadbalancerYaml {
@@ -506,7 +506,12 @@ class PlanYaml {
   @BeanProperty var expiration_policy: String = _
   @BeanProperty var traffic_shift: TrafficShiftYaml = _
   @BeanProperty var volumes: JList[VolumeYaml] = new java.util.ArrayList
-  @BeanProperty var ephemeral_disk: Int = -1
+  @BeanProperty var workflow: WorkflowYaml = _
+}
+
+class WorkflowYaml {
+  @BeanProperty var kind: String = Pulsar.name
+  @BeanProperty var blueprint: String = _
 }
 
 class TrafficShiftYaml {

@@ -18,7 +18,6 @@ package nelson
 
 import nelson.Datacenter.{Deployment}
 import nelson.Manifest.{UnitDef,Versioned,Plan,AlertOptOut}
-import nelson.blueprint.Template
 import nelson.docker.Docker.Image
 import nelson.docker.DockerOp
 import nelson.logging.LoggingOp
@@ -93,8 +92,8 @@ object Workflow {
     def pure[A](a: => A): WorkflowF[A] =
       WorkflowControlOp.pure(a).inject
 
-    def launch(i: Image, dc: Datacenter, ns: NamespaceName, u: UnitDef @@ Versioned, p: Plan, blueprint: Option[Template], hash: String): WorkflowF[String] =
-      SchedulerOp.launch(i, dc, ns, u, p, blueprint, hash).inject
+    def launch(i: Image, dc: Datacenter, ns: NamespaceName, u: UnitDef @@ Versioned, p: Plan, hash: String): WorkflowF[String] =
+      SchedulerOp.launch(i, dc, ns, u, p, hash).inject
 
     def delete(dc: Datacenter, d: Deployment): WorkflowF[Unit] =
       SchedulerOp.delete(dc,d).inject
@@ -158,7 +157,6 @@ object Workflow {
       } yield ()
 
     def createTrafficShift(id: ID, nsRef: NamespaceName, dc: Datacenter, p: TrafficShiftPolicy, dur: FiniteDuration): WorkflowF[Unit] = {
-
       val prog = for {
         ns   <- OptionT(StoreOp.getNamespace(dc.name, nsRef))
         to   <- OptionT(StoreOp.getDeployment(id).map(Option(_)))

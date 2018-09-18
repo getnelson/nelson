@@ -58,7 +58,7 @@ object Magnetar extends Workflow[Unit] {
       _  <- writeDiscoveryToConsul(id, sn, ns.name, dc)
       _  <- getTrafficShift.fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
       _  <- logToFile(id, s"instructing ${dc.name}'s scheduler to handle service container")
-      l  <- launch(i, dc, ns.name, vunit, p, None, hash)
+      l  <- launch(i, dc, ns.name, vunit, p, hash)
       _  <- debug(s"response from scheduler $l")
 
       _  <- status(id, getStatus(unit, p), "======> workflow completed <======")

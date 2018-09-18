@@ -25,8 +25,6 @@ units:
     dependencies:
       - ref: inventory@1.4
       - ref: cassandra@1.0
-    workflow: magnetar
-    expiration_policy: retain-active
     resources:
       - name: s3
         description: description of s3
@@ -61,8 +59,6 @@ units:
     description: crawler description
     dependencies:
       - ref: db.example@1.0
-    workflow: magnetar
-    schedule: once
     alerting:
       prometheus:
         alerts:
@@ -122,7 +118,6 @@ plans:
     retries: 2
     instances:
       desired: 1
-    ephemeral_disk: 200
     environment:
       - FOO=foo-1
       - QUX=qux-1
@@ -154,6 +149,9 @@ plans:
       - FOO=foo-prod
       - QUX=qux-prod
     expiration_policy: retain-latest-two-feature
+    workflow:
+      kind: pulsar
+      blueprint: qux@HEAD
 
   - name: lb-plan
     instances:
