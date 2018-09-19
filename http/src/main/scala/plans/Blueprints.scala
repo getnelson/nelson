@@ -61,6 +61,7 @@ object Blueprints {
         ("revision" := b.revision) ->:
         ("state" := b.state.toString.toLowerCase) ->:
         ("sha256" := b.sha256) ->:
+        ("template" := b.template.toString) ->:
         ("created_at" := b.createdAt) ->:
         jEmptyObject
       )
