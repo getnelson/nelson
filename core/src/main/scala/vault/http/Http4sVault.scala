@@ -137,6 +137,8 @@ final class Http4sVaultClient(
       }
     }
 
-  def createKubernetesRole(ckr: CreateKubernetesRole): IO[Unit] =
-    reqVoid(Request(POST, v1BaseUri / "auth" / ckr.authClusterName / "role" / ckr.roleName).withBody(ckr.asJson))
+  def createKubernetesRole(ckr: CreateKubernetesRole): IO[Unit] = {
+    val authEngineName = authBackendPrefix.map(_ + ckr.authClusterName).getOrElse(ckr.authClusterName)
+    reqVoid(Request(POST, v1BaseUri / "auth" / authEngineName / "role" / ckr.roleName).withBody(ckr.asJson))
+  }
 }
