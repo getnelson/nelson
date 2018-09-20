@@ -144,7 +144,7 @@ object Workflow {
      *   policies=<stackname>
      */
     def writeKubernetesRoleToVault(dc: Datacenter, sn: StackName, ns: NamespaceName): WorkflowF[Unit] =
-      Vault.createKubernetesRole(sn.toString, dc.name,
+      Vault.createKubernetesRole(dc.name, sn.toString,
           List(sn.toString), List(ns.asString),
           None, None, Some(List(sn.toString))).inject
 

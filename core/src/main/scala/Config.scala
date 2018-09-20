@@ -573,10 +573,11 @@ object Config {
           token <- kfg.lookup[String]("infrastructure.vault.auth-token")
           endpoint <- kfg.lookup[String]("infrastructure.vault.endpoint")
           timeout <- kfg.lookup[Duration]("infrastructure.vault.timeout")
+          prefix = kfg.lookup[String]("infrastructure.vault.auth-role-prefix")
           endpointUri = Uri.fromString(endpoint).valueOr(throw _) // YOLO
         } yield {
           val client = http4sClient(timeout)
-          val rawClient = client.map(c => new Http4sVaultClient(Token(token), endpointUri, c))
+          val rawClient = client.map(c => new Http4sVaultClient(Token(token), endpointUri, c, prefix))
           rawClient.map(rc => InstrumentedVaultClient(endpoint, rc))
         }).yolo("We really really need vault.  Seriously vault must be configured")
 

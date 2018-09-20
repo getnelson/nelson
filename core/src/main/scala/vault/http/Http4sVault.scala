@@ -34,10 +34,12 @@ import scala.collection.immutable.SortedMap
 
 final case class Initialized(init: Boolean)
 
-
-final class Http4sVaultClient(authToken: Token,
-                              baseUri: Uri,
-                              client: Client[IO]) extends (Vault ~> IO) with Json {
+final class Http4sVaultClient(
+  authToken: Token,
+  baseUri: Uri,
+  client: Client[IO],
+  authBackendPrefix: Option[String] = None
+) extends (Vault ~> IO) with Json {
 
   import Vault._
   import Method._
@@ -135,6 +137,8 @@ final class Http4sVaultClient(authToken: Token,
       }
     }
 
-  def createKubernetesRole(ckr: CreateKubernetesRole): IO[Unit] =
-    reqVoid(Request(POST, v1BaseUri / "auth" / ckr.authClusterName / "role" / ckr.roleName).withBody(ckr.asJson))
+  def createKubernetesRole(ckr: CreateKubernetesRole): IO[Unit] = {
+    val authEngineName = authBackendPrefix.map(_ + ckr.authClusterName).getOrElse(ckr.authClusterName)
+    reqVoid(Request(POST, v1BaseUri / "auth" / authEngineName / "role" / ckr.roleName).withBody(ckr.asJson))
+  }
 }

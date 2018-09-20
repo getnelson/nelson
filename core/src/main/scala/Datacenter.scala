@@ -73,8 +73,8 @@ object Infrastructure {
   )
 
   final case class Kubernetes(
-    mode: KubernetesMode
-  , timeout: FiniteDuration
+    mode: KubernetesMode,
+    timeout: FiniteDuration
   )
 
   sealed abstract class KubernetesMode extends Product with Serializable {

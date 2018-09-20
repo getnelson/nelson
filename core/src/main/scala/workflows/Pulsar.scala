@@ -39,9 +39,8 @@ object Pulsar extends Workflow[Unit] {
 
     // When the workflow is completed, we typically want to set the deployment to "Warming", so that once
     // consul indicates the deployment to be passing the health check, we can promote to "Ready" (via the
-    // DeploymentMonitor background process).  However, units without ports are not registered in consul, and
-    // thus we should immediately advance mark the deployment as "Ready".  Once Reconciliation is also used as
-    // a gating factor for promoting deployments to "Ready", we can potentially set all units to "Warming" here.
+    // DeploymentMonitor background process).  However, units without ports are not registered in service
+    // discovery, and thus we should immediately advance mark the deployment as "Ready".
     def getStatus(unit: UnitDef, plan: Plan):  DeploymentStatus =
       if (Manifest.isPeriodic(unit,plan)) Ready
       else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
