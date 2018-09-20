@@ -111,15 +111,15 @@ object Vault {
   ): VaultF[Token] = Free.liftF(CreateToken(policies, renewable, ttl, numUses))
 
   def createKubernetesRole(
-    roleName: String,
     authClusterName: String,
+    roleName: String,
     serviceAccountNames: List[String],
     seviceAccountNamespaces: List[String],
     defaultLeaseTTL: Option[FiniteDuration],
     maxLeaseTTL: Option[FiniteDuration],
     policies: Option[List[String]]
   ): VaultF[Unit] = Free.liftF(CreateKubernetesRole(
-    roleName, authClusterName,
+    authClusterName, roleName,
     serviceAccountNames,
     seviceAccountNamespaces,
     defaultLeaseTTL, maxLeaseTTL,

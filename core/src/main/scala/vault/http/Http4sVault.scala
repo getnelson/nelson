@@ -34,10 +34,12 @@ import scala.collection.immutable.SortedMap
 
 final case class Initialized(init: Boolean)
 
-
-final class Http4sVaultClient(authToken: Token,
-                              baseUri: Uri,
-                              client: Client[IO]) extends (Vault ~> IO) with Json {
+final class Http4sVaultClient(
+  authToken: Token,
+  baseUri: Uri,
+  client: Client[IO],
+  authBackendPrefix: Option[String] = None
+) extends (Vault ~> IO) with Json {
 
   import Vault._
   import Method._
