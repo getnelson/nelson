@@ -259,19 +259,21 @@ object ManifestValidator {
     }
 
     def validate(m: Manifest): IO[Valid[Manifest]] = {
-      val x: IO[Valid[Manifest]] = for {
+      val cumulative: IO[Valid[Manifest]] = for {
         a <- Manifest.verifyDeployable(m, cfg.datacenters, cfg.storage)
         b <- validateUnits(m, cfg.datacenters)
         c <- validateLoadbalancers(m, cfg.datacenters)
         d <- validateReferencesDefaultNamespace(m, cfg.defaultNamespace)
         e <- validateBlueprints(m)
-      } yield (a combine b combine c combine d combine e._1).map(_ => m.copy(plans = e._2))
+        (f,g) = e
+      } yield (a combine b combine c combine d combine f).map(_ => m.copy(plans = g))
 
       // We cannot do this validation in parallel with the above.
       // We rely on the assumptions the above validations afford us.
-      EitherT(x.map(_.toEither)).flatMap { m =>
-        CycleDetection.validateNoCycles(m, cfg)
-      }.value.map(x => x.toValidated.map(_ => m))
+      (for {
+        mn <- EitherT(cumulative.map(_.toEither))
+        _  <- CycleDetection.validateNoCycles(mn, cfg)
+      } yield mn).toValidated
     }
 
     yaml.ManifestParser.parse(str).fold(
