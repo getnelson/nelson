@@ -146,7 +146,7 @@ object Workflow {
     def writeKubernetesRoleToVault(dc: Datacenter, sn: StackName, ns: NamespaceName): WorkflowF[Unit] =
       Vault.createKubernetesRole(dc.name, sn.toString,
           List(sn.toString), List(ns.asString),
-          None, None, Some(List(sn.toString))).inject
+          None, None, Some(List(policies.policyName(sn, ns)))).inject
 
     def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Datacenter): WorkflowF[Unit] =
       for {
