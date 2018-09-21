@@ -287,4 +287,7 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
     loadManifest("/nelson/manifest.v1.blueprint-missing.yml").isRight should equal (true)
   }
 
+  it should "parse a plan with a workflow but no blueprint" in {
+    loadManifest("/nelson/manifest.v1.no-blueprint.yml").isRight should equal (true)
+  }
 }

@@ -23,7 +23,7 @@ import nelson.ManifestValidator.Json._
 import argonaut.Argonaut._
 
 import cats.data.NonEmptyList
-import cats.data.Validated.{Invalid, Valid}
+import cats.data.Validated.Invalid
 import cats.syntax.either._
 
 import journal.Logger
@@ -63,15 +63,6 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
   }
 
   behavior of "manifest validator:"
-
-  it should "accept a manifest with a valid workflow kind but no blueprint" in {
-    val out = (for {
-      a <- Util.loadResourceAsString("/nelson/manifest.v1.no-blueprint.yml")
-      b <- ManifestValidator.parseManifestAndValidate(a, config)
-    } yield b).unsafeRunSync()
-
-    val Valid(_) = out
-  }
 
   it should "reject a manifest with a plan containing a missing blueprint" in {
     val out = (for {
