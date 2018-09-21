@@ -178,11 +178,17 @@ object ManifestV1Parser {
     // at this point, we do not have access to the database so we can only
     // check that the specified blueprint is syntactically valid. The manifest
     // validator will hydrate the reference into a Blueprint proper.
-    val validateBlueprint =
-      Option(raw.workflow).traverse(x =>
-        Blueprint.parseNamedRevision(x.blueprint)
-          .fold(_ => None, x => Some(Left(x)))
-            .toValidNel(YamlError.invalidBlueprintReference(x.blueprint)))
+    val validateBlueprint: YamlValidation[Option[BlueprintRef]] = Option(raw.workflow).flatMap(wf => Option(wf.blueprint)) match {
+      // workflow is present, but no blueprint provided
+      // this is fine because we expect there to be default blueprints
+      case None => Validated.validNel(None)
+      case Some(blueprint) => Blueprint.parseNamedRevision(blueprint) match {
+        // workflow and blueprint both present, but could not parse blueprint revision
+        case Left(error) => Validated.invalidNel(YamlError.invalidBlueprintReference(blueprint, error.getMessage))
+        // workflow and blueprint both present and looking good
+        case Right(revision) => Validated.validNel(Some(revision))
+      }
+    }
 
     Apply[YamlValidation].map16(
       parseAlphaNumHyphen(raw.name, "plan.name"),
@@ -203,7 +209,7 @@ object ManifestV1Parser {
       validateBlueprint
     ) {
       case (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) =>
-        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o,p))
+        Plan(a, Environment(b,c,d,e,f,g,h,i,j,k,l,m,n,o,p.map(Left(_))))
     }
   }
 
