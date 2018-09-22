@@ -36,7 +36,7 @@ steps:
   - wait
 
   - label: ":radioactive_sign: teardown"
-    command: ./bin/cictl -off
+    command: .buildkite/pipeline.teardown.sh
     branches: master
     env:
       - BUILDKITE_CLEAN_CHECKOUT: true
@@ -47,7 +47,6 @@ steps:
         image: getnelson/build-env:unstable
         user: builder
         always-pull: true
-        network: host
         environment:
           - DIGITAL_OCEAN_API_TOKEN
           - BUILDKITE_CLEAN_CHECKOUT
