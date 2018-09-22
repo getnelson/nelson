@@ -81,12 +81,12 @@ Nelson has reasonably small runtime requirements. Nelson is typically consuming 
 
 * 8-16GB of RAM
 * 100GB of disk space (preferably SSDs)
-* Ubuntu 16.04 LTS (or latest Ubuntu LTS as needed)
+* Ubuntu 18.04 LTS (or latest Ubuntu LTS as needed)
+* Docker
 
 It is strongly advised to **not** use a RedHat-based OS for running Nelson. After a great deal of testing, Debian-based OS has been found to be orders of magnitude faster when running Docker than RedHat counterparts. This seems to be related to the interplay of the I/O subsystems, but the author was unable to find a clear "smoking gun" for this huge delta in performance. If users would like to use Red Hat, please reach out to the Nelson team for operational advice (please also note that the container ecosystem is a moving target, so you should conduct your own testing to validate performance in your environment).
 
 ### Authorize with Github
-
 
 Nelson is implemented as a Github OAuth application, and it requires a one-time setup when installing it into your Github organization. If you are not familiar with how to setup a Github application, please see the [GitHub documentation site](https://developer.github.com/guides/basics-of-authentication/) for details. This process should work equally well on both [github.com](https://github.com) and Github Enterprise.
 
@@ -330,7 +330,7 @@ This table should be considered an overview, and not an exhaustive list of the c
 
 ### Running Standalone
 
-Typically Nelson is operated and installed as a `systemd` unit, but users are free to configure or operate the system however they please (`initV`, `upstart` etc). The docker command you use to start the system will be very similar regardless of the init system you choose. Consider the systemd service definition (systemd is the default init system on modern linux OS):
+Typically Nelson is operated and installed as a `systemd` unit, but users are free to configure or operate the system however they please (`initV`, `upstart` etc). The docker command you use to start the system will be very similar regardless of the init system you choose. Consider the systemd service definition (`systemd` is the default init system on modern linux OS). The following unit definition assumes localhost TCP access to the docker daemon (instead of using the unsafe `docker` user group - see [here for more](https://coreos.com/os/docs/latest/customizing-docker.html))
 
 ```
 [Unit]
@@ -339,16 +339,18 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-User=nelson
+User=${RUNTIME_USER}
 TimeoutStartSec=0
 Restart=on-failure
 RestartSec=10s
-ExecStop=-/usr/bin/docker stop -t 5 nelson
-ExecStartPre=-/usr/bin/docker pull getnelson/nelson:latest
+ExecStop=-/usr/bin/docker -H tcp://127.0.0.1:2375 stop -t 5 nelson
+ExecStartPre=-/usr/bin/docker -H tcp://127.0.0.1:2375 pull getnelson/nelson:latest
 ExecStart=/usr/bin/docker -H tcp://127.0.0.1:2375 run --rm \
 --net=host \
 --name nelson \
--v "/var/nelson/etc/nelson.cfg":/opt/application/conf/nelson.cfg \
+-e KUBECONFIG=/opt/application/conf/kubeconfig \
+-v "/etc/nelson/nelson.cfg":/opt/application/conf/nelson.cfg \
+-v "/etc/nelson/kubeconfig":/opt/application/conf/kubeconfig \
 -v "/var/nelson/db":/opt/application/db \
 -v "/var/nelson/log":/var/nelson/log \
 getnelson/nelson:latest
@@ -357,7 +359,7 @@ getnelson/nelson:latest
 WantedBy=multi-user.target
 ```
 
-This command - or a command like it - can be run from any system with docker, and the file mounts supplied (using `-v`) are used so that the Nelson database and related configuration files are stored on the host system, and not within the container. This allows Nelson to persist state over process reboots.
+This command - or a command like it - can be run from any system with Docker installed, and the file mounts supplied (using `-v`) are used so that the Nelson database and related configuration files are stored on the host system, and not within the container. This allows Nelson to persist state over process reboots.
 
 <div class="alert alert-warning" role="alert">
 Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-based datastore. Nelson is intended to be running as a singleton and currently does not support clustering. Support for high-availability deployment modes are planned for a future release, but typically this is not needed as outages of Nelson have no critical affect on the datacenter runtime.
@@ -365,7 +367,9 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
 ### Running on Kubernetes
 
-@adelbertc to add information here
+Nelson can also be operated on top of Kubernetes (even if that same cluster is the one being managed by Nelson). When deploying to Kubernetes, Nelson operates like any other container applciation with the exception that it requires the use of a [Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to which Nelson can journal its state (database, job logs etc).
+
+As the Kubernetes configurations are rather verbose, the Nelson teams has provided a set of example configuration files [in the getnelson/kubernetes-configuration](https://github.com/getnelson/kubernetes-configuration) repository on Github.
 
 ### Installation Complete
 

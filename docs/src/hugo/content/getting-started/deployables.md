@@ -2,7 +2,7 @@
 layout: "single"
 title: Deployables
 preamble: >
-  A Nelson-enabled repository signals a deployment to Nelson by making a [release](https://help.github.com/articles/about-releases/). This release serves two purposes: to ensure versioning so that the code and deployment history can be traced through GitHub, and to inform Nelson which units to deploy for that release. Where the manifest enumerates all the units and plans under the repository's purview, the deployables attached to a release tell Nelson which units to actually deploy for that release.
+  An important differention point of Nelson, is that is does not care what kind of CI system you use. Nelson avoids this coupling directly to a CI platform by signaling the addition of deployments, via [Github releases](https://help.github.com/articles/about-releases/). This release serves two purposes: to ensure versioning so that the code and deployment history can be traced through GitHub, and to inform Nelson which units to deploy for that release. Where the manifest enumerates all the units and plans under the repository's purview - the logical defintion - the deployables attached to a release tell Nelson which units to actually deploy for that release, and the concrete artifacts to use.
 
 #contents:
 #- Command Line
