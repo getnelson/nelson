@@ -1,37 +1,37 @@
 ---
 steps:
-  # - label: ":hammer: build"
-  #   command: .buildkite/pipeline.exec.sh
-  #   concurrency: 1
-  #   concurrency_group: primary
-  #   timeout_in_minutes: 45
-  #   branches: master
-  #   env:
-  #     - BUILDKITE_CLEAN_CHECKOUT: true
-  #   agents:
-  #     os: linux
-  #   plugins:
-  #     docker#v1.4.0:
-  #       image: getnelson/build-env:unstable
-  #       user: builder
-  #       always-pull: true
-  #       network: host
-  #       environment:
-  #         - SONATYPE_USERNAME
-  #         - SONATYPE_PASSWORD
-  #         - COURSIER_PROGRESS=0
-  #         - GITHUB_TOKEN
-  #         - BUILDKITE_COMMIT
-  #         - BUILDKITE_BRANCH
-  #         - BUILDKITE_BUILD_NUMBER
-  #         - BUILDKITE_PULL_REQUEST
-  #         - BUILDKITE_CLEAN_CHECKOUT
-  #       mounts:
-  #         - /var/run/docker.sock:/var/run/docker.sock
-  #         - /var/lib/buildkite-agent/.docker:/home/builder/.docker
-  #         - /var/lib/buildkite-agent/sbt:/home/builder/.sbt
-  #         - /var/lib/buildkite-agent/ivy2:/home/builder/.ivy2
-  #         - /var/lib/buildkite-agent/.ssh:/home/builder/.ssh
+  - label: ":hammer: build"
+    command: .buildkite/pipeline.exec.sh
+    concurrency: 1
+    concurrency_group: primary
+    timeout_in_minutes: 45
+    branches: master
+    env:
+      - BUILDKITE_CLEAN_CHECKOUT: true
+    agents:
+      os: linux
+    plugins:
+      docker#v1.4.0:
+        image: getnelson/build-env:unstable
+        user: builder
+        always-pull: true
+        network: host
+        environment:
+          - SONATYPE_USERNAME
+          - SONATYPE_PASSWORD
+          - COURSIER_PROGRESS=0
+          - GITHUB_TOKEN
+          - BUILDKITE_COMMIT
+          - BUILDKITE_BRANCH
+          - BUILDKITE_BUILD_NUMBER
+          - BUILDKITE_PULL_REQUEST
+          - BUILDKITE_CLEAN_CHECKOUT
+        mounts:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /var/lib/buildkite-agent/.docker:/home/builder/.docker
+          - /var/lib/buildkite-agent/sbt:/home/builder/.sbt
+          - /var/lib/buildkite-agent/ivy2:/home/builder/.ivy2
+          - /var/lib/buildkite-agent/.ssh:/home/builder/.ssh
 
   - wait
 
