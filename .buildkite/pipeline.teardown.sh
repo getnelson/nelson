@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-doctl compute droplet delete "buildkite-worker"
+doctl auth init -t "${DIGITAL_OCEAN_API_TOKEN}"
+
+doctl compute droplet delete buildkite-worker
