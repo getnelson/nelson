@@ -9,14 +9,14 @@
       <td width="130"><img src="/img/platform-mac.jpg" width="60" /></td>
       <td>
         <h2>Mac OS</h2>
-        <a href="https://github.com/getnelson/nelson-cli/releases/download/{{.Inner}}/nelson-darwin-amd64-{{.Inner}}.tar.gz">64-bit</a>
+        <a href="https://github.com/getnelson/nelson-cli/releases/download/{{.Inner}}/nelson-darwin-amd64-{{trim .Inner "\n"}}.tar.gz">64-bit</a>
       </td>
     </tr>
     <tr>
       <td width="130"><img src="/img/platform-linux.png" width="60" /></td>
       <td>
         <h2>Linux</h2>
-        <a href="https://github.com/getnelson/nelson-cli/releases/download/{{.Inner}}/nelson-darwin-amd64-{{.Inner}}.tar.gz">64-bit</a>
+        <a href="https://github.com/getnelson/nelson-cli/releases/download/{{.Inner}}/nelson-linux-amd64-{{trim .Inner "\n"}}.tar.gz">64-bit</a>
       </td>
     </tr>
   </tbody>
