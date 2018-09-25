@@ -2,7 +2,7 @@
 layout: "single"
 title: "Lifecycle"
 preamble: >
-  xxxxxx
+  Lifecycle management - the act of autonomously managing creating and destroying applications in a runtime - is a key part of nelson's philosophy, and a core tenant of the system. This is document provides an overview of that functionality, and introudces the concepts.
 menu:
   main:
     parent: gs
