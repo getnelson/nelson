@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?bc5fa5cee0b18a65b0ac0570f09315d0" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?1725de0fe1c02f18488b5f7f4775bbf5" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?eef243d119892a64017414e803fedcd7" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?bcc79c0a053e7641067f15b745486496" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -46,11 +46,11 @@
       </li>
       
       <li class="nav-item ">
-        <a class="nav-link" href="/api/">Scaladoc</a>
+        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
       </li>
       
       <li class="nav-item ">
-        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
+        <a class="nav-link" href="/api/">API</a>
       </li>
       
     </ul>
@@ -73,6 +73,10 @@
                   
                       <li class="">
                           <a href="/introduction/use-case.html">Use Cases</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/introduction/competitors.html">Competitors</a>
                       </li>
                   
               </ol>
@@ -181,24 +185,16 @@
 
 <p>The primary mode of interacting with Nelson is via a command line interface (CLI). The command line client provides most of the functionality the majority of users would want of Nelson. A future version of Nelson will also have a web-based user experience, which will have more statistical reporting functions and tools for auditing.</p>
 
-<p>To install the Nelson CLI run the following:</p>
+<p>Choose your <a href="/downloads.html">platform specific download</a> or have our handy script automatically choose the rightdownload for you:</p>
 
 <pre><code>curl -GqL https://raw.githubusercontent.com/getnelson/nelson-cli/master/scripts/install | bash
 </code></pre>
 
-<p>This script will download and install the latest version and put it on your <code>$PATH</code>. We do not endorse piping scripts from the wire to <code>bash</code>, and you should read the script before executing the command. It will:</p>
+<p>This script will download and install the latest version and put it on your <code>$PATH</code>. It is safe to rerun this script to update nelson-cli at a future date.</p>
 
-<ol>
-<li><p>Fetch the latest version from Github Releases</p></li>
-
-<li><p>Verify the SHA1 sum</p></li>
-
-<li><p>Extract the tarball</p></li>
-
-<li><p>Copy nelson to <code>/usr/local/bin/nelson</code></p></li>
-</ol>
-
-<p>It is safe to rerun this script to update nelson-cli at a future date.</p>
+<div class="alert alert-warning" role="alert">
+⛔&nbsp; We do not endorse piping scripts from the wire to bash. You should read the script before executing the command.
+</div>
 
 <h3 id="using-the-cli">Using the CLI</h3>
 
@@ -214,8 +210,8 @@
 
 <p>You&rsquo;re ready to start using the CLI. The first command you should execute after install is <code>nelson whoami</code> which allows you to securely interact with the remote Nelson service and validate that you have successfully logged in.</p>
 
-<div class="alert alert-warning" role="alert">
-⛔&nbsp; Note that currently the Nelson client can only be logged into <strong>one</strong> remote <em>Nelson</em> service at a time.
+<div class="alert alert-info" role="alert">
+⚠️ &nbsp; Note that currently the Nelson client can only be logged into <strong>one</strong> remote <em>Nelson</em> service at a time.
 </div>
 
 <p>If you encounter problems with the CLI, be aware of the following options which aid in debugging:</p>
@@ -248,7 +244,8 @@
 <ul>
 <li>8-16GB of RAM</li>
 <li>100GB of disk space (preferably SSDs)</li>
-<li>Ubuntu 16.04 LTS (or latest Ubuntu LTS as needed)</li>
+<li>Ubuntu 18.04 LTS (or latest Ubuntu LTS as needed)</li>
+<li>Docker</li>
 </ul>
 
 <p>It is strongly advised to <strong>not</strong> use a RedHat-based OS for running Nelson. After a great deal of testing, Debian-based OS has been found to be orders of magnitude faster when running Docker than RedHat counterparts. This seems to be related to the interplay of the I/O subsystems, but the author was unable to find a clear &ldquo;smoking gun&rdquo; for this huge delta in performance. If users would like to use Red Hat, please reach out to the Nelson team for operational advice (please also note that the container ecosystem is a moving target, so you should conduct your own testing to validate performance in your environment).</p>
@@ -257,7 +254,7 @@
 
 <p>Nelson is implemented as a Github OAuth application, and it requires a one-time setup when installing it into your Github organization. If you are not familiar with how to setup a Github application, please see the <a href="https://developer.github.com/guides/basics-of-authentication/">GitHub documentation site</a> for details. This process should work equally well on both <a href="https://github.com">github.com</a> and Github Enterprise.</p>
 
-<p>When registering Nelson with Github, the exact domain on which the Nelson process is reachable should be specified (take care select the right protocol - <code>http</code> vs <code>https</code>), and the callback URL should be: <code>https://your.nelson.domain.net/auth/exchange</code>. From a networking standpoint, provided the Github instance can reach the Nelson server, and the domain specified in the OAuth application matches that being used by the client, then the system should work. <strong>If you are using <code>github.com</code>, then your Nelson instance must be accessible from the Github outbound NAT address</strong>. If you encounter problems during the setup, the Nelson logs should contain information about the error.</p>
+<p>When registering Nelson with Github, the exact domain on which the Nelson process is reachable should be specified (take care select the right protocol - <code>http</code> vs <code>https</code>), and the callback URL should be: <code>https://nelson.foo.net/auth/exchange</code>. From a networking standpoint, provided the Github instance can reach the Nelson server, and the domain specified in the OAuth application matches that being used by the client, then the system should work. <strong>If you are using <code>github.com</code>, then your Nelson instance must be accessible from the Github outbound NAT address</strong>. If you encounter problems during the setup, the Nelson logs should contain information about the error.</p>
 
 <p>Once setup, Github will present you with a <code>client_id</code> and a <code>client_secret</code> for the application. These are needed by the Nelson configuration, along with a system OAuth token Nelson can use to execute asynchronous actions on the applications behalf (i.e. without direct user interaction). Run the following to generate the access token:</p>
 
@@ -494,7 +491,7 @@
 
 <h3 id="running-standalone">Running Standalone</h3>
 
-<p>Typically Nelson is operated and installed as a <code>systemd</code> unit, but users are free to configure or operate the system however they please (<code>initV</code>, <code>upstart</code> etc). The docker command you use to start the system will be very similar regardless of the init system you choose. Consider the systemd service definition (systemd is the default init system on modern linux OS):</p>
+<p>Typically Nelson is operated and installed as a <code>systemd</code> unit, but users are free to configure or operate the system however they please (<code>initV</code>, <code>upstart</code> etc). The docker command you use to start the system will be very similar regardless of the init system you choose. Consider the systemd service definition (<code>systemd</code> is the default init system on modern linux OS). The following unit definition assumes localhost TCP access to the docker daemon (instead of using the unsafe <code>docker</code> user group - see <a href="https://coreos.com/os/docs/latest/customizing-docker.html">here for more</a>)</p>
 
 <pre><code>[Unit]
 Description=Nelson Server
@@ -502,16 +499,18 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-User=nelson
+User=${RUNTIME_USER}
 TimeoutStartSec=0
 Restart=on-failure
 RestartSec=10s
-ExecStop=-/usr/bin/docker stop -t 5 nelson
-ExecStartPre=-/usr/bin/docker pull getnelson/nelson:latest
+ExecStop=-/usr/bin/docker -H tcp://127.0.0.1:2375 stop -t 5 nelson
+ExecStartPre=-/usr/bin/docker -H tcp://127.0.0.1:2375 pull getnelson/nelson:latest
 ExecStart=/usr/bin/docker -H tcp://127.0.0.1:2375 run --rm \
 --net=host \
 --name nelson \
--v &quot;/var/nelson/etc/nelson.cfg&quot;:/opt/application/conf/nelson.cfg \
+-e KUBECONFIG=/opt/application/conf/kubeconfig \
+-v &quot;/etc/nelson/nelson.cfg&quot;:/opt/application/conf/nelson.cfg \
+-v &quot;/etc/nelson/kubeconfig&quot;:/opt/application/conf/kubeconfig \
 -v &quot;/var/nelson/db&quot;:/opt/application/db \
 -v &quot;/var/nelson/log&quot;:/var/nelson/log \
 getnelson/nelson:latest
@@ -520,7 +519,7 @@ getnelson/nelson:latest
 WantedBy=multi-user.target
 </code></pre>
 
-<p>This command - or a command like it - can be run from any system with docker, and the file mounts supplied (using <code>-v</code>) are used so that the Nelson database and related configuration files are stored on the host system, and not within the container. This allows Nelson to persist state over process reboots.</p>
+<p>This command - or a command like it - can be run from any system with Docker installed, and the file mounts supplied (using <code>-v</code>) are used so that the Nelson database and related configuration files are stored on the host system, and not within the container. This allows Nelson to persist state over process reboots.</p>
 
 <div class="alert alert-warning" role="alert">
 Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-based datastore. Nelson is intended to be running as a singleton and currently does not support clustering. Support for high-availability deployment modes are planned for a future release, but typically this is not needed as outages of Nelson have no critical affect on the datacenter runtime.
@@ -528,7 +527,9 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
 <h3 id="running-on-kubernetes">Running on Kubernetes</h3>
 
-<p>@adelbertc to add information here</p>
+<p>Nelson can also be operated on top of Kubernetes (even if that same cluster is the one being managed by Nelson). When deploying to Kubernetes, Nelson operates like any other container applciation with the exception that it requires the use of a <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">Persistent Volume Claim</a> to which Nelson can journal its state (database, job logs etc).</p>
+
+<p>As the Kubernetes configurations are rather verbose, the Nelson teams has provided a set of example configuration files <a href="https://github.com/getnelson/kubernetes-configuration">in the getnelson/kubernetes-configuration</a> repository on Github.</p>
 
 <h3 id="installation-complete">Installation Complete</h3>
 
@@ -551,7 +552,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
         </p>
         <p>
           Currently v
-                    0.11.121
+                    0.11.122
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -565,9 +566,9 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="/js/material.min.js"></script>
+<script src="/js/material.min.js?6628557f6b6bf3cca1ed4b3ea3ca1061"></script>
 
-<script src="/js/nelson.js"></script>
+<script src="/js/nelson.js?4ef5176ee39d483ffe026ddf931b9883"></script>
 
 
   </body>

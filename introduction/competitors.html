@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?b64f681ab2df9d2c0d9bf6026eea69cb" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?a1634d962000272bda046e6f2d82bcdd" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?218b41c9693a7552c3e8e8054cb7c425" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?3d3e0bfc887ed9276185a4d53c397bd0" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -46,11 +46,11 @@
       </li>
       
       <li class="nav-item ">
-        <a class="nav-link" href="/api/">Scaladoc</a>
+        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
       </li>
       
       <li class="nav-item ">
-        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
+        <a class="nav-link" href="/api/">API</a>
       </li>
       
     </ul>
@@ -67,12 +67,16 @@
     
     
         
-            <li class="">
+            <li class="active">
               <a href="/introduction/" class="">Introduction</span></a>
               <ol class="sub-menu">
                   
                       <li class="">
                           <a href="/introduction/use-case.html">Use Cases</a>
+                      </li>
+                  
+                      <li class="highlight">
+                          <a href="/introduction/competitors.html">Competitors</a>
                       </li>
                   
               </ol>
@@ -148,7 +152,7 @@
             <h1>Competitors</h1>
 
             
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum.</p>
+            <p>Nelson is in many ways a uniuqe system; the principles and methods used in its construction are not common in the operations domain. However, is is common for potential users to draw parrallels with other systems, and navigating the competitive space can often be difficult. The systems most commonly compared with Nelson are enumerated below a brief comparitive explanation is provided to help understand Nelson&rsquo;s value proposistion.</p>
             
 
             
@@ -169,21 +173,15 @@
 
             
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet. Sed pulvinar iaculis magna at feugiat. Quisque luctus nec lectus vitae pharetra. Cras euismod pharetra augue ac consequat. Integer id euismod lectus, non cursus ligula. Nunc lorem dolor, condimentum nec nunc non, hendrerit ullamcorper tellus. Sed tortor nibh, mollis eget euismod ac, tempor a eros. Etiam feugiat odio ac interdum pellentesque. Nam dignissim, ipsum ut vehicula interdum, justo dui accumsan felis, in maximus diam justo tristique tellus.</p>
-
 <h2 id="spinnaker">Spinnaker</h2>
 
-<p>YYYY Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet. Sed pulvinar iaculis magna at feugiat. Quisque luctus nec lectus vitae pharetra. Cras euismod pharetra augue ac consequat. Integer id euismod lectus, non cursus ligula. Nunc lorem dolor, condimentum nec nunc non, hendrerit ullamcorper tellus. Sed tortor nibh, mollis eget euismod ac, tempor a eros. Etiam feugiat odio ac interdum pellentesque. Nam dignissim, ipsum ut vehicula interdum, justo dui accumsan felis, in maximus diam justo tristique tellus.</p>
+<p>One of the most common systems Nelson is compared to is the <a href="https://spinnaker.io">Spinnaker project</a>. On the face of it, the systems are indeed solving similar problems. The truth is however a little more nuanced. Spinnaker was born out of Netflix as a replacement for their <a href="https://github.com/Netflix/asgard">Asguard deployment system</a>. The primary difference between Spinnaker and Nelson is that Nelson is container-first where as Spinnaker was primarily designed to operate with Netflix&rsquo;s virtual machine &ldquo;bakery&rdquo;. Whilst they have since retrofitted support for containers, the approach of the project cannot detech itself from that legacy workflow easily. Given Nelson is focused on integration with scheduling systems as its common substrate for deployment, the management of the virtual machines underlying those schedulers is out of scope. Indeed, with the prevelance of hosted scheudling systems like <a href="https://aws.amazon.com/eks/">EKS</a>, <a href="https://cloud.google.com/kubernetes-engine/">EKS</a> and <a href="https://azure.microsoft.com/en-us/services/kubernetes-service/">AKE</a>, the need for even running your own machines appears to be passing.</p>
+
+<p>Spinnaker has support for a wide range of process workflows (for example, gating deployments on manual intervention). Broadly speaking, Nelson is strongly against this from a philosophical standpoint, as such manual processes are a crutch for a lack of automation of continuous testing. Nelson by comparison provides a foundation for a robust experimentation system, where testing in production is the norm - this embraces the reality of the world we live in: ship frequently, experiment often, observe everything. The underlying intent here is that Nelson in no way perscribes how you will operate your release management; it simply provides a set of primitives.</p>
 
 <h2 id="collins">Collins</h2>
 
-<p>YYYY Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet. Sed pulvinar iaculis magna at feugiat. Quisque luctus nec lectus vitae pharetra. Cras euismod pharetra augue ac consequat. Integer id euismod lectus, non cursus ligula. Nunc lorem dolor, condimentum nec nunc non, hendrerit ullamcorper tellus. Sed tortor nibh, mollis eget euismod ac, tempor a eros. Etiam feugiat odio ac interdum pellentesque. Nam dignissim, ipsum ut vehicula interdum, justo dui accumsan felis, in maximus diam justo tristique tellus.</p>
-
-<p>YYYY Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet. Sed pulvinar iaculis magna at feugiat. Quisque luctus nec lectus vitae pharetra. Cras euismod pharetra augue ac consequat. Integer id euismod lectus, non cursus ligula. Nunc lorem dolor, condimentum nec nunc non, hendrerit ullamcorper tellus. Sed tortor nibh, mollis eget euismod ac, tempor a eros. Etiam feugiat odio ac interdum pellentesque. Nam dignissim, ipsum ut vehicula interdum, justo dui accumsan felis, in maximus diam justo tristique tellus.</p>
-
-<p>YYYY Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet. Sed pulvinar iaculis magna at feugiat. Quisque luctus nec lectus vitae pharetra. Cras euismod pharetra augue ac consequat. Integer id euismod lectus, non cursus ligula. Nunc lorem dolor, condimentum nec nunc non, hendrerit ullamcorper tellus. Sed tortor nibh, mollis eget euismod ac, tempor a eros. Etiam feugiat odio ac interdum pellentesque. Nam dignissim, ipsum ut vehicula interdum, justo dui accumsan felis, in maximus diam justo tristique tellus.</p>
-
-<p>YYYY Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet. Sed pulvinar iaculis magna at feugiat. Quisque luctus nec lectus vitae pharetra. Cras euismod pharetra augue ac consequat. Integer id euismod lectus, non cursus ligula. Nunc lorem dolor, condimentum nec nunc non, hendrerit ullamcorper tellus. Sed tortor nibh, mollis eget euismod ac, tempor a eros. Etiam feugiat odio ac interdum pellentesque. Nam dignissim, ipsum ut vehicula interdum, justo dui accumsan felis, in maximus diam justo tristique tellus.</p>
+<p>The <a href="https://tumblr.github.io/collins/">Collins</a> configuration management system - along with other configuration management solutions - do not truley embrace immutable infrastructure. Typically these systems are focused on maintaining a static fleet of servers and evolving them over time, applying patches and so forth. This is an intrinsically different model to the one Nelson provides. Collins would be a better fit for teams that which to manage the underlying infrastructure a scheduler might run on, instead of end-user applications.</p>
 
           </article>
 
@@ -202,7 +200,7 @@
         </p>
         <p>
           Currently v
-                    0.11.121
+                    0.11.122
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -216,9 +214,9 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="/js/material.min.js"></script>
+<script src="/js/material.min.js?d577bb7becfab34a633d0325e6be42f9"></script>
 
-<script src="/js/nelson.js"></script>
+<script src="/js/nelson.js?28f726aaa1b9b715779d52b64702767c"></script>
 
 
   </body>

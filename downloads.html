@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?60388af1a9e7e3ffe3cf781e6609c2d6" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?1acf09d325eb027f0fb29ab8f561bbb3" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?5570850ab28089b47464f95ff6372e81" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?4c6cbc5e95b5bec76875dc707b85defc" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -84,7 +84,7 @@
         
     
         
-            <li class="active">
+            <li class="">
               <a href="/getting-started/index.html" class="">Getting Started</span></a>
               <ol class="sub-menu">
                   
@@ -92,7 +92,7 @@
                           <a href="/getting-started/install.html">Install</a>
                       </li>
                   
-                      <li class="highlight">
+                      <li class="">
                           <a href="/getting-started/deployables.html">Deployables</a>
                       </li>
                   
@@ -149,57 +149,85 @@
 </aside>
 
           <article class="col-md-9">
-            <h1>Deployables</h1>
+            <h1>Downloads</h1>
 
             
-            <p>An important differention point of Nelson, is that is does not care what kind of CI system you use. Nelson avoids this coupling directly to a CI platform by signaling the addition of deployments, via <a href="https://help.github.com/articles/about-releases/">Github releases</a>. This release serves two purposes: to ensure versioning so that the code and deployment history can be traced through GitHub, and to inform Nelson which units to deploy for that release. Where the manifest enumerates all the units and plans under the repository&rsquo;s purview - the logical defintion - the deployables attached to a release tell Nelson which units to actually deploy for that release, and the concrete artifacts to use.</p>
-            
-
+            <p>Nelson comes in two parts: the server and the client. Most users will be simply using a Nelson server that was setup by an operator in your organization, so the <a href="#client">client</a> will be what most people want to download.</p>
             
 
             
-            <hr />
+
             
 
-            <p>Manifests describe a logical definition (e.g. a unit name) and deployables tie that logical definition to a physical one (e.g. a specific Docker image). This prevents the need to update the manifest everytime a version is bumped (frequent in a continuous delivery setting), whilst avoiding the need for a mutable tag like <code>latest</code>.</p>
+            
 
-<p>The <a href="https://github.com/getnelson/slipway">Slipway</a> tool can help with both creating a deployable file as well as making the actual annotated release. It is available as a <a href="https://github.com/getnelson/slipway/releases">small statically linked binary</a> ready to be pulled and used in a CI pipeline.</p>
+<h2 id="client">Client</h2>
 
-<p>If you&rsquo;d like, the deployable file format is pretty simple and can be created without Slipway. Each file should be named as <code>&lt;unit name&gt;.deployable.yml</code> and look like:</p>
+<p>The client is shipped as a static binary that comes pre-compiled for a variety of operating systems. The tables below enumerate the direct-download sites for the latest version (presently v0.11.122).</p>
 
-<pre><code class="language-yaml">---
-name: &lt;unit name&gt;
-version: &lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;
-output:
-  kind: docker
-  image: &lt;docker image&gt;
-</code></pre>
+<table class="table">
+  <thead>
+    <tr span="2">
+      <td class="p-0 m-0" style="height: 1.5em;"></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td width="130"><img src="/img/platform-mac.jpg" width="60" /></td>
+      <td>
+        <h2>Mac OS</h2>
+        <a href="https://github.com/getnelson/nelson-cli/releases/download/0.11.122/nelson-darwin-amd64-0.11.122.tar.gz">64-bit</a>
+      </td>
+    </tr>
+    <tr>
+      <td width="130"><img src="/img/platform-linux.png" width="60" /></td>
+      <td>
+        <h2>Linux</h2>
+        <a href="https://github.com/getnelson/nelson-cli/releases/download/0.11.122/nelson-darwin-amd64-0.11.122.tar.gz">64-bit</a>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>
 
-<p>The unit name and version in the file name and contents is what Nelson enters into its database - therefore the unit name in the filename should match the unit name in the contents which should match a unit name in the manifest. Because Nelson is version-aware, the same logical version cannot be deployed twice - the version must be incremented, though not necessarily sequential, with each new release.</p>
+<h2 id="server">Server</h2>
 
-<p>The Docker image tag typically matches the version, but it doesn&rsquo;t have to. Note that the provided Docker image is assumed to exist by the time the release (and therefore the deployment) is made, likely built and pushed by an earlier step in the CI pipeline. Nelson does little with the image string other than forward it to the backing scheduler.</p>
+<p>Nelson&rsquo;s server is distributed as a Docker container, which makes for an easy instalation and operation. Docker containers require <a href="https://docs.docker.com/install/">the Docker client</a> to <code>docker pull</code> the image as needed.</p>
 
-<p>As an example, consider a manifest that contains <code>foo</code>, <code>bar</code>, and <code>baz</code> as units. To tell Nelson to deploy <code>foo</code> and <code>bar</code> for a release, something similar to the following would be attached to the release (likely with Slipway):</p>
-
-<p>In <code>foo.deployable.yml</code>:</p>
-
-<pre><code class="language-yaml">---
-name: foo
-version: 1.2.3
-output:
-  kind: docker
-  image: your.docker.com/repo/foo:1.2.0
-</code></pre>
-
-<p>In <code>bar.deployable.yml</code>:</p>
-
-<pre><code class="language-yaml">---
-name: bar
-version: 2.1.3
-output:
-  kind: docker
-  image: your.docker.com/repo/bar:2.1.3
-</code></pre>
+<table class="table">
+  <thead>
+    <tr span="2">
+      <td class="p-0 m-0" style="height: 1.5em;"></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td width="130" style="padding-right:0;padding-left: 0.5em;"><img src="/img/platform-docker.png" height="60" /></td>
+      <td>
+        <h2>Docker</h2>
+        <a href="https://hub.docker.com/r/getnelson/nelson/tags/">64-bit</a> (based on Alpine Linux + OpenJDK 8)
+      </td>
+    </tr>
+    <tr>
+      <td width="130" style="padding-right:0;padding-left: 2em;"><img src="/img/logo-github.svg" height="60" /></td>
+      <td>
+        <h2>Source Code</h2>
+        <a href="https://github.com/getnelson/nelson/archive/0.11.122.tar.gz">Scala 2.11</a>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>
 
           </article>
 
@@ -232,9 +260,9 @@ output:
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="/js/material.min.js?2f395a5375405e6c5b994820dcc2d0d2"></script>
+<script src="/js/material.min.js?e940a899690ecdd2ce7ec86e527a26dd"></script>
 
-<script src="/js/nelson.js?56c4d2cbb2296617857eb82be90b2082"></script>
+<script src="/js/nelson.js?4c4c678b28b94cd964e7d0a658022973"></script>
 
 
   </body>

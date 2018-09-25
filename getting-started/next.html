@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?c943448d1d82901cb1c2066debd75088" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?9accf6cc0b4df213a91428286773e31b" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?32581a44bf266e4a1faf7f2d20404435" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?1f58aa1c3b4d4a3fbcb5816aedc7f61d" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -46,11 +46,11 @@
       </li>
       
       <li class="nav-item ">
-        <a class="nav-link" href="/api/">Scaladoc</a>
+        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
       </li>
       
       <li class="nav-item ">
-        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
+        <a class="nav-link" href="/api/">API</a>
       </li>
       
     </ul>
@@ -73,6 +73,10 @@
                   
                       <li class="">
                           <a href="/introduction/use-case.html">Use Cases</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/introduction/competitors.html">Competitors</a>
                       </li>
                   
               </ol>
@@ -158,9 +162,9 @@
             <p>In conclusion, the manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading <a href="reference.html#manifest">in the reference</a> about the Nelson manifest answers the following common queries:</p>
 
 <ul>
-<li><a href="reference.html#manifest-unit-dependencies">How do I declare a dependency on another unit?</a></li>
-<li><a href="reference.html#manifest-unit-alerting">How do I get alerted when my unit has a problem at runtime?</a></li>
-<li><a href="reference.html#manifest-load-balancers">How do I expose my service to the outside world?</a></li>
+<li><a href="/documentation/manifest.html#manifest-unit-dependencies">How do I declare a dependency on another unit?</a></li>
+<li><a href="/documentation/manifest.html#manifest-unit-alerting">How do I get alerted when my unit has a problem at runtime?</a></li>
+<li><a href="/documentation/manifest.html#manifest-load-balancers">How do I expose my service to the outside world?</a></li>
 </ul>
 
 <p>Now that you have your <code>.nelson.yml</code> as you want it, add the file to the <strong>root</strong> of your source repository, and commit it to the <code>master</code> branch. Nelson will look at the repositories&rsquo; <code>master</code> branch when it first attempts to validate your repository is something that is Nelson-compatible. You can check the validity of your manifest definition at anytime without checking in by using the Nelson CLI: <code>nelson lint manifest</code>.</p>
@@ -182,7 +186,7 @@
         </p>
         <p>
           Currently v
-                    0.11.121
+                    0.11.122
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -196,9 +200,9 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="/js/material.min.js"></script>
+<script src="/js/material.min.js?49b8e7b7cfccce02c6ee379d06329988"></script>
 
-<script src="/js/nelson.js"></script>
+<script src="/js/nelson.js?1cb7fd9224b59b04877a684b6b83e276"></script>
 
 
   </body>
