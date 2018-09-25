@@ -53,7 +53,7 @@ import com.typesafe.sbt.SbtGit.GitKeys.{gitBranch, gitRemoteRepo}
 
 gitRemoteRepo := "git@github.com:getnelson/nelson.git"
 
-includeFilter in Hugo := ("*.html" | "*.ico" | "*.svg" | "*.png" | "*.js" | "*.css" | "*.gif" | "CNAME")
+includeFilter in Hugo := ("*.html" | "*.ico" | "*.jpg" | "*.svg" | "*.png" | "*.js" | "*.css" | "*.gif" | "CNAME")
 
 minimumHugoVersion in Hugo := "0.48"
 
