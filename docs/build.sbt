@@ -47,7 +47,18 @@ hugoGenerateData := {
   dest
 }
 
-makeSite := makeSite.dependsOn(hugoGenerateData).value
+val latestCLIReleaseData = taskKey[File]("hugo-cli-release-data")
+
+latestCLIReleaseData := {
+  val dest = (sourceDirectory in Hugo).value / "data" / "release.json"
+  val contents = scala.io.Source.fromInputStream(
+    new java.net.URL("https://api.github.com/repos/getnelson/nelson-cli/releases/latest"
+      ).openConnection.getInputStream).mkString
+  IO.write(dest, contents)
+  dest
+}
+
+makeSite := makeSite.dependsOn(hugoGenerateData, latestCLIReleaseData).value
 
 import com.typesafe.sbt.SbtGit.GitKeys.{gitBranch, gitRemoteRepo}
 
