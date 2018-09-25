@@ -53,7 +53,7 @@ final class Kubectl(mode: KubernetesMode) {
 
   def getPods(namespace: NamespaceName, stackName: StackName): IO[List[HealthStatus]] = {
     implicit val healthStatusDecoder = healthStatusDecodeJson
-    exec(List("kubectl", "get", "pods", "-l", s"stackName=${stackName.toString}", "-o", "json"), emptyStdin)
+    exec(List("kubectl", "get", "pods", "-l", s"stackName=${stackName.toString}", "-n", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(for {
