@@ -28,10 +28,10 @@ menu:
       url: /documentation/
       weight: 4
     - identifier: nav-scaladoc
-      title: Scaladoc
+      title: API
       url: /api/
-      weight: 5
+      weight: 6
     - identifier: nav-github
       title: Code
       url: https://github.com/getnelson/nelson
-      weight: 6
+      weight: 5

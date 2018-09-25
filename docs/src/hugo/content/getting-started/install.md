@@ -19,23 +19,17 @@ menu:
 
 The primary mode of interacting with Nelson is via a command line interface (CLI). The command line client provides most of the functionality the majority of users would want of Nelson. A future version of Nelson will also have a web-based user experience, which will have more statistical reporting functions and tools for auditing.
 
-To install the Nelson CLI run the following:
+Choose your [platform specific download](/downloads.html) or have our handy script automatically choose the rightdownload for you:
 
 ```
 curl -GqL https://raw.githubusercontent.com/getnelson/nelson-cli/master/scripts/install | bash
 ```
 
-This script will download and install the latest version and put it on your `$PATH`. We do not endorse piping scripts from the wire to `bash`, and you should read the script before executing the command. It will:
+This script will download and install the latest version and put it on your `$PATH`. It is safe to rerun this script to update nelson-cli at a future date.
 
-1. Fetch the latest version from Github Releases
-
-2. Verify the SHA1 sum
-
-3. Extract the tarball
-
-4. Copy nelson to `/usr/local/bin/nelson`
-
-It is safe to rerun this script to update nelson-cli at a future date.
+<div class="alert alert-warning" role="alert">
+⛔&nbsp; We do not endorse piping scripts from the wire to bash. You should read the script before executing the command.
+</div>
 
 ### Using the CLI
 
@@ -49,8 +43,8 @@ Before getting started, ensure that you have completed the following steps:
 
 You're ready to start using the CLI. The first command you should execute after install is `nelson whoami` which allows you to securely interact with the remote Nelson service and validate that you have successfully logged in.
 
-<div class="alert alert-warning" role="alert">
-⛔&nbsp; Note that currently the Nelson client can only be logged into <strong>one</strong> remote <em>Nelson</em> service at a time.
+<div class="alert alert-info" role="alert">
+⚠️ &nbsp; Note that currently the Nelson client can only be logged into <strong>one</strong> remote <em>Nelson</em> service at a time.
 </div>
 
 If you encounter problems with the CLI, be aware of the following options which aid in debugging:
@@ -90,7 +84,7 @@ It is strongly advised to **not** use a RedHat-based OS for running Nelson. Afte
 
 Nelson is implemented as a Github OAuth application, and it requires a one-time setup when installing it into your Github organization. If you are not familiar with how to setup a Github application, please see the [GitHub documentation site](https://developer.github.com/guides/basics-of-authentication/) for details. This process should work equally well on both [github.com](https://github.com) and Github Enterprise.
 
-When registering Nelson with Github, the exact domain on which the Nelson process is reachable should be specified (take care select the right protocol - `http` vs `https`), and the callback URL should be: `https://your.nelson.domain.net/auth/exchange`. From a networking standpoint, provided the Github instance can reach the Nelson server, and the domain specified in the OAuth application matches that being used by the client, then the system should work. **If you are using `github.com`, then your Nelson instance must be accessible from the Github outbound NAT address**. If you encounter problems during the setup, the Nelson logs should contain information about the error.
+When registering Nelson with Github, the exact domain on which the Nelson process is reachable should be specified (take care select the right protocol - `http` vs `https`), and the callback URL should be: `https://nelson.foo.net/auth/exchange`. From a networking standpoint, provided the Github instance can reach the Nelson server, and the domain specified in the OAuth application matches that being used by the client, then the system should work. **If you are using `github.com`, then your Nelson instance must be accessible from the Github outbound NAT address**. If you encounter problems during the setup, the Nelson logs should contain information about the error.
 
 Once setup, Github will present you with a `client_id` and a `client_secret` for the application. These are needed by the Nelson configuration, along with a system OAuth token Nelson can use to execute asynchronous actions on the applications behalf (i.e. without direct user interaction). Run the following to generate the access token:
 

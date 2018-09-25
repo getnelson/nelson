@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{ partial "head.html" . }}
+
+  <body>
+    <!-- navigation -->
+    {{ partial "top_nav.html" . }}
+    <!-- e/o navigation -->
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+
+          {{ partial "aside.html" . }}
+
+          <article class="col-md-9">
+            <h1>Page Not Found</h1>
+            <p>The content you are looking for does not seem to exist. Please choose an option from the links listed on the left-hand-side menu.</p>
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    {{ partial "footer.html" . }}
+
+  </body>
+</html>
