@@ -9,7 +9,7 @@ preamble: >
 
 The client is shipped as a static binary that comes pre-compiled for a variety of operating systems. The tables below enumerate the direct-download sites for the latest version (presently v{{< version >}}).
 
-{{< downloads_client >}}{{< version >}}{{< /downloads_client >}}
+{{< downloads_client >}}{{< cli_version >}}{{< /downloads_client >}}
 
 ## Server
 
