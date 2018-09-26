@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://getnelson.io/favicon.ico?" type="image/x-icon">
+
+    <meta name="generator" content="Hugo 0.48" />
+
+    <title>Nelson – Cloud-native container deployment</title>
+
+    <link href="https://getnelson.io/css/material.min.css?58a4a05ba55c99af604cb1156dc55f29" rel="stylesheet">
+    
+    <link href="https://getnelson.io/css/nelson.css?37c9b9f6a00f06854f7ee7b59a711dab" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+
+
+  <body>
+    
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-blue-5">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="/img/nelson-without-background.svg?sanitize=true" width="30" height="30" class="d-inline-block align-top" alt="" />
+      &nbsp;
+      Nelson
+    </a>
+    <ul class="navbar-nav mr-auto">
+      
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/introduction/">Introduction</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/getting-started/">Getting Started</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/documentation/">Documentation</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/api/">API</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+    
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+          <aside class="col-md-3">
+  <ol>
+    
+    
+        
+            <li class="">
+              <a href="/introduction/" class="">Introduction</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/introduction/use-case.html">Use Cases</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/introduction/competitors.html">Competitors</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+        
+            <li class="active">
+              <a href="/getting-started/index.html" class="">Getting Started</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/getting-started/install.html">Install</a>
+                      </li>
+                  
+                      <li class="highlight">
+                          <a href="/getting-started/architecture.html">Architecture</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/deployables.html">Deployables</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/blueprints.html">Blueprints</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/lifecycle.html">Lifecycle</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/next.html">Further Reading</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+        
+            <li class="">
+              <a href="/documentation/" class="">Documentation</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/documentation/cli.html">Command Line</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/manifest.html">Manifest Settings</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/operator.html">Operator Guide</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/api.html">REST API</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/contributing.html">Contributing</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/credits.html">Credits</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+</ol>
+</aside>
+
+          <article class="col-md-9">
+            <h1>Architecture</h1>
+
+            
+            <p>Nelson is unlike many systems presently available in the market, and its architecture is discretely composable, and indeed, composability is an explicit design goal of the Nelson team. In practice this means that - unlikle other monolithic systems - Nelson lets you bring your own CI, bring your own scheduler, bring your own credential management and so on.</p>
+            
+
+            <nav id="TableOfContents">
+<ul>
+<li><a href="#data-flow">Data Flow</a></li>
+<li><a href="#domain-redundancy">Domain Redundancy</a></li>
+<li><a href="#availability">Availability</a></li>
+<li><a href="#security">Security</a></li>
+<li><a href="#next-steps">Next Steps</a></li>
+</ul>
+</nav>
+
+            <hr />
+
+            
+
+<p>With any new system, it is often useful to get a sense for how data is moving around the system, and the trade offs a given system is making. The following sections cover a few of these design choices.</p>
+
+<h1 id="data-flow">Data Flow</h1>
+
+<p>Nelson splits the build-&gt;deploy-&gt;release phases into two major parts, each with distinctly different properties. First, the building of the containers and publishing to a staging registry. Second, the deployment, validation, and migration of traffic. The following diagram illustrates a high-level view of the first major part of the workflow.</p>
+
+<div class="clearing">
+  <img src="/img/high-level-workflow.png" />
+  <small><em>Workflow overview</em></small>
+</div>
+
+<p>There are a range of automated steps at every phase of the build and release pipeline; only the most minimal metadata is needed in the resulting Github Release to conduct a deployment. Nelson is agnostic to what language your application is built with or how it is tooled. You are free to integrate however you prefer, but we provide some tools to make doing so easy. For more information on CI integration, please see the <a href="/getting-started/deployables.html">section on Deployables</a>.</p>
+
+<h1 id="domain-redundancy">Domain Redundancy</h1>
+
+<p>To run Nelson you will need access to a target &ldquo;datacenter&rdquo;. One can consider this logical datacenter - in practice - to be a <a href="https://en.wikipedia.org/wiki/Failure_domain">failure domain</a>. Every system should be redundant within the domain, but isolated from other datacenters. Typically Nelson requires the datacenter to be setup with a few key services before it can effectively be used. Imagine the setup with the following components:</p>
+
+<div class="clearing">
+  <img src="/img/atomic-datacenter.png" />
+  <small><em>Failure domain</em></small>
+</div>
+
+<p>Logically, Nelson typically sits outside one of its target datacenters. This could mean it lives at your office next to your Github, or it might actually reside in one of the target datacenters itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to <code>pull</code> images whilst deploying containers to the cluster, whilst the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.</p>
+
+<p>Whatever you choose, the rest of this operators guide will assume that you have configured one or more logical datacenters. If you don&rsquo;t want to setup a <em>real</em> datacenter, <a href="https://github.com/timperrett/hashpi">see Timothy Perrett&rsquo;s Github</a> to learn how to setup a <a href="https://www.raspberrypi.org/">Raspberry PI</a> cluster which can serve as your &ldquo;datacenter&rdquo; target.</p>
+
+<h1 id="availability">Availability</h1>
+
+<p>Whilst many systems authors today choose to adopt the complexity of high-availability, clustered systems, this is often done for the wrong reasons. Nelson is - by design - not high-availability, and avoids being in the &ldquo;hot path&rdquo; for runtime execution. This means that Nelson is operationally simpler than many of its competing systems, and with the correct supervision and a scale up approach, Nelson can reach way into the thousands of deployments a day range, without breaking a sweat.</p>
+
+<h1 id="security">Security</h1>
+
+<p>As Nelson was born from field experience, having a strong security story for runtime systems baked in was one of the top design goals. At a very high level, the security workflow for a deployment can be thought of like so:</p>
+
+<div class="clearing">
+  <img src="/img/security-workflow.png" />
+  <small><em>Security Workflow</em></small>
+</div>
+
+<p>When Nelson recieves the inbound release webhook (<span style="color:red; font-weight: bold">A</span> and <span style="color:red; font-weight: bold">B</span>), the deployment workflow starts executing. From here, Nelson will generate the following:</p>
+
+<ul>
+<li><p><span style="color:red; font-weight: bold">C</span> stack-specific policy that defines what secret paths can be read from the secure Vault storage system. This policy is <em>unique</em> and includes only the items that the stack needs to access - attempting to access anything else will be denied.</p></li>
+
+<li><p><span style="color:red; font-weight: bold">D</span> Next, Nelson provisions a dynamic &ldquo;auth role&rdquo; for the schuedler in question. This &ldquo;role&rdquo; is later used at runtime as a part of the container identification / secure introduction workflow (read more about this on the <a href="https://www.vaultproject.io/docs/concepts/auth.html">Vault documentation site</a>).</p></li>
+
+<li><p><span style="color:red; font-weight: bold">E</span> After these items are provisioned Neslon will go ahead and launch the stack on the configured scheudler, which at runtime will then reach out to Vault and authenticate as the stack-specific role that was provisioned in steps <span style="color:red; font-weight: bold">C</span> and <span style="color:red; font-weight: bold">D</span>.</p></li>
+</ul>
+
+<p>This may seem like quite a number of steps, but establishing trust in runtime systems is intrinsically very difficult (how do you get credentials, to get credentials?). With this frame, Nelson adopts an approach such that it can assume the absolute minimum possible privileges for any given stack container. Better still, if the resource you&rsquo;re accessing (i.e. the secret material you are using) is from one of Vault&rsquo;s <a href="https://www.vaultproject.io/intro/getting-started/dynamic-secrets.html">supported dynamic secret backends</a> - for example, <a href="https://aws.amazon.com/iam/">AWS IAM</a> - then whilst every stack is logically partioned from every other, within that stack every single container (be it a single container or thousands of replicas) will all have entirely unique credentials. This reduces the attack surface area to an exceedingly small window: if a container gets compromised, the attacker has the time from when they gain access to the time when you notice its been compromised, and redeploy the container - said attacker would not gain anything in perpetuity and would have to start their hack all over again.</p>
+
+<p>One can even extend this further, and build a zero-trust network by having every container use dynamically generated <a href="https://en.wikipedia.org/wiki/Mutual_authentication">mTLS</a> certificates, funneling all traffic via a service mesh like <a href="https://www.envoyproxy.io/">Envoy</a>. This means that the users application can be &ldquo;dumb&rdquo; and make plaintext TCP connections, whilst the on-wire traffic is transparently encrypted with certificates that are container-unique.</p>
+
+<h1 id="next-steps">Next Steps</h1>
+
+<ul>
+<li>Learn about how Nelson allows seamless integration with any CI system <a href="/getting-started/deployables.html">using Deployables</a>.</li>
+<li>Learn how Nelson enables operators to focus on enabling the rest of the organization via <a href="/getting-started/blueprints.html">Nelson&rsquo;s blueprints subsystem</a>.</li>
+</ul>
+
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    
+<div class="jumbotron bg-dark">
+  <footer class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <p>
+          Built with &hearts; by the Nelson engineering team.
+        </p>
+        <p>
+          Currently v
+                    0.11.128
+                  
+          &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
+          &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
+          &middot; <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>
+          &middot; <script type="text/javascript" src="/js/contact.js"></script>
+        </p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-57263411-7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-57263411-7');
+</script>
+<script src="/js/material.min.js?bdb5672d43a4d84ddc13daa5d517c8b8"></script>
+
+<script src="/js/nelson.js?9b9bfc415cb663d9030d7b1f21c7e0e4"></script>
+
+
+  </body>
+</html>
