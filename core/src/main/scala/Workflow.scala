@@ -154,6 +154,12 @@ object Workflow {
         policies = Some(List(policies.policyName(sn, ns)))
       ).inject
 
+    def deleteKubernetesRoleFromVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
+      Vault.deleteKubernetesRole(
+        authClusterName = dc.name,
+        roleName = sn.toString
+      ).inject
+
     def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Datacenter): WorkflowF[Unit] =
       for {
         d  <- StoreOp.getDeployment(id).inject[WorkflowOp]

@@ -125,6 +125,11 @@ object Vault {
     defaultLeaseTTL, maxLeaseTTL,
     policies))
 
+  def deleteKubernetesRole(
+    authClusterName: String,
+    roleName: String
+  ): VaultF[Unit] = Free.liftF(DeleteKubernetesRole(authClusterName, roleName))
+
   case object IsInitialized extends Vault[Boolean]
   final case class Initialize(init: Initialization) extends Vault[InitialCreds]
   final case class Unseal(key: MasterKey) extends Vault[SealStatus]
@@ -144,5 +149,6 @@ object Vault {
     defaultLeaseTTL: Option[FiniteDuration],
     maxLeaseTTL: Option[FiniteDuration],
     policies: Option[List[String]]) extends Vault[Unit]
+  final case class DeleteKubernetesRole(authClusterName: String, roleName: String) extends Vault[Unit]
 }
 
