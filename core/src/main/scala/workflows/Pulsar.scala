@@ -63,7 +63,11 @@ object Pulsar extends Workflow[Unit] {
 
   def destroy(d: Deployment, dc: Datacenter, ns: DCNamespace): WorkflowF[Unit] = {
     val stackName = d.stackName
-    logToFile(d.id, s"Instructing ${dc.name}'s scheduler to decomission ${stackName}") *>
+    logToFile(d.id, s"removing policy from vault: ${vaultLoggingFields(stackName, ns = ns.name, dcName = dc.name)}") *>
+    deletePolicyFromVault(d.stackName, ns.name) *>
+    logToFile(d.id, s"removing kubernetes role from vault: ${vaultLoggingFields(stackName, ns = ns.name, dcName = dc.name)}") *>
+    deleteKubernetesRoleFromVault(dc, d.stackName) *>
+    logToFile(d.id, s"instructing ${dc.name}'s scheduler to decomission ${stackName}") *>
     delete(dc, d) *>
     status(d.id, Terminated, s"Decomissioning deployment ${stackName} in ${dc.name}")
   }

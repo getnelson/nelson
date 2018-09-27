@@ -103,6 +103,7 @@ trait NelsonSuite
       case Vault.GetMounts => SortedMap.empty
       case _: Vault.CreateToken => vault.Token("aaaaaaaa-bbbb-cccc-dddddddddddd")
       case _: Vault.CreateKubernetesRole => ()
+      case _: Vault.DeleteKubernetesRole => ()
     })
   }
 

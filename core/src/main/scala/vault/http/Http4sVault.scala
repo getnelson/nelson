@@ -60,6 +60,7 @@ final class Http4sVaultClient(
     case GetMounts                => getMounts
     case ct: CreateToken          => createToken(ct)
     case kr: CreateKubernetesRole => createKubernetesRole(kr)
+    case dr: DeleteKubernetesRole => deleteKubernetesRole(dr)
   }
 
   val log = Logger[this.type]
@@ -138,7 +139,15 @@ final class Http4sVaultClient(
     }
 
   def createKubernetesRole(ckr: CreateKubernetesRole): IO[Unit] = {
-    val authEngineName = authBackendPrefix.map(_ + ckr.authClusterName).getOrElse(ckr.authClusterName)
-    reqVoid(Request(POST, v1BaseUri / "auth" / authEngineName / "role" / ckr.roleName).withBody(ckr.asJson))
+    val engine = kubernetesAuthEngineName(ckr.authClusterName)
+    reqVoid(Request(POST, v1BaseUri / "auth" / engine / "role" / ckr.roleName).withBody(ckr.asJson))
   }
+
+  def deleteKubernetesRole(dkr: DeleteKubernetesRole): IO[Unit] = {
+    val engine = kubernetesAuthEngineName(dkr.authClusterName)
+    reqVoid(IO.pure(Request(DELETE, v1BaseUri / "auth" / engine / "role" / dkr.roleName)))
+  }
+
+  private def kubernetesAuthEngineName(cn: String): String =
+    authBackendPrefix.map(_ + cn).getOrElse(cn)
 }
