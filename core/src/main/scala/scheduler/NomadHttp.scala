@@ -235,17 +235,6 @@ object NomadJson {
     )
   }
 
-  def dockerSplunkJson(name: String, ns: NamespaceName, splunkUrl: String, splunkToken: String): argonaut.Json =
-    argonaut.Json (
-      "type" := "splunk",
-      "config" := List(argonaut.Json (
-        "splunk-url" := splunkUrl,
-        "splunk-sourcetype" := name,
-        "splunk-index" := ns.root.asString,
-        "splunk-token" := splunkToken
-      ))
-    )
-
   // cpu in MHZ, mem in MB
   def resourcesJson(cpu: Int, mem: Int, ports: Option[Ports]): argonaut.Json = {
     val maybePorts = ports.map(_.nel.map(p => argonaut.Json(
