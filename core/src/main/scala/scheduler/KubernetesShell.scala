@@ -2,7 +2,7 @@ package nelson
 package scheduler
 
 import nelson.Datacenter.{Deployment, StackName}
-import nelson.Kubectl.{DeploymentStatus, JobStatus}
+import nelson.Kubectl.{DeploymentStatus, JobStatus, KubectlError}
 import nelson.Manifest.{HealthCheck => _, _}
 import nelson.blueprint.{DefaultBlueprints, Render}
 import nelson.docker.Docker.Image
@@ -50,14 +50,21 @@ final class KubernetesShell(
     // We don't have enough information here to determine what exactly
     // we're trying to delete so try each one in turn..
     val fallback =
-      kubectl.deleteService(ns, stack).void.recoverWith { case _ =>
-        kubectl.deleteCronJob(ns, stack).void.recoverWith { case _ =>
-          kubectl.deleteJob(ns, stack).void.recover { case _ => () }
+      kubectl.deleteService(ns, stack).void.recoverWith {
+        case err@KubectlError(_) if notFound(err) => kubectl.deleteCronJob(ns, stack).void.recoverWith {
+          case err@KubectlError(_) if notFound(err) => kubectl.deleteJob(ns, stack).void.recover {
+            case err@KubectlError(_) if notFound(err) => ()
+          }
         }
       }
 
     deployment.renderedBlueprint.fold(fallback)(spec => kubectl.delete(spec).void)
   }
+
+  // Janky heuristic to see if an attempted (legacy) deletion failed because
+  // it was not found as opposed to some other reason like RBAC permissions
+  private def notFound(error: KubectlError): Boolean =
+    error.stderr.exists(_.startsWith("Error from server (NotFound)"))
 
   def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
     val env = Render.makeEnv(image, dc, ns, unit, version, plan, hash)
