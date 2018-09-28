@@ -10,28 +10,6 @@ steps:
       - BUILDKITE_CLEAN_CHECKOUT: true
     agents:
       os: linux
-    plugins:
-      timperrett/docker#master:
-        image: getnelson/build-env:unstable
-        user: root
-        always-pull: true
-        privileged: true
-        environment:
-          - SONATYPE_USERNAME
-          - SONATYPE_PASSWORD
-          - COURSIER_PROGRESS=0
-          - GITHUB_TOKEN
-          - BUILDKITE_COMMIT
-          - BUILDKITE_BRANCH
-          - BUILDKITE_BUILD_NUMBER
-          - BUILDKITE_PULL_REQUEST
-          - BUILDKITE_CLEAN_CHECKOUT
-        mounts:
-          - /var/lib/buildkite-agent/.docker:/home/builder/.docker
-          - /var/lib/buildkite-agent/sbt:/home/builder/.sbt
-          - /var/lib/buildkite-agent/ivy2:/home/builder/.ivy2
-          - /var/lib/buildkite-agent/.ssh:/home/builder/.ssh
-          # - /var/run/docker.sock:/var/run/docker.sock
 
   - wait
 
@@ -42,11 +20,3 @@ steps:
       - BUILDKITE_CLEAN_CHECKOUT: true
     agents:
       os: linux
-    plugins:
-      docker#v1.4.0:
-        image: getnelson/build-env:unstable
-        user: builder
-        always-pull: true
-        environment:
-          - DIGITAL_OCEAN_API_TOKEN
-          - BUILDKITE_CLEAN_CHECKOUT
