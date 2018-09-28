@@ -13,9 +13,8 @@ steps:
     plugins:
       timperrett/docker#master:
         image: getnelson/build-env:unstable
-        user: builder
+        user: root
         always-pull: true
-        network: host
         privileged: true
         environment:
           - SONATYPE_USERNAME
@@ -28,11 +27,11 @@ steps:
           - BUILDKITE_PULL_REQUEST
           - BUILDKITE_CLEAN_CHECKOUT
         mounts:
-          # - /var/run/docker.sock:/var/run/docker.sock
           - /var/lib/buildkite-agent/.docker:/home/builder/.docker
           - /var/lib/buildkite-agent/sbt:/home/builder/.sbt
           - /var/lib/buildkite-agent/ivy2:/home/builder/.ivy2
           - /var/lib/buildkite-agent/.ssh:/home/builder/.ssh
+          # - /var/run/docker.sock:/var/run/docker.sock
 
   - wait
 

@@ -3,10 +3,12 @@
 git config --global user.email "team@getnelson.io"
 git config --global user.name "Nelson Team"
 
+dockerd --icc=false &
+
 # configure docker to use the remote tcp endpoint.
 # we're using 0.0.0.0 because 127.0.0.1 inside the
 # container still gets screwed up by docker networking.
-export DOCKER_HOST="tcp://0.0.0.0:2375"
+# export DOCKER_HOST="tcp://0.0.0.0:2375"
 
 # subvert the sbt-rig plugin
 export TRAVIS="true" # way hacky
