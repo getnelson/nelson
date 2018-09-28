@@ -15,3 +15,4 @@ if [ "$BUILDKITE_PULL_REQUEST" = 'false' ]; then
 fi
 
 sbt ++2.11.11 'core/testOnly nelson.TemplatesSpec'
+
