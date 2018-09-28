@@ -114,7 +114,7 @@ final case class Misc(config: NelsonConfig) extends Default {
     /*
      * POST /v1/validate-template
      *
-     * This resource expects a unit name and a consul-template to be posted
+     * This resource expects a unit name and a template to be posted
      * We run it with a temporary vault policy and fake Nomad environment
      * variables created for the unit.
      *
