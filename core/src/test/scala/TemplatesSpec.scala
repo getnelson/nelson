@@ -39,9 +39,10 @@ class TemplatesSpec extends FlatSpec with NelsonSuite {
   def render(file: String, timeout: FiniteDuration = 15.seconds) =
     renderTemplate(config.pools.defaultExecutor, config.pools.schedulingPool, config.template.copy(timeout = timeout), config.dockercfg,
       templatePath(file), DummyVaultToken, ExtraEnv)
+
   behavior of "runTemplates"
 
-  ignore should "return Rendered if it can be rendered" in {
+  it should "return Rendered if it can be rendered" in {
     render("valid").unsafeRunSync() should be (Rendered)
   }
 
@@ -57,7 +58,7 @@ class TemplatesSpec extends FlatSpec with NelsonSuite {
     }
   }
 
-  ignore should "expose custom environment variables" in {
+  it should "expose custom environment variables" in {
     render("custom-token").unsafeRunSync() shouldBe (Rendered)
   }
 
