@@ -2,4 +2,4 @@
 
 set -e
 
-buildkite-agent pipeline upload
+buildkite-agent pipeline upload .buildkite/pipeline.yml
