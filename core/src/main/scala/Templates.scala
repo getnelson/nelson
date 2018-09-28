@@ -167,6 +167,9 @@ object Templates {
         case Right(14) =>
           lintTemplateContainersRunning.dec()
           IO.pure(InvalidTemplate(err.toString))
+        case Right(1) =>
+          lintTemplateContainersRunning.dec()
+          IO.pure(InvalidTemplate(err.toString))
         case Right(n: Int) =>
           lintTemplateContainersRunning.dec()
           IO.raiseError(LintTemplateError(n, err.toString))
