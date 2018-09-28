@@ -90,42 +90,8 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="nelson.Templates.ConsulTemplateError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ConsulTemplateErrorextendsRuntimeExceptionwithProductwithSerializable"></a>
-      <a id="ConsulTemplateError:ConsulTemplateError"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Templates$$ConsulTemplateError.html"><span class="name">ConsulTemplateError</span></a><span class="params">(<span name="exitCode">exitCode: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.RuntimeException">RuntimeException</span> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Templates$@ConsulTemplateErrorextendsRuntimeExceptionwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">We couldn't call consul-template</p>
-    </li><li name="nelson.Templates.ConsulTemplateResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ConsulTemplateResultextendsProductwithSerializable"></a>
-      <a id="ConsulTemplateResult:ConsulTemplateResult"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="Templates$$ConsulTemplateResult.html"><span class="name">ConsulTemplateResult</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Templates$@ConsulTemplateResultextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">The result of a consul-template validation</p>
-    </li><li name="nelson.Templates.InvalidTemplate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InvalidTemplateextendsTemplates.ConsulTemplateResultwithProductwithSerializable"></a>
+              <ol><li name="nelson.Templates.InvalidTemplate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InvalidTemplateextendsTemplates.LintTemplateResultwithProductwithSerializable"></a>
       <a id="InvalidTemplate:InvalidTemplate"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -133,16 +99,50 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Templates$$InvalidTemplate.html"><span class="name">InvalidTemplate</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Templates$$InvalidTemplate.html"><span class="name">InvalidTemplate</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Templates$$LintTemplateResult.html" class="extype" name="nelson.Templates.LintTemplateResult">LintTemplateResult</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Templates$@InvalidTemplateextendsTemplates.ConsulTemplateResultwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Templates$@InvalidTemplateextendsTemplates.LintTemplateResultwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">The consul-template had an error</p>
+      <p class="shortcomment cmt">The lint-template had an error</p>
+    </li><li name="nelson.Templates.LintTemplateError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LintTemplateErrorextendsRuntimeExceptionwithProductwithSerializable"></a>
+      <a id="LintTemplateError:LintTemplateError"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Templates$$LintTemplateError.html"><span class="name">LintTemplateError</span></a><span class="params">(<span name="exitCode">exitCode: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.RuntimeException">RuntimeException</span> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Templates$@LintTemplateErrorextendsRuntimeExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">We couldn't call lint-template</p>
+    </li><li name="nelson.Templates.LintTemplateResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LintTemplateResultextendsProductwithSerializable"></a>
+      <a id="LintTemplateResult:LintTemplateResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Templates$$LintTemplateResult.html"><span class="name">LintTemplateResult</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Templates$@LintTemplateResultextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The result of a lint-template validation</p>
     </li><li name="nelson.Templates.TemplateTimeout" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="TemplateTimeoutextendsTemplates.ConsulTemplateResultwithProductwithSerializable"></a>
+      <a id="TemplateTimeoutextendsTemplates.LintTemplateResultwithProductwithSerializable"></a>
       <a id="TemplateTimeout:TemplateTimeout"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -150,14 +150,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Templates$$TemplateTimeout.html"><span class="name">TemplateTimeout</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Templates$$TemplateTimeout.html"><span class="name">TemplateTimeout</span></a><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Templates$$LintTemplateResult.html" class="extype" name="nelson.Templates.LintTemplateResult">LintTemplateResult</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Templates$@TemplateTimeoutextendsTemplates.ConsulTemplateResultwithProductwithSerializable" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Templates$@TemplateTimeoutextendsTemplates.LintTemplateResultwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">The consul-template job timed out.</p><div class="fullcomment"><div class="comment cmt"><p>The consul-template job timed out. It might be okay, but we gave up trying.</p></div></div>
+      <p class="shortcomment cmt">The lint-template job timed out.</p><div class="fullcomment"><div class="comment cmt"><p>The lint-template job timed out. It might be okay, but we gave up trying.</p></div></div>
     </li><li name="nelson.Templates.TemplateValidation" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="TemplateValidationextendsProductwithSerializable"></a>
       <a id="TemplateValidation:TemplateValidation"></a>
@@ -244,14 +244,14 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Templates$$Rendered$.html"><span class="name">Rendered</span></a><span class="result"> extends <a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Templates$$Rendered$.html"><span class="name">Rendered</span></a><span class="result"> extends <a href="Templates$$LintTemplateResult.html" class="extype" name="nelson.Templates.LintTemplateResult">LintTemplateResult</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Templates$@Rendered" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">The consul-template rendered correctly.</p>
+      <p class="shortcomment cmt">The lint-template rendered correctly.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -452,18 +452,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.Templates#renderTemplate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="renderTemplate(ec:scala.concurrent.ExecutionContext,scheduler:java.util.concurrent.ScheduledExecutorService,templateConfig:nelson.TemplateConfig,dockerConfig:nelson.DockerConfig,path:java.nio.file.Path,vaultToken:String,env:Map[String,String]):cats.effect.IO[nelson.Templates.ConsulTemplateResult]"></a>
-      <a id="renderTemplate(ExecutionContext,ScheduledExecutorService,TemplateConfig,DockerConfig,Path,String,Map[String,String]):IO[ConsulTemplateResult]"></a>
+      <a id="renderTemplate(ec:scala.concurrent.ExecutionContext,scheduler:java.util.concurrent.ScheduledExecutorService,templateConfig:nelson.TemplateConfig,dockerConfig:nelson.DockerConfig,path:java.nio.file.Path,vaultToken:String,env:Map[String,String]):cats.effect.IO[nelson.Templates.LintTemplateResult]"></a>
+      <a id="renderTemplate(ExecutionContext,ScheduledExecutorService,TemplateConfig,DockerConfig,Path,String,Map[String,String]):IO[LintTemplateResult]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">renderTemplate</span><span class="params">(<span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>, <span name="scheduler">scheduler: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>, <span name="templateConfig">templateConfig: <a href="TemplateConfig.html" class="extype" name="nelson.TemplateConfig">TemplateConfig</a></span>, <span name="dockerConfig">dockerConfig: <a href="DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a></span>, <span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="vaultToken">vaultToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="env">env: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map.empty</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a>]</span>
+        <span class="name">renderTemplate</span><span class="params">(<span name="ec">ec: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.ExecutionContext" class="extype" target="_top">ExecutionContext</a></span>, <span name="scheduler">scheduler: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>, <span name="templateConfig">templateConfig: <a href="TemplateConfig.html" class="extype" name="nelson.TemplateConfig">TemplateConfig</a></span>, <span name="dockerConfig">dockerConfig: <a href="DockerConfig.html" class="extype" name="nelson.DockerConfig">DockerConfig</a></span>, <span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="vaultToken">vaultToken: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="env">env: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Map.empty</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="Templates$$LintTemplateResult.html" class="extype" name="nelson.Templates.LintTemplateResult">LintTemplateResult</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Templates$@renderTemplate(ec:scala.concurrent.ExecutionContext,scheduler:java.util.concurrent.ScheduledExecutorService,templateConfig:nelson.TemplateConfig,dockerConfig:nelson.DockerConfig,path:java.nio.file.Path,vaultToken:String,env:Map[String,String]):cats.effect.IO[nelson.Templates.ConsulTemplateResult]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Templates$@renderTemplate(ec:scala.concurrent.ExecutionContext,scheduler:java.util.concurrent.ScheduledExecutorService,templateConfig:nelson.TemplateConfig,dockerConfig:nelson.DockerConfig,path:java.nio.file.Path,vaultToken:String,env:Map[String,String]):cats.effect.IO[nelson.Templates.LintTemplateResult]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -506,18 +506,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="nelson.Templates#validateTemplate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateTemplate(tv:nelson.Templates.TemplateValidation):nelson.Nelson.NelsonK[nelson.Templates.ConsulTemplateResult]"></a>
-      <a id="validateTemplate(TemplateValidation):NelsonK[ConsulTemplateResult]"></a>
+      <a id="validateTemplate(tv:nelson.Templates.TemplateValidation):nelson.Nelson.NelsonK[nelson.Templates.LintTemplateResult]"></a>
+      <a id="validateTemplate(TemplateValidation):NelsonK[LintTemplateResult]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateTemplate</span><span class="params">(<span name="tv">tv: <a href="Templates$$TemplateValidation.html" class="extype" name="nelson.Templates.TemplateValidation">TemplateValidation</a></span>)</span><span class="result">: <a href="Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Templates$$ConsulTemplateResult.html" class="extype" name="nelson.Templates.ConsulTemplateResult">ConsulTemplateResult</a>]</span>
+        <span class="name">validateTemplate</span><span class="params">(<span name="tv">tv: <a href="Templates$$TemplateValidation.html" class="extype" name="nelson.Templates.TemplateValidation">TemplateValidation</a></span>)</span><span class="result">: <a href="Nelson$.html#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="Templates$$LintTemplateResult.html" class="extype" name="nelson.Templates.LintTemplateResult">LintTemplateResult</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Templates$@validateTemplate(tv:nelson.Templates.TemplateValidation):nelson.Nelson.NelsonK[nelson.Templates.ConsulTemplateResult]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Templates$@validateTemplate(tv:nelson.Templates.TemplateValidation):nelson.Nelson.NelsonK[nelson.Templates.LintTemplateResult]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

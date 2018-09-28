@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">TemplateConfig</span><span class="params">(<span name="tempDir">tempDir: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="memoryMegabytes">memoryMegabytes: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="cpuPeriod">cpuPeriod: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="cpuQuota">cpuQuota: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="consulTemplateImage">consulTemplateImage: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="vaultAddress">vaultAddress: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">TemplateConfig</span><span class="params">(<span name="tempDir">tempDir: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="memoryMegabytes">memoryMegabytes: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="cpuPeriod">cpuPeriod: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="cpuQuota">cpuQuota: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="templateEngineImage">templateEngineImage: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="vaultAddress">vaultAddress: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.TemplateConfig#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(tempDir:java.nio.file.Path,memoryMegabytes:Int,cpuPeriod:Int,cpuQuota:Int,timeout:scala.concurrent.duration.FiniteDuration,consulTemplateImage:String,vaultAddress:Option[String]):nelson.TemplateConfig"></a>
+      <a id="&lt;init&gt;(tempDir:java.nio.file.Path,memoryMegabytes:Int,cpuPeriod:Int,cpuQuota:Int,timeout:scala.concurrent.duration.FiniteDuration,templateEngineImage:String,vaultAddress:Option[String]):nelson.TemplateConfig"></a>
       <a id="&lt;init&gt;:TemplateConfig"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">TemplateConfig</span><span class="params">(<span name="tempDir">tempDir: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="memoryMegabytes">memoryMegabytes: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="cpuPeriod">cpuPeriod: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="cpuQuota">cpuQuota: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="consulTemplateImage">consulTemplateImage: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="vaultAddress">vaultAddress: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
+        <span class="name">TemplateConfig</span><span class="params">(<span name="tempDir">tempDir: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="memoryMegabytes">memoryMegabytes: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="cpuPeriod">cpuPeriod: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="cpuQuota">cpuQuota: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a></span>, <span name="templateEngineImage">templateEngineImage: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="vaultAddress">vaultAddress: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.TemplateConfig@&lt;init&gt;(tempDir:java.nio.file.Path,memoryMegabytes:Int,cpuPeriod:Int,cpuQuota:Int,timeout:scala.concurrent.duration.FiniteDuration,consulTemplateImage:String,vaultAddress:Option[String]):nelson.TemplateConfig" title="Permalink" target="_top">
+      <a href="../index.html#nelson.TemplateConfig@&lt;init&gt;(tempDir:java.nio.file.Path,memoryMegabytes:Int,cpuPeriod:Int,cpuQuota:Int,timeout:scala.concurrent.duration.FiniteDuration,templateEngineImage:String,vaultAddress:Option[String]):nelson.TemplateConfig" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -205,23 +205,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="nelson.TemplateConfig#consulTemplateImage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="consulTemplateImage:String"></a>
-      <a id="consulTemplateImage:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">consulTemplateImage</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.TemplateConfig@consulTemplateImage:String" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.TemplateConfig#cpuPeriod" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="cpuPeriod:Int"></a>
       <a id="cpuPeriod:Int"></a>
@@ -428,6 +411,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.TemplateConfig@tempDir:java.nio.file.Path" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.TemplateConfig#templateEngineImage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="templateEngineImage:String"></a>
+      <a id="templateEngineImage:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">templateEngineImage</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.TemplateConfig@templateEngineImage:String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
