@@ -34,7 +34,7 @@ import scala.concurrent.duration._
 
 import Datacenter.StackName
 import Nelson.NelsonK
-import Metrics.default.{consulTemplateContainerCleanupFailuresTotal, consulTemplateContainersRunning, consulTemplateRunsDurationSeconds, consulTemplateRunsFailuresTotal}
+import Metrics.default.{lintTemplateContainerCleanupFailuresTotal, lintTemplateContainersRunning, lintTemplateRunsDurationSeconds, lintTemplateRunsFailuresTotal}
 import vault.policies
 
 object Templates {
@@ -42,22 +42,22 @@ object Templates {
 
   private[this] val logger = Logger[this.type]
 
-  /** The result of a consul-template validation */
-  sealed abstract class ConsulTemplateResult(val isValid: Boolean)
+  /** The result of a lint-template validation */
+  sealed abstract class LintTemplateResult(val isValid: Boolean)
       extends Product with Serializable
 
-  /** The consul-template rendered correctly. */
-  case object Rendered extends ConsulTemplateResult(true)
+  /** The lint-template rendered correctly. */
+  case object Rendered extends LintTemplateResult(true)
 
-  /** The consul-template had an error */
-  final case class InvalidTemplate(msg: String) extends ConsulTemplateResult(false)
+  /** The lint-template had an error */
+  final case class InvalidTemplate(msg: String) extends LintTemplateResult(false)
 
-  /** The consul-template job timed out. It might be okay, but we gave up trying. */
-  final case class TemplateTimeout(msg: String) extends ConsulTemplateResult(false)
+  /** The lint-template job timed out. It might be okay, but we gave up trying. */
+  final case class TemplateTimeout(msg: String) extends LintTemplateResult(false)
 
-  /** We couldn't call consul-template */
-  final case class ConsulTemplateError(exitCode: Int, msg: String)
-      extends RuntimeException(s"consul-template exited with code $exitCode: $msg")
+  /** We couldn't call lint-template */
+  final case class LintTemplateError(exitCode: Int, msg: String)
+      extends RuntimeException(s"lint-template exited with code $exitCode: $msg")
 
   /**
    * A template that we want to render in Nelson
@@ -73,7 +73,7 @@ object Templates {
   )
 
   /** Validate a template according to a template validation request */
-  def validateTemplate(tv: TemplateValidation): NelsonK[ConsulTemplateResult] =
+  def validateTemplate(tv: TemplateValidation): NelsonK[LintTemplateResult] =
     Kleisli { cfg =>
       val dc = cfg.datacenters.headOption.getOrElse {
         // We should never see this. Nelson doesn't start without a datacenter.
@@ -116,7 +116,7 @@ object Templates {
           },
           dir => IO { dir.toFile.delete(); () }
         )
-      }.compile.last.map(_.getOrElse(sys.error("Expected a ConsulTemplateResult")))
+      }.compile.last.map(_.getOrElse(sys.error("Expected a LintTemplateResult")))
     }
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf")) // false wart
@@ -128,25 +128,24 @@ object Templates {
     path: Path,
     vaultToken: String,
     env: Map[String, String] = Map.empty
-  ): IO[ConsulTemplateResult] = {
-    val containerName = s"consul-template-${randomAlphaNumeric(12)}"
+  ): IO[LintTemplateResult] = {
+    val containerName = s"lint-template-${randomAlphaNumeric(12)}"
     val dockerCommand = for {
       vaultAddr <- templateConfig.vaultAddress
     } yield {
       "docker" :: "-H" :: dockerConfig.connection ::
       "run" :: "--name" :: containerName ::
-      "--rm" :: "-v" :: s"${path.getParent}:/consul-template/templates" ::
+      "--rm" :: "-v" :: s"${path.getParent}:/templates" ::
       s"--memory=${templateConfig.memoryMegabytes}m" ::
-      // Our kernel doesn't support swap limit capabilites. This supresses a warning we can't do anything about.
       s"--memory-swap=-1" ::
-      s"--cpu-period=${templateConfig.cpuPeriod}" :: s"--cpu-quota=${templateConfig.cpuQuota}" ::
+      s"--cpu-period=${templateConfig.cpuPeriod}" ::
+      s"--cpu-quota=${templateConfig.cpuQuota}" ::
       "--net=host" ::
       env.map { case (k, v) => s"--env=${k}=${v}" }.toList :::
-      templateConfig.consulTemplateImage ::
-      "-once" :: "-dry" ::
-      s"-vault-addr=${vaultAddr}" ::
-      s"-vault-token=${vaultToken}" ::
-      s"-template=/consul-template/templates/${path.getFileName}" ::
+      templateConfig.templateEngineImage ::
+      "--vault-addr" :: s"${vaultAddr}" ::
+      "--vault-token" :: s"${vaultToken}" ::
+      "--file" :: s"/templates/${path.getFileName}" ::
       Nil
     }
 
@@ -156,21 +155,21 @@ object Templates {
       val pLogger = ProcessLogger(_ => (), writeLine)
 
       IO {
-        consulTemplateContainersRunning.inc()
+        lintTemplateContainersRunning.inc()
         val exitCode = cmd.!(pLogger)
         exitCode
       }.timed(templateConfig.timeout)(ec, scheduler).attempt.flatMap {
         // ^ NOTE: This will return when the timeout is up but will not cancel
         // the already running action - that is pending https://github.com/typelevel/cats-effect/pull/121
         case Right(0) =>
-          consulTemplateContainersRunning.dec()
+          lintTemplateContainersRunning.dec()
           IO.pure(Rendered)
         case Right(14) =>
-          consulTemplateContainersRunning.dec()
+          lintTemplateContainersRunning.dec()
           IO.pure(InvalidTemplate(err.toString))
         case Right(n: Int) =>
-          consulTemplateContainersRunning.dec()
-          IO.raiseError(ConsulTemplateError(n, err.toString))
+          lintTemplateContainersRunning.dec()
+          IO.raiseError(LintTemplateError(n, err.toString))
         case Left(e: TimeoutException) =>
           // We gave up.  We need to terminate the container and show the user as far as we got.
           cleanup(scheduler, dockerConfig, containerName).attempt flatMap { _ => IO.pure(TemplateTimeout(err.toString)) }
@@ -182,7 +181,7 @@ object Templates {
 
     dockerCommand match {
       case Some(cmd) => run(cmd)
-      case None => IO.raiseError(ConsulTemplateError(2, "No vault address detected. Templates are linted against the vault in the first data center."))
+      case None => IO.raiseError(LintTemplateError(2, "No vault address detected. Templates are linted against the vault in the first data center."))
     }
   }
 
@@ -204,30 +203,30 @@ object Templates {
       .last
       .map {
         case Some(_) =>
-          consulTemplateContainersRunning.dec()
+          lintTemplateContainersRunning.dec()
         case None =>
-          consulTemplateContainerCleanupFailuresTotal.inc()
+          lintTemplateContainerCleanupFailuresTotal.inc()
           logger.error(s"Failed to stop container. This probably leaked a thread: container=$containerName")
       }
   }
 
   @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.IsInstanceOf")) // false wart
-  private def timedRun(task: IO[ConsulTemplateResult]): IO[ConsulTemplateResult] =
+  private def timedRun(task: IO[LintTemplateResult]): IO[LintTemplateResult] =
     IO(System.nanoTime).flatMap { startNanos =>
       task.attempt.flatMap { att =>
         val elapsed = System.nanoTime - startNanos
-        consulTemplateRunsDurationSeconds.observe(elapsed / 1.0e9)
+        lintTemplateRunsDurationSeconds.observe(elapsed / 1.0e9)
         att match {
           case Right(Rendered) =>
             IO.pure(Rendered)
           case Right(it: InvalidTemplate) =>
-            consulTemplateRunsFailuresTotal.labels("invalid_template").inc()
+            lintTemplateRunsFailuresTotal.labels("invalid_template").inc()
             IO.pure(it)
           case Right(it: TemplateTimeout) =>
-            consulTemplateRunsFailuresTotal.labels("timeout").inc()
+            lintTemplateRunsFailuresTotal.labels("timeout").inc()
             IO.pure(it)
           case Left(e) =>
-            consulTemplateRunsFailuresTotal.labels("error").inc()
+            lintTemplateRunsFailuresTotal.labels("error").inc()
             IO.raiseError(e)
         }
       }

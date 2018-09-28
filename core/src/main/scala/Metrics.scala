@@ -26,25 +26,25 @@ import io.prometheus.client._
 // To avoid redefinition of Metrics, all metrics should be defined here.
 // Bonus points if you keep it alphabetical.
 class Metrics(registry: CollectorRegistry) {
-  val consulTemplateRunsDurationSeconds = (new Histogram.Builder)
+  val lintTemplateRunsDurationSeconds = (new Histogram.Builder)
     .name("consul_template_runs_duration_seconds")
     .help("Duration of consul template runs, in seconds")
     .register(registry)
 
-  val consulTemplateRunsFailuresTotal = (new Counter.Builder)
+  val lintTemplateRunsFailuresTotal = (new Counter.Builder)
     .labelNames("reason")
-    .name("consul_template_runs_failures_total")
-    .help("consul-template runs that failed to render a template")
+    .name("lint_template_runs_failures_total")
+    .help("lint-template runs that failed to render a template")
     .register(registry)
 
-  val consulTemplateContainersRunning = (new Gauge.Builder)
-    .name("consul_template_containers_running")
-    .help("number of consul-template containers currently running")
+  val lintTemplateContainersRunning = (new Gauge.Builder)
+    .name("lint_template_containers_running")
+    .help("number of lint-template containers currently running")
     .register(registry)
 
-  val consulTemplateContainerCleanupFailuresTotal = (new Counter.Builder)
-    .name("consul_template_container_cleanup_failures_total")
-    .help("consul-template containers that we could not clean up")
+  val lintTemplateContainerCleanupFailuresTotal = (new Counter.Builder)
+    .name("lint_template_container_cleanup_failures_total")
+    .help("lint-template containers that we could not clean up")
     .register(registry)
 
   val deploymentMonitorAwaitingHealth = Counter.build

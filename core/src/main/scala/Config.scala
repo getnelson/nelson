@@ -190,7 +190,7 @@ final case class TemplateConfig(
   cpuPeriod: Int,
   cpuQuota: Int,
   timeout: FiniteDuration,
-  consulTemplateImage: String,
+  templateEngineImage: String,
   vaultAddress: Option[String]
 )
 
@@ -504,7 +504,7 @@ object Config {
       cpuPeriod = tCfg.require[Int]("cpu-period"),
       cpuQuota = tCfg.require[Int]("cpu-quota"),
       timeout = tCfg.require[FiniteDuration]("timeout"),
-      consulTemplateImage = tCfg.require[String]("consul-template-image"),
+      templateEngineImage = tCfg.require[String]("template-engine-image"),
       vaultAddress = vaultAddress
     )
   }
