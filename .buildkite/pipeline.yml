@@ -27,7 +27,7 @@ steps:
           - BUILDKITE_PULL_REQUEST
           - BUILDKITE_CLEAN_CHECKOUT
         mounts:
-          - /var/run/docker.sock:/var/run/docker.sock
+          # - /var/run/docker.sock:/var/run/docker.sock
           - /var/lib/buildkite-agent/.docker:/home/builder/.docker
           - /var/lib/buildkite-agent/sbt:/home/builder/.sbt
           - /var/lib/buildkite-agent/ivy2:/home/builder/.ivy2
