@@ -14,5 +14,4 @@ if [ "$BUILDKITE_PULL_REQUEST" = 'false' ]; then
 	git checkout -qf "$BUILDKITE_BRANCH";
 fi
 
-sbt ++2.11.11 'core/testOnly nelson.TemplatesSpec'
-
+sbt ++2.11.11 'release with-defaults'
