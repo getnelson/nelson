@@ -11,11 +11,12 @@ steps:
     agents:
       os: linux
     plugins:
-      docker#v1.4.0:
+      timperrett/docker#master:
         image: getnelson/build-env:unstable
         user: builder
         always-pull: true
         network: host
+        privileged: true
         environment:
           - SONATYPE_USERNAME
           - SONATYPE_PASSWORD
