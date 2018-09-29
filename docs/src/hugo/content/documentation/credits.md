@@ -31,6 +31,7 @@ The engineering staff who helped originally create Nelson are listed below (in o
 * [Cody Allen](https://github.com/ceedubs)
 * [Andrew Morhland](https://github.com/andrewmohrland)
 * [Alice Wu](https://github.com/berkeleybear)
+* [Ryan Delucchi](https://github.com/ryanonsrc)
 
 Finally, the Nelson team would like to shout out to the following teams at Verizon who helped make this project happen:
 
