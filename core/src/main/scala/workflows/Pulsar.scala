@@ -19,11 +19,10 @@ package nelson
 import cats.syntax.apply._
 
 import nelson.Datacenter.{Deployment, Namespace => DCNamespace}
-import nelson.DeploymentStatus.{Pending, Ready, Terminated, Warming}
+import nelson.DeploymentStatus.{Pending, Deploying, Ready, Terminated, Warming}
 import nelson.Manifest.{Namespace => ManifestNamespace, Plan, UnitDef, Versioned}
-import nelson.Workflow.{WorkflowF, WorkflowOp}
+import nelson.Workflow.WorkflowF
 import nelson.Workflow.syntax._
-import nelson.docker.DockerOp
 
 /**
  * Kubernetes deployment workflow that deploys and deletes units, whilst provisioning
@@ -46,8 +45,9 @@ object Pulsar extends Workflow[Unit] {
       else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
 
     for {
-      i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
       _ <- status(id, Pending, "Pulsar workflow about to start")
+      _ <- status(id, Deploying, "Replicating container images to remote registry")
+      i <- dockerOps(id, unit, dc.docker.registry)
       //// write the policies to Vault
       _  <- logToFile(id, s"Writing policy to vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}")
       _  <- writePolicyToVault(cfg = dc.policy, sn = sn, ns = ns.name, rs = rs)
