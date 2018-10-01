@@ -1610,7 +1610,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
    * inspection API for checking specific revisions, simply showing what's available and
    * a pointer to the latest revision, should be informative enough.
    */
-  def listBlueprints: ConnectionIO[List[Blueprint]] = {
+  val listBlueprints: ConnectionIO[List[Blueprint]] = {
     sql"""
       SELECT bb.guid, bb.name, bb.description, bb.sha256, bb.revision, bb.template, bb.timestamp
       FROM (
