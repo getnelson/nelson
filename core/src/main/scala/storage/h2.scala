@@ -1601,7 +1601,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
   type BlueprintRow = (GUID, String, Option[String], Option[Sha256], Long, String, Instant)
 
-  private def _blueprintFromRow(row: BlueprintRow): Blueprint =
+  private def blueprintFromRow(row: BlueprintRow): Blueprint =
     Blueprint(row._1, row._2, row._3, Blueprint.Revision.Discrete(row._5), Blueprint.State.Active, row._4, Template.load(s"${row._2}-${row._5}", row._6), row._7)
 
   /**
@@ -1625,7 +1625,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       ORDER BY bb.timestamp DESC"""
       .query[BlueprintRow]
       .to[List]
-      .map(_.map(_blueprintFromRow))
+      .map(_.map(blueprintFromRow))
   }
 
   /**
@@ -1659,7 +1659,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       case Blueprint.Revision.Discrete(n) => getDiscrete(n)
     }
 
-    query.map(_.map(_blueprintFromRow))
+    query.map(_.map(blueprintFromRow))
   }
 
   def insertBlueprint(name: String, description: Option[String], sha256: Sha256, template: String): ConnectionIO[ID] = {
