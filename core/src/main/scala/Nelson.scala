@@ -351,7 +351,7 @@ object Nelson {
 
   def listBlueprints: NelsonK[List[Blueprint]] =
     Kleisli { cfg =>
-      IO(List.empty[Blueprint])
+      StoreOp.listBlueprints.foldMap(cfg.storage)
     }
 
   def fetchBlueprint(name: String, revision: Blueprint.Revision): NelsonK[Option[Blueprint]] =
