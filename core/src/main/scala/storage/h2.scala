@@ -110,6 +110,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     case GetLatestReleaseForLoadbalancer(n, mv) => getLatestReleaseForLoadbalancer(n, mv).transact(xa)
     case FindBlueprint(name, revision) => findBlueprint(name, revision).transact(xa)
     case InsertBlueprint(name, description, sha, template) => insertBlueprint(name, description, sha, template).transact(xa)
+    case ListBlueprints => listBlueprints.transact(xa)
   }
 
   implicit val metaVersion: Meta[Version] =
@@ -1600,6 +1601,33 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
 
   type BlueprintRow = (GUID, String, Option[String], Option[Sha256], Long, String, Instant)
 
+  private def _blueprintFromRow(row: BlueprintRow): Blueprint =
+    Blueprint(row._1, row._2, row._3, Blueprint.Revision.Discrete(row._5), Blueprint.State.Active, row._4, Template.load(s"${row._2}-${row._5}", row._6), row._7)
+
+  /**
+   * Fetches the latest blueprint revision for every known blueprint. The idea here
+   * is to provide insight into what blueprints exist in the system; given we have the
+   * inspection API for checking specific revisions, simply showing what's available and
+   * a pointer to the latest revision, should be informative enough.
+   */
+  def listBlueprints: ConnectionIO[List[Blueprint]] = {
+    sql"""
+      SELECT bb.guid, bb.name, bb.description, bb.sha256, bb.revision, bb.template, bb.timestamp
+      FROM (
+        SELECT MAX(b.revision) AS revision, b.name
+        FROM PUBLIC.blueprints AS b
+        GROUP BY b.name
+        ORDER BY b.name ASC
+      ) AS b
+      LEFT JOIN PUBLIC.blueprints AS bb
+      ON bb.name = b.name
+      AND bb.revision = b.revision
+      ORDER BY bb.timestamp DESC"""
+      .query[BlueprintRow]
+      .to[List]
+      .map(_.map(_blueprintFromRow))
+  }
+
   /**
    * Use cases exist for fetching a single, discrete revision of a blueprint and also
    * generically fetching whatever the latest might be. In this way, we funnel all that
@@ -1607,8 +1635,6 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
    * record, or in the latter case, sorts by descending revision and picks the head record.
    */
   def findBlueprint(name: String, revision: Blueprint.Revision): ConnectionIO[Option[Blueprint]] = {
-    def blueprintFromRow(row: BlueprintRow): Blueprint =
-      Blueprint(row._1, row._2, row._3, Blueprint.Revision.Discrete(row._5), Blueprint.State.Active, row._4, Template.load(s"${name}-${revision}", row._6), row._7)
 
     def getDiscrete(revision: Long) =
       sql"""
@@ -1633,7 +1659,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       case Blueprint.Revision.Discrete(n) => getDiscrete(n)
     }
 
-    query.map(_.map(blueprintFromRow))
+    query.map(_.map(_blueprintFromRow))
   }
 
   def insertBlueprint(name: String, description: Option[String], sha256: Sha256, template: String): ConnectionIO[ID] = {

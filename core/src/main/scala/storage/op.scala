@@ -248,6 +248,9 @@ object StoreOp {
   def insertBlueprint(name: String, description: Option[String], sha: Sha256, template: String): StoreOpF[ID] =
     Free.liftF(InsertBlueprint(name, description, sha, template))
 
+  def listBlueprints: StoreOpF[List[Blueprint]] =
+    Free.liftF(ListBlueprints)
+
   final case class FindRepository(u: User, slug: Slug) extends StoreOp[Option[Repo]]
   final case class ListRepositories(u: User) extends StoreOp[List[Repo]]
   final case class ListRepositoriesWithOwner(u: User, owner: String) extends StoreOp[List[Repo]]
@@ -310,4 +313,5 @@ object StoreOp {
   final case class GetLatestReleaseForLoadbalancer(name: String, mv: MajorVersion) extends StoreOp[Option[Released]]
   final case class FindBlueprint(name: String, revision: Blueprint.Revision) extends StoreOp[Option[Blueprint]]
   final case class InsertBlueprint(name: String, description: Option[String], sha: Sha256, template: String) extends StoreOp[ID]
+  final case object ListBlueprints extends StoreOp[List[Blueprint]]
 }
