@@ -1486,6 +1486,27 @@ This is used when we are syncing repositories at the behence of a user.
       </a>
     </span>
       
+    </li><li name="nelson.storage.H2Storage#listBlueprints" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="listBlueprints:doobie.ConnectionIO[List[nelson.blueprint.Blueprint]]"></a>
+      <a id="listBlueprints:doobie.ConnectionIO[List[Blueprint]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">listBlueprints</span><span class="result">: <span class="extype" name="doobie.free.Types.ConnectionIO">doobie.ConnectionIO</span>[<span class="extype" name="scala.List">List</span>[<a href="../blueprint/Blueprint.html" class="extype" name="nelson.blueprint.Blueprint">Blueprint</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#nelson.storage.H2Storage@listBlueprints:doobie.ConnectionIO[List[nelson.blueprint.Blueprint]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fetches the latest blueprint revision for every known blueprint.</p><div class="fullcomment"><div class="comment cmt"><p>Fetches the latest blueprint revision for every known blueprint. The idea here
+is to provide insight into what blueprints exist in the system; given we have the
+inspection API for checking specific revisions, simply showing what's available and
+a pointer to the latest revision, should be informative enough.
+</p></div></div>
     </li><li name="nelson.storage.H2Storage#listDatacenters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="listDatacenters:doobie.ConnectionIO[Set[String]]"></a>
       <a id="listDatacenters:doobie.ConnectionIO[Set[String]]"></a>
