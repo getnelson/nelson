@@ -89,6 +89,14 @@ object Github {
     repositoryId: Long
   ) extends Event
 
+  final case class DeploymentEvent(
+    id: Long,
+    slug: Slug,
+    ref: String, // sha, branch or tag
+    environment: String,
+    deployables: List[Asset]
+  ) extends Event
+
   final case class Release(
     id: Long,
     url: String,
@@ -110,7 +118,6 @@ object Github {
     url: Uri,
     content: Option[String] = None
   )
-
 
   ////// GITHUB DSL & Interpreter
 
