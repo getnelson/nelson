@@ -42,7 +42,7 @@ final case class WebHooks(config: NelsonConfig) extends Default {
           Ok()
         case r@Github.ReleaseEvent(_,_,_) =>
           log.info(s"received release event from github: $r")
-          json(Nelson.handleRelease(r))
+          json(Nelson.handleReleaseEvent(r))
       }
     }
   }

@@ -72,6 +72,9 @@ object Github {
       new String(java.util.Base64.getMimeDecoder.decode(base64.replace("\\n","")))
   }
 
+  /**
+   * Represents the events Nelson will recieve from Github (from webhooks).
+   */
   sealed trait Event
 
   /**
@@ -114,7 +117,7 @@ object Github {
   final case class Asset(
     id: Long,
     name: String,
-    state: String,
+    // state: String,
     url: Uri,
     content: Option[String] = None
   )

@@ -73,21 +73,6 @@ object Json {
       jEmptyObject
     )
 
-  implicit val taskStatusEncoder: EncodeJson[TaskStatus] = EncodeJson((s: TaskStatus) => s.toString.asJson )
-
-  implicit val taskEventEncoder: EncodeJson[TaskEvent] =
-    EncodeJson((e: TaskEvent) =>
-      ("message" := e.message) ->:
-      ("driver_message" := e.driverMessage) ->:
-      jEmptyObject
-    )
-
-  implicit val taskStatusAndTaskEventsEncoder: EncodeJson[(TaskStatus, List[TaskEvent])] = EncodeJson((t: (TaskStatus, List[TaskEvent])) =>
-    ("task_events" := t._2) ->:
-    ("task_status" := t._1) ->:
-    jEmptyObject
-  )
-
   implicit lazy val RoutingNodeEncoder: EncodeJson[routing.RoutingNode] =
     EncodeJson((rn: routing.RoutingNode) =>
       rn.node.fold(
@@ -410,13 +395,14 @@ object Json {
            ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
       c <- (z --\ "deployment" --\ "ref").as[String]
       d <- (z --\ "deployment" --\ "environment").as[String]
+      e <- (z --\ "deployment" --\ "payload").as[String]
     } yield {
       Github.DeploymentEvent(
         id = a,
         slug = b,
         ref = c,
         environment = d,
-        deployables = Nil
+        deployables = Nil //Parse.decodeOption[List[Base64]](e).getOrElse(Nil).map(_.decoded)
       )
     })
 
@@ -552,7 +538,6 @@ object Json {
     EncodeJson((asset: Github.Asset) =>
       ("id" := asset.id) ->:
       ("name" := asset.name) ->:
-      ("state" := asset.state) ->:
       ("url" := asset.url.toString) ->:
       ("content" := asset.content) ->:
       jEmptyObject
@@ -696,9 +681,8 @@ object Json {
     DecodeJson(c =>
       ((c --\ "id").as[Long],
         (c --\ "name").as[String],
-        (c --\ "state").as[String],
         (c --\ "url").as[Uri]
-      ).mapN((x,y,z,w) => Github.Asset(x,y,z,w))
+      ).mapN((x,y,z) => Github.Asset(x,y,z))
     )
 
   implicit lazy val GithubOrg: CodecJson[Github.OrgKey] =

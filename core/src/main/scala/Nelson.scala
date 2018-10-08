@@ -265,7 +265,11 @@ object Nelson {
    * Invoked when the inbound webhook from Github arrives, notifying Nelson
    * that a new deployment needs to take place.
    */
-  def handleRelease(e: Github.ReleaseEvent): NelsonK[Unit] = {
+  def handleReleaseEvent(e: Github.ReleaseEvent): NelsonK[Unit] =
+    fetchRelease(e).flatMap(r =>
+      handleDeployableRelease(e.slug, e.repositoryId)(r))
+
+  def handleDeployableRelease(slug: Slug, repositoryId: Long)(r: Github.Release): NelsonK[Unit] = {
     import Manifest.{Namespace,Plan,UnitDef,Action}
 
     // convert units in the manifest to action.
@@ -279,18 +283,17 @@ object Nelson {
 
     Kleisli { cfg =>
       for {
-        r  <- fetchRelease(e).run(cfg)
         v  <- (log(s"fetched full release from github: $r") *>
-                fetchRepoManifestAndValidateDeployable(e.slug, r.tagName).run(cfg))
+                fetchRepoManifestAndValidateDeployable(slug, r.tagName).run(cfg))
         m  <-  v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))
 
         hm <- (log(s"received manifest from github: $m")
-              *> storage.StoreOp.createRelease(e.repositoryId, r).foldMap(cfg.storage)
+              *> storage.StoreOp.createRelease(repositoryId, r).foldMap(cfg.storage)
               *> cfg.auditor.write(r, CreateAction, Option(r.id))
               *> log(s"created release in response to release ${r.id}")
               *> Manifest.saturateManifest(m)(r))
 
-        _  <- (storeManifest(hm, e.repositoryId).run(cfg)
+        _  <- (storeManifest(hm, repositoryId).run(cfg)
               *> log("stored the release manifest in the database"))
 
         _ <- deploy(unitActions(hm, cfg.defaultNamespace, cfg.datacenters)).run(cfg)
