@@ -22,7 +22,7 @@ The primary mode of interacting with Nelson is via a command line interface (CLI
 Choose your [platform specific download](/downloads.html) or have our handy script automatically choose the rightdownload for you:
 
 ```
-curl -GqL https://raw.githubusercontent.com/getnelson/nelson-cli/master/scripts/install | bash
+curl -GqL https://raw.githubusercontent.com/getnelson/cli/master/scripts/install | bash
 ```
 
 This script will download and install the latest version and put it on your `$PATH`. It is safe to rerun this script to update nelson-cli at a future date.
