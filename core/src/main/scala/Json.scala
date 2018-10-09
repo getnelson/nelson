@@ -387,7 +387,7 @@ object Json {
    *   }
    * }
   */
-  implicit val GithubDeploymentEventDecoder: DecodeJson[Github.DeploymentEvent] =
+  implicit val GithubDeploymentEventDecoder: DecodeJson[Github.Deployment] =
     DecodeJson(z => for {
       a <- (z --\ "deployment" --\ "id").as[Long]
       x <- (z --\ "repository" --\ "full_name").as[String]
@@ -398,7 +398,7 @@ object Json {
       e <- (z --\ "deployment" --\ "payload").as[String]
       f <- (z --\ "repository" --\ "id").as[Long]
     } yield {
-      Github.DeploymentEvent(
+      Github.Deployment(
         id = a,
         slug = b,
         ref = c,

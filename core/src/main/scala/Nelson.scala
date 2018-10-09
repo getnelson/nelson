@@ -238,7 +238,7 @@ object Nelson {
    * validates and then saturates with deployables.
    */
   def getVersionedManifestForRelease(r: Released): NelsonK[Manifest @@ Versioned] = {
-    val e = Github.DeploymentEvent(r.releaseId, r.slug, 0, "", "", Nil)
+    val e = Github.Deployment(r.releaseId, r.slug, 0, "", "", Nil)
     for  {
       cfg <- config
       g   <- fetchGithubDeployment(e)
@@ -249,11 +249,11 @@ object Nelson {
     } yield ms
   }
 
-  private def fetchGithubDeployment(e: Github.DeploymentEvent): NelsonK[Github.Release] = ???
+  private def fetchGithubDeployment(e: Github.Deployment): NelsonK[Github.Release] = ???
   //   Kleisli { cfg =>
   //     val t = cfg.git.systemAccessToken
 
-  //     Github.Request.fetchRelease(e.slug, e.id)(t).foldMap(cfg.github)
+  //     Github.Request.getDeployment(e.slug, e.id)(t).foldMap(cfg.github)
   //       .ensure(MissingReleaseAssets(e))(_.assets.nonEmpty)
   //       .retryExponentially(2.seconds, 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
   //   }
@@ -265,7 +265,7 @@ object Nelson {
    * Invoked when the inbound webhook from Github arrives, notifying Nelson
    * that a new deployment needs to take place.
    */
-  def handleDeployment(e: Github.DeploymentEvent): NelsonK[Unit] = {
+  def handleDeployment(e: Github.Deployment): NelsonK[Unit] = {
     import Manifest.{Namespace,Plan,UnitDef,Action}
 
     // convert units in the manifest to action.

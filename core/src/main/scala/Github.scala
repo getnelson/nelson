@@ -25,7 +25,6 @@ import java.net.URI
 import org.http4s.{Request => HttpRequest, Response => HttpResponse, argonaut => _, _}
 import org.http4s.argonaut._
 import org.http4s.client.{Client, UnexpectedStatus}
-import org.http4s.headers.Location
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
@@ -86,13 +85,23 @@ object Github {
     zen: String
   ) extends Event
 
+  /**
+   * Reference: https://developer.github.com/v3/activity/events/types/#releaseevent
+   *
+   * Nelson still accepts these as inbound input for historical reasons, so we
+   * simply accept it on the webhook entrypoint so that Github does not get invalid
+   * responses from Nelson (putting the webhook into an unsafe state).
+   */
   final case class ReleaseEvent(
     id: Long,
     slug: Slug,
     repositoryId: Long
   ) extends Event
 
-  final case class DeploymentEvent(
+  /**
+   * Reference: https://developer.github.com/v3/activity/events/types/#deploymentevent
+   */
+  final case class Deployment(
     id: Long,
     slug: Slug,
     repositoryId: Long,
@@ -143,12 +152,6 @@ object Github {
   final case class GetOrganizations(keys: List[Github.OrgKey], token: AccessToken)
     extends GithubOp[List[Organization]]
 
-  final case class GetReleaseAssetContent(asset: Github.Asset, t: AccessToken)
-    extends GithubOp[Github.Asset]
-
-  final case class GetRelease(slug: Slug, releaseId: ID, t: AccessToken)
-    extends GithubOp[Github.Release]
-
   final case class GetUserRepositories(token: AccessToken)
     extends GithubOp[List[Repo]]
 
@@ -163,6 +166,9 @@ object Github {
 
   final case class DeleteRepoWebHook(slug: Slug, id: Long, token: AccessToken)
     extends GithubOp[Unit]
+
+  final case class GetDeployment(slug: Slug, id: Long, t: AccessToken)
+    extends GithubOp[Option[Github.Deployment]]
 
   object Request {
 
@@ -182,21 +188,6 @@ object Github {
 
     def fetchOrganizations(keys: List[Github.OrgKey], token: AccessToken): GithubOpF[List[Organization]] =
       Free.liftF(GetOrganizations(keys, token))
-
-    /** * https://developer.github.com/v3/repos/releases/#get-a-single-release-asset */
-    def fetchReleaseAssetContent(asset: Github.Asset)(t: AccessToken): GithubOpF[Github.Asset] =
-      Free.liftF(GetReleaseAssetContent(asset, t))
-
-    /**
-     * reach out and fetch a specific release from a repo. we use this when
-     * nelson gets notified of a release, as the payload we get does not contain
-     * the assets that we need.
-     */
-    def fetchRelease(slug: Slug, id: ID)(t: AccessToken): GithubOpF[Github.Release] =
-      for {
-        r <- Free.liftF(GetRelease(slug, id, t))
-        a <- fetchReleaseAssets(r)(t)
-      } yield r.copy(assets = a)
 
     /**
      * given a user access token, recursivly fetch all the repositories said
@@ -221,6 +212,10 @@ object Github {
     def deleteRepoWebhook(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Unit] =
       Free.liftF(DeleteRepoWebHook(slug, id, token))
 
+    /** * https://developer.github.com/v3/repos/deployments/#get-a-single-deployment */
+    def getDeployment(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Option[Github.Deployment]] =
+      Free.liftF(GetDeployment(slug, id, token))
+
     /**
      * retrieve the user-specifc information about the agent logging
      * into the system. obtaining this information so we can have a neat
@@ -233,11 +228,6 @@ object Github {
         keys <- fetchUserOrgKeys(token)
         orgs <- fetchOrganizations(keys, token)
       } yield nelson.User(gu.login, gu.avatar, gu.name, gu.email, orgs)
-
-    def fetchReleaseAssets(r: Github.Release)(t: AccessToken): GithubOpF[List[Github.Asset]] = {
-      import cats.implicits._
-      r.assets.toList.traverse(asset => fetchReleaseAssetContent(asset)(t))
-    }
   }
 
   final class GithubHttp(
@@ -295,28 +285,6 @@ object Github {
           client.expect[Organization](request)
         }
 
-      case GetReleaseAssetContent(asset: Github.Asset, t: AccessToken) =>
-        val request = HttpRequest[IO](Method.GET, asset.url)
-          .putHeaders(Header("Accept", "application/octet-stream"))
-          .token(t)
-
-        val handler: HttpResponse[IO] => IO[Uri] = response => {
-          response.headers.get(Location) match {
-            case None => IO.raiseError(UnexpectedGithubResponse("fetching release asset contents", "missing location header"))
-            case Some(Location(loc)) => IO.pure(loc)
-          }
-        }
-
-        for {
-          assetLocation <- client.fetch(request)(handler)
-          assetRequest  = HttpRequest[IO](Method.GET, assetLocation)
-          assetContents <- client.fetch(assetRequest)(_.bodyAsText.compile.foldMonoid)
-        } yield asset.copy(content = Option(assetContents))
-
-      case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
-        val request = HttpRequest[IO](Method.GET, cfg.releaseEndpoint(slug, releaseId)).token(t)
-        client.expect[Github.Release](request)
-
       case GetUserRepositories(t: AccessToken) =>
         def go(uri: Uri)(accum: List[Repo]): IO[List[Repo]] = {
           val req = HttpRequest[IO](Method.GET, uri).token(t)
@@ -352,6 +320,10 @@ object Github {
         client.expect[String](HttpRequest[IO](Method.DELETE, cfg.webhookEndpoint(slug) / id.toString).token(t)).map(_ => ()).recover {
           case UnexpectedStatus(Status.NotFound) => ()
         }
+
+      case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
+        val req = HttpRequest[IO](Method.GET, cfg.deploymentEndpoint(slug, id)).token(t)
+        client.expect[Github.Deployment](req).map(Option(_)).handleError(_ => None)
     }
 
     /////////////////////////// INTERNALS ///////////////////////////
