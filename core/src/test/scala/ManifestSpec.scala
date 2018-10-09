@@ -112,7 +112,6 @@ class ManifestManualSpec extends NelsonSuite {
         id = 45,
         name = "example-howdy.deployable.yml",
         url = Uri.unsafeFromString(""),
-        state = "",
         content = Some(c)
       )
       e  = Github.Release(
@@ -142,7 +141,6 @@ class ManifestManualSpec extends NelsonSuite {
         id = 45,
         name = "example-howdy.deployable.yaml", // this is what is being tested - note .yaml instead of .yml
         url = Uri.unsafeFromString(""),
-        state = "",
         content = Some(contents)
       )
       release = Github.Release(

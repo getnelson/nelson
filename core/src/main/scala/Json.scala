@@ -230,9 +230,9 @@ object Json {
    * TIM: this seems really hacky.
    */
   implicit lazy val GithubEventDecoder: DecodeJson[Github.Event] =
-    (GithubDeploymentEventDecoder |||
-    GithubReleaseEventDecoder: DecodeJson[Github.Event]) |||
+    GithubDeploymentEventDecoder |||
     GithubPingEventDecoder
+    // GithubReleaseEventDecoder: DecodeJson[Github.Event]) |||
 
   /*
    * {
@@ -396,12 +396,14 @@ object Json {
       c <- (z --\ "deployment" --\ "ref").as[String]
       d <- (z --\ "deployment" --\ "environment").as[String]
       e <- (z --\ "deployment" --\ "payload").as[String]
+      f <- (z --\ "repository" --\ "id").as[Long]
     } yield {
       Github.DeploymentEvent(
         id = a,
         slug = b,
         ref = c,
         environment = d,
+        repositoryId = f,
         deployables = Nil //Parse.decodeOption[List[Base64]](e).getOrElse(Nil).map(_.decoded)
       )
     })

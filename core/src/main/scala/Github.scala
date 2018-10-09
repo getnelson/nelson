@@ -95,6 +95,7 @@ object Github {
   final case class DeploymentEvent(
     id: Long,
     slug: Slug,
+    repositoryId: Long,
     ref: String, // sha, branch or tag
     environment: String,
     deployables: List[Asset]
@@ -117,7 +118,6 @@ object Github {
   final case class Asset(
     id: Long,
     name: String,
-    // state: String,
     url: Uri,
     content: Option[String] = None
   )
