@@ -290,4 +290,11 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   it should "parse a plan with a workflow but no blueprint" in {
     loadManifest("/nelson/manifest.v1.no-blueprint.yml").isRight should equal (true)
   }
+
+  it should "parse a manifest that makes use of YAML anchors and aliases" in {
+    val check = loadManifest("/nelson/manifest.v1.anchors.yml").right.map(
+      _.plans.flatMap(_.environment.retries))
+    check should equal (Right(List(2,2)))
+  }
+
 }

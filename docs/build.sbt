@@ -52,7 +52,7 @@ val latestCLIReleaseData = taskKey[File]("hugo-cli-release-data")
 latestCLIReleaseData := {
   val dest = (sourceDirectory in Hugo).value / "data" / "release.json"
   val contents = scala.io.Source.fromInputStream(
-    new java.net.URL("https://api.github.com/repos/getnelson/nelson-cli/releases/latest"
+    new java.net.URL("https://api.github.com/repos/getnelson/cli/releases/latest"
       ).openConnection.getInputStream).mkString
   IO.write(dest, contents)
   dest
