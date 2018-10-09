@@ -24,12 +24,20 @@ import scala.reflect.ClassTag
 
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
+import org.yaml.snakeyaml.representer.Representer
 
 object YamlParser {
   def fromYaml[A : ClassTag](input: String): Either[NelsonError, A] =
     Either.catchNonFatal {
+      // NOTE: the configuration of the Representer allows us to make use
+      // of YAML syntax features like anchors and aliases, thus reducing
+      // boilerplate inside the .nelson.yml files (particularly for plans
+      // where configuration tends to overflow)
+      val representer = new Representer
+      representer.getPropertyUtils.setSkipMissingProperties(true)
+
       val constructor = new Constructor(implicitly[ClassTag[A]].runtimeClass)
-      val yaml = new Yaml(constructor)
+      val yaml = new Yaml(constructor, representer)
       yaml.load[A](input)
     } leftMap (t => YamlError.loadError(t.getMessage))
 }
