@@ -45,17 +45,6 @@ class GithubSpec extends FlatSpec with Matchers with BeforeAndAfterEach with Pro
     req should equal(Right(orgs))
   }
 
-  it should "return release assets" in {
-    val req = Github.Request.fetchReleaseAssetContent(asset)(token).foldMap(interpreter).attempt.unsafeRunSync()
-    req should equal(Right(asset))
-  }
-
-  it should "return release" in {
-    val r = release(250L)
-    val req = Github.Request.fetchRelease(slug, 0L)(token).foldMap(interpreter).attempt.unsafeRunSync()
-    req should equal(Right(r))
-  }
-
   it should "return repositories" in {
     val req = Github.Request.listUserRepositories(token).foldMap(interpreter).attempt.unsafeRunSync()
     req should equal(Right(repos))

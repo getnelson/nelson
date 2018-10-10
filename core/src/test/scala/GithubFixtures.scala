@@ -103,13 +103,6 @@ object GitFixtures {
         loadResourceAsString("/nelson/github.organization.json")
           .flatMap(fromJson[List[Organization]])
 
-      case GetReleaseAssetContent(asset: Github.Asset, t: AccessToken) =>
-        IO.pure(asset)
-
-      case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
-        loadResourceAsString("/nelson/github.release.json")
-          .flatMap(fromJson[Github.Release])
-
       case GetUserRepositories(token: AccessToken) =>
         loadResourceAsString("/nelson/github.repos.json")
           .flatMap(fromJson[List[Repo]])
@@ -126,6 +119,10 @@ object GitFixtures {
 
       case DeleteRepoWebHook(slug: Slug, id: Long, token: AccessToken) =>
         IO.unit
+
+      case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
+        loadResourceAsString("/nelson/github.deployment.json")
+          .flatMap(fromJson[Option[Deployment]])
     }
   }
 }

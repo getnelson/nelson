@@ -230,9 +230,10 @@ object Json {
    * TIM: this seems really hacky.
    */
   implicit lazy val GithubEventDecoder: DecodeJson[Github.Event] =
-    GithubDeploymentEventDecoder |||
-    GithubPingEventDecoder
-    // GithubReleaseEventDecoder: DecodeJson[Github.Event]) |||
+    (GithubDeploymentEventDecoder |||
+     GithubReleaseEventDecoder: DecodeJson[Github.Event]) |||
+     GithubPingEventDecoder
+
 
   /*
    * {
