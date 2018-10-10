@@ -961,7 +961,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
               slug = row.slug,
               version = row.version,
               timestamp = row.timestamp,
-              releaseId = row.releaseId,
+              referenceId = row.releaseId,
               releaseHtmlUrl = row.releaseHtmlUrl)
             List(rel -> ReleasedDeployment(row.deployid, unit, row.namespace, row.hash, row.deployTimestamp, row.deployStatus, row.deployGuid))
           }

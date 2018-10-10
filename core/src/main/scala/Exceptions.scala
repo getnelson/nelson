@@ -46,8 +46,8 @@ final case class ProblematicRepoManifest(slug: Slug)
 final case class ProblematicDeployable(str: String, url: String)
     extends NelsonError(s"Error when attempting to parse deployable from repository. Please ensure that a valid deployable yaml/yml file is available at the specified URL, or attached to the associated Github release: ${url} -- $str")
 
-// final case class MissingReleaseAssets(r: Github.ReleaseEvent)
-//  extends NelsonError(s"fetching the release assets from github returned no results; this is likely a critical error. release event was: $r")
+final case class MissingDeploymentReference(id: Long, slug: Slug)
+ extends NelsonError(s"fetching the deployment '${id}' from '${slug.toString}' on github returned no results; this is likely a critical error.")
 
 final case class MisconfiguredDatacenter(name: String, problem: String)
     extends NelsonError(s"The datacenter named $name is misconfigured: $problem")

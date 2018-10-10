@@ -30,7 +30,7 @@ import scala.collection.immutable.SortedMap
 object Nelson {
   import Datacenter._
   import scala.concurrent.ExecutionContext
-  // import scala.concurrent.duration._
+  import scala.concurrent.duration._
   import Json._
   import audit._
   import AuditableInstances._
@@ -238,25 +238,31 @@ object Nelson {
    * validates and then saturates with deployables.
    */
   def getVersionedManifestForRelease(r: Released): NelsonK[Manifest @@ Versioned] = {
-    val e = Github.Deployment(r.releaseId, r.slug, 0, "", "", Nil)
     for  {
       cfg <- config
-      g   <- fetchGithubDeployment(e)
-      v   <- fetchRepoManifestAndValidateDeployable(e.slug, g.tagName)
+      g   <- fetchGithubDeployment(r.referenceId, r.slug)
+      v   <- fetchRepoManifestAndValidateDeployable(r.slug, g.tagName)
       m   <- Kleisli.liftF(v.fold(e => IO.raiseError(MultipleValidationErrors(e)), m => IO.pure(m)))
       // take the deployable and modify the manifest to incorporate the release info
       ms  <- Kleisli.liftF(Manifest.saturateManifest(m)(g))
     } yield ms
   }
 
-  private def fetchGithubDeployment(e: Github.Deployment): NelsonK[Github.Release] = ???
-  //   Kleisli { cfg =>
-  //     val t = cfg.git.systemAccessToken
+  private def liftDeploymentToRelease(e: Github.Deployment): NelsonK[Github.Release] = ???
 
-  //     Github.Request.getDeployment(e.slug, e.id)(t).foldMap(cfg.github)
-  //       .ensure(MissingReleaseAssets(e))(_.assets.nonEmpty)
-  //       .retryExponentially(2.seconds, 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
-  //   }
+
+  private def fetchGithubDeployment(referenceId: Long, slug: Slug): NelsonK[Github.Release] = {
+    val foo: NelsonK[Option[Github.Deployment]] = Kleisli { cfg =>
+      val t = cfg.git.systemAccessToken
+      // NOTE(timperrett): im not wild about this, but there's simply no meaningful default that
+      // can sensibly be applied here, so we're just bailing out.
+      Github.Request.getDeployment(slug, referenceId)(t)
+        .foldMap(cfg.github)
+        .ensure(MissingDeploymentReference(referenceId, slug))(_.nonEmpty)
+        .retryExponentially(2.seconds, limit = 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
+    }
+    foo.flatMap(x => liftDeploymentToRelease(x.get))
+  }
 
   def deploy(actions: List[Manifest.Action]): NelsonK[Unit] =
     Kleisli(cfg => actions.traverse_(a => cfg.queue.enqueue1(a)))
@@ -279,7 +285,7 @@ object Nelson {
 
     Kleisli { cfg =>
       for {
-        r  <- fetchGithubDeployment(e).run(cfg)
+        r  <- liftDeploymentToRelease(e).run(cfg)
         v  <- (log(s"fetched full release from github: $r") *>
                 fetchRepoManifestAndValidateDeployable(e.slug, r.tagName).run(cfg))
         m  <-  v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))

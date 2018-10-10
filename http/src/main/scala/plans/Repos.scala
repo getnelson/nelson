@@ -80,12 +80,12 @@ final case class Repos(config: NelsonConfig) extends Default {
    */
   private implicit val ReleasedPairEncoder: EncodeJson[(Released,List[ReleasedDeployment])] =
     EncodeJson { (t: (Released,List[ReleasedDeployment])) =>
-      ("id" := t._1.releaseId) ->:
+      ("id" := t._1.referenceId) ->:
       ("slug"    := t._1.slug.toString) ->:
       ("version" := t._1.version.toString) ->:
       ("timestamp" := t._1.timestamp.toString) ->:
       ("github_html_url" := t._1.releaseHtmlUrl) ->:
-      ("release_url" := linkTo(s"/v1/releases/${t._1.releaseId.toString}")(config.network)) ->:
+      ("release_url" := linkTo(s"/v1/releases/${t._1.referenceId.toString}")(config.network)) ->:
       ("deployments" := t._2) ->:
       jEmptyObject
     }
