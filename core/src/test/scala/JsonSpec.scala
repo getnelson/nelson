@@ -60,4 +60,11 @@ class JsonSpec extends FlatSpec with Matchers {
     }
   }
 
+  it should "parse the pull request events from Github" in {
+    fromWebhookSample("/nelson/github.webhookpullrequest.json"){
+      case Github.PullRequestEvent(_,_,_) => true
+      case _ => false
+    }
+  }
+
 }

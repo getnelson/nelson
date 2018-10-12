@@ -86,6 +86,19 @@ object Github {
   ) extends Event
 
   /**
+   * Reference https://developer.github.com/v3/activity/events/types/#pullrequestevent
+   *
+   * This event definition is a placeholder for future support for inbound pull request
+   * deployments. This skeleton is being provided so that Nelson can parse the inbound
+   * payload and give a 200 OK response so Github doesn't think Nelson is faulty.
+   */
+  final case class PullRequestEvent(
+    id: Long,
+    url: String,
+    slug: Slug
+  ) extends Event
+
+  /**
    * Reference: https://developer.github.com/v3/activity/events/types/#releaseevent
    *
    * Nelson still accepts these as inbound input for historical reasons, so we

@@ -230,8 +230,9 @@ object Json {
    * TIM: this seems really hacky.
    */
   implicit lazy val GithubEventDecoder: DecodeJson[Github.Event] =
-    (GithubDeploymentEventDecoder |||
+    ((GithubDeploymentEventDecoder |||
      GithubReleaseEventDecoder: DecodeJson[Github.Event]) |||
+     GithubPullRequestEventDecoder: DecodeJson[Github.Event]) |||
      GithubPingEventDecoder
 
   /*
@@ -592,6 +593,21 @@ object Json {
         (c --\ "url").as[Uri]
       ).mapN((x,y,z) => Github.Asset(x,y,z))
     )
+
+  implicit val GithubPullRequestEventDecoder: DecodeJson[Github.PullRequestEvent] =
+    DecodeJson(z => for {
+      a <- (z --\ "number").as[Long]
+      b <- (z --\ "pull_request" --\ "url").as[String]
+      d <- (z --\ "repository" --\ "full_name").as[String]
+      x <- Slug.fromString(d).map(DecodeResult.ok
+           ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
+    } yield {
+      Github.PullRequestEvent(
+        id = a,
+        url = b,
+        slug = x
+      )
+    })
 
   implicit lazy val GithubOrg: CodecJson[Github.OrgKey] =
     casecodec2(Github.OrgKey.apply, Github.OrgKey.unapply)("id", "login")

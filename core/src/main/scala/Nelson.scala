@@ -130,7 +130,7 @@ object Nelson {
   def createHook(session: Session, slug: Slug): NelsonK[Repo] = {
     def hook(cfg: NelsonConfig): Github.WebHook = {
       val uri = linkTo("/listener")(cfg.network)
-      Github.WebHook.create("release" :: "deployment" :: Nil, uri)
+      Github.WebHook.create("release" :: "deployment" :: "pull_request" :: Nil, uri)
     }
 
     def getOrCreate(slug: Slug, hk: Github.WebHook): NelsonK[Github.WebHook] = Kleisli { cfg =>
