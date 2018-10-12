@@ -270,15 +270,16 @@ object Json {
   */
   implicit val GithubDeploymentEventDecoder: DecodeJson[Github.Deployment] =
     DecodeJson(z => for {
-      a <- (z --\ "deployment" --\ "id").as[Long]
+      deployment <- DecodeResult.ok(z --\ "deployment")
+      a <- (deployment --\ "id").as[Long]
+      c <- (deployment --\ "ref").as[String]
+      d <- (deployment --\ "environment").as[String]
+      e <- (deployment --\ "payload").as[String]
+      g <- (deployment --\ "url").as[String]
       x <- (z --\ "repository" --\ "full_name").as[String]
-      b <- Slug.fromString(x).map(DecodeResult.ok
-           ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
-      c <- (z --\ "deployment" --\ "ref").as[String]
-      d <- (z --\ "deployment" --\ "environment").as[String]
-      e <- (z --\ "deployment" --\ "payload").as[String]
       f <- (z --\ "repository" --\ "id").as[Long]
-      g <- (z --\ "deployment" --\ "url").as[String]
+      b <- Slug.fromString(x).map(DecodeResult.ok
+            ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
     } yield {
       // NOTE(timperrett): this seems a little sketchy as we're invoking the
       // protobuf decoder right here in the JSON decoder, even thought we've
