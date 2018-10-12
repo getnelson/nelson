@@ -296,7 +296,7 @@ object Manifest {
   /*
    * Saturates the manifest with all the bits that a unit or loadbalancer needs for deployment.
    */
-  def saturateManifest(m: Manifest)(r: Github.Release): IO[Manifest @@ Versioned] = {
+  def saturateManifest(m: Manifest)(r: Github.Deployment): IO[Manifest @@ Versioned] = {
     val units = addDeployable(m)(r)
     val lbs = addVersionToLoadbalancers(m)(r)
     units.map(u => Versioned(m.copy(units = u, loadbalancers = lbs)))
@@ -405,26 +405,17 @@ object Manifest {
       .map(l => Foldable[List].fold(l))
   }
 
-  private def addVersionToLoadbalancers(m: Manifest)(r: Github.Release): List[Loadbalancer] = {
-    val major = Version.fromString(r.tagName).map(_.toMajorVersion)
+  private def addVersionToLoadbalancers(m: Manifest)(r: Github.Deployment): List[Loadbalancer] = {
+    // NOTE(timperret): given `ref` might not actually be parsable as a `Version`, something
+    // needs to happen here that is a little more meaningful.
+    val major = Version.fromString(r.ref).map(_.toMajorVersion)
     m.loadbalancers.map(lb => lb.copy(majorVersion = major))
   }
 
-  private def addDeployable(m: Manifest)(r: Github.Release): IO[List[UnitDef]] =
-    m.units.traverse(u => parseDeployable(r, u.name).map(d => u.copy(deployable = Some(d))))
-
-  /**
-   * feels a little weird coupling the DeployableParser to
-   * this function, but right now its the most obvious
-   * place i could find to put it.
-   */
-  private def parseDeployable(release: Github.Release, name: String): IO[Deployable] = {
-    release.findAssetContent(s"${name}.deployable.yml").recoverWith {
-      case ProblematicDeployable(_, _) => release.findAssetContent(s"${name}.deployable.yaml")
-    }.flatMap { a =>
-      yaml.DeployableParser.parse(a).fold(e => IO.raiseError(MultipleErrors(e)), IO.pure)
-    }
-  }
+  private def addDeployable(m: Manifest)(e: Github.Deployment): IO[List[UnitDef]] =
+    m.units.traverse(u =>
+      e.findDeployable(u.name).map(d =>
+        u.copy(deployable = Some(d))))
 
   private[nelson] def filterDatacenters(dcs: Seq[Datacenter])(targets: DeploymentTarget): Seq[Datacenter] =
     targets match {

@@ -43,9 +43,7 @@ object GitFixtures {
 
   val orgs = List(Organization(0L, Some("name"),"slug",new java.net.URI("avatar")))
 
-  val asset = Asset(0, "manifest.deployable.v1.b.yml", Uri.unsafeFromString(""), Some("content"))
-
-  val contents:IO[Option[Contents]] =
+  val contents: IO[Option[Contents]] =
     loadResourceAsString("/nelson/dependencies.bar_2.0.0.yml").map { c =>
       val encoded = java.util.Base64.getMimeEncoder.encodeToString(c.getBytes("utf-8"))
       Some(Contents(encoded,"manifest.deployable.v1.b.yml",encoded.length.toLong))

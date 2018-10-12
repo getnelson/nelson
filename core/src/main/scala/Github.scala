@@ -107,22 +107,24 @@ object Github {
     repositoryId: Long,
     ref: String, // sha, branch or tag
     environment: String,
-    deployables: List[Asset]
-  ) extends Event
+    deployables: List[Manifest.Deployable],
+    url: String
+  ) extends Event {
+    def findDeployable(withName: String): IO[Manifest.Deployable] =
+      deployables.find(_.name.trim.toLowerCase == withName.trim.toLowerCase)
+        .fold[IO[Manifest.Deployable]](IO.raiseError(new ProblematicDeployable(s"could not find an asset named $withName", url)))(IO.pure)
+  }
 
+  // NOTE(timperrett): this is legacy, but we're keeping it around so that
+  // our webhooks still give valid responses to Github in the event that
+  // operators of Nelson forget to disable the release webhook.
   final case class Release(
     id: Long,
     url: String,
     htmlUrl: String,
     assets: List[Asset],
     tagName: String
-  ){
-    def findAssetContent(withName: String): IO[String] =
-      this.assets
-        .find(_.name.trim.toLowerCase == withName.trim.toLowerCase)
-        .flatMap(_.content)
-        .fold[IO[String]](IO.raiseError(new ProblematicDeployable(s"could not find an asset named $withName", url)))(IO.pure)
-  }
+  )
 
   final case class Asset(
     id: Long,

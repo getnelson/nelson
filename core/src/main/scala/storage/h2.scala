@@ -56,7 +56,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     case DeleteRepositories(list) => deleteRepositories(list).transact(xa)
     case LinkRepositoriesToUser(list, u) => linkRepositoriesToUser(list, u).transact(xa)
     case AddUnit(unit, repoId) => addUnit(unit, repoId).transact(xa)
-    case CreateRelease(repositoryId, r) => createRelease(repositoryId, r).transact(xa)
+    case CreateRelease(r) => createRelease(r).transact(xa)
     case KillRelease(slug, version) => killRelease(slug, version).transact(xa)
     case ListRecentReleasesForRepository(slug) => listRecentReleasesForRepository(slug).transact(xa)
     case ListReleases(limit) => listReleases(limit).transact(xa)
@@ -808,9 +808,9 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   /**
    *
    */
-  def createRelease(repositoryId: Long, r: Github.Release): ConnectionIO[Unit] = {
+  def createRelease(r: Github.Deployment): ConnectionIO[Unit] = {
     sql"""INSERT INTO PUBLIC.releases (repository_id, version, timestamp, release_id, release_url, release_html_url)
-          VALUES ( ${repositoryId}, ${r.tagName}, ${Instant.now()}, ${r.id}, ${r.url}, ${r.htmlUrl} );
+          VALUES ( ${r.repositoryId}, ${r.ref}, ${Instant.now()}, ${r.id}, ${r.url}, ${r.url} );
        """.update.run.void
   }
 

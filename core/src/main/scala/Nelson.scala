@@ -241,7 +241,7 @@ object Nelson {
     for  {
       cfg <- config
       g   <- fetchGithubDeployment(r.referenceId, r.slug)
-      v   <- fetchRepoManifestAndValidateDeployable(r.slug, g.tagName)
+      v   <- fetchRepoManifestAndValidateDeployable(r.slug, g.ref)
       m   <- Kleisli.liftF(v.fold(e => IO.raiseError(MultipleValidationErrors(e)), m => IO.pure(m)))
       // take the deployable and modify the manifest to incorporate the release info
       ms  <- Kleisli.liftF(Manifest.saturateManifest(m)(g))
@@ -251,8 +251,8 @@ object Nelson {
   private def liftDeploymentToRelease(e: Github.Deployment): NelsonK[Github.Release] = ???
 
 
-  private def fetchGithubDeployment(referenceId: Long, slug: Slug): NelsonK[Github.Release] = {
-    val foo: NelsonK[Option[Github.Deployment]] = Kleisli { cfg =>
+  private def fetchGithubDeployment(referenceId: Long, slug: Slug): NelsonK[Github.Deployment] = {
+    Kleisli[IO, NelsonConfig, Option[Github.Deployment]] { cfg =>
       val t = cfg.git.systemAccessToken
       // NOTE(timperrett): im not wild about this, but there's simply no meaningful default that
       // can sensibly be applied here, so we're just bailing out.
@@ -260,8 +260,7 @@ object Nelson {
         .foldMap(cfg.github)
         .ensure(MissingDeploymentReference(referenceId, slug))(_.nonEmpty)
         .retryExponentially(2.seconds, limit = 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
-    }
-    foo.flatMap(x => liftDeploymentToRelease(x.get))
+    }.map(_.get)
   }
 
   def deploy(actions: List[Manifest.Action]): NelsonK[Unit] =
@@ -285,16 +284,14 @@ object Nelson {
 
     Kleisli { cfg =>
       for {
-        r  <- liftDeploymentToRelease(e).run(cfg)
-        v  <- (log(s"fetched full release from github: $r") *>
-                fetchRepoManifestAndValidateDeployable(e.slug, r.tagName).run(cfg))
-        m  <-  v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))
+        v  <- fetchRepoManifestAndValidateDeployable(e.slug, e.ref).run(cfg)
+        m  <- v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))
 
         hm <- (log(s"received manifest from github: $m")
-              *> storage.StoreOp.createRelease(e.repositoryId, r).foldMap(cfg.storage)
-              *> cfg.auditor.write(r, CreateAction, Option(r.id))
-              *> log(s"created release in response to release ${r.id}")
-              *> Manifest.saturateManifest(m)(r))
+              *> storage.StoreOp.createRelease(e).foldMap(cfg.storage)
+              *> cfg.auditor.write(e, CreateAction, Option(e.id))
+              *> log(s"created release in response to release ${e.id}")
+              *> Manifest.saturateManifest(m)(e))
 
         _  <- (storeManifest(hm, e.repositoryId).run(cfg)
               *> log("stored the release manifest in the database"))

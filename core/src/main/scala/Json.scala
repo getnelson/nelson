@@ -234,7 +234,6 @@ object Json {
      GithubReleaseEventDecoder: DecodeJson[Github.Event]) |||
      GithubPingEventDecoder
 
-
   /*
    * {
    *   "deployment": {
@@ -249,24 +248,7 @@ object Json {
    *     "environment": "production",
    *     "description": null,
    *     "creator": {
-   *       "login": "timperrett",
-   *       "id": 458,
-   *       "node_id": "MDQ6VXNlcjQ1OA==",
-   *       "avatar_url": "https://avatars1.githubusercontent.com/u/458?v=4",
-   *       "gravatar_id": "",
-   *       "url": "https://api.github.com/users/timperrett",
-   *       "html_url": "https://github.com/timperrett",
-   *       "followers_url": "https://api.github.com/users/timperrett/followers",
-   *       "following_url": "https://api.github.com/users/timperrett/following{/other_user}",
-   *       "gists_url": "https://api.github.com/users/timperrett/gists{/gist_id}",
-   *       "starred_url": "https://api.github.com/users/timperrett/starred{/owner}{/repo}",
-   *       "subscriptions_url": "https://api.github.com/users/timperrett/subscriptions",
-   *       "organizations_url": "https://api.github.com/users/timperrett/orgs",
-   *       "repos_url": "https://api.github.com/users/timperrett/repos",
-   *       "events_url": "https://api.github.com/users/timperrett/events{/privacy}",
-   *       "received_events_url": "https://api.github.com/users/timperrett/received_events",
-   *       "type": "User",
-   *       "site_admin": false
+   *      ....
    *     },
    *     "created_at": "2018-10-06T04:52:40Z",
    *     "updated_at": "2018-10-06T04:52:40Z",
@@ -278,113 +260,10 @@ object Json {
    *     "node_id": "MDEwOlJlcG9zaXRvcnkxNDA1MjUzNzY=",
    *     "name": "example",
    *     "full_name": "timperrett/example",
-   *     "private": true,
-   *     "owner": {
-   *       "login": "timperrett",
-   *       "id": 4269340,
-   *       "node_id": "MDEyOk9yZ2FuaXphdGlvbjQyNjkzNDA=",
-   *       "avatar_url": "https://avatars2.githubusercontent.com/u/4269340?v=4",
-   *       "gravatar_id": "",
-   *       "url": "https://api.github.com/users/timperrett",
-   *       "html_url": "https://github.com/timperrett",
-   *       "followers_url": "https://api.github.com/users/timperrett/followers",
-   *       "following_url": "https://api.github.com/users/timperrett/following{/other_user}",
-   *       "gists_url": "https://api.github.com/users/timperrett/gists{/gist_id}",
-   *       "starred_url": "https://api.github.com/users/timperrett/starred{/owner}{/repo}",
-   *       "subscriptions_url": "https://api.github.com/users/timperrett/subscriptions",
-   *       "organizations_url": "https://api.github.com/users/timperrett/orgs",
-   *       "repos_url": "https://api.github.com/users/timperrett/repos",
-   *       "events_url": "https://api.github.com/users/timperrett/events{/privacy}",
-   *       "received_events_url": "https://api.github.com/users/timperrett/received_events",
-   *       "type": "Organization",
-   *       "site_admin": false
-   *     },
-   *     "html_url": "https://github.com/timperrett/example",
-   *     "description": "Example Nelson deployment",
-   *     "fork": false,
-   *     "url": "https://api.github.com/repos/timperrett/example",
-   *     "forks_url": "https://api.github.com/repos/timperrett/example/forks",
-   *     "keys_url": "https://api.github.com/repos/timperrett/example/keys{/key_id}",
-   *     "collaborators_url": "https://api.github.com/repos/timperrett/example/collaborators{/collaborator}",
-   *     "teams_url": "https://api.github.com/repos/timperrett/example/teams",
-   *     "hooks_url": "https://api.github.com/repos/timperrett/example/hooks",
-   *     "issue_events_url": "https://api.github.com/repos/timperrett/example/issues/events{/number}",
-   *     "events_url": "https://api.github.com/repos/timperrett/example/events",
-   *     "assignees_url": "https://api.github.com/repos/timperrett/example/assignees{/user}",
-   *     "branches_url": "https://api.github.com/repos/timperrett/example/branches{/branch}",
-   *     "tags_url": "https://api.github.com/repos/timperrett/example/tags",
-   *     "blobs_url": "https://api.github.com/repos/timperrett/example/git/blobs{/sha}",
-   *     "git_tags_url": "https://api.github.com/repos/timperrett/example/git/tags{/sha}",
-   *     "git_refs_url": "https://api.github.com/repos/timperrett/example/git/refs{/sha}",
-   *     "trees_url": "https://api.github.com/repos/timperrett/example/git/trees{/sha}",
-   *     "statuses_url": "https://api.github.com/repos/timperrett/example/statuses/{sha}",
-   *     "languages_url": "https://api.github.com/repos/timperrett/example/languages",
-   *     "stargazers_url": "https://api.github.com/repos/timperrett/example/stargazers",
-   *     "contributors_url": "https://api.github.com/repos/timperrett/example/contributors",
-   *     "subscribers_url": "https://api.github.com/repos/timperrett/example/subscribers",
-   *     "subscription_url": "https://api.github.com/repos/timperrett/example/subscription",
-   *     "commits_url": "https://api.github.com/repos/timperrett/example/commits{/sha}",
-   *     "git_commits_url": "https://api.github.com/repos/timperrett/example/git/commits{/sha}",
-   *     "comments_url": "https://api.github.com/repos/timperrett/example/comments{/number}",
-   *     "issue_comment_url": "https://api.github.com/repos/timperrett/example/issues/comments{/number}",
-   *     "contents_url": "https://api.github.com/repos/timperrett/example/contents/{+path}",
-   *     "compare_url": "https://api.github.com/repos/timperrett/example/compare/{base}...{head}",
-   *     "merges_url": "https://api.github.com/repos/timperrett/example/merges",
-   *     "archive_url": "https://api.github.com/repos/timperrett/example/{archive_format}{/ref}",
-   *     "downloads_url": "https://api.github.com/repos/timperrett/example/downloads",
-   *     "issues_url": "https://api.github.com/repos/timperrett/example/issues{/number}",
-   *     "pulls_url": "https://api.github.com/repos/timperrett/example/pulls{/number}",
-   *     "milestones_url": "https://api.github.com/repos/timperrett/example/milestones{/number}",
-   *     "notifications_url": "https://api.github.com/repos/timperrett/example/notifications{?since,all,participating}",
-   *     "labels_url": "https://api.github.com/repos/timperrett/example/labels{/name}",
-   *     "releases_url": "https://api.github.com/repos/timperrett/example/releases{/id}",
-   *     "deployments_url": "https://api.github.com/repos/timperrett/example/deployments",
-   *     "created_at": "2018-07-11T05:22:26Z",
-   *     "updated_at": "2018-10-02T01:53:41Z",
-   *     "pushed_at": "2018-10-02T01:55:17Z",
-   *     "git_url": "git://github.com/timperrett/example.git",
-   *     "ssh_url": "git@github.com:timperrett/example.git",
-   *     "clone_url": "https://github.com/timperrett/example.git",
-   *     "svn_url": "https://github.com/timperrett/example",
-   *     "homepage": null,
-   *     "size": 96,
-   *     "stargazers_count": 0,
-   *     "watchers_count": 0,
-   *     "language": "Python",
-   *     "has_issues": true,
-   *     "has_projects": true,
-   *     "has_downloads": true,
-   *     "has_wiki": true,
-   *     "has_pages": false,
-   *     "forks_count": 0,
-   *     "mirror_url": null,
-   *     "archived": false,
-   *     "open_issues_count": 0,
-   *     "license": null,
-   *     "forks": 0,
-   *     "open_issues": 0,
-   *     "watchers": 0,
-   *     "default_branch": "master"
+   *     ....
    *   },
    *   "sender": {
-   *     "login": "timperrett",
-   *     "id": 458,
-   *     "node_id": "MDQ6VXNlcjQ1OA==",
-   *     "avatar_url": "https://avatars1.githubusercontent.com/u/458?v=4",
-   *     "gravatar_id": "",
-   *     "url": "https://api.github.com/users/timperrett",
-   *     "html_url": "https://github.com/timperrett",
-   *     "followers_url": "https://api.github.com/users/timperrett/followers",
-   *     "following_url": "https://api.github.com/users/timperrett/following{/other_user}",
-   *     "gists_url": "https://api.github.com/users/timperrett/gists{/gist_id}",
-   *     "starred_url": "https://api.github.com/users/timperrett/starred{/owner}{/repo}",
-   *     "subscriptions_url": "https://api.github.com/users/timperrett/subscriptions",
-   *     "organizations_url": "https://api.github.com/users/timperrett/orgs",
-   *     "repos_url": "https://api.github.com/users/timperrett/repos",
-   *     "events_url": "https://api.github.com/users/timperrett/events{/privacy}",
-   *     "received_events_url": "https://api.github.com/users/timperrett/received_events",
-   *     "type": "User",
-   *     "site_admin": false
+   *    ....
    *   }
    * }
   */
@@ -398,16 +277,42 @@ object Json {
       d <- (z --\ "deployment" --\ "environment").as[String]
       e <- (z --\ "deployment" --\ "payload").as[String]
       f <- (z --\ "repository" --\ "id").as[Long]
+      g <- (z --\ "deployment" --\ "url").as[String]
     } yield {
+      // NOTE(timperrett): this seems a little sketchy as we're invoking the
+      // protobuf decoder right here in the JSON decoder, even thought we've
+      // no idea if things might work here or not... we can do better.
+      val bytes = java.util.Base64.getDecoder.decode(e)
+      val unmarshalled = nelson.api.deployable.Deployables.parseFrom(bytes)
+      val converted = unmarshalled.deployables.toList.map { a =>
+        val v = a.version.get
+        Manifest.Deployable(
+          name = a.unitName,
+          version = Version(v.series, v.feature, v.patch),
+          output = Manifest.Deployable.Container(a.kind.container.get.image)
+        )
+      }
       Github.Deployment(
         id = a,
         slug = b,
         ref = c,
         environment = d,
         repositoryId = f,
-        deployables = Nil //Parse.decodeOption[List[Base64]](e).getOrElse(Nil).map(_.decoded)
+        deployables = converted,
+        url = g
       )
     })
+
+  // TODO(timperrett): what do we do here about encoding the assets that
+  // are shipped to us as proto format?
+  implicit val GithubDeploymentEncoder: EncodeJson[Github.Deployment] =
+    EncodeJson((d: Github.Deployment) =>
+      ("id" := d.id) ->:
+      ("url" := d.url) ->:
+      ("slug" := d.slug.toString) ->:
+      ("ref" := d.ref) ->:
+      jEmptyObject
+    )
 
   /**
    * {
@@ -537,15 +442,6 @@ object Json {
       )
     )
 
-  implicit val GithubAssetsEncoder: EncodeJson[Github.Asset] =
-    EncodeJson((asset: Github.Asset) =>
-      ("id" := asset.id) ->:
-      ("name" := asset.name) ->:
-      ("url" := asset.url.toString) ->:
-      ("content" := asset.content) ->:
-      jEmptyObject
-    )
-
   implicit val GithubReleaseEncoder: EncodeJson[Github.Release] =
     EncodeJson((release: Github.Release) =>
       ("id" := release.id) ->:
@@ -553,6 +449,15 @@ object Json {
       ("html_url" := release.htmlUrl) ->:
       ("assets" := release.assets) ->:
       ("tag_name" := release.tagName) ->:
+      jEmptyObject
+    )
+
+  implicit val GithubAssetsEncoder: EncodeJson[Github.Asset] =
+    EncodeJson((asset: Github.Asset) =>
+      ("id" := asset.id) ->:
+      ("name" := asset.name) ->:
+      ("url" := asset.url.toString) ->:
+      ("content" := asset.content) ->:
       jEmptyObject
     )
 

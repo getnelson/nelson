@@ -1,5 +1,5 @@
 //: ----------------------------------------------------------------------------
-//: Copyright (C) 2017 Verizon.  All Rights Reserved.
+//:   Copyright (C) 2018 Verizon.  All Rights Reserved.
 //:
 //:   Licensed under the Apache License, Version 2.0 (the "License");
 //:   you may not use this file except in compliance with the License.
@@ -14,24 +14,14 @@
 //:   limitations under the License.
 //:
 //: ----------------------------------------------------------------------------
-package nelson
-package yaml
+syntax = "proto3";
 
-import org.scalatest.{FlatSpec,Matchers}
+package nelson.api;
 
-class DeployableYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
-  import Manifest._, Util._
+option go_package = "nelson";
 
-  def exe(yamlPath: String): Either[Throwable, Deployable] =
-    (for {
-      yml <- loadResourceAsString(yamlPath)
-      out <- DeployableParser.parseIO(yml)
-    } yield out).attempt.unsafeRunSync()
-
-  behavior of "v1 deployable parser:"
-
-  it should "parse a typical descriptor yaml" in {
-    exe("/nelson/manifest.deployable.v1.a.yml") should equal (
-      Right(Deployable("nelson-0.3", Version(0,3,123), Deployable.Container("units/nelson-0.3:0.3.0"))))
-  }
+message Version {
+  int32 series = 1;
+  int32 feature = 2;
+  int32 patch = 3;
 }

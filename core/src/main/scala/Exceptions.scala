@@ -44,7 +44,7 @@ final case class ProblematicRepoManifest(slug: Slug)
   extends NelsonError(s"repo '${slug.toString}' was expected to have a valid .nelson.yml")
 
 final case class ProblematicDeployable(str: String, url: String)
-    extends NelsonError(s"Error when attempting to parse deployable from repository. Please ensure that a valid deployable yaml/yml file is available at the specified URL, or attached to the associated Github release: ${url} -- $str")
+    extends NelsonError(s"Error when attempting to parse deployable from repository. Please ensure that a valid deployable was supplied: ${url} -- $str")
 
 final case class MissingDeploymentReference(id: Long, slug: Slug)
  extends NelsonError(s"fetching the deployment '${id}' from '${slug.toString}' on github returned no results; this is likely a critical error.")
@@ -113,9 +113,6 @@ object UnsatisfiedDeploymentRequirements {
   def apply(u: Manifest.UnitDef @@ Versioned): UnsatisfiedDeploymentRequirements =
     UnsatisfiedDeploymentRequirements(Versioned.unwrap(u))
 }
-
-final case class UnparsableReleaseVersion(version: String)
-  extends NelsonError(s"the supplied version '$version' was not of the form x.x.x")
 
 final case class ManifestUnitKindMismatch(unitKind: String, unitNames: List[String]) extends NelsonError(
   s"""The unit '$unitKind' does not appear in the supplied list of units '${unitNames.mkString(", ")}'. Please ensure that you are specifying the units in the manifests, as they are being supplied on the command line.`""")

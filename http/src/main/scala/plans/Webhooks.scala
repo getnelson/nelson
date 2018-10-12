@@ -37,9 +37,12 @@ final case class WebHooks(config: NelsonConfig) extends Default {
         case Github.PingEvent(_) =>
           log.info("received ping event from github, looks good!")
           Ok()
-        case d@Github.Deployment(_,_,_,_,_,_) =>
+        case d@Github.Deployment(_,_,_,_,_,_,_) =>
           log.info(s"received deployment event from github: $d")
           json(Nelson.handleDeployment(d))
+        // case r@Github.PullRequestEvent(_,_,_) =>
+        //   log.info(s"received pull request event from github: $r")
+        //   Ok()
         case r@Github.ReleaseEvent(_,_,_) =>
           log.info(s"received release event from github: $r")
           Ok()

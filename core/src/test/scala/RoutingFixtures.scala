@@ -174,46 +174,49 @@ trait RoutingFixtures {
       ().pure[WorkflowF]
   }
 
+  def mkDeployment(id: Long, version: String): Github.Deployment =
+    Github.Deployment(id, Slug("foo","bar"), 9999L, version, "dev", Nil, "")
+
   val slug = Slug("owner","RoutingTableSpec")
   val repo = Repo(9999L, slug.toString, RepoAccess.Admin.toString, None)
-  val release100 = Github.Release(100L, "", "", Nil, "1.0.0")
-  val release110 = Github.Release(110L, "", "", Nil, "1.1.0")
-  val release110100 = Github.Release(110100L, "", "", Nil, "1.10.100")
-  val release111 = Github.Release(111L, "", "", Nil, "1.1.1")
-  val release200 = Github.Release(200L, "", "", Nil, "2.0.0")
-  val release222 = Github.Release(222L, "", "", Nil, "2.2.2")
-  val release221 = Github.Release(221L, "", "", Nil, "2.2.1")
-  val release122 = Github.Release(122L, "", "", Nil, "1.2.2")
-  val release123 = Github.Release(123L, "", "", Nil, "1.2.3")
-  val release300 = Github.Release(300L, "", "", Nil, "3.0.0")
-  val release310 = Github.Release(310L, "", "", Nil, "3.1.0")
-  val release311 = Github.Release(311L, "", "", Nil, "3.1.1")
-  val release410 = Github.Release(410L, "", "", Nil, "4.1.0")
-  val release510 = Github.Release(510L, "", "", Nil, "5.1.0")
-  val release600 = Github.Release(600L, "", "", Nil, "6.0.0")
-  val release610 = Github.Release(610L, "", "", Nil, "6.1.0")
-  val release620 = Github.Release(620L, "", "", Nil, "6.2.0")
-  val release621 = Github.Release(621L, "", "", Nil, "6.2.1")
+  val release100    = mkDeployment(100L, "1.0.0")
+  val release110    = mkDeployment(110L, "1.1.0")
+  val release110100 = mkDeployment(110100L, "1.10.100")
+  val release111    = mkDeployment(111L, "1.1.1")
+  val release200    = mkDeployment(200L, "2.0.0")
+  val release222    = mkDeployment(222L, "2.2.2")
+  val release221    = mkDeployment(221L, "2.2.1")
+  val release122    = mkDeployment(122L, "1.2.2")
+  val release123    = mkDeployment(123L, "1.2.3")
+  val release300    = mkDeployment(300L, "3.0.0")
+  val release310    = mkDeployment(310L, "3.1.0")
+  val release311    = mkDeployment(311L, "3.1.1")
+  val release410    = mkDeployment(410L, "4.1.0")
+  val release510    = mkDeployment(510L, "5.1.0")
+  val release600    = mkDeployment(600L, "6.0.0")
+  val release610    = mkDeployment(610L, "6.1.0")
+  val release620    = mkDeployment(620L, "6.2.0")
+  val release621    = mkDeployment(621L, "6.2.1")
 
   val ingestReleases: StoreOpF[Unit] =
-    StoreOp.createRelease(repo.toOption.get.id, release100) *>
-    StoreOp.createRelease(repo.toOption.get.id, release110) *>
-    StoreOp.createRelease(repo.toOption.get.id, release110100) *>
-    StoreOp.createRelease(repo.toOption.get.id, release111) *>
-    StoreOp.createRelease(repo.toOption.get.id, release200) *>
-    StoreOp.createRelease(repo.toOption.get.id, release222) *>
-    StoreOp.createRelease(repo.toOption.get.id, release221) *>
-    StoreOp.createRelease(repo.toOption.get.id, release122) *>
-    StoreOp.createRelease(repo.toOption.get.id, release123) *>
-    StoreOp.createRelease(repo.toOption.get.id, release300) *>
-    StoreOp.createRelease(repo.toOption.get.id, release310) *>
-    StoreOp.createRelease(repo.toOption.get.id, release311) *>
-    StoreOp.createRelease(repo.toOption.get.id, release410) *>
-    StoreOp.createRelease(repo.toOption.get.id, release510) *>
-    StoreOp.createRelease(repo.toOption.get.id, release600) *>
-    StoreOp.createRelease(repo.toOption.get.id, release610) *>
-    StoreOp.createRelease(repo.toOption.get.id, release620) *>
-    StoreOp.createRelease(repo.toOption.get.id, release621)
+    StoreOp.createRelease(release100) *>
+    StoreOp.createRelease(release110) *>
+    StoreOp.createRelease(release110100) *>
+    StoreOp.createRelease(release111) *>
+    StoreOp.createRelease(release200) *>
+    StoreOp.createRelease(release222) *>
+    StoreOp.createRelease(release221) *>
+    StoreOp.createRelease(release122) *>
+    StoreOp.createRelease(release123) *>
+    StoreOp.createRelease(release300) *>
+    StoreOp.createRelease(release310) *>
+    StoreOp.createRelease(release311) *>
+    StoreOp.createRelease(release410) *>
+    StoreOp.createRelease(release510) *>
+    StoreOp.createRelease(release600) *>
+    StoreOp.createRelease(release610) *>
+    StoreOp.createRelease(release620) *>
+    StoreOp.createRelease(release621)
 
   def lbManifest(ns: Manifest.Namespace) =
     Manifest(
