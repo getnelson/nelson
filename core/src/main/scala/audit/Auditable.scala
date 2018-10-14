@@ -93,9 +93,9 @@ object AuditableInstances {
       def category = GithubReleaseCategory
     }
 
-  implicit def githubDeploymentAudtiable(implicit e: EncodeJson[Github.Deployment]): Auditable[Github.Deployment] =
-    new Auditable[Github.Deployment] {
-      def encode(a: Github.Deployment) = e.encode(a)
+  implicit def githubDeploymentAudtiable(implicit e: EncodeJson[Github.DeploymentEvent]): Auditable[Github.DeploymentEvent] =
+    new Auditable[Github.DeploymentEvent] {
+      def encode(a: Github.DeploymentEvent) = e.encode(a)
       def category = GithubDeploymentCategory
     }
 

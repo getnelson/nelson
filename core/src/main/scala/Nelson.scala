@@ -248,11 +248,11 @@ object Nelson {
     } yield ms
   }
 
-  private def liftDeploymentToRelease(e: Github.Deployment): NelsonK[Github.Release] = ???
+  private def liftDeploymentToRelease(e: Github.DeploymentEvent): NelsonK[Github.Release] = ???
 
 
-  private def fetchGithubDeployment(referenceId: Long, slug: Slug): NelsonK[Github.Deployment] = {
-    Kleisli[IO, NelsonConfig, Option[Github.Deployment]] { cfg =>
+  private def fetchGithubDeployment(referenceId: Long, slug: Slug): NelsonK[Github.DeploymentEvent] = {
+    Kleisli[IO, NelsonConfig, Option[Github.DeploymentEvent]] { cfg =>
       val t = cfg.git.systemAccessToken
       // NOTE(timperrett): im not wild about this, but there's simply no meaningful default that
       // can sensibly be applied here, so we're just bailing out.
@@ -270,7 +270,7 @@ object Nelson {
    * Invoked when the inbound webhook from Github arrives, notifying Nelson
    * that a new deployment needs to take place.
    */
-  def handleDeployment(e: Github.Deployment): NelsonK[Unit] = {
+  def handleDeployment(e: Github.DeploymentEvent): NelsonK[Unit] = {
     import Manifest.{Namespace,Plan,UnitDef,Action}
 
     // convert units in the manifest to action.

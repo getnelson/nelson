@@ -296,7 +296,7 @@ object Manifest {
   /*
    * Saturates the manifest with all the bits that a unit or loadbalancer needs for deployment.
    */
-  def saturateManifest(m: Manifest)(r: Github.Deployment): IO[Manifest @@ Versioned] = {
+  def saturateManifest(m: Manifest)(r: Github.DeploymentEvent): IO[Manifest @@ Versioned] = {
     val units = addDeployable(m)(r)
     val lbs = addVersionToLoadbalancers(m)(r)
     units.map(u => Versioned(m.copy(units = u, loadbalancers = lbs)))
@@ -405,14 +405,14 @@ object Manifest {
       .map(l => Foldable[List].fold(l))
   }
 
-  private def addVersionToLoadbalancers(m: Manifest)(r: Github.Deployment): List[Loadbalancer] = {
+  private def addVersionToLoadbalancers(m: Manifest)(r: Github.DeploymentEvent): List[Loadbalancer] = {
     // NOTE(timperret): given `ref` might not actually be parsable as a `Version`, something
     // needs to happen here that is a little more meaningful.
     val major = Version.fromString(r.ref).map(_.toMajorVersion)
     m.loadbalancers.map(lb => lb.copy(majorVersion = major))
   }
 
-  private def addDeployable(m: Manifest)(e: Github.Deployment): IO[List[UnitDef]] =
+  private def addDeployable(m: Manifest)(e: Github.DeploymentEvent): IO[List[UnitDef]] =
     m.units.traverse(u =>
       e.findDeployable(u.name).map(d =>
         u.copy(deployable = Some(d))))

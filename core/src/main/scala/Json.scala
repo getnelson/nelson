@@ -268,7 +268,7 @@ object Json {
    *   }
    * }
   */
-  implicit val GithubDeploymentEventDecoder: DecodeJson[Github.Deployment] =
+  implicit val GithubDeploymentEventDecoder: DecodeJson[Github.DeploymentEvent] =
     DecodeJson(z => for {
       a <- (z --\ "deployment" --\ "id").as[Long]
       x <- (z --\ "repository" --\ "full_name").as[String]
@@ -293,7 +293,7 @@ object Json {
           output = Manifest.Deployable.Container(a.kind.container.get.image)
         )
       }
-      Github.Deployment(
+      Github.DeploymentEvent(
         id = a,
         slug = b,
         ref = c,
@@ -306,8 +306,8 @@ object Json {
 
   // TODO(timperrett): what do we do here about encoding the assets that
   // are shipped to us as proto format?
-  implicit val GithubDeploymentEncoder: EncodeJson[Github.Deployment] =
-    EncodeJson((d: Github.Deployment) =>
+  implicit val GithubDeploymentEncoder: EncodeJson[Github.DeploymentEvent] =
+    EncodeJson((d: Github.DeploymentEvent) =>
       ("id" := d.id) ->:
       ("url" := d.url) ->:
       ("slug" := d.slug.toString) ->:

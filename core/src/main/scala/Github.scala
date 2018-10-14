@@ -114,7 +114,7 @@ object Github {
   /**
    * Reference: https://developer.github.com/v3/activity/events/types/#deploymentevent
    */
-  final case class Deployment(
+  final case class DeploymentEvent(
     id: Long,
     slug: Slug,
     repositoryId: Long,
@@ -183,7 +183,7 @@ object Github {
     extends GithubOp[Unit]
 
   final case class GetDeployment(slug: Slug, id: Long, t: AccessToken)
-    extends GithubOp[Option[Github.Deployment]]
+    extends GithubOp[Option[Github.DeploymentEvent]]
 
   object Request {
 
@@ -228,7 +228,7 @@ object Github {
       Free.liftF(DeleteRepoWebHook(slug, id, token))
 
     /** * https://developer.github.com/v3/repos/deployments/#get-a-single-deployment */
-    def getDeployment(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Option[Github.Deployment]] =
+    def getDeployment(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Option[Github.DeploymentEvent]] =
       Free.liftF(GetDeployment(slug, id, token))
 
     /**
@@ -338,7 +338,7 @@ object Github {
 
       case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
         val req = HttpRequest[IO](Method.GET, cfg.deploymentEndpoint(slug, id)).token(t)
-        client.expect[Github.Deployment](req).map(Option(_)).handleError(_ => None)
+        client.expect[Github.DeploymentEvent](req).map(Option(_)).handleError(_ => None)
     }
 
     /////////////////////////// INTERNALS ///////////////////////////
