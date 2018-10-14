@@ -296,10 +296,28 @@ object Manifest {
   /*
    * Saturates the manifest with all the bits that a unit or loadbalancer needs for deployment.
    */
-  def saturateManifest(m: Manifest)(r: Github.Release): IO[Manifest @@ Versioned] = {
-    val units = addDeployable(m)(r)
-    val lbs = addVersionToLoadbalancers(m)(r)
-    units.map(u => Versioned(m.copy(units = u, loadbalancers = lbs)))
+  def saturateManifest(m: Manifest)(e: Github.DeploymentEvent): IO[Manifest @@ Versioned] = {
+    def addVersionToLoadbalancers(m: Manifest)(major: MajorVersion): List[Loadbalancer] = {
+      m.loadbalancers.map(lb => lb.copy(majorVersion = Some(major)))
+    }
+
+    // NOTE(timperrett): this is logically "broken" for an arbirary deployment event
+    // and we cannot deploy branches or direct-sha, but this meets functional parity
+    // with what nelson prior to 0.12 had. We need to think more deeply about what
+    // it will mean to support non-semver inputs here when it comes to load balencers
+    // which are not explicitly versioned by deployable specifications, but instead
+    // versioned by the implicit tag version (which is an unfortunate coupling).
+    e.ref match {
+      case Github.Tag(v) =>
+        val major = v.toMajorVersion
+        val units = addDeployable(m)(e)
+        val lbs = addVersionToLoadbalancers(m)(major)
+        units.map(u => Versioned(m.copy(units = u, loadbalancers = lbs)))
+
+      case Github.Branch(_, _) | Github.Sha(_) =>
+        val units = addDeployable(m)(e)
+        units.map(u => Versioned(m.copy(units = u)))
+    }
   }
 
   /*
@@ -405,26 +423,10 @@ object Manifest {
       .map(l => Foldable[List].fold(l))
   }
 
-  private def addVersionToLoadbalancers(m: Manifest)(r: Github.Release): List[Loadbalancer] = {
-    val major = Version.fromString(r.tagName).map(_.toMajorVersion)
-    m.loadbalancers.map(lb => lb.copy(majorVersion = major))
-  }
-
-  private def addDeployable(m: Manifest)(r: Github.Release): IO[List[UnitDef]] =
-    m.units.traverse(u => parseDeployable(r, u.name).map(d => u.copy(deployable = Some(d))))
-
-  /**
-   * feels a little weird coupling the DeployableParser to
-   * this function, but right now its the most obvious
-   * place i could find to put it.
-   */
-  private def parseDeployable(release: Github.Release, name: String): IO[Deployable] = {
-    release.findAssetContent(s"${name}.deployable.yml").recoverWith {
-      case ProblematicDeployable(_, _) => release.findAssetContent(s"${name}.deployable.yaml")
-    }.flatMap { a =>
-      yaml.DeployableParser.parse(a).fold(e => IO.raiseError(MultipleErrors(e)), IO.pure)
-    }
-  }
+  private def addDeployable(m: Manifest)(e: Github.DeploymentEvent): IO[List[UnitDef]] =
+    m.units.traverse(u =>
+      e.findDeployable(u.name).map(d =>
+        u.copy(deployable = Some(d))))
 
   private[nelson] def filterDatacenters(dcs: Seq[Datacenter])(targets: DeploymentTarget): Seq[Datacenter] =
     targets match {

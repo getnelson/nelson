@@ -33,14 +33,38 @@ class JsonSpec extends FlatSpec with Matchers {
     out.isRight should equal (true)
   }
 
-  it should "parse the arbitrary events from Github" in {
+  private def fromWebhookSample(path: String)(f: Github.Event => Boolean) =
     (for {
-      a <- loadResourceAsString("/nelson/github.webhookping.json").attempt.unsafeRunSync()
+      a <- loadResourceAsString(path).attempt.unsafeRunSync()
       b <- Parse.decodeEither[Github.Event](a)
-    } yield b match {
-      case Github.PingEvent(_)              => true
-      case Github.ReleaseEvent(_,_,_) => false
-    }) should equal (Right(true))
+    } yield f(b)) should equal (Right(true))
+
+  it should "parse the arbitrary events from Github" in {
+    fromWebhookSample("/nelson/github.webhookping.json"){
+      case Github.PingEvent(_) => true
+      case _ => false
+    }
+  }
+
+  it should "parse the deployment events from Github" in {
+    fromWebhookSample("/nelson/github.webhookdeployment.json"){
+      case Github.DeploymentEvent(_,_,_,_,_,_,_) => true
+      case _ => false
+    }
+  }
+
+  it should "parse the release events from Github" in {
+    fromWebhookSample("/nelson/github.webhookrelease.json"){
+      case Github.ReleaseEvent(_,_,_) => true
+      case _ => false
+    }
+  }
+
+  it should "parse the pull request events from Github" in {
+    fromWebhookSample("/nelson/github.webhookpullrequest.json"){
+      case Github.PullRequestEvent(_,_,_) => true
+      case _ => false
+    }
   }
 
 }

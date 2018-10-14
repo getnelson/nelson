@@ -43,9 +43,7 @@ object GitFixtures {
 
   val orgs = List(Organization(0L, Some("name"),"slug",new java.net.URI("avatar")))
 
-  val asset = Asset(0, "manifest.deployable.v1.b.yml", "", Uri.unsafeFromString(""), Some("content"))
-
-  val contents:IO[Option[Contents]] =
+  val contents: IO[Option[Contents]] =
     loadResourceAsString("/nelson/dependencies.bar_2.0.0.yml").map { c =>
       val encoded = java.util.Base64.getMimeEncoder.encodeToString(c.getBytes("utf-8"))
       Some(Contents(encoded,"manifest.deployable.v1.b.yml",encoded.length.toLong))
@@ -56,7 +54,6 @@ object GitFixtures {
     "https://github.example.com/tim/howdy/releases/tag/0.13.17",
     List(Asset(119,
      "example-howdy.deployable.yml",
-     "uploaded",
      Uri.unsafeFromString("https://github.example.com/api/v3/repos/tim/howdy/releases/assets/119"),
      None)
     ),
@@ -104,18 +101,11 @@ object GitFixtures {
         loadResourceAsString("/nelson/github.organization.json")
           .flatMap(fromJson[List[Organization]])
 
-      case GetReleaseAssetContent(asset: Github.Asset, t: AccessToken) =>
-        IO.pure(asset)
-
-      case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
-        loadResourceAsString("/nelson/github.release.json")
-          .flatMap(fromJson[Github.Release])
-
       case GetUserRepositories(token: AccessToken) =>
         loadResourceAsString("/nelson/github.repos.json")
           .flatMap(fromJson[List[Repo]])
 
-      case GetFileFromRepository(slug: Slug, path: String, tagOrBranch: String, t: AccessToken) =>
+      case GetFileFromRepository(slug: Slug, path: String, ref: Reference, t: AccessToken) =>
         contents
 
       case GetRepoWebHooks(slug: Slug, token: AccessToken) =>
@@ -127,6 +117,10 @@ object GitFixtures {
 
       case DeleteRepoWebHook(slug: Slug, id: Long, token: AccessToken) =>
         IO.unit
+
+      case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
+        loadResourceAsString("/nelson/github.deployment.json")
+          .flatMap(fromJson[Option[DeploymentEvent]])
     }
   }
 }

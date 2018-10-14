@@ -59,8 +59,8 @@ object StoreOp {
   def addUnit(unit: UnitDef @@ Versioned, repoId: ID): StoreOpF[Unit] =
     Free.liftF(AddUnit(unit, repoId))
 
-  def createRelease(repositoryId: Long, r: Github.Release): StoreOpF[Unit] =
-    Free.liftF(CreateRelease(repositoryId, r))
+  def createRelease(r: Github.DeploymentEvent): StoreOpF[Unit] =
+    Free.liftF(CreateRelease(r))
 
   def killRelease(slug: Slug, version: String): StoreOpF[Either[Throwable, Unit]] =
     Free.liftF(KillRelease(slug, version))
@@ -259,7 +259,7 @@ object StoreOp {
   final case class LinkRepositoriesToUser(list: List[Repo], u: User) extends StoreOp[Unit]
   final case class DeleteRepositories(nel: NonEmptyList[Repo]) extends StoreOp[Unit]
   final case class AddUnit(unit: UnitDef @@ Versioned, repo_id: ID) extends StoreOp[Unit]
-  final case class CreateRelease(repositoryId: Long, r: Github.Release) extends StoreOp[Unit]
+  final case class CreateRelease(r: Github.DeploymentEvent) extends StoreOp[Unit]
   final case class KillRelease(slug: Slug, version: String) extends StoreOp[Either[Throwable, Unit]]
   final case class ListRecentReleasesForRepository(slug: Slug) extends StoreOp[SortedMap[Released, List[ReleasedDeployment]]]
   final case class ListReleases(limit: Int) extends StoreOp[SortedMap[Released, List[ReleasedDeployment]]]

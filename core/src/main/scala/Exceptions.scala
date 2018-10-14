@@ -44,10 +44,10 @@ final case class ProblematicRepoManifest(slug: Slug)
   extends NelsonError(s"repo '${slug.toString}' was expected to have a valid .nelson.yml")
 
 final case class ProblematicDeployable(str: String, url: String)
-    extends NelsonError(s"Error when attempting to parse deployable from repository. Please ensure that a valid deployable yaml/yml file is available at the specified URL, or attached to the associated Github release: ${url} -- $str")
+    extends NelsonError(s"Error when attempting to parse deployable from repository. Please ensure that a valid deployable was supplied: ${url} -- $str")
 
-final case class MissingReleaseAssets(r: Github.ReleaseEvent)
- extends NelsonError(s"fetching the release assets from github returned no results; this is likely a critical error. release event was: $r")
+final case class MissingDeploymentReference(id: Long, slug: Slug)
+ extends NelsonError(s"fetching the deployment '${id}' from '${slug.toString}' on github returned no results; this is likely a critical error.")
 
 final case class MisconfiguredDatacenter(name: String, problem: String)
     extends NelsonError(s"The datacenter named $name is misconfigured: $problem")
@@ -113,9 +113,6 @@ object UnsatisfiedDeploymentRequirements {
   def apply(u: Manifest.UnitDef @@ Versioned): UnsatisfiedDeploymentRequirements =
     UnsatisfiedDeploymentRequirements(Versioned.unwrap(u))
 }
-
-final case class UnparsableReleaseVersion(version: String)
-  extends NelsonError(s"the supplied version '$version' was not of the form x.x.x")
 
 final case class ManifestUnitKindMismatch(unitKind: String, unitNames: List[String]) extends NelsonError(
   s"""The unit '$unitKind' does not appear in the supplied list of units '${unitNames.mkString(", ")}'. Please ensure that you are specifying the units in the manifests, as they are being supplied on the command line.`""")
@@ -187,6 +184,9 @@ final case class UnknownBlueprintReference(ref: String, revision: blueprint.Blue
   extends NelsonError(s"the blueprint '${ref}@${revision.toString}' does not exist in the database; be sure you have specified the correct name and revision")
 
 final object NomadNotImplemented extends NelsonError(s"Nelson 0.11.x+ currently does not support Nomad. If you are interested in using Nelson with Nomad please file an issue on GitHub: https://github.com/getnelson/nelson/ or reach out to us on Gitter: https://gitter.im/getnelson/nelson")
+
+final case class VersionedGitTagRequired(ref: Github.Reference) 
+  extends NelsonError(s"Nelson can presently only release from tags whilst the supplied ref was '${ref}'")
 
 ////////////////////////// YAML ERRORS ///////////////////////////////
 

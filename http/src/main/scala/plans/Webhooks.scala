@@ -32,14 +32,21 @@ final case class WebHooks(config: NelsonConfig) extends Default {
    * way to handle the arbitrary message shapes that Github sends.
    */
   val service: HttpService[IO] = HttpService[IO] {
-    case req @ POST -> Root / "listener" =>
+    case req @ POST -> Root / "listener" => {
       decode[Github.Event](req){
         case Github.PingEvent(_) =>
           log.info("received ping event from github, looks good!")
           Ok()
+        case d@Github.DeploymentEvent(_,_,_,_,_,_,_) =>
+          log.info(s"received deployment event from github: $d")
+          json(Nelson.handleDeployment(d))
+        case r@Github.PullRequestEvent(_,_,_) =>
+          log.info(s"received pull request event from github: $r")
+          Ok()
         case r@Github.ReleaseEvent(_,_,_) =>
           log.info(s"received release event from github: $r")
-          json(Nelson.handleRelease(r))
+          Ok()
       }
+    }
   }
 }

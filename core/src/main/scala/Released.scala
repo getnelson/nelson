@@ -29,8 +29,8 @@ final case class Released(
   version: Version,
   /* when was this release created */
   timestamp: Instant,
-  /* reference id from github */
-  releaseId: Long,
+  /* reference id from github (in practice, a deployment id or legacy release id) */
+  referenceId: Long,
   /* informational URIs on github, to be used in a UI */
   releaseHtmlUrl: URI
 )
@@ -55,5 +55,5 @@ object Released {
   import cats.instances.long._
 
   implicit def releasedOrder: Order[Released] =
-    Order.by(_.releaseId)
+    Order.by(_.referenceId)
 }
