@@ -25,7 +25,6 @@ import java.net.URI
 import org.http4s.{Request => HttpRequest, Response => HttpResponse, argonaut => _, _}
 import org.http4s.argonaut._
 import org.http4s.client.{Client, UnexpectedStatus}
-import org.http4s.headers.Location
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
@@ -72,6 +71,9 @@ object Github {
       new String(java.util.Base64.getMimeDecoder.decode(base64.replace("\\n","")))
   }
 
+  /**
+   * Represents the events Nelson will recieve from Github (from webhooks).
+   */
   sealed trait Event
 
   /**
@@ -83,34 +85,93 @@ object Github {
     zen: String
   ) extends Event
 
+  /**
+   * Reference https://developer.github.com/v3/activity/events/types/#pullrequestevent
+   *
+   * This event definition is a placeholder for future support for inbound pull request
+   * deployments. This skeleton is being provided so that Nelson can parse the inbound
+   * payload and give a 200 OK response so Github doesn't think Nelson is faulty.
+   */
+  final case class PullRequestEvent(
+    id: Long,
+    url: String,
+    slug: Slug
+  ) extends Event
+
+  /**
+   * Reference: https://developer.github.com/v3/activity/events/types/#releaseevent
+   *
+   * Nelson still accepts these as inbound input for historical reasons, so we
+   * simply accept it on the webhook entrypoint so that Github does not get invalid
+   * responses from Nelson (putting the webhook into an unsafe state).
+   */
   final case class ReleaseEvent(
     id: Long,
     slug: Slug,
     repositoryId: Long
   ) extends Event
 
+  /**
+   * Reference: https://developer.github.com/v3/activity/events/types/#deploymentevent
+   */
+  final case class DeploymentEvent(
+    id: Long,
+    slug: Slug,
+    repositoryId: Long,
+    ref: Reference, // sha, branch or tag
+    environment: String,
+    deployables: List[Manifest.Deployable],
+    url: String
+  ) extends Event {
+    def findDeployable(withName: String): IO[Manifest.Deployable] =
+      deployables.find(_.name.trim.toLowerCase == withName.trim.toLowerCase)
+        .fold[IO[Manifest.Deployable]](IO.raiseError(new ProblematicDeployable(s"could not find an asset named $withName", url)))(IO.pure)
+  }
+
+  // NOTE(timperrett): this is legacy, but we're keeping it around so that
+  // our webhooks still give valid responses to Github in the event that
+  // operators of Nelson forget to disable the release webhook.
   final case class Release(
     id: Long,
     url: String,
     htmlUrl: String,
     assets: List[Asset],
     tagName: String
-  ){
-    def findAssetContent(withName: String): IO[String] =
-      this.assets
-        .find(_.name.trim.toLowerCase == withName.trim.toLowerCase)
-        .flatMap(_.content)
-        .fold[IO[String]](IO.raiseError(new ProblematicDeployable(s"could not find an asset named $withName", url)))(IO.pure)
-  }
+  )
 
   final case class Asset(
     id: Long,
     name: String,
-    state: String,
     url: Uri,
     content: Option[String] = None
   )
 
+  sealed trait Reference
+  object Reference {
+    /* NOTE(timperrett): this uses a fairly simplistic heuristic to figure out
+     * what kind of ref we're dealing with. This is - depending on your view - 
+     * actually quite fragile. Given Nelson is expecting SemVer for released
+     * versions of software, we assume tags are always parsable as Version
+     */
+    def fromString(str: String, sha: Option[String] = None): Reference =
+      if (sha.exists(_ == str.trim.toLowerCase)) Sha(str)
+      else {
+        // if we got here, then it wasn't a Sha (as we cant use something simple 
+        // like strlen as a strong enough indicator)
+        Version.fromString(str).map(Tag(_)) getOrElse {
+          sha.fold(Branch(str))(x => Branch(str, Some(x)))
+        }
+      }
+  }
+  final case class Tag(version: Version) extends Reference {
+    override def toString: String = version.toString
+  }
+  final case class Sha(str: Sha256) extends Reference {
+    override def toString: String = str
+  }
+  final case class Branch(name: String, sha: Option[String] = None) extends Reference {
+    override def toString: String = name
+  }
 
   ////// GITHUB DSL & Interpreter
 
@@ -133,16 +194,10 @@ object Github {
   final case class GetOrganizations(keys: List[Github.OrgKey], token: AccessToken)
     extends GithubOp[List[Organization]]
 
-  final case class GetReleaseAssetContent(asset: Github.Asset, t: AccessToken)
-    extends GithubOp[Github.Asset]
-
-  final case class GetRelease(slug: Slug, releaseId: ID, t: AccessToken)
-    extends GithubOp[Github.Release]
-
   final case class GetUserRepositories(token: AccessToken)
     extends GithubOp[List[Repo]]
 
-  final case class GetFileFromRepository(slug: Slug, path: String, tagOrBranch: String, t: AccessToken)
+  final case class GetFileFromRepository(slug: Slug, path: String, ref: Reference, t: AccessToken)
     extends GithubOp[Option[Github.Contents]]
 
   final case class GetRepoWebHooks(slug: Slug, token: AccessToken)
@@ -153,6 +208,9 @@ object Github {
 
   final case class DeleteRepoWebHook(slug: Slug, id: Long, token: AccessToken)
     extends GithubOp[Unit]
+
+  final case class GetDeployment(slug: Slug, id: Long, t: AccessToken)
+    extends GithubOp[Option[Github.DeploymentEvent]]
 
   object Request {
 
@@ -173,21 +231,6 @@ object Github {
     def fetchOrganizations(keys: List[Github.OrgKey], token: AccessToken): GithubOpF[List[Organization]] =
       Free.liftF(GetOrganizations(keys, token))
 
-    /** * https://developer.github.com/v3/repos/releases/#get-a-single-release-asset */
-    def fetchReleaseAssetContent(asset: Github.Asset)(t: AccessToken): GithubOpF[Github.Asset] =
-      Free.liftF(GetReleaseAssetContent(asset, t))
-
-    /**
-     * reach out and fetch a specific release from a repo. we use this when
-     * nelson gets notified of a release, as the payload we get does not contain
-     * the assets that we need.
-     */
-    def fetchRelease(slug: Slug, id: ID)(t: AccessToken): GithubOpF[Github.Release] =
-      for {
-        r <- Free.liftF(GetRelease(slug, id, t))
-        a <- fetchReleaseAssets(r)(t)
-      } yield r.copy(assets = a)
-
     /**
      * given a user access token, recursivly fetch all the repositories said
      * user is an admin or collaborator for.
@@ -196,8 +239,8 @@ object Github {
       Free.liftF(GetUserRepositories(token))
 
     /** * https://developer.github.com/v3/repos/contents/#get-contents */
-    def fetchFileFromRepository(s: Slug, p: String, tOrB: String)(t: AccessToken):  GithubOpF[Option[Github.Contents]] =
-      Free.liftF(GetFileFromRepository(s, p, tOrB, t))
+    def fetchFileFromRepository(s: Slug, p: String, ref: Reference)(t: AccessToken):  GithubOpF[Option[Github.Contents]] =
+      Free.liftF(GetFileFromRepository(s, p, ref, t))
 
     /** * https://developer.github.com/v3/repos/hooks/#list-hooks */
     def fetchRepoWebhooks(slug: Slug)(token: AccessToken): GithubOpF[List[Github.WebHook]] =
@@ -211,6 +254,10 @@ object Github {
     def deleteRepoWebhook(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Unit] =
       Free.liftF(DeleteRepoWebHook(slug, id, token))
 
+    /** * https://developer.github.com/v3/repos/deployments/#get-a-single-deployment */
+    def getDeployment(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Option[Github.DeploymentEvent]] =
+      Free.liftF(GetDeployment(slug, id, token))
+
     /**
      * retrieve the user-specifc information about the agent logging
      * into the system. obtaining this information so we can have a neat
@@ -223,11 +270,6 @@ object Github {
         keys <- fetchUserOrgKeys(token)
         orgs <- fetchOrganizations(keys, token)
       } yield nelson.User(gu.login, gu.avatar, gu.name, gu.email, orgs)
-
-    def fetchReleaseAssets(r: Github.Release)(t: AccessToken): GithubOpF[List[Github.Asset]] = {
-      import cats.implicits._
-      r.assets.toList.traverse(asset => fetchReleaseAssetContent(asset)(t))
-    }
   }
 
   final class GithubHttp(
@@ -285,28 +327,6 @@ object Github {
           client.expect[Organization](request)
         }
 
-      case GetReleaseAssetContent(asset: Github.Asset, t: AccessToken) =>
-        val request = HttpRequest[IO](Method.GET, asset.url)
-          .putHeaders(Header("Accept", "application/octet-stream"))
-          .token(t)
-
-        val handler: HttpResponse[IO] => IO[Uri] = response => {
-          response.headers.get(Location) match {
-            case None => IO.raiseError(UnexpectedGithubResponse("fetching release asset contents", "missing location header"))
-            case Some(Location(loc)) => IO.pure(loc)
-          }
-        }
-
-        for {
-          assetLocation <- client.fetch(request)(handler)
-          assetRequest  = HttpRequest[IO](Method.GET, assetLocation)
-          assetContents <- client.fetch(assetRequest)(_.bodyAsText.compile.foldMonoid)
-        } yield asset.copy(content = Option(assetContents))
-
-      case GetRelease(slug: Slug, releaseId: ID, t: AccessToken) =>
-        val request = HttpRequest[IO](Method.GET, cfg.releaseEndpoint(slug, releaseId)).token(t)
-        client.expect[Github.Release](request)
-
       case GetUserRepositories(t: AccessToken) =>
         def go(uri: Uri)(accum: List[Repo]): IO[List[Repo]] = {
           val req = HttpRequest[IO](Method.GET, uri).token(t)
@@ -319,8 +339,8 @@ object Github {
         }
         go(cfg.repoEndpoint(page = 1))(Nil)
 
-      case GetFileFromRepository(slug: Slug, path: String, tagOrBranch: String, t: AccessToken) =>
-        val queryParams = Map(("ref", List(java.net.URLEncoder.encode(tagOrBranch, "UTF-8"))))
+      case GetFileFromRepository(slug: Slug, path: String, ref: Reference, t: AccessToken) =>
+        val queryParams = Map(("ref", List(java.net.URLEncoder.encode(ref.toString, "UTF-8"))))
         val uri = cfg.contentsEndpoint(slug, path).setQueryParams(queryParams)
         val req = HttpRequest[IO](Method.GET, uri).token(t)
         client.expect[Github.Contents](req).map(Option(_)).handleError(_ => None)
@@ -342,6 +362,10 @@ object Github {
         client.expect[String](HttpRequest[IO](Method.DELETE, cfg.webhookEndpoint(slug) / id.toString).token(t)).map(_ => ()).recover {
           case UnexpectedStatus(Status.NotFound) => ()
         }
+
+      case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
+        val req = HttpRequest[IO](Method.GET, cfg.deploymentEndpoint(slug, id)).token(t)
+        client.expect[Github.DeploymentEvent](req).map(Option(_)).handleError(_ => None)
     }
 
     /////////////////////////// INTERNALS ///////////////////////////

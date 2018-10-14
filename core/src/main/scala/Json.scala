@@ -73,21 +73,6 @@ object Json {
       jEmptyObject
     )
 
-  implicit val taskStatusEncoder: EncodeJson[TaskStatus] = EncodeJson((s: TaskStatus) => s.toString.asJson )
-
-  implicit val taskEventEncoder: EncodeJson[TaskEvent] =
-    EncodeJson((e: TaskEvent) =>
-      ("message" := e.message) ->:
-      ("driver_message" := e.driverMessage) ->:
-      jEmptyObject
-    )
-
-  implicit val taskStatusAndTaskEventsEncoder: EncodeJson[(TaskStatus, List[TaskEvent])] = EncodeJson((t: (TaskStatus, List[TaskEvent])) =>
-    ("task_events" := t._2) ->:
-    ("task_status" := t._1) ->:
-    jEmptyObject
-  )
-
   implicit lazy val RoutingNodeEncoder: EncodeJson[routing.RoutingNode] =
     EncodeJson((rn: routing.RoutingNode) =>
       rn.node.fold(
@@ -230,7 +215,7 @@ object Json {
     )
 
   /**
-   *
+   * Supplied by Github to ensure that your webhook is active
    */
   implicit lazy val GithubPingEventDecoder: DecodeJson[Github.PingEvent] =
     DecodeJson(c => for {
@@ -245,8 +230,91 @@ object Json {
    * TIM: this seems really hacky.
    */
   implicit lazy val GithubEventDecoder: DecodeJson[Github.Event] =
-    GithubReleaseEventDecoder.asInstanceOf[DecodeJson[Github.ReleaseEvent]] |||
-    GithubPingEventDecoder.asInstanceOf[DecodeJson[Github.Event]]
+    ((GithubDeploymentEventDecoder |||
+     GithubReleaseEventDecoder: DecodeJson[Github.Event]) |||
+     GithubPullRequestEventDecoder: DecodeJson[Github.Event]) |||
+     GithubPingEventDecoder
+
+  /*
+   * {
+   *   "deployment": {
+   *     "url": "https://api.github.com/repos/timperrett/example/deployments/107241174",
+   *     "id": 107241174,
+   *     "node_id": "MDEwOkRlcGxveW1lbnQxMDcyNDExNzQ=",
+   *     "sha": "fdb7da2ab3b2cd172e86c1af9adefa3523f6d65b",
+   *     "ref": "fdb7da2ab3b2cd172e86c1af9adefa3523f6d65b",
+   *     "task": "deploy",
+   *     "payload": "{ \"foo\": true }",
+   *     "original_environment": "production",
+   *     "environment": "production",
+   *     "description": null,
+   *     "creator": {
+   *      ....
+   *     },
+   *     "created_at": "2018-10-06T04:52:40Z",
+   *     "updated_at": "2018-10-06T04:52:40Z",
+   *     "statuses_url": "https://api.github.com/repos/timperrett/example/deployments/107241174/statuses",
+   *     "repository_url": "https://api.github.com/repos/timperrett/example"
+   *   },
+   *   "repository": {
+   *     "id": 140525376,
+   *     "node_id": "MDEwOlJlcG9zaXRvcnkxNDA1MjUzNzY=",
+   *     "name": "example",
+   *     "full_name": "timperrett/example",
+   *     ....
+   *   },
+   *   "sender": {
+   *    ....
+   *   }
+   * }
+  */
+  implicit val GithubDeploymentEventDecoder: DecodeJson[Github.DeploymentEvent] =
+    DecodeJson(z => for {
+      a <- (z --\ "deployment" --\ "id").as[Long]
+      x <- (z --\ "repository" --\ "full_name").as[String]
+      b <- Slug.fromString(x).map(DecodeResult.ok
+           ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
+      c <- (z --\ "deployment" --\ "ref").as[String]
+      s <- (z --\ "deployment" --\ "sha").as[String]
+      d <- (z --\ "deployment" --\ "environment").as[String]
+      e <- (z --\ "deployment" --\ "payload").as[String]
+      f <- (z --\ "repository" --\ "id").as[Long]
+      g <- (z --\ "deployment" --\ "url").as[String]
+    } yield {
+      // NOTE(timperrett): this seems a little sketchy as we're invoking the
+      // protobuf decoder right here in the JSON decoder, even thought we've
+      // no idea if things might work here or not... we can do better.
+      val bytes = java.util.Base64.getDecoder.decode(e)
+      val unmarshalled = nelson.api.deployable.Deployables.parseFrom(bytes)
+      val converted = unmarshalled.deployables.toList.map { a =>
+        val v = a.version.semver.get
+        Manifest.Deployable(
+          name = a.unitName,
+          version = Version(v.major, v.minor, v.patch),
+          output = Manifest.Deployable.Container(a.kind.container.get.image)
+        )
+      }
+      Github.DeploymentEvent(
+        id = a,
+        slug = b,
+        ref = Github.Reference.fromString(c,Option(s)),
+        environment = d,
+        repositoryId = f,
+        deployables = converted,
+        url = g
+      )
+    })
+
+  // TODO(timperrett): what do we do here about encoding the assets that
+  // are shipped to us as proto format?
+  implicit val GithubDeploymentEncoder: EncodeJson[Github.DeploymentEvent] =
+    EncodeJson((d: Github.DeploymentEvent) =>
+      ("id" := d.id) ->:
+      ("url" := d.url) ->:
+      ("slug" := d.slug.toString) ->:
+      ("ref" := d.ref.toString) ->:
+      jEmptyObject
+    )
 
   /**
    * {
@@ -376,16 +444,6 @@ object Json {
       )
     )
 
-  implicit val GithubAssetsEncoder: EncodeJson[Github.Asset] =
-    EncodeJson((asset: Github.Asset) =>
-      ("id" := asset.id) ->:
-      ("name" := asset.name) ->:
-      ("state" := asset.state) ->:
-      ("url" := asset.url.toString) ->:
-      ("content" := asset.content) ->:
-      jEmptyObject
-    )
-
   implicit val GithubReleaseEncoder: EncodeJson[Github.Release] =
     EncodeJson((release: Github.Release) =>
       ("id" := release.id) ->:
@@ -393,6 +451,15 @@ object Json {
       ("html_url" := release.htmlUrl) ->:
       ("assets" := release.assets) ->:
       ("tag_name" := release.tagName) ->:
+      jEmptyObject
+    )
+
+  implicit val GithubAssetsEncoder: EncodeJson[Github.Asset] =
+    EncodeJson((asset: Github.Asset) =>
+      ("id" := asset.id) ->:
+      ("name" := asset.name) ->:
+      ("url" := asset.url.toString) ->:
+      ("content" := asset.content) ->:
       jEmptyObject
     )
 
@@ -524,10 +591,24 @@ object Json {
     DecodeJson(c =>
       ((c --\ "id").as[Long],
         (c --\ "name").as[String],
-        (c --\ "state").as[String],
         (c --\ "url").as[Uri]
-      ).mapN((x,y,z,w) => Github.Asset(x,y,z,w))
+      ).mapN((x,y,z) => Github.Asset(x,y,z))
     )
+
+  implicit val GithubPullRequestEventDecoder: DecodeJson[Github.PullRequestEvent] =
+    DecodeJson(z => for {
+      a <- (z --\ "number").as[Long]
+      b <- (z --\ "pull_request" --\ "url").as[String]
+      d <- (z --\ "repository" --\ "full_name").as[String]
+      x <- Slug.fromString(d).map(DecodeResult.ok
+           ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
+    } yield {
+      Github.PullRequestEvent(
+        id = a,
+        url = b,
+        slug = x
+      )
+    })
 
   implicit lazy val GithubOrg: CodecJson[Github.OrgKey] =
     casecodec2(Github.OrgKey.apply, Github.OrgKey.unapply)("id", "login")

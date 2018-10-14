@@ -17,7 +17,6 @@
 package nelson
 
 import cats.implicits._
-import org.http4s.Uri
 import org.scalacheck._, Prop._
 
 object ManifestSpec extends Properties("manifest") with RoutingFixtures {
@@ -103,24 +102,18 @@ class ManifestManualSpec extends NelsonSuite {
   import Util._
   import DeploymentTarget._
 
-  def load(what: String) = {
+  def load(what: Manifest.Deployable) = {
     for {
       a <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync()
       b <- yaml.ManifestParser.parse(a)
-      c <- loadResourceAsString(what).attempt.unsafeRunSync()
-      d  = Github.Asset(
-        id = 45,
-        name = "example-howdy.deployable.yml",
-        url = Uri.unsafeFromString(""),
-        state = "",
-        content = Some(c)
-      )
-      e  = Github.Release(
+      e  = Github.DeploymentEvent(
         id = 123,
-        url = "",
-        htmlUrl = "",
-        assets = List(d),
-        tagName = "master"
+        slug = Slug("tim", "example"),
+        repositoryId = 123,
+        ref = Github.Branch("master"),
+        environment = "dev",
+        deployables = List(what),
+        url = ""
       )
     } yield Manifest.versionedUnits((Manifest.saturateManifest(b)(e)).unsafeRunSync()).map(_.version)
   }
@@ -133,36 +126,21 @@ class ManifestManualSpec extends NelsonSuite {
 
   behavior of "loading from YAML"
 
-  it should "be OK with *.yaml" in {
-    val manifest = for {
-      resource <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync()
-      manifest <- yaml.ManifestParser.parse(resource)
-      contents <- loadResourceAsString("/nelson/manifest.deployable.v1.c.yml").attempt.unsafeRunSync()
-      asset = Github.Asset(
-        id = 45,
-        name = "example-howdy.deployable.yaml", // this is what is being tested - note .yaml instead of .yml
-        url = Uri.unsafeFromString(""),
-        state = "",
-        content = Some(contents)
-      )
-      release = Github.Release(
-        id = 123,
-        url = "",
-        htmlUrl = "",
-        assets = List(asset),
-        tagName = "master"
-      )
-    } yield Manifest.versionedUnits((Manifest.saturateManifest(manifest)(release)).unsafeRunSync()).map(_.version)
-
-    manifest should equal (Right(List(Version(0, 6, 10))))
-  }
-
   it should "augment the manifest with a release in the happy case" in {
-    load("/nelson/manifest.deployable.v1.c.yml") should equal (Right(List(Version(0,6,10))))
+    val input = Manifest.Deployable(
+      name = "example-howdy",
+      version = Version(0,6,10),
+      output = Manifest.Deployable.Container("units/example-howdy-0.6:0.6.10"))
+    load(input) should equal (Right(List(Version(0,6,10))))
   }
 
-  it should "fail when the deployable has a different name" in {
-    load("/nelson/manifest.deployable.v1.d.yml") should equal (Right(List(Version(0,6,10))))
+  it should "fail when the deployable unit name is not found in the manifest" in {
+    val input = Manifest.Deployable(
+      name = "examplexxxxx-howdy-0.6",
+      version = Version(0,6,10),
+      output = Manifest.Deployable.Container("units/example-howdy-0.6:0.6.10"))
+
+    an [ProblematicDeployable] should be thrownBy load(input)
   }
 
   behavior of "filterDatacenters"

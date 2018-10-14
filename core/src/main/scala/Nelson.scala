@@ -130,7 +130,7 @@ object Nelson {
   def createHook(session: Session, slug: Slug): NelsonK[Repo] = {
     def hook(cfg: NelsonConfig): Github.WebHook = {
       val uri = linkTo("/listener")(cfg.network)
-      Github.WebHook.create("release" :: Nil, uri)
+      Github.WebHook.create("release" :: "deployment" :: "pull_request" :: Nil, uri)
     }
 
     def getOrCreate(slug: Slug, hk: Github.WebHook): NelsonK[Github.WebHook] = Kleisli { cfg =>
@@ -215,20 +215,20 @@ object Nelson {
    *
    * Anything else is just not cricket.
    */
-  def fetchRepoManifestAndValidateDeployable(slug: Slug, tagOrBranch: String = "master"): NelsonK[ValidatedNel[NelsonError, Manifest]] = {
+  def fetchRepoManifestAndValidateDeployable(slug: Slug, ref: Github.Reference = Github.Branch("master")): NelsonK[ValidatedNel[NelsonError, Manifest]] = {
     for {
       cfg <- config
       token = cfg.git.systemAccessToken
-      raw <- fetchRawRepoManifest(token)(slug, tagOrBranch)
+      raw <- fetchRawRepoManifest(token)(slug, ref)
       mnf <- Kleisli.liftF(ManifestValidator.parseManifestAndValidate(raw, cfg))
     } yield mnf
   }
 
-  def fetchRawRepoManifest(token: AccessToken)(slug: Slug, tagOrBranch: String = "master"): NelsonK[String] =
+  def fetchRawRepoManifest(token: AccessToken)(slug: Slug, ref: Github.Reference = Github.Branch("master")): NelsonK[String] =
     Kleisli { cfg =>
       for {
-        _   <- log(s"about to fetch ${cfg.manifest.filename} from ${slug}:${tagOrBranch} repository")
-        raw <- Github.Request.fetchFileFromRepository(slug, cfg.manifest.filename, tagOrBranch)(token).foldMap(cfg.github)
+        _   <- log(s"about to fetch ${cfg.manifest.filename} from ${slug}@${ref.toString} repository")
+        raw <- Github.Request.fetchFileFromRepository(slug, cfg.manifest.filename, ref)(token).foldMap(cfg.github)
         dec <- raw.tfold(ProblematicRepoManifest(slug))(_.decoded)
       } yield dec
     }
@@ -238,25 +238,30 @@ object Nelson {
    * validates and then saturates with deployables.
    */
   def getVersionedManifestForRelease(r: Released): NelsonK[Manifest @@ Versioned] = {
-    val e = Github.ReleaseEvent(r.releaseId, r.slug, 0)
     for  {
       cfg <- config
-      g   <- fetchRelease(e)
-      v   <- fetchRepoManifestAndValidateDeployable(e.slug, g.tagName)
+      g   <- fetchGithubDeployment(r.referenceId, r.slug)
+      v   <- fetchRepoManifestAndValidateDeployable(r.slug, g.ref)
       m   <- Kleisli.liftF(v.fold(e => IO.raiseError(MultipleValidationErrors(e)), m => IO.pure(m)))
       // take the deployable and modify the manifest to incorporate the release info
       ms  <- Kleisli.liftF(Manifest.saturateManifest(m)(g))
     } yield ms
   }
 
-  private def fetchRelease(e: Github.ReleaseEvent): NelsonK[Github.Release] =
-    Kleisli { cfg =>
-      val t = cfg.git.systemAccessToken
+  private def liftDeploymentToRelease(e: Github.DeploymentEvent): NelsonK[Github.Release] = ???
 
-      Github.Request.fetchRelease(e.slug, e.id)(t).foldMap(cfg.github)
-        .ensure(MissingReleaseAssets(e))(_.assets.nonEmpty)
-        .retryExponentially(2.seconds, 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
-    }
+
+  private def fetchGithubDeployment(referenceId: Long, slug: Slug): NelsonK[Github.DeploymentEvent] = {
+    Kleisli[IO, NelsonConfig, Option[Github.DeploymentEvent]] { cfg =>
+      val t = cfg.git.systemAccessToken
+      // NOTE(timperrett): im not wild about this, but there's simply no meaningful default that
+      // can sensibly be applied here, so we're just bailing out.
+      Github.Request.getDeployment(slug, referenceId)(t)
+        .foldMap(cfg.github)
+        .ensure(MissingDeploymentReference(referenceId, slug))(_.nonEmpty)
+        .retryExponentially(2.seconds, limit = 3)(cfg.pools.schedulingPool, cfg.pools.defaultExecutor)
+    }.map(_.get)
+  }
 
   def deploy(actions: List[Manifest.Action]): NelsonK[Unit] =
     Kleisli(cfg => actions.traverse_(a => cfg.queue.enqueue1(a)))
@@ -265,7 +270,7 @@ object Nelson {
    * Invoked when the inbound webhook from Github arrives, notifying Nelson
    * that a new deployment needs to take place.
    */
-  def handleRelease(e: Github.ReleaseEvent): NelsonK[Unit] = {
+  def handleDeployment(e: Github.DeploymentEvent): NelsonK[Unit] = {
     import Manifest.{Namespace,Plan,UnitDef,Action}
 
     // convert units in the manifest to action.
@@ -279,16 +284,14 @@ object Nelson {
 
     Kleisli { cfg =>
       for {
-        r  <- fetchRelease(e).run(cfg)
-        v  <- (log(s"fetched full release from github: $r") *>
-                fetchRepoManifestAndValidateDeployable(e.slug, r.tagName).run(cfg))
-        m  <-  v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))
+        v  <- fetchRepoManifestAndValidateDeployable(e.slug, e.ref).run(cfg)
+        m  <- v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))
 
         hm <- (log(s"received manifest from github: $m")
-              *> storage.StoreOp.createRelease(e.repositoryId, r).foldMap(cfg.storage)
-              *> cfg.auditor.write(r, CreateAction, Option(r.id))
-              *> log(s"created release in response to release ${r.id}")
-              *> Manifest.saturateManifest(m)(r))
+              *> storage.StoreOp.createRelease(e).foldMap(cfg.storage)
+              *> cfg.auditor.write(e, CreateAction, Option(e.id))
+              *> log(s"created release in response to release ${e.id}")
+              *> Manifest.saturateManifest(m)(e))
 
         _  <- (storeManifest(hm, e.repositoryId).run(cfg)
               *> log("stored the release manifest in the database"))

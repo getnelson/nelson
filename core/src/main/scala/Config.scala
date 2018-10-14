@@ -100,11 +100,14 @@ final case class GithubConfig(
     (api / "user" / "repos").setQueryParams(queryParams)
   }
 
-  def webhookEndpoint(slug: Slug) = api / "repos" / slug.owner / slug.repository / "hooks"
+  def webhookEndpoint(slug: Slug) =
+    api / "repos" / slug.owner / slug.repository / "hooks"
 
-  def contentsEndpoint(slug: Slug, path: String) = api / "repos" / slug.owner / slug.repository / "contents" / path
+  def contentsEndpoint(slug: Slug, path: String) =
+    api / "repos" / slug.owner / slug.repository / "contents" / path
 
-  def releaseEndpoint(slug: Slug, releaseId: Long) = api / "repos" / slug.owner / slug.repository / "releases" / releaseId.toString
+  def deploymentEndpoint(slug: Slug, deploymentId: Long) =
+    api / "repos" / slug.owner / slug.repository / "deployments" / deploymentId.toString
 
   private [nelson] def encodeURI(uri: String): String =
     java.net.URLEncoder.encode(uri, "UTF-8")

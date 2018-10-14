@@ -25,6 +25,7 @@ import Datacenter.Deployment
 sealed trait AuditCategory extends Product with Serializable
 case object GithubReleaseCategory extends AuditCategory
 case object GithubWebHookCategory extends AuditCategory
+case object GithubDeploymentCategory extends AuditCategory
 case object GithubRepoCategory extends AuditCategory
 case object ManualDeploymentCategory extends AuditCategory
 case object DeploymentCategory extends AuditCategory
@@ -33,13 +34,14 @@ case object InfoCategory extends AuditCategory
 
 object AuditCategory {
   def stringify(cat: AuditCategory) = cat match {
-    case GithubReleaseCategory   => "release"
-    case GithubWebHookCategory   => "hook"
-    case GithubRepoCategory      => "repo"
+    case GithubReleaseCategory    => "release"
+    case GithubDeploymentCategory => "deployment"
+    case GithubWebHookCategory    => "hook"
+    case GithubRepoCategory       => "repo"
     case ManualDeploymentCategory => "manual_deploy"
-    case DeploymentCategory      => "deploy"
-    case ErrorCategory           => "error"
-    case InfoCategory            => "info"
+    case DeploymentCategory       => "deploy"
+    case ErrorCategory            => "error"
+    case InfoCategory             => "info"
   }
 }
 
@@ -85,10 +87,17 @@ object AuditableInstances {
 
   import argonaut._, Argonaut._
 
-  implicit def githubReleaseAudtiable(implicit e: EncodeJson[Github.Release]): Auditable[Github.Release] = new Auditable[Github.Release] {
-    def encode(a: Github.Release) = e.encode(a)
-    def category = GithubReleaseCategory
-  }
+  implicit def githubReleaseAudtiable(implicit e: EncodeJson[Github.Release]): Auditable[Github.Release] =
+    new Auditable[Github.Release] {
+      def encode(a: Github.Release) = e.encode(a)
+      def category = GithubReleaseCategory
+    }
+
+  implicit def githubDeploymentAudtiable(implicit e: EncodeJson[Github.DeploymentEvent]): Auditable[Github.DeploymentEvent] =
+    new Auditable[Github.DeploymentEvent] {
+      def encode(a: Github.DeploymentEvent) = e.encode(a)
+      def category = GithubDeploymentCategory
+    }
 
   implicit def githubWebHook(implicit e: EncodeJson[Github.WebHook]): Auditable[Github.WebHook] =
     new Auditable[Github.WebHook] {
@@ -102,33 +111,39 @@ object AuditableInstances {
       def category = ManualDeploymentCategory
     }
 
-  implicit def repoAudtiable(implicit e: EncodeJson[Repo]): Auditable[Repo] = new Auditable[Repo] {
-    def encode(a: Repo) = e.encode(a)
-    def category = GithubRepoCategory
-  }
+  implicit def repoAudtiable(implicit e: EncodeJson[Repo]): Auditable[Repo] =
+    new Auditable[Repo] {
+      def encode(a: Repo) = e.encode(a)
+      def category = GithubRepoCategory
+    }
 
-  implicit def hookAudtiable(implicit e: EncodeJson[Hook]): Auditable[Hook] = new Auditable[Hook] {
-    def encode(a: Hook) = e.encode(a)
-    def category = GithubWebHookCategory
-  }
+  implicit def hookAudtiable(implicit e: EncodeJson[Hook]): Auditable[Hook] =
+    new Auditable[Hook] {
+      def encode(a: Hook) = e.encode(a)
+      def category = GithubWebHookCategory
+    }
 
-  implicit val stringAuditable: Auditable[String] = new Auditable[String] {
-    def encode(s: String) = jString(s)
-    def category = InfoCategory
-  }
+  implicit val stringAuditable: Auditable[String] =
+    new Auditable[String] {
+      def encode(s: String) = jString(s)
+      def category = InfoCategory
+    }
 
-  implicit val nelsonErrorAuditable: Auditable[NelsonError] = new Auditable[NelsonError] {
-    def encode(error: NelsonError) = nelson.Json.NelsonErrorEncoder.encode(error)
-    def category = ErrorCategory
-  }
+  implicit val nelsonErrorAuditable: Auditable[NelsonError] =
+    new Auditable[NelsonError] {
+      def encode(error: NelsonError) = nelson.Json.NelsonErrorEncoder.encode(error)
+      def category = ErrorCategory
+    }
 
-  implicit def sessionAuditable(implicit e: EncodeJson[Session]): Auditable[Session] = new Auditable[Session] {
-    def encode(s: Session) = e.encode(s)
-    def category = InfoCategory
-  }
+  implicit def sessionAuditable(implicit e: EncodeJson[Session]): Auditable[Session] =
+    new Auditable[Session] {
+      def encode(s: Session) = e.encode(s)
+      def category = InfoCategory
+    }
 
-  implicit def deploymentAuditable(implicit e: EncodeJson[Deployment]): Auditable[Deployment] = new Auditable[Deployment] {
-    def encode(s: Deployment) = e.encode(s)
-    def category = DeploymentCategory
-  }
+  implicit def deploymentAuditable(implicit e: EncodeJson[Deployment]): Auditable[Deployment] =
+    new Auditable[Deployment] {
+      def encode(s: Deployment) = e.encode(s)
+      def category = DeploymentCategory
+    }
 }
