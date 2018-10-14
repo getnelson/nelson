@@ -110,7 +110,7 @@ class ManifestManualSpec extends NelsonSuite {
         id = 123,
         slug = Slug("tim", "example"),
         repositoryId = 123,
-        ref = Github.Tag(Version(1,2,3)),
+        ref = Github.Branch("master"),
         environment = "dev",
         deployables = List(what),
         url = ""
