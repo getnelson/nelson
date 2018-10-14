@@ -275,6 +275,7 @@ object Json {
       b <- Slug.fromString(x).map(DecodeResult.ok
            ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
       c <- (z --\ "deployment" --\ "ref").as[String]
+      s <- (z --\ "deployment" --\ "sha").as[String]
       d <- (z --\ "deployment" --\ "environment").as[String]
       e <- (z --\ "deployment" --\ "payload").as[String]
       f <- (z --\ "repository" --\ "id").as[Long]
@@ -296,7 +297,7 @@ object Json {
       Github.DeploymentEvent(
         id = a,
         slug = b,
-        ref = c,
+        ref = Github.Reference.fromString(c,Option(s)),
         environment = d,
         repositoryId = f,
         deployables = converted,
@@ -311,7 +312,7 @@ object Json {
       ("id" := d.id) ->:
       ("url" := d.url) ->:
       ("slug" := d.slug.toString) ->:
-      ("ref" := d.ref) ->:
+      ("ref" := d.ref.toString) ->:
       jEmptyObject
     )
 

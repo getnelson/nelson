@@ -55,7 +55,7 @@ object Notify {
 
     def fetchNotifications(d: Deployment): IO[NotificationSubscriptions] = {
       def fetchManifest(slug: Slug) = Github.Request.fetchFileFromRepository(slug,
-        cfg.manifest.filename, "master")(cfg.git.systemAccessToken).foldMap(cfg.github)
+        cfg.manifest.filename, Github.Branch("master"))(cfg.git.systemAccessToken).foldMap(cfg.github)
 
       def findRelease(guid: GUID) =
         StoreOp.findReleaseByDeploymentGuid(d.guid).map(_.map(_._1.slug)).foldMap(cfg.storage)

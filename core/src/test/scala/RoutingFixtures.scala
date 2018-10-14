@@ -174,8 +174,9 @@ trait RoutingFixtures {
       ().pure[WorkflowF]
   }
 
-  def mkDeployment(id: Long, version: String): Github.DeploymentEvent =
-    Github.DeploymentEvent(id, Slug("foo","bar"), 9999L, version, "dev", Nil, "")
+  def mkDeployment(id: Long, tag: String): Github.DeploymentEvent =
+    Github.DeploymentEvent(id, Slug("foo","bar"), 9999L, 
+      Github.Reference.fromString(tag), "dev", Nil, "")
 
   val slug = Slug("owner","RoutingTableSpec")
   val repo = Repo(9999L, slug.toString, RepoAccess.Admin.toString, None)

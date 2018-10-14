@@ -297,9 +297,23 @@ object Manifest {
    * Saturates the manifest with all the bits that a unit or loadbalancer needs for deployment.
    */
   def saturateManifest(m: Manifest)(r: Github.DeploymentEvent): IO[Manifest @@ Versioned] = {
-    val units = addDeployable(m)(r)
-    val lbs = addVersionToLoadbalancers(m)(r)
-    units.map(u => Versioned(m.copy(units = u, loadbalancers = lbs)))
+    def addVersionToLoadbalancers(m: Manifest)(major: MajorVersion): List[Loadbalancer] = {
+      m.loadbalancers.map(lb => lb.copy(majorVersion = Some(major)))
+    }
+
+    // NOTE(timperrett): this is logically "broken" for an arbirary deployment event
+    // and we cannot deploy branches or direct-sha, but this meets functional parity
+    // with what nelson prior to 0.12 had. We need to think more deeply about what
+    // it will mean to support non-semver inputs here.
+    r.ref match {
+      case Github.Tag(v) => {
+        val major = v.toMajorVersion
+        val units = addDeployable(m)(r)
+        val lbs = addVersionToLoadbalancers(m)(major)
+        units.map(u => Versioned(m.copy(units = u, loadbalancers = lbs)))
+      }
+      case _ => IO.raiseError(VersionedGitTagRequired(r.ref))
+    }
   }
 
   /*
@@ -403,13 +417,6 @@ object Manifest {
     foldUnits(m, dcs, folder, Nil)
       .sequence
       .map(l => Foldable[List].fold(l))
-  }
-
-  private def addVersionToLoadbalancers(m: Manifest)(r: Github.DeploymentEvent): List[Loadbalancer] = {
-    // NOTE(timperret): given `ref` might not actually be parsable as a `Version`, something
-    // needs to happen here that is a little more meaningful.
-    val major = Version.fromString(r.ref).map(_.toMajorVersion)
-    m.loadbalancers.map(lb => lb.copy(majorVersion = major))
   }
 
   private def addDeployable(m: Manifest)(e: Github.DeploymentEvent): IO[List[UnitDef]] =

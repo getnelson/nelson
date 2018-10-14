@@ -215,20 +215,20 @@ object Nelson {
    *
    * Anything else is just not cricket.
    */
-  def fetchRepoManifestAndValidateDeployable(slug: Slug, tagOrBranch: String = "master"): NelsonK[ValidatedNel[NelsonError, Manifest]] = {
+  def fetchRepoManifestAndValidateDeployable(slug: Slug, ref: Github.Reference = Github.Branch("master")): NelsonK[ValidatedNel[NelsonError, Manifest]] = {
     for {
       cfg <- config
       token = cfg.git.systemAccessToken
-      raw <- fetchRawRepoManifest(token)(slug, tagOrBranch)
+      raw <- fetchRawRepoManifest(token)(slug, ref)
       mnf <- Kleisli.liftF(ManifestValidator.parseManifestAndValidate(raw, cfg))
     } yield mnf
   }
 
-  def fetchRawRepoManifest(token: AccessToken)(slug: Slug, tagOrBranch: String = "master"): NelsonK[String] =
+  def fetchRawRepoManifest(token: AccessToken)(slug: Slug, ref: Github.Reference = Github.Branch("master")): NelsonK[String] =
     Kleisli { cfg =>
       for {
-        _   <- log(s"about to fetch ${cfg.manifest.filename} from ${slug}:${tagOrBranch} repository")
-        raw <- Github.Request.fetchFileFromRepository(slug, cfg.manifest.filename, tagOrBranch)(token).foldMap(cfg.github)
+        _   <- log(s"about to fetch ${cfg.manifest.filename} from ${slug}:${ref.toString} repository")
+        raw <- Github.Request.fetchFileFromRepository(slug, cfg.manifest.filename, ref)(token).foldMap(cfg.github)
         dec <- raw.tfold(ProblematicRepoManifest(slug))(_.decoded)
       } yield dec
     }

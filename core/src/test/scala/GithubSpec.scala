@@ -51,7 +51,7 @@ class GithubSpec extends FlatSpec with Matchers with BeforeAndAfterEach with Pro
   }
 
   it should "return file from repository" in {
-     val req = Github.Request.fetchFileFromRepository(slug, "","")(token).foldMap(interpreter).attempt.unsafeRunSync() 
+     val req = Github.Request.fetchFileFromRepository(slug, "", Github.Branch("master"))(token).foldMap(interpreter).attempt.unsafeRunSync() 
      req should equal(contents.attempt.unsafeRunSync())
   }
 
