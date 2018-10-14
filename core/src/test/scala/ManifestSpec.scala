@@ -106,11 +106,11 @@ class ManifestManualSpec extends NelsonSuite {
     for {
       a <- loadResourceAsString("/nelson/manifest.howdy-manifest.yml").attempt.unsafeRunSync()
       b <- yaml.ManifestParser.parse(a)
-      e  = Github.Deployment(
+      e  = Github.DeploymentEvent(
         id = 123,
         slug = Slug("tim", "example"),
         repositoryId = 123,
-        ref = "master",
+        ref = Github.Tag(Version(1,2,3)),
         environment = "dev",
         deployables = List(what),
         url = ""

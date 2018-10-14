@@ -48,7 +48,7 @@ class JsonSpec extends FlatSpec with Matchers {
 
   it should "parse the deployment events from Github" in {
     fromWebhookSample("/nelson/github.webhookdeployment.json"){
-      case Github.Deployment(_,_,_,_,_,_,_) => true
+      case Github.DeploymentEvent(_,_,_,_,_,_,_) => true
       case _ => false
     }
   }

@@ -114,11 +114,11 @@ object Github {
   /**
    * Reference: https://developer.github.com/v3/activity/events/types/#deploymentevent
    */
-  final case class Deployment(
+  final case class DeploymentEvent(
     id: Long,
     slug: Slug,
     repositoryId: Long,
-    ref: String, // sha, branch or tag
+    ref: Reference, // sha, branch or tag
     environment: String,
     deployables: List[Manifest.Deployable],
     url: String
@@ -146,6 +146,33 @@ object Github {
     content: Option[String] = None
   )
 
+  sealed trait Reference
+  object Reference {
+    /* NOTE(timperrett): this uses a fairly simplistic heuristic to figure out
+     * what kind of ref we're dealing with. This is - depending on your view - 
+     * actually quite fragile. Given Nelson is expecting SemVer for released
+     * versions of software, we assume tags are always parsable as Version
+     */
+    def fromString(str: String, sha: Option[String] = None): Reference =
+      if (sha.exists(_ == str.trim.toLowerCase)) Sha(str)
+      else {
+        // if we got here, then it wasn't a Sha (as we cant use something simple 
+        // like strlen as a strong enough indicator)
+        Version.fromString(str).map(Tag(_)) getOrElse {
+          sha.fold(Branch(str))(x => Branch(str, Some(x)))
+        }
+      }
+  }
+  final case class Tag(version: Version) extends Reference {
+    override def toString: String = version.toString
+  }
+  final case class Sha(str: Sha256) extends Reference {
+    override def toString: String = str
+  }
+  final case class Branch(name: String, sha: Option[String] = None) extends Reference {
+    override def toString: String = name
+  }
+
   ////// GITHUB DSL & Interpreter
 
   import cats.~>
@@ -170,7 +197,7 @@ object Github {
   final case class GetUserRepositories(token: AccessToken)
     extends GithubOp[List[Repo]]
 
-  final case class GetFileFromRepository(slug: Slug, path: String, tagOrBranch: String, t: AccessToken)
+  final case class GetFileFromRepository(slug: Slug, path: String, ref: Reference, t: AccessToken)
     extends GithubOp[Option[Github.Contents]]
 
   final case class GetRepoWebHooks(slug: Slug, token: AccessToken)
@@ -183,7 +210,7 @@ object Github {
     extends GithubOp[Unit]
 
   final case class GetDeployment(slug: Slug, id: Long, t: AccessToken)
-    extends GithubOp[Option[Github.Deployment]]
+    extends GithubOp[Option[Github.DeploymentEvent]]
 
   object Request {
 
@@ -212,8 +239,8 @@ object Github {
       Free.liftF(GetUserRepositories(token))
 
     /** * https://developer.github.com/v3/repos/contents/#get-contents */
-    def fetchFileFromRepository(s: Slug, p: String, tOrB: String)(t: AccessToken):  GithubOpF[Option[Github.Contents]] =
-      Free.liftF(GetFileFromRepository(s, p, tOrB, t))
+    def fetchFileFromRepository(s: Slug, p: String, ref: Reference)(t: AccessToken):  GithubOpF[Option[Github.Contents]] =
+      Free.liftF(GetFileFromRepository(s, p, ref, t))
 
     /** * https://developer.github.com/v3/repos/hooks/#list-hooks */
     def fetchRepoWebhooks(slug: Slug)(token: AccessToken): GithubOpF[List[Github.WebHook]] =
@@ -228,7 +255,7 @@ object Github {
       Free.liftF(DeleteRepoWebHook(slug, id, token))
 
     /** * https://developer.github.com/v3/repos/deployments/#get-a-single-deployment */
-    def getDeployment(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Option[Github.Deployment]] =
+    def getDeployment(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Option[Github.DeploymentEvent]] =
       Free.liftF(GetDeployment(slug, id, token))
 
     /**
@@ -312,8 +339,8 @@ object Github {
         }
         go(cfg.repoEndpoint(page = 1))(Nil)
 
-      case GetFileFromRepository(slug: Slug, path: String, tagOrBranch: String, t: AccessToken) =>
-        val queryParams = Map(("ref", List(java.net.URLEncoder.encode(tagOrBranch, "UTF-8"))))
+      case GetFileFromRepository(slug: Slug, path: String, ref: Reference, t: AccessToken) =>
+        val queryParams = Map(("ref", List(java.net.URLEncoder.encode(ref.toString, "UTF-8"))))
         val uri = cfg.contentsEndpoint(slug, path).setQueryParams(queryParams)
         val req = HttpRequest[IO](Method.GET, uri).token(t)
         client.expect[Github.Contents](req).map(Option(_)).handleError(_ => None)
@@ -338,7 +365,7 @@ object Github {
 
       case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
         val req = HttpRequest[IO](Method.GET, cfg.deploymentEndpoint(slug, id)).token(t)
-        client.expect[Github.Deployment](req).map(Option(_)).handleError(_ => None)
+        client.expect[Github.DeploymentEvent](req).map(Option(_)).handleError(_ => None)
     }
 
     /////////////////////////// INTERNALS ///////////////////////////

@@ -105,7 +105,7 @@ object GitFixtures {
         loadResourceAsString("/nelson/github.repos.json")
           .flatMap(fromJson[List[Repo]])
 
-      case GetFileFromRepository(slug: Slug, path: String, tagOrBranch: String, t: AccessToken) =>
+      case GetFileFromRepository(slug: Slug, path: String, ref: Reference, t: AccessToken) =>
         contents
 
       case GetRepoWebHooks(slug: Slug, token: AccessToken) =>
@@ -120,7 +120,7 @@ object GitFixtures {
 
       case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
         loadResourceAsString("/nelson/github.deployment.json")
-          .flatMap(fromJson[Option[Deployment]])
+          .flatMap(fromJson[Option[DeploymentEvent]])
     }
   }
 }
