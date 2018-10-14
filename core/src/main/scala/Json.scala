@@ -287,10 +287,10 @@ object Json {
       val bytes = java.util.Base64.getDecoder.decode(e)
       val unmarshalled = nelson.api.deployable.Deployables.parseFrom(bytes)
       val converted = unmarshalled.deployables.toList.map { a =>
-        val v = a.version.get
+        val v = a.version.semver.get
         Manifest.Deployable(
           name = a.unitName,
-          version = Version(v.series, v.feature, v.patch),
+          version = Version(v.major, v.minor, v.patch),
           output = Manifest.Deployable.Container(a.kind.container.get.image)
         )
       }

@@ -69,7 +69,7 @@ object Server {
     Kleisli[OptionT[IO, ?], Request[IO], Response[IO]] { req =>
       service.run(req).handleErrorWith(err => OptionT.liftF(err match {
         case e@(LoadError(_) | ProblematicRepoManifest(_)) =>
-          log.info(s"unable to load repository YAML file ${e.getMessage}")
+          log.info(s"Unable to load repository YAML file: ${e.getMessage}")
           UnprocessableEntity(
             Map(
               "message" -> s"Please ensure you have a valid .nelson.yml file in your repository. ${e.getMessage}"

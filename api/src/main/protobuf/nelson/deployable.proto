@@ -28,7 +28,9 @@ message Deployables {
 
 message Deployable {
   string unit_name = 1;
-  Version version = 2;
+  oneof version {
+    SemanticVersion semver = 2;
+  }
   oneof kind {
     Container container = 3;
   }

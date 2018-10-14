@@ -227,7 +227,7 @@ object Nelson {
   def fetchRawRepoManifest(token: AccessToken)(slug: Slug, ref: Github.Reference = Github.Branch("master")): NelsonK[String] =
     Kleisli { cfg =>
       for {
-        _   <- log(s"about to fetch ${cfg.manifest.filename} from ${slug}:${ref.toString} repository")
+        _   <- log(s"about to fetch ${cfg.manifest.filename} from ${slug}@${ref.toString} repository")
         raw <- Github.Request.fetchFileFromRepository(slug, cfg.manifest.filename, ref)(token).foldMap(cfg.github)
         dec <- raw.tfold(ProblematicRepoManifest(slug))(_.decoded)
       } yield dec
