@@ -1,10 +1,10 @@
 ---
 steps:
   - label: ":hammer: build"
-    command: .buildkite/pipeline.exec.sh
+    command: .buildkite/extradition.exec.sh
     concurrency: 1
     concurrency_group: primary
-    timeout_in_minutes: 45
+    timeout_in_minutes: 10
     branches: master
     env:
       - BUILDKITE_CLEAN_CHECKOUT: true
