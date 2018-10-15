@@ -11,13 +11,13 @@ steps:
     agents:
       os: linux
 
-  # - wait: ~
-  #   continue_on_failure: true
+  - wait: ~
+    continue_on_failure: true
 
-  # - label: ":radioactive_sign: teardown"
-  #   command: .buildkite/pipeline.teardown.sh
-  #   branches: master
-  #   env:
-  #     - BUILDKITE_CLEAN_CHECKOUT: true
-  #   agents:
-  #     os: linux
+  - label: ":radioactive_sign: teardown"
+    command: .buildkite/pipeline.teardown.sh
+    branches: master
+    env:
+      - BUILDKITE_CLEAN_CHECKOUT: true
+    agents:
+      os: linux
