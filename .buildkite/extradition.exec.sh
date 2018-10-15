@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 git config --global user.email "team@getnelson.io"
 git config --global user.name "Nelson Team"
 
