@@ -14,7 +14,7 @@ temp_dir=$(mktemp -d)
 git clone git@github.com:getnelson/api.git "${temp_dir}"
 
 echo "--> copying updated files from nelson tree to api tree..."
-cp -fvR "api/src/main/protobuf/*"  "${temp_dir}/src/main/protobuf/"
+cp -fvR "api/src/main/protobuf/"  "${temp_dir}/src/main/"
 
 # save those changes
 cd "${temp_dir}"
