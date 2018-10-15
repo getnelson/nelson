@@ -273,18 +273,18 @@
 to github to change it into a legit access token that we can
 use to make API calls on the users behalf.</p>
     </li><li name="nelson.Github.Request#fetchFileFromRepository" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fetchFileFromRepository(s:nelson.Slug,p:String,tOrB:String)(t:nelson.AccessToken):nelson.Github.GithubOpF[Option[nelson.Github.Contents]]"></a>
-      <a id="fetchFileFromRepository(Slug,String,String)(AccessToken):GithubOpF[Option[Contents]]"></a>
+      <a id="fetchFileFromRepository(s:nelson.Slug,p:String,ref:nelson.Github.Reference)(t:nelson.AccessToken):nelson.Github.GithubOpF[Option[nelson.Github.Contents]]"></a>
+      <a id="fetchFileFromRepository(Slug,String,Reference)(AccessToken):GithubOpF[Option[Contents]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchFileFromRepository</span><span class="params">(<span name="s">s: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tOrB">tOrB: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="Github$.html#GithubOpF[A]=cats.free.Free[nelson.Github.GithubOp,A]" class="extmbr" name="nelson.Github.GithubOpF">GithubOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Github$$Contents.html" class="extype" name="nelson.Github.Contents">Contents</a>]]</span>
+        <span class="name">fetchFileFromRepository</span><span class="params">(<span name="s">s: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ref">ref: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a></span>)</span><span class="params">(<span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="Github$.html#GithubOpF[A]=cats.free.Free[nelson.Github.GithubOp,A]" class="extmbr" name="nelson.Github.GithubOpF">GithubOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Github$$Contents.html" class="extype" name="nelson.Github.Contents">Contents</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$Request$@fetchFileFromRepository(s:nelson.Slug,p:String,tOrB:String)(t:nelson.AccessToken):nelson.Github.GithubOpF[Option[nelson.Github.Contents]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$Request$@fetchFileFromRepository(s:nelson.Slug,p:String,ref:nelson.Github.Reference)(t:nelson.AccessToken):nelson.Github.GithubOpF[Option[nelson.Github.Contents]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -302,60 +302,6 @@ use to make API calls on the users behalf.</p>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Github$$Request$@fetchOrganizations(keys:List[nelson.Github.OrgKey],token:nelson.AccessToken):nelson.Github.GithubOpF[List[nelson.Organization]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Github.Request#fetchRelease" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetchRelease(slug:nelson.Slug,id:nelson.ID)(t:nelson.AccessToken):nelson.Github.GithubOpF[nelson.Github.Release]"></a>
-      <a id="fetchRelease(Slug,ID)(AccessToken):GithubOpF[Release]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fetchRelease</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="id">id: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>)</span><span class="params">(<span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="Github$.html#GithubOpF[A]=cats.free.Free[nelson.Github.GithubOp,A]" class="extmbr" name="nelson.Github.GithubOpF">GithubOpF</a>[<a href="Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$Request$@fetchRelease(slug:nelson.Slug,id:nelson.ID)(t:nelson.AccessToken):nelson.Github.GithubOpF[nelson.Github.Release]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">reach out and fetch a specific release from a repo.</p><div class="fullcomment"><div class="comment cmt"><p>reach out and fetch a specific release from a repo. we use this when
-nelson gets notified of a release, as the payload we get does not contain
-the assets that we need.
-</p></div></div>
-    </li><li name="nelson.Github.Request#fetchReleaseAssetContent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fetchReleaseAssetContent(asset:nelson.Github.Asset)(t:nelson.AccessToken):nelson.Github.GithubOpF[nelson.Github.Asset]"></a>
-      <a id="fetchReleaseAssetContent(Asset)(AccessToken):GithubOpF[Asset]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fetchReleaseAssetContent</span><span class="params">(<span name="asset">asset: <a href="Github$$Asset.html" class="extype" name="nelson.Github.Asset">Asset</a></span>)</span><span class="params">(<span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="Github$.html#GithubOpF[A]=cats.free.Free[nelson.Github.GithubOp,A]" class="extmbr" name="nelson.Github.GithubOpF">GithubOpF</a>[<a href="Github$$Asset.html" class="extype" name="nelson.Github.Asset">Asset</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$Request$@fetchReleaseAssetContent(asset:nelson.Github.Asset)(t:nelson.AccessToken):nelson.Github.GithubOpF[nelson.Github.Asset]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">* https://developer.github.com/v3/repos/releases/#get-a-single-release-asset</p>
-    </li><li name="nelson.Github.Request#fetchReleaseAssets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fetchReleaseAssets(r:nelson.Github.Release)(t:nelson.AccessToken):nelson.Github.GithubOpF[List[nelson.Github.Asset]]"></a>
-      <a id="fetchReleaseAssets(Release)(AccessToken):GithubOpF[List[Asset]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fetchReleaseAssets</span><span class="params">(<span name="r">r: <a href="Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a></span>)</span><span class="params">(<span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="Github$.html#GithubOpF[A]=cats.free.Free[nelson.Github.GithubOp,A]" class="extmbr" name="nelson.Github.GithubOpF">GithubOpF</a>[<span class="extype" name="scala.List">List</span>[<a href="Github$$Asset.html" class="extype" name="nelson.Github.Asset">Asset</a>]]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$Request$@fetchReleaseAssets(r:nelson.Github.Release)(t:nelson.AccessToken):nelson.Github.GithubOpF[List[nelson.Github.Asset]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -473,6 +419,23 @@ to github.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Github.Request#getDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getDeployment(slug:nelson.Slug,id:Long)(token:nelson.AccessToken):nelson.Github.GithubOpF[Option[nelson.Github.DeploymentEvent]]"></a>
+      <a id="getDeployment(Slug,Long)(AccessToken):GithubOpF[Option[DeploymentEvent]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getDeployment</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result">: <a href="Github$.html#GithubOpF[A]=cats.free.Free[nelson.Github.GithubOp,A]" class="extmbr" name="nelson.Github.GithubOpF">GithubOpF</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$$Request$@getDeployment(slug:nelson.Slug,id:Long)(token:nelson.AccessToken):nelson.Github.GithubOpF[Option[nelson.Github.DeploymentEvent]]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">* https://developer.github.com/v3/repos/deployments/#get-a-single-deployment</p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>

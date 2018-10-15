@@ -17,6 +17,9 @@
       <div class="name">DCUnit</div>
       <div class="occurrences"><a href="../nelson/Datacenter$.html" class="extype" name="nelson.Datacenter">Datacenter</a> </div>
     </div><div class="entry">
+      <div class="name">DEPLOYABLES_FIELD_NUMBER</div>
+      <div class="occurrences"><a href="../nelson/api/deployable/Deployables$.html" class="extype" name="nelson.api.deployable.Deployables">Deployables</a> </div>
+    </div><div class="entry">
       <div class="name">DNSName</div>
       <div class="occurrences"><a href="../nelson/package.html" class="extype" name="nelson">nelson</a> </div>
     </div><div class="entry">
@@ -40,9 +43,6 @@
     </div><div class="entry">
       <div class="name">Dc</div>
       <div class="occurrences"><a href="../nelson/plans/Params$.html" class="extype" name="nelson.plans.Params">Params</a> </div>
-    </div><div class="entry">
-      <div class="name">Dead</div>
-      <div class="occurrences"><a href="../nelson/TaskStatus$.html" class="extype" name="nelson.TaskStatus">TaskStatus</a> </div>
     </div><div class="entry">
       <div class="name">Debug</div>
       <div class="occurrences"><a href="../nelson/logging/LoggingOp$.html" class="extype" name="nelson.logging.LoggingOp">LoggingOp</a> </div>
@@ -102,13 +102,19 @@
       <div class="occurrences"><a href="../nelson/yaml/package.html" class="extype" name="nelson.yaml">yaml</a> </div>
     </div><div class="entry">
       <div class="name">Deployable</div>
-      <div class="occurrences"><a href="../nelson/Manifest$.html" class="extype" name="nelson.Manifest">Manifest</a> </div>
+      <div class="occurrences"><a href="../nelson/Manifest$.html" class="extype" name="nelson.Manifest">Manifest</a> <a href="../nelson/api/deployable/package.html" class="extype" name="nelson.api.deployable">deployable</a> </div>
     </div><div class="entry">
-      <div class="name">DeployableParser</div>
-      <div class="occurrences"><a href="../nelson/yaml/package.html" class="extype" name="nelson.yaml">yaml</a> </div>
+      <div class="name">DeployableLens</div>
+      <div class="occurrences"><a href="../nelson/api/deployable/Deployable$.html" class="extype" name="nelson.api.deployable.Deployable">Deployable</a> </div>
     </div><div class="entry">
-      <div class="name">DeployableYamlVersion1</div>
-      <div class="occurrences"><a href="../nelson/yaml/package.html" class="extype" name="nelson.yaml">yaml</a> </div>
+      <div class="name">DeployableProto</div>
+      <div class="occurrences"><a href="../nelson/api/deployable/package.html" class="extype" name="nelson.api.deployable">deployable</a> </div>
+    </div><div class="entry">
+      <div class="name">Deployables</div>
+      <div class="occurrences"><a href="../nelson/api/deployable/package.html" class="extype" name="nelson.api.deployable">deployable</a> </div>
+    </div><div class="entry">
+      <div class="name">DeployablesLens</div>
+      <div class="occurrences"><a href="../nelson/api/deployable/Deployables$.html" class="extype" name="nelson.api.deployable.Deployables">Deployables</a> </div>
     </div><div class="entry">
       <div class="name">Deploying</div>
       <div class="occurrences"><a href="../nelson/DeploymentStatus$.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a> </div>
@@ -133,6 +139,9 @@
     </div><div class="entry">
       <div class="name">DeploymentEncoder</div>
       <div class="occurrences"><a href="../nelson/Json$.html" class="extype" name="nelson.Json">Json</a> </div>
+    </div><div class="entry">
+      <div class="name">DeploymentEvent</div>
+      <div class="occurrences"><a href="../nelson/Github$.html" class="extype" name="nelson.Github">Github</a> </div>
     </div><div class="entry">
       <div class="name">DeploymentHash</div>
       <div class="occurrences"><a href="../nelson/package.html" class="extype" name="nelson">nelson</a> </div>
@@ -275,6 +284,9 @@
       <div class="name">defaultExecutor</div>
       <div class="occurrences"><a href="../nelson/Pools.html" class="extype" name="nelson.Pools">Pools</a> </div>
     </div><div class="entry">
+      <div class="name">defaultInstance</div>
+      <div class="occurrences"><a href="../nelson/api/deployable/Container$.html" class="extype" name="nelson.api.deployable.Container">Container</a> <a href="../nelson/api/deployable/Deployable$.html" class="extype" name="nelson.api.deployable.Deployable">Deployable</a> <a href="../nelson/api/deployable/Deployables$.html" class="extype" name="nelson.api.deployable.Deployables">Deployables</a> <a href="../nelson/api/version/SemanticVersion$.html" class="extype" name="nelson.api.version.SemanticVersion">SemanticVersion</a> </div>
+    </div><div class="entry">
       <div class="name">defaultLeaseTTL</div>
       <div class="occurrences"><a href="../nelson/vault/Mount.html" class="extype" name="nelson.vault.Mount">Mount</a> <a href="../nelson/vault/Vault$$CreateKubernetesRole.html" class="extype" name="nelson.vault.Vault.CreateKubernetesRole">CreateKubernetesRole</a> </div>
     </div><div class="entry">
@@ -372,7 +384,7 @@
       <div class="occurrences"><a href="../nelson/CycleDetection$.html" class="extype" name="nelson.CycleDetection">CycleDetection</a> </div>
     </div><div class="entry">
       <div class="name">dependencies</div>
-      <div class="occurrences"><a href="../nelson/Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a> <a href="../nelson/Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a> <a href="../nelson/yaml/UnitYaml.html" class="extype" name="nelson.yaml.UnitYaml">UnitYaml</a> </div>
+      <div class="occurrences"><a href="../nelson/Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a> <a href="../nelson/Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a> <a href="../nelson/api/deployable/DeployableProto$.html" class="extype" name="nelson.api.deployable.DeployableProto">DeployableProto</a> <a href="../nelson/api/version/VersionProto$.html" class="extype" name="nelson.api.version.VersionProto">VersionProto</a> <a href="../nelson/yaml/UnitYaml.html" class="extype" name="nelson.yaml.UnitYaml">UnitYaml</a> </div>
     </div><div class="entry">
       <div class="name">dependency</div>
       <div class="occurrences"><a href="../nelson/DeprecatedDependency.html" class="extype" name="nelson.DeprecatedDependency">DeprecatedDependency</a> <a href="../nelson/MissingDependency.html" class="extype" name="nelson.MissingDependency">MissingDependency</a> </div>
@@ -399,7 +411,10 @@
       <div class="occurrences"><a href="../nelson/storage/H2Storage$ReleaseRow.html" class="extype" name="nelson.storage.H2Storage.ReleaseRow">ReleaseRow</a> </div>
     </div><div class="entry">
       <div class="name">deployable</div>
-      <div class="occurrences"><a href="../nelson/Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a> </div>
+      <div class="occurrences"><a href="../nelson/Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a> <a href="../nelson/api/package.html" class="extype" name="nelson.api">api</a> </div>
+    </div><div class="entry">
+      <div class="name">deployables</div>
+      <div class="occurrences"><a href="../nelson/Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a> <a href="../nelson/api/deployable/Deployables.html" class="extype" name="nelson.api.deployable.Deployables">Deployables</a> <a href="../nelson/api/deployable/Deployables$$DeployablesLens.html" class="extype" name="nelson.api.deployable.Deployables.DeployablesLens">DeployablesLens</a> </div>
     </div><div class="entry">
       <div class="name">deployedTemplate</div>
       <div class="occurrences"><a href="../nelson/notifications/Notify$.html" class="extype" name="nelson.notifications.Notify">Notify</a> </div>
@@ -412,6 +427,9 @@
     </div><div class="entry">
       <div class="name">deploymentAuditable</div>
       <div class="occurrences"><a href="../nelson/audit/AuditableInstances$.html" class="extype" name="nelson.audit.AuditableInstances">AuditableInstances</a> </div>
+    </div><div class="entry">
+      <div class="name">deploymentEndpoint</div>
+      <div class="occurrences"><a href="../nelson/GithubConfig.html" class="extype" name="nelson.GithubConfig">GithubConfig</a> </div>
     </div><div class="entry">
       <div class="name">deploymentFromRow</div>
       <div class="occurrences"><a href="../nelson/storage/H2Storage.html" class="extype" name="nelson.storage.H2Storage">H2Storage</a> </div>
@@ -460,6 +478,9 @@
     </div><div class="entry">
       <div class="name">description</div>
       <div class="occurrences"><a href="../nelson/Datacenter$$DCUnit.html" class="extype" name="nelson.Datacenter.DCUnit">DCUnit</a> <a href="../nelson/Datacenter$$ManualDeployment.html" class="extype" name="nelson.Datacenter.ManualDeployment">ManualDeployment</a> <a href="../nelson/Manifest$$Resource.html" class="extype" name="nelson.Manifest.Resource">Resource</a> <a href="../nelson/Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a> <a href="../nelson/blueprint/Blueprint.html" class="extype" name="nelson.blueprint.Blueprint">Blueprint</a> <a href="../nelson/cleanup/ExpirationPolicy$.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a> <a href="../nelson/plans/Blueprints$$BlueprintRequestJson.html" class="extype" name="nelson.plans.Blueprints.BlueprintRequestJson">BlueprintRequestJson</a> <a href="../nelson/storage/StoreOp$$CreateManualDeployment.html" class="extype" name="nelson.storage.StoreOp.CreateManualDeployment">CreateManualDeployment</a> <a href="../nelson/storage/StoreOp$$InsertBlueprint.html" class="extype" name="nelson.storage.StoreOp.InsertBlueprint">InsertBlueprint</a> <a href="../nelson/vault/Mount.html" class="extype" name="nelson.vault.Mount">Mount</a> <a href="../nelson/yaml/ResourceYaml.html" class="extype" name="nelson.yaml.ResourceYaml">ResourceYaml</a> <a href="../nelson/yaml/UnitYaml.html" class="extype" name="nelson.yaml.UnitYaml">UnitYaml</a> </div>
+    </div><div class="entry">
+      <div class="name"><strike>descriptor</strike></div>
+      <div class="occurrences"><strike><a href="../nelson/api/deployable/DeployableProto$.html" class="extype" name="nelson.api.deployable.DeployableProto">DeployableProto</a></strike> <strike><a href="../nelson/api/version/VersionProto$.html" class="extype" name="nelson.api.version.VersionProto">VersionProto</a></strike> </div>
     </div><div class="entry">
       <div class="name">desired</div>
       <div class="occurrences"><a href="../nelson/loadbalancers/ASGSize.html" class="extype" name="nelson.loadbalancers.ASGSize">ASGSize</a> <a href="../nelson/yaml/InstancesYaml.html" class="extype" name="nelson.yaml.InstancesYaml">InstancesYaml</a> </div>

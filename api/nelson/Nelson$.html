@@ -733,35 +733,35 @@ that are avalible in that specific datacenter (if any).</p>
     </span>
       
     </li><li name="nelson.Nelson#fetchRawRepoManifest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fetchRawRepoManifest(token:nelson.AccessToken)(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[String]"></a>
-      <a id="fetchRawRepoManifest(AccessToken)(Slug,String):NelsonK[String]"></a>
+      <a id="fetchRawRepoManifest(token:nelson.AccessToken)(slug:nelson.Slug,ref:nelson.Github.Reference):nelson.Nelson.NelsonK[String]"></a>
+      <a id="fetchRawRepoManifest(AccessToken)(Slug,Reference):NelsonK[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchRawRepoManifest</span><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;master&quot;</span></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">fetchRawRepoManifest</span><span class="params">(<span name="token">token: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="ref">ref: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a> = <span class="symbol"><span class="name"><a href="Github$.html">Github.Branch(&quot;master&quot;)</a></span></span></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@fetchRawRepoManifest(token:nelson.AccessToken)(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[String]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@fetchRawRepoManifest(token:nelson.AccessToken)(slug:nelson.Slug,ref:nelson.Github.Reference):nelson.Nelson.NelsonK[String]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="nelson.Nelson#fetchRepoManifestAndValidateDeployable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[cats.data.ValidatedNel[nelson.NelsonError,nelson.Manifest]]"></a>
-      <a id="fetchRepoManifestAndValidateDeployable(Slug,String):NelsonK[ValidatedNel[NelsonError,Manifest]]"></a>
+      <a id="fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,ref:nelson.Github.Reference):nelson.Nelson.NelsonK[cats.data.ValidatedNel[nelson.NelsonError,nelson.Manifest]]"></a>
+      <a id="fetchRepoManifestAndValidateDeployable(Slug,Reference):NelsonK[ValidatedNel[NelsonError,Manifest]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchRepoManifestAndValidateDeployable</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;master&quot;</span></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="cats.data.ValidatedNel">ValidatedNel</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>, <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
+        <span class="name">fetchRepoManifestAndValidateDeployable</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="ref">ref: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a> = <span class="symbol"><span class="name"><a href="Github$.html">Github.Branch(&quot;master&quot;)</a></span></span></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<span class="extype" name="cats.data.ValidatedNel">ValidatedNel</span>[<a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>, <a href="Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,tagOrBranch:String):nelson.Nelson.NelsonK[cats.data.ValidatedNel[nelson.NelsonError,nelson.Manifest]]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@fetchRepoManifestAndValidateDeployable(slug:nelson.Slug,ref:nelson.Github.Reference):nelson.Nelson.NelsonK[cats.data.ValidatedNel[nelson.NelsonError,nelson.Manifest]]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -986,19 +986,19 @@ for the specified unit only. This is primarily used to power the SVG badging.</p
       </a>
     </span>
       
-    </li><li name="nelson.Nelson#handleRelease" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="handleRelease(e:nelson.Github.ReleaseEvent):nelson.Nelson.NelsonK[Unit]"></a>
-      <a id="handleRelease(ReleaseEvent):NelsonK[Unit]"></a>
+    </li><li name="nelson.Nelson#handleDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="handleDeployment(e:nelson.Github.DeploymentEvent):nelson.Nelson.NelsonK[Unit]"></a>
+      <a id="handleDeployment(DeploymentEvent):NelsonK[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handleRelease</span><span class="params">(<span name="e">e: <a href="Github$$ReleaseEvent.html" class="extype" name="nelson.Github.ReleaseEvent">ReleaseEvent</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">handleDeployment</span><span class="params">(<span name="e">e: <a href="Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a></span>)</span><span class="result">: <a href="#NelsonK[U]=cats.data.Kleisli[cats.effect.IO,nelson.NelsonConfig,U]" class="extmbr" name="nelson.Nelson.NelsonK">NelsonK</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Nelson$@handleRelease(e:nelson.Github.ReleaseEvent):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Nelson$@handleDeployment(e:nelson.Github.DeploymentEvent):nelson.Nelson.NelsonK[Unit]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

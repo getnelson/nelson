@@ -345,6 +345,40 @@
   &quot;size&quot;: 633
 }
 </p>
+    </li><li name="nelson.Json#GithubDeploymentEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GithubDeploymentEncoder:argonaut.EncodeJson[nelson.Github.DeploymentEvent]"></a>
+      <a id="GithubDeploymentEncoder:EncodeJson[DeploymentEvent]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">GithubDeploymentEncoder</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<a href="Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Json$@GithubDeploymentEncoder:argonaut.EncodeJson[nelson.Github.DeploymentEvent]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Json#GithubDeploymentEventDecoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GithubDeploymentEventDecoder:argonaut.DecodeJson[nelson.Github.DeploymentEvent]"></a>
+      <a id="GithubDeploymentEventDecoder:DecodeJson[DeploymentEvent]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">GithubDeploymentEventDecoder</span><span class="result">: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<a href="Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Json$@GithubDeploymentEventDecoder:argonaut.DecodeJson[nelson.Github.DeploymentEvent]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.Json#GithubEventDecoder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="GithubEventDecoder:argonaut.DecodeJson[nelson.Github.Event]"></a>
       <a id="GithubEventDecoder:DecodeJson[Event]"></a>
@@ -400,7 +434,25 @@ and un-typed worlds here... *sigh*.</p><p>TIM: this seems really hacky.
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p>
+      <p class="shortcomment cmt">Supplied by Github to ensure that your webhook is active
+</p>
+    </li><li name="nelson.Json#GithubPullRequestEventDecoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GithubPullRequestEventDecoder:argonaut.DecodeJson[nelson.Github.PullRequestEvent]"></a>
+      <a id="GithubPullRequestEventDecoder:DecodeJson[PullRequestEvent]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">GithubPullRequestEventDecoder</span><span class="result">: <span class="extype" name="argonaut.DecodeJson">DecodeJson</span>[<a href="Github$$PullRequestEvent.html" class="extype" name="nelson.Github.PullRequestEvent">PullRequestEvent</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Json$@GithubPullRequestEventDecoder:argonaut.DecodeJson[nelson.Github.PullRequestEvent]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.Json#GithubReleaseDecoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GithubReleaseDecoder:argonaut.DecodeJson[nelson.Github.Release]"></a>
       <a id="GithubReleaseDecoder:DecodeJson[Release]"></a>
@@ -1397,57 +1449,6 @@ and un-typed worlds here... *sigh*.</p><p>TIM: this seems really hacky.
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Json$@tagEncoder[A,T](implicitea:argonaut.EncodeJson[A]):argonaut.EncodeJson[nelson.@@[A,T]]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Json#taskEventEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="taskEventEncoder:argonaut.EncodeJson[nelson.TaskEvent]"></a>
-      <a id="taskEventEncoder:EncodeJson[TaskEvent]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">taskEventEncoder</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<a href="TaskEvent.html" class="extype" name="nelson.TaskEvent">TaskEvent</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Json$@taskEventEncoder:argonaut.EncodeJson[nelson.TaskEvent]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Json#taskStatusAndTaskEventsEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="taskStatusAndTaskEventsEncoder:argonaut.EncodeJson[(nelson.TaskStatus,List[nelson.TaskEvent])]"></a>
-      <a id="taskStatusAndTaskEventsEncoder:EncodeJson[(TaskStatus,List[TaskEvent])]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">taskStatusAndTaskEventsEncoder</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[(<a href="TaskStatus.html" class="extype" name="nelson.TaskStatus">TaskStatus</a>, <span class="extype" name="scala.List">List</span>[<a href="TaskEvent.html" class="extype" name="nelson.TaskEvent">TaskEvent</a>])]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Json$@taskStatusAndTaskEventsEncoder:argonaut.EncodeJson[(nelson.TaskStatus,List[nelson.TaskEvent])]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Json#taskStatusEncoder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="taskStatusEncoder:argonaut.EncodeJson[nelson.TaskStatus]"></a>
-      <a id="taskStatusEncoder:EncodeJson[TaskStatus]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">taskStatusEncoder</span><span class="result">: <span class="extype" name="argonaut.EncodeJson">EncodeJson</span>[<a href="TaskStatus.html" class="extype" name="nelson.TaskStatus">TaskStatus</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Json$@taskStatusEncoder:argonaut.EncodeJson[nelson.TaskStatus]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

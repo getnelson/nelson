@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">GetFileFromRepository</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Github$$Contents.html" class="extype" name="nelson.Github.Contents">Contents</a>]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">GetFileFromRepository</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ref">ref: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Github$$Contents.html" class="extype" name="nelson.Github.Contents">Contents</a>]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Github.GetFileFromRepository#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(slug:nelson.Slug,path:String,tagOrBranch:String,t:nelson.AccessToken):nelson.Github.GetFileFromRepository"></a>
+      <a id="&lt;init&gt;(slug:nelson.Slug,path:String,ref:nelson.Github.Reference,t:nelson.AccessToken):nelson.Github.GetFileFromRepository"></a>
       <a id="&lt;init&gt;:GetFileFromRepository"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">GetFileFromRepository</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="tagOrBranch">tagOrBranch: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span>
+        <span class="name">GetFileFromRepository</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="ref">ref: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetFileFromRepository@&lt;init&gt;(slug:nelson.Slug,path:String,tagOrBranch:String,t:nelson.AccessToken):nelson.Github.GetFileFromRepository" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$GetFileFromRepository@&lt;init&gt;(slug:nelson.Slug,path:String,ref:nelson.Github.Reference,t:nelson.AccessToken):nelson.Github.GetFileFromRepository" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -347,6 +347,23 @@
       </a>
     </span>
       
+    </li><li name="nelson.Github.GetFileFromRepository#ref" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ref:nelson.Github.Reference"></a>
+      <a id="ref:Reference"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ref</span><span class="result">: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$$GetFileFromRepository@ref:nelson.Github.Reference" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.Github.GetFileFromRepository#slug" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="slug:nelson.Slug"></a>
       <a id="slug:Slug"></a>
@@ -394,23 +411,6 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Github$$GetFileFromRepository@t:nelson.AccessToken" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Github.GetFileFromRepository#tagOrBranch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="tagOrBranch:String"></a>
-      <a id="tagOrBranch:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tagOrBranch</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetFileFromRepository@tagOrBranch:String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

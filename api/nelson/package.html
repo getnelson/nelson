@@ -1371,6 +1371,23 @@ API is subset of what Google's Guava libraries is providing
       </a>
     </span>
       
+    </li><li name="nelson.MissingDeploymentReference" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MissingDeploymentReferenceextendsNelsonErrorwithProductwithSerializable"></a>
+      <a id="MissingDeploymentReference:MissingDeploymentReference"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MissingDeploymentReference.html"><span class="name">MissingDeploymentReference</span></a><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result"> extends <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@MissingDeploymentReferenceextendsNelsonErrorwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.MissingHealthCheckPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="MissingHealthCheckPathextendsNelsonErrorwithProductwithSerializable"></a>
       <a id="MissingHealthCheckPath:MissingHealthCheckPath"></a>
@@ -1401,23 +1418,6 @@ API is subset of what Google's Guava libraries is providing
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@MissingIndividualDefaultNamespaceReferenceextendsNelsonErrorwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.MissingReleaseAssets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MissingReleaseAssetsextendsNelsonErrorwithProductwithSerializable"></a>
-      <a id="MissingReleaseAssets:MissingReleaseAssets"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="MissingReleaseAssets.html"><span class="name">MissingReleaseAssets</span></a><span class="params">(<span name="r">r: <a href="Github$$ReleaseEvent.html" class="extype" name="nelson.Github.ReleaseEvent">ReleaseEvent</a></span>)</span><span class="result"> extends <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@MissingReleaseAssetsextendsNelsonErrorwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1775,7 +1775,7 @@ concurrency limits are in place.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Released.html"><span class="name">Released</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="version">version: <a href="Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="timestamp">timestamp: <span class="extype" name="java.time.Instant">Instant</span></span>, <span name="releaseId">releaseId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="releaseHtmlUrl">releaseHtmlUrl: <span class="extype" name="java.net.URI">URI</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Released.html"><span class="name">Released</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="version">version: <a href="Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="timestamp">timestamp: <span class="extype" name="java.time.Instant">Instant</span></span>, <span name="referenceId">referenceId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="releaseHtmlUrl">releaseHtmlUrl: <span class="extype" name="java.net.URI">URI</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@ReleasedextendsProductwithSerializable" title="Permalink" target="_top">
@@ -2013,40 +2013,6 @@ to canonically reference a repo within nelson.</p>
       </a>
     </span>
       
-    </li><li name="nelson.TaskName" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="TaskNameextendsAnyRef"></a>
-      <a id="TaskName:TaskName"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="TaskName.html"><span class="name">TaskName</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@TaskNameextendsAnyRef" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.TaskStatus" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="TaskStatusextendsProductwithSerializable"></a>
-      <a id="TaskStatus:TaskStatus"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="TaskStatus.html"><span class="name">TaskStatus</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@TaskStatusextendsProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.TemplateConfig" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TemplateConfigextendsProductwithSerializable"></a>
       <a id="TemplateConfig:TemplateConfig"></a>
@@ -2270,23 +2236,6 @@ to canonically reference a repo within nelson.</p>
       </a>
     </span>
       
-    </li><li name="nelson.UnparsableReleaseVersion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="UnparsableReleaseVersionextendsNelsonErrorwithProductwithSerializable"></a>
-      <a id="UnparsableReleaseVersion:UnparsableReleaseVersion"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="UnparsableReleaseVersion.html"><span class="name">UnparsableReleaseVersion</span></a><span class="params">(<span name="version">version: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@UnparsableReleaseVersionextendsNelsonErrorwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.UnsatisfiedDeploymentRequirements" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="UnsatisfiedDeploymentRequirementsextendsNelsonErrorwithProductwithSerializable"></a>
       <a id="UnsatisfiedDeploymentRequirements:UnsatisfiedDeploymentRequirements"></a>
@@ -2351,6 +2300,23 @@ to canonically reference a repo within nelson.</p>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.package@Versionable[A]extendsAnywithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.VersionedGitTagRequired" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VersionedGitTagRequiredextendsNelsonErrorwithProductwithSerializable"></a>
+      <a id="VersionedGitTagRequired:VersionedGitTagRequired"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="VersionedGitTagRequired.html"><span class="name">VersionedGitTagRequired</span></a><span class="params">(<span name="ref">ref: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a></span>)</span><span class="result"> extends <a href="NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@VersionedGitTagRequiredextendsNelsonErrorwithProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -3295,23 +3261,6 @@ authentication roles in Vault so that Kubernetes pods can talk to Vault at runti
       <p class="shortcomment cmt">Copied, adapted, and minimized from Scalaz's Tag implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Copied, adapted, and minimized from Scalaz's Tag implementation.
 https://github.com/scalaz/scalaz/blob/v7.1.17/core/src/main/scala/scalaz/Tag.scala
 </p></div></div>
-    </li><li name="nelson.TaskStatus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TaskStatus"></a>
-      <a id="TaskStatus:TaskStatus"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="TaskStatus$.html"><span class="name">TaskStatus</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.package@TaskStatus" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="nelson.Templates" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Templates"></a>
       <a id="Templates:Templates"></a>
@@ -3486,6 +3435,23 @@ Consul.</p><div class="fullcomment"><div class="comment cmt"><p>Contains code re
 Consul.</p><p>In theory, we can support multiple alerting systems.  In current practice, we
 only support Prometheus.
 </p></div></div>
+    </li><li name="nelson.api" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="api"></a>
+      <a id="api:api"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="api/package.html"><span class="name">api</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.package@api" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="nelson.audit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="audit"></a>
       <a id="audit:audit"></a>

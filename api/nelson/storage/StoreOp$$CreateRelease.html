@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">CreateRelease</span><span class="params">(<span name="repositoryId">repositoryId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="r">r: <a href="../Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a></span>)</span><span class="result"> extends <a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">CreateRelease</span><span class="params">(<span name="r">r: <a href="../Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a></span>)</span><span class="result"> extends <a href="StoreOp.html" class="extype" name="nelson.storage.StoreOp">StoreOp</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.storage.StoreOp.CreateRelease#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(repositoryId:Long,r:nelson.Github.Release):nelson.storage.StoreOp.CreateRelease"></a>
+      <a id="&lt;init&gt;(r:nelson.Github.DeploymentEvent):nelson.storage.StoreOp.CreateRelease"></a>
       <a id="&lt;init&gt;:CreateRelease"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">CreateRelease</span><span class="params">(<span name="repositoryId">repositoryId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="r">r: <a href="../Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a></span>)</span>
+        <span class="name">CreateRelease</span><span class="params">(<span name="r">r: <a href="../Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.StoreOp$$CreateRelease@&lt;init&gt;(repositoryId:Long,r:nelson.Github.Release):nelson.storage.StoreOp.CreateRelease" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.storage.StoreOp$$CreateRelease@&lt;init&gt;(r:nelson.Github.DeploymentEvent):nelson.storage.StoreOp.CreateRelease" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -331,35 +331,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="nelson.storage.StoreOp.CreateRelease#r" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="r:nelson.Github.Release"></a>
-      <a id="r:Release"></a>
+      <a id="r:nelson.Github.DeploymentEvent"></a>
+      <a id="r:DeploymentEvent"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">r</span><span class="result">: <a href="../Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a></span>
+        <span class="name">r</span><span class="result">: <a href="../Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.StoreOp$$CreateRelease@r:nelson.Github.Release" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.storage.StoreOp.CreateRelease#repositoryId" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="repositoryId:Long"></a>
-      <a id="repositoryId:Long"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">repositoryId</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.storage.StoreOp$$CreateRelease@repositoryId:Long" title="Permalink" target="_top">
+      <a href="../../index.html#nelson.storage.StoreOp$$CreateRelease@r:nelson.Github.DeploymentEvent" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

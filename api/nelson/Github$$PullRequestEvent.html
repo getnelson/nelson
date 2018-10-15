@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>GetRelease - nelson.Github.GetRelease</title>
-          <meta name="description" content="GetRelease - nelson.Github.GetRelease" />
-          <meta name="keywords" content="GetRelease nelson.Github.GetRelease" />
+          <title>PullRequestEvent - nelson.Github.PullRequestEvent</title>
+          <meta name="description" content="PullRequestEvent - nelson.Github.PullRequestEvent" />
+          <meta name="keywords" content="PullRequestEvent nelson.Github.PullRequestEvent" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'nelson.Github$$GetRelease';
+            var hash = 'nelson.Github$$PullRequestEvent';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,10 +30,10 @@
       <div id="definition">
         <img alt="Class" src="../lib/class_big.png" />
         <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a>.<a href="Github$.html" class="extype" name="nelson.Github">Github</a></p>
-        <h1>GetRelease</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>PullRequestEvent</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="Github$.html" class="extype" name="nelson.Github">package Github</a>
           </div></span></h3><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,13 +45,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">GetRelease</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="releaseId">releaseId: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a>] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">PullRequestEvent</span><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span><span class="result"> extends <a href="Github$$Event.html" class="extype" name="nelson.Github.Event">Event</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/core/src/main/scala/Github.scala" target="_blank">Github.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Reference https://developer.github.com/v3/activity/events/types/#pullrequestevent</p><p>This event definition is a placeholder for future support for inbound pull request
+deployments. This skeleton is being provided so that Nelson can parse the inbound
+payload and give a 200 OK response so Github doesn't think Nelson is faulty.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/core/src/main/scala/Github.scala" target="_blank">Github.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a>], <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="Github$$Event.html" class="extype" name="nelson.Github.Event">Event</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="nelson.Github.GetRelease"><span>GetRelease</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="nelson.Github.GithubOp"><span>GithubOp</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="nelson.Github.PullRequestEvent"><span>PullRequestEvent</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="nelson.Github.Event"><span>Event</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,19 +91,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="nelson.Github.GetRelease#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(slug:nelson.Slug,releaseId:nelson.ID,t:nelson.AccessToken):nelson.Github.GetRelease"></a>
-      <a id="&lt;init&gt;:GetRelease"></a>
+              <ol><li name="nelson.Github.PullRequestEvent#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(id:Long,url:String,slug:nelson.Slug):nelson.Github.PullRequestEvent"></a>
+      <a id="&lt;init&gt;:PullRequestEvent"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">GetRelease</span><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="releaseId">releaseId: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span>
+        <span class="name">PullRequestEvent</span><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@&lt;init&gt;(slug:nelson.Slug,releaseId:nelson.ID,t:nelson.AccessToken):nelson.Github.GetRelease" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@&lt;init&gt;(id:Long,url:String,slug:nelson.Slug):nelson.Github.PullRequestEvent" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -126,7 +129,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -143,7 +146,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@##():Int" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@##():Int" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -160,7 +163,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -177,7 +180,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -194,7 +197,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@clone():Object" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@clone():Object" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -217,7 +220,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -234,7 +237,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@finalize():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@finalize():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -257,11 +260,28 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Github.PullRequestEvent#id" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="id:Long"></a>
+      <a id="id:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">id</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@id:Long" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -274,7 +294,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -291,7 +311,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -308,7 +328,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@notify():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@notify():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -325,29 +345,12 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.Github.GetRelease#releaseId" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="releaseId:nelson.ID"></a>
-      <a id="releaseId:ID"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">releaseId</span><span class="result">: <a href="package.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@releaseId:nelson.ID" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="nelson.Github.GetRelease#slug" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="nelson.Github.PullRequestEvent#slug" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="slug:nelson.Slug"></a>
       <a id="slug:Slug"></a>
       <h4 class="signature">
@@ -359,7 +362,7 @@
         <span class="name">slug</span><span class="result">: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@slug:nelson.Slug" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@slug:nelson.Slug" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -376,24 +379,24 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.Github.GetRelease#t" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="t:nelson.AccessToken"></a>
-      <a id="t:AccessToken"></a>
+    </li><li name="nelson.Github.PullRequestEvent#url" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="url:String"></a>
+      <a id="url:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">t</span><span class="result">: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>
+        <span class="name">url</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@t:nelson.AccessToken" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@url:String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -410,7 +413,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@wait():Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@wait():Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -433,7 +436,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -456,7 +459,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$$GetRelease@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$$PullRequestEvent@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -484,8 +487,8 @@
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
-            </div><div class="parent" name="nelson.Github.GithubOp">
-              <h3>Inherited from <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="Github$$Release.html" class="extype" name="nelson.Github.Release">Release</a>]</h3>
+            </div><div class="parent" name="nelson.Github.Event">
+              <h3>Inherited from <a href="Github$$Event.html" class="extype" name="nelson.Github.Event">Event</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
