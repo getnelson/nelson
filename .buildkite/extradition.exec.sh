@@ -19,8 +19,16 @@ cp -fvR "api/src/main/protobuf/"  "${temp_dir}/src/main/"
 # save those changes
 cd "${temp_dir}"
 echo "--> commiting changes to api upstream..."
-git commit -am "auto-extradition $(date)"
-git push origin master
 
-# cleanup the workspace
-rm -rf "${temp_dir}"
+files_changed=$(git diff --name-only | wc -l | awk '{print $1}')
+
+if [ "${files_changed}" = "0" ]; then
+  echo "--> all files are up to date, nothing to do."
+  exit 0;
+else
+  git commit -am "auto-extradition $(date)"
+  git push origin master
+
+  echo "--> cleaning up..."
+  rm -rf "${temp_dir}"
+fi

@@ -25,3 +25,4 @@ message SemanticVersion {
   int32 minor = 2;
   int32 patch = 3;
 }
+
