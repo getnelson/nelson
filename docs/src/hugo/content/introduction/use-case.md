@@ -9,7 +9,7 @@ menu:
     parent: intro
     identifier: intro-use-case
     url: /introduction/use-case.html
-    weight: 2
+    weight: 1
 ---
 
 ## Deployment
