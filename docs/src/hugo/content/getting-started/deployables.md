@@ -16,34 +16,20 @@ Manifests describe a logical definition (e.g. a unit name) and deployables tie t
 
 ## Protocol
 
-The deployable format - what we call NLDP - is a small binary protocol based on [Google Protocol Buffers](https://developers.google.com/protocol-buffers/). This protocol is located within the Nelson code base, but is automatically extracted into [getnelson/api](https://github.com/getnelson/api) for ease of client code generation.
+The deployable format - what we call NLDP - is a small binary protocol based on [Google Protocol Buffers](https://developers.google.com/protocol-buffers/). This protocol is located within the Nelson code base, but is automatically extracted into [getnelson/api](https://github.com/getnelson/api) for ease of client code generation. Consider the following protocol definition:
 
 ```
-/// replace
+message Deployable {
+  string unit_name = 1;
+  oneof version {
+    SemanticVersion semver = 2;
+  }
+  oneof kind {
+    Container container = 3;
+  }
+}
 ```
 
-The unit name and version in the file name and contents is what Nelson enters into its database - therefore the unit name in the filename should match the unit name in the contents which should match a unit name in the manifest. Because Nelson is version-aware, the same logical version cannot be deployed twice - the version must be incremented, though not necessarily sequential, with each new release.
+The `unit_name` and `version` is what Nelson enters into its database - therefore the unit name must match a unit name in the repository manifest. Because Nelson is version-aware, the same logical version cannot be deployed twice - the version must be incremented, though not necessarily sequentually, with each new release. At present, Nelson only supports [semantic versioning](https://semver.org/), with scope for supporting other sortable schemes in the future.
 
-The Docker image tag typically matches the version, but it doesn't have to. Note that the provided Docker image is assumed to exist by the time the release (and therefore the deployment) is made, likely built and pushed by an earlier step in the CI pipeline. Nelson does little with the image string other than forward it to the backing scheduler.
-
-As an example, consider a manifest that contains `foo`, `bar`, and `baz` as units. To tell Nelson to deploy `foo` and `bar` for a release, something similar to the following would be attached to the release (likely with Slipway):
-
-In `foo.deployable.yml`:
-```yaml
----
-name: foo
-version: 1.2.3
-output:
-  kind: docker
-  image: your.docker.com/repo/foo:1.2.0
-```
-
-In `bar.deployable.yml`:
-```yaml
----
-name: bar
-version: 2.1.3
-output:
-  kind: docker
-  image: your.docker.com/repo/bar:2.1.3
-```
+The Docker image tag typically matches the semantic version, but it doesn't have to. Note that the provided Docker image is assumed to exist by the time the release (and therefore the deployment) is made, likely built and pushed by an earlier step in the CI pipeline. Nelson does little with the image string other than forward it to the backing scheduler.
