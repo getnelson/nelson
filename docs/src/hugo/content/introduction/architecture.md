@@ -5,9 +5,9 @@ preamble: >
   Nelson is unlike many systems presently available in the market, and its architecture is discretely composable, and indeed, composability is an explicit design goal of the Nelson team. In practice this means that - unlikle other monolithic systems - Nelson lets you bring your own CI, bring your own scheduler, bring your own credential management and so on.
 menu:
   main:
-    parent: gs
+    parent: intro
     identifier: gs-arch
-    url: /getting-started/architecture.html
+    url: /introduction/architecture.html
     weight: 2
 ---
 
@@ -22,7 +22,7 @@ Nelson splits the build->deploy->release phases into two major parts, each with 
   <small><em>Workflow overview</em></small>
 </div>
 
-There are a range of automated steps at every phase of the build and release pipeline; only the most minimal metadata is needed in the resulting Github Release to conduct a deployment. Nelson is agnostic to what language your application is built with or how it is tooled. You are free to integrate however you prefer, but we provide some tools to make doing so easy. For more information on CI integration, please see the [section on Deployables](/getting-started/deployables.html).
+There are a range of automated steps at every phase of the build and release pipeline; only the most minimal metadata is needed in the resulting Github Deployment to conduct a deployment. Nelson is agnostic to what language your application is built with or how it is tooled. You are free to integrate however you prefer, but we provide some tools to make doing so easy. For more information on CI integration, please see the [section on Deployables](/getting-started/deployables.html).
 
 # Domain Redundancy
 

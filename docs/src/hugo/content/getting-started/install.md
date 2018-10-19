@@ -55,7 +55,7 @@ If you encounter problems with the CLI, be aware of the following options which 
 
 ## Slipway Command Line
 
-[Github releases](https://help.github.com/articles/creating-releases/) are the "trigger" for whole Nelson process to start deploying a given system. This small file-based protocol (called a [Deployable](/getting-started/deployables.html)), whilst simple, is essentially the "glue" between your continuous integration system and Nelson. To automate this integration, the Nelson ecosystem provides a convenient tool for creating releases called `slipway`.
+[Github deployments](https://developer.github.com/v3/repos/deployments/) are the "trigger" for whole Nelson process to start deploying a given system. This small file-based protocol (called a [Deployable](/getting-started/deployables.html)), whilst simple, is essentially the "glue" between your continuous integration system and Nelson. To automate this integration, the Nelson ecosystem provides a convenient tool for creating releases called `slipway`.
 
 The `slipway` tool can be installed by running the following:
 
@@ -316,7 +316,7 @@ The following table gives an explanation of the configuration file sections and 
   </tr>
   <tr>
     <td><code>nelson.default-namespace</code></td>
-    <td>Upon receiving a github release event, where should Nelson assume the application should get deployed too. This can either be a root namespace, or a subordinate namespace, e.g. `stage/unstable`... its arbitrary, but the namespace must exist (Nelson will attempt to create the specified namespace on bootup).</td>
+    <td>Upon receiving a github deployment event, where should Nelson assume the application should get deployed too. This can either be a root namespace, or a subordinate namespace, e.g. `stage/unstable`... its arbitrary, but the namespace must exist (Nelson will attempt to create the specified namespace on bootup).</td>
   </tr>
 </table>
 
