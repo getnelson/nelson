@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?2d01630e684dab4937a23ecac96f47c1" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?71354c41c62a8000e5f663e1d4172156" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?956eb6c5f2cd2041f9788794989e1ae9" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?399de8e16a9c5cfa96aa4d551b6e522a" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -76,6 +76,10 @@
                       </li>
                   
                       <li class="">
+                          <a href="/introduction/architecture.html">Architecture</a>
+                      </li>
+                  
+                      <li class="">
                           <a href="/introduction/competitors.html">Competitors</a>
                       </li>
                   
@@ -90,10 +94,6 @@
                   
                       <li class="highlight">
                           <a href="/getting-started/install.html">Install</a>
-                      </li>
-                  
-                      <li class="">
-                          <a href="/getting-started/architecture.html">Architecture</a>
                       </li>
                   
                       <li class="">
@@ -228,7 +228,7 @@
 
 <h2 id="slipway-command-line">Slipway Command Line</h2>
 
-<p><a href="https://help.github.com/articles/creating-releases/">Github releases</a> are the &ldquo;trigger&rdquo; for whole Nelson process to start deploying a given system. This small file-based protocol (called a <a href="/getting-started/deployables.html">Deployable</a>), whilst simple, is essentially the &ldquo;glue&rdquo; between your continuous integration system and Nelson. To automate this integration, the Nelson ecosystem provides a convenient tool for creating releases called <code>slipway</code>.</p>
+<p><a href="https://developer.github.com/v3/repos/deployments/">Github deployments</a> are the &ldquo;trigger&rdquo; for whole Nelson process to start deploying a given system. This small file-based protocol (called a <a href="/getting-started/deployables.html">Deployable</a>), whilst simple, is essentially the &ldquo;glue&rdquo; between your continuous integration system and Nelson. To automate this integration, the Nelson ecosystem provides a convenient tool for creating releases called <code>slipway</code>.</p>
 
 <p>The <code>slipway</code> tool can be installed by running the following:</p>
 
@@ -487,7 +487,7 @@
   </tr>
   <tr>
     <td><code>nelson.default-namespace</code></td>
-    <td>Upon receiving a github release event, where should Nelson assume the application should get deployed too. This can either be a root namespace, or a subordinate namespace, e.g. `stage/unstable`... its arbitrary, but the namespace must exist (Nelson will attempt to create the specified namespace on bootup).</td>
+    <td>Upon receiving a github deployment event, where should Nelson assume the application should get deployed too. This can either be a root namespace, or a subordinate namespace, e.g. `stage/unstable`... its arbitrary, but the namespace must exist (Nelson will attempt to create the specified namespace on bootup).</td>
   </tr>
 </table>
 
@@ -556,7 +556,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
         </p>
         <p>
           Currently v
-                    0.12.145
+                    0.12.146
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -577,9 +577,9 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?b2fc7fe9417541fc533fec36da06587e"></script>
+<script src="/js/material.min.js?2ab8f159ed03e83b6dde97940c0783bb"></script>
 
-<script src="/js/nelson.js?0b48e4834fb2d6e61de3c17179d446bd"></script>
+<script src="/js/nelson.js?dc16d49abb2c93a2062c1020ff245e79"></script>
 
 
   </body>
