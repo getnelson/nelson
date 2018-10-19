@@ -175,6 +175,24 @@
       </a>
     </span>
       
+    </li><li name="nelson.Github.Deployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DeploymentextendsProductwithSerializable"></a>
+      <a id="Deployment:Deployment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Github$$Deployment.html"><span class="name">Deployment</span></a><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="ref">ref: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a></span>, <span name="environment">environment: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deployables">deployables: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a>]</span>, <span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Github$@DeploymentextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">https://developer.github.com/v3/repos/deployments/#response-1
+</p>
     </li><li name="nelson.Github.DeploymentEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DeploymentEventextendsGithub.EventwithProductwithSerializable"></a>
       <a id="DeploymentEvent:DeploymentEvent"></a>
@@ -184,7 +202,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Github$$DeploymentEvent.html"><span class="name">DeploymentEvent</span></a><span class="params">(<span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="repositoryId">repositoryId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="ref">ref: <a href="Github$$Reference.html" class="extype" name="nelson.Github.Reference">Reference</a></span>, <span name="environment">environment: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="deployables">deployables: <span class="extype" name="scala.List">List</span>[<a href="Manifest$$Deployable.html" class="extype" name="nelson.Manifest.Deployable">Deployable</a>]</span>, <span name="url">url: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Github$$Event.html" class="extype" name="nelson.Github.Event">Event</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Github$$DeploymentEvent.html"><span class="name">DeploymentEvent</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="repositoryId">repositoryId: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="deployment">deployment: <a href="Github$$Deployment.html" class="extype" name="nelson.Github.Deployment">Deployment</a></span>)</span><span class="result"> extends <a href="Github$$Event.html" class="extype" name="nelson.Github.Event">Event</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Github$@DeploymentEventextendsGithub.EventwithProductwithSerializable" title="Permalink" target="_top">
@@ -228,7 +246,7 @@
     </span>
       
     </li><li name="nelson.Github.GetDeployment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="GetDeploymentextendsGithub.GithubOp[Option[nelson.Github.DeploymentEvent]]withProductwithSerializable"></a>
+      <a id="GetDeploymentextendsGithub.GithubOp[Option[nelson.Github.Deployment]]withProductwithSerializable"></a>
       <a id="GetDeployment:GetDeployment"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -236,10 +254,10 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Github$$GetDeployment.html"><span class="name">GetDeployment</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Github$$DeploymentEvent.html" class="extype" name="nelson.Github.DeploymentEvent">DeploymentEvent</a>]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Github$$GetDeployment.html"><span class="name">GetDeployment</span></a><span class="params">(<span name="slug">slug: <a href="Slug.html" class="extype" name="nelson.Slug">Slug</a></span>, <span name="id">id: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="t">t: <a href="AccessToken.html" class="extype" name="nelson.AccessToken">AccessToken</a></span>)</span><span class="result"> extends <a href="Github$$GithubOp.html" class="extype" name="nelson.Github.GithubOp">GithubOp</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Github$$Deployment.html" class="extype" name="nelson.Github.Deployment">Deployment</a>]] with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Github$@GetDeploymentextendsGithub.GithubOp[Option[nelson.Github.DeploymentEvent]]withProductwithSerializable" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Github$@GetDeploymentextendsGithub.GithubOp[Option[nelson.Github.Deployment]]withProductwithSerializable" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
