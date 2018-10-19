@@ -296,7 +296,7 @@ object Manifest {
   /*
    * Saturates the manifest with all the bits that a unit or loadbalancer needs for deployment.
    */
-  def saturateManifest(m: Manifest)(e: Github.DeploymentEvent): IO[Manifest @@ Versioned] = {
+  def saturateManifest(m: Manifest)(e: Github.Deployment): IO[Manifest @@ Versioned] = {
     def addVersionToLoadbalancers(m: Manifest)(major: MajorVersion): List[Loadbalancer] = {
       m.loadbalancers.map(lb => lb.copy(majorVersion = Some(major)))
     }
@@ -423,7 +423,7 @@ object Manifest {
       .map(l => Foldable[List].fold(l))
   }
 
-  private def addDeployable(m: Manifest)(e: Github.DeploymentEvent): IO[List[UnitDef]] =
+  private def addDeployable(m: Manifest)(e: Github.Deployment): IO[List[UnitDef]] =
     m.units.traverse(u =>
       e.findDeployable(u.name).map(d =>
         u.copy(deployable = Some(d))))

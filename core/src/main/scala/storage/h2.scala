@@ -810,7 +810,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
    */
   def createRelease(r: Github.DeploymentEvent): ConnectionIO[Unit] = {
     sql"""INSERT INTO PUBLIC.releases (repository_id, version, timestamp, release_id, release_url, release_html_url)
-          VALUES ( ${r.repositoryId}, ${r.ref.toString}, ${Instant.now()}, ${r.id}, ${r.url}, ${r.url} );
+          VALUES ( ${r.repositoryId}, ${r.deployment.ref.toString}, ${Instant.now()}, ${r.deployment.id}, ${r.deployment.url}, ${r.deployment.url} );
        """.update.run.void
   }
 

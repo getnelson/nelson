@@ -115,14 +115,21 @@ object Github {
    * Reference: https://developer.github.com/v3/activity/events/types/#deploymentevent
    */
   final case class DeploymentEvent(
-    id: Long,
     slug: Slug,
     repositoryId: Long,
+    deployment: Deployment
+  ) extends Event
+
+  /**
+   * https://developer.github.com/v3/repos/deployments/#response-1
+   */
+  final case class Deployment(
+    id: Long,
     ref: Reference, // sha, branch or tag
     environment: String,
     deployables: List[Manifest.Deployable],
     url: String
-  ) extends Event {
+  ) {
     def findDeployable(withName: String): IO[Manifest.Deployable] =
       deployables.find(_.name.trim.toLowerCase == withName.trim.toLowerCase)
         .fold[IO[Manifest.Deployable]](IO.raiseError(new ProblematicDeployable(s"could not find an asset named $withName", url)))(IO.pure)
@@ -210,7 +217,7 @@ object Github {
     extends GithubOp[Unit]
 
   final case class GetDeployment(slug: Slug, id: Long, t: AccessToken)
-    extends GithubOp[Option[Github.DeploymentEvent]]
+    extends GithubOp[Option[Github.Deployment]]
 
   object Request {
 
@@ -255,7 +262,7 @@ object Github {
       Free.liftF(DeleteRepoWebHook(slug, id, token))
 
     /** * https://developer.github.com/v3/repos/deployments/#get-a-single-deployment */
-    def getDeployment(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Option[Github.DeploymentEvent]] =
+    def getDeployment(slug: Slug, id: Long)(token: AccessToken): GithubOpF[Option[Github.Deployment]] =
       Free.liftF(GetDeployment(slug, id, token))
 
     /**
@@ -365,7 +372,7 @@ object Github {
 
       case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
         val req = HttpRequest[IO](Method.GET, cfg.deploymentEndpoint(slug, id)).token(t)
-        client.expect[Github.DeploymentEvent](req).map(Option(_)).handleError(_ => None)
+        client.expect[Github.Deployment](req).map(Option(_)).handleError(_ => None)
     }
 
     /////////////////////////// INTERNALS ///////////////////////////

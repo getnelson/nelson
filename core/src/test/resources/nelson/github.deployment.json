@@ -5,7 +5,7 @@
   "sha": "fdb7da2ab3b2cd172e86c1af9adefa3523f6d65b",
   "ref": "fdb7da2ab3b2cd172e86c1af9adefa3523f6d65b",
   "task": "deploy",
-  "payload": "{ \"foo\": true }",
+  "payload": "ClUKEGF2ZHJpdmluZ3JlcG9ydHMSBQgCGMcCGjoKOGxpYnJhcnkucGR4LmF3cy5hdi5seWZ0Lm5ldC9qb2IvYXZkcml2aW5ncmVwb3J0czoyLjAuMzI3",
   "original_environment": "production",
   "environment": "production",
   "description": null,

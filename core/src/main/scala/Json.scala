@@ -230,7 +230,7 @@ object Json {
    * TIM: this seems really hacky.
    */
   implicit lazy val GithubEventDecoder: DecodeJson[Github.Event] =
-    ((GithubDeploymentEventDecoder |||
+    ((GithubDeploymentEventInboundDecoder |||
      GithubReleaseEventDecoder: DecodeJson[Github.Event]) |||
      GithubPullRequestEventDecoder: DecodeJson[Github.Event]) |||
      GithubPingEventDecoder
@@ -268,18 +268,14 @@ object Json {
    *   }
    * }
   */
-  implicit val GithubDeploymentEventDecoder: DecodeJson[Github.DeploymentEvent] =
+  implicit val GithubDeploymentEventDecoder: DecodeJson[Github.Deployment] =
     DecodeJson(z => for {
-      a <- (z --\ "deployment" --\ "id").as[Long]
-      x <- (z --\ "repository" --\ "full_name").as[String]
-      b <- Slug.fromString(x).map(DecodeResult.ok
-           ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
-      c <- (z --\ "deployment" --\ "ref").as[String]
-      s <- (z --\ "deployment" --\ "sha").as[String]
-      d <- (z --\ "deployment" --\ "environment").as[String]
-      e <- (z --\ "deployment" --\ "payload").as[String]
-      f <- (z --\ "repository" --\ "id").as[Long]
-      g <- (z --\ "deployment" --\ "url").as[String]
+      a <- (z --\ "id").as[Long]
+      c <- (z --\ "ref").as[String]
+      s <- (z --\ "sha").as[String]
+      d <- (z --\ "environment").as[String]
+      e <- (z --\ "payload").as[String]
+      g <- (z --\ "url").as[String]
     } yield {
       // NOTE(timperrett): this seems a little sketchy as we're invoking the
       // protobuf decoder right here in the JSON decoder, even thought we've
@@ -294,12 +290,10 @@ object Json {
           output = Manifest.Deployable.Container(a.kind.container.get.image)
         )
       }
-      Github.DeploymentEvent(
+      Github.Deployment(
         id = a,
-        slug = b,
         ref = Github.Reference.fromString(c,Option(s)),
         environment = d,
-        repositoryId = f,
         deployables = converted,
         url = g
       )
@@ -307,14 +301,22 @@ object Json {
 
   // TODO(timperrett): what do we do here about encoding the assets that
   // are shipped to us as proto format?
-  implicit val GithubDeploymentEncoder: EncodeJson[Github.DeploymentEvent] =
-    EncodeJson((d: Github.DeploymentEvent) =>
+  implicit val GithubDeploymentEncoder: EncodeJson[Github.Deployment] =
+    EncodeJson((d: Github.Deployment) =>
       ("id" := d.id) ->:
       ("url" := d.url) ->:
-      ("slug" := d.slug.toString) ->:
       ("ref" := d.ref.toString) ->:
       jEmptyObject
     )
+
+  implicit val GithubDeploymentEventInboundDecoder: DecodeJson[Github.DeploymentEvent] =
+    DecodeJson(z => (for {
+      a <- (z --\ "deployment").as[Github.Deployment]
+      x <- (z --\ "repository" --\ "full_name").as[String]
+      b <- Slug.fromString(x).map(DecodeResult.ok
+           ).valueOr(e => DecodeResult.fail(e.getMessage,z.history))
+      f <- (z --\ "repository" --\ "id").as[Long]
+    } yield Github.DeploymentEvent(slug = b, repositoryId = f, deployment = a) ))
 
   /**
    * {
