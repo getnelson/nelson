@@ -120,7 +120,7 @@ object GitFixtures {
 
       case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
         loadResourceAsString("/nelson/github.deployment.json")
-          .flatMap(fromJson[Option[DeploymentEvent]])
+          .flatMap(fromJson[Option[Deployment]])
     }
   }
 }

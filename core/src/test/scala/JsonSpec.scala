@@ -33,35 +33,42 @@ class JsonSpec extends FlatSpec with Matchers {
     out.isRight should equal (true)
   }
 
-  private def fromWebhookSample(path: String)(f: Github.Event => Boolean) =
+  private def fromSample[A : DecodeJson](path: String)(f: A => Boolean) =
     (for {
       a <- loadResourceAsString(path).attempt.unsafeRunSync()
-      b <- Parse.decodeEither[Github.Event](a)
+      b <- Parse.decodeEither[A](a)
     } yield f(b)) should equal (Right(true))
 
   it should "parse the arbitrary events from Github" in {
-    fromWebhookSample("/nelson/github.webhookping.json"){
+    fromSample[Github.Event]("/nelson/github.webhookping.json"){
       case Github.PingEvent(_) => true
       case _ => false
     }
   }
 
+  it should "parse the deployment response from Github" in {
+    fromSample[Github.Event]("/nelson/github.webhookdeployment.json"){
+      case Github.DeploymentEvent(_,_,_) => true
+      case _ => false
+    }
+  }
+
   it should "parse the deployment events from Github" in {
-    fromWebhookSample("/nelson/github.webhookdeployment.json"){
-      case Github.DeploymentEvent(_,_,_,_,_,_,_) => true
+    fromSample[Github.Deployment]("/nelson/github.deployment.json"){
+      case Github.Deployment(_,_,_,_,_) => true
       case _ => false
     }
   }
 
   it should "parse the release events from Github" in {
-    fromWebhookSample("/nelson/github.webhookrelease.json"){
+    fromSample[Github.Event]("/nelson/github.webhookrelease.json"){
       case Github.ReleaseEvent(_,_,_) => true
       case _ => false
     }
   }
 
   it should "parse the pull request events from Github" in {
-    fromWebhookSample("/nelson/github.webhookpullrequest.json"){
+    fromSample[Github.Event]("/nelson/github.webhookpullrequest.json"){
       case Github.PullRequestEvent(_,_,_) => true
       case _ => false
     }

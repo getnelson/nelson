@@ -248,11 +248,8 @@ object Nelson {
     } yield ms
   }
 
-  private def liftDeploymentToRelease(e: Github.DeploymentEvent): NelsonK[Github.Release] = ???
-
-
-  private def fetchGithubDeployment(referenceId: Long, slug: Slug): NelsonK[Github.DeploymentEvent] = {
-    Kleisli[IO, NelsonConfig, Option[Github.DeploymentEvent]] { cfg =>
+  private def fetchGithubDeployment(referenceId: Long, slug: Slug): NelsonK[Github.Deployment] = {
+    Kleisli[IO, NelsonConfig, Option[Github.Deployment]] { cfg =>
       val t = cfg.git.systemAccessToken
       // NOTE(timperrett): im not wild about this, but there's simply no meaningful default that
       // can sensibly be applied here, so we're just bailing out.
@@ -284,14 +281,14 @@ object Nelson {
 
     Kleisli { cfg =>
       for {
-        v  <- fetchRepoManifestAndValidateDeployable(e.slug, e.ref).run(cfg)
-        m  <- v.fold(e => IO.raiseError(MultipleErrors(e)), m => IO.pure(m))
+        v  <- fetchRepoManifestAndValidateDeployable(e.slug, e.deployment.ref).run(cfg)
+        m  <- v.fold(err => IO.raiseError(MultipleErrors(err)), m => IO.pure(m))
 
         hm <- (log(s"received manifest from github: $m")
               *> storage.StoreOp.createRelease(e).foldMap(cfg.storage)
-              *> cfg.auditor.write(e, CreateAction, Option(e.id))
-              *> log(s"created release in response to release ${e.id}")
-              *> Manifest.saturateManifest(m)(e))
+              *> cfg.auditor.write(e.deployment, CreateAction, Option(e.deployment.id))
+              *> log(s"created release in response to release ${e.deployment.id}")
+              *> Manifest.saturateManifest(m)(e.deployment))
 
         _  <- (storeManifest(hm, e.repositoryId).run(cfg)
               *> log("stored the release manifest in the database"))
