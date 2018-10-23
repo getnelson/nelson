@@ -539,7 +539,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     }
 
     def insertRelease(v: String) = sql"""
-        MERGE INTO PUBLIC.releases (repository_id, version, timestamp, release_url, release_html_url)
+        MERGE INTO PUBLIC.events (repository_id, version, timestamp, release_url, release_html_url)
             KEY(repository_id, version)
             VALUES(-1, ${v}, ${Instant.now()}, '', '')
     """.update.run.map(x => log.debug(s"[insertRelease] merged ${x} rows creating a fake release for ${serviceType} version ${v} in namespace ${namespace.asString}"))
@@ -809,7 +809,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
    *
    */
   def createRelease(r: Github.DeploymentEvent): ConnectionIO[Unit] = {
-    sql"""INSERT INTO PUBLIC.releases (repository_id, version, timestamp, release_id, release_url, release_html_url)
+    sql"""INSERT INTO PUBLIC.events (repository_id, version, timestamp, release_id, release_url, release_html_url)
           VALUES ( ${r.repositoryId}, ${r.deployment.ref.toString}, ${Instant.now()}, ${r.deployment.id}, ${r.deployment.url}, ${r.deployment.url} );
        """.update.run.void
   }
@@ -822,12 +822,12 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     val query = sql"""
       SELECT
         rr.slug,
-        r.version,
+        u.version,
         r.timestamp,
         r.release_id,
         r.release_html_url
       FROM PUBLIC.units AS u
-      INNER JOIN PUBLIC.releases AS r
+      INNER JOIN PUBLIC.events AS r
         ON r.repository_id = u.repository_id
         AND r.version = u.version
       LEFT JOIN PUBLIC.repositories AS rr
@@ -844,7 +844,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     val query = sql"""
       SELECT rr.slug, r.version, r.timestamp, r.release_id, release_html_url
       FROM PUBLIC.loadbalancers as lb
-      INNER JOIN PUBLIC.releases as r
+      INNER JOIN PUBLIC.events as r
         ON r.repository_id = lb.repository_id
         AND r.version LIKE ${likeVersion}
       LEFT JOIN PUBLIC.repositories AS rr
@@ -889,7 +889,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         ON n.id = d.namespace_id
       INNER JOIN PUBLIC.units AS u
         ON u.id = d.unit_id
-      INNER JOIN PUBLIC.releases AS r
+      INNER JOIN PUBLIC.events AS r
         ON r.repository_id = u.repository_id
         AND r.version = u.version
       LEFT JOIN PUBLIC.repositories AS rr

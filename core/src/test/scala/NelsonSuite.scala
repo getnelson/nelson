@@ -56,7 +56,7 @@ trait NelsonSuite
     sql"TRUNCATE TABLE loadbalancer_routes".update.run *>
     sql"TRUNCATE TABLE loadbalancer_deployments".update.run *>
     sql"TRUNCATE TABLE loadbalancers".update.run *>
-    sql"TRUNCATE TABLE releases".update.run *>
+    sql"TRUNCATE TABLE events".update.run *>
     sql"TRUNCATE TABLE namespaces".update.run *>
     sql"TRUNCATE TABLE datacenters".update.run *>
     sql"SET REFERENTIAL_INTEGRITY TRUE; -- COYOLO".update.run
