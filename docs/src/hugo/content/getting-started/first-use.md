@@ -9,6 +9,7 @@ contents:
 - Enabling Nelson
 - Triggering a Deployment
 - Working with Stacks
+- Further Reading
 menu:
   main:
     parent: gs
@@ -153,3 +154,9 @@ For information about the lifecycle of stacks, please see the [dedicated lifecyc
 
 In the event there was a problem launching to the scheduler, writing to vault, or anything else encompassed by the deployment workflow: it will show here in the logs.
 
+## Further Reading
+
+Nelson has a range of settings and options that can be configured. Users should talk to their administrator / operators in order to understand what is possible, but this documentation site includes a set of useful reading materials:
+
+* [Lifecycle management](/getting-started/lifecycle.html)
+* [Available manifest settings](/documentation/manifest.html)
