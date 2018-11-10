@@ -20,15 +20,17 @@ menu:
 
 ## Assumptions
 
-Whilst Nelson is typically non-perscriptive, for the unfamiliar user and for the remainder of this article, the following assumptions will be made to avoid confussion:
+Whilst Nelson is typically non-prescriptive, for the unfamiliar user and for the remainder of this article, the following assumptions will be made to avoid confusion:
 
-* You can launch any container you like using Nelson; there is no requirement from the system perspective that the container behaves in a particular way other than having a [typical Nelson entrypoint](https://docs.docker.com/engine/reference/builder/#entrypoint).
+* If some of the terminology in this guide is unfamiliar, please be sure [to read the glossary](https://getnelson.io/getting-started/) before continuing.
 
-* Nelson is setup and running in your environment, and configured to talk to a scheudler of your choosing.
+* You can launch any container you like using Nelson; there is no requirement from the system perspective that the container behaves in a particular way other than having a [typical Docker entrypoint](https://docs.docker.com/engine/reference/builder/#entrypoint).
+
+* Nelson is setup and running in your environment, and configured to talk to a scheduler of your choosing.
 
 ## Manifest
 
-One of the core tenets of the Nelson philosophy is that all changes are checked into source code - nothing should be actioned out of band, resutling in an untrackable system state. Nelson requires users define a manifest file and check it into the root of the source repository. This file is called `.nelson.yml` (note the preceding `.` since it is a UNIX dotfile).
+One of the core tenets of the Nelson philosophy is that all changes are checked into source code - nothing should be actioned out of band, resulting in an untrackable system state. Nelson requires users to define a manifest file and check it into the root of the source repository. This file is called `.nelson.yml` (note the preceding `.` since it is a UNIX dotfile).
 
 This file contains the application `unit` definitions, along with any additional configuration for monitoring, alerting and scaling those units as needed. Consider this example that launches a Hello World service:
 
@@ -39,7 +41,7 @@ units:
   description: >
     very simple example job that
     prints hello world when run
-      
+
 plans:
 - name: default
 
@@ -69,10 +71,10 @@ To sync your repositories for the first time, run the following:
 $ nelson repos sync
 ```
 
-Depending upon the number of organizations and repositories you have access too, the time this operation takes to complete may very. For larger organizations with thousands of repositories this may take a several minutes, but in the common case it should be relatively quick. Once completed, you can list the repositories available in your system like so:
+Depending upon the number of organizations and repositories you have access too, the time this operation takes to complete may vary. For larger organizations with thousands of repositories this may take a several minutes, but in the common case it should be relatively quick. Once completed, you can list the repositories available in your system like so:
 
 ```
-$ nelson repos list -o example
+$ nelson repos list --owner example
 ```
 
 You should expect to see output that looks something like the following:
@@ -97,11 +99,11 @@ $ nelson repos enable \
 --repository hello-world
 ```
 
-This command will instruct the Nelson server to install a Github webhook on the repository specified, which will send subsequent Github Deployment events to Nelson. From here, we can 
+This command will instruct the Nelson server to install a Github webhook on the repository specified, which will send subsequent Github Deployment events to Nelson.
 
 ## Triggering a Deployment
 
-In most organizations where Nelson is being deployed, [continuous deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) is an explicit goal. That is to say, merging changes into the mainline branch should trigger a deployment into the targeted datacenter(s). Nelson is integrated with Github for this purpose; listening to [Github Deployments](https://developer.github.com/v3/guides/delivering-deployments/) as a trigger for action. Whilst you are free to trigger this however you like (Nelson doesn't care, provided the invokation sends the desired [deployable specification](/getting-started/deployables.html)), but to make this easy the Nelson project provides a supporting tool called [Slipway](https://github.com/getnelson/slipway). Checkout <a href="/downloads.html">the downloads page</a> to find the latest release of Slipway and Nelson CLI.
+In most organizations where Nelson is being deployed, [continuous deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) is an explicit goal. That is to say, merging changes into the mainline branch should trigger a deployment into the targeted datacenter(s). Nelson is integrated with Github for this purpose; listening to [Github Deployments](https://developer.github.com/v3/guides/delivering-deployments/) as a trigger for action. You are free to trigger the deployment however you like - Nelson doesn't care, provided the invokation sends the desired [deployable specification](/getting-started/deployables.html)). In order to make triggering deployments easy the Nelson project provides a supporting tool called [Slipway](https://github.com/getnelson/slipway). Checkout <a href="/downloads.html">the downloads page</a> to find the latest release of Slipway and Nelson CLI.
 
 Often Slipway is installed and configured by your CI operator / administrator, but there is nothing preventing you from triggering a deployment from your local machine. Here's an example of deploying from a given Git that was pushed to remote: first, we generate the deployable protocol by supplying the name of the container image that we would like to specify as a deployable:
 
@@ -109,7 +111,7 @@ Often Slipway is installed and configured by your CI operator / administrator, b
 slipway gen --format nldp "docker.company.com/app/hello-world:1.2.3"
 ```
 
-Be aware that the `gen` command may be called any number of times for a given deployment invocation, allowing you to conduct simultaneous deployments of multiple logical units. 
+Be aware that the `gen` command may be called any number of times for a given deployment invocation, allowing you to conduct simultaneous deployments of multiple logical units.
 
 <div class="alert alert-warning" role="alert">
   Ensure that the image name you're passing to the <code>gen</code> command <i> exactly matches that which was defined in the manifest</i> created earlier in this guide. When Nelson operates on your deployment, it will fuse the logical definition in your repository with the runtime information supplied with the deployment invocation.
@@ -121,7 +123,7 @@ Next, using the deployable files emitted to the local working directory with the
 slipway deploy -d . --repo getnelson/hello-world --ref 1.2.3
 ```
 
-Momentarily after this invocation, Nelson should receive the webhook and start to deploy the specified deployable units. Typically it is nice to know how your deployment is doing, and you can do that with a couple of easy commands. 
+Momentarily after this invocation, Nelson should receive the webhook and start to deploy the specified deployable units. Typically it is nice to know how your deployment is doing, and you can do that with a couple of easy commands.
 
 ## Working with Stacks
 
@@ -152,7 +154,7 @@ For information about the lifecycle of stacks, please see the [dedicated lifecyc
 2018-11-02T21:43:52.715Z: =====> Pulsar workflow completed <=====
 ```
 
-In the event there was a problem launching to the scheduler, writing to vault, or anything else encompassed by the deployment workflow: it will show here in the logs.
+In the event there was a problem launching to the scheduler, writing to Vault, or anything else encompassed by the deployment workflow, any errors will show here in the logs.
 
 ## Further Reading
 
