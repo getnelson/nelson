@@ -32,3 +32,4 @@ trebuchet
 *.orig
 docs/src/hugo/public
 .ensime*
+*OLD*
