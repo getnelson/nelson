@@ -36,7 +36,7 @@ Next, add a line to your `/etc/hosts` such that you have a `nelson.local` domain
 127.0.0.1 nelson.local
 ```
 
-This may seem like a strange modification, but is required in order to have browsers like chrome store cookies locally. As Nelson uses cookies for authentication, without this you wont actually be able to maintain an active session. 
+This may seem like a strange modification, but is required in order to have browsers like Chrome store cookies locally. As Nelson uses cookies for authentication, without this you won't actually be able to maintain an active session. 
 
 This is the bare minimum required to run Nelson. You can then instruct Nelson to boot up by using the following command:
 
@@ -93,7 +93,7 @@ Do be aware that you could also run these dependencies as containers but it can 
 
 Nelson is integrated with [Kubernetes](https://kubernetes.io). You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using [minikube](https://kubernetes.io/docs/setup/minikube/), or leverging one of the cloud-hosted solutions like [GKE](https://cloud.google.com/kubernetes-engine/), [AKE](https://azure.microsoft.com/en-us/services/kubernetes-service/) or [EKS](https://aws.amazon.com/eks/).
 
-As Kuberntes itself has a complicated authentication story, Nelson does not try to replicate that at all, and instead simply shells out to the `kubectl` command line application, which in turn uses the Kubernetes configuration defined by `KUBECONFIG` environment variable. In short, provided your `kubectl` is operating with the cluster you wish to use with Nelson no further external setup is required. 
+As Kubernetes itself has a complicated authentication story, Nelson does not try to replicate that at all, and instead simply shells out to the `kubectl` command line application, which in turn uses the Kubernetes configuration defined by `KUBECONFIG` environment variable. In short, provided your `kubectl` is operating with the cluster you wish to use with Nelson no further external setup is required. 
 
 To instruct Nelson to use this local Kubernetes cluster, alter the configuration at `$NELSON_HOME/etc/development/http/http.dev.cfg`:
 
@@ -208,7 +208,7 @@ To run tests, you must have `promtool` available on your path. Developers on a M
 ./bin/install-promtool
 ```
 
-If you prefer to install this binary manually, then please fetch it [from the prometheus site](https://prometheus.io/download/) and install at your favourite location on your `$PATH`.
+If you prefer to install this binary manually, then please fetch it [from the Prometheus site](https://prometheus.io/download/) and install at your favorite location on your `$PATH`.
 
 ### Conventions
 
