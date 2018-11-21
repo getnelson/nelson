@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?06d3635025437684bfa64a2f6a427767" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?277e5e6b558e7d144bf87ca54468730e" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?851f0cc3158e8819108373ed7323a658" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?0584eb707bb17eb471f9f77bae150dbf" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -187,6 +187,184 @@
 
 <p>Nelson is written in <a href="https://scala-lang.org">Scala</a>, and built using <a href="http://www.scala-sbt.org/">SBT</a>. You will need to install SBT locally before you can start working with the Nelson codebase. Please <a href="https://www.scala-sbt.org/1.x/docs/Setup.html">follow the install steps</a> to get setup.</p>
 
+<div class="alert alert-info" role="alert">
+This guide will assume that the path to the Nelson source code on disk is denoted by <code>$NELSON_HOME</code>. Whilst this variable does not need to be literally set in your shell, the author uses this notation to avoid confusing <code>$NELSON_HOME/etc</code> with system <code>/etc</code> for example. 
+</div>
+
+<p>To boot up Nelson locally, there are a handful of items that need to be setup beforehand. First, obtain a <a href="https://github.com/settings/tokens">Personal Access Token for Github</a>. Once you have this, add it to your <code>~/.bash_profile</code> as the <code>GITHUB_TOKEN</code> environment variable - the specific permissions needed are <a href="https://getnelson.io/getting-started/install.html#using-the-cli">listed in the main install documentation</a></p>
+
+<pre><code># the value here should be the PAT that you got from Github
+export GITHUB_TOKEN=&quot;XXXXXXXXXXXXXXXXXX&quot;
+</code></pre>
+
+<p>Next, add a line to your <code>/etc/hosts</code> such that you have a <code>nelson.local</code> domain pointing to your local loopback interface. This looks like:</p>
+
+<pre><code>127.0.0.1 nelson.local
+</code></pre>
+
+<p>This may seem like a strange modification, but is required in order to have browsers like Chrome store cookies locally. As Nelson uses cookies for authentication, without this you won&rsquo;t actually be able to maintain an active session.</p>
+
+<p>This is the bare minimum required to run Nelson. You can then instruct Nelson to boot up by using the following command:</p>
+
+<pre><code>sbt http/reStart
+</code></pre>
+
+<p>Nelson will then boot up and be running on <code>http://nelson.local:9000</code>.</p>
+
+<div class="alert alert-warning" role="alert">
+    Be aware that unless you have correctly configured a development OAuth application on Github for your local Nelson, you will get rejected from any activity related to Github.
+</div>
+
+<p>Configuring an OAuth application for local Nelson development is covered <a href="https://getnelson.io/getting-started/install.html#authorize-with-github">in the operator guide</a> section of the documentation. Unless you are working on specific components related to interaction with Github, this should not be needed.</p>
+
+<p>If you need Github access locally, setup the OAuth application and then configure the following properties in <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code>:</p>
+
+<pre><code>nelson.github.client-id = &quot;&lt;your value&gt;&quot;
+nelson.github.client-secret = &quot;&lt;your value&gt;&quot;
+# If you need github enterprise, uncomment and set the following:
+# nelson.github.domain = &quot;github.yourcompany.com&quot;
+</code></pre>
+
+<h3 id="user-interface">User Interface</h3>
+
+<p>When developing the UI, Nelson supports pointing its web directory to another path on disk to facilitate developing the UI with frontend-native tools. This can be altered by changing <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code>:</p>
+
+<pre><code># where are the assets located on disk, that Nelson
+# will serve as its UI contents; this is for local development purposes
+# only and should not be used in production.
+nelson.ui.file-path = &quot;/path/to/nelson/ui&quot;
+</code></pre>
+
+<p>Note that Nelson can also be run in an entirely headless manner, using the following:</p>
+
+<pre><code>nelson.ui.enabled = false
+</code></pre>
+
+<p>This can be useful when developing certain types of UI, but largely can be ignored.</p>
+
+<h2 id="development-dependencies" data-subheading-of="development">
+  Dependencies
+</h2>
+
+<p>Technically, you can run Nelson locally <strong>without</strong> the other system dependencies running locally - some functionality will of course not work. If the feature you&rsquo;re working on doesn&rsquo;t need those systems, please be aware your logs will contain errors reporting that those dependencies are not running. To remove these errors, install and run the needed systems locally before booting Nelson.</p>
+
+<p>Do be aware that you could also run these dependencies as containers but it can often become tricky with networking. This is something that is certainly possible to overcome, but it&rsquo;s more hassle than most people want when getting setup, and so this guide assumes you are running binaries natively.</p>
+
+<h3 id="kubernetes">Kubernetes</h3>
+
+<p>Nelson is integrated with <a href="https://kubernetes.io">Kubernetes</a>. You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using <a href="https://kubernetes.io/docs/setup/minikube/">minikube</a>, or leverging one of the cloud-hosted solutions like <a href="https://cloud.google.com/kubernetes-engine/">GKE</a>, <a href="https://azure.microsoft.com/en-us/services/kubernetes-service/">AKE</a> or <a href="https://aws.amazon.com/eks/">EKS</a>.</p>
+
+<p>As Kubernetes itself has a complicated authentication story, Nelson does not try to replicate that at all, and instead simply shells out to the <code>kubectl</code> command line application, which in turn uses the Kubernetes configuration defined by <code>KUBECONFIG</code> environment variable. In short, provided your <code>kubectl</code> is operating with the cluster you wish to use with Nelson no further external setup is required.</p>
+
+<p>To instruct Nelson to use this local Kubernetes cluster, alter the configuration at <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code>:</p>
+
+<pre><code>datacenters {
+  local {
+    infrastructure {
+      scheduler {
+        scheduler = &quot;kubernetes&quot;
+        kubernetes {
+          in-cluster = false
+          timeout    = 10 seconds
+          kubeconfig = &quot;/path/to/kubeconfig&quot;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>This is all that&rsquo;s needed to use a local Kubernetes configuration.</p>
+
+<h3 id="nomad">Nomad</h3>
+
+<p>Nelson is integrated with <a href="http://nomadproject.io">Hashicorp Nomad</a>. You can optionally use it for development purposes, even if you do not use it in production. By default, the local development configuration assumes you&rsquo;re running Nomad on the loopback address, <code>127.0.0.1</code>. If you wish to point to a remote Nomad cluster, then you must set the following environment variables:</p>
+
+<pre><code>export NOMAD_ADDR=http://127.0.0.1:4646
+</code></pre>
+
+<p>Boot Nomad in a shell with <code>nomad agent -dev</code> and put it to one side. To instruct Nelson to use this local Nomad, alter the configuration at <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code>:</p>
+
+<pre><code>infrastructure {
+  scheduler {
+    scheduler = &quot;nomad&quot;
+    nomad {
+      endpoint = &quot;http://127.0.0.1:4646&quot;
+      timeout = 2 seconds
+      docker {
+        host = &quot;registry.service.texas.your.company.com&quot;
+        user = &quot;someuser&quot;
+        password = &quot;dummypwd&quot;
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>If the docker container registry that you&rsquo;re using requires authentication, please specify it here. If not, you can remove the <code>user</code> and <code>password</code> fields.</p>
+
+<p>This is all that&rsquo;s needed to use a local Nomad configuration.</p>
+
+<h3 id="consul">Consul</h3>
+
+<p>Nelson is integrated with <a href="http://consul.io">Hashicorp Consul</a> for routing and runtime health information. If you do not need these features you can ignore this dependency. To enable Consul with Nelson, modify the configuration at <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code>: in the <code>consul</code> config, update <code>endpoint</code> to be:</p>
+
+<pre><code>datacenters {
+  local {
+    infrastructure {
+      consul {
+        endpoint  = &quot;http://127.0.0.8500&quot;
+        timeout   = 1 second
+        acl-token = &quot;XXXXXXXXX&quot;
+        username  = &quot;XXXXXXXXX&quot;
+        password  = &quot;XXXXXXXXX&quot;
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>Then, run the Consul binary with <code>consul agent -dev</code>.</p>
+
+<h3 id="vault">Vault</h3>
+
+<p>Install Vault with <code>brew install vault</code>, or by downloading and installing <a href="https://www.vaultproject.io/downloads.html">here</a>. Modify the Nelson config at <code>&lt;project-dir&gt;/etc/development/http/http.dev.cfg</code>:</p>
+
+<pre><code>datacenters {
+  local {
+    infrastructure {
+      vault {
+        endpoint         = &quot;http://127.0.0.1:8200&quot;
+        auth-token       = &quot;xxxxxxxxxxxxxxxxxx&quot;
+        timeout          = 5 seconds
+      }
+    }
+    policy {
+      # Path under which credentials are stored for
+      # resources.  Units will get read capability on each resource.
+      # Supported variables: %env%, %resource%, %unit%
+      resource-creds-path = &quot;nelson/%env%/%resource%/creds/%unit%&quot;
+
+      # Path to your PKI backend. Optional. If specified, unit will get
+      # create and update capabilities on ${pki-path}/issue
+      # Supported variables: %env%
+      pki-path = &quot;pki/cloud/%env%&quot;
+    }
+  }
+}
+</code></pre>
+
+<p>Then, run the Vault binary with <code>vault server -dev</code>.</p>
+
+<h3 id="promtool">Promtool</h3>
+
+<p>To run tests, you must have <code>promtool</code> available on your path. Developers on a Mac may run this script to fetch <code>promtool</code> and install to <code>/usr/local/bin</code>:</p>
+
+<pre><code class="language-sh">./bin/install-promtool
+</code></pre>
+
+<p>If you prefer to install this binary manually, then please fetch it <a href="https://prometheus.io/download/">from the Prometheus site</a> and install at your favorite location on your <code>$PATH</code>.</p>
+
 <h3 id="conventions">Conventions</h3>
 
 <p>There are a few conventions at play within the Nelson codebase:</p>
@@ -269,7 +447,7 @@ hugo server -w -b 127.0.0.1 -p 4000
         </p>
         <p>
           Currently v
-                    0.12.148
+                    0.12.151
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -290,9 +468,9 @@ hugo server -w -b 127.0.0.1 -p 4000
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?785428fdaa4233e7c0f73e7723e179b2"></script>
+<script src="/js/material.min.js?f08fffa079b79f995803a051b9461e5e"></script>
 
-<script src="/js/nelson.js?604770c119215922b321fd3819fe2980"></script>
+<script src="/js/nelson.js?49adc0cd936491e56ebfb620bc8fb20d"></script>
 
 
   </body>
