@@ -18,7 +18,7 @@ To run Nelson you will need access to a target datacenter. One can consider this
 
 <div class="clearing">
   <img src="/img/atomic-datacenter.png" />
-  <small><em>Figure 4.0: failure domain</em></small>
+  <small><em>Figure 1.0: failure domain</em></small>
 </div>
 
 Logically, Nelson sits outside one of its target datacenters. This could mean it lives at your office next to your Github, or it might actually reside in one of the target datacenters itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to `pull` images whilst deploying containers to the cluster, whilst the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.
