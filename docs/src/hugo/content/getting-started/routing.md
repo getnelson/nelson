@@ -20,7 +20,7 @@ Nelson supports a dynamic discovery system, which leverages semantic versioning 
 
 Reviewing the figure, the runtime workflow works as follows:
 
-<span style="font-weight: bold; color: red">A.</span> The container is launched by the scheduler and consul-template interacts with a consul agent running on the surrounding host. Consul Template obtains a certificate from the PKI backend in Vault after negotiating with its secure Vault token.
+<span style="font-weight: bold; color: red">A.</span> The container is launched by the scheduler and your templating engine of choice obtains a certificate from the PKI backend in Vault after safely negotiating access to Vault with its secure token.
 
 <span style="font-weight: bold; color: red">B.</span> Envoy boots using the certificates obtained from the first step, and then initializes the configured `xDS` provider. Whatever control plane you choose to use ([Istio](https://istio.io/), [Rotor](https://github.com/turbinelabs/rotor) etc) acts as a mediator between Nelson and the runtime Envoy mesh - Nelson simply send instructions to the control plane, and the control plane in turn dynamically streams updates to the Envoy mesh.
 
