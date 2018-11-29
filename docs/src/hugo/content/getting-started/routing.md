@@ -39,7 +39,7 @@ Typically load balancers are static at the edge of the network because external 
 
 ### Protocol
 
-Nelson also publishes static configuration pertaining the load balancer before it's launched into the datacenter. The protocol is as follows and is published to Consul's KV store at nelson/v1/loadbalancers/<lb-name>:
+Nelson also publishes static configuration pertaining the load balancer before it's launched into the datacenter. The protocol is as follows and is published to Consul's KV store at `nelson/v1/loadbalancers/<lb-name>`:
 
 ```
 [
