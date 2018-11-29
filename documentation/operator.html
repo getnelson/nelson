@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?ddba23b8876f3351d5ea22aec6a8b822" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?9bd184ad994a93889c570945cb81a54d" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?a7ee4a6973c7b7de4f4636172c6e03ed" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?346d9239ed8cd0a82211fbef8baf7694" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -113,6 +113,10 @@
                       </li>
                   
                       <li class="">
+                          <a href="/getting-started/routing.html">Routing</a>
+                      </li>
+                  
+                      <li class="">
                           <a href="/getting-started/next.html">Further Reading</a>
                       </li>
                   
@@ -185,7 +189,7 @@
 
 <div class="clearing">
   <img src="/img/atomic-datacenter.png" />
-  <small><em>Figure 4.0: failure domain</em></small>
+  <small><em>Figure 1.0: failure domain</em></small>
 </div>
 
 <p>Logically, Nelson sits outside one of its target datacenters. This could mean it lives at your office next to your Github, or it might actually reside in one of the target datacenters itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to <code>pull</code> images whilst deploying containers to the cluster, whilst the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.</p>
@@ -285,7 +289,7 @@
         </p>
         <p>
           Currently v
-                    0.12.151
+                    0.12.152
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -306,9 +310,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?6acfc38f2b6bb9993efe9513cd5c49ab"></script>
+<script src="/js/material.min.js?c34f100b26597cb90bf75edffc319768"></script>
 
-<script src="/js/nelson.js?d718b28b89806f7c4c57b5555be48e80"></script>
+<script src="/js/nelson.js?3e7364823c2476fd548050a1d9f49eaf"></script>
 
 
   </body>

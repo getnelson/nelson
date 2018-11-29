@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?e1e6fba07d79e206b53f972e90397db4" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?5ee5362cfe97a2dcb3e38b481e3281c2" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?cda1e569709260924cffa4fa1e793068" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?847086825f9148ac6b0c2c4356e0323b" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -110,6 +110,10 @@
                   
                       <li class="">
                           <a href="/getting-started/lifecycle.html">Lifecycle</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/routing.html">Routing</a>
                       </li>
                   
                       <li class="">
@@ -407,7 +411,7 @@ namespaces:
 <table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Field</strong></td>
+      <td width="20%"><strong>Field</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -557,7 +561,7 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
 <p>The <code>ports</code> dictionary items must follow a very specific structure - this is how nelson expresses relationships in ports. Let&rsquo;s break down the structure:</p>
 
 <div class="clearing">
-  <img src="images/port-syntax.png" />
+  <img src="/img/port-syntax.png" />
   <small><em>Figure 2.3.1: port definition syntax</em></small>
 </div>
 
@@ -566,7 +570,7 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
 <table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Section</strong></td>
+      <td width="20%"><strong>Section</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -708,7 +712,7 @@ namespaces:
 <table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Reference</strong></td>
+      <td width="30%"><strong>Reference</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -804,10 +808,10 @@ units:
 
 <p>Upon first glace, the alert block in the manifest can seem confusing. Thankfully, there are only three sections a user needs to care about. The table below outlines the alert definitions.</p>
 
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Dictionary</strong></td>
+      <td width="36%"><strong>Dictionary</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -833,10 +837,10 @@ units:
 
 <p>In addition to specification of alerts, the manifest also allows for the specification of Prometheus rules. See the <a href="https://prometheus.io/docs/querying/rules/#recording-rules">Prometheus documentation on recording rules</a> for a discussion on the differences between alerts and recording rules.</p>
 
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Dictionary</strong></td>
+      <td width="36%"><strong>Dictionary</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -921,7 +925,7 @@ namespaces:
         </p>
         <p>
           Currently v
-                    0.12.151
+                    0.12.152
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -942,9 +946,9 @@ namespaces:
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?cefdacbcdf3c7fcf91593c7154bdb4f3"></script>
+<script src="/js/material.min.js?a3d5fc66ed5b7d5e5a5bb3257d468233"></script>
 
-<script src="/js/nelson.js?29714c6ed9e6e6bc0a1383e90edad9ad"></script>
+<script src="/js/nelson.js?956d7ff73e27491c155ea41e621c0de0"></script>
 
 
   </body>

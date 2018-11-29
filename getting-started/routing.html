@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?a960fe6890d761509ae59a1f35f66111" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?b9ece9fcd3ae4ed6358e6cfd55acd6a7" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?bc598f011cde25e8935831e9d87aefb3" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?898f26b4f7e6dcd000f1769a7e942813" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -88,7 +88,7 @@
         
     
         
-            <li class="">
+            <li class="active">
               <a href="/getting-started/index.html" class="">Getting Started</span></a>
               <ol class="sub-menu">
                   
@@ -112,7 +112,7 @@
                           <a href="/getting-started/lifecycle.html">Lifecycle</a>
                       </li>
                   
-                      <li class="">
+                      <li class="highlight">
                           <a href="/getting-started/routing.html">Routing</a>
                       </li>
                   
@@ -161,84 +161,87 @@
 </aside>
 
           <article class="col-md-9">
-            <h1>Downloads</h1>
+            <h1>Routing</h1>
 
             
-            <p>Nelson comes in two parts: the server and the client. Most users will be simply using a Nelson server that was setup by an operator in your organization, so the <a href="#client">client</a> will be what most people want to download.</p>
-            
-
+            <p>Within the Nelson ecosystem, Routing encompases two critical parts of the system: internal communication (so-called service-to-service), and ingresses traffic from outside the dynamic environment via so-called &ldquo;load balancers&rdquo;. Given Nelson&rsquo;s strong belief in immutable infrastructure, the way in which these routing systems operate are cutting edge, leverging the latest technology to get the job done effectively.</p>
             
 
             
 
             
+            <hr />
+            
 
-<h2 id="client">Client</h2>
+            
 
-<p>The client is shipped as a static binary that comes pre-compiled for a variety of operating systems. The tables below enumerate the direct-download sites for the latest version (presently v0.12.152).</p>
+<p>Nelson supports a dynamic discovery system, which leverages semantic versioning and control input from manifest declarations to make routing choices. This part of the system is perhaps one of the most complicated elements, so a brief overview is included here. To give a general overview, figure 1.1 highlights the various moving parts.</p>
 
-<table class="table">
+<div class="clearing">
+  <img src="/img/routing-design.png" />
+  <small><em>Figure 1.1: container routing</em></small>
+</div>
+
+<p>Reviewing the figure, the runtime workflow works as follows:</p>
+
+<p><span style="font-weight: bold; color: red">A.</span> The container is launched by the scheduler and your templating engine of choice obtains a certificate from the PKI backend in Vault after safely negotiating access to Vault with its secure token.</p>
+
+<p><span style="font-weight: bold; color: red">B.</span> Envoy boots using the certificates obtained from the first step, and then initializes the configured <code>xDS</code> provider. Whatever control plane you choose to use (<a href="https://istio.io/">Istio</a>, <a href="https://github.com/turbinelabs/rotor">Rotor</a> etc) acts as a mediator between Nelson and the runtime Envoy mesh - Nelson simply send instructions to the control plane, and the control plane in turn dynamically streams updates to the Envoy mesh.</p>
+
+<p><span style="font-weight: bold; color: red">C.</span> Application boots and goes about its business. In the event the application is attempting to make a call to another service, it actually calls to &ldquo;localhost&rdquo; from the containers perspective, and hits the locally running Envoy instance. Envoy then wraps the request in mutual SSL and forwards it to the target service instance. In this way, the application itself is free from knowing about the details of mutual authentication and certificate chains. All calls made via Envoy are automatically circuit-broken and report metrics via StatsD. This is rolled up to a central StatsD server.</p>
+
+<h2 id="load-balancers">Load Balancers</h2>
+
+<p>In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via &ldquo;load balancers&rdquo; (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about <a href="https://aws.amazon.com/elasticloadbalancing/">ELB</a> and so forth. If however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.</p>
+
+<div class="clearing">
+  <img src="/img/lbs.png" />
+  <small><em>Figure 1.2: load balancer overview</em></small>
+</div>
+
+<p>Typically load balancers are static at the edge of the network because external DNS is often mapped to them. This is clearly a mismatch between statically configured DNS and the very dynamic, scheduler-based infrastructure Nelson otherwise relies upon. To bridge this gap, Nelson makes the assumption that the LB in question is capable of dynamically updating its runtime routes via consuming the Lighthouse discovery protocol.</p>
+
+<h3 id="protocol">Protocol</h3>
+
+<p>Nelson also publishes static configuration pertaining the load balancer before it&rsquo;s launched into the datacenter. The protocol is as follows and is published to Consul&rsquo;s KV store at <code>nelson/v1/loadbalancers/&lt;lb-name&gt;</code>:</p>
+
+<pre><code>[
+  {
+    &quot;port_label&quot;: &quot;default&quot;,
+    &quot;frontend_port&quot;: 8444,
+    &quot;service_name&quot;: &quot;http-service&quot;,
+    &quot;major_version&quot;: 1
+  }
+]
+</code></pre>
+
+<p>Whilst the fields should be self-explanatory, here are a list of definitions:</p>
+
+<table class="table table-striped">
   <thead>
-    <tr span="2">
-      <td class="p-0 m-0" style="height: 1.5em;"></td>
+    <tr>
+      <td width="20%"><strong>Field</strong></td>
+      <td><strong>Description</strong></td>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td width="130"><img src="/img/platform-mac.jpg" width="60" /></td>
-      <td>
-        <h2>Mac OS</h2>
-        <a href="https://github.com/getnelson/cli/releases/download/0.9.87/nelson-darwin-amd64-0.9.87.tar.gz">64-bit</a>
-      </td>
+      <td><code>port_label</code></td>
+      <td>Port label used to describe this particular port in the manifest definition. All ports require a named label.</td>
     </tr>
     <tr>
-      <td width="130"><img src="/img/platform-linux.png" width="60" /></td>
-      <td>
-        <h2>Linux</h2>
-        <a href="https://github.com/getnelson/cli/releases/download/0.9.87/nelson-linux-amd64-0.9.87.tar.gz">64-bit</a>
-      </td>
+      <td><code>frontend_port</code></td>
+      <td>Port used to expose traffic on the outside of the load balancer. The available ports are restricted by the configuration parameter <code>nelson.proxy-port-whitelist</code>.</td>
+    </tr>
+    <tr>
+      <td><code>service_name</code></td>
+      <td>The service to route traffic to.</td>
+    </tr>
+    <tr>
+      <td><code>major_version</code></td>
+      <td>The major version the load balancer is bound to. Note, a load balancer's life cycle is bound the the major version of the service it is proxying</td>
     </tr>
   </tbody>
-  <tfoot>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-  </tfoot>
-</table>
-
-<h2 id="server">Server</h2>
-
-<p>Nelson&rsquo;s server is distributed as a Docker container, which makes for an easy instalation and operation. Docker containers require <a href="https://docs.docker.com/install/">the Docker client</a> to <code>docker pull</code> the image as needed.</p>
-
-<table class="table">
-  <thead>
-    <tr span="2">
-      <td class="p-0 m-0" style="height: 1.5em;"></td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td width="130" style="padding-right:0;padding-left: 0.5em;"><img src="/img/platform-docker.png" height="60" /></td>
-      <td>
-        <h2>Docker</h2>
-        <a href="https://hub.docker.com/r/getnelson/nelson/tags/">64-bit</a> (based on Alpine Linux + OpenJDK 8)
-      </td>
-    </tr>
-    <tr>
-      <td width="130" style="padding-right:0;padding-left: 2em;"><img src="/img/logo-github.svg" height="60" /></td>
-      <td>
-        <h2>Source Code</h2>
-        <a href="https://github.com/getnelson/nelson/archive/0.12.152.tar.gz">Scala 2.11</a>
-      </td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-  </tfoot>
 </table>
 
           </article>
@@ -279,9 +282,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?2ff4bcf5d5a7f66cb64bef3af9095cb5"></script>
+<script src="/js/material.min.js?c31ea4b1c4b46a539978be3649866ae9"></script>
 
-<script src="/js/nelson.js?9f745e905118546d64abdd875602e0cb"></script>
+<script src="/js/nelson.js?b9a40e64632bb287f41e7eea8d45a3bb"></script>
 
 
   </body>
