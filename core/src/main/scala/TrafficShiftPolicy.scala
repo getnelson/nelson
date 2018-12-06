@@ -22,9 +22,9 @@ import spire.math.Rational
 import ca.mrvisser.sealerate
 
 /*
- * Defines a policy for shifing traffic from one deployment
+ * Defines a policy for shifting traffic from one deployment
  * to another. A policy is a function from (start, timestamp, duration) => Double
- * where start marks the begining of the shift, the timestamp is the current
+ * where start marks the beginning of the shift, the timestamp is the current
  * place in time, and duration is the total length of the shift.
  * The return value is the weight of the from target between 0.0 and 1.0
  *

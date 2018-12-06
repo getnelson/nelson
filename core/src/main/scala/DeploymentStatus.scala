@@ -19,6 +19,7 @@ package nelson
 import ca.mrvisser.sealerate
 import cats.Eq
 import cats.data.NonEmptyList
+import cats.instances.string._
 import cats.syntax.list._
 
 sealed abstract class DeploymentStatus extends Product with Serializable
@@ -80,8 +81,5 @@ object DeploymentStatus {
   implicit val deploymentStatusDecoder: DecodeJson[DeploymentStatus] =
     DecodeJson.StringDecodeJson.map(fromString)
 
-  implicit val deploymentStatusEq: Eq[DeploymentStatus] =
-    new Eq[DeploymentStatus] {
-      def eqv(x: DeploymentStatus, y: DeploymentStatus): Boolean = ???
-    }
+  implicit val deploymentStatusEq: Eq[DeploymentStatus] = Eq.by(_.toString)
 }

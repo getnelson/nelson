@@ -97,7 +97,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       cfg.asg.deleteAutoScalingGroup(req)
     }.void.recover {
       // Matching on the error message is only way to detect a 404. I trolled the aws
-      // documnetation and this is the best I could find, super janky.
+      // documentation and this is the best I could find, super janky.
       // swallow 404, as we're being asked to delete something that does not exist
       // this can happen when a workflow fails and the cleanup process is subsequently called
       case t: AmazonAutoScalingException if t.getErrorMessage.contains("not found") =>

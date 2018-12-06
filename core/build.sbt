@@ -46,7 +46,7 @@ libraryDependencies ++= Seq(
   "org.flywaydb"                % "flyway-core"                        % "3.2.1",
   "ca.mrvisser"                %% "sealerate"                          % "0.0.4",
   "org.typelevel"              %% "cats-kernel-laws"                   % V.cats   % "test",
-  "org.typelevel"              %% "cats-testkit"                       % V.cats   % "test",
+  "org.typelevel"              %% "cats-laws"                          % V.cats   % "test",
   "org.apache.commons"          % "commons-email"                      % "1.3.3",
   "commons-codec"               % "commons-codec"                      % "1.11",
   "com.amazonaws"               % "aws-java-sdk-autoscaling"           % "1.11.25",

@@ -69,7 +69,7 @@ final class NomadHttp(
     val name = buildName(sn)
     val req = addCreds(dc, Request[IO](Method.GET, nomad.endpoint / "v1" / "job" / name / "summary"))
     implicit val decoder = deploymentSummaryDecoder(name)
-    client.expect[DeploymentSummary](req)(jsonOf[IO, DeploymentSummary]).map(ds => Some(ds): Option[DeploymentSummary]).recoverWith {
+    client.expect[DeploymentSummary](req)(jsonOf[IO, DeploymentSummary]).map(_.some).recoverWith {
       case UnexpectedStatus(NotFound) => IO.pure(None)
     }
   }
@@ -93,12 +93,6 @@ final class NomadHttp(
       case UnexpectedStatus(NotFound) => IO.unit
     }
   }
-
-  private def delete(dc: Datacenter, d: Deployment): IO[Unit] =
-    d.renderedBlueprint.fold(deleteUnitAndChildren(dc, d)) { spec =>
-      // TODO: Delete via spec
-      deleteUnitAndChildren(dc, d)
-    }
 
   /*
    * Calls Nomad to delete the given unit and all child jobs

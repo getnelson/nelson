@@ -16,25 +16,35 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import org.scalacheck._, Prop._
+import cats.implicits._
+import org.scalacheck._
+import Prop._
+import cats.kernel.laws.discipline.EqTests
 
 class DeploymentStatusSpec extends Properties("DeploymentStatus") {
   import DeploymentStatusSpec._
 
   property("DeploymentStatus/String round trip") = forAll { (s: DeploymentStatus) =>
-    DeploymentStatus.fromString(s.toString) == s
+    DeploymentStatus.fromString(s.toString) === s
   }
 
   property("fromString is case-insensitive") = forAll { (s: DeploymentStatus) =>
-    DeploymentStatus.fromString(s.toString.toUpperCase) == s
+    DeploymentStatus.fromString(s.toString.toUpperCase) === s
   }
 
   property("fromString is Unknown for an unknown value") = {
-    DeploymentStatus.fromString("foo") == DeploymentStatus.Unknown
+    DeploymentStatus.fromString("foo") === DeploymentStatus.Unknown
   }
+
+  include(EqTests[DeploymentStatus].eqv.all)
 }
 
 object DeploymentStatusSpec {
   implicit val arbDeploymentStatus: Arbitrary[DeploymentStatus] =
     Arbitrary(Gen.oneOf(DeploymentStatus.all.toSeq))
+
+  implicit val arbFDeploymentStatus: Arbitrary[DeploymentStatus => DeploymentStatus] =
+    Arbitrary {
+      arbDeploymentStatus.arbitrary.map(_ => _)
+    }
 }

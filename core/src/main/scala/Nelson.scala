@@ -75,7 +75,7 @@ object Nelson {
 
   /**
    * Given a users Github personal access token - obtained either directly by user input,
-   * or via the OAtuh web flow - and lift it into a Github session. This function is
+   * or via the OAuth web flow - and lift it into a Github session. This function is
    * distinct from `createSessionFromOAuthCode` because we require a way for non-web
    * clients to obtain a token they can use when calling the Nelson API programatically.
    */
@@ -274,7 +274,7 @@ object Nelson {
     // filter out all units that are not in the provided namespace (ns)
     def unitActions(m: Manifest @@ Versioned, ns: NamespaceName, dcs: Seq[Datacenter]): List[Action] = {
       val unitFilter: (Datacenter,Namespace,Plan,UnitDef) => Boolean =
-        (_,namespace,_,_) => namespace.name == ns
+        (_,namespace,_,_) => namespace.name === ns
 
       Manifest.unitActions(m, dcs, unitFilter)
     }

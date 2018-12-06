@@ -91,7 +91,7 @@ Do be aware that you could also run these dependencies as containers but it can 
 
 ### Kubernetes
 
-Nelson is integrated with [Kubernetes](https://kubernetes.io). You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using [minikube](https://kubernetes.io/docs/setup/minikube/), or leverging one of the cloud-hosted solutions like [GKE](https://cloud.google.com/kubernetes-engine/), [AKE](https://azure.microsoft.com/en-us/services/kubernetes-service/) or [EKS](https://aws.amazon.com/eks/).
+Nelson is integrated with [Kubernetes](https://kubernetes.io). You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using [minikube](https://kubernetes.io/docs/setup/minikube/), or leveraging one of the cloud-hosted solutions like [GKE](https://cloud.google.com/kubernetes-engine/), [AKE](https://azure.microsoft.com/en-us/services/kubernetes-service/) or [EKS](https://aws.amazon.com/eks/).
 
 As Kubernetes itself has a complicated authentication story, Nelson does not try to replicate that at all, and instead simply shells out to the `kubectl` command line application, which in turn uses the Kubernetes configuration defined by `KUBECONFIG` environment variable. In short, provided your `kubectl` is operating with the cluster you wish to use with Nelson no further external setup is required. 
 
@@ -156,7 +156,7 @@ datacenters {
   local {
     infrastructure {
       consul {
-        endpoint  = "http://127.0.0.8500"
+        endpoint  = "http://127.0.0.1:8500"
         timeout   = 1 second
         acl-token = "XXXXXXXXX"
         username  = "XXXXXXXXX"

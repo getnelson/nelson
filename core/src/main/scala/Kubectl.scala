@@ -63,11 +63,11 @@ final class Kubectl(mode: KubernetesMode) {
       }
   }
 
-  def getDeployment(namespace: NamespaceName, stackName: StackName): IO[DeploymentStatus] =
+  def getDeployment(namespace: NamespaceName, stackName: StackName): IO[Kubectl.DeploymentStatus] =
     exec(List("kubectl", "get", "deployment", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
-        IO.fromEither(Parse.decodeEither[DeploymentStatus](stdout.mkString("\n")).leftMap(kubectlJsonError))
+        IO.fromEither(Parse.decodeEither[Kubectl.DeploymentStatus](stdout.mkString("\n")).leftMap(kubectlJsonError))
       }
 
   def getCronJob(namespace: NamespaceName, stackName: StackName): IO[JobStatus] =

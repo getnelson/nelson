@@ -51,7 +51,7 @@ final class SlackHttp(cfg: SlackConfig, client: Client[IO]) extends (SlackOp ~> 
   def send(channel: String, msg: String): IO[Unit] = {
     val json = Json("channel" := "#"+channel, "text" := msg, "username" := cfg.username)
     val request = Request[IO](POST, cfg.webhook).withBody(json)
-    client.expect[String](request).map(_ => ())
+    client.expect[String](request).void
   }
 }
 
