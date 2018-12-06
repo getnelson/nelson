@@ -2,7 +2,7 @@
 layout: "single"
 title: Routing
 preamble: >
-  Within the Nelson ecosystem, Routing encompases two critical parts of the system: internal communication (so-called service-to-service), and ingresses traffic from outside the dynamic environment via so-called "load balancers". Given Nelson's strong belief in immutable infrastructure, the way in which these routing systems operate are cutting edge, leverging the latest technology to get the job done effectively.
+  Within the Nelson ecosystem, Routing encompasses two critical parts of the system: internal communication (so-called service-to-service), and ingresses traffic from outside the dynamic environment via so-called "load balancers". Given Nelson's strong belief in immutable infrastructure, the way in which these routing systems operate are cutting edge, leveraging the latest technology to get the job done effectively.
 menu:
   main:
     parent: gs

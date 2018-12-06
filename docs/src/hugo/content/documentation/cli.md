@@ -54,7 +54,7 @@ When logging into *Nelson*, there are a variety of options and ways in which to 
 $ nelson login nelson.yourdomain.com
 ```
 
-But the following additional options are also availabe. Note that the `--disable-tls` option should only ever be used for local development, and is not intended for regular usage.
+But the following additional options are also available. Note that the `--disable-tls` option should only ever be used for local development, and is not intended for regular usage.
 
 ```
 # fully explicit login

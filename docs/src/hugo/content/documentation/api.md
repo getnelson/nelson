@@ -44,7 +44,7 @@ curl -H Cookie: nelson.session=XXXXXXXXXXXXXXXXXXXXXXXXXXXX https://your.domain.
 
 The cookie can be obtained via two of methods. The typical user path will be via the OAuth workflow, authenticating with the backend Github endpoint (Github Enterprise or github.com). In this case, the browser automatically collects the token and stores it in the browser cache.
 
-For programatic API access, the user needs to supply a Github [personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) to Nelson, which will then be exchanged for a Nelson security token.
+For programmatic API access, the user needs to supply a Github [personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) to Nelson, which will then be exchanged for a Nelson security token.
 
 ```
 POST /auth/github
@@ -79,7 +79,7 @@ The following is an example.
 User-Agent: NelsonCLI/1.0
 ```
 
-If you provide an invalid or restricted User-Agent header, you will recieve a `403 Forbidden` response.
+If you provide an invalid or restricted User-Agent header, you will receive a `403 Forbidden` response.
 
 <h3 id="api-overview-errors" class="linkable">
   Error Reporting
@@ -151,7 +151,7 @@ List all the audit events, matching the query parameters (if supplied).
 GET /v1/audit
 ```
 
-<h5>Paramaters</h5>
+<h5>Parameters</h5>
 
 <table class="table">
   <thead>

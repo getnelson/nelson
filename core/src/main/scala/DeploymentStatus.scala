@@ -17,6 +17,7 @@
 package nelson
 
 import ca.mrvisser.sealerate
+import cats.Eq
 import cats.data.NonEmptyList
 import cats.syntax.list._
 
@@ -69,7 +70,7 @@ object DeploymentStatus {
   val nel: NonEmptyList[DeploymentStatus] = all.toList.toNel.yolo("there should be at least one DeploymentStatus")
 
   // Deployments with a routable status are included in the routing graph.
-  // Ready is the common case and inidcates that a deployment is ready to receive traffic.
+  // Ready is the common case and indicates that a deployment is ready to receive traffic.
   // Deprecated deployments are included in routing graph until all upstreams have upgraded.
   val routable = NonEmptyList.of(Ready,Deprecated)
 
@@ -78,4 +79,9 @@ object DeploymentStatus {
 
   implicit val deploymentStatusDecoder: DecodeJson[DeploymentStatus] =
     DecodeJson.StringDecodeJson.map(fromString)
+
+  implicit val deploymentStatusEq: Eq[DeploymentStatus] =
+    new Eq[DeploymentStatus] {
+      def eqv(x: DeploymentStatus, y: DeploymentStatus): Boolean = ???
+    }
 }

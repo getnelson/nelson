@@ -138,7 +138,7 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      * {{{
      *  {
      *    "name": "use-nvidia-1080ti",
-     *    "description": "only scheudle on nodes with nvida 1080ti hardware"
+     *    "description": "only schedule on nodes with nvidia 1080ti hardware"
      *    "sha256": "1e34a423ebe1fafeda8277386ede3263b01357e490b124b69bc0bfb493e64140"
      *    "template": "<base64 encoded template>"
      *  }

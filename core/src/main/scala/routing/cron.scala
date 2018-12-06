@@ -39,7 +39,7 @@ object cron {
 
         dtout = dts.map {
           case ((sn,ns),dts) =>
-            log.debug(s"cron: refressing lighthouse table for ${sn}")
+            log.debug(s"cron: refreshing lighthouse table for ${sn}")
             dc -> Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dts)
         }
 

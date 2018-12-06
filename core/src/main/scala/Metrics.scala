@@ -161,7 +161,7 @@ object Metrics {
     def apply[A](op: IO[A]) : IO[A] = {
       val io = for {
         _       <- before
-        start   <- IO(System.nanoTime())
+        start   <- IO(System.nanoTime()) // fixme use cats.effect.Timer
         a       <- op
         elapsed = (System.nanoTime - start) / 1.0e9
         _       <- onComplete.run(elapsed)

@@ -274,5 +274,5 @@ cd docs/src/hugo
 hugo server -w -b 127.0.0.1 -p 4000
 ```
 
-Hugo will automatically refresh the page when the source files are changed, which can be very helpful when one is itterating on the documentation site over time.
+Hugo will automatically refresh the page when the source files are changed, which can be very helpful when one is iterating on the documentation site over time.
 

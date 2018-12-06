@@ -82,7 +82,7 @@ final class KubernetesShell(
     // in the database) so we simply take the supplied plan and extract
     // the `Blueprint`, and `Template` in turn.
     val template = plan.environment.blueprint match {
-      case Some(Left(_)) => IO.raiseError(new IllegalArgumentException(s"Internal error occured: un-hydrated blueprint passed to scheduler!"))
+      case Some(Left((ref, rev))) => IO.raiseError(UnhydratedBlueprint(ref, rev))
       case Some(Right(bp)) => IO.pure(bp.template)
       case None => fallback
     }

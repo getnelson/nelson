@@ -27,7 +27,7 @@ final case class WebHooks(config: NelsonConfig) extends Default {
 
   /**
    * This function has to dispatch whatever type of Github.Event
-   * we recieve on the wire and dispatch it to the correct
+   * we receive on the wire and dispatch it to the correct
    * nelson function. This is a little hacky, but its the only
    * way to handle the arbitrary message shapes that Github sends.
    */

@@ -4,13 +4,14 @@ set -e
 
 DIR=$( cd $(dirname $0) ; pwd -P )
 
-echo "==>>> Generating security keys..."
-eval $($DIR/generate-keys)
+#echo "==>>> Generating security keys..."
+#eval $($DIR/generate-keys)
 
 echo "==>>> Booting the container..."
 
 docker run -i -t --rm \
   --name nelson-local \
+  -v ~/.nelson/:/var/nelson/ \
   -e NELSON_SECURITY_ENCRYPTION_KEY="$NELSON_SECURITY_ENCRYPTION_KEY" \
   -e NELSON_SECURITY_SIGNATURE_KEY="$NELSON_SECURITY_SIGNATURE_KEY" \
   -e NELSON_GITHUB_DOMAIN="github.com" \

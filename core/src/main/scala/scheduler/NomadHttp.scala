@@ -19,14 +19,14 @@ package scheduler
 
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
-import nelson.Manifest.{Environment, EnvironmentVariable, HealthCheck, Plan, Port, Ports, UnitDef}
+import nelson.Manifest._
+import nelson.blueprint.{DefaultBlueprints, Render}
 import nelson.docker.Docker
 import nelson.docker.Docker.Image
 
 import cats.~>
 import cats.effect.IO
 import cats.implicits._
-
 import java.util.concurrent.ScheduledExecutorService
 
 import journal.Logger
@@ -114,63 +114,49 @@ final class NomadHttp(
 
   private def listChildren(dc: Datacenter, parentID: String): IO[Set[RunningUnit]] = {
     val prefix = parentID + "/periodic"
-    runningUnits(dc, Some(prefix)).map(_.filter(_.parentID.exists(_ == parentID)))
+    runningUnits(dc, Some(prefix)).map(_.filter(_.parentID.exists(_ === parentID)))
   }
 
   private def addCreds(dc: Datacenter, req: Request[IO]): Request[IO] =
-    dc.proxyCredentials.fold(req){ creds =>
-      req.putHeaders(Authorization(BasicCredentials(creds.username,creds.password)))
+    dc.proxyCredentials.fold(req) { creds =>
+      req.putHeaders(Authorization(BasicCredentials(creds.username, creds.password)))
     }
-
-  private def getJson(u: UnitDef, name: String, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): Json = {
-    val tags = cfg.requiredServiceTags.getOrElse(List()).toSet.union(u.meta)
-    val schedule =  Manifest.getSchedule(u, plan)
-    NomadJson.job(name, u.name, plan, img, dc, schedule, u.ports, ns, nomad, tags)
-  }
 
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
   private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
-    val template = plan.environment.blueprint match {
-      case Some(Left(_)) => IO.raiseError(new IllegalArgumentException(s"Internal error occured: un-hydrated blueprint passed to scheduler!"))
-      case Some(Right(bp)) => IO.pure(bp.template)
-      case None => IO.raiseError(new IllegalArgumentException(s"Internal error occured: there is currently no support for a default Nomad blueprint!"))
-    }
-
-    template.flatMap { t =>
-      launchDefault(u, hash, version, img, dc, ns, plan)
-      val sn = StackName(u.name, version, hash)
-      val name = buildName(sn)
-      // TODO: Actually do the interpolation
-      // TODO: Do we want to do validation here?
-      val spec = t.render(Map.empty)
-      Parse.decodeEither[Json](spec) match {
-        case Left(err) =>
-          IO.raiseError(new IllegalArgumentException(s"Rendered blueprint was not valid JSON, failed with error: '${err}', render: '${spec}'"))
-        case Right(json) => call(name, dc, json)
-      }
-    }
-  }
-
-  private def launchDefault(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
     val sn = StackName(u.name, version, hash)
     val name = buildName(sn)
-    val vars = plan.environment.bindings ::: List(
-      EnvironmentVariable("NELSON_STACKNAME", sn.toString),
-      EnvironmentVariable("NELSON_DATACENTER", dc.name),
-      EnvironmentVariable("NELSON_ENV", ns.root.asString),
-      EnvironmentVariable("NELSON_NAMESPACE", ns.asString),
-      EnvironmentVariable("NELSON_DNS_ROOT", dc.domain.name),
-      EnvironmentVariable("NELSON_PLAN", plan.name),
-      EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
-      EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.limitOrElse(512D).toInt.toString),
-      EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
-      EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name))
-    )
+    val vars = plan.environment.bindings ::: nomadEnvs(name, img, ns, plan)
     val p = plan.copy(environment = plan.environment.copy(bindings = vars))
-    val json = getJson(u,name,img,dc,ns,p)
-    call(name, dc, json)
+    val env = Render.makeEnv(img, dc, ns, u, version, p, hash)
+
+    val fallback = Manifest.getSchedule(u, p) match {
+      case None => DefaultBlueprints.magnetar.nomad.service
+      case Some(sched) => sched.toCron match {
+        case None => DefaultBlueprints.magnetar.nomad.job
+        case Some(_) => DefaultBlueprints.magnetar.nomad.cronJob
+      }
+    }
+
+    val template = p.environment.blueprint match {
+      case Some(Left((ref, rev))) => IO.raiseError(UnhydratedBlueprint(ref, rev))
+      case Some(Right(bp)) => IO.pure(bp.template)
+      case None => fallback
+    }
+
+    for {
+      t <- template
+      j <- parse(dc, t.render(env))
+      r <- call(name, dc, j)
+    } yield r
+  }
+
+  def parse(dc: Datacenter, spec: String): IO[Json] = {
+    log.debug(s"normalizing the following spec: $spec")
+    val req = addCreds(dc, Request[IO](Method.POST, nomad.endpoint / "v1" / "jobs" / "parse"))
+    client.expect[Json](req.withBody(parseReqJson(spec)))
   }
 
   def call(name: String, dc: Datacenter, json: Json): IO[String] = {
@@ -178,6 +164,13 @@ final class NomadHttp(
     val req = addCreds(dc, Request[IO](Method.POST, nomad.endpoint / "v1" / "job" / name))
     client.expect[String](req.withBody(json))
   }
+
+  // todo clean this up and move it into Render
+  private def nomadEnvs(name: String, img: Image, ns: NamespaceName, plan: Plan) = List(
+    EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
+    EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.limitOrElse(512D).toInt.toString),
+    EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
+    EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name)))
 }
 
 object NomadJson {
@@ -212,6 +205,13 @@ object NomadJson {
         p  <- (c --\ "ParentID").as[Option[String]]
       } yield RunningUnit(nm, st, p)
     })
+
+  def parseReqJson(spec: String): argonaut.Json = {
+    argonaut.Json(
+      "JobHCL"       := spec,
+      "Canonicalize" := true
+    )
+  }
 
   def dockerConfigJson(
     nomad: Nomad,

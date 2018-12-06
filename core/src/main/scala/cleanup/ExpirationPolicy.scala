@@ -20,6 +20,9 @@ package cleanup
 import nelson.Datacenter.Deployment
 import nelson.routing.{RoutingNode,RoutingGraph}
 
+import cats.instances.option._
+import cats.syntax.foldable._
+
 import ca.mrvisser.sealerate
 
 import java.time.Instant
@@ -27,9 +30,9 @@ import java.time.Instant
 import scala.concurrent.duration._
 
 /*
- * An EpxirationPolicy defines a policy that given
+ * An ExpirationPolicy defines a policy that given
  * a Deployment and RoutingGraph optionally returns
- * a Duration to extend the deploymenst expiration by.
+ * a Duration to extend the deployment's expiration by.
  */
 sealed trait ExpirationPolicy {
   def name: String
@@ -46,7 +49,7 @@ object RetainLatest extends ExpirationPolicy {
   def policy(d: DeploymentCtx, g: RoutingGraph)(ext: Duration): Option[Duration] = {
     val ds = ExpirationPolicy.filterDeploymentsByName(g.nodes, d.deployment)
     val latest = Deployment.getLatestVersion(ds.toSet)
-    if (latest.exists(_ == d.deployment.unit.version) &&
+    if (latest.contains_(d.deployment.unit.version) &&
         !ExpirationPolicy.isDeprecated(d))
       Some(ext)
     else
@@ -66,7 +69,7 @@ object RetainLatestTwoMajor extends ExpirationPolicy {
     val latest = Deployment.getLatestVersion(ds.toSet)
     val second = Deployment.getLatestVersion(ds.filter(x =>
       latest.exists(y => y.major != x.unit.version.major)).toSet)
-    if ((latest.exists(_ == d.deployment.unit.version) || second.exists(_ == d.deployment.unit.version)) &&
+    if ((latest.contains_(d.deployment.unit.version) || second.contains_(d.deployment.unit.version)) &&
         !ExpirationPolicy.isDeprecated(d))
       Some(ext)
     else
@@ -87,7 +90,7 @@ object RetainLatestTwoFeature extends ExpirationPolicy {
     // same major different minor
     val second = Deployment.getLatestVersion(ds.filter(x => latest.exists(y =>
         y.major == x.unit.version.major && y.minor != x.unit.version.minor)).toSet)
-    if ((latest.exists(_ == d.deployment.unit.version) || second.exists(_ == d.deployment.unit.version)) &&
+    if ((latest.contains_(d.deployment.unit.version) || second.contains_(d.deployment.unit.version)) &&
         !ExpirationPolicy.isDeprecated(d))
       Some(ext)
     else
@@ -96,7 +99,7 @@ object RetainLatestTwoFeature extends ExpirationPolicy {
 }
 
 /*
- * Retains if there are any incomming links in RoutingGraph
+ * Retains if there are any incoming links in RoutingGraph
  */
 object RetainActive extends ExpirationPolicy {
 
@@ -191,7 +194,7 @@ object ExpirationPolicyProcess {
    */
   def partitionByName(g: RoutingGraph, ns: Namespace): Map[String,Vector[Deployment]] =
     g.nodes.flatMap(_.deployment)
-      .filter(_.nsid == ns.id) // downstream and upstream depedencies can be in other namespaces so filter them out
+      .filter(_.nsid == ns.id) // downstream and upstream dependencies can be in other namespaces so filter them out
       .groupBy(_.unit.name)
 
   /*

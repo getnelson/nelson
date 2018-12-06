@@ -39,7 +39,7 @@ object Reaper {
 
   /*
    * Runs destroy workflow to decommission a deployment.
-   * This typically invovles making a call to whatever
+   * This typically involves making a call to whatever
    * scheduler was used to initially place the deployment
    * to delete the running job.
    */
@@ -51,7 +51,7 @@ object Reaper {
           // this is a Sink and the end of the world, so we need to handle NonFatal to keep Processes running
           case NonFatal(e) =>
             destroyFailureCounter.labels(ns.name.asString).inc()
-            IO(log.warn(s"error occured during destroy phase $e"))
+            IO(log.warn(s"error occurred during destroy phase $e"))
         }
     }
 

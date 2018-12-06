@@ -28,7 +28,7 @@ class InstrumentedDockerClient private (instance: String, interp: DockerOp ~> IO
   def apply[A](op: DockerOp[A]): IO[A] =
     IO(System.nanoTime).flatMap { startNanos =>
       interp(op).attempt.flatMap { att =>
-        val elapsed = System.nanoTime - startNanos
+        val elapsed = System.nanoTime - startNanos // fixme use cats.effect.Timer
         val label = toLabel(op)
         metrics.dockerRequestsLatencySeconds.labels(label, instance).observe(elapsed / 1.0e9)
         att match {

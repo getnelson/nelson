@@ -101,11 +101,11 @@ abstract class Default extends Product with Serializable { self =>
     def apply[A](session: Session): Boolean =
       apply(session, config.git.organizationAdminList)
 
-    // TIM: this is a tempoary hack such that we don't have the "teams"
+    // TIM: this is a temporary hack such that we don't have the "teams"
     // metadata currently available on the `User` object
     def apply[A](session: Session, list: List[String]): Boolean =
       if(config.security.useEnvironmentSession) true
-      else list.find(_.trim.toLowerCase == session.user.login.trim.toLowerCase).nonEmpty
+      else list.exists(_.trim.toLowerCase === session.user.login.trim.toLowerCase)
   }
 
   object NotAuthenticated {

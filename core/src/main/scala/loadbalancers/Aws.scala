@@ -27,6 +27,7 @@ import cats.~>
 import cats.effect.IO
 import cats.syntax.apply._
 import cats.syntax.applicativeError._
+import cats.syntax.functor._
 
 import journal.Logger
 
@@ -94,14 +95,13 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withAutoScalingGroupName(name)
         .withForceDelete(true) // terminates all associated ec2s
       cfg.asg.deleteAutoScalingGroup(req)
-    }.map(_ => ()).recoverWith {
+    }.void.recover {
       // Matching on the error message is only way to detect a 404. I trolled the aws
       // documnetation and this is the best I could find, super janky.
       // swallow 404, as we're being asked to delete something that does not exist
       // this can happen when a workflow fails and the cleanup process is subsequently called
       case t: AmazonAutoScalingException if t.getErrorMessage.contains("not found") =>
         log.info(s"aws call to delete asg responded with ${t.getMessage} for ${name}, swallowing error and marking deployment as terminated")
-        IO.unit
     }
 
   def resizeASG(name: String, size: ASGSize): IO[Unit] =

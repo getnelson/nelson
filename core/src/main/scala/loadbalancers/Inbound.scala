@@ -19,7 +19,7 @@ package loadbalancers
  
 
 /**
- * Represents an incomming loadbalancer. The port exposes the backend service (i.e. stackName)
+ * Represents an incoming loadbalancer. The port exposes the backend service (i.e. stackName)
  * to the outside world.
  */
 final case class Inbound(stackName: Datacenter.StackName, label: String, port: Int)

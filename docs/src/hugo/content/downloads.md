@@ -13,6 +13,6 @@ The client is shipped as a static binary that comes pre-compiled for a variety o
 
 ## Server
 
-Nelson's server is distributed as a Docker container, which makes for an easy instalation and operation. Docker containers require [the Docker client](https://docs.docker.com/install/) to `docker pull` the image as needed.
+Nelson's server is distributed as a Docker container, which makes for an easy installation and operation. Docker containers require [the Docker client](https://docs.docker.com/install/) to `docker pull` the image as needed.
 
 {{< downloads_server >}}{{< version >}}{{< /downloads_server >}}

@@ -48,7 +48,7 @@ object CleanupCron {
 
   private val routables = DeploymentStatus.routable.toList
 
-  /* Gets all deployments (exluding terminated) and routing graph for a namespace */
+  /* Gets all deployments (excluding terminated) and routing graph for a namespace */
   def getDeploymentsForNamespace(ns: Namespace): StoreOpF[Vector[(Namespace,DeploymentCtx)]] =
     for {
       dps <- StoreOp.listDeploymentsForNamespaceByStatus(ns.id, status)
@@ -71,7 +71,7 @@ object CleanupCron {
     cfg.datacenters.toVector.flatTraverse(dc => getDeploymentsForDatacenter(dc)).foldMap(cfg.storage)
 
   def routable(d: DeploymentCtx): Boolean =
-    routables.exists(_ == d.status)
+    routables.contains_(d.status)
 
   def process(cfg: NelsonConfig): Stream[IO, CleanupRow] =
      Stream.eval(getDeployments(cfg)).flatMap(rs => Stream.emits(rs).covary[IO])

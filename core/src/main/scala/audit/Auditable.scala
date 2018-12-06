@@ -73,10 +73,10 @@ final case class AuditContext(action: AuditAction, category: AuditCategory) {
 
 /** Represents an `event` that we wish to audit.
   * Because we are storing the events in a persistent store an encoding is necessary.
-  * Json was choosen because the shape of events varies and because most
+  * Json was chosen because the shape of events varies and because most
   * events already have a json encoder available.
   * The category provides context outside of the json blob concerning the `event`.
-  * the category is usefull from a querying perspective.
+  * the category is useful from a querying perspective.
   */
 trait Auditable[A] {
   def encode(a: A): argonaut.Json
@@ -87,13 +87,13 @@ object AuditableInstances {
 
   import argonaut._, Argonaut._
 
-  implicit def githubReleaseAudtiable(implicit e: EncodeJson[Github.Release]): Auditable[Github.Release] =
+  implicit def githubReleaseAuditable(implicit e: EncodeJson[Github.Release]): Auditable[Github.Release] =
     new Auditable[Github.Release] {
       def encode(a: Github.Release) = e.encode(a)
       def category = GithubReleaseCategory
     }
 
-  implicit def githubDeploymentAudtiable(implicit e: EncodeJson[Github.Deployment]): Auditable[Github.Deployment] =
+  implicit def githubDeploymentAuditable(implicit e: EncodeJson[Github.Deployment]): Auditable[Github.Deployment] =
     new Auditable[Github.Deployment] {
       def encode(a: Github.Deployment) = e.encode(a)
       def category = GithubDeploymentCategory
@@ -111,13 +111,13 @@ object AuditableInstances {
       def category = ManualDeploymentCategory
     }
 
-  implicit def repoAudtiable(implicit e: EncodeJson[Repo]): Auditable[Repo] =
+  implicit def repoAuditable(implicit e: EncodeJson[Repo]): Auditable[Repo] =
     new Auditable[Repo] {
       def encode(a: Repo) = e.encode(a)
       def category = GithubRepoCategory
     }
 
-  implicit def hookAudtiable(implicit e: EncodeJson[Hook]): Auditable[Hook] =
+  implicit def hookAuditable(implicit e: EncodeJson[Hook]): Auditable[Hook] =
     new Auditable[Hook] {
       def encode(a: Hook) = e.encode(a)
       def category = GithubWebHookCategory

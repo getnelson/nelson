@@ -28,7 +28,7 @@ class InstrumentedNomadClient private (instance: String, interp: SchedulerOp ~> 
   def apply[A](op: SchedulerOp[A]): IO[A] =
     IO(System.nanoTime).flatMap { startNanos =>
       interp(op).attempt.flatMap { att =>
-        val elapsed = System.nanoTime - startNanos
+        val elapsed = System.nanoTime - startNanos // fixme use cats.effect.Timer
         val label = toLabel(op)
         metrics.nomadRequestsLatencySeconds.labels(label, instance).observe(elapsed / 1.0e9)
         att match {

@@ -17,7 +17,8 @@ object Render {
       (namespace, StringValue(ns.root.asString)),
       (unitName, StringValue(sn.serviceType)),
       (version, StringValue(sn.version.toString)),
-      (image, StringValue(img.toString))
+      (image, StringValue(img.toString)),
+      (datacenter, StringValue(dc.name))
     )
 
     val jobEnv = fromOption(Manifest.getSchedule(unit, p).flatMap(_.toCron)) { cronExpr =>
@@ -122,6 +123,8 @@ object Render {
     val envvarsList = "envvars_list"
     val envvarName = "envvar_name"
     val envvarValue = "envvar_value"
+
+    val datacenter = "datacenter"
   }
 
 }

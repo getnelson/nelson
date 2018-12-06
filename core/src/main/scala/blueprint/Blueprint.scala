@@ -45,7 +45,7 @@ object Blueprint {
    * ==>> uses the latest (whatever revision that is) of a specified blueprint
    * use-gpu-hardware@HEAD
    *
-   * ==>> equivilent to HEAD
+   * ==>> equivalent to HEAD
    * do-my-bidding
    * }}}
    */

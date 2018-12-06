@@ -1,0 +1,127 @@
+job "{{name}}" {
+  type        = "batch"
+
+  region      = "{{datacenter}}"
+  datacenters = ["{{datacenter}}"]
+
+  parameterized {
+  }
+
+  all_at_once = false
+
+  group "{{name}}" {
+    {{#desired_instances}}
+    count = {{desired_instances}}
+    {{/desired_instances}}
+    {{^desired_instances}}
+    count = 1
+    {{/desired_instances}}
+
+    {{#ephemeral_disks_list}}
+    ephemeral_disk {
+      migrate = {{ephemeral_disk_migrate}}
+      size    = "{{ephemeral_disk_size}}"
+      sticky  = {{ephemeral_disk_sticky}}
+    }
+    {{/ephemeral_disks_list}}
+
+    restart {
+      interval = "5m"
+      attempts = {{retries}}
+      delay    = "15s"
+      mode     = "delay" {{! todo batch v service }}
+    }
+
+    task "{{name}}" {
+      driver = "docker"
+
+      config {
+        image = "{{image}}"
+
+        network_mode = "{{docker_network_mode}}"
+
+        volumes = [
+        {{#empty_volumes_list}}
+          "{{empty_volume_mount_name}}:{{empty_volume_mount_path}}"
+        {{/empty_volumes_list}}
+        ]
+
+        auth {
+        {{#docker_basic_auth}}
+          username = "{{docker_username}}"
+          password = "{{docker_password}}"
+        {{/docker_basic_auth}}
+        {{#docker_registry}}
+          {{docker_server_address}}
+        {{/docker_registry}}
+        }
+        auth_soft_fail = true
+
+        labels {
+          stackName = "{{stack_name}}"
+          unitName  = "{{unit_name}}"
+          version   = "{{version}}"
+          nelson    = "true"
+        }
+      }
+
+      env {
+      {{#envvars_list}}
+        "{{envvar_name}}" = "{{envvar_value}}"
+      {{/envvars_list}}
+      }
+
+      service {
+        tags = [{{tags}}]
+
+        {{#health_checks}}
+        check {
+          type            = "{{health_check_protocol}}" {{! todo support other check types }}
+          protocol        = "{{health_check_protocol}}"
+          tls_skip_verify = {{health_check_tls_skip_verify}}
+          name            = "{{health_check_name}}"
+          port            = "{{health_check_port_ref}}" {{! todo method would be useful too; i use HEAD often }}
+          path            = "{{health_check_path}}"
+          interval        = "{{health_check_interval}}"
+          timeout         = "{{health_check_timeout}}"
+
+          {{#health_check_header}}
+          header {
+            {{health_check_header_name}} = ["{{health_check_header_value}}"]
+          }
+          {{/health_check_header}}
+        }
+        {{/health_checks}}
+      }
+
+      vault {
+        policies = [
+        {{#vault_policies}}
+          "{{vault_policy_name}}"
+        {{/vault_policies}}
+        ]
+        env           = true
+        change_mode   = "{{vault_change_mode}}"
+        change_signal = "{{vault_change_signal}}"
+      }
+
+      resources {
+        cpu    = {{cpu_limit}}
+        memory = {{memory_limit}}
+
+        network {
+          mbits = 1
+        }
+      }
+    }
+  }
+
+  meta {
+    name      = "{{stack_name}}"
+    namespace = "{{namespace}}"
+    stackName = "{{stack_name}}"
+    unitName  = "{{unit_name}}"
+    version   = "{{version}}"
+    nelson    = "true"
+  }
+}

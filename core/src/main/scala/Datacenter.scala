@@ -120,6 +120,7 @@ object Infrastructure {
     import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient
     import com.amazonaws.services.autoscaling.AmazonAutoScalingClient
 
+    // todo use a provider chain
     private val creds = new BasicAWSCredentials(accessKeyId, secretAccessKey)
 
     val asg = new AmazonAutoScalingClient(creds)

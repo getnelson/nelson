@@ -51,7 +51,7 @@ If you encounter problems with the CLI, be aware of the following options which 
 
 *  `--debug`: this option dumps the wire logs of the underlying network client so you can see what requests and responses the CLI is handling.
 
-* `--debug-curl`: this option shows you the comparitive cURL command to make that would match functionally what Nelson CLI is doing. This is typically very useful for debugging purposes.
+* `--debug-curl`: this option shows you the comparative cURL command to make that would match functionally what Nelson CLI is doing. This is typically very useful for debugging purposes.
 
 ## Slipway Command Line
 
@@ -66,8 +66,6 @@ curl -GqL https://raw.githubusercontent.com/getnelson/slipway/master/scripts/ins
 It is safe to rerun this script to keep `slipway` current. If you have the source code checked out locally, you need only execute: `scripts/install` to install the latest version of `slipway`.
 
 ## Nelson Server
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eu commodo nisi. Etiam sagittis enim purus, id tristique ante tincidunt id. Nunc placerat velit neque. Integer finibus velit nec vestibulum elementum. Mauris vel tempor velit. Nam sodales malesuada purus vel bibendum. Sed eu mauris sit amet nulla sodales imperdiet.
 
 ### Requirements
 
@@ -109,7 +107,7 @@ Please see the [configuration section](#instalation-configuration) for details o
 
 ### Configuration
 
-Nelson has a range of configuration options specified using the [Knobs](https://verizon.github.io/knobs/) format, read from fils on disk. Nelson can either be told where to load configuration from, but if no path is specified then it will assume that it should be loaded from `/opt/application/conf/nelson.cfg`.
+Nelson has a range of configuration options specified using the [Knobs](https://verizon.github.io/knobs/) format, read from files on disk. Nelson can either be told where to load configuration from, but if no path is specified then it will assume that it should be loaded from `/opt/application/conf/nelson.cfg`.
 
 Many of the Nelson defaults will be fine for the majority of users. There are however, several configuration sections which must be updated by the operator to ensure Nelson works as expected. Here's an example of the minimal configuration file:
 
@@ -361,7 +359,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
 ### Running on Kubernetes
 
-Nelson can also be operated on top of Kubernetes (even if that same cluster is the one being managed by Nelson). When deploying to Kubernetes, Nelson operates like any other container applciation with the exception that it requires the use of a [Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to which Nelson can journal its state (database, job logs etc).
+Nelson can also be operated on top of Kubernetes (even if that same cluster is the one being managed by Nelson). When deploying to Kubernetes, Nelson operates like any other container application with the exception that it requires the use of a [Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to which Nelson can journal its state (database, job logs etc).
 
 As the Kubernetes configurations are rather verbose, the Nelson teams has provided a set of example configuration files [in the getnelson/kubernetes-configuration](https://github.com/getnelson/kubernetes-configuration) repository on Github.
 

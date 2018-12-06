@@ -482,7 +482,7 @@ object Config {
   }
 
   /* Here we're ok to require fields, because they are always specified in
-     defaults.cfg. functioanltiy is affected by ui.enabled in the config */
+     defaults.cfg. functionality is affected by ui.enabled in the config */
   private[nelson] def readUI(cfg: KConfig): UIConfig =
     UIConfig(
       enabled  = cfg.require[Boolean]("enabled"),
@@ -535,9 +535,12 @@ object Config {
     def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
       (kfg.lookup[String]("endpoint"),
        kfg.lookup[Duration]("timeout"),
-       kfg.lookup[String]("docker.user"),
+       kfg.lookup[String]("docker.user"), // todo username/password shouldn't be required; won't work for environments using ECR
        kfg.lookup[String]("docker.password"),
        kfg.lookup[String]("docker.host"),
+      // fixme this is problematic for heterogeneous clusters. can we find a way to defer needing this value
+      // fixme until we know the impact of our node constraints? can a better heuristic be built based on the
+      // fixme info in the nodes api?
        kfg.lookup[Int]("mhz-per-cpu")
         ).mapN((a,b,c,d,e,f) => {
           val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
@@ -607,13 +610,11 @@ object Config {
             http4sConsul.map(consulClient => PrometheusConsul(a, consulClient))
           }
 
-          // for {
-          //   consulClient  <- consul
-          //   sched         <- readNomadScheduler(schedConfig.subconfig("nomad"))
-          //   healthChecker = health.Http4sConsulHealthClient(consulClient)
-          // } yield (sched, healthChecker, consulClient)
-
-          IO.raiseError(NomadNotImplemented)
+         for {
+           consulClient  <- consul
+           sched         <- readNomadScheduler(schedConfig.subconfig("nomad"))
+           healthChecker = health.Http4sConsulHealthClient(consulClient)
+         } yield (sched, healthChecker, consulClient)
 
         case Some("kubernetes") =>
           readKubernetesInfrastructure(schedConfig.subconfig("kubernetes")) match {

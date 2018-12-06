@@ -2,7 +2,7 @@
 layout: "single"
 title: "Competitors"
 preamble: >
-  Nelson is in many ways a uniuqe system; the principles and methods used in its construction are not common in the operations domain. However, is is common for potential users to draw parrallels with other systems, and navigating the competitive space can often be difficult. The systems most commonly compared with Nelson are enumerated below a brief comparitive explanation is provided to help understand Nelson's value proposistion.
+  Nelson is in many ways a uniuqe system; the principles and methods used in its construction are not common in the operations domain. However, is is common for potential users to draw parrallels with other systems, and navigating the competitive space can often be difficult. The systems most commonly compared with Nelson are enumerated below; a brief comparative explanation is provided to help understand Nelson's value proposition.
 contents:
 - Spinnaker
 - Collins

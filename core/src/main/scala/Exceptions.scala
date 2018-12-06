@@ -20,6 +20,7 @@ import nelson.Manifest.UnitDef
 import cats.data.NonEmptyList
 import cats.instances.string._
 import cats.syntax.reducible._
+import nelson.blueprint.Blueprint.Revision
 
 abstract class NelsonError(msg: String) extends RuntimeException {
   override def getMessage: String = msg
@@ -182,6 +183,9 @@ final case class InvalidUnitNameChars(name: String)
 
 final case class UnknownBlueprintReference(ref: String, revision: blueprint.Blueprint.Revision)
   extends NelsonError(s"the blueprint '${ref}@${revision.toString}' does not exist in the database; be sure you have specified the correct name and revision")
+
+final case class UnhydratedBlueprint(ref: String, revision: Revision)
+  extends NelsonError(s"the blueprint '${ref}@${revision.toString}' was un-hydrated when it reached the scheduler")
 
 final object NomadNotImplemented extends NelsonError(s"Nelson 0.11.x+ currently does not support Nomad. If you are interested in using Nelson with Nomad please file an issue on GitHub: https://github.com/getnelson/nelson/ or reach out to us on Gitter: https://gitter.im/getnelson/nelson")
 
