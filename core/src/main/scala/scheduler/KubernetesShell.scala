@@ -4,16 +4,16 @@ package scheduler
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Kubectl.{DeploymentStatus, JobStatus, KubectlError}
 import nelson.Manifest.{HealthCheck => _, _}
-import nelson.blueprint.{DefaultBlueprints, Render}
+import nelson.blueprint.{ContextRenderer, Render}
+import nelson.blueprint.DefaultBlueprints.canopus
 import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp._
-
 import nelson.CatsHelpers._
 import cats.~>
 import cats.effect.IO
 import cats.implicits._
-
 import java.util.concurrent.ScheduledExecutorService
+
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
@@ -67,28 +67,17 @@ final class KubernetesShell(
     error.stderr.exists(_.startsWith("Error from server (NotFound)"))
 
   def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
-    val env = Render.makeEnv(image, dc, ns, unit, version, plan, hash)
+    val env = Render.makeEnv(
+      ContextRenderer.Base(image, dc, ns, unit, version, plan, hash)
+    )
 
-    val fallback = Manifest.getSchedule(unit, plan) match {
-      case None => DefaultBlueprints.canopus.service
-      case Some(sched) => sched.toCron match {
-        case None => DefaultBlueprints.canopus.job
-        case Some(_) => DefaultBlueprints.canopus.cronJob
-      }
-    }
-
-    // NOTE: by this point in the system, we know we're dealing with
-    // a hydrated blueprint (i.e. passes manifest validation and exists
-    // in the database) so we simply take the supplied plan and extract
-    // the `Blueprint`, and `Template` in turn.
-    val template = plan.environment.blueprint match {
-      case Some(Left((ref, rev))) => IO.raiseError(UnhydratedBlueprint(ref, rev))
-      case Some(Right(bp)) => IO.pure(bp.template)
-      case None => fallback
-    }
+    val fallback = mkFallback(unit, plan)(
+      canopus.service,
+      canopus.job,
+      canopus.cronJob)
 
     for {
-      t <- template
+      t <- mkTemplate(plan.environment, fallback)
       r <- kubectl.apply(t.render(env))
     } yield r
   }

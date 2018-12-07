@@ -56,8 +56,8 @@ job "{{name}}" {
         auth_soft_fail = true
 
         labels {
-          stackName = "{{stack_name}}"
-          unitName  = "{{unit_name}}"
+          stack_name = "{{stack_name}}"
+          unit_name  = "{{unit_name}}"
           version   = "{{version}}"
           nelson    = "true"
         }

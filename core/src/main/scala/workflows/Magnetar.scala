@@ -27,6 +27,8 @@ object Magnetar extends Workflow[Unit] {
 
   val name: WorkflowRef = "magnetar"
 
+  final case class Context(ns: NamespaceName, n: String)
+
   def deploy(id: ID, hash: String, vunit: UnitDef @@ Versioned, p: Plan, dc: Datacenter, ns: Manifest.Namespace): WorkflowF[Unit] = {
     val unit = Manifest.Versioned.unwrap(vunit)
     val sn = Datacenter.StackName(unit.name, vunit.version, hash)

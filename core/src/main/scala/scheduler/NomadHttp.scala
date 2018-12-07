@@ -20,10 +20,10 @@ package scheduler
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
 import nelson.Manifest._
-import nelson.blueprint.{DefaultBlueprints, Render}
+import nelson.blueprint.{ContextRenderer, EnvValue, Render}
+import nelson.blueprint.DefaultBlueprints.magnetar
 import nelson.docker.Docker
 import nelson.docker.Docker.Image
-
 import cats.~>
 import cats.effect.IO
 import cats.implicits._
@@ -35,6 +35,23 @@ import scala.concurrent.ExecutionContext
 
 object NomadHttp {
   private val log = Logger[NomadHttp.type]
+
+  implicit val contextRendererNomadContext: ContextRenderer[Magnetar.Context] =
+    new ContextRenderer[Magnetar.Context] {
+      import Render.keys._
+      import EnvValue._
+
+      override def inject(context: Magnetar.Context): Map[String, EnvValue] = {
+        import context._
+        Map(
+          (vaultPolicies, ListValue(
+            MapValue(Map((vaultPolicyName, StringValue(getPolicyName(ns, n))))) :: Nil
+          ))
+        )
+      }
+    }
+
+  def getPolicyName(ns: NamespaceName, name: String) = s"nelson__${ns.root.asString}__${name}"
 }
 
 final class NomadHttp(
@@ -45,7 +62,7 @@ final class NomadHttp(
   ec: ExecutionContext
 ) extends (SchedulerOp ~> IO) {
   import NomadJson._
-  import NomadHttp.log
+  import NomadHttp._
   import SchedulerOp._
   import argonaut._, Argonaut._
   import org.http4s._
@@ -60,7 +77,7 @@ final class NomadHttp(
         deleteUnitAndChildren(dc, d).retryExponentially()(scheduler, ec)
       case Launch(i, dc, ns, u, p, hash) =>
         val unit = Manifest.Versioned.unwrap(u)
-        launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()(scheduler, ec)
+        launch(i, dc, ns, unit, u.version, p, hash).retryExponentially()(scheduler, ec)
       case Summary(dc,_,sn) =>
         summary(dc,sn)
     }
@@ -87,7 +104,7 @@ final class NomadHttp(
    */
   private def deleteUnit(dc: Datacenter, name: String): IO[Unit] = {
     val req = addCreds(dc,Request[IO](Method.DELETE, nomad.endpoint / "v1" / "job" / name))
-    client.expect[String](req).map(_ => ()).recoverWith {
+    client.expect[String](req).void.recoverWith {
       // swallow 404, as we're being asked to delete something that does not exist
       // this can happen when a workflow fails and the cleanup process is subsequently called
       case UnexpectedStatus(NotFound) => IO.unit
@@ -119,30 +136,26 @@ final class NomadHttp(
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
-  private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
-    val sn = StackName(u.name, version, hash)
+  private def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
+    val sn = StackName(unit.name, version, hash)
     val name = buildName(sn)
-    val vars = plan.environment.bindings ::: nomadEnvs(name, img, ns, plan)
-    val p = plan.copy(environment = plan.environment.copy(bindings = vars))
-    val env = Render.makeEnv(img, dc, ns, u, version, p, hash)
 
-    val fallback = Manifest.getSchedule(u, p) match {
-      case None => DefaultBlueprints.magnetar.nomad.service
-      case Some(sched) => sched.toCron match {
-        case None => DefaultBlueprints.magnetar.nomad.job
-        case Some(_) => DefaultBlueprints.magnetar.nomad.cronJob
-      }
+    val env = plan.environment.workflow match {
+      case Magnetar => Render
+        .makeEnv(ContextRenderer.Base(image, dc, ns, unit, version, plan, hash),
+                 Magnetar.Context(ns, name)).pure[IO]
+      case wf => IO.raiseError(WorkflowNotSupported(wf.name, "nomad"))
     }
 
-    val template = p.environment.blueprint match {
-      case Some(Left((ref, rev))) => IO.raiseError(UnhydratedBlueprint(ref, rev))
-      case Some(Right(bp)) => IO.pure(bp.template)
-      case None => fallback
-    }
+    val fallback = mkFallback(unit, plan)(
+      magnetar.nomad.service,
+      magnetar.nomad.job,
+      magnetar.nomad.cronJob)
 
     for {
-      t <- template
-      j <- parse(dc, t.render(env))
+      e <- env
+      t <- mkTemplate(plan.environment, fallback)
+      j <- parse(dc, t.render(e))
       r <- call(name, dc, j)
     } yield r
   }
@@ -158,13 +171,6 @@ final class NomadHttp(
     val req = addCreds(dc, Request[IO](Method.POST, nomad.endpoint / "v1" / "job" / name))
     client.expect[String](req.withBody(json))
   }
-
-  // todo clean this up and move it into Render
-  private def nomadEnvs(name: String, img: Image, ns: NamespaceName, plan: Plan) = List(
-    EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
-    EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.limitOrElse(512D).toInt.toString),
-    EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
-    EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name)))
 }
 
 object NomadJson {
@@ -172,6 +178,7 @@ object NomadJson {
   import argonaut.EncodeJsonCats._
   import Infrastructure.Nomad
   import scala.concurrent.duration._
+  import NomadHttp._
 
   sealed abstract class NetworkMode(val asString: String)
   final case object BridgeMode extends NetworkMode("bridge")
@@ -252,8 +259,6 @@ object NomadJson {
       "MaxFileSizeMB" := maxFileSize
     )
   }
-
-  def getPolicyName(ns: NamespaceName, name: String) = s"nelson__${ns.root.asString}__${name}"
 
   def vaultJson(ns: NamespaceName, name: String): argonaut.Json = {
     // Names need to be namespaced, because a secret in dev != a secret in prod

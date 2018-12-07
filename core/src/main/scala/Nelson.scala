@@ -16,15 +16,16 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import nelson.blueprint.Blueprint
-
+import nelson.blueprint.{Blueprint, ContextRenderer}
 import cats.data.{EitherT, Kleisli, NonEmptyList, OptionT, ValidatedNel}
 import cats.effect.IO
 import cats.implicits._
 import nelson.CatsHelpers._
 import fs2.async.parallelTraverse
 import java.time.Instant
+
 import journal.Logger
+
 import scala.collection.immutable.SortedMap
 
 object Nelson {
@@ -383,7 +384,7 @@ object Nelson {
           Set("some-tag")
       )
       val proofingData: Map[String, EnvValue] =
-        Render.makeEnv(
+        Render.makeEnv(ContextRenderer.Base(
           image,
           cfg.datacenters.head,
           NamespaceName("dev"),
@@ -391,7 +392,7 @@ object Nelson {
           version,
           Manifest.Plan.default,
           randomAlphaNumeric(8)
-        )
+        ))
       // NOTE: using random identifier here simply so that
       // even if template engine has caching engaged, we
       // always get a fresh result (cache busting FTW).

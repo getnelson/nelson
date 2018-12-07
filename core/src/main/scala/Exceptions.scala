@@ -181,6 +181,9 @@ final case class InvalidUnitNameLength(name: String)
 final case class InvalidUnitNameChars(name: String)
   extends NelsonError(s"$name contains invalid characters. Unit names can only include hyphens, A-Z, a-z, 0-9 where the unit name starts and ends with an alpha-numeric character.")
 
+final case class WorkflowNotSupported(workflow: WorkflowRef, scheduler: String)
+  extends NelsonError(s"the $workflow workflow is not supported by $scheduler")
+
 final case class UnknownBlueprintReference(ref: String, revision: blueprint.Blueprint.Revision)
   extends NelsonError(s"the blueprint '${ref}@${revision.toString}' does not exist in the database; be sure you have specified the correct name and revision")
 
