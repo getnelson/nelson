@@ -17,10 +17,10 @@ object Render {
     }
 
   def makeEnv[A0](a0: A0)(implicit CR0: CR[A0]): Map[String, EnvValue] =
-    CR0.inject(a0)
+    CR0.render(a0)
 
   def makeEnv[A0, A1](a0: A0, a1: A1)(implicit CR0: CR[A0], CR1: CR[A1]): Map[String, EnvValue] =
-    CR0.inject(a0) |+| CR1.inject(a1)
+    CR0.render(a0) |+| CR1.render(a1)
 
   object keys {
     // Unit/Deployment

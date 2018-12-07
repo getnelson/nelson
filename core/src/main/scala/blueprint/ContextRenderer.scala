@@ -9,7 +9,7 @@ import simulacrum.typeclass
 
 @typeclass
 trait ContextRenderer[A] {
-  def inject(a: A): Map[String, EnvValue]
+  def render(a: A): Map[String, EnvValue]
 }
 
 object ContextRenderer {
@@ -19,7 +19,7 @@ object ContextRenderer {
 
   implicit val baseContextRenderer: ContextRenderer[Base] =
     new ContextRenderer[Base] {
-      override def inject(base: Base): Map[String, EnvValue] = {
+      override def render(base: Base): Map[String, EnvValue] = {
         import Render.keys._
         import base._
 
