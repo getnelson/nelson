@@ -28,17 +28,21 @@ import nelson.scheduler.{KubernetesShell, SchedulerOp}
 import nelson.storage.StoreOp
 import nelson.vault._
 import nelson.vault.http4s._
-import cats.~>
-import cats.effect.{Effect, IO}
-import cats.implicits._
-import java.nio.file.{Path, Paths}
-import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService, ThreadFactory}
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProvider, AWSCredentialsProviderChain, BasicAWSCredentials, EC2ContainerCredentialsProviderWrapper}
 import com.amazonaws.internal.StaticCredentialsProvider
+
+import cats.~>
+import cats.effect.{Effect, IO}
+import cats.implicits._
+
+import java.nio.file.{Path, Paths}
+import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService, ThreadFactory}
 import javax.net.ssl.SSLContext
+
 import journal.Logger
+
 import org.http4s.Uri
 import org.http4s.client.Client
 import org.http4s.client.blaze._
