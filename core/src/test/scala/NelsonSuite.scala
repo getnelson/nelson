@@ -20,7 +20,7 @@ import cats.~>
 import cats.effect.IO
 import cats.implicits._
 
-import nelson.notifications.{SlackOp,EmailOp}
+import nelson.notifications.{SlackOp,EmailOp,WebHookOp}
 
 import doobie._
 import doobie.implicits._
@@ -123,6 +123,14 @@ trait NelsonSuite
     }
   }
 
+  lazy val testWebHook: WebHookOp ~> IO = new (WebHookOp ~> IO) {
+    import WebHookOp._
+    def apply[A](op: WebHookOp[A]): IO[A] = op match {
+      case SendWebHookNotification(subscribers, ev) =>
+        IO.unit
+    }
+  }
+
   import docker._
   lazy val testDocker = new (DockerOp ~> IO) {
     def apply[A](op: DockerOp[A]) = op match {
@@ -190,7 +198,7 @@ trait NelsonSuite
       database = dbConfig, // let each suite get its own h2
       dockercfg = DockerConfig(sys.env.getOrElse("DOCKER_HOST", "unix:///var/run/docker.sock"), true),
       datacenters = List(datacenter(testName).copy(interpreters = testInterpreters)),
-      interpreters = Interpreters(GitFixtures.interpreter,stg,Some(testSlack),Some(testEmail))
+      interpreters = Interpreters(GitFixtures.interpreter,stg,Some(testSlack),Some(testEmail),Some(testWebHook))
     )
 }
 

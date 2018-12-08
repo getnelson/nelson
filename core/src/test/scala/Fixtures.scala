@@ -46,6 +46,7 @@ object Fixtures {
   implicit lazy val arbGithubRelease: Arbitrary[Github.Release] = Arbitrary(genGithubRelease)
   implicit lazy val arbSlackSub: Arbitrary[notifications.SlackSubscription] = Arbitrary(genSlackSubscription)
   implicit lazy val arbEmailSub: Arbitrary[notifications.EmailSubscription] = Arbitrary(genEmailSubscription)
+  implicit lazy val arbWebHookSub: Arbitrary[notifications.WebHookSubscription] = Arbitrary(genWebHookSubscription)
   implicit lazy val arbRegex: Arbitrary[Regex] = Arbitrary(genRegex)
   implicit lazy val arbDeployment: Arbitrary[Datacenter.Deployment] = Arbitrary(genDeployment)
   implicit lazy val arbTrafficShiftPolicy: Arbitrary[TrafficShiftPolicy] = Arbitrary(genTrafficShiftPolicy)
@@ -281,11 +282,33 @@ object Fixtures {
       a <- arbitrary[String]
     } yield notifications.EmailSubscription(a)
 
-  val getNotifications: Gen[notifications.NotificationSubscriptions] =
+  val genWebHookSubscription: Gen[notifications.WebHookSubscription] = {
+    import org.http4s.{Header, Headers, Uri}
+
+    type StringPair = (String, String)
+
+    val genUri: Gen[Option[Uri]] =
+      for {
+        s  <- Gen.oneOf("http", "https")
+        h  <- Gen.identifier
+        p  <- Gen.choose(80, 1024)
+        sc <- Gen.choose(0, 10)
+        ss <- Gen.listOfN(sc, Gen.identifier)
+      } yield Uri.fromString(s"$s://$h:$p/${ss.mkString("/")}").toOption
+
+    for {
+      a <- genUri suchThat (_.nonEmpty)
+      b <- Gen.listOfN(5, arbitrary[StringPair]).map(ps => Headers(ps.map(h => Header(h._1, h._2))))
+      c <- Gen.listOfN(5, arbitrary[StringPair])
+    } yield notifications.WebHookSubscription(a.get, b, c)
+  }
+
+  val genNotifications: Gen[notifications.NotificationSubscriptions] =
     for {
       a <- arbitrary[List[notifications.SlackSubscription]]
       b <- arbitrary[List[notifications.EmailSubscription]]
-    } yield notifications.NotificationSubscriptions(a,b)
+      c <- arbitrary[List[notifications.WebHookSubscription]]
+    } yield notifications.NotificationSubscriptions(a,b,c)
 
   val genPlan: Gen[Manifest.Plan] =
     for {
@@ -304,7 +327,7 @@ object Fixtures {
       b <- Gen.listOfN(2, genManifestUnitDef)
       c <- Gen.listOfN(2, genManifestUnitDef)
       d <- Gen.listOfN(4, alphaNumStr)
-      e <- getNotifications
+      e <- genNotifications
       f <- genManifestDeployable
       h <- genPlan
       i <- Gen.listOfN(2, genLoadbalancer)

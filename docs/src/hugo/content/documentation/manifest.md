@@ -343,12 +343,12 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
   Notifications
 </h2>
 
-Nelson can notify you about your deployment results via slack and/or email. Notifications are sent for a deployment when:
+Nelson can notify you about your deployment results via slack, email and/or generic webhook. Notifications are sent for a deployment when:
 
 * a deployment has successfully completed or failed
 * a deployment has been decommissioned
 
-The following is a simple example that configure both email and slack notifications:
+The following is a simple example that configures email, slack, and webhook notifications:
 
 
 ```
@@ -361,6 +361,15 @@ notifications:
     channels:
       - infrastructure
       - devops
+  webhook:
+    subscribers:
+      - uri: https://fakehooks.com/_foo
+      - uri: https://fakehooks.com/_bar
+        headers:
+          Authorization: "token 75b413aed31d0f6b964af9735d2b8d0d"
+      - uri: https://fakehooks.com/_bar
+        params:
+          auth_key: 75b413aed31d0f6b964af9735d2b8d0d
 ```
 
 <h2 id="manifest-units" data-subheading-of="manifest">Units</h2>

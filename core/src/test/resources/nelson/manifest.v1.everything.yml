@@ -197,3 +197,6 @@ notifications:
     channels:
       - development
       - general
+  webhook:
+    subscribers:
+      - uri: https://localhost:80/

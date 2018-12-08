@@ -23,7 +23,7 @@ import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
 import nelson.health.KubernetesHealthClient
 import nelson.logging.{WorkflowLogger,LoggingOp}
-import nelson.notifications.{SlackHttp,SlackOp,EmailOp,EmailServer}
+import nelson.notifications.{SlackHttp,SlackOp,EmailOp,EmailServer,WebHookHttp,WebHookOp}
 import nelson.scheduler.{KubernetesShell, SchedulerOp}
 import nelson.storage.StoreOp
 import nelson.vault._
@@ -39,7 +39,7 @@ import javax.net.ssl.SSLContext
 
 import journal.Logger
 
-import org.http4s.Uri
+import org.http4s.{Headers, Uri}
 import org.http4s.client.Client
 import org.http4s.client.blaze._
 
@@ -215,6 +215,16 @@ final case class EmailConfig(
   useSSL: Boolean = true
 )
 
+final case class WebHookSubscriberConfig(
+  endpoint: Uri,
+  headers: Headers,
+  params: List[(String, String)]
+)
+
+final case class WebHookConfig(
+  subscribers: List[WebHookSubscriberConfig]
+)
+
 final case class CacheConfig(
   stackStatusCache: Cache[(String,String,String), DeploymentStatus]
 )
@@ -266,7 +276,8 @@ final case class Interpreters(
   git: Github.GithubOp ~> IO,
   storage: StoreOp ~> IO,
   slack: Option[SlackOp ~> IO],
-  email: Option[EmailOp ~> IO]
+  email: Option[EmailOp ~> IO],
+  webhook: Option[WebHookOp ~> IO]
 )
 
 /**
@@ -363,6 +374,8 @@ final case class NelsonConfig(
 
   lazy val email = interpreters.email
 
+  lazy val webhook = interpreters.webhook
+
   lazy val auditor = new Auditor(auditQueue, git.systemUsername)
 
   // i've currently assigned these pretty arbitrary values
@@ -449,6 +462,7 @@ object Config {
       httpClient <- http
       gitClient  = new Github.GithubHttp(gitcfg, httpClient, timeout, pools.defaultExecutor)
       slackClient = readSlack(cfg.subconfig("nelson.slack")).map(new SlackHttp(_, httpClient))
+      webhookClient = Option(new WebHookHttp(httpClient))
     } yield {
       NelsonConfig(
         git                = gitcfg,
@@ -467,7 +481,7 @@ object Config {
         template           = readTemplate(cfg),
         http               = httpClient,
         pools              = pools,
-        interpreters       = Interpreters(gitClient,storage,slackClient,email),
+        interpreters       = Interpreters(gitClient,storage,slackClient,email,webhookClient),
         workflowLogger     = wflogger,
         bannedClients      = readBannedClients(cfg.subconfig("nelson.banned-clients")),
         ui                 = readUI(cfg.subconfig("nelson.ui")),

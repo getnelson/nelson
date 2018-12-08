@@ -17,14 +17,15 @@
 package nelson
 package notifications
 
+import org.http4s._
 
 sealed trait NotificationSubscription
 final case class SlackSubscription(channel: SlackChannel) extends NotificationSubscription
 final case class EmailSubscription(recipient: EmailAddress) extends NotificationSubscription
+final case class WebHookSubscription(uri: Uri, headers: Headers, params: List[(String, String)]) extends NotificationSubscription
 
-final case class NotificationSubscriptions(slack: List[SlackSubscription], email: List[EmailSubscription])
+final case class NotificationSubscriptions(slack: List[SlackSubscription], email: List[EmailSubscription], webhook: List[WebHookSubscription])
 
 object NotificationSubscriptions {
-  val empty: NotificationSubscriptions = NotificationSubscriptions(Nil,Nil)
+  val empty: NotificationSubscriptions = NotificationSubscriptions(Nil,Nil,Nil)
 }
-
