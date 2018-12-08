@@ -121,6 +121,11 @@ final case class DockerConfig(
   verifyTLS: Boolean
 )
 
+final case class DockerCreds(
+  dockerRepoUser: String,
+  dockerRepoPassword: String
+)
+
 final case class NomadConfig(
   applicationPrefix: Option[String],
   requiredServiceTags: Option[List[String]]
@@ -533,15 +538,19 @@ object Config {
                                       logger: LoggingOp ~> IO): IO[List[Datacenter]] = {
 
     def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
+
+      val dockerCreds =
+        (kfg.lookup[String]("docker.user"),
+         kfg.lookup[String]("docker.password")
+        ).mapN((a,b) => DockerCreds(a,b))
+
       (kfg.lookup[String]("endpoint"),
        kfg.lookup[Duration]("timeout"),
-       kfg.lookup[String]("docker.user"),
-       kfg.lookup[String]("docker.password"),
        kfg.lookup[String]("docker.host"),
        kfg.lookup[Int]("mhz-per-cpu")
-        ).mapN((a,b,c,d,e,f) => {
+        ).mapN((a,b,c,d) => {
           val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
-          Infrastructure.Nomad(uri,b,c,d,e,f)
+          Infrastructure.Nomad(uri,b,dockerCreds,c,d)
         })
     }
 
@@ -607,13 +616,11 @@ object Config {
             http4sConsul.map(consulClient => PrometheusConsul(a, consulClient))
           }
 
-          // for {
-          //   consulClient  <- consul
-          //   sched         <- readNomadScheduler(schedConfig.subconfig("nomad"))
-          //   healthChecker = health.Http4sConsulHealthClient(consulClient)
-          // } yield (sched, healthChecker, consulClient)
-
-          IO.raiseError(NomadNotImplemented)
+          for {
+            consulClient  <- consul
+            sched         <- readNomadScheduler(schedConfig.subconfig("nomad"))
+            healthChecker = health.Http4sConsulHealthClient(consulClient)
+          } yield (sched, healthChecker, consulClient)
 
         case Some("kubernetes") =>
           readKubernetesInfrastructure(schedConfig.subconfig("kubernetes")) match {

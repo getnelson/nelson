@@ -1,0 +1,184 @@
+job "{{unit_name}}" {
+  {{#schedule}}
+  type = "batch"
+  {{/schedule}}
+  {{^schedule}}
+  type = "service"
+  {{/schedule}}
+
+  region      = "{{datacenter}}"
+  datacenters = ["{{datacenter}}"]
+
+  {{!- todo support time zone for predefined expressions }}
+  {{#schedule}}
+  periodic {
+    cron             = "{{schedule}}"
+    prohibit_overlap = true
+  }
+  {{/schedule}}
+
+  all_at_once = false
+
+  group "{{unit_name}}" {
+    {{#desired_instances}}
+    count = {{desired_instances}}
+    {{/desired_instances}}
+    {{^desired_instances}}
+    count = 1
+    {{/desired_instances}}
+
+    {{#ephemeral_disks_list}}
+    ephemeral_disk {
+      migrate = {{ephemeral_disk_migrate}}
+      size    = "{{ephemeral_disk_size}}"
+      sticky  = {{ephemeral_disk_sticky}}
+    }
+    {{/ephemeral_disks_list}}
+
+    restart {
+      {{#restart_interval}}
+      interval = "{{restart_interval}}"
+      {{/restart_interval}}
+      {{^restart_interval}}
+      interval = "5m"
+      {{/restart_interval}}
+      attempts = {{retries}}
+      {{#restart_delay}}
+      delay = "{{restart_delay}}"
+      {{/restart_delay}}
+      {{^restart_delay}}
+      delay     = "15s"
+      {{/restart_delay}}
+      {{#restart_mode}}
+      mode     = "{{restart_mode}}"
+      {{/restart_mode}}
+      {{^restart_mode}}
+      {{#schedule}}
+      mode     = "fail"
+      {{/schedule}}
+      {{^schedule}}
+      mode     = "delay"
+      {{/schedule}}
+      {{/restart_mode}}
+    }
+
+    task "{{unit_name}}" {
+      driver = "docker"
+
+      env {
+        {{#envvars}}
+        {{#envvars_list}}
+        "{{envvar_name}}" = "{{envvar_value}}"
+        {{/envvars_list}}
+        {{/envvars}}
+      }
+
+      config {
+        image = "{{image}}"
+
+        network_mode = "{{docker_network_mode}}"
+
+        volumes = [
+        {{#empty_volumes_list}}
+          "{{empty_volume_mount_name}}:{{empty_volume_mount_path}}"
+        {{/empty_volumes_list}}
+        ]
+
+        auth {
+        {{#docker_username}}
+          username = "{{docker_username}}"
+        {{/docker_username}}
+        {{#docker_password}}
+          password = "{{docker_password}}"
+        {{/docker_password}}
+        {{#docker_server_address}}
+          server_address = "{{docker_server_address}}"
+        {{/docker_server_address}}
+        }
+        auth_soft_fail = true
+
+        labels {
+          stack_name = "{{stack_name}}"
+          unit_name  = "{{unit_name}}"
+          version    = "{{version}}"
+          nelson     = "true"
+        }
+      }
+
+      service {
+        tags = [{{tags}}]
+
+        {{#health_checks}}
+        check {
+          type            = "{{health_check_type}}" {{! todo support other check types }}
+          protocol        = "{{health_check_protocol}}"
+          tls_skip_verify = {{health_check_tls_skip_verify}}
+          name            = "{{health_check_name}}"
+          port            = "{{health_check_port_ref}}" {{! todo method would be useful too; i use HEAD often }}
+          path            = "{{health_check_path}}"
+          interval        = "{{health_check_interval}}"
+          timeout         = "{{health_check_timeout}}"
+
+          {{#health_check_header}}
+          header {
+            {{health_check_header_name}} = ["{{health_check_header_value}}"]
+          }
+          {{/health_check_header}}
+        }
+        {{/health_checks}}
+      }
+
+      vault {
+        policies = [
+        {{#vault_policies}}
+          "{{vault_policy_name}}"
+        {{/vault_policies}}
+        ]
+        env           = true
+        {{#vault_change_mode}}
+        change_mode   = "{{vault_change_mode}}"
+        {{/vault_change_mode}}
+        {{^vault_change_mode}}
+        change_mode   = "restart"
+        {{/vault_change_mode}}
+        {{#vault_change_signal}}
+        change_signal = "{{vault_change_signal}}"
+        {{/vault_change_signal}}
+        {{^vault_change_signal}}
+        change_signal = "{{vault_change_signal}}"
+        {{/vault_change_signal}}
+      }
+
+      resources {
+        cpu    = {{cpu_limit}}
+        memory = {{memory_limit}}
+
+        network {
+          mbits = 1
+          {{#ports}}
+          {{#ports_list}}
+          {{#port_number}}
+          port "{{port_name}}" {
+            static = "{{port_number}}"
+          }
+          {{/port_number}}
+          {{^port_number}}
+          port "{{port_name}}" {}
+          {{/port_number}}
+          {{/ports_list}}
+          {{/ports}}
+        }
+      }
+    }
+  }
+
+  meta {
+    name      = "{{stack_name}}"
+    namespace = "{{namespace}}"
+    stackName = "{{stack_name}}"
+    unitName  = "{{unit_name}}"
+    version   = "{{version}}"
+    nelson    = "true"
+    plan_meta = "{{nelson_unit_metadata}}"
+  }
+}

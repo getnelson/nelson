@@ -66,8 +66,7 @@ object Infrastructure {
   final case class Nomad(
     endpoint: Uri,
     timeout: Duration,
-    dockerRepoUser: String,
-    dockerRepoPassword: String,
+    dockerCredentials: Option[DockerCreds],
     dockerRepoServerAddress: String,
     mhzPerCPU: Int
   )
