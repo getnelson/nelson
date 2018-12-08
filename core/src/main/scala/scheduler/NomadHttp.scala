@@ -21,11 +21,9 @@ import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
 import nelson.Manifest.{EnvironmentVariable, HealthCheck, Plan, UnitDef}
 import nelson.docker.Docker.Image
-
 import cats.~>
 import cats.effect.IO
 import cats.implicits._
-
 import java.util.concurrent.ScheduledExecutorService
 
 import journal.Logger
@@ -124,37 +122,52 @@ final class NomadHttp(
   private def buildName(sn: StackName): String =
     cfg.applicationPrefix.map(prefix => s"${prefix}-${sn.toString}").getOrElse(sn.toString)
 
+  private def modulateCpu(cpu: Double) = nomad.mhzPerCPU * cpu
+
   private def launch(u: UnitDef, hash: String, version: Version, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): IO[String] = {
     import blueprint._
+    import Manifest.ResourceSpec._
+
+    val env = plan.environment
     val sn = StackName(u.name, version, hash)
     val name = buildName(sn)
+    val cpu = modulateCpu(env.cpu.limitOrElse(0.5))
+    val memory = env.memory.limitOrElse(512D)
 
-    val template = plan.environment.blueprint
+    val updateHealthChecks = env.healthChecks
+
+    val updatePlan = plan.copy(
+      environment    = env.copy(
+        bindings     = env.bindings ++ List(
+                       EnvironmentVariable("NELSON_DATACENTER", dc.name),
+                       EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
+                       EnvironmentVariable("NELSON_CPU_LIMIT", cpu.toString),
+                       EnvironmentVariable("NELSON_MEMORY_LIMIT", memory.toString),
+                       EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
+                       EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name))),
+        cpu          = env.cpu.fold(
+                       limitOnly(cpu),
+                       l => limitOnly(modulateCpu(l)),
+                       (_, l) => limitOnly(modulateCpu(l))).get,
+        memory       = env.memory.fold(
+                       limitOnly(memory),
+                       limitOnly,
+                       (_, l) => limitOnly(l)).get))
+
+    val injectEnv =
+      Render.makeEnv(img, dc, ns, u, version, updatePlan, hash) ++
+      render(img, dc, ns, u, version, updatePlan, hash)
+
+    val template = env.blueprint
       .traverse {
         case Left(_)   => IO.raiseError(new IllegalArgumentException("Internal error occured: un-hydrated blueprint passed to scheduler!"))
         case Right(bp) => bp.template.pure[IO]
       } >>=
       (_.fold(DefaultBlueprints.magnetar)(_.pure[IO]))
 
-    /**
-      *
-      */
-    val updatedPlan = plan
-      .copy(environment = plan.environment
-      .copy(bindings    = plan.environment.bindings ++ List(
-        EnvironmentVariable("NELSON_DATACENTER", dc.name),
-        EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
-        EnvironmentVariable("NELSON_MEMORY_LIMIT", plan.environment.memory.limitOrElse(512D).toInt.toString),
-        EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
-        EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name)))))
-
-    val env =
-      Render.makeEnv(img, dc, ns, u, version, updatedPlan, hash) ++
-      render(img, dc, ns, u, version, updatedPlan, hash)
-
     for {
       tmpl <- template
-      spec  = tmpl.render(env)
+      spec  = tmpl.render(injectEnv)
       json <- parse(dc, spec)
       spec <- call(name, dc, json)
     } yield spec
@@ -195,19 +208,16 @@ final class NomadHttp(
       .map(s => ("schedule", sv(s)) :: Nil)
       .getOrElse(List.empty)
 
-    (("cpu_limit"            , sv(runtime.cpuLimit.toString)) ::
-     ("memory_limit"         , sv(runtime.memoryLimit.toString)) ::
-     ("health_checks"        , lv(runtime.healthChecks.map(hc => mv(mkHealthCheck(hc))))) ::
+    (("health_checks"        , lv(runtime.healthChecks.map(hc => mv(mkHealthCheck(hc))))) ::
      ("vault_policies"       , lv(sv(getPolicyName(ns, name)) :: Nil)) ::
      ("vault_change_mode"    , sv("restart")) ::
      ("vault_change_signal"  , sv("")) ::
      ("datacenter"           , sv(dc.name)) ::
      ("nelson_unit_metadata" , sv(unit.meta.mkString(","))) ::
      ("docker_network_mode"  , sv(BridgeMode.asString)) ::
-     ("docker_server_address", sv(nomad.dockerRepoServerAddress)) ::
-     nomad.dockerCredentials.map { dc =>
+     ("docker_server_address", sv(nomad.dockerRepoServerAddress)) :: nomad.dockerCredentials.map(dc =>
        ("docker_username"    , sv(dc.dockerRepoUser)) ::
-       ("docker_password"    , sv(dc.dockerRepoPassword)) :: Nil }.toList.flatten ++
+       ("docker_password"    , sv(dc.dockerRepoPassword)) :: Nil).toList.flatten ++
      schedule).toMap
   }
 
