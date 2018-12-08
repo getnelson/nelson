@@ -702,9 +702,7 @@ object Config {
 
       val ec2Discovery = Option(new EC2ContainerCredentialsProviderWrapper())
 
-      val profile = Option(new ProfileCredentialsProvider())
-
-      (basic :: profile :: ec2Discovery :: Nil)
+      (basic :: ec2Discovery :: Nil)
         .sequence[Option, AWSCredentialsProvider]
         .map(ps => new AWSCredentialsProviderChain(ps: _*))
     }
