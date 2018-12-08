@@ -24,17 +24,21 @@ import nelson.logging.LoggingOp
 import nelson.scheduler.SchedulerOp
 import nelson.storage.StoreOp
 import nelson.vault.Vault
-import cats.{Order, ~>}
+
+import cats.{~>,Order}
 import cats.data.ValidatedNel
 import cats.effect.IO
 import cats.implicits._
+
+import com.amazonaws.auth.AWSCredentialsProviderChain
 import com.amazonaws.regions.Region
+
 import helm.ConsulOp
+
 import java.net.URI
 import java.time.Instant
 import java.nio.file.Path
 
-import com.amazonaws.auth.AWSCredentialsProviderChain
 import org.http4s.Uri
 
 import scala.concurrent.duration.FiniteDuration
