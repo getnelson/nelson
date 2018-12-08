@@ -29,8 +29,7 @@ import nelson.storage.StoreOp
 import nelson.vault._
 import nelson.vault.http4s._
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{AWSCredentialsProvider, AWSCredentialsProviderChain, BasicAWSCredentials, EC2ContainerCredentialsProviderWrapper}
+import com.amazonaws.auth.{AWSCredentialsProviderChain, BasicAWSCredentials, EC2ContainerCredentialsProviderWrapper}
 import com.amazonaws.internal.StaticCredentialsProvider
 
 import cats.~>
