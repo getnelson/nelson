@@ -22,7 +22,7 @@ import nelson.audit.{Auditor, AuditEvent}
 import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
 import nelson.health.KubernetesHealthClient
-import nelson.logging.{WorkflowLogger, LoggingOp}
+import nelson.logging.{WorkflowLogger,LoggingOp}
 import nelson.notifications.{SlackHttp,SlackOp,EmailOp,EmailServer}
 import nelson.scheduler.{KubernetesShell, SchedulerOp}
 import nelson.storage.StoreOp
