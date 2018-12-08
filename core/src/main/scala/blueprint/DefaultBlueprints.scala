@@ -19,4 +19,6 @@ object DefaultBlueprints {
     val cronJob = templateFromClasspath("nelson/canopus_cron_job.mustache")
     val job = templateFromClasspath("nelson/canopus_job.mustache")
   }
+
+  val magnetar = templateFromClasspath("nelson/magnetar.mustache")
 }

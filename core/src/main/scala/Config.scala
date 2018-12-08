@@ -124,6 +124,11 @@ final case class DockerConfig(
   verifyTLS: Boolean
 )
 
+final case class DockerCreds(
+  dockerRepoUser: String,
+  dockerRepoPassword: String
+)
+
 final case class NomadConfig(
   applicationPrefix: Option[String],
   requiredServiceTags: Option[List[String]]
@@ -536,16 +541,28 @@ object Config {
                                       stg: StoreOp ~> IO,
                                       logger: LoggingOp ~> IO): IO[List[Datacenter]] = {
 
+    def readDocker(kfg: KConfig): Infrastructure.Docker = {
+
+      val creds =
+        (kfg.lookup[String]("docker.user"),
+         kfg.lookup[String]("docker.password")
+        ).mapN((a,b) => Docker.Credentials(a,b))
+
+      /*
+      If a datacenter specific registry isn't specified fall back to Nelson's publish registry
+       */
+      val registry = kfg.lookup[String]("docker.registry") getOrElse kfg.require[String]("docker-registry")
+
+      Infrastructure.Docker(registry, creds)
+    }
+
     def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
       (kfg.lookup[String]("endpoint"),
        kfg.lookup[Duration]("timeout"),
-       kfg.lookup[String]("docker.user"),
-       kfg.lookup[String]("docker.password"),
-       kfg.lookup[String]("docker.host"),
        kfg.lookup[Int]("mhz-per-cpu")
-        ).mapN((a,b,c,d,e,f) => {
+        ).mapN((a,b,c) => {
           val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
-          Infrastructure.Nomad(uri,b,c,d,e,f)
+          Infrastructure.Nomad(uri,b,readDocker(kfg),c)
         })
     }
 
@@ -629,7 +646,6 @@ object Config {
           withKubectl((kubectl, timeout) =>
             IO.pure(new KubernetesShell(kubectl, timeout, ec, schedulerPool)))
         }
-        case Some("nomad") => IO.raiseError(NomadNotImplemented)
         case _ => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
       }
 
@@ -675,7 +691,7 @@ object Config {
       interpreters.map { interp =>
         Datacenter(
           name = id,
-          docker = Infrastructure.Docker(kfg.require[String]("docker-registry")),
+          docker = readDocker(kfg),
           domain = Infrastructure.Domain(kfg.require[String]("domain")),
           defaultTrafficShift = trafficShift,
           proxyCredentials = proxyCreds,

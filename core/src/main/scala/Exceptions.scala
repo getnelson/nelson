@@ -183,8 +183,6 @@ final case class InvalidUnitNameChars(name: String)
 final case class UnknownBlueprintReference(ref: String, revision: blueprint.Blueprint.Revision)
   extends NelsonError(s"the blueprint '${ref}@${revision.toString}' does not exist in the database; be sure you have specified the correct name and revision")
 
-final object NomadNotImplemented extends NelsonError(s"Nelson 0.11.x+ currently does not support Nomad. If you are interested in using Nelson with Nomad please file an issue on GitHub: https://github.com/getnelson/nelson/ or reach out to us on Gitter: https://gitter.im/getnelson/nelson")
-
 final case class VersionedGitTagRequired(ref: Github.Reference)
   extends NelsonError(s"Nelson can presently only release from tags whilst the supplied ref was '${ref}'")
 

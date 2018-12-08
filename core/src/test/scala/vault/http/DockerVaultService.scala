@@ -22,6 +22,7 @@ import com.spotify.docker.client.{DefaultDockerClient, DockerClient}
 import com.whisk.docker.impl.spotify.SpotifyDockerFactory
 import com.whisk.docker._
 import journal.Logger
+import scala.concurrent.duration._
 import scala.io.Source
 
 trait DockerVaultService extends DockerKit {
@@ -34,9 +35,9 @@ trait DockerVaultService extends DockerKit {
     DockerContainer("consul:1.2.2", name = Some("consul"))
       .withPorts(8500 -> Some(8500))
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"consul: $s")))
-      // NOTE(timperrett): for some reason, this no longer works for consul
-      // despite trying a range of different things.
-      // .withReadyChecker(DockerReadyChecker.LogLineContains("Consul agent running!"))
+      .withReadyChecker(DockerReadyChecker
+        .HttpResponseCode(8500, "/v1/status/leader")
+        .looped(5, 10.seconds))
 
   private val vaultLocalConfig =
     Source.fromInputStream(getClass.getResourceAsStream("/vault.hcl")).mkString
@@ -48,7 +49,9 @@ trait DockerVaultService extends DockerKit {
       .withLinks(ContainerLink(consulContainer, "consul"))
       .withCommand("server")
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"vault: $s")))
-      .withReadyChecker(DockerReadyChecker.LogLineContains("Vault server started!"))
+      .withReadyChecker(DockerReadyChecker
+        .HttpResponseCode(8200, "/v1/sys/health", code = 501)
+        .looped(5, 10.seconds))
 
   abstract override def dockerContainers: List[DockerContainer] =
     consulContainer :: vaultContainer :: super.dockerContainers

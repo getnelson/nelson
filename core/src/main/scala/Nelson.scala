@@ -393,9 +393,8 @@ object Nelson {
           cfg.datacenters.head,
           NamespaceName("dev"),
           unit,
-          version,
           Manifest.Plan.default,
-          randomAlphaNumeric(8)
+          StackName(unitName, version, randomAlphaNumeric(8))
         )
       // NOTE: using random identifier here simply so that
       // even if template engine has caching engaged, we
