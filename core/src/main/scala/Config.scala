@@ -18,12 +18,12 @@ package nelson
 
 import nelson.BannedClientsConfig.HttpUserAgent
 import nelson.Infrastructure.KubernetesMode
-import nelson.audit.{AuditEvent, Auditor}
+import nelson.audit.{Auditor, AuditEvent}
 import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
 import nelson.health.KubernetesHealthClient
-import nelson.logging.{LoggingOp, WorkflowLogger}
-import nelson.notifications.{EmailOp, EmailServer, SlackHttp, SlackOp}
+import nelson.logging.{WorkflowLogger, LoggingOp}
+import nelson.notifications.{SlackHttp,SlackOp,EmailOp,EmailServer}
 import nelson.scheduler.{KubernetesShell, SchedulerOp}
 import nelson.storage.StoreOp
 import nelson.vault._
