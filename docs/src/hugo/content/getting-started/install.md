@@ -359,11 +359,19 @@ This command - or a command like it - can be run from any system with Docker ins
 Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-based datastore. Nelson is intended to be running as a singleton and currently does not support clustering. Support for high-availability deployment modes are planned for a future release, but typically this is not needed as outages of Nelson have no critical affect on the datacenter runtime.
 </div>
 
-### Running on Kubernetes
+### Running in Containers
 
-Nelson can also be operated on top of Kubernetes (even if that same cluster is the one being managed by Nelson). When deploying to Kubernetes, Nelson operates like any other container applciation with the exception that it requires the use of a [Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to which Nelson can journal its state (database, job logs etc).
+#### Kubernetes
+
+Nelson can also be operated on top of Kubernetes (even if that same cluster is the one being managed by Nelson). When deploying to containerized environments, Nelson operates like any other container application with the exception that it requires the use of a [Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to which Nelson can journal its state (database, job logs etc). Depending on your infrastructure and tooling, special considerations should be taken, some of which are detailed below.
 
 As the Kubernetes configurations are rather verbose, the Nelson teams has provided a set of example configuration files [in the getnelson/kubernetes-configuration](https://github.com/getnelson/kubernetes-configuration) repository on Github.
+
+#### AWS ECS
+
+Since ECS does not support a logical volume claims, like Kubernetes and Nomad, special care must be taken to ensure Nelson can journal its state (database, job logs etc). At the time of writing, Nelson should not be deployed to a Fargate cluster due to lack of native support for persistent volumes. It may be possible for more advanced operators to construct a resilient storage solution using multiple containers and bind mounts.
+
+For beginners, the easiest deployment solution will utilize a dedicated ECS cluster and a dedicated EFS filesystem. The EFS filesystem will be [attached to the Nelson container](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_efs.html) and provides persistence guarantees across restarts in all virtualization layers. Deployment into an existing cluster is possible if the operator configures IAM to permit the ECS cluster to create the mount target, but restricts mount target access to a security group held only by Nelson.
 
 ### Installation Complete
 

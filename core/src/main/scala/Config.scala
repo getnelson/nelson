@@ -18,27 +18,27 @@ package nelson
 
 import nelson.BannedClientsConfig.HttpUserAgent
 import nelson.Infrastructure.KubernetesMode
-import nelson.audit.{Auditor,AuditEvent}
+import nelson.audit.{AuditEvent, Auditor}
 import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
 import nelson.health.KubernetesHealthClient
-import nelson.logging.{WorkflowLogger,LoggingOp}
-import nelson.notifications.{SlackHttp,SlackOp,EmailOp,EmailServer}
+import nelson.logging.{LoggingOp, WorkflowLogger}
+import nelson.notifications.{EmailOp, EmailServer, SlackHttp, SlackOp}
 import nelson.scheduler.{KubernetesShell, SchedulerOp}
 import nelson.storage.StoreOp
 import nelson.vault._
 import nelson.vault.http4s._
-
 import cats.~>
 import cats.effect.{Effect, IO}
 import cats.implicits._
-
 import java.nio.file.{Path, Paths}
 import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService, ThreadFactory}
+
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.auth.{AWSCredentialsProvider, AWSCredentialsProviderChain, BasicAWSCredentials, EC2ContainerCredentialsProviderWrapper}
+import com.amazonaws.internal.StaticCredentialsProvider
 import javax.net.ssl.SSLContext
-
 import journal.Logger
-
 import org.http4s.Uri
 import org.http4s.client.Client
 import org.http4s.client.blaze._
@@ -690,13 +690,29 @@ object Config {
 
     val zones = readAvailabilityZones(kfg.subconfig("availability-zones"))
 
-    (kfg.lookup[String]("access-key-id"),
-     kfg.lookup[String]("secret-access-key"),
+    def lookupProviderChain(kfg: KConfig): Option[AWSCredentialsProviderChain] = {
+      import cats.implicits._
+
+      val basic = for {
+        ak <- kfg.lookup[String]("access-key-id")
+        sk <- kfg.lookup[String]("secret-access-key")
+      } yield new StaticCredentialsProvider(new BasicAWSCredentials(ak, sk))
+
+      val ec2Discovery = Option(new EC2ContainerCredentialsProviderWrapper())
+
+      val profile = Option(new ProfileCredentialsProvider())
+
+      (basic :: profile :: ec2Discovery :: Nil)
+        .sequence[Option, AWSCredentialsProvider]
+        .map(ps => new AWSCredentialsProviderChain(ps: _*))
+    }
+
+    (lookupProviderChain(kfg),
      lookupRegion(kfg),
      kfg.lookup[String]("launch-configuration-name"),
      kfg.lookup[List[String]]("elb-security-group-names"),
      kfg.lookup[String]("image")
-    ).mapN((a,b,c,d,e,f) => Infrastructure.Aws(a,b,c,d,e.toSet,zones,f))
+    ).mapN((a,b,c,d,e) => Infrastructure.Aws(a,b,c,d.toSet,zones,e))
   }
 
   private def readNomad(cfg: KConfig): NomadConfig =
