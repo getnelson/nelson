@@ -18,7 +18,7 @@ package nelson
 
 import nelson.BannedClientsConfig.HttpUserAgent
 import nelson.Infrastructure.KubernetesMode
-import nelson.audit.{Auditor, AuditEvent}
+import nelson.audit.{Auditor,AuditEvent}
 import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
 import nelson.health.KubernetesHealthClient
