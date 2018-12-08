@@ -694,7 +694,7 @@ object Config {
 
     val zones = readAvailabilityZones(kfg.subconfig("availability-zones"))
 
-    def lookupProviderChain(kfg: KConfig): Option[AWSCredentialsProviderChain] = {
+    def buildProviderChain(kfg: KConfig): AWSCredentialsProviderChain = {
       val basic = for {
         ak <- kfg.lookup[String]("access-key-id")
         sk <- kfg.lookup[String]("secret-access-key")
@@ -702,17 +702,16 @@ object Config {
 
       val ec2Discovery = Option(new EC2ContainerCredentialsProviderWrapper())
 
-      (basic :: ec2Discovery :: Nil)
-        .sequence[Option, AWSCredentialsProvider]
-        .map(ps => new AWSCredentialsProviderChain(ps: _*))
+      new AWSCredentialsProviderChain((basic :: ec2Discovery :: Nil).flatten: _*)
     }
 
-    (lookupProviderChain(kfg),
-     lookupRegion(kfg),
+    val creds = buildProviderChain(kfg)
+
+    (lookupRegion(kfg),
      kfg.lookup[String]("launch-configuration-name"),
      kfg.lookup[List[String]]("elb-security-group-names"),
      kfg.lookup[String]("image")
-    ).mapN((a,b,c,d,e) => Infrastructure.Aws(a,b,c,d.toSet,zones,e))
+    ).mapN((a,b,c,d) => Infrastructure.Aws(creds,a,b,c.toSet,zones,d))
   }
 
   private def readNomad(cfg: KConfig): NomadConfig =
