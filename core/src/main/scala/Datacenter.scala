@@ -25,7 +25,7 @@ import nelson.scheduler.SchedulerOp
 import nelson.storage.StoreOp
 import nelson.vault.Vault
 
-import cats.{~>,Order}
+import cats.{~>, Order}
 import cats.data.ValidatedNel
 import cats.effect.IO
 import cats.implicits._
