@@ -695,8 +695,6 @@ object Config {
     val zones = readAvailabilityZones(kfg.subconfig("availability-zones"))
 
     def lookupProviderChain(kfg: KConfig): Option[AWSCredentialsProviderChain] = {
-      import cats.implicits._
-
       val basic = for {
         ak <- kfg.lookup[String]("access-key-id")
         sk <- kfg.lookup[String]("secret-access-key")
