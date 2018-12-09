@@ -51,7 +51,8 @@ object Infrastructure {
   )
 
   final case class Docker(
-    registry: docker.Docker.RegistryURI
+    registry: docker.Docker.RegistryURI,
+    credentials: Option[docker.Docker.Credentials]
   )
 
   /**
@@ -66,8 +67,7 @@ object Infrastructure {
   final case class Nomad(
     endpoint: Uri,
     timeout: Duration,
-    dockerCredentials: Option[DockerCreds],
-    dockerRepoServerAddress: String,
+    docker: Docker,
     mhzPerCPU: Int
   )
 

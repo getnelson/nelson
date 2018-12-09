@@ -150,8 +150,18 @@ job "{{unit_name}}" {
       }
 
       resources {
+        {{#cpu_limit}}
         cpu    = {{cpu_limit}}
+        {{/cpu_limit}}
+        {{^cpu_limit}}
+        cpu    = 10
+        {{/cpu_limit}}
+        {{#memory_limit}}
         memory = {{memory_limit}}
+        {{/memory_limit}}
+        {{^memory_limit}}
+        memory = 500
+        {{/memory_limit}}
 
         network {
           mbits = 1

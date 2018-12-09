@@ -19,7 +19,7 @@ package scheduler
 
 import nelson.Datacenter.{Deployment, StackName}
 import nelson.Json._
-import nelson.Manifest.{EnvironmentVariable, HealthCheck, Plan, UnitDef}
+import nelson.Manifest.{EnvironmentVariable, Plan, UnitDef}
 import nelson.docker.Docker.Image
 import cats.~>
 import cats.effect.IO
@@ -134,30 +134,6 @@ final class NomadHttp(
     val cpu = modulateCpu(env.cpu.limitOrElse(0.5))
     val memory = env.memory.limitOrElse(512D)
 
-    val updateHealthChecks = env.healthChecks
-
-    val updatePlan = plan.copy(
-      environment    = env.copy(
-        bindings     = env.bindings ++ List(
-                       EnvironmentVariable("NELSON_DATACENTER", dc.name),
-                       EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
-                       EnvironmentVariable("NELSON_CPU_LIMIT", cpu.toString),
-                       EnvironmentVariable("NELSON_MEMORY_LIMIT", memory.toString),
-                       EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
-                       EnvironmentVariable("NELSON_VAULT_POLICYNAME", getPolicyName(ns, name))),
-        cpu          = env.cpu.fold(
-                       limitOnly(cpu),
-                       l => limitOnly(modulateCpu(l)),
-                       (_, l) => limitOnly(modulateCpu(l))).get,
-        memory       = env.memory.fold(
-                       limitOnly(memory),
-                       limitOnly,
-                       (_, l) => limitOnly(l)).get))
-
-    val injectEnv =
-      Render.makeEnv(img, dc, ns, u, version, updatePlan, hash) ++
-      render(img, dc, ns, u, version, updatePlan, hash)
-
     val template = env.blueprint
       .traverse {
         case Left(_)   => IO.raiseError(new IllegalArgumentException("Internal error occured: un-hydrated blueprint passed to scheduler!"))
@@ -165,60 +141,32 @@ final class NomadHttp(
       } >>=
       (_.fold(DefaultBlueprints.magnetar)(_.pure[IO]))
 
+    val magnetarEnv = List(
+      EnvironmentVariable("NELSON_DATACENTER", dc.name),
+      EnvironmentVariable("NELSON_DOCKER_IMAGE", img.toString),
+      EnvironmentVariable("NELSON_CPU_LIMIT", cpu.toString),
+      EnvironmentVariable("NELSON_MEMORY_LIMIT", memory.toString),
+      EnvironmentVariable("NELSON_NODENAME", s"$${node.unique.name}"),
+      EnvironmentVariable("NELSON_VAULT_POLICYNAME", vault.policies.policyName(sn, ns)))
+
+    val updatePlan = plan.copy(
+      environment = env.copy(
+        bindings  = env.bindings ++ magnetarEnv,
+        cpu       = env.cpu.fold(
+                    limitOnly(cpu),
+                    l => limitOnly(modulateCpu(l)),
+                    (_, l) => limitOnly(modulateCpu(l))).get,
+        memory    = env.memory.fold(
+                    limitOnly(memory),
+                    limitOnly,
+                    (_, l) => limitOnly(l)).get))
+
     for {
       tmpl <- template
-      spec  = tmpl.render(injectEnv)
+      spec  = tmpl.render(Render.magnetar(img, dc, ns, u, updatePlan, sn, nomad.docker))
       json <- parse(dc, spec)
       spec <- call(name, dc, json)
     } yield spec
-  }
-
-  private def render(img: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, v: Version, p: Plan, hash: String): Map[String, blueprint.EnvValue] = {
-    import blueprint._
-    import EnvValue.{ListValue => lv, MapValue => mv, StringValue => sv}
-    val sn = StackName(unit.name, v, hash)
-    val name = buildName(sn)
-
-    object runtime {
-      val cpuLimit: Double = nomad.mhzPerCPU * p.environment.cpu.limitOrElse(0.5)
-      val memoryLimit: Double = p.environment.memory.limitOrElse(512.0)
-      val healthChecks: List[HealthCheck] = p.environment.healthChecks
-    }
-
-    def mkHealthCheck(hc: HealthCheck) = {
-      val protocol  = hc.protocol
-      val checkType = if (protocol === "http" || protocol === "https") "http" else protocol
-      val interval  = hc.interval.toMillis
-      val timeout   = hc.timeout.toMillis
-      val tlsSkipVerify = if (protocol === "https") true else false
-
-      (("health_check_name"           , sv(hc.name)) ::
-       ("health_check_port_ref"       , sv(hc.portRef)) ::
-       ("health_check_path"           , sv(hc.path.getOrElse(""))) ::
-       ("health_check_protocol"       , sv(protocol)) ::
-       ("health_check_type"           , sv(checkType)) ::
-       ("health_check_interval"       , sv(interval.toString)) ::
-       ("health_check_timeout"        , sv(timeout.toString)) ::
-       ("health_check_tls_skip_verify", sv(tlsSkipVerify.toString)) ::
-       Nil).toMap
-    }
-
-    val schedule = Manifest.getSchedule(unit, p)
-      .flatMap(_.toCron())
-      .map(s => ("schedule", sv(s)) :: Nil)
-      .getOrElse(List.empty)
-
-    (("health_checks"        , lv(runtime.healthChecks.map(hc => mv(mkHealthCheck(hc))))) ::
-     ("vault_policies"       , lv(sv(getPolicyName(ns, name)) :: Nil)) ::
-     ("vault_change_mode"    , sv("restart")) ::
-     ("vault_change_signal"  , sv("")) ::
-     ("datacenter"           , sv(dc.name)) ::
-     ("nelson_unit_metadata" , sv(unit.meta.mkString(","))) ::
-     ("docker_network_mode"  , sv(BridgeMode.asString)) ::
-     ("docker_server_address", sv(nomad.dockerRepoServerAddress)) :: nomad.dockerCredentials.map(dc =>
-       ("docker_username"    , sv(dc.dockerRepoUser)) ::
-       ("docker_password"    , sv(dc.dockerRepoPassword)) :: Nil).toList.flatten ++
-     schedule).toMap
   }
 
   def parse(dc: Datacenter, spec: String): IO[Json] = {
@@ -268,6 +216,4 @@ object NomadJson {
     ("JobHCL"       := spec) ->:
     ("Canonicalize" := true) ->:
     jEmptyObject
-
-  def getPolicyName(ns: NamespaceName, name: String) = s"nelson__${ns.root.asString}__${name}"
 }

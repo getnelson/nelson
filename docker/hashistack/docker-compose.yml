@@ -1,0 +1,125 @@
+version: '3'
+
+services:
+
+  consul-server-1: &consul-server
+    image: consul:1.4.0
+    networks:
+    - consul
+    depends_on:
+    - consul-server-bootstrap
+    environment:
+      - CONSUL_CLIENT_INTERFACE=eth0
+      - CONSUL_BIND_INTERFACE=eth0
+    command: |
+      agent -server -bootstrap-expect 3 -retry-join consul-server-bootstrap -node consul-server-1
+
+  consul-server-2:
+    <<: *consul-server
+    command: |
+      agent -server -bootstrap-expect 3 -retry-join consul-server-bootstrap -node consul-server-2
+
+  consul-server-bootstrap:
+    <<: *consul-server
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600"
+      - "8600:8600/udp"
+    depends_on: []
+    command: |
+      agent -server -ui -bootstrap-expect 3 -client 0.0.0.0 -node consul-server-3
+
+  consul-agent-1:
+    <<: *consul-server
+    privileged: true
+    command: |
+      agent -retry-join consul-server-bootstrap -node nomad-server-1
+  nomad-server-1: &nomad-server
+    privileged: true
+    build:
+      context: .
+    networks:
+    - consul
+    volumes:
+    - ./etc/nomad:/etc/nomad-docker
+    - ~/.nomad:/opt/nomad
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /tmp:/tmp
+    links:
+    - consul-agent-1
+    depends_on:
+    - consul-server-1
+    - consul-server-2
+    - consul-server-bootstrap
+    command: |
+      agent -client -config=/etc/nomad-docker/config.dev.hcl -consul-address=http://consul-agent-1:8500
+
+  consul-agent-2:
+    <<: *consul-server
+    privileged: true
+    command: |
+      agent -retry-join consul-server-bootstrap -node nomad-server-2
+  nomad-server-2:
+    <<: *nomad-server
+    links:
+    - consul-agent-2
+    command: |
+      agent -client -config=/etc/nomad-docker/config.dev.hcl -consul-address=http://consul-agent-2:8500
+
+  consul-agent-3:
+    <<: *consul-server
+    privileged: true
+    command: |
+      agent -retry-join consul-server-bootstrap -node nomad-server-3
+  nomad-server-3:
+    <<: *nomad-server
+    links:
+    - consul-agent-3
+    ports:
+      - "4646:4646"
+      - "4647:4647"
+      - "4648:4648"
+      - "4648:4648/udp"
+    command: |
+      agent -client -config=/etc/nomad-docker/config.dev.hcl -consul-address=http://consul-agent-3:8500
+
+  hashi-ui:
+    image: jippi/hashi-ui
+    restart: always
+    networks:
+      - consul
+    ports:
+      - "3000:3000"
+    environment:
+      - NOMAD_ENABLE=false
+      - NOMAD_ADDR=http://nomad-server-3:4646
+      - CONSUL_ENABLE=true
+      - CONSUL_ADDR=http://consul-server-bootstrap:8500
+
+networks:
+  consul:
+
+  #  nomad-agent-1: &nomad-agent
+  #    image: djenriquez/nomad
+  #    depends_on:
+  #      - nomad-server-1
+  #      - nomad-server-2
+  #      - nomad-server-3
+  #    networks:
+  #      - consul
+  #    volumes:
+  #      - ./etc/nomad:/etc/nomad-docker
+  #      - /var/run/docker.sock:/var/run/docker.sock
+  #    command: |
+  #      agent -config=/etc/nomad-docker/client.hcl -consul-address=http://consul-server-bootstrap:8500 -bind=nomad-agent-1
+  #
+  #  nomad-agent-2:
+  #    <<: *nomad-agent
+  #    command: |
+  #      agent -config=/etc/nomad-docker/client.hcl -consul-address=http://consul-server-bootstrap:8500 -bind=nomad-agent-2
+  #
+  #  nomad-agent-3:
+  #    <<: *nomad-agent
+  #    command: |
+  #      agent -config=/etc/nomad-docker/client.hcl -consul-address=http://consul-server-bootstrap:8500 -bind=nomad-agent-3

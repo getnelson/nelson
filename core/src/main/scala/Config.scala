@@ -537,20 +537,28 @@ object Config {
                                       stg: StoreOp ~> IO,
                                       logger: LoggingOp ~> IO): IO[List[Datacenter]] = {
 
-    def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
+    def readDocker(kfg: KConfig): Infrastructure.Docker = {
 
-      val dockerCreds =
+      val creds =
         (kfg.lookup[String]("docker.user"),
          kfg.lookup[String]("docker.password")
-        ).mapN((a,b) => DockerCreds(a,b))
+        ).mapN((a,b) => Docker.Credentials(a,b))
 
+      /*
+      If a datacenter specific registry isn't specified fall back to Nelson's publish registry
+       */
+      val registry = kfg.lookup[String]("docker.registry") getOrElse kfg.require[String]("docker-registry")
+
+      Infrastructure.Docker(registry, creds)
+    }
+
+    def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
       (kfg.lookup[String]("endpoint"),
        kfg.lookup[Duration]("timeout"),
-       kfg.lookup[String]("docker.host"),
        kfg.lookup[Int]("mhz-per-cpu")
-        ).mapN((a,b,c,d) => {
+        ).mapN((a,b,c) => {
           val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
-          Infrastructure.Nomad(uri,b,dockerCreds,c,d)
+          Infrastructure.Nomad(uri,b,readDocker(kfg),c)
         })
     }
 
@@ -659,7 +667,7 @@ object Config {
       interpreters.map { interp =>
         Datacenter(
           name = id,
-          docker = Infrastructure.Docker(kfg.require[String]("docker-registry")),
+          docker = readDocker(kfg),
           domain = Infrastructure.Domain(kfg.require[String]("domain")),
           defaultTrafficShift = trafficShift,
           proxyCredentials = proxyCreds,
