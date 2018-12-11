@@ -29,6 +29,9 @@ import nelson.storage.StoreOp
 import nelson.vault._
 import nelson.vault.http4s._
 
+import com.amazonaws.auth.{AWSCredentialsProviderChain, BasicAWSCredentials, EC2ContainerCredentialsProviderWrapper}
+import com.amazonaws.internal.StaticCredentialsProvider
+
 import cats.~>
 import cats.effect.{Effect, IO}
 import cats.implicits._
@@ -690,13 +693,24 @@ object Config {
 
     val zones = readAvailabilityZones(kfg.subconfig("availability-zones"))
 
-    (kfg.lookup[String]("access-key-id"),
-     kfg.lookup[String]("secret-access-key"),
-     lookupRegion(kfg),
+    def buildProviderChain(kfg: KConfig): AWSCredentialsProviderChain = {
+      val basic = for {
+        ak <- kfg.lookup[String]("access-key-id")
+        sk <- kfg.lookup[String]("secret-access-key")
+      } yield new StaticCredentialsProvider(new BasicAWSCredentials(ak, sk))
+
+      val ec2Discovery = Option(new EC2ContainerCredentialsProviderWrapper())
+
+      new AWSCredentialsProviderChain((basic :: ec2Discovery :: Nil).flatten: _*)
+    }
+
+    val creds = buildProviderChain(kfg)
+
+    (lookupRegion(kfg),
      kfg.lookup[String]("launch-configuration-name"),
      kfg.lookup[List[String]]("elb-security-group-names"),
      kfg.lookup[String]("image")
-    ).mapN((a,b,c,d,e,f) => Infrastructure.Aws(a,b,c,d,e.toSet,zones,f))
+    ).mapN((a,b,c,d) => Infrastructure.Aws(creds,a,b,c.toSet,zones,d))
   }
 
   private def readNomad(cfg: KConfig): NomadConfig =
