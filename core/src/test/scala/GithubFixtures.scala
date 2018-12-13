@@ -32,7 +32,7 @@ object GitFixtures {
   val user = User(
     "login",
     new java.net.URI("avatar"),
-    "Randal McMurphy",
+    Some("Randal McMurphy"),
     Some("one@two.com")
   )
 

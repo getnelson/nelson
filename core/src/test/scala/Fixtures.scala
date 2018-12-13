@@ -107,7 +107,7 @@ object Fixtures {
   def genUser: Gen[User] = for {
     login  <- alphaNumStr
     avatar <- arbitrary[URI]
-    name   <- alphaNumStr
+    name   <- Gen.option(alphaNumStr)
     email  <- Gen.option(alphaNumStr)
     orgs   <- listOfN(10, genOrg)
   } yield User(login,avatar,name,email, orgs)

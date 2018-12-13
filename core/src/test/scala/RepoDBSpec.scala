@@ -31,7 +31,7 @@ class RepoDBSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
   val storage = TestStorage.storage("RepoSpec")
 
   val uri = new java.net.URI("http://foo")
-  val user = User("login", uri, "user", None, List(Organization(0L, Some("org1"), "org1", uri),Organization(1L, Some("org2"), "org2", uri)))
+  val user = User("login", uri, Some("user"), None, List(Organization(0L, Some("org1"), "org1", uri),Organization(1L, Some("org2"), "org2", uri)))
 
   val slug1 = Slug("org1","repo1")
   val repo1 = Repo(1, slug1.toString, RepoAccess.Admin.toString, Some(Hook(0L, true))).toOption.get

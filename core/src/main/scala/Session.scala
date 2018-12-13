@@ -52,7 +52,7 @@ object Session { session =>
   val userCodec: Codec[User] =
     (nonGreedyString ::
      uriCodec ::
-     nonGreedyString ::
+     optional(bool, nonGreedyString) ::
      optional(bool, nonGreedyString) ::
      listOfN(uint16, organizationCodec)
     ).as[User]
