@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?8375b860e91ef9bede1ad2992b7083ef" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?d0cd8a83c939a7f30acc8f7465333286" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?b885e339d0febb3a8976798dc72add80" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?9924ce4d880c029c7318c7efe1f0c5af" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -182,7 +182,11 @@
 <li><a href="#authorize-with-github">Authorize with Github</a></li>
 <li><a href="#configuration">Configuration</a></li>
 <li><a href="#running-standalone">Running Standalone</a></li>
-<li><a href="#running-on-kubernetes">Running on Kubernetes</a></li>
+<li><a href="#running-in-containers">Running in Containers</a>
+<ul>
+<li><a href="#kubernetes">Kubernetes</a></li>
+<li><a href="#aws-ecs">AWS ECS</a></li>
+</ul></li>
 <li><a href="#installation-complete">Installation Complete</a></li>
 </ul></li>
 </ul></li>
@@ -537,11 +541,19 @@ WantedBy=multi-user.target
 Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-based datastore. Nelson is intended to be running as a singleton and currently does not support clustering. Support for high-availability deployment modes are planned for a future release, but typically this is not needed as outages of Nelson have no critical affect on the datacenter runtime.
 </div>
 
-<h3 id="running-on-kubernetes">Running on Kubernetes</h3>
+<h3 id="running-in-containers">Running in Containers</h3>
 
-<p>Nelson can also be operated on top of Kubernetes (even if that same cluster is the one being managed by Nelson). When deploying to Kubernetes, Nelson operates like any other container applciation with the exception that it requires the use of a <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">Persistent Volume Claim</a> to which Nelson can journal its state (database, job logs etc).</p>
+<h4 id="kubernetes">Kubernetes</h4>
+
+<p>Nelson can also be operated on top of Kubernetes (even if that same cluster is the one being managed by Nelson). When deploying to containerized environments, Nelson operates like any other container application with the exception that it requires the use of a <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">Persistent Volume Claim</a> to which Nelson can journal its state (database, job logs etc). Depending on your infrastructure and tooling, special considerations should be taken, some of which are detailed below.</p>
 
 <p>As the Kubernetes configurations are rather verbose, the Nelson teams has provided a set of example configuration files <a href="https://github.com/getnelson/kubernetes-configuration">in the getnelson/kubernetes-configuration</a> repository on Github.</p>
+
+<h4 id="aws-ecs">AWS ECS</h4>
+
+<p>Since ECS does not support a logical volume claims, like Kubernetes and Nomad, special care must be taken to ensure Nelson can journal its state (database, job logs etc). At the time of writing, Nelson should not be deployed to a Fargate cluster due to lack of native support for persistent volumes. It may be possible for more advanced operators to construct a resilient storage solution using multiple containers and bind mounts.</p>
+
+<p>For beginners, the easiest deployment solution will utilize a dedicated ECS cluster and a dedicated EFS filesystem. The EFS filesystem will be <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_efs.html">attached to the Nelson container</a> and provides persistence guarantees across restarts in all virtualization layers. Deployment into an existing cluster is possible if the operator configures IAM to permit the ECS cluster to create the mount target, but restricts mount target access to a security group held only by Nelson.</p>
 
 <h3 id="installation-complete">Installation Complete</h3>
 
@@ -564,7 +576,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
         </p>
         <p>
           Currently v
-                    0.12.152
+                    0.12.153
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -585,9 +597,9 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?892a7fbd6cdd241a6a23ca765ddbb589"></script>
+<script src="/js/material.min.js?4286978867259a7d0d0ef32a730cba06"></script>
 
-<script src="/js/nelson.js?23fc88b71cf33c9dbedbd063858e582e"></script>
+<script src="/js/nelson.js?c5d1fb7be2ccb08fcae6efea6de07fa4"></script>
 
 
   </body>
