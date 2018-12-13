@@ -7,7 +7,7 @@ menu:
     parent: gs
     identifier: gs-next
     url: /getting-started/next.html
-    weight: 6
+    weight: 7
 ---
 
 In conclusion, the manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading [in the reference](reference.html#manifest) about the Nelson manifest answers the following common queries:

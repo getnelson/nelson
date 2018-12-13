@@ -248,7 +248,7 @@ In this example, foobar service's `default` port will have an http health check 
 <table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Field</strong></td>
+      <td width="20%"><strong>Field</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -401,7 +401,7 @@ For completeness, here's a more complete example of a service unit that can be u
 The `ports` dictionary items must follow a very specific structure - this is how nelson expresses relationships in ports. Let's break down the structure:
 
 <div class="clearing">
-  <img src="images/port-syntax.png" />
+  <img src="/img/port-syntax.png" />
   <small><em>Figure 2.3.1: port definition syntax</em></small>
 </div>
 
@@ -410,7 +410,7 @@ It's fairly straight forward syntactically, but lets clarify some of the semanti
 <table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Section</strong></td>
+      <td width="20%"><strong>Section</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -559,7 +559,7 @@ Nelson manages the entire deployment lifecycle including cleanup. Deployment cle
 <table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Reference</strong></td>
+      <td width="30%"><strong>Reference</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -655,10 +655,10 @@ Whilst the alerting support directly exposes an underlying integration to the us
 
 Upon first glace, the alert block in the manifest can seem confusing. Thankfully, there are only three sections a user needs to care about. The table below outlines the alert definitions.
 
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Dictionary</strong></td>
+      <td width="36%"><strong>Dictionary</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>
@@ -684,10 +684,10 @@ Upon first glace, the alert block in the manifest can seem confusing. Thankfully
 
 In addition to specification of alerts, the manifest also allows for the specification of Prometheus rules. See the <a href="https://prometheus.io/docs/querying/rules/#recording-rules">Prometheus documentation on recording rules</a> for a discussion on the differences between alerts and recording rules.
 
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
-      <td><strong>Dictionary</strong></td>
+      <td width="36%"><strong>Dictionary</strong></td>
       <td><strong>Description</strong></td>
     </tr>
   </thead>

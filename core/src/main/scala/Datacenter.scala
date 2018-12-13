@@ -30,6 +30,7 @@ import cats.data.ValidatedNel
 import cats.effect.IO
 import cats.implicits._
 
+import com.amazonaws.auth.AWSCredentialsProviderChain
 import com.amazonaws.regions.Region
 
 import helm.ConsulOp
@@ -108,19 +109,15 @@ object Infrastructure {
   )
 
   final case class Aws(
-    accessKeyId: String,
-    secretAccessKey: String,
+    private val creds: AWSCredentialsProviderChain,
     region: Region,
     launchConfigurationName: String,
     elbSecurityGroupNames: Set[String],
     availabilityZones: Set[AvailabilityZone] = Set.empty,
     image: String
   ) {
-    import com.amazonaws.auth.BasicAWSCredentials
     import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient
     import com.amazonaws.services.autoscaling.AmazonAutoScalingClient
-
-    private val creds = new BasicAWSCredentials(accessKeyId, secretAccessKey)
 
     val asg = new AmazonAutoScalingClient(creds)
       .withRegion[AmazonAutoScalingClient](region)
