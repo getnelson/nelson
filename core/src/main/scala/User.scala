@@ -24,12 +24,12 @@ import java.net.URI
 final case class User(
   login: String,
   avatar: URI,
-  name: String,
+  name: Option[String],
   email: Option[String],
   orgs: List[Organization]
 ){
   val toOrganization: Organization =
-    Organization(0l, Option(name), login, avatar)
+    Organization(0l, name, login, avatar)
 }
 
 final case class Organization(

@@ -58,7 +58,7 @@ object Github {
   final case class User(
     login: String,
     avatar: URI,
-    name: String,
+    name: Option[String],
     email: Option[String]
   )
 
