@@ -114,7 +114,7 @@ object Infrastructure {
     launchConfigurationName: String,
     elbSecurityGroupNames: Set[String],
     availabilityZones: Set[AvailabilityZone] = Set.empty,
-    image: String
+    image: Option[String]
   ) {
     import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient
     import com.amazonaws.services.autoscaling.AmazonAutoScalingClient
