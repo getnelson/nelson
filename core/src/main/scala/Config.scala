@@ -708,9 +708,8 @@ object Config {
 
     (lookupRegion(kfg),
      kfg.lookup[String]("launch-configuration-name"),
-     kfg.lookup[List[String]]("elb-security-group-names"),
-     kfg.lookup[String]("image")
-    ).mapN((a,b,c,d) => Infrastructure.Aws(creds,a,b,c.toSet,zones,d))
+     kfg.lookup[List[String]]("elb-security-group-names")
+    ).mapN((a,b,c) => Infrastructure.Aws(creds,a,b,c.toSet,zones,kfg.lookup[String]("image")))
   }
 
   private def readNomad(cfg: KConfig): NomadConfig =

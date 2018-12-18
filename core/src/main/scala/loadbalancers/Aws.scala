@@ -125,7 +125,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withValue(name)
 
       val iTag = new Tag()
-        .withKey("NELSON_HAPROXY_IMAGE")
+        .withKey("NELSON_INGRESS_IMAGE")
         .withValue(cfg.image.toString)
 
       val nameTag = new Tag()
