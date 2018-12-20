@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?642065fa4f3da0aea054444d86389f45" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?0460c133105e5042576ef46d1669c417" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?5943fa7cf6aaba7410c61679e669831a" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?d47f3599aeb0dfb74037f942e218d5d3" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -199,7 +199,7 @@
 <p>In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via &ldquo;load balancers&rdquo; (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about <a href="https://aws.amazon.com/elasticloadbalancing/">ELB</a> and so forth. If however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.</p>
 
 <div class="clearing">
-  <img src="/img/lbs.png" />
+  <img src="/img/lbs.png"/>
   <small><em>Figure 1.2: load balancer overview</em></small>
 </div>
 
@@ -248,6 +248,59 @@
   </tbody>
 </table>
 
+<h3 id="amazon-web-services">Amazon Web Services</h3>
+
+<p>Nelson has first-class support for spawning load balancers on Amazon. When using Nelson with a datacenter located in AWS, the &ldquo;load balancer&rdquo; setup looks like this:</p>
+
+<div class="clearing">
+  <img src="/img/lbs-aws.png" width="40%"  />
+  <small><em>Figure 1.3: load balancer on AWS</em></small>
+</div>
+
+<p>Exactly how the proxy implementation is done is not something Nelson cares about. From Nelson&rsquo;s perspective, all that matters is that a logical traffic ingress point exists. In practical terms, you can bake an AMI that has your proxy software configured arbitrarily, it could be in a host-mode container, it could be running native: it is an implementation detail.</p>
+
+<p>In order for Nelson to be able to spawn ELBs, you will need to give Nelson credentials for AWS using the following <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html">IAM policy document</a>:</p>
+
+<pre><code>{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;ec2:DescribeAccountAttributes&quot;,
+        &quot;ec2:DescribeAddresses&quot;,
+        &quot;ec2:DescribeInternetGateways&quot;,
+        &quot;ec2:DescribeSecurityGroups&quot;,
+        &quot;ec2:DescribeSubnets&quot;,
+        &quot;ec2:DescribeVpcs&quot;,
+        &quot;iam:CreateServiceLinkedRole&quot;,
+        &quot;autoscaling:CreateAutoScalingGroup&quot;,
+        &quot;autoscaling:DeleteAutoScalingGroup&quot;,
+        &quot;autoscaling:DescribeAutoScalingGroups&quot;,
+        &quot;autoscaling:DescribeAutoScalingInstances&quot;,
+        &quot;autoscaling:DescribeLoadBalancers&quot;,
+        &quot;autoscaling:SetDesiredCapacity&quot;,
+        &quot;autoscaling:UpdateAutoScalingGroup&quot;,
+        &quot;elasticloadbalancing:CreateLoadBalancer&quot;,
+        &quot;elasticloadbalancing:CreateLoadBalancerListeners&quot;,
+        &quot;elasticloadbalancing:DeleteLoadBalancer&quot;,
+        &quot;elasticloadbalancing:DeleteLoadBalancerListeners&quot;,
+        &quot;elasticloadbalancing:DeregisterInstancesFromLoadBalancer&quot;,
+        &quot;elasticloadbalancing:DescribeLoadBalancers&quot;,
+        &quot;elasticloadbalancing:DescribeTags&quot;,
+        &quot;elasticloadbalancing:DetachLoadBalancerFromSubnets&quot;,
+        &quot;elasticloadbalancing:RegisterInstancesWithLoadBalancer&quot;
+      ],
+      &quot;Resource&quot;: &quot;*&quot;
+    }
+  ]
+}
+</code></pre>
+
+<h3 id="alternative-implementations">Alternative Implementations</h3>
+
+<p>At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward but left as an exercise for the reader. Looking toward the future it probally would make sense for Nelson to support the prominant cloud providers natively, but that work is not currently in the roadmap.</p>
+
           </article>
 
         </div>
@@ -265,7 +318,7 @@
         </p>
         <p>
           Currently v
-                    0.12.155
+                    0.12.156
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -286,9 +339,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?eb567b85c955ad378968695313787247"></script>
+<script src="/js/material.min.js?88a3a8c7017220d679c619eafa0928bc"></script>
 
-<script src="/js/nelson.js?5d28acdec2d0a186f02c9dd2f1b39121"></script>
+<script src="/js/nelson.js?ffd4c11afcc267f88c1a76773ed45102"></script>
 
 
   </body>
