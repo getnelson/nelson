@@ -1,9 +1,12 @@
 ---
-layout: "single-with-toc"
+layout: "single"
 toc: "true"
 title: Blueprint Settings
 preamble: >
   For an introduction to blueprints, please see the [getting started guide](/getting-started/blueprints.html). This reference covers the available template attributes that blueprint authors can use, along with some examples. For ease of reading, this reference for blueprint fields is broken down into a few logical sections.
+contents:
+- Units and Deployments
+- Plans
 menu:
   main:
     identifier: docs-blueprint
@@ -43,7 +46,7 @@ env:
 
 In this example, we would say that `envvars` has the context `*`, because it can be used anywhere. Comparitivly, the `envvars_list` can only be used in the context `envvars` because it is not otherwise accessible.
 
-## Units + Deployments
+## Units and Deployments
 
 <table class="table table-striped">
   <thead>
