@@ -234,6 +234,7 @@ object YamlError {
   val missingVolumeSize: YamlError = MissingVolumeSize
   def invalidVolumeSize(request: Int): YamlError = InvalidVolumeSize(request)
   def invalidBlueprintReference(blueprintRef: String, msg: String): YamlError = InvalidBlueprintReference(blueprintRef, msg)
+  def missingResourceName(unitName: UnitName): YamlError = MissingResourceName(unitName)
 }
 
 private final case class InvalidBlueprintReference(ref: String, msg: String)
@@ -358,3 +359,6 @@ private final case object MissingVolumeSize
 
 private final case class InvalidVolumeSize(request: Int)
   extends YamlError(s"$request is an invalid volume disk request, must be > 0 (measured in megabytes).")
+
+private final case class MissingResourceName(name: UnitName)
+  extends YamlError(s"A resource in unit $name is missing a name")

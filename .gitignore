@@ -33,3 +33,5 @@ trebuchet
 docs/src/hugo/public
 .ensime*
 *OLD*
+.bloop
+.metals

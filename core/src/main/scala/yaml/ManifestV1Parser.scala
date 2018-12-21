@@ -53,8 +53,9 @@ object ManifestV1Parser {
     }
   }
 
-  def parseResource(r: ResourceYaml): YamlValidation[Resource] = {
-    (parseAlphaNumHyphen(r.name, "unit.resources.name"), Validated.valid(Option(r.description))).mapN((a,b) => Manifest.Resource(a, b))
+  def parseResource(u: UnitYaml)(r: ResourceYaml): YamlValidation[Resource] = {
+    (Option(r.name).fold(missingResourceName(u.name).invalidNel[String])(parseAlphaNumHyphen(_, "unit.resources.name")),
+     Validated.valid(Option(r.description))).mapN((a,b) => Manifest.Resource(a, b))
   }
 
   def validateMeta(s: String): YamlValidation[String] = {
@@ -263,7 +264,7 @@ object ManifestV1Parser {
       Option(raw.name).toValidNel(missingProperty("unit.name")),
       Option(raw.description).toValidNel(missingProperty("unit.description")),
       validateJList("unit.dependencies", raw.dependencies, parseDependency _).map(_.toMap),
-      validateJList("unit.resources", raw.resources, parseResource _).map(_.toSet),
+      validateJList("unit.resources", raw.resources, parseResource(raw) _).map(_.toSet),
       parseAlerting(raw.name, raw.alerting),
       Option(raw.ports).filter(_.size > 0).traverse(p => mkPorts(p.asScala.toList)),
       Validated.valid(None),
