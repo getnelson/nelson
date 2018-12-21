@@ -119,25 +119,24 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   def createASG(name: String, namespace: NamespaceName, size: ASGSize): IO[Unit] =
     IO {
-      // pass deployment specifics to haproxy
-      val lbTag = new Tag()
-        .withKey("NELSON_LB_NAME")
-        .withValue(name)
-
-      val iTag = new Tag()
-        .withKey("NELSON_INGRESS_IMAGE")
-        .withValue(cfg.image.toString)
-
       val nameTag = new Tag()
         .withKey("Name")
         .withValue(name)
 
+      val lbTag = new Tag()
+        .withKey("nelson:ingress:name")
+        .withValue(name)
+
+      val iTag = new Tag()
+        .withKey("nelson:ingress:container")
+        .withValue(cfg.image.toString)
+
       val namespaceTag = new Tag()
-        .withKey("NELSON_NAMESPACE")
+        .withKey("nelson:ingress:namespace")
         .withValue(namespace.asString)
 
       val envTag = new Tag()
-        .withKey("NELSON_ENV")
+        .withKey("nelson:ingress:env")
         .withValue(namespace.root.asString)
 
       val req = new CreateAutoScalingGroupRequest()
