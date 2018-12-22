@@ -376,7 +376,7 @@ Any validation errors encountered will be reported back to you exactly as they w
 Debugging file templates is a notoriously difficult and frustrating component to readying the deployment of an application, regardless of the runtime and tooling which is used. Nelson aids in this process by allowing you to simulate the template rendering process exactly as it would occur during deployment.
 
 ```
-λ nelson lint manifest --unit foo --resource s3 --resouce mysql --template foo.ctmpl
+λ nelson lint manifest --unit foo --resource s3 --resource mysql --template foo.ctmpl
 2017/02/06 20:31:57.832769 [INFO] consul-template v0.18.0 (5211c66)
 2017/02/06 20:31:57.832781 [INFO] (runner) creating new runner (dry: true, once: true)
 2017/02/06 20:31:57.832968 [INFO] (runner) creating watcher
@@ -386,7 +386,7 @@ Consul Template returned errors:
 /consul-template/templates/nelson8021968182946245276.template: parse: template: :3: unterminated quoted string
 ```
 
-At the time of writing, Nelson only support rendering and linting Consul templates; however, since the underlying template engine executed via Docker, linting could be extended to support any engine for which a Docker container and command set can be provided.
+At the time of writing, Nelson only support rendering and linting Consul templates; however, since the underlying template engine is executed via Docker, linting could be extended to support any engine for which a Docker container and command set can be provided.
 
 ### Proofing Blueprints
 
