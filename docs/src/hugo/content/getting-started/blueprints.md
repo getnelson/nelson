@@ -92,4 +92,4 @@ It is these kinds of actions and steps, when viewed together, that makeup a work
 
 At the time of writing, Workflows are codified inside of the Nelson codebase. This may change in future versions of Nelson to make it easier to customize without requiring a source change, but today, please visit the Gitter channel or email the <script src="javascript/contact.js"></script>.
 
-For more information on Blueprints, please [checkout the reference](reference.html#blueprints).
+For more information on Blueprints, please [checkout the reference](/documentation/blueprints.html).

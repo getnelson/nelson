@@ -9,6 +9,7 @@ contents:
 - Datacenter Operations
 - Unit Operations
 - Stack Operations
+- Development Tools
 - Tips
 menu:
   main:
@@ -351,6 +352,49 @@ There are occasions where you might want to try re-deploying a stack: for exampl
 ```
 λ nelson stacks redeploy ec695f081fbd
 ==>> Redeployment requested for ec695f081fbd
+```
+
+<hr />
+
+## Development Tools
+
+The CLI also provides a collection of utilities which assist in developing applications atop Nelson.
+
+### Linting Manifests
+
+To help you understand and experiment with various manifest settings, the CLI can analyze a manifest prior to enabling the repository. This can be particularly useful when first adding a manifest to a repository or when taking on an extensive refactor of an existing manifest. From the root directory of your application repository run: 
+
+```
+λ nelson lint manifest
+Nelson manifest validated with no errors.
+```
+
+Any validation errors encountered will be reported back to you exactly as they would during the standard runtime operation of Nelson. If you would like to test a manifest whose name is different than the default `.nelson.yml`, you can supply a file path explicitly with the `-m` command line option. 
+
+### Linting Templates
+
+Debugging file templates is a notoriously difficult and frustrating component to readying the deployment of an application, regardless of the runtime and tooling which is used. Nelson aids in this process by allowing you to simulate the template rendering process exactly as it would occur during deployment.
+
+```
+λ nelson lint manifest --unit foo --resource s3 --resource mysql --template foo.ctmpl
+2017/02/06 20:31:57.832769 [INFO] consul-template v0.18.0 (5211c66)
+2017/02/06 20:31:57.832781 [INFO] (runner) creating new runner (dry: true, once: true)
+2017/02/06 20:31:57.832968 [INFO] (runner) creating watcher
+2017/02/06 20:31:57.837192 [INFO] (runner) starting
+2017/02/06 20:31:57.837213 [INFO] (runner) initiating run
+Consul Template returned errors:
+/consul-template/templates/nelson8021968182946245276.template: parse: template: :3: unterminated quoted string
+```
+
+At the time of writing, Nelson only support rendering and linting Consul templates; however, since the underlying template engine is executed via Docker, linting could be extended to support any engine for which a Docker container and command set can be provided.
+
+### Proofing Blueprints
+
+To assist in the development of blueprints, the `proof` command can be used to inject a set of fake values into the blueprint, allowing you to quickly analyze how your changes will impact the rendered artifact. This can be particularly useful to help tamp out YAML issues in Kubernetes pod manifests or embedded Consul templates in Nomad job specifications. 
+
+```
+λ nelson blueprint proof -f cron-no-gpu.nomad
+[... full rendered blueprint ...]
 ```
 
 <hr />
