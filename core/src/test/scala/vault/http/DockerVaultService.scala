@@ -31,6 +31,8 @@ trait DockerVaultService extends DockerKit {
   private val client: DockerClient = DefaultDockerClient.fromEnv().build()
   override implicit val dockerFactory: DockerFactory = new SpotifyDockerFactory(client)
 
+  println(s"==> DOCKER_HOST in kit ${client.getHost}")
+
   val consulContainer =
     DockerContainer("consul:1.2.2", name = Some("consul"))
       .withPorts(8500 -> Some(8500))

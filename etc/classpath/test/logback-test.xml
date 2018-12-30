@@ -18,7 +18,7 @@
   <!-- other -->
   <logger name="com.ning.http.client" level="OFF" />
 
-  <root level="DEBUG">
+  <root level="INFO">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

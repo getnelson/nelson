@@ -52,6 +52,7 @@
        url <- sys.env.get("DOCKER_HOST")
        host <- parseDockerHost(url)
        yolo <- Uri.fromString(s"http://$host:8200").toOption
+       _ = println(s"==> DOCKER_HOST = $host")
      } yield yolo
 
    var masterKey: MasterKey = _
