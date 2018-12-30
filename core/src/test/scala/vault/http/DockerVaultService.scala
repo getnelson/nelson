@@ -29,7 +29,7 @@ trait DockerVaultService extends DockerKit {
   private[this] val logger = Logger[DockerVaultService]
 
   private val client: DockerClient = DefaultDockerClient.fromEnv()
-    .uri("unix:///var/run/docker.sock")
+    .uri("tcp://0.0.0.0:2376")
     .build()
   override implicit val dockerFactory: DockerFactory = new SpotifyDockerFactory(client)
 
