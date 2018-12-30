@@ -18,6 +18,9 @@
   <!-- other -->
   <logger name="com.ning.http.client" level="OFF" />
 
+  <!-- docker -->
+  <logger name="com.whisk.docker" level="ERROR" />
+
   <root level="INFO">
     <appender-ref ref="STDOUT" />
   </root>
