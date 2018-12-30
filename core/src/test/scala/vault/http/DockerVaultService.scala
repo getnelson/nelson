@@ -50,7 +50,7 @@ trait DockerVaultService extends DockerKit {
       .withCommand("server")
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"vault: $s")))
       .withReadyChecker(DockerReadyChecker
-        .HttpResponseCode(8200, "/v1/sys/health", code = 501)
+        .HttpResponseCode(8200, "/v1/sys/seal-status", code = 400)
         .looped(5, 10.seconds))
 
   abstract override def dockerContainers: List[DockerContainer] =

@@ -33,10 +33,7 @@
      with DockerVaultService
      with vault.http4s.Json
  {
-
-   override val StartContainersTimeout = 1.minute
-   override val PullImagesTimeout = 5.minutes
-   override val StopContainersTimeout = 15.seconds
+   override val StopContainersTimeout = 5.minutes
 
    override def dockerContainers =
      if (sys.env.get("BUILDKITE").isEmpty) consulContainer :: vaultContainer :: super.dockerContainers
