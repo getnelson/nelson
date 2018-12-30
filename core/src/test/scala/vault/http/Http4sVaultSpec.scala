@@ -40,7 +40,7 @@
    override def dockerContainers =
      if (sys.env.get("BUILDKITE").isEmpty) consulContainer :: vaultContainer :: super.dockerContainers
      else super.dockerContainers
-   
+
    def vaultHost: Option[Uri] =
      for {
        host <- Option(dockerExecutor.host)
