@@ -28,7 +28,9 @@ import scala.io.Source
 trait DockerVaultService extends DockerKit {
   private[this] val logger = Logger[DockerVaultService]
 
-  private val client: DockerClient = DefaultDockerClient.fromEnv().build()
+  private val client: DockerClient = DefaultDockerClient.fromEnv()
+    .uri("unix:///var/run/docker.sock")
+    .build()
   override implicit val dockerFactory: DockerFactory = new SpotifyDockerFactory(client)
 
   println(s"==> DOCKER_HOST in kit ${client.getHost}")
