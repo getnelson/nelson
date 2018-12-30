@@ -40,7 +40,7 @@ trait DockerVaultService extends DockerKit {
       .withPorts(8500 -> Some(18500))
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"consul: $s")))
       .withReadyChecker(DockerReadyChecker
-        .HttpResponseCode(18500, "/v1/status/leader", host = Some("127.0.0.1"))
+        .HttpResponseCode(18500, "/v1/status/leader")
         .looped(5, 10.seconds))
 
   private val vaultLocalConfig =
@@ -54,7 +54,7 @@ trait DockerVaultService extends DockerKit {
       .withCommand("server")
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"vault: $s")))
       .withReadyChecker(DockerReadyChecker
-        .HttpResponseCode(18200, "/v1/sys/seal-status", host = Some("127.0.0.1"), code = 400)
+        .HttpResponseCode(18200, "/v1/sys/seal-status", code = 400)
         .looped(5, 10.seconds))
 
   abstract override def dockerContainers: List[DockerContainer] =
