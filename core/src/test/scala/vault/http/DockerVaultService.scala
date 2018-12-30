@@ -28,34 +28,32 @@ import scala.io.Source
 trait DockerVaultService extends DockerKit {
   private[this] val logger = Logger[DockerVaultService]
 
-  private val client: DockerClient = DefaultDockerClient.fromEnv()
-    .uri("tcp://0.0.0.0:2376")
-    .build()
+  private val client: DockerClient = DefaultDockerClient.fromEnv().build()
   override implicit val dockerFactory: DockerFactory = new SpotifyDockerFactory(client)
 
-  println(s"==> DOCKER_HOST in kit ${client.getHost}")
+  logger.debug(client.info().toString)
 
   val consulContainer =
     DockerContainer("consul:1.2.2", name = Some("consul"))
-      .withPorts(8500 -> Some(18500))
+      .withPorts(8500 -> Some(8500))
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"consul: $s")))
       .withReadyChecker(DockerReadyChecker
-        .HttpResponseCode(18500, "/v1/status/leader")
-        .looped(5, 10.seconds))
+        .HttpResponseCode(8500, "/v1/status/leader")
+        .looped(12, 10.seconds))
 
   private val vaultLocalConfig =
     Source.fromInputStream(getClass.getResourceAsStream("/vault.hcl")).mkString
 
   val vaultContainer =
     DockerContainer("vault:0.10.4", name = Some("vault"))
-      .withPorts(8200 -> Some(18200))
+      .withPorts(8200 -> Some(8200))
       .withEnv(s"VAULT_LOCAL_CONFIG=$vaultLocalConfig")
       .withLinks(ContainerLink(consulContainer, "consul"))
       .withCommand("server")
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"vault: $s")))
       .withReadyChecker(DockerReadyChecker
-        .HttpResponseCode(18200, "/v1/sys/seal-status", code = 400)
-        .looped(5, 10.seconds))
+        .HttpResponseCode(8200, "/v1/sys/seal-status", code = 400)
+        .looped(12, 10.seconds))
 
   abstract override def dockerContainers: List[DockerContainer] =
     consulContainer :: vaultContainer :: super.dockerContainers

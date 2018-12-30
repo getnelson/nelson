@@ -33,25 +33,18 @@
      with DockerVaultService
      with vault.http4s.Json
  {
-   override val StopContainersTimeout = 5.minutes
+   override val PullImagesTimeout = 20.minutes
+   override val StartContainersTimeout = 1.minute
+   override val StopContainersTimeout = 1.minute
 
    override def dockerContainers =
      if (sys.env.get("BUILDKITE").isEmpty) consulContainer :: vaultContainer :: super.dockerContainers
      else super.dockerContainers
-
-   // i'm expecting protocol://ip:port
-   def parseDockerHost(url: String): Option[String] = {
-     val parts = url.split(":")
-     if(parts.length == 3)
-       Some(parts(1).substring(2))
-     else None
-   }
-
+   
    def vaultHost: Option[Uri] =
      for {
-       url <- sys.env.get("DOCKER_HOST")
-       host <- parseDockerHost(url)
-       yolo <- Uri.fromString(s"http://$host:18200").toOption
+       host <- Option(dockerExecutor.host)
+       yolo <- Uri.fromString(s"http://$host:8200").toOption
        _ = println(s"==> DOCKER_HOST = $host")
      } yield yolo
 
@@ -59,7 +52,7 @@
    var rootToken: RootToken = _
    var interp: Http4sVaultClient = _
 
-   val baseUrl: Uri = vaultHost getOrElse Uri.uri("http://0.0.0.0:18200")
+   val baseUrl: Uri = vaultHost getOrElse Uri.uri("http://0.0.0.0:8200")
 
    val client = Http1Client[IO]().unsafeRunSync()
    val token = Token("asdf")
