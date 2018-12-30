@@ -35,10 +35,10 @@ trait DockerVaultService extends DockerKit {
 
   val consulContainer =
     DockerContainer("consul:1.2.2", name = Some("consul"))
-      .withPorts(8500 -> Some(8500))
+      .withPorts(8500 -> Some(18500))
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"consul: $s")))
       .withReadyChecker(DockerReadyChecker
-        .HttpResponseCode(8500, "/v1/status/leader", host = Some("127.0.0.1"))
+        .HttpResponseCode(18500, "/v1/status/leader", host = Some("127.0.0.1"))
         .looped(5, 10.seconds))
 
   private val vaultLocalConfig =
@@ -46,13 +46,13 @@ trait DockerVaultService extends DockerKit {
 
   val vaultContainer =
     DockerContainer("vault:0.10.4", name = Some("vault"))
-      .withPorts(8200 -> Some(8200))
+      .withPorts(8200 -> Some(18200))
       .withEnv(s"VAULT_LOCAL_CONFIG=$vaultLocalConfig")
       .withLinks(ContainerLink(consulContainer, "consul"))
       .withCommand("server")
       .withLogLineReceiver(LogLineReceiver(true, s => logger.debug(s"vault: $s")))
       .withReadyChecker(DockerReadyChecker
-        .HttpResponseCode(8200, "/v1/sys/seal-status", host = Some("127.0.0.1"), code = 400)
+        .HttpResponseCode(18200, "/v1/sys/seal-status", host = Some("127.0.0.1"), code = 400)
         .looped(5, 10.seconds))
 
   abstract override def dockerContainers: List[DockerContainer] =
