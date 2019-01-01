@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?caa8ac757e0e43f455324b580b0138c6" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?38cc4d21dd101ed8eed565cba69f6098" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?223c057808b98815cc7ed2987152e4ba" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?763e6a5b6af49f17d661ff13578842de" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -182,6 +182,8 @@
                   <li><a href="#unit-operations">Unit Operations</a></li>
                 
                   <li><a href="#stack-operations">Stack Operations</a></li>
+                
+                  <li><a href="#development-tools">Development Tools</a></li>
                 
                   <li><a href="#tips">Tips</a></li>
                 
@@ -517,6 +519,46 @@ $ nelson login nelson.yourdomain.com
 
 <hr />
 
+<h2 id="development-tools">Development Tools</h2>
+
+<p>The CLI also provides a collection of utilities which assist in developing applications atop Nelson.</p>
+
+<h3 id="linting-manifests">Linting Manifests</h3>
+
+<p>To help you understand and experiment with various manifest settings, the CLI can analyze a manifest prior to enabling the repository. This can be particularly useful when first adding a manifest to a repository or when taking on an extensive refactor of an existing manifest. From the root directory of your application repository run:</p>
+
+<pre><code>λ nelson lint manifest
+Nelson manifest validated with no errors.
+</code></pre>
+
+<p>Any validation errors encountered will be reported back to you exactly as they would during the standard runtime operation of Nelson. If you would like to test a manifest whose name is different than the default <code>.nelson.yml</code>, you can supply a file path explicitly with the <code>-m</code> command line option.</p>
+
+<h3 id="linting-templates">Linting Templates</h3>
+
+<p>Debugging file templates is a notoriously difficult and frustrating component to readying the deployment of an application, regardless of the runtime and tooling which is used. Nelson aids in this process by allowing you to simulate the template rendering process exactly as it would occur during deployment.</p>
+
+<pre><code>λ nelson lint manifest --unit foo --resource s3 --resource mysql --template foo.ctmpl
+2017/02/06 20:31:57.832769 [INFO] consul-template v0.18.0 (5211c66)
+2017/02/06 20:31:57.832781 [INFO] (runner) creating new runner (dry: true, once: true)
+2017/02/06 20:31:57.832968 [INFO] (runner) creating watcher
+2017/02/06 20:31:57.837192 [INFO] (runner) starting
+2017/02/06 20:31:57.837213 [INFO] (runner) initiating run
+Consul Template returned errors:
+/consul-template/templates/nelson8021968182946245276.template: parse: template: :3: unterminated quoted string
+</code></pre>
+
+<p>At the time of writing, Nelson only support rendering and linting Consul templates; however, since the underlying template engine is executed via Docker, linting could be extended to support any engine for which a Docker container and command set can be provided.</p>
+
+<h3 id="proofing-blueprints">Proofing Blueprints</h3>
+
+<p>To assist in the development of blueprints, the <code>proof</code> command can be used to inject a set of fake values into the blueprint, allowing you to quickly analyze how your changes will impact the rendered artifact. This can be particularly useful to help tamp out YAML issues in Kubernetes pod manifests or embedded Consul templates in Nomad job specifications.</p>
+
+<pre><code>λ nelson blueprint proof -f cron-no-gpu.nomad
+[... full rendered blueprint ...]
+</code></pre>
+
+<hr />
+
 <h2 id="tips">Tips</h2>
 
 <p>Generally speaking the command line client is just like any other CLI tool, and it integrates perfectly well with other bash tools. What follows below is just a useful laundry list of bash commands working in concert with the <em>Nelson</em> CLI.</p>
@@ -560,7 +602,7 @@ $ nelson login nelson.yourdomain.com
         </p>
         <p>
           Currently v
-                    0.12.156
+                    0.12.157
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -581,9 +623,9 @@ $ nelson login nelson.yourdomain.com
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?425ee66607fdb62037f65414d60c18e5"></script>
+<script src="/js/material.min.js?41cbc8d2ff2b16ff7a6d7dc222c7c85f"></script>
 
-<script src="/js/nelson.js?0a15b6a44ba58936b3bf99d8d10f9827"></script>
+<script src="/js/nelson.js?2ff232fc30a29170602356e79dfd550b"></script>
 
 
   </body>
