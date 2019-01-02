@@ -49,8 +49,8 @@ namespaces:
 - name: dev
   units:
   - ref: hello-world
-  - plans:
-  - default
+    plans:
+    - default
 ```
 
 This is a simplistic `.nelson.yml` that one could define for a unit that exposes a service on port 9000. It declares a unit called `hello-world`, and then exposes a port. This is an example of a unit that is typically referred to as a service - be sure to save this file and check it into the `master` branch of your repository.
