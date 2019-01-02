@@ -268,7 +268,7 @@ private final case class InvalidPortSpecification(msg: String)
   extends YamlError(msg)
 
 private final case class UnknownUnitRef(ref: String)
-    extends YamlError(s"'$ref' isn't a valid unit reference, because it was not declared as a unit.")
+    extends YamlError(s"'$ref' isn't a valid unit reference, because it was not declared as a unit. Ensure that the unit in question is being correctly referenced from namespaces and plans respectively.")
 
 private final case class UnknownLoadbalancerRef(ref: String)
     extends YamlError(s"'$ref' isn't a valid loadbalancer reference, because it was not declared as a loadbalancer.")

@@ -40,7 +40,7 @@ datacenters:
 
 Using the `except` keyword forms a blacklist, meaning that this deployment would deploy everywhere `except` in seattle. The common use case for this would be that `seattle` had not upgraded to a particular bit of platform infrastructure etc.
 
-<h2 id="manifest-load-balancers" data-subheading-of="manifest">Load Balancers</h2>
+## Load Balancers
 
 Load balancers are another top-level manifest declaration. For an overview of the LB functionality, see the [usage guide](index.html#user-guide-lbs). LBs are first declared logically, with the following block:
 
@@ -66,7 +66,7 @@ Next - just like units - you need to declare a [plan](#manifest-plans) in order 
 
 Depending on the backend in use (e.g. AWS), various fields in the `plan` will be ignored, so be sure to check with your administrator which fields are required.
 
-<h2 id="manifest-namespaces" data-subheading-of="manifest">Namespaces</h2>
+## Namespaces
 
 Namespaces represent virtual "worlds" within the shared computing cluster. From a manifest specification perspective, there are a few interesting things that *Namespaces* enable.
 
@@ -78,7 +78,7 @@ During a release event each unit will only be deployed into the default namespac
 
 In an ideal world, whatever system you use for testing or validation, the user would integrate with the Nelson API so that applications can be automatically committed from namespace to namespace.
 
-<h2 id="manifest-plans" data-subheading-of="manifest">Plans</h2>
+## Plans
 
 When deploying a unit in a given namespace, it is highly probable that the `unit` may require different resource capacity in each target namespace. For example, a unit in the `dev` namespace is unlikely to need the same resources that the same service in a high-scale `production` namespace would need. This is where plans come in, they define resource requirements, constraints, and environment variables.
 
@@ -339,9 +339,7 @@ older deployed as defined by the traffic shifting policy. The reverse will shift
 being routed to the older deployment. Once this happens the newer deployment will no longer receive traffic and will be
 eventually cleaned up by nelson. No other intervention is needed by the user after a reverse is issued.
 
-<h2 id="manifest-notifications" data-subheading-of="manifest">
-  Notifications
-</h2>
+## Notifications
 
 Nelson can notify you about your deployment results via slack and/or email. Notifications are sent for a deployment when:
 
@@ -349,7 +347,6 @@ Nelson can notify you about your deployment results via slack and/or email. Noti
 * a deployment has been decommissioned
 
 The following is a simple example that configure both email and slack notifications:
-
 
 ```
 notifications:
@@ -363,7 +360,7 @@ notifications:
       - devops
 ```
 
-<h2 id="manifest-units" data-subheading-of="manifest">Units</h2>
+## Units
 
 A "unit" is a generic, atomic item of work that Nelson will attempt to push through one of its workflows (more on workflows later). Any given Unit represents something that can be deployed as a container, but that has distinct parameters and requirements.
 
