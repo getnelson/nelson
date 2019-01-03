@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">NetworkConfig</span><span class="params">(<span name="bindHost">bindHost: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="bindPort">bindPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="externalHost">externalHost: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="externalPort">externalPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="tls">tls: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="monitoringPort">monitoringPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">NetworkConfig</span><span class="params">(<span name="bindHost">bindHost: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="bindPort">bindPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="externalHost">externalHost: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="externalPort">externalPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="tls">tls: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="monitoringPort">monitoringPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -92,7 +92,7 @@ are used for remote callers.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.NetworkConfig#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(bindHost:String,bindPort:Int,externalHost:String,externalPort:Int,tls:Boolean,monitoringPort:Int):nelson.NetworkConfig"></a>
+      <a id="&lt;init&gt;(bindHost:String,bindPort:Int,externalHost:String,externalPort:Int,tls:Boolean,monitoringPort:Int,idleTimeout:scala.concurrent.duration.Duration):nelson.NetworkConfig"></a>
       <a id="&lt;init&gt;:NetworkConfig"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,10 +100,10 @@ are used for remote callers.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">NetworkConfig</span><span class="params">(<span name="bindHost">bindHost: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="bindPort">bindPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="externalHost">externalHost: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="externalPort">externalPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="tls">tls: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="monitoringPort">monitoringPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span>
+        <span class="name">NetworkConfig</span><span class="params">(<span name="bindHost">bindHost: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="bindPort">bindPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="externalHost">externalHost: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="externalPort">externalPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="tls">tls: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="monitoringPort">monitoringPort: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="idleTimeout">idleTimeout: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.NetworkConfig@&lt;init&gt;(bindHost:String,bindPort:Int,externalHost:String,externalPort:Int,tls:Boolean,monitoringPort:Int):nelson.NetworkConfig" title="Permalink" target="_top">
+      <a href="../index.html#nelson.NetworkConfig@&lt;init&gt;(bindHost:String,bindPort:Int,externalHost:String,externalPort:Int,tls:Boolean,monitoringPort:Int,idleTimeout:scala.concurrent.duration.Duration):nelson.NetworkConfig" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -333,6 +333,23 @@ are used for remote callers.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.NetworkConfig#idleTimeout" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="idleTimeout:scala.concurrent.duration.Duration"></a>
+      <a id="idleTimeout:Duration"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">idleTimeout</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.Duration" class="extype" target="_top">Duration</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.NetworkConfig@idleTimeout:scala.concurrent.duration.Duration" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

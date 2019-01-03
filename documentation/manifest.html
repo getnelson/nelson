@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?aa9130884a0e497a2104796c996756a3" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?e2bc490bca2158cf03558f2b45d19439" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?daafa6cb8a3d54d92fe393a3a27948e2" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?8679d0cdc4299c8effcb915419d95e9f" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -216,7 +216,7 @@
 
 <p>Using the <code>except</code> keyword forms a blacklist, meaning that this deployment would deploy everywhere <code>except</code> in seattle. The common use case for this would be that <code>seattle</code> had not upgraded to a particular bit of platform infrastructure etc.</p>
 
-<h2 id="manifest-load-balancers" data-subheading-of="manifest">Load Balancers</h2>
+<h2 id="load-balancers">Load Balancers</h2>
 
 <p>Load balancers are another top-level manifest declaration. For an overview of the LB functionality, see the <a href="index.html#user-guide-lbs">usage guide</a>. LBs are first declared logically, with the following block:</p>
 
@@ -240,7 +240,7 @@
 
 <p>Depending on the backend in use (e.g. AWS), various fields in the <code>plan</code> will be ignored, so be sure to check with your administrator which fields are required.</p>
 
-<h2 id="manifest-namespaces" data-subheading-of="manifest">Namespaces</h2>
+<h2 id="namespaces">Namespaces</h2>
 
 <p>Namespaces represent virtual &ldquo;worlds&rdquo; within the shared computing cluster. From a manifest specification perspective, there are a few interesting things that <em>Namespaces</em> enable.</p>
 
@@ -252,7 +252,7 @@
 
 <p>In an ideal world, whatever system you use for testing or validation, the user would integrate with the Nelson API so that applications can be automatically committed from namespace to namespace.</p>
 
-<h2 id="manifest-plans" data-subheading-of="manifest">Plans</h2>
+<h2 id="plans">Plans</h2>
 
 <p>When deploying a unit in a given namespace, it is highly probable that the <code>unit</code> may require different resource capacity in each target namespace. For example, a unit in the <code>dev</code> namespace is unlikely to need the same resources that the same service in a high-scale <code>production</code> namespace would need. This is where plans come in, they define resource requirements, constraints, and environment variables.</p>
 
@@ -505,9 +505,7 @@ older deployed as defined by the traffic shifting policy. The reverse will shift
 being routed to the older deployment. Once this happens the newer deployment will no longer receive traffic and will be
 eventually cleaned up by nelson. No other intervention is needed by the user after a reverse is issued.</p>
 
-<h2 id="manifest-notifications" data-subheading-of="manifest">
-  Notifications
-</h2>
+<h2 id="notifications">Notifications</h2>
 
 <p>Nelson can notify you about your deployment results via slack and/or email. Notifications are sent for a deployment when:</p>
 
@@ -529,7 +527,7 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
       - devops
 </code></pre>
 
-<h2 id="manifest-units" data-subheading-of="manifest">Units</h2>
+<h2 id="units">Units</h2>
 
 <p>A &ldquo;unit&rdquo; is a generic, atomic item of work that Nelson will attempt to push through one of its workflows (more on workflows later). Any given Unit represents something that can be deployed as a container, but that has distinct parameters and requirements.</p>
 
@@ -929,7 +927,7 @@ namespaces:
         </p>
         <p>
           Currently v
-                    0.12.157
+                    0.12.158
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -950,9 +948,9 @@ namespaces:
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?dd7048f51c78823b4b27661b98456382"></script>
+<script src="/js/material.min.js?a1c4df8bc442cdbb4cc5905a69afeed6"></script>
 
-<script src="/js/nelson.js?c3ec44045b62499de55eaae1d04fdd94"></script>
+<script src="/js/nelson.js?5910e78b2cd80210f60646d6fb54328e"></script>
 
 
   </body>

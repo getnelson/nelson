@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?6bd86227960f9f5b397e0ea7d58d82c2" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?043c653024a456a6a08e5fb72c3ad146" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?1946c063e224413ecd138f853550433a" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?6ed1f93eda3ea368f63717836fda9be5" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -229,8 +229,8 @@ namespaces:
 - name: dev
   units:
   - ref: hello-world
-  - plans:
-  - default
+    plans:
+    - default
 </code></pre>
 
 <p>This is a simplistic <code>.nelson.yml</code> that one could define for a unit that exposes a service on port 9000. It declares a unit called <code>hello-world</code>, and then exposes a port. This is an example of a unit that is typically referred to as a service - be sure to save this file and check it into the <code>master</code> branch of your repository.</p>
@@ -353,7 +353,7 @@ GUID  NAMESPACE  STACK  STATUS  PLAN  WORKFLOW  DEPLOYED AT
         </p>
         <p>
           Currently v
-                    0.12.157
+                    0.12.158
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -374,9 +374,9 @@ GUID  NAMESPACE  STACK  STATUS  PLAN  WORKFLOW  DEPLOYED AT
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?f1cfe366179902b9cca79be5b2593b2c"></script>
+<script src="/js/material.min.js?953d5ef1eed0f23f9666016ee5acab7d"></script>
 
-<script src="/js/nelson.js?b892d7a38436a404bad6cad6f24d3392"></script>
+<script src="/js/nelson.js?6354661080e7eafecf1b07c88761ed0c"></script>
 
 
   </body>
