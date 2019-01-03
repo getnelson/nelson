@@ -110,6 +110,7 @@ object Server {
 
   def start(config: NelsonConfig): IO[org.http4s.server.Server[IO]] = {
     BlazeBuilder[IO]
+      .withIdleTimeout(config.network.idleTimeout)
       .bindHttp(config.network.bindPort, config.network.bindHost)
       .mountService(service(config))
       .start

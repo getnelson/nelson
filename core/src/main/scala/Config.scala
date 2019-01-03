@@ -140,7 +140,8 @@ final case class NetworkConfig(
   externalHost: String,
   externalPort: Int,
   tls: Boolean,
-  monitoringPort: Int
+  monitoringPort: Int,
+  idleTimeout: Duration
 )
 
 final case class DatabaseConfig(
@@ -748,7 +749,8 @@ object Config {
       externalHost = cfg.require[String]("external-host"),
       externalPort = cfg.require[Int]("external-port"),
       tls = cfg.require[Boolean]("enable-tls"),
-      monitoringPort = cfg.require[Int]("monitoring-port")
+      monitoringPort = cfg.require[Int]("monitoring-port"),
+      idleTimeout = cfg.require[Duration]("idle-timeout")
     )
 
   private def readGithub(cfg: KConfig): GithubConfig =
