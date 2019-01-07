@@ -378,7 +378,7 @@ object Nelson {
           Map("database" -> FeatureVersion(1,2)),
           Set.empty,
           Alerting.empty,
-          Some(Ports(Port("default", 1, "http"), Nil)),
+          Some(Ports(Port("default", 8080, "tcp"), Nil)),
           Some(Deployable(unitName, version, Deployable.Container(image.toString))),
           Set("some-tag")
       )
