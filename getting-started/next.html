@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?f88b28833c70f4653df652db609b7f2b" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?1b52546f7ada281c9a22f11b212dd84c" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?76697f9f02d1c70c08aa07d67ce7384e" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?fe09f7b3a1b32bde7d0b8096766835ab" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -175,7 +175,9 @@
             <hr />
             
 
-            <p>In conclusion, the manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading <a href="reference.html#manifest">in the reference</a> about the Nelson manifest answers the following common queries:</p>
+            
+
+<p>In conclusion, the manifest contains a variety of settings and options too numerous to mention in this introductory text. Suggested further reading <a href="reference.html#manifest">in the reference</a> about the Nelson manifest answers the following common queries:</p>
 
 <ul>
 <li><a href="/documentation/manifest.html#manifest-unit-dependencies">How do I declare a dependency on another unit?</a></li>
@@ -184,6 +186,28 @@
 </ul>
 
 <p>Now that you have your <code>.nelson.yml</code> as you want it, add the file to the <strong>root</strong> of your source repository, and commit it to the <code>master</code> branch. Nelson will look at the repositories&rsquo; <code>master</code> branch when it first attempts to validate your repository is something that is Nelson-compatible. You can check the validity of your manifest definition at anytime without checking in by using the Nelson CLI: <code>nelson lint manifest</code>.</p>
+
+<p>Outside of this website there are also several blog posts and talks on Nelson, from design principles to implementation
+to the system as a whole.</p>
+
+<h3 id="blog-posts">Blog Posts</h3>
+
+<ul>
+<li><a href="http://timperrett.com/2017/12/07/nelson-integrates-kubernetes">Nelson integrates Kubernetes</a> - Timothy Perrett, December 2017</li>
+<li><a href="http://timperrett.com/2017/05/13/nomad-with-envoy-and-consul">Envoy with Nomad and Consul</a> - Timothy Perrett, May 2017</li>
+</ul>
+
+<h3 id="talks">Talks</h3>
+
+<ul>
+<li><a href="https://youtu.be/c_bD9N4A7rY">Nelson: Functional programming in system design</a> - Adelbert Chang, Scale by the Bay 2018 - <a href="https://speakerdeck.com/adelbertc/nelson-functional-programming-in-system-design-sbtb-2018">slides</a> - more systems/workflow focused</li>
+<li><a href="https://youtu.be/t8KRo-DXnEo">Nelson: Functional programming in system design</a> - Adelbert Chang, Northeast Scala Symposium 2018 - <a href="https://speakerdeck.com/adelbertc/nelson-functional-programming-in-system-design">slides</a> - more implementation focused</li>
+<li><a href="https://www.youtube.com/watch?v=exepvX_XnlM&amp;feature=youtu.be&amp;t=2m46s">Persistent Data Structures in System Design</a> - Adelbert Chang, East Bay Haskell Meetup January 2018 - <a href="https://speakerdeck.com/adelbertc/persistent-data-structures-in-system-design">slides</a></li>
+<li><a href="https://youtu.be/PyXF0k2DUG0">Online Experimentation with Converged, Immutable Infrastructure</a> - Timothy Perrett, HashiConf 2017 - <a href="https://www.slideshare.net/timperrett/online-experimentation-with-immutable-infrastructure">slides</a></li>
+<li><a href="https://youtu.be/3EHtAA4oE0k">Nelson: Rigorous Deployment for a Functional World</a> - Timothy Perrett, Scale by the Bay 2017 - <a href="https://www.slideshare.net/timperrett/nelson-rigorous-deployment-for-a-functional-world">slides</a></li>
+<li><a href="https://youtu.be/RzmpW5a1zEI">Large Scale Infrastructure Automation at Verizon</a> - Timothy Perrett, HashiConf 2016 - <a href="https://www.slideshare.net/timperrett/largescale-infrastructure-automation-at-verizon-65797198">slides</a></li>
+<li><a href="https://youtu.be/lTIvKZHedJQ">Nelson: Multiregional container orchestration for Hashicorp Nomad and Lyft Envoy</a> - Timothy Perrett, San Francisco Infrastructure as Code Meetup June 2017 - <a href="https://www.slideshare.net/timperrett/nelson-automated-multiregion-container-deployment">slides</a></li>
+</ul>
 
           </article>
 
@@ -202,7 +226,7 @@
         </p>
         <p>
           Currently v
-                    0.12.158
+                    0.12.159
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -223,9 +247,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?2a1d6dab1e8e3b0347a29ab4d9624fa4"></script>
+<script src="/js/material.min.js?a1a95087c60acfb796cf94c399bea8fd"></script>
 
-<script src="/js/nelson.js?773faa62555d7110b97ab97cbe803025"></script>
+<script src="/js/nelson.js?ac71a203348c936f1c1100e03bc5f46c"></script>
 
 
   </body>
