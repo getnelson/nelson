@@ -82,6 +82,18 @@ It is these kinds of actions and steps, when viewed together, that makeup a work
       <td align="center">✓</td>
     </tr>
     <tr>
+      <td><i>Discovery</i></td>
+      <td></td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+    </tr>
+    <tr>
+      <td><i>Traffic Shifting</i></td>
+      <td></td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+    </tr>
+    <tr>
       <td><i>Prometheus</i></td>
       <td></td>
       <td></td>

@@ -168,6 +168,16 @@ object Workflow {
         _  <- Discovery.writeDiscoveryInfoToConsul(ns, sn, dc.domain.name, dt).inject[WorkflowOp]
       } yield ()
 
+    /**
+     * Provides a way to see if creating a traffic shift is actually relevant. In the case
+     * of periodic units, shifting traffic would make no sense, so those are NoOps.
+     */
+    def getTrafficShift(unit: UnitDef, plan: Plan, d: Datacenter): Option[Manifest.TrafficShift] =
+      if (!Manifest.isPeriodic(unit, plan))
+        Option(plan.environment.trafficShift
+                .getOrElse(Manifest.TrafficShift(d.defaultTrafficShift.policy, d.defaultTrafficShift.duration)))
+      else None
+
     def createTrafficShift(id: ID, nsRef: NamespaceName, dc: Datacenter, p: TrafficShiftPolicy, dur: FiniteDuration): WorkflowF[Unit] = {
       val prog = for {
         ns   <- OptionT(StoreOp.getNamespace(dc.name, nsRef))
@@ -178,6 +188,17 @@ object Workflow {
 
       prog.value.inject[WorkflowOp].map(_ => ())
     }
+
+    /*
+     * When the workflow is completed, we typically want to set the deployment to "Warming", so that once
+     * consul indicates the deployment to be passing the health check, we can promote to "Ready" (via the
+     * DeploymentMonitor background process).  However, units without ports are not registered in consul, and
+     * thus we should immediately advance mark the deployment as "Ready".  Once Reconciliation is also used as
+     * a gating factor for promoting deployments to "Ready", we can potentially set all units to "Warming" here.
+     */
+    def getStatus(unit: UnitDef, plan: Plan):  DeploymentStatus =
+      if (Manifest.isPeriodic(unit,plan)) DeploymentStatus.Ready
+      else unit.ports.fold[DeploymentStatus](DeploymentStatus.Ready)(_ => DeploymentStatus.Warming)
 
     def dockerOps(id: ID, unit: UnitDef, registry: RegistryURI): WorkflowF[Image] = {
       import Docker.Pull.{Error => PullError}
