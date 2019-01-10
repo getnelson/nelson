@@ -16,7 +16,7 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import Manifest.{UnitDef,Versioned,Plan,TrafficShift}
+import Manifest.{UnitDef,Versioned,Plan}
 import Datacenter.{Namespace,Deployment}
 import Workflow.WorkflowF
 import cats.implicits._
@@ -32,21 +32,6 @@ object Magnetar extends Workflow[Unit] {
     val sn = Datacenter.StackName(unit.name, vunit.version, hash)
     val rs = unit.dependencies.keys.toSet ++ unit.resources.map(_.name)
 
-    // When the workflow is completed, we typically want to set the deployment to "Warming", so that once
-    // consul indicates the deployment to be passing the health check, we can promote to "Ready" (via the
-    // DeploymentMonitor background process).  However, units without ports are not registered in consul, and
-    // thus we should immediately advance mark the deployment as "Ready".  Once Reconciliation is also used as
-    // a gating factor for promoting deployments to "Ready", we can potentially set all units to "Warming" here.
-    def getStatus(unit: UnitDef, plan: Plan):  DeploymentStatus =
-      if (Manifest.isPeriodic(unit,plan)) Ready
-      else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
-
-    def getTrafficShift: Option[TrafficShift] =
-      if (!Manifest.isPeriodic(unit, p))
-        Option(p.environment.trafficShift
-                .getOrElse(TrafficShift(dc.defaultTrafficShift.policy, dc.defaultTrafficShift.duration)))
-      else None
-
     for {
       _  <- status(id, Pending, "workflow about to start")
       i  <- dockerOps(id, unit, dc.docker.registry)
@@ -56,7 +41,7 @@ object Magnetar extends Workflow[Unit] {
       _  <- writePolicyToVault(cfg = dc.policy, sn = sn, ns = ns.name, rs = rs)
       _  <- logToFile(id, s"writing discovery tables to ${routing.Discovery.consulDiscoveryKey(sn)}")
       _  <- writeDiscoveryToConsul(id, sn, ns.name, dc)
-      _  <- getTrafficShift.fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
+      _  <- getTrafficShift(unit, p, dc).fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
       _  <- logToFile(id, s"instructing ${dc.name}'s scheduler to handle service container")
       l  <- launch(i, dc, ns.name, vunit, p, hash)
       _  <- debug(s"response from scheduler $l")

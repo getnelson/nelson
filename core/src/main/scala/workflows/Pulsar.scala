@@ -54,6 +54,11 @@ object Pulsar extends Workflow[Unit] {
       //// create a Vault kubernetes auth role
       _  <- logToFile(id, s"Writing Kubernetes auth role '${sn.toString}' to Vault...")
       _  <- writeKubernetesRoleToVault(dc = dc, sn = sn, ns = ns.name)
+      //// write the needful to consul
+      _  <- logToFile(id, s"writing discovery tables to ${routing.Discovery.consulDiscoveryKey(sn)}")
+      _  <- writeDiscoveryToConsul(id, sn, ns.name, dc)
+      _  <- getTrafficShift(unit, p, dc).fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
+      //// show kubernetes some love
       _ <- logToFile(id, s"Instructing ${dc.name}'s scheduler to handle service container")
       l <- launch(i, dc, ns.name, vunit, p, hash)
       _ <- debug(s"Scheduler responded with: ${l}")
