@@ -48,7 +48,8 @@ object Notify {
     val msg = deployedTemplate(actionConfig.datacenter.name,actionConfig.namespace.name,sn)
     val sub = s"Deployed $sn in ${actionConfig.datacenter.name} ${actionConfig.namespace.name.asString}"
     sendSlack(actionConfig.notifications.slack.map(_.channel), msg)(cfg.slack) productR
-    sendEmail(actionConfig.notifications.email.map(_.recipient), sub, msg)(cfg.email)
+    sendEmail(actionConfig.notifications.email.map(_.recipient), sub, msg)(cfg.email) productR
+    sendWebHooks(actionConfig.notifications.webhook, NotificationEvent.deploy(unit, actionConfig))(cfg.webhook)
   }
 
   def sendDecommissionedNotifications(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(cfg: NelsonConfig): IO[Unit] = {
@@ -78,6 +79,7 @@ object Notify {
       n <- fetchNotifications(d)
       _ <- sendSlack(n.slack.map(_.channel), msg)(cfg.slack)
       _ <- sendEmail(n.email.map(_.recipient), subject, msg)(cfg.email)
+      _ <- sendWebHooks(n.webhook, NotificationEvent.decommission(d))(cfg.webhook)
     } yield ()
   }
 
@@ -91,6 +93,12 @@ object Notify {
     if (cs.isEmpty) IO.unit
     else i.fold(log(s"slack notification was not sent because slack integration is not configured")) { interp =>
       SlackOp.send(cs, msg).foldMap(interp)
+    }
+
+  private def sendWebHooks(ss: List[WebHookSubscription], ev: NotificationEvent)(i: Option[WebHookOp ~> IO]): IO[Unit] =
+    if (ss.isEmpty) IO.unit
+    else i.fold(log(s"webhook notification was not sent because webhooks are not configured")) { interp =>
+      WebHookOp.send(ss, ev).foldMap(interp)
     }
 
   private val logger = Logger[Notify.type]

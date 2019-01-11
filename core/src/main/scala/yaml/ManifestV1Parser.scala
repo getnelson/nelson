@@ -30,7 +30,7 @@ import cats.implicits._
 
 import java.net.URI
 import java.nio.file.Paths
-import java.util.{ArrayList => JList}
+import java.util.{ArrayList => JList, HashMap => JMap}
 
 import scala.beans.BeanProperty
 import scala.collection.JavaConverters._
@@ -327,7 +327,8 @@ object ManifestV1Parser {
   def parseNotifications(raw: NotificationYaml): YamlValidation[NotificationSubscriptions] = {
     val slack = parseSlackNotifications(raw.slack).map(_.map(SlackSubscription(_)))
     val email = parseEmailNotifications(raw.email).map(_.map(EmailSubscription(_)))
-    (slack, email).mapN(NotificationSubscriptions.apply)
+    val webhook = parseWebHookNotifications(raw.webhook).map(_.map(sc => WebHookSubscription(sc.endpoint, sc.headers, sc.params)))
+    (slack, email, webhook).mapN(NotificationSubscriptions.apply)
   }
 
   private[this] val validEmail = """(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b""".r
@@ -341,6 +342,27 @@ object ManifestV1Parser {
 
   def parseSlackNotifications(raw: NotificationSlackYaml): YamlValidation[List[String]] =
     raw.channels.asScala.toList.validNel
+
+  def parseWebHookConfiguration(raw: WebHookConfigurationYaml): YamlValidation[WebHookSubscriberConfig] = {
+    import org.http4s._
+
+    def parseWebHookUri(str: String): YamlValidation[Uri] =
+      Uri.fromString(str).leftMap(_ => invalidURI(str)).toValidatedNel
+
+    def parseHeaders(hs: collection.mutable.Map[String, String]): YamlValidation[Headers] =
+      Headers(hs.map(h => Header(h._1, h._2)).toList).validNel
+
+    def parseParams(ps: collection.mutable.Map[String, String]): YamlValidation[List[(String, String)]] =
+      ps.toList.validNel
+
+    (parseWebHookUri(raw.uri),
+     parseHeaders(raw.headers.asScala),
+     parseParams(raw.params.asScala))
+    .mapN((u, hs, ps) => WebHookSubscriberConfig(u, hs, ps))
+  }
+
+  def parseWebHookNotifications(raw: NotificationWebHookYaml): YamlValidation[List[WebHookSubscriberConfig]] =
+    raw.subscribers.asScala.toList.traverse(parseWebHookConfiguration)
 
   def parseAlerting(unitName: UnitName, rawAlerting: AlertingYaml): YamlValidation[Alerting] =
     parsePrometheusAlerting(unitName, rawAlerting.prometheus).map(Alerting.apply)
@@ -635,6 +657,7 @@ class PrometheusRuleYaml {
 class NotificationYaml {
   @BeanProperty var slack: NotificationSlackYaml = new NotificationSlackYaml
   @BeanProperty var email: NotificationEmailYaml = new NotificationEmailYaml
+  @BeanProperty var webhook: NotificationWebHookYaml = new NotificationWebHookYaml
 }
 
 class NotificationSlackYaml {
@@ -643,4 +666,14 @@ class NotificationSlackYaml {
 
 class NotificationEmailYaml {
   @BeanProperty var recipients: JList[String] = new java.util.ArrayList
+}
+
+class WebHookConfigurationYaml {
+  @BeanProperty var uri: String = _
+  @BeanProperty var headers: JMap[String, String] = new java.util.HashMap
+  @BeanProperty var params: JMap[String, String] = new java.util.HashMap
+}
+
+class NotificationWebHookYaml {
+  @BeanProperty var subscribers: JList[WebHookConfigurationYaml] = new java.util.ArrayList
 }

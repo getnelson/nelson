@@ -17,12 +17,16 @@
 package nelson
 package yaml
 
-import java.nio.file.Paths
-
-import org.scalatest.{FlatSpec,Matchers}
-import scala.concurrent.duration._
 import cats.instances.either._
 import cats.syntax.foldable._
+
+import org.http4s.Uri.uri
+
+import org.scalatest.{FlatSpec,Matchers}
+
+import java.nio.file.Paths
+
+import scala.concurrent.duration._
 
 class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   import Manifest._
@@ -152,7 +156,11 @@ class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
                 )),
     notifications = NotificationSubscriptions(
                 List(SlackSubscription("development"),SlackSubscription("general")),
-                List(EmailSubscription("baxter@example.com"))),
+                List(EmailSubscription("baxter@example.com")),
+                List(WebHookSubscription(
+                  uri = uri("https://localhost:80/"),
+                  headers = org.http4s.Headers.empty,
+                  params = List.empty))),
     loadbalancers = List(
       Loadbalancer("howdy-lb",
         Vector(Route(Port("default",8444,"http"), BackendDestination("foobar", "default")),
