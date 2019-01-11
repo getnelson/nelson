@@ -588,7 +588,7 @@ object Config {
           rawClient.map(rc => InstrumentedVaultClient(endpoint, rc))
         }).yolo("We really really need vault. Seriously vault must be configured")
 
-      /**
+      /*
        * Build the internal consul client. In order to make sure this is actually running,
        * your configuration needs to enable the feature, you must specify a specific endpoint
        * to talk to Consul.  If this field is absent, then StubbedConsulClient will be
