@@ -35,7 +35,7 @@ import org.http4s.client.blaze.Http1Client
 
 import scala.concurrent.ExecutionContext
 
-object ZMain {
+object Main {
   private val log = Logger[this.type]
 
   def main(args: Array[String]): Unit = {
@@ -50,7 +50,6 @@ object ZMain {
     val configThreadPool = ExecutionContext.fromExecutorService(Executors.newSingleThreadExecutor(configThreadFactory))
 
     val file = new File(args.headOption.getOrElse("/opt/application/conf/nelson.cfg"))
-    println(s"Configuration loaded from ${file.getAbsolutePath}")
 
     def readConfig = for {
       defaults  <- knobs.loadImmutable[IO](Required(ClassPathResource("nelson/defaults.cfg")) :: Nil)
@@ -93,7 +92,7 @@ object ZMain {
       runBackgroundJob("sweeper", cleanup.Sweeper.process(cfg))
       runBackgroundJob("deployment_monitor", DeploymentMonitor.loop(cfg))
 
-      registerJvmMetrics()  
+      registerJvmMetrics()
       MonitoringServer(port = cfg.network.monitoringPort).attempt.unsafeRunSync().fold(
         e => {
           log.error(s"fatal error starting monitoring server: '$e'")

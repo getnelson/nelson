@@ -679,7 +679,7 @@ object Json {
     DecodeJson.optionDecoder(_.string.flatMap(s =>
       NamespaceName.fromString(s).toOption), "NamespaceName")
 
-  final case class  NamespaceNameJson(
+  final case class NamespaceNameJson(
     namespace: NamespaceName
   )
 
