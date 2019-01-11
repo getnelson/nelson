@@ -446,6 +446,42 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Workflow.syntax#getStatus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getStatus(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan):nelson.DeploymentStatus"></a>
+      <a id="getStatus(UnitDef,Plan):DeploymentStatus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getStatus</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>)</span><span class="result">: <a href="DeploymentStatus.html" class="extype" name="nelson.DeploymentStatus">DeploymentStatus</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Workflow$$syntax$@getStatus(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan):nelson.DeploymentStatus" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Workflow.syntax#getTrafficShift" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getTrafficShift(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan,d:nelson.Datacenter):Option[nelson.Manifest.TrafficShift]"></a>
+      <a id="getTrafficShift(UnitDef,Plan,Datacenter):Option[TrafficShift]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getTrafficShift</span><span class="params">(<span name="unit">unit: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="plan">plan: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="d">d: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Manifest$$TrafficShift.html" class="extype" name="nelson.Manifest.TrafficShift">TrafficShift</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Workflow$$syntax$@getTrafficShift(unit:nelson.Manifest.UnitDef,plan:nelson.Manifest.Plan,d:nelson.Datacenter):Option[nelson.Manifest.TrafficShift]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides a way to see if creating a traffic shift is actually relevant.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a way to see if creating a traffic shift is actually relevant. In the case
+of periodic units, shifting traffic would make no sense, so those are NoOps.
+</p></div></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
