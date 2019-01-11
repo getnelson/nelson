@@ -586,48 +586,63 @@ object Config {
           val client = http4sClient(timeout)
           val rawClient = client.map(c => new Http4sVaultClient(Token(token), endpointUri, c, prefix))
           rawClient.map(rc => InstrumentedVaultClient(endpoint, rc))
-        }).yolo("We really really need vault.  Seriously vault must be configured")
+        }).yolo("We really really need vault. Seriously vault must be configured")
+
+      /**
+       * Build the internal consul client. In order to make sure this is actually running,
+       * your configuration needs to enable the feature, you must specify a specific endpoint
+       * to talk to Consul.  If this field is absent, then StubbedConsulClient will be
+       * used in place of the real interpreter.
+       */
+      def consulRouting: IO[helm.ConsulOp ~> IO] = {
+        val isEnabled = kfg.lookup[String]("infrastructure.consul.endpoint").nonEmpty
+        if (isEnabled){
+          // if you're using consul, you must specify the timeout and the endpoint.
+          // these are non-optional.
+          val a = kfg.require[String]("infrastructure.consul.endpoint")
+          val b = kfg.require[Duration]("infrastructure.consul.timeout")
+          val c = kfg.lookup[String]("infrastructure.consul.acl-token")
+          val d = kfg.lookup[String]("infrastructure.consul.username")
+          val e = kfg.lookup[String]("infrastructure.consul.password")
+          val client = http4sClient(b, 20)
+
+          val http4sConsul = (d,e) match {
+            case (None,None) => client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), consulClient))
+            case (Some(u),Some(pw)) =>
+              client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c,
+                Some(Infrastructure.Credentials(u,pw))), consulClient))
+            case _ =>
+              log.error("If you configure the datacenter to have a consul username, or consul password, it must have both.")
+              client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), consulClient))
+          }
+          http4sConsul.map(consulClient => PrometheusConsul(a, consulClient))
+        } else {
+          IO.pure(StubbedConsulClient)
+        }
+      }
 
       val schedConfig = kfg.subconfig("infrastructure.scheduler")
 
       val components = schedConfig.lookup[String]("scheduler") match {
         case Some("nomad") =>
-          val consul = {
-            val a = kfg.require[String]("infrastructure.consul.endpoint")
-            val b = kfg.require[Duration]("infrastructure.consul.timeout")
-            val c = kfg.lookup[String]("infrastructure.consul.acl-token")
-            val d = kfg.lookup[String]("infrastructure.consul.username")
-            val e = kfg.lookup[String]("infrastructure.consul.password")
-            val client = http4sClient(b, 20)
-            val http4sConsul = (d,e) match {
-              case (None,None) => client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), consulClient))
-              case (Some(u),Some(pw)) =>
-                client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c,
-                  Some(Infrastructure.Credentials(u,pw))), consulClient))
-              case _ =>
-                log.error("If you configure the datacenter to have a consul username, or consul password, it must have both.")
-                client.map(consulClient => Http4sConsul.client(Infrastructure.Consul(new URI(a), b, c, None), consulClient))
-            }
-            http4sConsul.map(consulClient => PrometheusConsul(a, consulClient))
-          }
-
           // for {
-          //   consulClient  <- consul
+          //   consulClient  <- consulRouting
           //   sched         <- readNomadScheduler(schedConfig.subconfig("nomad"))
           //   healthChecker = health.Http4sConsulHealthClient(consulClient)
           // } yield (sched, healthChecker, consulClient)
-
           IO.raiseError(NomadNotImplemented)
 
         case Some("kubernetes") =>
           readKubernetesInfrastructure(schedConfig.subconfig("kubernetes")) match {
             case Some(Infrastructure.Kubernetes(mode, timeout)) =>
               val kubectl = new Kubectl(mode)
-              IO.pure((
-                new KubernetesShell(kubectl, timeout, ec, schedulerPool),
-                new KubernetesHealthClient(kubectl, timeout, ec, schedulerPool),
-                StubbedConsulClient
-              ))
+              consulRouting.map { consul =>
+                (
+                  new KubernetesShell(kubectl, timeout, ec, schedulerPool),
+                  new KubernetesHealthClient(kubectl, timeout, ec, schedulerPool),
+                  consul
+                )
+              }
             case None => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
           }
 
