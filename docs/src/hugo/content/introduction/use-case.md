@@ -14,7 +14,7 @@ menu:
 
 ## Deployment
 
-At its core, Nelson is a system that deploys containers to scheudlers like Kubernetes and Nomad. This alone however does not make Nelson unique: those tools provide a means to deploy containers in a myriad of different ways, and theirin lies the source of a great deal of friction. Scheduler interfaces expose a discrete set of trade-offs to the user, and more often than not they make hard things easier, but easy things hard. This is typically not what most organizations are looking for: easy things should be easy. Nelson provides users a simple interface to deploy the What, Where and How of their deployment.
+At its core, Nelson is a system that deploys containers to schedulers like Kubernetes and Nomad. This alone however does not make Nelson unique: those tools provide a means to deploy containers in a myriad of different ways, and therein lies the source of a great deal of friction. Scheduler interfaces expose a discrete set of trade-offs to the user, and more often than not they make hard things easier, but easy things hard. This is typically not what most organizations are looking for: easy things should be easy. Nelson provides users a simple interface to deploy the What, Where and How of their deployment.
 
 ## Dependency Graph
 
