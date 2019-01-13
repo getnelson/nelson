@@ -39,8 +39,11 @@ object Http4sConsul {
   def baseUri(consul: Infrastructure.Consul): Uri = {
     val consulHost = consul.endpoint.getHost
     val port = consul.endpoint.getPort
-    val port0 = if (port <= 0) 80 else port
-    Uri.fromString(s"http://$consulHost:$port0").toOption.yolo("Invalid URI for consul")
+    val scheme = consul.endpoint.getScheme
+    val port0 = if (port <= 0 && scheme == "http") 80 
+                else if (port <= 0 && scheme == "https") 443
+                else port
+    Uri.fromString(s"${scheme}://${consulHost}:${port0}").toOption.yolo("Invalid URI for consul")
   }
 
   def token(consul: Infrastructure.Consul): Option[String] =

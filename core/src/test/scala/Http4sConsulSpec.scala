@@ -29,7 +29,17 @@ class Http4sConsulSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
     Option("someacltoken"),
     None)
 
-  it should "handle missing ports" in {
+  it should "handle http port 80" in {
+    val consul0 = consul.copy(endpoint = new java.net.URI("http://consule.example.com"))
+    baseUri(consul0) should equal (uri("http://consule.example.com:80"))
+  }
+
+  it should "handle https port 443" in {
+    val consul0 = consul.copy(endpoint = new java.net.URI("https://consule.example.com"))
+    baseUri(consul0) should equal (uri("https://consule.example.com:443"))
+  }
+
+  it should "support https URIs on non-standard ports" in {
     val consul0 = consul.copy(endpoint = new java.net.URI("http://consule.example.com"))
     baseUri(consul0) should equal (uri("http://consule.example.com:80"))
   }
