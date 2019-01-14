@@ -561,7 +561,7 @@ object Config {
     def readNomadScheduler(kfg: KConfig): IO[SchedulerOp ~> IO] =
       readNomadInfrastructure(kfg) match {
         case Some(n) => http4sClient(n.timeout).map(client => new scheduler.NomadHttp(nomadcfg, n, client, schedulerPool, ec))
-        case None    => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
+        case None    => IO.raiseError(new IllegalArgumentException("Unable to parse the nomad scheduler configuration"))
       }
 
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
