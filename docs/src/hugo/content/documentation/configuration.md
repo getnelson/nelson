@@ -15,7 +15,6 @@ contents:
 - Email
 - Github
 - Network
-- Nomad
 - Pipeline
 - Security
 - Slack
@@ -89,14 +88,14 @@ These are 100% functionally equivalent, and there is no prescription on what sty
 
 Some configuration in Nelson is "top-level" in the `nelson` scope. These options are typically core to how Nelson operates, and Nelson administrators should carefully review these options to ensure that they are set to values that make sense for your deployment.
 
-* [default-namespace](#default-namespace)
-* [discovery-delay](#discovery-delay)
-* [manifest-filename](#manifest-filename)
-* [proxy-port-whitelist](#proxy-port-whitelist)
-* [readiness-delay](#readiness-delay)
-* [timeout](#timeout)
+* [nelson.default-namespace](#nelson-default-namespace)
+* [nelson.discovery-delay](#nelson-discovery-delay)
+* [nelson.manifest-filename](#nelson-manifest-filename)
+* [nelson.proxy-port-whitelist](#nelson-proxy-port-whitelist)
+* [nelson.readiness-delay](#nelson-readiness-delay)
+* [nelson.timeout](#nelson-timeout)
 
-#### Default Namespace 
+#### nelson.default-namespace 
 
 upon receiving a github release event, where should Nelson assume the
 application should get deployed too. This can either be a root namespace,
@@ -107,7 +106,7 @@ namespace must exist (otherwise Nelson will attempt to create it on boot)
 nelson.default-namespace = "dev"
 ```
 
-#### Discovery Delay
+#### nelson.discovery-delay
 
 The frequency on which should nelson write out the discovery / routing protocol information to your configured routing sub-system. This should typically not be set too high as it will affect the frequency and choppiness of updates in the runtime. For example, if you set the value to 10 minutes and wanted to migrate traffic in 30 minutes, you'd end up with 3 large "steps" in that traffic-shifting curve (assuming a linear specification). 
 
@@ -115,7 +114,7 @@ The frequency on which should nelson write out the discovery / routing protocol 
 nelson.discovery-delay = 2 minutes
 ```
 
-#### Manifest Filename
+#### nelson.manifest-filename
 
 When Nelson fetches the repository manifest, this field controls what filename Nelson should be looking for. By default, the expectation is that this config is a path from the root of the repository, but can be specified with relative paths (from the root of any given repository).
 
@@ -123,7 +122,7 @@ When Nelson fetches the repository manifest, this field controls what filename N
 nelson.manifest-filename = ".nelson.yml"
 ```
 
-#### Proxy Port Whitelist
+#### nelson.proxy-port-whitelist
 
 When using Nelson [load balancer](/getting-started/routing.html#load-balancers) feature, to avoid exposing random ports on the internet, administrators can keep a whitelist of the ports they are permitting to be exposed. This helps mitigate issues with security surface areas, whilst not restricting users to some hardcoded defaults.  
 
@@ -131,7 +130,7 @@ When using Nelson [load balancer](/getting-started/routing.html#load-balancers) 
 nelson.proxy-port-whitelist = [ 80, 443, 8080 ]
 ```
 
-#### Readiness Delay
+#### nelson.readiness-delay
 
 How frequently should Nelson run the readiness check to see if a service deployment is ready to take active traffic. How frequently this needs to be will largely be affected by the routing sub-system you have elected to use. For example, queries to Consul, vs queries to Kubernetes. 
 
@@ -139,7 +138,7 @@ How frequently should Nelson run the readiness check to see if a service deploym
 nelson.readiness-delay = 3 minutes
 ```
 
-#### Timeout
+#### nelson.timeout
 
 Controls how long Nelson should wait when talking to external systems. For example, when Nelson makes a call to Vault, or a scheduling sub-system, how long should it wait?
 
@@ -148,6 +147,27 @@ nelson.timeout = 4 seconds
 ```
 
 ## Auditing
+
+Nelson has an internal auditing subsystem that keeps a track of all the events that happen; from deployments to cleanup and deliberate user actions.
+
+* [audit.concurrency-limit](#audit-concurrency-limit)
+* [audit.inbound-buffer-limit](#audit-inbound-buffer-limit)
+
+#### audit.concurrency-limit
+
+As Nelson is executing various parts of its system asynchronously, the audit system has to be able to respond to multiple inbound callers at the same time. This configuration option controls the size of the thread pool that is used specifically for auditing. This should typically be a lower number, but greater than `2`.
+
+```
+audit.concurrency-limit = 4
+```
+
+#### audit.inbound-buffer-limit
+
+The auditing system operates as a buffered queue. In order to define the behavior of Nelson, the buffer is capped to a specific value controlled by the `inbound-buffer-limit` field. In practice this should not be a problem and the default should suffice in nearly every case, but be aware that if Nelson were internally queuing more than the value specified here the queue will block until items have been consumed by one of the auditing processor threads.
+
+```
+audit.inbound-buffer-limit = 50
+```
 
 
 ## Cleanup
@@ -167,7 +187,7 @@ Upon what cadence should Nelson process the stack topology and look for stacks t
 cleanup.cleanup-delay = 10 minutes
 ```
 
-#### cleanup.extend-deployment-time-to-live
+#### cleanup.extend-deployment-time-to-live
 
 When Nelson determines that a stack is still useful and is to avoid deletion, how long should that stack TTL be increased by? This parameter should be set to the longest time that you would be prepared to wait for a stack to be destroyed. Be aware that if the TTL is less than the `cleanup-delay` parameter then Nelson will find your stacks to be garbage and delete them. Change this parameter with caution and be sure to validate the behavior is what you want.
 
@@ -175,7 +195,7 @@ When Nelson determines that a stack is still useful and is to avoid deletion, ho
 cleanup.extend-deployment-time-to-live = 30 minutes
 ```
 
-#### cleanup.initial-deployment-time-to-live
+#### cleanup.initial-deployment-time-to-live
 
 When a stack is first launched by Nelson, how much of a grace period should be given before Nelson starts to subject the stack to the typical garbage collection process? This is the maximum time that Nelson will check for readiness - once the period elapses, if the stack is not in the `ready` state it will fall subject to the garbage collection process. 
 
@@ -183,10 +203,9 @@ When a stack is first launched by Nelson, how much of a grace period should be g
 cleanup.initial-deployment-time-to-live = 30 minutes
 ```
 
+#### cleanup.sweeper-delay
 
-#### cleanup.sweeper-delay
-
-Nelson is publishing a set of metadata about stacks to the configured routing subsystem of your choice. Cleaning the discovery / routing systems up is typically done on a slower cadence in the event that a stack needed to be redeployed or an error occurred and something needed to be recovered. The longer this period is set too, the more cruft will accumulate in your discovery / routing system (for example, Consul's KV storage).
+Nelson is publishing a set of metadata about stacks to the configured routing subsystem of your choice. Cleaning the discovery / routing systems up is typically done on a slower cadence in the event that a stack needed to be redeployed or an error occurred and something needed to be recovered. The longer this period is set too, the more cruft will accumulate in your discovery / routing system (for example, Consul's KV storage). 
 
 ```
 cleanup.sweeper-delay = 24 hours
@@ -281,7 +300,7 @@ Controls where Nelson will look for your SMTP email server.
 nelson.email.host = "mail.company.com"
 ```
 
-#### email.port
+#### email.port
 
 What port should Nelson use when talking to your SMTP email server.
 
@@ -317,18 +336,66 @@ nelson.email.password = "somepassword"
 
 ## Github
 
+Nelson requires a set of Github credentials in order to be able to interact with your source code. For more information, please [see the installation section](/getting-started/install.html#nelson-server).
+
+* [github.client-id](#github-client-id)
+* [github.client-secret](#github-client-secret)
+* [github.github.scope](#github-github.scope)
+* [github.access-token](#github-access-token)
+* [github.system-username](#github-system-username)
+
+
+#### github.client-id
+
+```
+nelson.github.client-id = "xxxxxxxxxxx"
+```
+
+#### github.client-secret
+
+```
+nelson.github.client-secret = "yyyyy"
+```
+
+#### github.redirect-uri
+
+```
+nelson.github.redirect-uri = "http://nelson.local/auth/exchange"
+```
+
+#### github.scope
+
+
+```
+nelson.github.scope  = "repo"
+```
+
+#### github.access-token
+
+
+```
+nelson.github.access-token = "replaceme"
+```
+
+#### github.system-username
+
+Configure the correct 
+
+```
+nelson.github.system-username = "nelson"
+```
 
 ## Network
 
 Specify the networking options used by Nelson, including the network interface the JVM binds too, port binding, and the address Nelson advertises in its API. 
 
-* [bind-host](#bind-host)
-* [bind-port](#bind-port)
-* [external-host](#external-host)
-* [external-port](#external-port)
-* [idle-timeout](#idle-timeout)
+* [network.bind-host](#network-bind-host)
+* [network.bind-port](#network-bind-port)
+* [network.external-host](#network-external-host)
+* [network.external-port](#network-external-port)
+* [network.idle-timeout](#network-idle-timeout)
 
-#### Bind Host
+#### network.bind-host
 
 What host - interface - should Nelson bind its JVM server process too.
 
@@ -336,7 +403,7 @@ What host - interface - should Nelson bind its JVM server process too.
 nelson.network.bind-host = "0.0.0.0"
 ```
 
-#### Bind Port
+#### network.bind-port
 
 What TCP port should Nelson bind its JVM server process too. This is typically a non-privileged port (i.e. above port 3000).
 
@@ -344,7 +411,7 @@ What TCP port should Nelson bind its JVM server process too. This is typically a
 nelson.network.bind-port = "9000"
 ```
 
-#### External Host
+#### network.external-host
 
 Typically Nelson is hosted behind a reverse proxy, or otherwise bound to an internal address. In order for cookie retention to work for browsers, and for Nelson to rewrite its generated URLs to locations that are network accessible, the operator must tell Nelson what that external address is.
 
@@ -358,7 +425,7 @@ Whilst not recommended, but you can also use an IP address here if you do not ha
 nelson.network.external-host = "10.10.1.11"
 ```
 
-#### External Port
+#### network.external-port
 
 If using a reverse proxy, and `external-host` is set, what port should be used for external responses (i.e. HTTP 302 redirects and so forth). If external-port is not supplied, then we assume port 443 (https)
 
@@ -366,7 +433,7 @@ If using a reverse proxy, and `external-host` is set, what port should be used f
 nelson.network.external-port = 443
 ```
 
-#### Idle Timeout
+#### network.idle-timeout
 
 `idle-timeout` defines how long should nelson wait before closing requests to the Nelson server process. Under the hood, this equates to `idle-timeout` on http4s' [BlazeBuilder](https://github.com/http4s/http4s/blob/master/blaze-server/src/main/scala/org/http4s/server/blaze/BlazeBuilder.scala))
 
@@ -374,26 +441,12 @@ nelson.network.external-port = 443
 nelson.network.idle-timeout = 60 seconds
 ```
 
-#### Monitoring Port
+#### network.monitoring-port
 
 Nelson uses [Prometheus](https://prometheus.io/) as its monitoring solution. Prometheus exposes its metrics for collection via a TCP port, and the `monitoring-port` allows you to configure what port that is.
 
 ```
 nelson.network.monitoring-port = 5775
-```
-
-## Nomad
-
-When using the Nomad scheduling subsystem, you may want to provide some static configuration options:
-
-* [required-service-tags](#required-service-tags)
-
-#### Required Service Tags
-
-Nomad is integrated with Consul and the scheduler can register services deployed with Consul. When doing this, it is sometimes advantageous to apply some admin-configured service tags. 
-
-```
-nelson.nomad.required-service-tags = [ "foo", "bar" ]
 ```
 
 ## Pipeline
