@@ -6,7 +6,22 @@ preamble: >
   For installation instructions, see the [user guide](/getting-started/install.html) section. This reference guide covers the various configuration options Nelson can have in its configuration file and explains why you might want them.
 contents:
 - Overview
+- Core
+- Auditing
+- Cleanup
+- Database
+- Datacenters
+- Docker
+- Email
+- Github
 - Network
+- Nomad
+- Pipeline
+- Security
+- Slack
+- Templating
+- User Interface
+- Workflow Logger
 menu:
   main:
     identifier: docs-configuration
@@ -29,6 +44,12 @@ foo = 123
 # durations
 delay = 30 seconds
 another = 1 minute
+
+# lists of strings
+list-of-thing = [ "buzz", "qux" ]
+
+# list of integers
+list-of-int = [ 80, 443 ]
 
 ```
 
@@ -63,6 +84,118 @@ nelson.timeout = 4 seconds
 ```
 
 These are 100% functionally equivalent, and there is no prescription on what style you use where in your deployment of Nelson. The rest of this guide will use block-syntax as the Nelson team believe it is more readable for most users.
+
+## Core
+
+Some configuration in Nelson is "top-level" in the `nelson` scope. These options are typically core to how Nelson operates, and Nelson administrators should carefully review these options to ensure that they are set to values that make sense for your deployment.
+
+* [default-namespace](#default-namespace)
+* [discovery-delay](#discovery-delay)
+* [manifest-filename](#manifest-filename)
+* [proxy-port-whitelist](#proxy-port-whitelist)
+* [readiness-delay](#readiness-delay)
+* [timeout](#timeout)
+
+#### Default Namespace 
+
+upon receiving a github release event, where should Nelson assume the
+application should get deployed too. This can either be a root namespace,
+or a subordinate namespace, e.g. `stage/unstable`... its arbitrary, but the
+namespace must exist (otherwise Nelson will attempt to create it on boot)
+
+```
+nelson.default-namespace = "dev"
+```
+
+#### Discovery Delay
+
+The frequency on which should nelson write out the discovery / routing protocol information to your configured routing sub-system. This should typically not be set too high as it will affect the frequency and choppiness of updates in the runtime. For example, if you set the value to 10 minutes and wanted to migrate traffic in 30 minutes, you'd end up with 3 large "steps" in that traffic-shifting curve (assuming a linear specification). 
+
+```
+nelson.discovery-delay = 2 minutes
+```
+
+#### Manifest Filename
+
+When Nelson fetches the repository manifest, this field controls what filename Nelson should be looking for. By default, the expectation is that this config is a path from the root of the repository, but can be specified with relative paths (from the root of any given repository).
+
+```
+nelson.manifest-filename = ".nelson.yml"
+```
+
+#### Proxy Port Whitelist
+
+When using Nelson [load balancer](/getting-started/routing.html#load-balancers) feature, to avoid exposing random ports on the internet, administrators can keep a whitelist of the ports they are permitting to be exposed. This helps mitigate issues with security surface areas, whilst not restricting users to some hardcoded defaults.  
+
+```
+nelson.proxy-port-whitelist = [ 80, 443, 8080 ]
+```
+
+#### Readiness Delay
+
+How frequently should Nelson run the readiness check to see if a service deployment is ready to take active traffic. How frequently this needs to be will largely be affected by the routing sub-system you have elected to use. For example, queries to Consul, vs queries to Kubernetes. 
+
+```
+nelson.readiness-delay = 3 minutes
+```
+
+#### Timeout
+
+Controls how long Nelson should wait when talking to external systems. For example, when Nelson makes a call to Vault, or a scheduling sub-system, how long should it wait?
+
+```
+nelson.timeout = 4 seconds
+```
+
+
+
+## Auditing
+## Cleanup
+## Database
+## Datacenters
+## Docker
+## Email
+
+Nelson can notify you by Email when changes to deployments happen. In order to do this, Nelson needs to be configured with an SMTP server. This is fully compatible with public cloud email offerings like SES (or any other provider that implements the SMTP protocol).
+
+* [email.host](#email.host)
+* [email.port](#email.port)
+* [email.from](#email.from)
+* [email.user](#email.user)
+* [email.password](#email.password)
+
+#### email.host
+
+```
+nelson.email.host = "mail.company.com"
+```
+
+#### email.port
+
+```
+nelson.email.port = 9000
+```
+
+#### email.from
+
+```
+nelson.email.from = "nelson@example.com"
+```
+
+### email.user
+
+```
+nelson.email.user = "someuser"
+```
+
+#### email.password
+
+```
+nelson.email.password = "somepassword"
+```
+
+## Github
+
 
 ## Network
 
@@ -128,3 +261,23 @@ Nelson uses [Prometheus](https://prometheus.io/) as its monitoring solution. Pro
 nelson.network.monitoring-port = 5775
 ```
 
+## Nomad
+
+When using the Nomad scheduling subsystem, you may want to provide some static configuration options:
+
+* [required-service-tags](#required-service-tags)
+
+#### Required Service Tags
+
+Nomad is integrated with Consul and the scheduler can register services deployed with Consul. When doing this, it is sometimes advantageous to apply some admin-configured service tags. 
+
+```
+nelson.nomad.required-service-tags = [ "foo", "bar" ]
+```
+
+## Pipeline
+## Security
+## Slack
+## Templating
+## User Interface
+## Workflow Logger
