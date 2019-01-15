@@ -147,24 +147,94 @@ Controls how long Nelson should wait when talking to external systems. For examp
 nelson.timeout = 4 seconds
 ```
 
-
-
 ## Auditing
 ## Cleanup
+
+
+
 ## Database
+
+Nelson's H2 database requires some configuration to use. By default H2 will just write the database into the process-local folder, but this is typically not what you want. Most operators prefer the Nelson database to be on a redundant or backed-up known location. 
+
+* [database.driver](#database-driver)
+* [database.connection](#database-connection)
+* [database.username](#database-username)
+* [database.password](#database-password)
+
+#### database.driver
+
+At the time of writing, Nelson only supported H2 as its backend datastore; this field should typically not be changed by administrators.
+
+```
+nelson.database.driver = "org.h2.Driver"
+```
+
+#### database.connection
+
+Depending on the driver specified in the `nelson.database.url` field, configure an appropriate JDBC string:
+
+```
+database.connection = "jdbc:h2:file:/opt/application/db/nelson;DATABASE_TO_UPPER=FALSE;AUTO_SERVER=TRUE;"
+```
+
+#### database.username
+
+If your database is using authentication, specify the username with the `username` field:
+
+```
+nelson.database.username = "admin"
+```
+
+#### database.password
+
+If your database is using authentication, specify the password with the `password` field:
+
+```
+nelson.database.password = "some password"
+```
+
+
 ## Datacenters
 ## Docker
+
+For some workflows and developer experience functionality, Nelson requires access to a [Docker](https://docker.com) daemon to launch and replicate containers. In order to do this, Nelson must be told how to talk to the Docker process. 
+
+* [docker.connection](#docker-connection)
+* [docker.verify-tls](#docker-verify-tls)
+
+#### docker.connection
+
+Docker supports a range of ways to connect to the daemon process and any of the Docker-supported URIs are valid for this field. 
+
+```
+# using tcp (recomended for security reasons)
+nelson.docker.connection = "tcp://0.0.0.0:2376"
+
+# using unix sockets
+nelson.docker.connection = "unix:///path/to/docker.sock"
+```
+
+#### docker.verify-tls
+
+Depending on your Docker process configuration, you may want to skip TLS verification. The default is to verify TLS (as that is the recommended, secure configuration), but you can optionally disable that verification here. 
+
+```
+nelson.docker.verify-tls = true
+``` 
+
 ## Email
 
 Nelson can notify you by Email when changes to deployments happen. In order to do this, Nelson needs to be configured with an SMTP server. This is fully compatible with public cloud email offerings like SES (or any other provider that implements the SMTP protocol).
 
-* [email.host](#email.host)
-* [email.port](#email.port)
-* [email.from](#email.from)
-* [email.user](#email.user)
-* [email.password](#email.password)
+* [email.host](#email-host)
+* [email.port](#email-port)
+* [email.from](#email-from)
+* [email.user](#email-user)
+* [email.password](#email-password)
 
 #### email.host
+
+Controls where Nelson will look for your SMTP email server. 
 
 ```
 nelson.email.host = "mail.company.com"
@@ -172,27 +242,37 @@ nelson.email.host = "mail.company.com"
 
 #### email.port
 
+What port should Nelson use when talking to your SMTP email server.
+
 ```
 nelson.email.port = 9000
 ```
 
 #### email.from
 
+When Nelson sends emails about system status, what should the `From` line in the email be?
+
 ```
 nelson.email.from = "nelson@example.com"
 ```
 
-### email.user
+#### email.user
+
+If your SMTP server requires authentication, what username should be used.
 
 ```
 nelson.email.user = "someuser"
 ```
 
-#### email.password
+#### email.password
+
+If your SMTP server requires authentication, what password should be used.
 
 ```
 nelson.email.password = "somepassword"
 ```
+
+
 
 ## Github
 
