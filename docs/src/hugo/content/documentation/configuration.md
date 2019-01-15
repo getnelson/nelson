@@ -359,30 +359,34 @@ nelson.github.client-secret = "yyyyy"
 
 #### github.redirect-uri
 
+What is the fully qualified URL that Github will redirect the OAuth exchange back too. This should match the domain configured in `network.external-host` and `network.external-port`, if configured. 
+
 ```
-nelson.github.redirect-uri = "http://nelson.local/auth/exchange"
+nelson.github.redirect-uri = "https://nelson.local/auth/exchange"
 ```
 
 #### github.scope
 
+What OAuth scopes should Nelson use when interacting with Github. Read more about Github OAuth scopes [on the Github documentation site](https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). 
 
 ```
 nelson.github.scope  = "repo"
 ```
 
-#### github.access-token
-
-
-```
-nelson.github.access-token = "replaceme"
-```
-
 #### github.system-username
 
-Configure the correct 
+Configure the Github username that Nelson will conduct operations as. This is needed because some operations that Nelson does are not in the context of any human interaction. For example, when Nelson conducts a deployment, it's all happening automatically and asynchronously from any human, and thus human-user OAuth tokens. To protect privacy Nelson does not store end-user OAuth tokens, and such needs its own user to interact with your Github account.  
 
 ```
 nelson.github.system-username = "nelson"
+```
+
+#### github.access-token
+
+Configure an access token for the account specified by `system-username`.
+
+```
+nelson.github.access-token = "replaceme"
 ```
 
 ## Network
