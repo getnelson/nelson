@@ -148,8 +148,49 @@ nelson.timeout = 4 seconds
 ```
 
 ## Auditing
+
+
 ## Cleanup
 
+The `cleanup` stanza controls how Nelson evaluates and executes the automatic cleanup operations on the service and job graphs.
+
+* [cleanup.cleanup-delay](#cleanup-cleanup-delay)
+* [cleanup.extend-deployment-time-to-live](#cleanup-cleanup-delay)
+* [cleanup.initial-deployment-time-to-live](#cleanup-cleanup-delay)
+* [cleanup.sweeper-delay](#cleanup-cleanup-delay)
+
+#### cleanup.cleanup-delay
+
+Upon what cadence should Nelson process the stack topology and look for stacks that have been marked as garbage and are pending deletion. This timeout affects how quickly a stack moves from the `ready` state to the `garbage` state, and in turn how quickly items that were `garbage` actually get reaped. 
+
+```
+cleanup.cleanup-delay = 10 minutes
+```
+
+#### cleanup.extend-deployment-time-to-live
+
+When Nelson determines that a stack is still useful and is to avoid deletion, how long should that stack TTL be increased by? This parameter should be set to the longest time that you would be prepared to wait for a stack to be destroyed. Be aware that if the TTL is less than the `cleanup-delay` parameter then Nelson will find your stacks to be garbage and delete them. Change this parameter with caution and be sure to validate the behavior is what you want.
+
+```
+cleanup.extend-deployment-time-to-live = 30 minutes
+```
+
+#### cleanup.initial-deployment-time-to-live
+
+When a stack is first launched by Nelson, how much of a grace period should be given before Nelson starts to subject the stack to the typical garbage collection process? This is the maximum time that Nelson will check for readiness - once the period elapses, if the stack is not in the `ready` state it will fall subject to the garbage collection process. 
+
+```
+cleanup.initial-deployment-time-to-live = 30 minutes
+```
+
+
+#### cleanup.sweeper-delay
+
+Nelson is publishing a set of metadata about stacks to the configured routing subsystem of your choice. Cleaning the discovery / routing systems up is typically done on a slower cadence in the event that a stack needed to be redeployed or an error occurred and something needed to be recovered. The longer this period is set too, the more cruft will accumulate in your discovery / routing system (for example, Consul's KV storage).
+
+```
+cleanup.sweeper-delay = 24 hours
+```
 
 
 ## Database
