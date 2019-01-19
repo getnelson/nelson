@@ -668,11 +668,11 @@ Upon first glance, the alert block in the manifest can seem confusing. Thankfull
     </tr>
     <tr>
       <td><code>prometheus.alerts[...].alert</code></td>
-      <td>The name of the alert. This alert name is used as a key for [opt-outs](#manifest-unit-alerting-opt-out) and appears throughout the alerting system. Select a name that will make sense to you when you get paged at 3am. The alert name should be in snake case and must be unique within the unit. Valid characters are <code>[A-Za-z0-9_]</code>.</td>
+      <td>The name of the alert. This alert name is used as a key for <a href="#manifest-unit-alerting-opt-out">opt-outs</a> and appears throughout the alerting system. Select a name that will make sense to you when you get paged at 3am. The alert name should be in snake case and must be unique within the unit. Valid characters are <code>[A-Za-z0-9_]</code>.</td>
     </tr>
     <tr>
       <td><code>prometheus.alerts[...].expression</code></td>
-      <td>Prometheus expression that defines the alert rule. An alert expression always begins with `IF`. Please see the [Prometheus documentation](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) for a full discussion of the expression syntax. We impose the further constraint that all alert expressions come with at least one annotation.</code>.</td>
+      <td>Prometheus expression that defines the alert rule. An alert expression always begins with `IF`. Please see the <a href="https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules">Prometheus documentation</a> for a full discussion of the expression syntax. We impose the further constraint that all alert expressions come with at least one annotation.</code>.</td>
     </tr>
   </tbody>
 </table>
