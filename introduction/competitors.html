@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?b846c37d0b347dfd5b2673225a5d682c" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?74d0070c457cdd6abccc2fcef2cb6d6f" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?620012de79c49bdd1d67db9c1d97f450" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?02341f2c45593e6761f0d2de8c681706" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -168,7 +168,7 @@
             <h1>Competitors</h1>
 
             
-            <p>Nelson is in many ways a uniuqe system; the principles and methods used in its construction are not common in the operations domain. However, is is common for potential users to draw parrallels with other systems, and navigating the competitive space can often be difficult. The systems most commonly compared with Nelson are enumerated below a brief comparitive explanation is provided to help understand Nelson&rsquo;s value proposistion.</p>
+            <p>Nelson is in many ways a unique system; the principles and methods used in its construction are not common in the operations domain. However, it is common for potential users to draw parallels with other systems, and navigating the competitive space can often be difficult. The comparisons below help illustrate Nelson&rsquo;s value proposition.</p>
             
 
             
@@ -191,13 +191,13 @@
 
 <h2 id="spinnaker">Spinnaker</h2>
 
-<p>One of the most common systems Nelson is compared to is the <a href="https://spinnaker.io">Spinnaker project</a>. On the face of it, the systems are indeed solving similar problems. The truth is however a little more nuanced. Spinnaker was born out of Netflix as a replacement for their <a href="https://github.com/Netflix/asgard">Asguard deployment system</a>. The primary difference between Spinnaker and Nelson is that Nelson is container-first where as Spinnaker was primarily designed to operate with Netflix&rsquo;s virtual machine &ldquo;bakery&rdquo;. Whilst they have since retrofitted support for containers, the approach of the project cannot detech itself from that legacy workflow easily. Given Nelson is focused on integration with scheduling systems as its common substrate for deployment, the management of the virtual machines underlying those schedulers is out of scope. Indeed, with the prevelance of hosted scheudling systems like <a href="https://aws.amazon.com/eks/">EKS</a>, <a href="https://cloud.google.com/kubernetes-engine/">EKS</a> and <a href="https://azure.microsoft.com/en-us/services/kubernetes-service/">AKE</a>, the need for even running your own machines appears to be passing.</p>
+<p>One of the most common systems Nelson is compared to is the <a href="https://spinnaker.io">Spinnaker project</a>. On the face of it, the systems are indeed solving similar problems. The truth is however a little more nuanced. Spinnaker was born out of Netflix as a replacement for their <a href="https://github.com/Netflix/asgard">Asgard deployment system</a>. The primary difference between Spinnaker and Nelson is that Nelson is container-first whereas Spinnaker was primarily designed to operate with Netflix&rsquo;s virtual machine &ldquo;bakery&rdquo;. Whilst they have since retrofitted support for containers, the approach of the project cannot detach itself from that legacy workflow easily. Given Nelson is focused on integration with scheduling systems as its common substrate for deployment, the management of the virtual machines underlying those schedulers is out of scope. Indeed, with the prevalence of hosted scheduling systems like <a href="https://aws.amazon.com/eks/">EKS</a>, <a href="https://cloud.google.com/kubernetes-engine/">GKE</a> and <a href="https://azure.microsoft.com/en-us/services/kubernetes-service/">AKE</a>, the need for even running your own machines appears to be passing.</p>
 
-<p>Spinnaker has support for a wide range of process workflows (for example, gating deployments on manual intervention). Broadly speaking, Nelson is strongly against this from a philosophical standpoint, as such manual processes are a crutch for a lack of automation of continuous testing. Nelson by comparison provides a foundation for a robust experimentation system, where testing in production is the norm - this embraces the reality of the world we live in: ship frequently, experiment often, observe everything. The underlying intent here is that Nelson in no way perscribes how you will operate your release management; it simply provides a set of primitives.</p>
+<p>Spinnaker has support for a wide range of process workflows (for example, gating deployments on manual intervention). Broadly speaking, Nelson is strongly against this from a philosophical standpoint, as such manual processes are a crutch for a lack of automation of continuous testing. Nelson, by comparison, provides a foundation for a robust experimentation system, where testing in production is the norm - this embraces the reality of the world we live in: ship frequently, experiment often, observe everything. The underlying intent here is that Nelson in no way prescribes how you will operate your release management; it simply provides a set of primitives.</p>
 
 <h2 id="collins">Collins</h2>
 
-<p>The <a href="https://tumblr.github.io/collins/">Collins</a> configuration management system - along with other configuration management solutions - do not truley embrace immutable infrastructure. Typically these systems are focused on maintaining a static fleet of servers and evolving them over time, applying patches and so forth. This is an intrinsically different model to the one Nelson provides. Collins would be a better fit for teams that which to manage the underlying infrastructure a scheduler might run on, instead of end-user applications.</p>
+<p>The <a href="https://tumblr.github.io/collins/">Collins</a> configuration management system - along with other configuration management solutions - do not truly embrace immutable infrastructure. Typically these systems are focused on maintaining a static fleet of servers and evolving them over time, applying patches and so forth. This is an intrinsically different model to the one Nelson provides. Collins would be a better fit for teams that wish to manage the underlying infrastructure a scheduler might run on, instead of end-user applications.</p>
 
           </article>
 
@@ -216,7 +216,7 @@
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -237,9 +237,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?16524cebf6c41fa10f48f820d73f1093"></script>
+<script src="/js/material.min.js?2f585b5f347e9f6d494a34a71596f6e9"></script>
 
-<script src="/js/nelson.js?c97a16fccc8a86865209f837ce60caf2"></script>
+<script src="/js/nelson.js?1809c1747a161344d12b137851768aa5"></script>
 
 
   </body>

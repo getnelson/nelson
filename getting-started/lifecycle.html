@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?eea6e2830570ffd8728e0380740447a6" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?1e3816de34f3a2b17d899972105175fd" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?4b6bca63eaee9ed9b00f54bc2cf46ddb" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?bd8b0af3f28b2da3fdb022dd764657c8" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -168,7 +168,7 @@
             <h1>Lifecycle</h1>
 
             
-            <p>Lifecycle management - the act of autonomously managing creating and destroying applications in a runtime - is a key part of nelson&rsquo;s philosophy, and a core tenant of the system. This is document provides an overview of that functionality, and introudces the concepts.</p>
+            <p>Lifecycle management - the act of autonomously managing creating and destroying applications in a runtime - is a key part of Nelson&rsquo;s philosophy, and a core tenant of the system. This document provides an overview of that functionality, and introduces the concepts.</p>
             
 
             
@@ -244,7 +244,7 @@
 
 <p>When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternatively it might just take a while for the application to fully initialize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration <code>nelson.cleanup.initial-deployment-time-to-live</code> Knobs property.</p>
 
-<p>In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthy application cannot have traffic routed to it, and serves no useful purpose in the wider runtime.</p>
+<p>In order to understand if an application has fully warmed up or not, Nelson relies on the health check statuses in Consul to indicate what the current status of a newly deployed application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The health checks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing health checks after the initial grace window, your application will be garbage collected. An unhealthy application cannot have traffic routed to it, and serves no useful purpose in the wider runtime.</p>
 
 <p>If you expose ports, you <strong>must</strong> bind them with something. Nelson controls the cadence in which it checks stack states with Consul via the <code>nelson.readiness-delay</code>, which is intervals of 3 minutes by default.</p>
 
@@ -259,7 +259,7 @@
 
 <p>In practice the &ldquo;Evaluate Policy&rdquo; decision block is one of the following policies - which can be selected by the user. The first and most common policy is <code>retain-active</code>. This is the default for any unit that exposes one or more network ports.</p>
 
-<p>Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (<code>F 1.3</code> in the diagram) is deployed which no longer requires its previous dependency <code>G 1.0</code>, both <code>F 1.1</code> and <code>G 1.0</code> are declared unnecessary garbage, and scheduled for removal.</p>
+<p>Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (<code>F 1.3</code> in the diagram) is deployed which no longer requires its previous dependency <code>G 1.0</code>, both <code>F 1.2</code> and <code>G 1.0</code> are declared unnecessary garbage, and scheduled for removal.</p>
 
 <div class="clearing">
   <img src="/img/dependencies-upgrade.png" width="40%" />
@@ -289,9 +289,9 @@
   <small><em>Figure 2.5: retain latest two major versions</em></small>
 </div>
 
-<p>Cleanup policies in Nelson can be explored with <code>nelson system cleanup-policies</code> from the CLI. If you believe there are additional use cases not covered by the default policies, please <a href="#community">enter the community</a> and let us know what you think is missing.</p>
+<p>Cleanup policies in Nelson can be explored with <code>nelson system cleanup-policies</code> from the CLI. If you believe there are additional use cases not covered by the default policies, please <a href="https://gitter.im/getnelson/nelson">enter the community</a> and let us know what you think is missing.</p>
 
-<p>Any time Nelson executes or actions a cleanup policy - or inaction causes a state transition - it will be recorded in the <a href="#install-auditing">auditing system</a>, so you can be aware of exactly what Nelson did on your behalf.</p>
+<p>Any time Nelson executes a cleanup policy - or inaction causes a state transition - it will be recorded in the <a href="/documentation/blueprints.html#auditing">auditing system</a>, so you can be aware of exactly what Nelson did on your behalf.</p>
 
           </article>
 
@@ -310,7 +310,7 @@
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -331,9 +331,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?3e67bf2e024a48c5f10f0bfe61cb8d14"></script>
+<script src="/js/material.min.js?6232a28ac1df3a585fd6b357c5247f11"></script>
 
-<script src="/js/nelson.js?427d043f56e53ee83bb365a51d7702e9"></script>
+<script src="/js/nelson.js?cea988d92bebb46d0273c164804eac7c"></script>
 
 
   </body>

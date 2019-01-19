@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?34d173503cdeb9eba1dda3208bd9ce46" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?cb5c527f80696fa1d9feed6179cf30df" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?82190257d67d459c4110e4104e38102d" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?341b9cb856e06f1a77343ae7fdad400a" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -168,7 +168,7 @@
             <h1>Contributing</h1>
 
             
-            <p>Contributions to Nelson are very much welcome! If you&rsquo;re considering contributing to the project, feel free to swing by the <a href="https://gitter.im/getnelson/nelson">gitter chat room</a> to disucss the changes before hand (perhaps someone else is already working on your issue!). Alternitivly, please <a href="https://github.com/getnelson/nelson/issues">file an issue</a> and one of the Nelson team will endevour to get back to you as soon as possible. The sections below outline some of the conventions and useful information for Nelson developers.</p>
+            <p>Contributions to Nelson are very much welcome! If you&rsquo;re considering contributing to the project, feel free to swing by the <a href="https://gitter.im/getnelson/nelson">Gitter chat room</a> to discuss the changes beforehand (perhaps someone else is already working on your issue!). Alternatively, please <a href="https://github.com/getnelson/nelson/issues">file an issue</a> and a member of the Nelson team will endeavor to get back to you as soon as possible. The sections below outline some of the conventions and useful information for Nelson developers.</p>
             
 
             
@@ -199,18 +199,18 @@
 This guide will assume that the path to the Nelson source code on disk is denoted by <code>$NELSON_HOME</code>. Whilst this variable does not need to be literally set in your shell, the author uses this notation to avoid confusing <code>$NELSON_HOME/etc</code> with system <code>/etc</code> for example. 
 </div>
 
-<p>To boot up Nelson locally, there are a handful of items that need to be setup beforehand. First, obtain a <a href="https://github.com/settings/tokens">Personal Access Token for Github</a>. Once you have this, add it to your <code>~/.bash_profile</code> as the <code>GITHUB_TOKEN</code> environment variable - the specific permissions needed are <a href="https://getnelson.io/getting-started/install.html#using-the-cli">listed in the main install documentation</a></p>
+<p>To boot up Nelson locally, there are a handful of items that need to be setup beforehand. First, obtain a <a href="https://github.com/settings/tokens">Personal Access Token for GitHub</a> with the <a href="https://getnelson.io/getting-started/install.html#using-the-cli">following permissions</a>. Once you have this, add it to your environment with the <code>GITHUB_TOKEN</code> variable using <code>~/.bash_profile</code>, or whatever file as appropriate for your shell of choice.</p>
 
-<pre><code># the value here should be the PAT that you got from Github
+<pre><code># the value here should be the personal access token that you got from GitHub
 export GITHUB_TOKEN=&quot;XXXXXXXXXXXXXXXXXX&quot;
 </code></pre>
 
-<p>Next, add a line to your <code>/etc/hosts</code> such that you have a <code>nelson.local</code> domain pointing to your local loopback interface. This looks like:</p>
+<p>Next, add a line to <code>/etc/hosts</code> such that you have a <code>nelson.local</code> domain pointing to your local loopback interface. This looks like:</p>
 
 <pre><code>127.0.0.1 nelson.local
 </code></pre>
 
-<p>This may seem like a strange modification, but is required in order to have browsers like Chrome store cookies locally. As Nelson uses cookies for authentication, without this you won&rsquo;t actually be able to maintain an active session.</p>
+<p>This may seem like a strange modification, but it is required in order to have browsers like Chrome store cookies locally. As Nelson uses cookies for authentication, without this you won&rsquo;t actually be able to maintain an active session.</p>
 
 <p>This is the bare minimum required to run Nelson. You can then instruct Nelson to boot up by using the following command:</p>
 
@@ -220,16 +220,16 @@ export GITHUB_TOKEN=&quot;XXXXXXXXXXXXXXXXXX&quot;
 <p>Nelson will then boot up and be running on <code>http://nelson.local:9000</code>.</p>
 
 <div class="alert alert-warning" role="alert">
-    Be aware that unless you have correctly configured a development OAuth application on Github for your local Nelson, you will get rejected from any activity related to Github.
+  Be aware that unless you have correctly configured a development OAuth application on GitHub for your local Nelson, you will get rejected from any activity related to GitHub.
 </div>
 
-<p>Configuring an OAuth application for local Nelson development is covered <a href="https://getnelson.io/getting-started/install.html#authorize-with-github">in the operator guide</a> section of the documentation. Unless you are working on specific components related to interaction with Github, this should not be needed.</p>
+<p>Configuring an OAuth application for local Nelson development is covered <a href="https://getnelson.io/getting-started/install.html#authorize-with-github">in the operator guide</a> section of the documentation. Unless you are working on specific components related to interaction with GitHub, this should not be needed.</p>
 
-<p>If you need Github access locally, setup the OAuth application and then configure the following properties in <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code>:</p>
+<p>If you need GitHub access locally, setup the OAuth application and then configure the following properties in <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code>:</p>
 
 <pre><code>nelson.github.client-id = &quot;&lt;your value&gt;&quot;
 nelson.github.client-secret = &quot;&lt;your value&gt;&quot;
-# If you need github enterprise, uncomment and set the following:
+# If you need GitHub enterprise, uncomment and set the following:
 # nelson.github.domain = &quot;github.yourcompany.com&quot;
 </code></pre>
 
@@ -260,7 +260,7 @@ nelson.ui.file-path = &quot;/path/to/nelson/ui&quot;
 
 <h3 id="kubernetes">Kubernetes</h3>
 
-<p>Nelson is integrated with <a href="https://kubernetes.io">Kubernetes</a>. You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using <a href="https://kubernetes.io/docs/setup/minikube/">minikube</a>, or leverging one of the cloud-hosted solutions like <a href="https://cloud.google.com/kubernetes-engine/">GKE</a>, <a href="https://azure.microsoft.com/en-us/services/kubernetes-service/">AKE</a> or <a href="https://aws.amazon.com/eks/">EKS</a>.</p>
+<p>Nelson is integrated with <a href="https://kubernetes.io">Kubernetes</a>. You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using <a href="https://kubernetes.io/docs/setup/minikube/">minikube</a>, or leveraging one of the cloud-hosted solutions like <a href="https://cloud.google.com/kubernetes-engine/">GKE</a>, <a href="https://azure.microsoft.com/en-us/services/kubernetes-service/">AKE</a> or <a href="https://aws.amazon.com/eks/">EKS</a>.</p>
 
 <p>As Kubernetes itself has a complicated authentication story, Nelson does not try to replicate that at all, and instead simply shells out to the <code>kubectl</code> command line application, which in turn uses the Kubernetes configuration defined by <code>KUBECONFIG</code> environment variable. In short, provided your <code>kubectl</code> is operating with the cluster you wish to use with Nelson no further external setup is required.</p>
 
@@ -336,7 +336,7 @@ nelson.ui.file-path = &quot;/path/to/nelson/ui&quot;
 
 <h3 id="vault">Vault</h3>
 
-<p>Install Vault with <code>brew install vault</code>, or by downloading and installing <a href="https://www.vaultproject.io/downloads.html">here</a>. Modify the Nelson config at <code>&lt;project-dir&gt;/etc/development/http/http.dev.cfg</code>:</p>
+<p>Install Vault with <code>brew install vault</code>, or by downloading and installing <a href="https://www.vaultproject.io/downloads.html">here</a>. Modify the Nelson config at <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code>:</p>
 
 <pre><code>datacenters {
   local {
@@ -385,9 +385,9 @@ nelson.ui.file-path = &quot;/path/to/nelson/ui&quot;
 
 <h3 id="database">Database</h3>
 
-<p>Nelson&rsquo;s primary data store is a H2 database. This deliberately doesn&rsquo;t scale past a single machine, and was an intentional design choice to limit complexity in the early phases of the project. With that being said, H2 is very capable, and for most users this will work extremely well. If Nelson were reaching the point where H2 on SSD drives were a bottleneck, you would be doing many thousand of deployments a second, which is exceedingly unlikely.</p>
+<p>Nelson&rsquo;s primary data store is a H2 database. This deliberately doesn&rsquo;t scale past a single machine, and was an intentional design choice to limit complexity in the early phases of the project. With that being said, H2 is very capable, and for most users this will work extremely well. If Nelson were reaching the point where H2 on SSD drives were a bottleneck, you would be doing many thousands of deployments a second, which is exceedingly unlikely.</p>
 
-<p>If you start to contribute to Nelson, then its useful to understand the data schema, which is as follows:</p>
+<p>If you start to contribute to Nelson, then it’s useful to understand the data schema, which is as follows:</p>
 
 <div class="clearing">
   <img src="/img/erd.png" width="100%" />
@@ -398,7 +398,7 @@ nelson.ui.file-path = &quot;/path/to/nelson/ui&quot;
 <h3 id="known-issues">Known Issues</h3>
 
 <ol>
-<li><p>Upon receiving notification of a release event on Github, Nelson converts this to events published to its internal event stream (called <code>Pipeline</code>). <code>Pipeline</code> and messages on it, are not durable. If Nelson is processing a message (or has messages queued because of contention or existing backpressure), and an outage / upgrade or any reason that causes a halt to the JVM process, will loose said messages.</p></li>
+<li><p>Upon receiving notification of a release event on GitHub, Nelson converts this to events published to its internal event stream (called <code>Pipeline</code>). <code>Pipeline</code> and messages on it, are not durable. If Nelson is processing a message (or has messages queued because of contention or existing backpressure) and an outage / upgrade, or any issue that causes a halt to the JVM process, occurs, there will be message loss.</p></li>
 
 <li><p>Nelson does not have a high-availability data store. As mentioned in the database section, this is typically not a problem, but should be a consideration. In the future, the authors may consider upgrading Nelson so it can cluster, but the expectation is that scaling-up will be more cost-effective than scaling-out for most users. Nelson will currently eat up several thousand deployments a minute, which is larger than most organizations will ever reach.</p></li>
 </ol>
@@ -412,7 +412,7 @@ nelson.ui.file-path = &quot;/path/to/nelson/ui&quot;
 <pre><code>nelson login --disable-tls nelson.local:9000
 </code></pre>
 
-<p>It&rsquo;s important to note that to use the API locally, a change to the development config at <code>&lt;project-dir&gt;/etc/development/http/http.dev.cfg</code> is needed. Add the following line inside the <code>nelson.github</code> config:</p>
+<p>It&rsquo;s important to note that to use the API locally, a change to the development config at <code>$NELSON_HOME/etc/development/http/http.dev.cfg</code> is needed. Add the following line inside the <code>nelson.github</code> config:</p>
 
 <pre><code>organization-admins = [ &quot;&lt;your-github-handle-here&gt;&quot; ]
 </code></pre>
@@ -430,13 +430,13 @@ nelson.ui.file-path = &quot;/path/to/nelson/ui&quot;
 <pre><code>sbt docs/previewSite
 </code></pre>
 
-<p>This will open your default web browser with the documentation site, which is handy for locally viewing the docs. It does however <em>not</em> support dynamic reloading of pages when the source changes. Luckily this is supported by Hugo, and can easily be run with a script locally:</p>
+<p>This will open your default web browser with the documentation site, which is handy for locally viewing the docs. It does, however, <em>not</em> support dynamic reloading of pages when the source changes. Luckily this is supported by Hugo, and can easily be run with a script locally:</p>
 
 <pre><code>cd docs/src/hugo
 hugo server -w -b 127.0.0.1 -p 4000
 </code></pre>
 
-<p>Hugo will automatically refresh the page when the source files are changed, which can be very helpful when one is itterating on the documentation site over time.</p>
+<p>Hugo will automatically refresh the page when the source files are changed, which can be very helpful when one is iterating on the documentation site over time.</p>
 
           </article>
 
@@ -455,7 +455,7 @@ hugo server -w -b 127.0.0.1 -p 4000
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -476,9 +476,9 @@ hugo server -w -b 127.0.0.1 -p 4000
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?4a794e7690f64fb3f4b2b459d456b108"></script>
+<script src="/js/material.min.js?aa5cd48defdc10bbd4f207d8e6cc36f8"></script>
 
-<script src="/js/nelson.js?b88a5784590d224b0dd01e91815d3063"></script>
+<script src="/js/nelson.js?38719cd0169fc6e3f0d71a7ab680760d"></script>
 
 
   </body>

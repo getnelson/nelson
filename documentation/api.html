@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?9d1e8d77e495ce01b46d7e6e665a21b2" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?cd3f52e2fe0396b4a29b94a76282eeaf" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?9198d47660ea2afe7614cbfce88d2c9f" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?e0ba411b81cca06a6e81ecbfed94c6a6" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -222,9 +222,9 @@
 <pre><code>curl -H Cookie: nelson.session=XXXXXXXXXXXXXXXXXXXXXXXXXXXX https://your.domain.com/v1/
 </code></pre>
 
-<p>The cookie can be obtained via two of methods. The typical user path will be via the OAuth workflow, authenticating with the backend Github endpoint (Github Enterprise or github.com). In this case, the browser automatically collects the token and stores it in the browser cache.</p>
+<p>The cookie can be obtained via two of methods. The typical user path will be via the OAuth workflow, authenticating with the backend GitHub endpoint (GitHub Enterprise or github.com). In this case, the browser automatically collects the token and stores it in the browser cache.</p>
 
-<p>For programatic API access, the user needs to supply a Github <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/">personal access token</a> to Nelson, which will then be exchanged for a Nelson security token.</p>
+<p>For programmatic API access, the user needs to supply a GitHub <a href="https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/">personal access token</a> to Nelson, which will then be exchanged for a Nelson security token.</p>
 
 <pre><code>POST /auth/github
 </code></pre>
@@ -241,7 +241,7 @@
     <tr>
       <td><code>access_token</code></td>
       <td><code>string</code></td>
-      <td>The personal access token obtained from the aforementioned Github instance</td>
+      <td>The personal access token obtained from the aforementioned GitHub instance.</td>
     </tr>
   </tbody>
 </table>
@@ -257,7 +257,7 @@
 <pre><code>User-Agent: NelsonCLI/1.0
 </code></pre>
 
-<p>If you provide an invalid or restricted User-Agent header, you will recieve a <code>403 Forbidden</code> response.</p>
+<p>If you provide an invalid or restricted User-Agent header, you will receive a <code>403 Forbidden</code> response.</p>
 
 <h3 id="api-overview-errors" class="linkable">
   Error Reporting
@@ -283,7 +283,7 @@
     </tr>
     <tr>
       <td><code>415 Unsupported Media Type</code></td>
-      <td>Returned if a request did not send an acceptable media type.Requests with a JSON body should send a <code>Content-Type: application/json</code> header.
+      <td>Returned if a request did not send an acceptable media type. Requests with a JSON body should send a <code>Content-Type: application/json</code> header.
       <br />
       <br />
       <pre><code>{"message":"No media type specified in Content-Type header. Expected one of the following media ranges: application/json"}</code></pre>
@@ -291,7 +291,7 @@
     </tr>
     <tr>
       <td><code>422 Unprocessable Entity</code></td>
-      <td>Returned if a request body could be parsed, but not decoded, due to a missing or mistyped field.  The error returns a <code>message</code> and a <code>cursor_history</code> field from the JSON decoder.  This response is for a request that's missing an `access_token`:
+      <td>Returned if a request body could be parsed, but not decoded, due to a missing or mistyped field.  The error returns a <code>message</code> and a <code>cursor_history</code> field from the JSON decoder.  This response is for a request that's missing an <code>access_token</code>:
       <br />
       <br />
       <pre><code>{
@@ -328,7 +328,7 @@
 <pre><code>GET /v1/audit
 </code></pre>
 
-<h5>Paramaters</h5>
+<h5>Parameters</h5>
 
 <table class="table">
   <thead>
@@ -344,19 +344,19 @@
       <td><code>release_id</code></td>
       <td><code>int</code></td>
       <td>No</td>
-      <td>The release ID that you specifically want to fetch audit events for</td>
+      <td>The release ID that you specifically want to fetch audit events for.</td>
     </tr>
     <tr>
       <td><code>limit</code></td>
       <td><code>int</code></td>
       <td>No</td>
-      <td>The maximum number of events to return in a given response</td>
+      <td>The maximum number of events to return in a given response.</td>
     </tr>
     <tr>
       <td><code>offset</code></td>
       <td><code>int</code></td>
       <td>No</td>
-      <td>Where to start reading events from in the audit stream</td>
+      <td>Where to start reading events from in the audit stream.</td>
     </tr>
   </tbody>
 </table>
@@ -454,7 +454,7 @@
       <td><code>namespaces</code></td>
       <td><code>array[string]</code></td>
       <td>Yes</td>
-      <td>A list of namespace labels</td>
+      <td>A list of namespace labels.</td>
     </tr>
   </tbody>
 </table>
@@ -489,7 +489,7 @@
   List Load Balancers
 </h3>
 
-<p>Listing the available load balancers in a given namespace displays all the associated routes for that load balancers, and optionally (depending on the load balancer backend in use), the externally accessible URL.</p>
+<p>Listing the available load balancers in a given namespace displays all the associated routes for that load balancers, and optionally, depending on the load balancer backend in use, the externally accessible URL.</p>
 
 <pre><code>GET /v1/loadbalancers
 </code></pre>
@@ -599,7 +599,7 @@ This API is only available to Nelson administrators.
   Sync User Profile
 </h3>
 
-<p><code>POST</code>ing to this URL will result in Nelson fetching the latest list of repositories from Github and updating this users permission set. Typically this API is used by the user-interface, but might need to be called when a new repository was created that the user wishes to enable deployment for.</p>
+<p><code>POST</code>ing to this URL will result in Nelson fetching the latest list of repositories from GitHub and updating this user’s permission set. Typically, this API is used by the user-interface, but might need to be called when a new repository was created that the user wishes to enable deployment for.</p>
 
 <pre><code>POST /v1/profile/sync
 </code></pre>
@@ -608,7 +608,7 @@ This API is only available to Nelson administrators.
   Lint Manifest
 </h3>
 
-<p>The service can verify if a supplied manifest is valid or not (e.g. if the dependencies specified in the file dont exist, validation will fail).</p>
+<p>The service can verify if a supplied manifest is valid or not (e.g. if the dependencies specified in the file don’t exist, validation will fail).</p>
 
 <pre><code>POST /v1/lint
 </code></pre>
@@ -629,13 +629,13 @@ This API is only available to Nelson administrators.
       <td><code>units</code></td>
       <td><code>array</code></td>
       <td>Yes</td>
-      <td>List of informational objects about the available units</td>
+      <td>List of informational objects about the available units.</td>
     </tr>
     <tr>
       <td><code>manifest</code></td>
       <td><code>string</code></td>
       <td>Yes</td>
-      <td>Base64 encoded string representation of the .nelson.yml file</td>
+      <td>Base64 encoded string representation of the .nelson.yml file.</td>
     </tr>
   </tbody>
 </table>
@@ -659,7 +659,7 @@ This API is only available to Nelson administrators.
   Lint Template
 </h3>
 
-<p>The service can verify if a supplied Consul template will render or not in the container.  A template is uploaded with the name of its unit and a set of resources.  The template is rendered with a vault token appropriate to the unit and resources, along with all the <code>NELSON_</code> environment variables. If the template renders successfully, a successful status is returned.  If the template can&rsquo;t be rendered, the errors are displayed so the developer can fix them before deploying the unit.</p>
+<p>The service can verify if a supplied Consul template will render or not in the container.  A template is uploaded with the name of its unit and a set of resources.  The template is rendered with a Vault token appropriate to the unit and resources, along with all the <code>NELSON_</code> environment variables. If the template renders successfully, a successful status is returned.  If the template can&rsquo;t be rendered, the errors are displayed so the developer can fix them before deploying the unit.</p>
 
 <pre><code>POST /v1/validate-template
 </code></pre>
@@ -692,7 +692,7 @@ This API is only available to Nelson administrators.
       <td><code>template</code></td>
       <td><code>string</code></td>
       <td>Yes</td>
-      <td>Base64 encoded string representation of the template to render</td>
+      <td>Base64 encoded string representation of the template to render.</td>
     </tr>
   </tbody>
 </table>
@@ -722,7 +722,7 @@ This API is only available to Nelson administrators.
   List Cleanup Policies
 </h3>
 
-<p>List the available cleanup policies available in this instance of Nelson</p>
+<p>List the available cleanup policies available in this instance of Nelson.</p>
 
 <pre><code>GET /v1/cleanup-policies
 </code></pre>
@@ -760,7 +760,7 @@ GET /v1/repos?owner=tim
 GET /v1/repos?state=active
 </code></pre>
 
-<h5>Paramaters</h5>
+<h5>Parameters</h5>
 
 <table class="table">
   <thead>
@@ -776,13 +776,13 @@ GET /v1/repos?state=active
       <td><code>owner</code></td>
       <td><code>string</code></td>
       <td>No</td>
-      <td>List only repositories with the specified owner</td>
+      <td>List only repositories with the specified owner.</td>
     </tr>
     <tr>
-      <td><code>manifest</code></td>
+      <td><code>state</code></td>
       <td><code>string</code></td>
-      <td>state</td>
-      <td>List only repositories with the specified state; options are: <code>active</code></td>
+      <td>No</td>
+      <td>List only repositories with the specified state; options are: <code>active</code>.</td>
     </tr>
   </tbody>
 </table>
@@ -887,6 +887,7 @@ GET /v1/repos?state=active
   <li><a href="#api-stacks-inspect">Inspect Stack</a></li>
   <li><a href="#api-stacks-create-manual">Create Manually</a></li>
   <li><a href="#api-stacks-redeploy">Redeploy</a></li>
+  <li><a href="#api-stacks-reverse">Reverse Traffic Shift</a></li>
   <li><a href="#api-stacks-logs">Inspect Logs</a></li>
 </ol>
 
@@ -897,7 +898,7 @@ GET /v1/repos?state=active
 <pre><code>GET /v1/deployments
 </code></pre>
 
-<h5>Paramaters</h5>
+<h5>Parameters</h5>
 
 <table class="table">
   <thead>
@@ -913,25 +914,25 @@ GET /v1/repos?state=active
       <td><code>namespace</code></td>
       <td><code>string[,string,...]</code></td>
       <td>Yes</td>
-      <td>Comma delimited set of namespace(s) you want to list deployments for</td>
+      <td>Comma delimited set of namespaces you want to list deployments for.</td>
     </tr>
     <tr>
       <td><code>status</code></td>
       <td><code>string[,string,...]</code></td>
       <td>No</td>
-      <td>Comma delimited set of <code>status</code> values (e.g. <code>active</code>,<code>deploying</code>)</td>
+      <td>Comma delimited set of <code>status</code> values (e.g. <code>active</code>,<code>deploying</code>).</td>
     </tr>
     <tr>
       <td><code>dc</code></td>
       <td><code>string[,string,...]</code></td>
       <td>No</td>
-      <td>Comma delimited set of datacenter names the result set include</td>
+      <td>Comma delimited set of datacenter names the result set include.</td>
     </tr>
     <tr>
       <td><code>unit</code></td>
       <td><code>string</code></td>
       <td>No</td>
-      <td>Unit name</td>
+      <td>Unit name.</td>
     </tr>
   </tbody>
 </table>
@@ -1086,16 +1087,16 @@ This API is only available to Nelson administrators.
   Redeploy
 </h3>
 
-<p>Sometimes it is necessary to redeploy an exist stack. In this event, simply <code>POST</code> an empty body to the following API:</p>
+<p>Sometimes it is necessary to redeploy an existing stack. In this event, simply <code>POST</code> an empty body to the following API:</p>
 
 <pre><code>POST /v1/deployments/:guid/redeploy
 </code></pre>
 
 <h3 id="api-stacks-reverse" class="linkable">
-  Redeploy
+  Reverse Traffic Shift
 </h3>
 
-<p>Sometimes it is necessary to reverse and in progress traffic shift. In this event, simply <code>POST</code> an empty body to the following API:</p>
+<p>Sometimes it is necessary to reverse an in-progress traffic shift. In this event, simply <code>POST</code> an empty body to the following API:</p>
 
 <pre><code>POST /v1/deployments/:guid/trafficshift/reverse
 </code></pre>
@@ -1104,7 +1105,7 @@ This API is only available to Nelson administrators.
   Inspect Logs
 </h3>
 
-<p>Collect the entire log of workflow execution as Nelson processed it, for a given stack deployment. The workflow log allows the caller to see exactly what Nelson did on the users behalf, without requiring access to the Nelson server. The response includes every log line, and an <code>offset</code> that allows the caller to only receive a subset of the log output.</p>
+<p>Collect the entire log of workflow execution as Nelson processed it, for a given stack deployment. The workflow log allows the caller to see exactly what Nelson did on the user’s behalf, without requiring access to the Nelson server. The response includes every log line and an <code>offset</code> that allows the caller to only receive a subset of the log output.</p>
 
 <pre><code>GET /v1/deployments/:guid/logs
 </code></pre>
@@ -1128,8 +1129,6 @@ This API is only available to Nelson administrators.
 
 <h2 id="units">Units</h2>
 
-<p>Units blah blah blah blah blah blah blah blah blah blah blah</p>
-
 <ol>
   <li><a href="#api-units-list">List Units</a></li>
   <li><a href="#api-units-commit">Commit Units</a></li>
@@ -1147,7 +1146,7 @@ This API is only available to Nelson administrators.
   Commit Units
 </h3>
 
-<p>Commits a <code>unit@version</code> combination to a target namespace. See <a href="#manifest-namespace-sequencing">Committing</a> for more.</p>
+<p>Commits a <code>unit@version</code> combination to a target namespace. See <a href="/documentation/cli.html#commit">committing</a> for more.</p>
 
 <pre><code>POST /v1/units/commit
 
@@ -1170,11 +1169,11 @@ This API is only available to Nelson administrators.
 <h2 id="webhooks">Webhooks</h2>
 
 <ol>
-  <li><a href="#api-webhooks-github">Github Listener</a></li>
+  <li><a href="#api-webhooks-github">GitHub Listener</a></li>
 </ol>
 
 <h3 id="api-webhooks-github" class="linkable">
-  Github Listener
+  GitHub Listener
 </h3>
 
 <pre><code>POST /listener
@@ -1197,7 +1196,7 @@ This API is only available to Nelson administrators.
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -1218,9 +1217,9 @@ This API is only available to Nelson administrators.
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?62d2b379db42bf71993a1f34ba781ff3"></script>
+<script src="/js/material.min.js?50b093e8f9267857540913bacef02f32"></script>
 
-<script src="/js/nelson.js?54dea9708cced621bf99b9553ffb67d0"></script>
+<script src="/js/nelson.js?68cf4e24e022ef53143a522177128e91"></script>
 
 
   </body>

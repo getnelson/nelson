@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?a66be487396f279bf6183f9af00706cd" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?5bf73d38a0a7209ea4dcd24869283ea4" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?9e41898c89183a7ba8412f199e2c22a3" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?291d4192505ad1802af0fa8ab8f3ca70" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -168,7 +168,7 @@
             <h1>Operator Guide</h1>
 
             
-            <p>The Nelson team has tried to ensure that the on-going operator burden of the system is as minimal as possible. To achive this, we have front-loaded some of the operator complexity and it is important to read through this documentation understand the operational trade-offs that have been made.</p>
+            <p>The Nelson team has tried to ensure that the on-going operator burden of the system is as minimal as possible. To achieve this, we have front-loaded some of the operator complexity and it is important to read through this documentation to understand the operational trade-offs that have been made.</p>
             
 
             <nav id="TableOfContents">
@@ -189,16 +189,16 @@
 
 <h2 id="failure-domains">Failure Domains</h2>
 
-<p>To run Nelson you will need access to a target datacenter. One can consider this logical datacenter - in practice - to be a <a href="https://en.wikipedia.org/wiki/Failure_domain">failure domain</a>. Every system should be redundant within the domain, but isolated from other datacenters. Typically Nelson requires the datacenter to be setup with a few key services before it can effectively be used. Imagine the setup with the following components:</p>
+<p>To run Nelson, you will need access to a target datacenter. One can consider this logical datacenter - in practice - to be a <a href="https://en.wikipedia.org/wiki/Failure_domain">failure domain</a>. Every system should be redundant within the domain, but isolated from other datacenters. Typically, Nelson requires the datacenter to be setup with a few key services before it can be used effectively. Imagine the setup with the following components:</p>
 
 <div class="clearing">
   <img src="/img/atomic-datacenter.png" />
   <small><em>Figure 1.0: failure domain</em></small>
 </div>
 
-<p>Logically, Nelson sits outside one of its target datacenters. This could mean it lives at your office next to your Github, or it might actually reside in one of the target datacenters itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to <code>pull</code> images whilst deploying containers to the cluster, whilst the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.</p>
+<p>Logically, Nelson sits outside one of its target datacenters. This could mean it lives at your office next to your GitHub, or it might actually reside in one of the target datacenters itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime Docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to <code>pull</code> images whilst deploying containers to the cluster, while the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.</p>
 
-<p>Whatever you choose, the rest of this operators guide will assume that you have configured one or more logical datacenters. If you don&rsquo;t want to setup a <em>real</em> datacenter, <a href="https://github.com/timperrett/hashpi">see the authors Github</a> about how to setup a <a href="https://www.raspberrypi.org/">Raspberry PI</a> cluster which can serve as your datacenter.</p>
+<p>Whatever you choose, the rest of this operator&rsquo;s guide will assume that you have configured one or more logical datacenters. If you don&rsquo;t want to setup a <em>real</em> datacenter, <a href="https://github.com/timperrett/hashpi">see the authors GitHub</a> about how to setup a <a href="https://www.raspberrypi.org/">Raspberry PI</a> cluster which can serve as your datacenter.</p>
 
 <h2 id="name-resolution">Name Resolution</h2>
 
@@ -209,9 +209,11 @@
 <li><code>profile--6-3-1--Jd5gv2xq.service.massachusetts.yourtld.com</code></li>
 </ul>
 
-<p>In these two examples, the <a href="#user-guide-terminology">stack name</a> has been prefixed to <code>.service.&lt;datacenter&gt;.&lt;top-level-doamin&gt;</code>. Whilst the author heartily recommends you <a href="https://www.consul.io/docs/guides/forwarding.html">read the consul documentation</a> on setting up DNS forwarding, but assuming you have that available and your DNS records do the right delegation you should be able to reference your stacks by a simple DNS convention. The domain that Nelson chooses to use as the TLD for domains is specified by <code>NELSON_DOMAIN</code> when <a href="#install-launching">launching</a> the Nelson container.</p>
+<p>In these two examples, the <a href="/getting-started/index.html">stack name</a> has been prefixed to <code>.service.&lt;datacenter&gt;.&lt;top-level-domain&gt;</code>. <code>top-level-domain</code>, in this case, is defined by <code>NELSON_DOMAIN</code> when launching the Nelson container.</p>
 
-<p>Regardless of how ugly the exploded stack names look with their double dashes, this is unfortunately one of the very few schemes that meets the domain name RFC whilst also still enabling users to leverage externally rooted certificate material if needed (the key part here being that your TLD must match the domain you actually own, in order for an externally rooted CA to issue a certificate to you for that domain). As an operator, you could decide that you did not want to use externally rooted material, and perhaps use a scheme like <code>&lt;stack&gt;.service.&lt;dc&gt;.local</code>. This would also work, provided the <code>local</code> TLD was resolvable for all parties (again, this is not recommended, but would work if you wanted / needed it too).</p>
+<p>It is recommended that the operator read the <a href="https://www.consul.io/docs/guides/forwarding.html">Consul documentation</a> as it provides a guide to setup DNS forwarding as well as the aforementioned naming convention. Assuming the user&rsquo;s environment is setup properly, you should be able to reference your stacks using the CNAME records above.</p>
+
+<p>Regardless of how ugly the exploded stack names look with their double dashes, this is unfortunately one of the very few schemes that meets the domain name RFC whilst also still enabling users to leverage externally rooted certificate material if needed (the key part here being that your TLD must match the domain you actually own, in order for an externally rooted CA to issue a certificate to you for that domain). As an operator, you could decide that you do not want to use externally rooted material, and perhaps use a scheme like <code>&lt;stack&gt;.service.&lt;dc&gt;.local</code>. This would also work, provided the <code>local</code> TLD was resolvable for all parties (again, this is not recommended, but would work if you wanted / needed it to).</p>
 
 <h2 id="manual-deployments">Manual Deployments</h2>
 
@@ -227,12 +229,12 @@
   --port 2181
 </code></pre>
 
-<p>In this example, the <code>zookeeper</code> stack was deployed outside of the Nelson-supported scheduler. It is common for such coordination and persistent systems to be deployed outside a dynamic scheduling environment as they are typically very sensitive to network partitions, rebalancing and loss of a cluster member. All that is needed is to simply tell Nelson about the particulars and be aware of the following items when using manual deployments:</p>
+<p>In this example, the <code>zookeeper</code> stack was deployed outside of the Nelson-supported scheduler. It is common for such coordination and persistent systems to be deployed outside a dynamic scheduling environment as they are typically very sensitive to network partitions, rebalancing, and loss of a cluster member. All that is needed is to simply tell Nelson about the particulars and be aware of the following items when using manual deployments:</p>
 
 <ul>
-<li><p>The system in question is part of the Consul mesh and has implemented <a href="#install-dc-dns">DNS setup as mentioned earlier</a>. This typically means the systems will be running Consul agent, configured to talk to the Consul server in that datacenter / domain.</p></li>
+<li><p>The system in question is part of the Consul mesh and has implemented DNS setup as mentioned earlier. This typically means the systems will be running a Consul agent configured to talk to the Consul server in that datacenter / domain.</p></li>
 
-<li><p>Nelson will never care about the current state of the target system being added as a manual deployment. It is expected the systems outside of Nelson are monitored and managed out of band. If an operator decides to cleanup the stack that Nelson was informed about, the operator <strong>must</strong> be sure to run <code>nelson stack deprecate &lt;guid&gt;</code> of the manual deployment so that Nelson will remove it from the currently operational stack list.</p></li>
+<li><p>Nelson will never care about the current state of the target system being added as a manual deployment. It is expected the systems outside of Nelson are monitored and managed out of band. If an operator decides to clean up the stack that Nelson was informed about, the operator <strong>must</strong> be sure to run <code>nelson stack deprecate &lt;guid&gt;</code> of the manual deployment so that Nelson will remove it from the currently operational stack list.</p></li>
 
 <li><p>Any system that was <strong>deployed with Nelson</strong> should never be added as a manual deployment. This is unnecessary as Nelson is already maintaining its internal routing graph dynamically.</p></li>
 </ul>
@@ -241,7 +243,7 @@
 
 <h2 id="administering-vault">Administering Vault</h2>
 
-<p>In order to provide user applications with credentials at runtime, a member of the operations staff must provision a backend in <a href="https://www.vaultproject.io/">Vault</a>. This can either by one of the provided secret backends which generate credentials dynamically, or a generic backend for an arbitrary credential blob. Nelson is using the following convention regarding how it resolves credential paths, from a <code>root</code> of your choosing. The following example assumes <code>myorg</code> is the <code>root</code>:</p>
+<p>In order to provide user applications with credentials at runtime, a member of the operations staff must provision a backend in <a href="https://www.vaultproject.io/">Vault</a>. This can either be one of the provided secret backends which generate credentials dynamically, or a generic backend for an arbitrary credential blob. Nelson is using the following convention regarding how it resolves credential paths, from a <code>root</code> of your choosing. The following example assumes <code>myorg</code> is the <code>root</code>:</p>
 
 <pre><code>myorg/&lt;namespace&gt;/&lt;resource&gt;/creds/&lt;unitName&gt;
 </code></pre>
@@ -250,8 +252,8 @@
 
 <ul>
 <li><code>&lt;namespace&gt;</code>: one of <code>dev</code>, <code>qa</code>, <code>prod</code>.</li>
-<li><code>&lt;resource&gt;</code>: the name of a resource, like <code>mysql</code></li>
-<li><code>&lt;unitName&gt;</code>: the name of the unit being deployed, for example <code>howdy-http</code></li>
+<li><code>&lt;resource&gt;</code>: the name of a resource, like <code>mysql</code>.</li>
+<li><code>&lt;unitName&gt;</code>: the name of the unit being deployed, for example <code>howdy-http</code>.</li>
 </ul>
 
 <p>If a unit does not have access to a resource within a given namespace, the secret will not exist.  All secrets at these paths can be expected to contain fields named <code>username</code> and <code>password</code>. Extended properties depend on the type of <a href="https://www.vaultproject.io/docs/auth/index.html">auth backend</a> holding the secret, so as an operations team member you have a responsibility to ensure that the credentials you are providing are needed, and to engage security team advice if you are not certain about access requirements.</p>
@@ -269,12 +271,12 @@
 <ul>
 <li><p><code>acmeco/prod/s3-prod-somebucket</code> - including the namespace name as part of the resource identifier makes it impossible for users to generically write consul-templates against the Vault path.</p></li>
 
-<li><p><code>acmeco/prod/s3-prod-somebucket-california</code> - in addition to the namespace, including a datacenter specific identifier again makes templating problematic, as it breaks Nelson&rsquo;s deploy target transparency&hellip; instead, user a generic path that can have a valid value in all datacenters.</p></li>
+<li><p><code>acmeco/prod/s3-prod-somebucket-california</code> - in addition to the namespace, including a datacenter specific identifier again makes templating problematic, as it breaks Nelson&rsquo;s deploy target transparency. Instead, use a generic path that can have a valid value in all datacenters.</p></li>
 
-<li><p><code>foobar/dev/accounts-db /</code> - the trailing slash causes issues both in Vault and Nelson</p></li>
+<li><p><code>foobar/dev/accounts-db /</code> - the trailing slash causes issues both in Vault and Nelson.</p></li>
 </ul>
 
-<p>In order to obtain the credentials in your container runtime, it is typically expected that users will leverage <a href="https://github.com/hashicorp/consul-template">consul-template</a> to render their credentials. Consul Template has built in support for extracting credentials from Vault, so the amount of user-facing integration work is very minimal.</p>
+<p>In order to obtain the credentials in your container runtime, it is typically expected that users will leverage <a href="https://github.com/hashicorp/consul-template">consul-template</a> to render their credentials. Consul Template has built-in support for extracting credentials from Vault, so the amount of user-facing integration work is very minimal.</p>
 
           </article>
 
@@ -293,7 +295,7 @@
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -314,9 +316,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?e7544978be7ed2d43a3378c34f1837be"></script>
+<script src="/js/material.min.js?402731192b53aca43bdb0ea7211297d8"></script>
 
-<script src="/js/nelson.js?054faa3907c4e4cd9bac9a1cbf3e8b63"></script>
+<script src="/js/nelson.js?32d07dfdd13a1f65f1ba77453c89cd1e"></script>
 
 
   </body>

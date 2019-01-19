@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?39b9e6a978fea9b30a5752ce98363d02" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?1322fdfff6011b2f9b94a7595893a104" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?4aa42a7d12a2149fc4fbc71a2c04f474" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?5c4ca1bc38374335b0a9b33196523213" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -168,7 +168,7 @@
             <h1>Architecture</h1>
 
             
-            <p>Nelson is unlike many systems presently available in the market, and its architecture is discretely composable, and indeed, composability is an explicit design goal of the Nelson team. In practice this means that - unlikle other monolithic systems - Nelson lets you bring your own CI, bring your own scheduler, bring your own credential management and so on.</p>
+            <p>Nelson is unlike many systems presently available in the market, and its architecture is discretely composable, and indeed, composability is an explicit design goal of the Nelson team. In practice this means that - unlike other monolithic systems - Nelson lets you bring your own CI, bring your own scheduler, bring your own credential management and so on.</p>
             
 
             <nav id="TableOfContents">
@@ -185,7 +185,7 @@
 
             
 
-<p>With any new system, it is often useful to get a sense for how data is moving around the system, and the trade offs a given system is making. The following sections cover a few of these design choices.</p>
+<p>With any new system, it is often useful to get a sense for how data is moving around the system, and the tradeoffs a given system is making. The following sections cover a few of these design choices.</p>
 
 <h1 id="data-flow">Data Flow</h1>
 
@@ -196,7 +196,7 @@
   <small><em>Workflow overview</em></small>
 </div>
 
-<p>There are a range of automated steps at every phase of the build and release pipeline; only the most minimal metadata is needed in the resulting Github Deployment to conduct a deployment. Nelson is agnostic to what language your application is built with or how it is tooled. You are free to integrate however you prefer, but we provide some tools to make doing so easy. For more information on CI integration, please see the <a href="/getting-started/deployables.html">section on Deployables</a>.</p>
+<p>There are a range of automated steps at every phase of the build and release pipeline; only the most minimal metadata is needed in the resulting GitHub Deployment to conduct a deployment. Nelson is agnostic to what language your application is built with or how it is tooled. You are free to integrate however you prefer, but we provide some tools to make doing so easy. For more information on CI integration, please see the <a href="/getting-started/deployables.html">section on Deployables</a>.</p>
 
 <h1 id="domain-redundancy">Domain Redundancy</h1>
 
@@ -207,9 +207,9 @@
   <small><em>Failure domain</em></small>
 </div>
 
-<p>Logically, Nelson typically sits outside one of its target datacenters. This could mean it lives at your office next to your Github, or it might actually reside in one of the target datacenters itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to <code>pull</code> images whilst deploying containers to the cluster, whilst the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.</p>
+<p>Logically, Nelson typically sits outside one of its target datacenters. This could mean it lives at your office next to your GitHub, or it might actually reside in one of the target datacenters itself. This is an operational choice that you would make, and provided Nelson has network line of sight to these key services, you can put it wherever you like. With that being said, it is recommended that your stage and runtime docker registries be different, as the performance characteristics of the runtime and staging registries are quite different. Specifically, the runtime registry receives many requests to <code>pull</code> images whilst deploying containers to the cluster, whilst the staging registry largely has mass-writes from your build system. Keeping these separate ensures that either side of that interaction does not fail the other.</p>
 
-<p>Whatever you choose, the rest of this operators guide will assume that you have configured one or more logical datacenters. If you don&rsquo;t want to setup a <em>real</em> datacenter, <a href="https://github.com/timperrett/hashpi">see Timothy Perrett&rsquo;s Github</a> to learn how to setup a <a href="https://www.raspberrypi.org/">Raspberry PI</a> cluster which can serve as your &ldquo;datacenter&rdquo; target.</p>
+<p>Whatever you choose, the rest of this operator’s guide will assume that you have configured one or more logical datacenters. If you don&rsquo;t want to setup a <em>real</em> datacenter, <a href="https://github.com/timperrett/hashpi">see Timothy Perrett&rsquo;s GitHub</a> to learn how to setup a <a href="https://www.raspberrypi.org/">Raspberry PI</a> cluster which can serve as your &ldquo;datacenter&rdquo; target.</p>
 
 <h1 id="availability">Availability</h1>
 
@@ -224,19 +224,19 @@
   <small><em>Security Workflow</em></small>
 </div>
 
-<p>When Nelson recieves the inbound release webhook (<span style="color:red; font-weight: bold">A</span> and <span style="color:red; font-weight: bold">B</span>), the deployment workflow starts executing. From here, Nelson will generate the following:</p>
+<p>When Nelson receives the inbound release webhook (<span style="color: red; font-weight: bold">A</span> and <span style="color: red; font-weight: bold">B</span>), the deployment workflow starts executing. From here, Nelson will generate the following:</p>
 
 <ul>
-<li><p><span style="color:red; font-weight: bold">C</span> stack-specific policy that defines what secret paths can be read from the secure Vault storage system. This policy is <em>unique</em> and includes only the items that the stack needs to access - attempting to access anything else will be denied.</p></li>
+<li><p><span style="color: red; font-weight: bold">C</span> stack-specific policy that defines what secret paths can be read from the secure Vault storage system. This policy is <em>unique</em> and includes only the items that the stack needs to access - attempting to access anything else will be denied.</p></li>
 
-<li><p><span style="color:red; font-weight: bold">D</span> Next, Nelson provisions a dynamic &ldquo;auth role&rdquo; for the schuedler in question. This &ldquo;role&rdquo; is later used at runtime as a part of the container identification / secure introduction workflow (read more about this on the <a href="https://www.vaultproject.io/docs/concepts/auth.html">Vault documentation site</a>).</p></li>
+<li><p><span style="color: red; font-weight: bold">D</span> Next, Nelson provisions a dynamic &ldquo;auth role&rdquo; for the scheduler in question. This &ldquo;role&rdquo; is later used at runtime as a part of the container identification / secure introduction workflow (read more about this on the <a href="https://www.vaultproject.io/docs/concepts/auth.html">Vault documentation site</a>).</p></li>
 
-<li><p><span style="color:red; font-weight: bold">E</span> After these items are provisioned Neslon will go ahead and launch the stack on the configured scheudler, which at runtime will then reach out to Vault and authenticate as the stack-specific role that was provisioned in steps <span style="color:red; font-weight: bold">C</span> and <span style="color:red; font-weight: bold">D</span>.</p></li>
+<li><p><span style="color: red; font-weight: bold">E</span> After these items are provisioned Nelson will go ahead and launch the stack on the configured scheduler, which at runtime will then reach out to Vault and authenticate as the stack-specific role that was provisioned in steps <span style="color: red; font-weight: bold">C</span> and <span style="color: red; font-weight: bold">D</span>.</p></li>
 </ul>
 
-<p>This may seem like quite a number of steps, but establishing trust in runtime systems is intrinsically very difficult (how do you get credentials, to get credentials?). With this frame, Nelson adopts an approach such that it can assume the absolute minimum possible privileges for any given stack container. Better still, if the resource you&rsquo;re accessing (i.e. the secret material you are using) is from one of Vault&rsquo;s <a href="https://www.vaultproject.io/intro/getting-started/dynamic-secrets.html">supported dynamic secret backends</a> - for example, <a href="https://aws.amazon.com/iam/">AWS IAM</a> - then whilst every stack is logically partioned from every other, within that stack every single container (be it a single container or thousands of replicas) will all have entirely unique credentials. This reduces the attack surface area to an exceedingly small window: if a container gets compromised, the attacker has the time from when they gain access to the time when you notice its been compromised, and redeploy the container - said attacker would not gain anything in perpetuity and would have to start their hack all over again.</p>
+<p>This may seem like quite a number of steps, but establishing trust in runtime systems is intrinsically very difficult (how do you get credentials, to get credentials?). With this frame, Nelson adopts an approach such that it can assume the absolute minimum possible privileges for any given stack container. Better still, if the resource you&rsquo;re accessing (i.e. the secret material you are using) is from one of Vault&rsquo;s <a href="https://www.vaultproject.io/intro/getting-started/dynamic-secrets.html">supported dynamic secret backends</a> - for example, <a href="https://aws.amazon.com/iam/">AWS IAM</a> - then whilst every stack is logically partitioned from every other, within that stack every single container (be it a single container or thousands of replicas) will all have entirely unique credentials. This reduces the attack surface area to an exceedingly small window: if a container gets compromised, the attacker has the time from when they gain access to the time when you notice it’s been compromised and redeploy the container - said attacker would not gain anything in perpetuity and would have to start their hack all over again.</p>
 
-<p>One can even extend this further, and build a zero-trust network by having every container use dynamically generated <a href="https://en.wikipedia.org/wiki/Mutual_authentication">mTLS</a> certificates, funneling all traffic via a service mesh like <a href="https://www.envoyproxy.io/">Envoy</a>. This means that the users application can be &ldquo;dumb&rdquo; and make plaintext TCP connections, whilst the on-wire traffic is transparently encrypted with certificates that are container-unique.</p>
+<p>One can even extend this further and build a zero-trust network by having every container use dynamically generated <a href="https://en.wikipedia.org/wiki/Mutual_authentication">mTLS</a> certificates, funneling all traffic via a service mesh like <a href="https://www.envoyproxy.io/">Envoy</a>. This means that the user’s application can be &ldquo;dumb&rdquo; and make plaintext TCP connections, whilst the on-wire traffic is transparently encrypted with certificates that are container-unique.</p>
 
 <h1 id="next-steps">Next Steps</h1>
 
@@ -262,7 +262,7 @@
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -283,9 +283,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?4d147953280b586aed17d76214a4d0b0"></script>
+<script src="/js/material.min.js?6eabb9973c812749dfff003247604a95"></script>
 
-<script src="/js/nelson.js?288fc341919cce2db5dba96e255f51db"></script>
+<script src="/js/nelson.js?626855f46492b0e51088bd1a3e3b489f"></script>
 
 
   </body>

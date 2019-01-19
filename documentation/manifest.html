@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?85d41902da058ef73bd2c6ee281d6586" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?18a596245559d100614e564c8b0567b7" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?581025bd401a73cf4890f968896f3535" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?5530a19f8f984a27508590e8eaa3e67a" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -168,7 +168,7 @@
             <h1>Manifest Settings</h1>
 
             
-            <p>The manifest is the primary method to control parameters about your deployment: what it should be called, how big it should be, where it should be deployed too etc etc.</p>
+            <p>The manifest is the primary method to control parameters about your deployment: what it should be called, how big it should be, where it should be deployed to etc.</p>
             
 
             
@@ -199,7 +199,7 @@
 
 <h2 id="datacenters">Datacenters</h2>
 
-<p>Given that not all resources may be available in all datacenters, <em>Nelson</em> understands that you may at times want to be picky about which particular datacenters you deploy your <em>units</em> into. With this in mind, <em>Nelson</em> supplies the ability to whitelist and blacklist certain datacenters.</p>
+<p>Given that not all resources may be available in all datacenters, Nelson understands that you may at times want to be picky about which particular datacenters you deploy your <em>units</em> into. With this in mind, Nelson supplies the ability to whitelist and blacklist certain datacenters.</p>
 
 <pre><code>datacenters:
   only:
@@ -214,11 +214,11 @@
     - seattle
 </code></pre>
 
-<p>Using the <code>except</code> keyword forms a blacklist, meaning that this deployment would deploy everywhere <code>except</code> in seattle. The common use case for this would be that <code>seattle</code> had not upgraded to a particular bit of platform infrastructure etc.</p>
+<p>Using the <code>except</code> keyword forms a blacklist, meaning that this deployment would deploy everywhere <code>except</code> in <code>seattle</code>. The common use case for this would be that <code>seattle</code> had not been upgraded to a particular bit of platform infrastructure etc.</p>
 
 <h2 id="load-balancers">Load Balancers</h2>
 
-<p>Load balancers are another top-level manifest declaration. For an overview of the LB functionality, see the <a href="index.html#user-guide-lbs">usage guide</a>. LBs are first declared logically, with the following block:</p>
+<p>Load balancers are another top-level manifest declaration. For an overview of the LB functionality, see the <a href="/getting-started/routing.html#load-balancers">routing page</a>. LBs are first declared logically, with the following block:</p>
 
 <pre><code>loadbalancers:
   - name: foo-lb
@@ -231,7 +231,7 @@
         destination: foobar-&gt;monitoring
 </code></pre>
 
-<p>Next - just like units - you need to declare a <a href="#manifest-plans">plan</a> in order to specify size and scale of the LB. Plans are discussed in-depth <a href="#manifest-plans">later in this reference</a>, but here&rsquo;s an example for completeness:</p>
+<p>Next - just like units - you need to declare a <a href="#plans">plan</a> in order to specify size and scale of the LB. Plans are discussed in-depth <a href="#plans">later in this reference</a>, but here&rsquo;s an example for completeness:</p>
 
 <pre><code>- name: lb-plan
   instances:
@@ -248,7 +248,7 @@
   Committing
 </h3>
 
-<p>During a release event each unit will only be deployed into the default namespace (this is usually <code>dev</code>). After the initial release the unit can be deployed into other namespaces by &ldquo;committing&rdquo; it. This can be done via the <a href="#api-units-commit">commit endpoint of the API</a>, or <a href="#cli-unit-commit"><code>nelson unit commit</code> in the CLI</a>.</p>
+<p>During a release event each unit will only be deployed into the default namespace (this is usually <code>dev</code>). After the initial release the unit can be deployed into other namespaces by &ldquo;committing&rdquo; it. This can be done via the <a href="/documentation/api.html#api-units-commit">commit endpoint of the API</a>, or <a href="/documentation/cli.html#commit"><code>nelson unit commit</code> in the CLI</a>.</p>
 
 <p>In an ideal world, whatever system you use for testing or validation, the user would integrate with the Nelson API so that applications can be automatically committed from namespace to namespace.</p>
 
@@ -287,7 +287,7 @@ namespaces:
           - prod-plan
 </code></pre>
 
-<p>This example defines two plans: <code>dev-plan</code> and <code>prod-plan</code>. The fact that the words <code>dev</code> and <code>prod</code> are in the name is inconsequential, they could have been <code>plan-a</code> and <code>plan-b</code>. Notice that under the namespace stanza each unit references a plan, this forms a contract between the unit, namespace, and plan. The example above can be expanded into the following deployments: the <code>foobar</code> unit deployed in the <code>dev</code> namespace using the <code>dev-plan</code>, and the <code>foobar</code> unit deployed in the <code>production</code> namespace using the <code>prod-plan</code></p>
+<p>This example defines two plans: <code>dev-plan</code> and <code>prod-plan</code>. The fact that the words <code>dev</code> and <code>prod</code> are in the name is inconsequential, they could have been <code>plan-a</code> and <code>plan-b</code>. Notice that under the <code>namespaces</code> stanza each unit references a plan, this forms a contract between the unit, namespace, and plan. The example above can be expanded into the following deployments: the <code>foobar</code> unit deployed in the <code>dev</code> namespace using the <code>dev-plan</code>, and the <code>foobar</code> unit deployed in the <code>production</code> namespace using the <code>prod-plan</code></p>
 
 <p>As a quick note the <code>memory</code> field is expressed in megabytes, and the <code>cpu</code> field is expressed in number of cores (where 1.0 would equate to full usage of one CPU core, and 2.0 would require full usage of two cores). If no resources are specified Nelson will default to 0.5 CPU and 512 MB of memory.</p>
 
@@ -309,7 +309,7 @@ namespaces:
   Deployment Matrix
 </h3>
 
-<p>In order to provide experimenting with different deployment configurations Nelson allows a unit to reference multiple plans for a single namespace. Think of it as a deployment matrix with the form: units x plans. Use cases range from providing different environment variables (for S3 paths) to cpu / memory requirements. In the example below, the unit <code>foobar</code> will be deployed twice in the dev namespace, once with <code>dev-plan-a</code> and once with <code>dev-plan-b</code>.</p>
+<p>In order to provide experimenting with different deployment configurations, Nelson allows a unit to reference multiple plans for a single namespace. Think of it as a deployment matrix with the form: units x plans. Use cases range from providing different environment variables (for S3 paths) to cpu / memory requirements. In the example below, the unit <code>foobar</code> will be deployed twice in the <code>dev</code> namespace, once with <code>dev-plan-a</code> and once with <code>dev-plan-b</code>.</p>
 
 <pre><code>plans:
   - name: dev-plan-a
@@ -337,7 +337,7 @@ namespaces:
   Environment Variables
 </h3>
 
-<p>Given that every unit is deployed as a container, it is highly likely that configuration may need to be tweaked for deployment into each environment. For example, in the <code>dev</code> namespace, you might want a <code>DEBUG</code> logging level, but in the <code>production</code> namespace you might want only want <code>ERROR</code> level logging. To give a concrete example, lets consider the popular logging library <a href="http://logback.qos.ch/">Logback</a>, and a configuration snippet:</p>
+<p>Given that every unit is deployed as a container, it is highly likely that configuration may need to be tweaked for deployment into each environment. For example, in the <code>dev</code> namespace, you might want a <code>DEBUG</code> logging level, but in the <code>production</code> namespace you might only want <code>ERROR</code> level logging. To give a concrete example, let&rsquo;s consider the popular logging library <a href="http://logback.qos.ch/">Logback</a>, and a configuration snippet:</p>
 
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;included&gt;
@@ -345,7 +345,7 @@ namespaces:
 &lt;/included&gt;
 </code></pre>
 
-<p>In order to customize this log level on a per-namespace basis, one only needs to specify the environment variables in the unit specification of the namespace. Here&rsquo;s an example:</p>
+<p>In order to customize this log level on a per-namespace basis, one only needs to specify the environment variables under <code>plans</code>. Here&rsquo;s an example:</p>
 
 <pre><code>plans:
   - name: dev-plan
@@ -360,7 +360,7 @@ namespaces:
           - dev-plan
 </code></pre>
 
-<p>The <code>.nelson.yml</code> allows you to specify a dictionary of environment variables, so you can add as many as your application needs. <strong>Never, ever add credentials using this mechanism</strong>. Credentials or otherwise secret information should not be checked into your source repository in plain text. For information on credential handling, see <a href="index.html#user-guide-credentials">the credentials section of the user guide</a>.</p>
+<p>The <code>.nelson.yml</code> allows you to specify a dictionary of environment variables, so you can add as many as your application needs. <strong>Never, ever add credentials using this mechanism</strong>. Credentials or otherwise secret information should not be checked into your source repository in plain text.</p>
 
 <h3 id="manifest-plan-health-checks" class="linkable">
   Scaling
@@ -376,7 +376,7 @@ namespaces:
       desired: 1
 </code></pre>
 
-<p>At the time of writing <em>Nelson</em> does not support auto-scaling. Instead, Nelson relies on &ldquo;overprovisioned&rdquo; applications and cost savings in a converged infrastructure where the scheduling sub-systems know how to handle over-subscription.</p>
+<p>At the time of writing Nelson does not support auto-scaling. Instead, Nelson relies on &ldquo;overprovisioned&rdquo; applications and cost savings in a converged infrastructure where the scheduling sub-systems know how to handle over-subscription.</p>
 
 <h3 id="manifest-plan-health-checks" class="linkable">
   Health Checks
@@ -410,7 +410,7 @@ namespaces:
        - dev-plan
 </code></pre>
 
-<p>In this example, foobar service&rsquo;s <code>default</code> port will have an http health check that queries the path <code>/v1/status</code> every 2 seconds in the dev namespace. Below is an explanation of each field in the <code>health_checks</code> stanza:</p>
+<p>In this example, the <code>default</code> port for the <code>foobar</code> service will have a http health check that queries the path <code>/v1/status</code> every 2 seconds in the <code>dev</code> namespace. Below is an explanation of each field in the <code>health_checks</code> stanza:</p>
 
 <table class="table table-striped">
   <thead>
@@ -422,11 +422,11 @@ namespaces:
   <tbody>
     <tr>
       <td><code>name</code></td>
-      <td>A alphanumeric string that identifies the health check, it can contain alphanumeric characters and hyphens.</td>
+      <td>An alphanumeric string that identifies the health check, it can contain alphanumeric characters and hyphens.</td>
     </tr>
     <tr>
       <td><code>port_reference</code></td>
-      <td>Specifies the port reference which the service is running. This must match up with the port label defined in the ports stanza of units.</td>
+      <td>Specifies the port reference which the service is running. This must match up with the port label defined in the <code>ports</code> stanza of `units`.</td>
     </tr>
     <tr>
       <td><code>protocol</code></td>
@@ -442,7 +442,7 @@ namespaces:
     </tr>
     <tr>
       <td><code>interval</code></td>
-      <td>Specifies the frequency that Consul will preform the health check. It is specified like: "10 seconds".</td>
+      <td>Specifies the frequency that Consul will perform the health check. It is specified like: "10 seconds".</td>
     </tr>
   </tbody>
 </table>
@@ -451,10 +451,10 @@ namespaces:
   Traffic Shifting
 </h3>
 
-<p>Nelson has the ability to split traffic between two deployments when a new deployment is replacing and older one. A
+<p>Nelson has the ability to split traffic between two deployments when a new deployment is replacing an older one. A
 traffic shift is defined in terms of a traffic shift policy and a duration. A traffic shift policy defines a function
 which calculates the percentage of traffic the older and newer deployments should receive given the current moment in time.
-As time progresses the weights change and Nelson updates the values for the older and newer deployments. It should be
+As time progresses, the weights change and Nelson updates the values for the older and newer deployments. It should be
 noted that it does not make sense to define a traffic shifting policy for a unit that is run periodically, i.e. define a
 <code>schedule</code>. Nelson will return a validation error if a traffic shifting policy is defined for such a unit.</p>
 
@@ -463,8 +463,8 @@ traffic from the older version to the newer version linearly over the duration o
 shifts traffic all at once to the newer version.</p>
 
 <p>Traffic shifts are defined on a <code>plan</code> as it is desirable to use different policies for different namespaces. For
-example in the <code>dev</code> namepsace one might want to define a <code>linear</code> policy with duration of 5 minutes, while in <code>prod</code>
-the duration is 1 hour.</p>
+example in the <code>dev</code> namespace one might want to define an <code>atomic</code> policy with a duration of 5 minutes, while in <code>prod</code>
+the duration is 1 hour with a <code>linear</code> policy.</p>
 
 <p>Below is an example of using traffic shifting:</p>
 
@@ -501,20 +501,20 @@ namespaces:
 
 <p>Finally, Nelson provides a mechanism to reverse a traffic shift if it is observed that the newer version of the
 deployment is undesirable. Once a traffic shift reverse is issued, Nelson will begin to shift traffic back to the
-older deployed as defined by the traffic shifting policy. The reverse will shift traffic backwards until 100% is
+older deployment as defined by the traffic shifting policy. The reverse will shift traffic backwards until 100% is
 being routed to the older deployment. Once this happens the newer deployment will no longer receive traffic and will be
 eventually cleaned up by nelson. No other intervention is needed by the user after a reverse is issued.</p>
 
 <h2 id="notifications">Notifications</h2>
 
-<p>Nelson can notify you about your deployment results via slack and/or email. Notifications are sent for a deployment when:</p>
+<p>Nelson can notify you about your deployment results via Slack and/or email. Notifications are sent for a deployment when:</p>
 
 <ul>
 <li>a deployment has successfully completed or failed</li>
 <li>a deployment has been decommissioned</li>
 </ul>
 
-<p>The following is a simple example that configure both email and slack notifications:</p>
+<p>The following is a simple example that configures both email and Slack notifications:</p>
 
 <pre><code>notifications:
   email:
@@ -529,13 +529,13 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
 
 <h2 id="units">Units</h2>
 
-<p>A &ldquo;unit&rdquo; is a generic, atomic item of work that Nelson will attempt to push through one of its workflows (more on workflows later). Any given Unit represents something that can be deployed as a container, but that has distinct parameters and requirements.</p>
+<p>A &ldquo;unit&rdquo; is a generic, atomic item of work that Nelson will attempt to push through one of its <a href="#manifest-unit-workflows">workflows</a>. Any given Unit represents something that can be deployed as a container with distinct parameters and requirements.</p>
 
 <h3 id="manifest-unit-ports" class="linkable">
   Ports
 </h3>
 
-<p>Units can be run either as a long-running process (service) or periodically (job). While services are meant to be long running processes, jobs are either something that needs to be run on a re-occurring schedule, or something that needs to be run once and forgotten about. Jobs are essentially the opposite of long-lived services; they are inherently short-lived, batch-style workloads.</p>
+<p>Units can be run either as a long-running process (service) or periodically (job). While services are meant to be long running processes, jobs are either something that needs to be run on a recurring schedule, or something that needs to be run once and forgotten about. Jobs are essentially the opposite of long-lived services; they are inherently short-lived, batch-style workloads.</p>
 
 <p>Units that are meant to be long running typically expose a TCP port. A minimal example of a unit that exposes a port would be:</p>
 
@@ -545,9 +545,9 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
     - default-&gt;8080/http
 </code></pre>
 
-<p>This represents a single service, that exposes HTTP on port <code>8080</code>. When declaring ports, the primary application port that is used for routing application traffic must be referred to as <code>default</code>. You can happily expose multiple ports, but only the <code>default</code> port will be used for automatic routing within the wider system. Any subsystem that wishes to use a non-default port can happily do so, but must handle any associated concerns. For example, one might expose a <code>monitoring</code> port that a specialized scheduler could call to collect metrics.</p>
+<p>This represents a single service, that exposes HTTP on port <code>8080</code>. When declaring ports, the primary application port that is used for routing application traffic must be referred to as <code>default</code>. You can happily expose multiple ports, but only the <code>default</code> port will be used for automatic routing within the wider system. Any subsystem that wishes to use a non-default port can do so, but must handle any associated concerns. For example, one might expose a <code>monitoring</code> port that a specialized scheduler could call to collect metrics.</p>
 
-<p>For completeness, here&rsquo;s a more complete example of a service unit that can be used in your <code>.nelson.yml</code>:</p>
+<p>For completeness, here&rsquo;s an example of a service unit that can be used in your <code>.nelson.yml</code>:</p>
 
 <pre><code>- name: foobar
   description: description of foobar
@@ -560,14 +560,14 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
     - ref: db-example@1.0
 </code></pre>
 
-<p>The <code>ports</code> dictionary items must follow a very specific structure - this is how nelson expresses relationships in ports. Let&rsquo;s break down the structure:</p>
+<p>The <code>ports</code> dictionary items must follow a very specific structure - this is how Nelson expresses relationships in ports. Let&rsquo;s break down the structure:</p>
 
 <div class="clearing">
   <img src="/img/port-syntax.png" />
   <small><em>Figure 2.3.1: port definition syntax</em></small>
 </div>
 
-<p>It&rsquo;s fairly straight forward syntactically, but lets clarify some of the semantics:</p>
+<p>It&rsquo;s fairly straight forward syntactically, but let&rsquo;s clarify some of the semantics:</p>
 
 <table class="table table-striped">
   <thead>
@@ -583,7 +583,7 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
     </tr>
     <tr>
       <td><code>port&nbsp;number</code></td>
-      <td>Actual port number that the container has <a href="https://docs.docker.com/engine/reference/builder/#/expose">EXPOSE</a>'d at build time.</td>
+      <td>Actual port number that the container has <a href="https://docs.docker.com/engine/reference/builder/#expose">EXPOSE</a>'d at build time.</td>
     </tr>
     <tr>
       <td><code>protocol</code></td>
@@ -596,7 +596,7 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
   Dependencies
 </h3>
 
-<p>For most units to be useful, it is very common to require another sub-system to successfully operate, and <em>Nelson</em> encodes this concept as <code>dependencies</code>. Dependencies need to be declared in the unit definition as a logical requirement:</p>
+<p>For most units to be useful, it is very common to require another sub-system to successfully operate, and Nelson encodes this concept as <code>dependencies</code>. Dependencies need to be declared in the unit definition as a logical requirement:</p>
 
 <pre><code>- name: foobar-service
   description: description of foobar
@@ -606,15 +606,15 @@ eventually cleaned up by nelson. No other intervention is needed by the user aft
     - ref: inventory@1.4
 </code></pre>
 
-<p>The unit name of the dependency can typically be discovered using the <em>Nelson</em> CLI command <code>nelson units list</code>, which will display the logical dependencies available in the specified datacenter. If you declare a dependency on a system, it <strong>must</strong> exist in every namespace you are attempting to deploy into; in the event this is not the case, <em>Nelson</em> will fail to validate your manifest definition.</p>
+<p>The unit name of the dependency can typically be discovered using the Nelson CLI command <code>nelson units list</code>, which will display the logical dependencies available in the specified datacenter. If you declare a dependency on a system, it <strong>must</strong> exist in every namespace you are attempting to deploy into; in the event this is not the case, Nelson will fail to validate your manifest definition.</p>
 
-<p>Having multiple dependencies is common: typically a service or job might depend on a datastore, message queue or another service. Once declared in <em>Nelson</em> as a dependency, the appropriate Lighthouse data will also be pushed to the datacenter, which enables the user to dynamically resolve their dependencies within whatever datacenter the application was deployed into.</p>
+<p>Having multiple dependencies is common: typically a service or job might depend on a datastore, message queue or another service. Once declared in Nelson as a dependency, the appropriate Lighthouse data will also be pushed to the datacenter, which enables the user to dynamically resolve their dependencies within whatever datacenter the application was deployed into.</p>
 
 <h3 id="manifest-unit-resources" class="linkable">
   Resources
 </h3>
 
-<p>In addition to depending on internal elements like databases and message queues, any given units can also depend on external services (such as Amazon S3, Google search etc) and are declared under the resources stanza. What makes <code>resources</code> different to <code>dependencies</code> is that they are explicitly global to the caller. Regardless of where you visit <a href="https://www.google.com">google.com</a> from, you always access the same service from the callers perspective - the fact that <a href="https://www.google.com">google.com</a> is globally distributed and co-located in many edge datacenters is entirely opaque.</p>
+<p>In addition to depending on internal elements like databases and message queues, any given units can also depend on external services (such as Amazon S3, Google search etc.) and are declared under the <code>resources</code> stanza. What makes <code>resources</code> different to <code>dependencies</code> is that they are explicitly global to the caller. Regardless of where you visit <a href="https://www.google.com">google.com</a> from, you always access the same service from the caller&rsquo;s perspective - the fact that <a href="https://www.google.com">google.com</a> is globally distributed and co-located in many edge datacenters is entirely opaque.</p>
 
 <div class="alert alert-warning" role="alert">
   It is critical that as a user, you only leverage the <code>resources</code> block for external services. If the feature is abused for internal runtime systems, multi-region and data-locality will simply not work, and system QoS cannot be ensured.
@@ -632,7 +632,7 @@ provisioning is needed (i.e. S3).</p>
       description: image storage
 </code></pre>
 
-<p>All resources must define a uri associated with it. Because a uri can be different between namespaces it is defined under the plans stanze. A use case for this is using a different bucket between qa and dev.</p>
+<p>All resources must define a uri associated with it. Because a uri can be different between namespaces it is defined under the <code>plans</code> stanza. For example, one might use one S3 bucket for <code>qa</code> and another for <code>dev</code>.</p>
 
 <pre><code>plans:
   - name: dev
@@ -651,7 +651,7 @@ provisioning is needed (i.e. S3).</p>
   Schedules
 </h3>
 
-<p>Units that are meant to be run periodically define a <code>schedule</code> under the plans stanza. They can also optionally declare <code>ports</code> and <code>dependencies</code>. The example below will be run daily in dev and hourly in prod.</p>
+<p>Units that are meant to be run periodically define a <code>schedule</code> under the <code>plans</code> stanza. They can also optionally declare <code>ports</code> and <code>dependencies</code>. The example below will be run daily in <code>dev</code> and hourly in <code>prod</code>.</p>
 
 <pre><code>units:
   - name: foobar-batch
@@ -663,7 +663,7 @@ plans:
   - name: dev
     schedule: daily
 
-  - mame: prod
+  - name: prod
     schedule: hourly
 
 namespaces:
@@ -673,7 +673,7 @@ namespaces:
     plans:
        - dev-plan
 
-  - name: dev
+  - name: prod
     units:
       - ref: foobar-batch
     plans:
@@ -691,7 +691,7 @@ namespaces:
 <p>The value <code>once</code> is a special case and indicates that the job will only be run once. If more control over a job&rsquo;s schedule is needed the <code>schedule</code> field can be defined directly with any valid cron expression.</p>
 
 <pre><code>plans:
-  - mame: dev
+  - name: dev
     schedule: &quot;*/30 * * * *&quot;
 </code></pre>
 
@@ -701,15 +701,17 @@ namespaces:
   Workflows
 </h3>
 
-<p>Workflows are a core concept in <em>Nelson</em>: they represent the sequence of actions that should be conducted for a single deployment <code>unit</code>. Whilst users cannot define their own workflows in an arbitrary fashion, each and every <code>unit</code> has the chance to reference an alternative workflow by its name. However, at the time of this writing there is only a single workflow (referenced as <code>magnetar</code>) for all <code>units</code>. The <code>magnetar</code> workflow first replicates the the required container to the target datacenter, and then attempts to launch the <code>unit</code> using the datacenters pre-configured scheduler. Broadly speaking this should be sufficient for the majority of deployable units.</p>
+<p>Workflows are a core concept in Nelson: they represent the sequence of actions that should be conducted for a single deployment <code>unit</code>. Whilst users cannot define their own workflows in an arbitrary fashion, each and every <code>unit</code> has the chance to reference an alternative workflow by its name. The <code>magnetar</code> workflow first replicates the required container to the target datacenter, and then attempts to launch the <code>unit</code> using the datacenters pre-configured scheduler. Broadly speaking this should be sufficient for the majority of deployable units.</p>
 
-<p>If users require a specialized workflow, please contact the <em>Nelson</em> team to discuss your requirements.</p>
+<p>Additionally, there are the <code>canopus</code> and <code>pulsar</code> workflows. The <code>canopus</code> workflow simply deploys and deletes units. Vault and traffic shifting support is not yet supported. The <code>pulsar</code> workflow also deploys and deletes units, but has additional support for provisioning authentication roles in Vault for use by Kubernetes pods at runtime.</p>
+
+<p>If users require a specialized workflow, please contact the Nelson team to discuss your requirements.</p>
 
 <h3 id="manifest-unit-expiration-policies" class="linkable">
   Expiration Policies
 </h3>
 
-<p>Nelson manages the entire deployment lifecycle including cleanup. Deployment cleanup is triggered via the deployments expiration date which is managed by the <code>expiration_policy</code> field in the plans stanza. The <code>expiration_policy</code> defines rules about when a deployment can be decommissioned. Below is a list of available expiration policies:</p>
+<p>Nelson manages the entire deployment lifecycle including cleanup. Deployment cleanup is triggered via the deployments expiration date which is managed by the <code>expiration_policy</code> field in the <code>plans</code> stanza. The <code>expiration_policy</code> field defines rules about when a deployment can be decommissioned. Below is a list of available expiration policies:</p>
 
 <table class="table table-striped">
   <thead>
@@ -721,24 +723,24 @@ namespaces:
   <tbody>
     <tr>
       <td><code>retain-active</code></td>
-      <td>Retain active is the default expiration policy for services. It retains all versions with an active incoming dependency</td>
+      <td>Retain active is the default expiration policy for services. It retains all versions with an active incoming dependency.</td>
     </tr>
     <tr>
       <td><code>retain-latest</code></td>
-      <td>Retain latest is the default expiration policy for jobs. It retains the latest version</td>
+      <td>Retain latest is the default expiration policy for jobs. It retains the latest version.</td>
     </tr>
     <tr>
       <td><code>retain-latest-two-major</code></td>
-      <td>Retain latest two major is an alternative policy for jobs. It retains latest two major versions, i.e. 2.X.X and 1.X.X</td>
+      <td>Retain latest two major is an alternative policy for jobs. It retains latest two major versions, i.e. 2.X.X and 1.X.X.</td>
     </tr>
     <tr>
       <td><code>retain-latest-two-feature</code></td>
-      <td>Retain latest two feature is an alternative policy for jobs. It retains the latest two feature versions, i.e. 2.3.X and 2.2.X</td>
+      <td>Retain latest two feature is an alternative policy for jobs. It retains the latest two feature versions, i.e. 2.3.X and 2.2.X.</td>
     </tr>
   </tbody>
 </table>
 
-<p>Nelson does not support manual cleanup, by design. All deployed stacks exist on borrowed time, and will (eventually) expire. If you do not explicitly choose an expiration policy (this is common), then Nelson will apply some sane defaults, as described in the preceding table.</p>
+<p>Nelson does not support manual cleanup, by design. All deployed stacks exist on borrowed time, and will eventually expire. If you do not explicitly choose an expiration policy (this is common), then Nelson will apply some sane defaults, as described in the preceding table.</p>
 
 <h3 id="manifest-unit-meta" class="linkable">
   Meta Tags
@@ -756,7 +758,7 @@ namespaces:
   - buzzfiz
 </code></pre>
 
-<p>Meta tags may not be longer than 14 characters in length and can only use characters that are acceptable in a DNS name.</p>
+<p>Meta tags may not be longer than 14 characters in length and can only use characters that are acceptable in a <a href="https://en.wikipedia.org/wiki/Domain_name#Technical_requirements_and_process">DNS name</a>.</p>
 
 <h3 id="manifest-unit-alerting" class="linkable">
   Alerting
@@ -764,7 +766,7 @@ namespaces:
 
 <p>Alerting is defined per unit, and then deployed for each stack that is created for that unit. Nelson is not tied to a particular alerting system, and as with the integrations with the cluster managers, Nelson can support integration with multiple monitoring and alerting backends. At the time of writing, Nelson only supports <a href="https://prometheus.io/">Prometheus</a> as a first-class citizen. This is a popular monitoring and alerting tool, with good throughput performance that should scale for the majority of use cases.</p>
 
-<p>From a design perspective, Nelson is decoupled from the actual runtime, and is not in the &ldquo;hot path&rdquo; for alerting. Instead, Nelson acts as a facilitator and will write out the specified alerting rules to keys in the Consul for the datacenter in question. In turn, it is expected that the operators have setup <a href="https://github.com/hashicorp/consul-template">consul-template</a> (or similar) to respond to the update of the relevant keys, and write out the appropriate configuration file. In this way, Nelson delegates the actual communication / implementation of how the rules are ingested to datacenter operations.</p>
+<p>From a design perspective, Nelson is decoupled from the actual runtime, and is not in the &ldquo;hot path&rdquo; for alerting. Instead, Nelson acts as a facilitator and will write out the specified alerting rules to keys in Consul for the datacenter in question. In turn, it is expected that the operators have setup <a href="https://github.com/hashicorp/consul-template">consul-template</a> (or similar) to respond to the update of the relevant keys, and write out the appropriate configuration file. In this way, Nelson delegates the actual communication / implementation of how the rules are ingested to datacenter operations.</p>
 
 <p>The following conventions are observed when dealing with alerts:</p>
 
@@ -802,13 +804,13 @@ units:
 
 <p>The observant reader will notice the <code>alerting.prometheus</code> dictionary that has been added. When using the support for Prometheus, Nelson allows you to specify the native Prometheus alert definition syntax inline with the rest of your manifest. You can use any valid Prometheus alert syntax, and the alert definitions will be automatically validated using the Prometheus binary before being accepted by Nelson.</p>
 
-<p>Whilst the alerting support directly exposes an underlying integration to the user-facing manifest API, we made the choice to expose the complete power of the underlying alerting system, simply because the use cases for monitoring are extremely varied, and having Nelson attempt to &ldquo;translate&rdquo; arbitrary syntax for a third-party monitoring system seem tedious and low value. We&rsquo;re happy with this trade off overall as organization change their monitoring infrastructure infrequently, so whilst its a &ldquo;moving target&rdquo; over time, it is slow moving.</p>
+<p>Whilst the alerting support directly exposes an underlying integration to the user-facing manifest API, we made the choice to expose the complete power of the underlying alerting system, simply because the use cases for monitoring are extremely varied, and having Nelson attempt to &ldquo;translate&rdquo; arbitrary syntax for a third-party monitoring system seems tedious and low value. We&rsquo;re happy with this trade off overall as organizations change their monitoring infrastructure infrequently, so whilst it&rsquo;s a &ldquo;moving target&rdquo; over time, it is slow moving.</p>
 
 <h4 id="manifest-unit-alerting-syntax">
   Alert Syntax
 </h4>
 
-<p>Upon first glace, the alert block in the manifest can seem confusing. Thankfully, there are only three sections a user needs to care about. The table below outlines the alert definitions.</p>
+<p>Upon first glance, the alert block in the manifest can seem confusing. Thankfully, there are only three sections a user needs to care about. The table below outlines the alert definitions.</p>
 
 <table class="table table-striped">
   <thead>
@@ -824,11 +826,11 @@ units:
     </tr>
     <tr>
       <td><code>prometheus.alerts[...].alert</code></td>
-      <td>The name of the alert. This alert name is used as a key for <a href="#alert-opt-outs">opt-outs</a> and appears throughout the alerting system. Select a name that will make sense to you when you get paged at 3am. The alert name should be in snake case, and must be unique within the unit. Valid characters are <code>[A-Za-z0-9_]</code>.</td>
+      <td>The name of the alert. This alert name is used as a key for [opt-outs](#manifest-unit-alerting-opt-out) and appears throughout the alerting system. Select a name that will make sense to you when you get paged at 3am. The alert name should be in snake case and must be unique within the unit. Valid characters are <code>[A-Za-z0-9_]</code>.</td>
     </tr>
     <tr>
       <td><code>prometheus.alerts[...].expression</code></td>
-      <td>Prometheus expression that defines the alert rule. An alert expression always begins with `IF`. Please see the <a href="https://prometheus.io/docs/alerting/rules/">Prometheus documentation</a> for a full discussion of the expression syntax. We impose the further constraint that all alert expressions come with at least one annotation.</code>.</td>
+      <td>Prometheus expression that defines the alert rule. An alert expression always begins with `IF`. Please see the [Prometheus documentation](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) for a full discussion of the expression syntax. We impose the further constraint that all alert expressions come with at least one annotation.</code>.</td>
     </tr>
   </tbody>
 </table>
@@ -837,7 +839,7 @@ units:
   Rule Syntax
 </h4>
 
-<p>In addition to specification of alerts, the manifest also allows for the specification of Prometheus rules. See the <a href="https://prometheus.io/docs/querying/rules/#recording-rules">Prometheus documentation on recording rules</a> for a discussion on the differences between alerts and recording rules.</p>
+<p>In addition to specification of alerts, the manifest also allows for the specification of Prometheus rules. See the Prometheus documentation on recording rules for a discussion on the differences between <a href="https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/">alerts</a> and <a href="https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/">recording rules</a>.</p>
 
 <table class="table table-striped">
   <thead>
@@ -866,7 +868,7 @@ units:
   Opting Out
 </h4>
 
-<p>A good alert is an actionable alert.  In some cases, an alert may not be actionable in a given namespace.  A development team might know that quirks in test data in the qa namespace result in high request latencies, and any alerts on such are not informative.  In this case, an alert may be opted out via the <code>alert_opt_outs</code> array for the unit.</p>
+<p>A good alert is an actionable alert.  In some cases, an alert may not be actionable in a given namespace.  A development team might know that quirks in test data in the qa namespace result in high request latencies, and any alerts on such are not informative.  In this case, one may opt out via the <code>alert_opt_outs</code> array for the unit.</p>
 
 <pre><code>units:
   - name: foobar
@@ -927,7 +929,7 @@ namespaces:
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -948,9 +950,9 @@ namespaces:
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?c54ca1437a9b0ff0f2a2d708abc5783e"></script>
+<script src="/js/material.min.js?4c3b67b1b2cf1a88dfe86fcb559fd49e"></script>
 
-<script src="/js/nelson.js?d1f7bf5ccecc904d3666d0ef3d257c62"></script>
+<script src="/js/nelson.js?334b3b3191945de46c3b1b6d05e99820"></script>
 
 
   </body>

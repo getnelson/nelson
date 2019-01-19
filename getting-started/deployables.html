@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?87f3d132b3feac6cd793c592f76e6349" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?fdf50a54437383327340227c65ad6cc9" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?a5d96dc02001fea8ae5f6158c70222df" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?fc19c5af81667379668305935a31cfea" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -168,7 +168,7 @@
             <h1>Deployables</h1>
 
             
-            <p>An important differention point of Nelson, is that is does not care what kind of CI system you use. Nelson avoids this coupling directly to a CI platform by signaling the addition of deployments, via <a href="https://developer.github.com/v3/repos/deployments/">Github Deployments</a>. This deployment payload serves two purposes: to ensure versioning so that the code and deployment history can be traced through GitHub, and to inform Nelson which units to deploy for a given deployment payload. By comparison, the manifest located in the users repository enumerates all the units and plans under said repository&rsquo;s purview - the logical defintion - the deployables encoded in a deployment event tell Nelson which units to actually deploy, and the concrete artifacts to use.</p>
+            <p>An important differentiator of Nelson is that it does not care what kind of CI system you use. Nelson avoids this coupling directly to a CI platform by signaling the addition of deployments, via <a href="https://developer.github.com/v3/repos/deployments/">GitHub Deployments</a>. This deployment payload serves two purposes: to ensure versioning so that the code and deployment history can be traced through GitHub, and to inform Nelson which units to deploy for a given deployment payload. By comparison, the manifest located in the user’s repository enumerates all the units and plans under said repository&rsquo;s purview - the logical definition - the deployables encoded in a deployment event tell Nelson which units to actually deploy, and the concrete artifacts to use.</p>
             
 
             
@@ -179,7 +179,7 @@
 
             
 
-<p>Manifests describe a logical definition (e.g. a unit name) and deployables tie that logical definition to a physical one (e.g. a specific Docker image). This prevents the need to update the manifest everytime a version is bumped (frequent in a continuous delivery setting), whilst avoiding the need for a mutable tag like <code>latest</code>. The <a href="https://github.com/getnelson/slipway">Slipway</a> tool can help with both creating a deployable file as well as triggering the actual Github Deployment. Slipway is available as a <a href="https://github.com/getnelson/slipway/releases">small statically linked binary</a>, ready to be pulled and used in a CI pipeline.</p>
+<p>Manifests describe a logical definition (e.g. a unit name) and deployables tie that logical definition to a physical one (e.g. a specific Docker image). This prevents the need to update the manifest every time a version is bumped (frequent in a continuous delivery setting), whilst avoiding the need for a mutable tag like <code>latest</code>. The <a href="https://github.com/getnelson/slipway">Slipway</a> tool can help with both creating a deployable file as well as triggering the actual GitHub Deployment. Slipway is available as a <a href="https://github.com/getnelson/slipway/releases">small statically linked binary</a>, ready to be pulled and used in a CI pipeline.</p>
 
 <h2 id="protocol">Protocol</h2>
 
@@ -196,7 +196,7 @@
 }
 </code></pre>
 
-<p>The <code>unit_name</code> and <code>version</code> is what Nelson enters into its database - therefore the unit name must match a unit name in the repository manifest. Because Nelson is version-aware, the same logical version cannot be deployed twice - the version must be incremented, though not necessarily sequentually, with each new release. At present, Nelson only supports <a href="https://semver.org/">semantic versioning</a>, with scope for supporting other sortable schemes in the future.</p>
+<p>The <code>unit_name</code> and <code>version</code> is what Nelson enters into its database - therefore the unit name must match a unit name in the repository manifest. Because Nelson is version-aware, the same logical version cannot be deployed twice - the version must be incremented, though not necessarily sequentially, with each new release. At present, Nelson only supports <a href="https://semver.org/">semantic versioning</a>, with scope for supporting other sortable schemes in the future.</p>
 
 <p>The Docker image tag typically matches the semantic version, but it doesn&rsquo;t have to. Note that the provided Docker image is assumed to exist by the time the release (and therefore the deployment) is made, likely built and pushed by an earlier step in the CI pipeline. Nelson does little with the image string other than forward it to the backing scheduler.</p>
 
@@ -217,7 +217,7 @@
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -238,9 +238,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?58b5d0e362be27951a02ac5cff790ff0"></script>
+<script src="/js/material.min.js?c129cf09769d2367c697f8d9a0ad15a0"></script>
 
-<script src="/js/nelson.js?42c7f2df433b95890dd05af978ba9950"></script>
+<script src="/js/nelson.js?ea346516b91d8796730aa5d5e0d981b8"></script>
 
 
   </body>

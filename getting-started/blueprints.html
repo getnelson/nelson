@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?84d8aa8bd3dc4c0671080fb0881fd284" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?827bf130eb108ea8e85fabf760baf473" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?195d5024f72729e153106f40e1b24455" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?edf450b74b781e1f6c274d6b66e91b82" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -179,7 +179,7 @@
 
             
 
-<p>A <code>Blueprint</code> is a scheduler specification (for example, Kubernetes YAML document(s) or Nomad HCL) mustache template, which at deploy-time <em>Nelson</em> will interpolate with the runtime data (e.g. <code>StackName</code>), and submit that rendered output to the scheduler API in order to launch a stack. Whilst the author would hope that this powerful tool is carefully used, it provides the operators / admins of <em>Nelson</em> the flexibility to create deployment stacks that use whatever runtime setup they want. For example, Company X might wish to run their logging and routing as sidecars, with Kubernetes pods using particular node affinity, where as Company Y might want to instead just use node selectors for deployments and rely on some node global configuration. <em>Nelson</em> simply does not care. Consider the following Kubernetes Blueprint snippet as an example:</p>
+<p>A <code>Blueprint</code> is a scheduler specification (for example, Kubernetes YAML document(s) or Nomad HCL) mustache template, which at deploy-time <em>Nelson</em> will interpolate with the runtime data (e.g. <code>StackName</code>), and submit that rendered output to the scheduler API in order to launch a stack. Whilst the author would hope that this powerful tool is carefully used, it provides the operators / admins of <em>Nelson</em> the flexibility to create deployment stacks that use whatever runtime setup they want. For example, Company X might wish to run their logging and routing as sidecars, with Kubernetes pods using particular node affinity, whereas Company Y might want to instead just use node selectors for deployments and rely on some node global configuration. <em>Nelson</em> simply does not care. Consider the following Kubernetes Blueprint snippet as an example:</p>
 
 <pre><code>[...]
 {{#ports}}
@@ -192,7 +192,7 @@ ports:
 [...]
 </code></pre>
 
-<p>Here, the blueprint enumerates the <code>port_list</code> defined in the supplied Nelson Manifest, translating that definition into the Kubernetes &ldquo;pod spec&rdquo; definition of container ports. Please <a href="api.html#blueprints">see the reference section</a> for more information about Blueprint templating scheme and the variables that are available for interpolation.</p>
+<p>Here, the blueprint enumerates the <code>port_list</code> defined in the supplied Nelson Manifest, translating that definition into the Kubernetes &ldquo;pod spec&rdquo; definition of container ports. Please <a href="/documentation/blueprints.html">see the reference section</a> for more information about Blueprint templating scheme and the variables that are available for interpolation.</p>
 
 <h2 id="workflows">Workflows</h2>
 
@@ -207,7 +207,7 @@ ports:
 
 <li><p>Wait for the stack to become ready</p></li>
 
-<li><p>Setup alerting rules in prometheus</p></li>
+<li><p>Setup alerting rules in Prometheus</p></li>
 </ul>
 
 <p>It is these kinds of actions and steps, when viewed together, that makeup a workflow. There is never just a single system involved in operational orchestration. At the time of writing, Nelson supports a set of different workflows that support different runtime features:</p>
@@ -218,7 +218,7 @@ ports:
       <td align="center"><strong>&nbsp;</strong></td>
       <td align="center"><strong>canopus</strong></td>
       <td align="center"><strong>pulsar</strong></td>
-      <td align="center"><strong>magentar</strong></td>
+      <td align="center"><strong>magnetar</strong></td>
     </tr>
   </thead>
   <tbody>
@@ -267,9 +267,11 @@ ports:
   </tbody>
 </table>
 
-<p>At the time of writing, Workflows are codified inside of the Nelson codebase. This may change in future versions of Nelson to make it easier to customize without requiring a source change, but today, please visit the Gitter channel or email the <script src="javascript/contact.js"></script>.</p>
+<p>At the time of writing, Workflows are codified inside of the Nelson codebase, however, this may change in future versions of Nelson to make it easier to customize without requiring a source change.</p>
 
 <p>For more information on Blueprints, please <a href="/documentation/blueprints.html">checkout the reference</a>.</p>
+
+<p>For the latest development news, please visit the <a href="https://gitter.im/getnelson/nelson">Gitter channel</a>.</p>
 
           </article>
 
@@ -288,7 +290,7 @@ ports:
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -309,9 +311,9 @@ ports:
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?0d9a52d034bd069e42c705e4a2ca35d3"></script>
+<script src="/js/material.min.js?65e7ea9480fb444ed18ca30a487e0756"></script>
 
-<script src="/js/nelson.js?c1d4bf4be29022bbdcca2c32671c6da2"></script>
+<script src="/js/nelson.js?c3f3b40397930ded54238107136cddf5"></script>
 
 
   </body>

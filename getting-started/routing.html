@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?0f9bc3ed123715b0d5362cf9474b9481" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?4500f7a266848aabba454523a65c3a16" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?92a449596124152efe23cb62fa061974" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?7fec52147dde9eb7e5e30b1eb0669ed8" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -168,7 +168,7 @@
             <h1>Routing</h1>
 
             
-            <p>Within the Nelson ecosystem, Routing encompases two critical parts of the system: internal communication (so-called service-to-service), and ingresses traffic from outside the dynamic environment via so-called &ldquo;load balancers&rdquo;. Given Nelson&rsquo;s strong belief in immutable infrastructure, the way in which these routing systems operate are cutting edge, leverging the latest technology to get the job done effectively.</p>
+            <p>Within the Nelson ecosystem, Routing encompasses two critical parts of the system: internal communication (so-called service-to-service), and ingresses traffic from outside the dynamic environment via so-called &ldquo;load balancers&rdquo;. Given Nelson&rsquo;s strong belief in immutable infrastructure, the way in which these routing systems operate are cutting edge, leveraging the latest technology to get the job done effectively.</p>
             
 
             
@@ -190,13 +190,13 @@
 
 <p><span style="font-weight: bold; color: red">A.</span> The container is launched by the scheduler and your templating engine of choice obtains a certificate from the PKI backend in Vault after safely negotiating access to Vault with its secure token.</p>
 
-<p><span style="font-weight: bold; color: red">B.</span> Envoy boots using the certificates obtained from the first step, and then initializes the configured <code>xDS</code> provider. Whatever control plane you choose to use (<a href="https://istio.io/">Istio</a>, <a href="https://github.com/turbinelabs/rotor">Rotor</a> etc) acts as a mediator between Nelson and the runtime Envoy mesh - Nelson simply send instructions to the control plane, and the control plane in turn dynamically streams updates to the Envoy mesh.</p>
+<p><span style="font-weight: bold; color: red">B.</span> Envoy boots using the certificates obtained from the first step, and then initializes the configured <code>xDS</code> provider. Whatever control plane you choose to use (<a href="https://istio.io/">Istio</a>, <a href="https://github.com/turbinelabs/rotor">Rotor</a> etc.) acts as a mediator between Nelson and the runtime Envoy mesh - Nelson simply send instructions to the control plane, and the control plane in turn dynamically streams updates to the Envoy mesh.</p>
 
 <p><span style="font-weight: bold; color: red">C.</span> Application boots and goes about its business. In the event the application is attempting to make a call to another service, it actually calls to &ldquo;localhost&rdquo; from the containers perspective, and hits the locally running Envoy instance. Envoy then wraps the request in mutual SSL and forwards it to the target service instance. In this way, the application itself is free from knowing about the details of mutual authentication and certificate chains. All calls made via Envoy are automatically circuit-broken and report metrics via StatsD. This is rolled up to a central StatsD server.</p>
 
 <h2 id="load-balancers">Load Balancers</h2>
 
-<p>In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via &ldquo;load balancers&rdquo; (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about <a href="https://aws.amazon.com/elasticloadbalancing/">ELB</a> and so forth. If however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.</p>
+<p>In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via &ldquo;load balancers&rdquo; (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about <a href="https://aws.amazon.com/elasticloadbalancing/">ELB</a> and so forth. If, however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.</p>
 
 <div class="clearing">
   <img src="/img/lbs.png"/>
@@ -243,7 +243,7 @@
     </tr>
     <tr>
       <td><code>major_version</code></td>
-      <td>The major version the load balancer is bound to. Note, a load balancer's life cycle is bound the the major version of the service it is proxying</td>
+      <td>The major version the load balancer is bound to. Note, a load balancer's lifecycle is bound to the major version of the service it is proxying</td>
     </tr>
   </tbody>
 </table>
@@ -299,7 +299,7 @@
 
 <h3 id="alternative-implementations">Alternative Implementations</h3>
 
-<p>At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward but left as an exercise for the reader. Looking toward the future it probally would make sense for Nelson to support the prominant cloud providers natively, but that work is not currently in the roadmap.</p>
+<p>At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward but left as an exercise for the reader. Looking toward the future it probably would make sense for Nelson to support the prominent cloud providers natively, but that work is not currently in the roadmap.</p>
 
           </article>
 
@@ -318,7 +318,7 @@
         </p>
         <p>
           Currently v
-                    0.13.163
+                    0.13.164
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -339,9 +339,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?5ad18a0d826d3815981c83dac1a14bfb"></script>
+<script src="/js/material.min.js?37986ff8e8eb45a1ce99ec70212773e3"></script>
 
-<script src="/js/nelson.js?5f910a52c73aa6f7d663ea1fbde43daf"></script>
+<script src="/js/nelson.js?b5e0fdd5cd0f2e44cf307d617b4141c7"></script>
 
 
   </body>
