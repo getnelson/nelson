@@ -2,7 +2,7 @@
 layout: "single"
 title: "Lifecycle"
 preamble: >
-  Lifecycle management - the act of autonomously managing creating and destroying applications in a runtime - is a key part of nelson's philosophy, and a core tenant of the system. This is document provides an overview of that functionality, and introudces the concepts.
+  Lifecycle management - the act of autonomously managing creating and destroying applications in a runtime - is a key part of Nelson's philosophy, and a core tenant of the system. This document provides an overview of that functionality, and introduces the concepts.
 menu:
   main:
     parent: gs
@@ -76,7 +76,7 @@ At first glance this appears overwhelming, as there are many states. Some of the
 
 When a system is newly deployed, it is very common that an application will require a certain grace period to warm up. For example, an application may need time to heat up internal caches which could take several minutes. Alternatively it might just take a while for the application to fully initialize and bind to the appropriate ports. Whatever the case, Nelson provides every application stack a grace period where they are immune from any kind of cleanup for 30 minutes after being deployed. This grace period duration is 30 minutes by default, and is configured via the Nelson configuration `nelson.cleanup.initial-deployment-time-to-live` Knobs property.
 
-In order to understand if an application has fully warmed up or not, Nelson relies on the healthcheck statuses in Consul to indicate what the current status of a newly deploy application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The healthchecks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing healthchecks after the initial grace window, your application will be garbage collected. An unhealthy application cannot have traffic routed to it, and serves no useful purpose in the wider runtime.
+In order to understand if an application has fully warmed up or not, Nelson relies on the health check statuses in Consul to indicate what the current status of a newly deployed application is. Units that have ports declared in their manifest are expected to expose a TCP service bound on that port. The health checks are a simplistic L4 probe and are specified by Nelson when launching your application onto the scheduler. If these probes do not report passing health checks after the initial grace window, your application will be garbage collected. An unhealthy application cannot have traffic routed to it, and serves no useful purpose in the wider runtime.
 
 If you expose ports, you **must** bind them with something. Nelson controls the cadence in which it checks stack states with Consul via the `nelson.readiness-delay`, which is intervals of 3 minutes by default.
 
@@ -91,7 +91,7 @@ A key part of application lifecycle is the ability to cleanup application stacks
 
 In practice the "Evaluate Policy" decision block is one of the following policies - which can be selected by the user. The first and most common policy is `retain-active`. This is the default for any unit that exposes one or more network ports.
 
-Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.1` and `G 1.0` are declared unnecessary garbage, and scheduled for removal.
+Nelson has an understanding of the entire logical topology for the whole system. As such, Nelson is able to make interesting assertions about what is - and is not - still required to be running. In the event that a new application (`F 1.3` in the diagram) is deployed which no longer requires its previous dependency `G 1.0`, both `F 1.2` and `G 1.0` are declared unnecessary garbage, and scheduled for removal.
 
 <div class="clearing">
   <img src="/img/dependencies-upgrade.png" width="40%" />
@@ -121,6 +121,6 @@ These policies are typically used for jobs where you want to actively compare an
   <small><em>Figure 2.5: retain latest two major versions</em></small>
 </div>
 
-Cleanup policies in Nelson can be explored with `nelson system cleanup-policies` from the CLI. If you believe there are additional use cases not covered by the default policies, please [enter the community](#community) and let us know what you think is missing.
+Cleanup policies in Nelson can be explored with `nelson system cleanup-policies` from the CLI. If you believe there are additional use cases not covered by the default policies, please [enter the community](https://gitter.im/getnelson/nelson) and let us know what you think is missing.
 
-Any time Nelson executes or actions a cleanup policy - or inaction causes a state transition - it will be recorded in the [auditing system](#install-auditing), so you can be aware of exactly what Nelson did on your behalf.
+Any time Nelson executes a cleanup policy - or inaction causes a state transition - it will be recorded in the [auditing system](/documentation/blueprints.html#auditing), so you can be aware of exactly what Nelson did on your behalf.

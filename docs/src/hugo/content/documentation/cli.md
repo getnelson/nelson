@@ -21,7 +21,7 @@ menu:
 
 ## System Operations
 
-*Nelson* provides a set of system operations that allow you to get a set of informational data about your session
+Nelson provides a set of system operations that allow you to get a set of informational data about your session.
 
 ### Who Am I
 
@@ -34,7 +34,7 @@ Who are you currently logged in as and to which server? Just ask! This is useful
 
 ### Cleanup Policies
 
-When you need to know what cleanup policies are available on this instance of *Nelson*, run the following:
+When you need to know what cleanup policies are available on this instance of Nelson, run the following:
 
 ```
 λ nelson system cleanup-policies
@@ -48,14 +48,14 @@ retain-latest-two-major    retains the latest two major versions, i.e. 2.X.X and
 
 ### Login
 
-When logging into *Nelson*, there are a variety of options and ways in which to use the command line. Generally speaking, it is recommended that the Github PAT that you setup during the installation is set to the environment variables `GITHUB_TOKEN`, but if you don't want to do that, supplying it explicitly is also supported. Typical usage would look like this:
+When logging into Nelson, there are a variety of options and ways in which to use the command line. Generally speaking, it is recommended that the GitHub personal access token that you setup during the installation is set to the environment variables `GITHUB_TOKEN`, but if you don't want to do that, supplying it explicitly is also supported. Typical usage would look like this:
 
 ```
 # read token from environment variable GITHUB_TOKEN, but supply explicit host
 $ nelson login nelson.yourdomain.com
 ```
 
-But the following additional options are also availabe. Note that the `--disable-tls` option should only ever be used for local development, and is not intended for regular usage.
+However, the following additional options are also available. Note that the `--disable-tls` option should only ever be used for local development, and is not intended for regular usage.
 
 ```
 # fully explicit login
@@ -104,7 +104,7 @@ This is typically very useful when building out (or upgrading) your own unit tha
   c0e4281e9c9d  dev      howdy-http        0.38
 ```
 
-The `unit list` subcommand comes with a variety of switches and options, for your convenience:
+The `units list` subcommand comes with a variety of switches and options, for your convenience:
 
 <table class="table table-striped">
   <thead>
@@ -122,14 +122,14 @@ The `unit list` subcommand comes with a variety of switches and options, for you
       <td width="12%"><code>-ns</code></td>
       <td>Yes</td>
       <td width="17%"><code>n/a</code></td>
-      <td>Specify the one or more namespaces that you wish to query. Accepts a command delimited list, for example: `dev,qa,prod`. Note that the comma-delimited list must not contain any spaces</td>
+      <td>Specify one or more namespaces that you wish to query. Accepts a comma delimited list, for example: `dev,qa,prod`. Note that the comma-delimited list must not contain any spaces.</td>
     </tr>
     <tr>
       <td><code>--datacenters</code></td>
       <td><code>-d</code></td>
       <td>No</td>
       <td><code>*</code></td>
-      <td>Specify the one or more datacenters you're interested. It is excepted that users would typically not have to specify this switch, as usually users care about overall availability, not the presence of a given datacenter.</td>
+      <td>Specify one or more datacenters you're interested in. It is expected that users would typically not have to specify this switch, as usually users care about overall availability, not the presence of a given datacenter.</td>
     </tr>
     <tr>
       <td><code>--statuses</code></td>
@@ -138,7 +138,7 @@ The `unit list` subcommand comes with a variety of switches and options, for you
       <td><code>warming</code><br />
           <code>active</code><br/>
           <code>deprecated</code></td>
-      <td>Specify the one or more statuses that you want the unit to be in. The valid options are <code>pending</code>, <code>deploying</code>, <code>warming</code>,<code>ready</code>, <code>deprecated</code>, <code>garbage</code>, <code>failed</code>, <code>terminated</code></td>
+      <td>Specify one or more statuses that you want the unit to be in. The valid options are <code>pending</code>, <code>deploying</code>, <code>warming</code>,<code>ready</code>, <code>deprecated</code>, <code>garbage</code>, <code>failed</code>, <code>terminated</code>.</td>
     </tr>
   </tbody>
 </table>
@@ -158,8 +158,8 @@ These options can be combined or committed in a variety of ways:
 # show the units available in all datacenters for a given namespace and status
 λ nelson units list --namespaces dev --statuses deploying,active,deprecated
 
-# show the units that have been terminated by nelson in a given namespace
-λ nelson units list --namespaces dev --statues terminated
+# show the units that have been terminated by Nelson in a given namespace
+λ nelson units list --namespaces dev --statuses terminated
 ```
 
 ### Commit
@@ -176,14 +176,14 @@ namespaces:
       - ref: howdy-http
 ```
 
-To promote version 0.38.145 of howdy-batch to qa, issue the following command:
+To promote version 0.38.145 of howdy-http to qa, issue the following command:
 
 ```
 # Commits unit howdy, version 0.38.145 to the qa namespace
 λ nelson unit commit --unit howdy-http --version 0.38.145 --target qa
 ```
 
-See [Committing](#manifest-namespace-sequencing) for more.
+See [Committing](/documentation/manifest.html#manifest-namespace-sequencing) for more.
 
 ### Inspection
 
@@ -227,14 +227,14 @@ The `stack list` subcommand also comes with a variety of switches and options, f
       <td width="12%"><code>-ns</code></td>
       <td>Yes</td>
       <td width="17%"><code>n/a</code></td>
-      <td>Specify the one or more namespaces that you wish to query. Accepts a command delimited list, for example: `dev,qa,prod`. Note that the comma-delimited list must not contain any spaces</td>
+      <td>Specify one or more namespaces that you wish to query. Accepts a comma delimited list, for example: `dev,qa,prod`. Note that the comma-delimited list must not contain any spaces.</td>
     </tr>
     <tr>
       <td><code>--datacenters</code></td>
       <td><code>-d</code></td>
       <td>No</td>
       <td><code>*</code></td>
-      <td>Specify the one or more datacenters you're interested in. It is expected that users would typically not have to specify this switch, as usually users care about overall availability, not the presence of a given datacenter.</td>
+      <td>Specify one or more datacenters you're interested in. It is expected that users would typically not have to specify this switch, as usually users care about overall availability, not the presence of a given datacenter.</td>
     </tr>
     <tr>
       <td><code>--statuses</code></td>
@@ -243,7 +243,7 @@ The `stack list` subcommand also comes with a variety of switches and options, f
       <td><code>warming</code><br />
           <code>ready</code><br/>
           <code>deprecated</code></td>
-      <td>Specify the one or more statuses that you want the returned stacks to be in. The valid options are <code>pending</code>, <code>deploying</code>, <code>warming</code>,<code>ready</code>, <code>deprecated</code>, <code>garbage</code>, <code>failed</code>, <code>terminated</code>, any of which can be supplied, in any order.</td>
+      <td>Specify one or more statuses that you want the returned stacks to be in. The valid options are <code>pending</code>, <code>deploying</code>, <code>warming</code>,<code>ready</code>, <code>deprecated</code>, <code>garbage</code>, <code>failed</code>, <code>terminated</code>.</td>
     </tr>
   </tbody>
 </table>
@@ -254,7 +254,7 @@ These options can be combined or committed in a variety of ways:
 # show the stacks deployed in a given datacenter
 λ nelson stacks list --namespaces dev --datacenters massachusetts
 
-# show the stacks availabe in several datacenters
+# show the stacks available in several datacenters
 λ nelson stacks list --namespaces dev --datacenters massachusetts,california
 
 # show the stacks available in all datacenters for a given namespace
@@ -263,8 +263,8 @@ These options can be combined or committed in a variety of ways:
 # show the stacks available in all datacenters for a given namespace and status
 λ nelson stacks list --namespaces dev --statuses deploying,ready,deprecated
 
-# show the stacks that have been terminated by nelson in a given namespace
-λ nelson stacks list --namespaces dev --statues terminated
+# show the stacks that have been terminated by Nelson in a given namespace
+λ nelson stacks list --namespaces dev --statuses terminated
 
 ```
 
@@ -324,7 +324,7 @@ The logs indicate exactly what Nelson executed, and any internal errors that hap
 
 ### Runtime
 
-Nelson can tell you about what it has logically done, and about its internal state. While this is most frequently useful, during debugging you might want to know the *actual* status of something in the runtime you asked Nelson to deploy your application too. In this case, the `runtime` command becomes useful, as it will fetch information from the scheduler and from consul as to the **current** state of your application.
+Nelson can tell you about what it has logically done, and about its internal state. While this is most frequently useful, during debugging you might want to know the *actual* status of something in the runtime you asked Nelson to deploy your application to. In this case, the `runtime` command becomes useful, as it will fetch information from the scheduler and from Consul as to the **current** state of your application.
 
 ```
 λ ./bin/nelson stacks runtime f81c7a504bf6
@@ -332,7 +332,7 @@ Nelson can tell you about what it has logically done, and about its internal sta
   STATUS:   ready
   EXPIRES:  2016-12-23T19:18:46Z
 
-==>> Scheudler
+==>> Scheduler
   PENDING:    0
   RUNNING:    1
   COMPLETED:  0
@@ -347,7 +347,7 @@ In the event you have multiple instances deployed (this example only has one), y
 
 ### Redeployment
 
-There are occasions where you might want to try re-deploying a stack: for example, if your stack was idle for a long time and Nelson cleaned it up, as per the policy, or when the workflow had an error during deployment that was no fault of the user. These are both legit cases for re-deploying a stack, so the CLI supports it as a first-class stack operation. Redeployment will *cause a brand new deployment* of the same release version. The following is an example:
+There are occasions where you might want to try re-deploying a stack: for example, if your stack was idle for a long time and Nelson cleaned it up, as per the policy, or when the workflow had an error during deployment that was no fault of the user. These are both legitimate cases for re-deploying a stack, so the CLI supports it as a first-class stack operation. Redeployment will *cause a brand new deployment* of the same release version. The following is an example:
 
 ```
 λ nelson stacks redeploy ec695f081fbd
@@ -386,7 +386,7 @@ Consul Template returned errors:
 /consul-template/templates/nelson8021968182946245276.template: parse: template: :3: unterminated quoted string
 ```
 
-At the time of writing, Nelson only support rendering and linting Consul templates; however, since the underlying template engine is executed via Docker, linting could be extended to support any engine for which a Docker container and command set can be provided.
+At the time of writing, Nelson only supports rendering and linting Consul templates; however, since the underlying template engine is executed via Docker, linting could be extended to support any engine for which a Docker container and command set can be provided.
 
 ### Proofing Blueprints
 
@@ -401,7 +401,7 @@ To assist in the development of blueprints, the `proof` command can be used to i
 
 ## Tips
 
-Generally speaking the command line client is just like any other CLI tool, and it integrates perfectly well with other bash tools. What follows below is just a useful laundry list of bash commands working in concert with the *Nelson* CLI.
+Generally speaking the command line client is just like any other CLI tool, and it integrates perfectly well with other bash tools. What follows below is just a useful laundry list of bash commands working in concert with the Nelson CLI.
 
 ### Sorting Tables
 

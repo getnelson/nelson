@@ -30,7 +30,7 @@ In order to understand the rest of this user guide, there are a set of terms tha
     </tr>
     <tr>
       <td><em>Scheduler</em></td>
-      <td>The element within the datacenter that actually makes work placement decisioning, based upon the available resources (e.g. CPU, RAM etc).</td>
+      <td>The element within the datacenter that actually makes work placement decisioning, based upon the available resources (e.g. CPU, RAM etc.).</td>
     </tr>
     <tr>
       <td><em>Datacenter</em></td>
