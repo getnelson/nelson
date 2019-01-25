@@ -82,7 +82,7 @@ nelson {
 nelson.timeout = 4 seconds
 ```
 
-These are 100% functionally equivalent, and there is no prescription on what style you use where in your deployment of Nelson. This guide uses inline syntax for referencing specific fields, simply for compactness and readability in this guide. It is however recomended that the block syntax be used in production deployments, as the Nelson team believe it is more readable for most users.
+These are 100% functionally equivalent, and there is no prescription on what style you use where in your deployment of Nelson. This guide uses inline syntax for referencing specific fields, simply for compactness and readability. It is however recommended that the block syntax be used in production deployments, as the Nelson team believe it is more readable for most users.
 
 ----
 
