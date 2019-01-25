@@ -84,6 +84,8 @@ nelson.timeout = 4 seconds
 
 These are 100% functionally equivalent, and there is no prescription on what style you use where in your deployment of Nelson. This guide uses inline syntax for referencing specific fields, simply for compactness and readability in this guide. It is however recomended that the block syntax be used in production deployments, as the Nelson team believe it is more readable for most users.
 
+----
+
 ## Core
 
 Some configuration in Nelson is "top-level" in the `nelson` scope. These options are typically core to how Nelson operates, and Nelson administrators should carefully review these options to ensure that they are set to values that make sense for your deployment.
@@ -146,6 +148,8 @@ Controls how long Nelson should wait when talking to external systems. For examp
 nelson.timeout = 4 seconds
 ```
 
+----
+
 ## Auditing
 
 Nelson has an internal auditing subsystem that keeps a track of all the events that happen; from deployments to cleanup and deliberate user actions.
@@ -169,6 +173,7 @@ The auditing system operates as a buffered queue. In order to define the behavio
 nelson.audit.inbound-buffer-limit = 50
 ```
 
+----
 
 ## Cleanup
 
@@ -211,6 +216,7 @@ Nelson is publishing a set of metadata about stacks to the configured routing su
 nelson.cleanup.sweeper-delay = 24 hours
 ```
 
+----
 
 ## Database
 
@@ -253,8 +259,12 @@ If your database is using authentication, specify the password with the `passwor
 nelson.database.password = "some password"
 ```
 
+----
 
 ## Datacenters
+
+----
+
 ## Docker
 
 For some workflows and developer experience functionality, Nelson requires access to a [Docker](https://docker.com) daemon to launch and replicate containers. In order to do this, Nelson must be told how to talk to the Docker process. 
@@ -281,6 +291,8 @@ Depending on your Docker process configuration, you may want to skip TLS verific
 ```
 nelson.docker.verify-tls = true
 ``` 
+
+----
 
 ## Email
 
@@ -331,6 +343,8 @@ If your SMTP server requires authentication, what password should be used.
 ```
 nelson.email.password = "somepassword"
 ```
+
+----
 
 ## Github
 
@@ -386,6 +400,8 @@ Configure an access token for the account specified by `system-username`.
 ```
 nelson.github.access-token = "replaceme"
 ```
+
+----
 
 ## Network
 
@@ -451,6 +467,8 @@ Nelson uses [Prometheus](https://prometheus.io/) as its monitoring solution. Pro
 nelson.network.monitoring-port = 5775
 ```
 
+----
+
 ## Pipeline
 
 Nelson's internal so-called "pipeline" is the primary queue and dequeuing mechanism from which the whole deployment process is executed. In short, the pipeline is a work-stealing dequeue, and the configuration allow you to tune the parallelism of this queue and so forth.
@@ -473,6 +491,8 @@ Internally, the pipeline is implemented as a queue, and all queues buffer. To av
 ```
 nelson.pipeline.inbound-buffer-limit = 50
 ```
+
+----
 
 ## Security
 
@@ -534,6 +554,8 @@ with Github OAuth because we're developing locally (potentially even offline). W
 nelson.security.use-environment-session = false
 ```
 
+----
+
 ## Slack
 
 Nelson can integrate with Slack and send notifications to a Slack channel of your choice.
@@ -556,6 +578,8 @@ Defines the name that will appear as the poster of messages from Nelson in the S
 ```
 nelson.slack.username = "Nelson"
 ``` 
+
+----
 
 ## Templating
 
@@ -615,8 +639,12 @@ The Nelson ecosystem has [a set of containers](https://github.com/getnelson/cont
 nelson.template.template-engine-image = "getnelson/linter-consul-template:2.0.13"
 ```
 
+----
+
 
 ## User Interface
+
+----
 
 
 ## Workflow Logger
