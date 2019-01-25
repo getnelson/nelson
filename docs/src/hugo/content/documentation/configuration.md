@@ -534,8 +534,89 @@ with Github OAuth because we're developing locally (potentially even offline). W
 nelson.security.use-environment-session = false
 ```
 
-
 ## Slack
+
+Nelson can integrate with Slack and send notifications to a Slack channel of your choice.
+
+* [slack.webhook-url](#slack-webhook-url)
+* [slack.username](#slack-username)
+
+#### slack.webhook-url
+
+The url that your Slack administrator provides from the Slack webhook configuration. For more information please see the [Slack webhook setup guide](https://api.slack.com/incoming-webhooks).
+
+```
+nelson.slack.webhook-url = "https://hooks.slack.com/services/....."
+```
+
+#### slack.username
+
+Defines the name that will appear as the poster of messages from Nelson in the Slack channel.
+
+```
+nelson.slack.username = "Nelson"
+``` 
+
 ## Templating
+
+In order to lint templates, you need to configure the templating engine. This configuration section is primarily exposing the limits and options which control how Nelson will spawn an ephemeral container to lint the template supplied by the user.
+
+* [template.cpu-period](#template-cpu-period)
+* [template.cpu-quota](#template-cpu-quota)
+* [template.memory-mb](#template-memory-mb)
+* [template.timeout](#template-timeout)
+
+
+#### template.cpu-period
+
+Specify the [CPU CFS](https://en.wikipedia.org/wiki/Completely_Fair_Scheduler) scheduler period, which is used alongside `cpu-quota`. defaults to 100 micro-seconds.
+
+```
+nelson.template.cpu-period = 100000
+```
+
+#### template.cpu-quota
+
+Impose a [CPU CFS](https://en.wikipedia.org/wiki/Completely_Fair_Scheduler) quota on the container. The number of microseconds per cpu-period that the container is limited to before throttled; acting as the effective ceiling for the execution.
+
+```
+nelson.template.cpu-quota = 50000
+```
+
+#### template.memory-mb
+
+Control the maximum amount of memory assigned to this template container execution. Typically this should be a small value, and most templating engines only use a very small amount of memory. 
+
+```
+nelson.template.memory-mb = 8
+```
+
+#### template.timeout
+
+When Nelson spawns a child container, configure the maximum duration to give the container before it is actively killed. This is set to ensure that the Nelson server does not end up with zombie containers which end up suffocating the host system.
+
+```
+nelson.template.timeout = 10 seconds
+```
+
+#### template.temp-dir
+
+What host-path should Nelson bind into the temporary container as a scratch space. Whatever templating engine you've selected, the output template will be written to this scratch space prior to be deleted.
+
+```
+nelson.template.temp-dir = "/tmp"
+```
+
+#### template.template-engine-image
+
+The Nelson ecosystem has [a set of containers](https://github.com/getnelson/containers) that are available to be used as templating linting engines. Typically the administrator chooses a template engine for the organization and this is used throughout - all template linting is assumed to be of the same form and users cannot dynamically mix and match. This container image must be accessible (i.e. pull'able by the Docker daemon on the Nelson host).
+
+```
+nelson.template.template-engine-image = "getnelson/linter-consul-template:2.0.13"
+```
+
+
 ## User Interface
+
+
 ## Workflow Logger
