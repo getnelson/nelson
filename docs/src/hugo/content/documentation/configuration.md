@@ -476,6 +476,63 @@ nelson.pipeline.inbound-buffer-limit = 50
 
 ## Security
 
+Nelson has a variety of security options available to administrators. For the most part these are set-once variables, but they affect the operation of the system and can impact users, so its important to understand their purpose.
+
+* [security.encryption-key](#security-encryption-key)
+* [security.expire-login-after](#security-expire-login-after)
+* [security.key-id](#security-key-id)
+* [security.signature-key](#security-signature-key)
+* [security.use-environment-session](#security-use-environment-session)
+
+#### security.encryption-key
+
+As the name suggests, this is the encryption key that Nelson uses for its session tokens, supplied and passed around by users of the Nelson API. This key is typically `base64` encoded and 24 characters long. To make generation of these encryption keys easy, we have [provided a script](https://github.com/getnelson/nelson/blob/master/bin/generate-keys) which will dynamically produce a new candidate for a key. Keep in mind that whilst these tokens need to be encrypted, the level of encryption here only needs to be good enough to protect the contents for a period defined by `expire-login-after`.
+
+```
+# this is a dummy value for example purposes only;
+# !!!!!! DO NOT USE THIS VALUE !!!!!!!
+nelson.security.encryption-key = "B1oy5R9nVAw1gv0zAlreRg=="
+```
+
+#### security.expire-login-after
+
+This field affects the cadence for which user tokens will be refreshed. To be specific, this means that can user of the Nelson CLI will, upon issuance, be able to use that token up to the maximum bound defined by this field (excluding a change in the encryption or signing keys). This value should be set to a size that is not too large, but also not too small causing users to constantly be refreshing tokens which might unduly burden the system if you have a lot of concurrent users.
+
+```
+# as the field is a duration, you can specify it with 
+# a few different formats:
+nelson.security.expire-login-after = 7 days
+
+# using hours, minutes or seconds etc
+nelson.security.expire-login-after = 48 hours
+```
+
+#### security.key-id 
+
+The key-id is an implementation detail, and is usually statically set by an operator and never changed. Earlier revisions of Nelson used a rotating key system, which was never open-sourced, and so the key-id is a vestigial configuration from that historical detail. 
+
+```
+nelson.security.key-id = 468513861
+```
+
+#### security.signature-key
+
+The signature key is used to sign tokens to ensure they were not tampered with by clients. Every token will be signed with this key, so keep it safe just like you would the `encryption-key`.
+
+```
+# this is a dummy value for example purposes only;
+# !!!!!! DO NOT USE THIS VALUE !!!!!!!
+nelson.security.signature-key = "1toKbHQzLfb+zLeONuFdIA=="
+```
+
+#### security.use-environment-session
+
+For development purposes, sometimes we want to not have to actually log in
+with Github OAuth because we're developing locally (potentially even offline). When set to `true` this configuration forces the system to "auto-auth" based on local environment variables from the shell in which Nelson was started. This really is for development use only and should *never*, *ever*, be used in production.
+
+```
+nelson.security.use-environment-session = false
+```
 
 
 ## Slack
