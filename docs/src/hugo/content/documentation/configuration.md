@@ -471,7 +471,7 @@ nelson.network.monitoring-port = 5775
 
 ## Pipeline
 
-Nelson's internal so-called "pipeline" is the primary queue and dequeuing mechanism from which the whole deployment process is executed. In short, the pipeline is a work-stealing dequeue, and the configuration allow you to tune the parallelism of this queue and so forth.
+Nelson's internal "pipeline" is the primary queue and dequeuing mechanism from which the whole deployment process is executed. In short, the pipeline is a work-stealing dequeue, and the configuration allow you to tune the parallelism of this queue and so forth.
 
 * [pipeline.concurrency-limit](#pipeline-concurrency-limit)
 * [pipeline.inbound-buffer-limit](#pipeline-inbound-buffer-limit)
