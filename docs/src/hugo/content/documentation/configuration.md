@@ -68,7 +68,7 @@ nelson {
 import overrides.cfg
 ```
 
-This is frequently useful to assembly configuration from discrete modular parts. For a more exhasutive description of the configuration format itself, please see the [Knobs documentation](http://verizon.github.io/knobs/).
+This is frequently useful to assemble configuration from discrete modular parts. For a more exhaustive description of the configuration format itself, please see the [Knobs documentation](http://verizon.github.io/knobs/).
 
 All configuration in Nelson is a sub-config of the `nelson` scope / namespace. This can either be specified using "block" sytanx, or "inline" syntax. Consider the following example:
 
@@ -110,7 +110,7 @@ nelson.default-namespace = "dev"
 
 #### nelson.discovery-delay
 
-The frequency on which should nelson write out the discovery / routing protocol information to your configured routing sub-system. This should typically not be set too high as it will affect the frequency and choppiness of updates in the runtime. For example, if you set the value to 10 minutes and wanted to migrate traffic in 30 minutes, you'd end up with 3 large "steps" in that traffic-shifting curve (assuming a linear specification). 
+The frequency at which nelson should write out the discovery / routing protocol information to your configured routing sub-system. This should typically not be set too high as it will affect the frequency and choppiness of updates in the runtime. For example, if you set the value to 10 minutes and wanted to migrate traffic in 30 minutes, you'd end up with 3 large "steps" in that traffic-shifting curve (assuming a linear specification). 
 
 ```
 nelson.discovery-delay = 2 minutes
@@ -126,7 +126,7 @@ nelson.manifest-filename = ".nelson.yml"
 
 #### nelson.proxy-port-whitelist
 
-When using Nelson [load balancer](/getting-started/routing.html#load-balancers) feature, to avoid exposing random ports on the internet, administrators can keep a whitelist of the ports they are permitting to be exposed. This helps mitigate issues with security surface areas, whilst not restricting users to some hardcoded defaults.  
+When using Nelson's [load balancer](/getting-started/routing.html#load-balancers) feature, to avoid exposing random ports on the internet, administrators can keep a whitelist of the ports they are permitting to be exposed. This helps mitigate issues with security surface areas, whilst not restricting users to some hardcoded defaults.  
 
 ```
 nelson.proxy-port-whitelist = [ 80, 443, 8080 ]
@@ -152,7 +152,7 @@ nelson.timeout = 4 seconds
 
 ## Auditing
 
-Nelson has an internal auditing subsystem that keeps a track of all the events that happen; from deployments to cleanup and deliberate user actions.
+Nelson has an internal auditing subsystem that keeps a track of all the events that happen, from deployments to cleanup and deliberate user actions.
 
 * [audit.concurrency-limit](#audit-concurrency-limit)
 * [audit.inbound-buffer-limit](#audit-inbound-buffer-limit)
@@ -186,7 +186,7 @@ The `cleanup` stanza controls how Nelson evaluates and executes the automatic cl
 
 #### cleanup.cleanup-delay
 
-Upon what cadence should Nelson process the stack topology and look for stacks that have been marked as garbage and are pending deletion. This timeout affects how quickly a stack moves from the `ready` state to the `garbage` state, and in turn how quickly items that were `garbage` actually get reaped. 
+The cadence at which Nelson should process the stack topology and look for stacks that have been marked as garbage and are pending deletion. This timeout affects how quickly a stack moves from the `ready` state to the `garbage` state, and in turn how quickly items that were `garbage` actually get reaped. 
 
 ```
 nelson.cleanup.cleanup-delay = 10 minutes
@@ -296,7 +296,7 @@ nelson.docker.verify-tls = true
 
 ## Email
 
-Nelson can notify you by Email when changes to deployments happen. In order to do this, Nelson needs to be configured with an SMTP server. This is fully compatible with public cloud email offerings like SES (or any other provider that implements the SMTP protocol).
+Nelson can notify you by email when changes to deployments happen. In order to do this, Nelson needs to be configured with an SMTP server. This is fully compatible with public cloud email offerings like SES (or any other provider that implements the SMTP protocol).
 
 * [email.host](#email-host)
 * [email.port](#email-port)
@@ -387,7 +387,7 @@ nelson.github.scope  = "repo"
 
 #### github.system-username
 
-Configure the Github username that Nelson will conduct operations as. This is needed because some operations that Nelson does are not in the context of any human interaction. For example, when Nelson conducts a deployment, it's all happening automatically and asynchronously from any human, and thus human-user OAuth tokens. To protect privacy Nelson does not store end-user OAuth tokens, and such needs its own user to interact with your Github account.  
+Configure the Github username that Nelson will conduct operations as. This is needed because some operations that Nelson does are not in the context of any human interaction. For example, when Nelson conducts a deployment, it's all happening automatically and asynchronously from any human, and thus human-user OAuth tokens cannot be utilized within these operations. To protect privacy Nelson does not store end-user OAuth tokens, and as such needs its own user to interact with your Github account.  
 
 ```
 nelson.github.system-username = "nelson"
@@ -405,7 +405,7 @@ nelson.github.access-token = "replaceme"
 
 ## Network
 
-Specify the networking options used by Nelson, including the network interface the JVM binds too, port binding, and the address Nelson advertises in its API. 
+Specify the networking options used by Nelson, including the network interface to which the JVM binds, port binding, and the address Nelson advertises in its API. 
 
 * [network.bind-host](#network-bind-host)
 * [network.bind-port](#network-bind-port)
@@ -437,7 +437,7 @@ Typically Nelson is hosted behind a reverse proxy, or otherwise bound to an inte
 nelson.network.external-host = "nelson.yourco.com"
 ```
 
-Whilst not recommended, but you can also use an IP address here if you do not have an internal domain name server. 
+Whilst not recommended, you can also use an IP address here if you do not have an internal domain name server. 
 
 ```
 nelson.network.external-host = "10.10.1.11"
@@ -496,7 +496,7 @@ nelson.pipeline.inbound-buffer-limit = 50
 
 ## Security
 
-Nelson has a variety of security options available to administrators. For the most part these are set-once variables, but they affect the operation of the system and can impact users, so its important to understand their purpose.
+Nelson has a variety of security options available to administrators. For the most part these are set-once variables, but they affect the operation of the system and can impact users, so it's important to understand their purpose.
 
 * [security.encryption-key](#security-encryption-key)
 * [security.expire-login-after](#security-expire-login-after)
@@ -516,7 +516,7 @@ nelson.security.encryption-key = "B1oy5R9nVAw1gv0zAlreRg=="
 
 #### security.expire-login-after
 
-This field affects the cadence for which user tokens will be refreshed. To be specific, this means that can user of the Nelson CLI will, upon issuance, be able to use that token up to the maximum bound defined by this field (excluding a change in the encryption or signing keys). This value should be set to a size that is not too large, but also not too small causing users to constantly be refreshing tokens which might unduly burden the system if you have a lot of concurrent users.
+This field affects the cadence at which user tokens will be refreshed. To be specific, this means that the user of the Nelson CLI will, upon issuance, be able to use that token up to the maximum bound defined by this field (excluding a change in the encryption or signing keys). This value should be set to a size that is not too large, but also not too small causing users to constantly be refreshing tokens which might unduly burden the system if you have a lot of concurrent users.
 
 ```
 # as the field is a duration, you can specify it with 
@@ -625,7 +625,7 @@ nelson.template.timeout = 10 seconds
 
 #### template.temp-dir
 
-What host-path should Nelson bind into the temporary container as a scratch space. Whatever templating engine you've selected, the output template will be written to this scratch space prior to be deleted.
+What host-path should Nelson bind into the temporary container as a scratch space. Whatever templating engine you've selected, the output template will be written to this scratch space prior to being deleted.
 
 ```
 nelson.template.temp-dir = "/tmp"
