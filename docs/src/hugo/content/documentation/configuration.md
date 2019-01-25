@@ -101,7 +101,7 @@ Some configuration in Nelson is "top-level" in the `nelson` scope. These options
 
 upon receiving a github release event, where should Nelson assume the
 application should get deployed too. This can either be a root namespace,
-or a subordinate namespace, e.g. `stage/unstable`... its arbitrary, but the
+or a subordinate namespace, e.g. `stage/unstable`... it's arbitrary, but the
 namespace must exist (otherwise Nelson will attempt to create it on boot)
 
 ```
