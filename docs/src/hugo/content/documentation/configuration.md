@@ -644,7 +644,48 @@ nelson.template.template-engine-image = "getnelson/linter-consul-template:2.0.13
 
 ## User Interface
 
+Nelson has a pluggable user-interface and can be pointed at a location on disk to provide a custom UI, or the UI can be disabled entirely.
+
+* [ui.enabled](#ui-enabled)
+* [ui.file-path](#ui-file-path)
+
+#### ui.enabled
+
+Should nelson serve a user interface, or not?
+
+```
+nelson.ui.enabled = true
+```
+
+#### ui.file-path
+
+Where are the assets located on disk, that Nelson will serve as its UI contents; this is for local development purposes only and is not typically used in production, as the UI is typically bundled with Nelson itself. However, if desired, this configuration can be used to provide a custom or otherwise altered UI from local disk.
+
+```
+nelson.ui.file-path = "/path/to/nelson/ui"
+```
+
 ----
 
 
 ## Workflow Logger
+
+* [workflow-loggger.inbound-buffer-limit](#workflow-loggger-inbound-buffer-limit)
+* [workflow-loggger.file-path](#workflow-loggger-file-path)
+
+
+#### workflow-logger.inbound-buffer-limit
+
+Every workflow process logs progress information to a file on disk. The logging is run as a separate, asynchronous background processes where writes are first put into a queue and then serialized into the specific file. This configuration value controls what the maximum size of that queue buffer is - most implementations will never need to change the default value.
+
+```
+nelson.workflow-logger.inbound-buffer-limit = 50
+```
+
+#### workflow-logger.file-path
+
+The base directory where the workflow logging files are stored on disk. Ensure when deploying Nelson as a container that this location is bind-mounted to a host volume, or uses a docker-volume container, otherwise the files that were journaled to disk will be destroyed when the container quits.
+
+```
+nelson.workflow-logger.file-path = "/var/nelson/log"
+```
