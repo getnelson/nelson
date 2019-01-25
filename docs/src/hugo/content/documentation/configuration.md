@@ -31,7 +31,7 @@ menu:
 
 ## Overview
 
-Nelson is configuring using [Knobs](https://github.com/getnelson/knobs) which is a Scala port of the [Data.Configurator](http://hackage.haskell.org/package/configurator-0.3.0.0/docs/Data-Configurator.html) from Haskell. This format is well-specified and using Knobs allows Nelson to give better, more accurate error messages in the event of a user configuration error. More practically, Knobs supports a simplistic syntax for common data types:
+Nelson is configuring using [Knobs](https://github.com/getnelson/knobs) which is a Scala port of the [Data.Configurator](http://hackage.haskell.org/package/configurator-0.3.0.0/docs/Data-Configurator.html) library from Haskell. This format is well-specified and using Knobs allows Nelson to give better, more accurate error messages in the event of a user configuration error. More practically, Knobs supports a simplistic syntax for common data types:
 
 ```
 # strings
@@ -82,7 +82,7 @@ nelson {
 nelson.timeout = 4 seconds
 ```
 
-These are 100% functionally equivalent, and there is no prescription on what style you use where in your deployment of Nelson. The rest of this guide will use block-syntax as the Nelson team believe it is more readable for most users.
+These are 100% functionally equivalent, and there is no prescription on what style you use where in your deployment of Nelson. This guide uses inline syntax for referencing specific fields, simply for compactness and readability in this guide. It is however recomended that the block syntax be used in production deployments, as the Nelson team believe it is more readable for most users.
 
 ## Core
 
@@ -158,7 +158,7 @@ Nelson has an internal auditing subsystem that keeps a track of all the events t
 As Nelson is executing various parts of its system asynchronously, the audit system has to be able to respond to multiple inbound callers at the same time. This configuration option controls the size of the thread pool that is used specifically for auditing. This should typically be a lower number, but greater than `2`.
 
 ```
-audit.concurrency-limit = 4
+nelson.audit.concurrency-limit = 4
 ```
 
 #### audit.inbound-buffer-limit
@@ -166,7 +166,7 @@ audit.concurrency-limit = 4
 The auditing system operates as a buffered queue. In order to define the behavior of Nelson, the buffer is capped to a specific value controlled by the `inbound-buffer-limit` field. In practice this should not be a problem and the default should suffice in nearly every case, but be aware that if Nelson were internally queuing more than the value specified here the queue will block until items have been consumed by one of the auditing processor threads.
 
 ```
-audit.inbound-buffer-limit = 50
+nelson.audit.inbound-buffer-limit = 50
 ```
 
 
@@ -184,7 +184,7 @@ The `cleanup` stanza controls how Nelson evaluates and executes the automatic cl
 Upon what cadence should Nelson process the stack topology and look for stacks that have been marked as garbage and are pending deletion. This timeout affects how quickly a stack moves from the `ready` state to the `garbage` state, and in turn how quickly items that were `garbage` actually get reaped. 
 
 ```
-cleanup.cleanup-delay = 10 minutes
+nelson.cleanup.cleanup-delay = 10 minutes
 ```
 
 #### cleanup.extend-deployment-time-to-live
@@ -192,7 +192,7 @@ cleanup.cleanup-delay = 10 minutes
 When Nelson determines that a stack is still useful and is to avoid deletion, how long should that stack TTL be increased by? This parameter should be set to the longest time that you would be prepared to wait for a stack to be destroyed. Be aware that if the TTL is less than the `cleanup-delay` parameter then Nelson will find your stacks to be garbage and delete them. Change this parameter with caution and be sure to validate the behavior is what you want.
 
 ```
-cleanup.extend-deployment-time-to-live = 30 minutes
+nelson.cleanup.extend-deployment-time-to-live = 30 minutes
 ```
 
 #### cleanup.initial-deployment-time-to-live
@@ -200,7 +200,7 @@ cleanup.extend-deployment-time-to-live = 30 minutes
 When a stack is first launched by Nelson, how much of a grace period should be given before Nelson starts to subject the stack to the typical garbage collection process? This is the maximum time that Nelson will check for readiness - once the period elapses, if the stack is not in the `ready` state it will fall subject to the garbage collection process. 
 
 ```
-cleanup.initial-deployment-time-to-live = 30 minutes
+nelson.cleanup.initial-deployment-time-to-live = 30 minutes
 ```
 
 #### cleanup.sweeper-delay
@@ -208,7 +208,7 @@ cleanup.initial-deployment-time-to-live = 30 minutes
 Nelson is publishing a set of metadata about stacks to the configured routing subsystem of your choice. Cleaning the discovery / routing systems up is typically done on a slower cadence in the event that a stack needed to be redeployed or an error occurred and something needed to be recovered. The longer this period is set too, the more cruft will accumulate in your discovery / routing system (for example, Consul's KV storage). 
 
 ```
-cleanup.sweeper-delay = 24 hours
+nelson.cleanup.sweeper-delay = 24 hours
 ```
 
 
@@ -234,7 +234,7 @@ nelson.database.driver = "org.h2.Driver"
 Depending on the driver specified in the `nelson.database.url` field, configure an appropriate JDBC string:
 
 ```
-database.connection = "jdbc:h2:file:/opt/application/db/nelson;DATABASE_TO_UPPER=FALSE;AUTO_SERVER=TRUE;"
+nelson.database.connection = "jdbc:h2:file:/opt/application/db/nelson;DATABASE_TO_UPPER=FALSE;AUTO_SERVER=TRUE;"
 ```
 
 #### database.username
@@ -332,8 +332,6 @@ If your SMTP server requires authentication, what password should be used.
 nelson.email.password = "somepassword"
 ```
 
-
-
 ## Github
 
 Nelson requires a set of Github credentials in order to be able to interact with your source code. For more information, please [see the installation section](/getting-started/install.html#nelson-server).
@@ -359,7 +357,7 @@ nelson.github.client-secret = "yyyyy"
 
 #### github.redirect-uri
 
-What is the fully qualified URL that Github will redirect the OAuth exchange back too. This should match the domain configured in `network.external-host` and `network.external-port`, if configured. 
+What is the fully qualified URL that Github will redirect the OAuth exchange back too. This should match the domain configured in `network.external-host` and `network.external-port`, if configured.
 
 ```
 nelson.github.redirect-uri = "https://nelson.local/auth/exchange"
@@ -454,7 +452,32 @@ nelson.network.monitoring-port = 5775
 ```
 
 ## Pipeline
+
+Nelson's internal so-called "pipeline" is the primary queue and dequeuing mechanism from which the whole deployment process is executed. In short, the pipeline is a work-stealing dequeue, and the configuration allow you to tune the parallelism of this queue and so forth.
+
+* [pipeline.concurrency-limit](#pipeline-concurrency-limit)
+* [pipeline.inbound-buffer-limit](#pipeline-inbound-buffer-limit)
+
+#### pipeline.concurrency-limit
+
+Defines maximum number of pipeline workflows Nelson will handle at the same time. This limit is typically bound by the hardware that the Nelson server is running on, but a general rule of thumb is to set this value to the same number as the total count of processors that are available to on the machine (or available to Nelson if running in a container).
+
+```
+nelson.pipeline.concurrency-limit = 4
+```
+
+#### pipeline.inbound-buffer-limit
+
+Internally, the pipeline is implemented as a queue, and all queues buffer. To avoid queuing infinitely and potentally running out of memory it is prudent to set a maximum size for the queue - most everyone should be using the default value here, and changing this should be very rare as if you have more that 50 pending deployments, something is very wrong (on the basis that Nelson typically processes an entire workflow in a few seconds).
+
+```
+nelson.pipeline.inbound-buffer-limit = 50
+```
+
 ## Security
+
+
+
 ## Slack
 ## Templating
 ## User Interface
