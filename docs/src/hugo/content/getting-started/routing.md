@@ -2,7 +2,7 @@
 layout: "single"
 title: Routing
 preamble: >
-  Within the Nelson ecosystem, Routing encompases two critical parts of the system: internal communication (so-called service-to-service), and ingresses traffic from outside the dynamic environment via so-called "load balancers". Given Nelson's strong belief in immutable infrastructure, the way in which these routing systems operate are cutting edge, leverging the latest technology to get the job done effectively.
+  Within the Nelson ecosystem, Routing encompasses two critical parts of the system: internal communication (so-called service-to-service), and ingresses traffic from outside the dynamic environment via so-called "load balancers". Given Nelson's strong belief in immutable infrastructure, the way in which these routing systems operate are cutting edge, leveraging the latest technology to get the job done effectively.
 menu:
   main:
     parent: gs
@@ -22,13 +22,13 @@ Reviewing the figure, the runtime workflow works as follows:
 
 <span style="font-weight: bold; color: red">A.</span> The container is launched by the scheduler and your templating engine of choice obtains a certificate from the PKI backend in Vault after safely negotiating access to Vault with its secure token.
 
-<span style="font-weight: bold; color: red">B.</span> Envoy boots using the certificates obtained from the first step, and then initializes the configured `xDS` provider. Whatever control plane you choose to use ([Istio](https://istio.io/), [Rotor](https://github.com/turbinelabs/rotor) etc) acts as a mediator between Nelson and the runtime Envoy mesh - Nelson simply send instructions to the control plane, and the control plane in turn dynamically streams updates to the Envoy mesh.
+<span style="font-weight: bold; color: red">B.</span> Envoy boots using the certificates obtained from the first step, and then initializes the configured `xDS` provider. Whatever control plane you choose to use ([Istio](https://istio.io/), [Rotor](https://github.com/turbinelabs/rotor) etc.) acts as a mediator between Nelson and the runtime Envoy mesh - Nelson simply send instructions to the control plane, and the control plane in turn dynamically streams updates to the Envoy mesh.
 
 <span style="font-weight: bold; color: red">C.</span> Application boots and goes about its business. In the event the application is attempting to make a call to another service, it actually calls to "localhost" from the containers perspective, and hits the locally running Envoy instance. Envoy then wraps the request in mutual SSL and forwards it to the target service instance. In this way, the application itself is free from knowing about the details of mutual authentication and certificate chains. All calls made via Envoy are automatically circuit-broken and report metrics via StatsD. This is rolled up to a central StatsD server.
 
 ## Load Balancers
 
-In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via "load balancers" (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about [ELB](https://aws.amazon.com/elasticloadbalancing/) and so forth. If however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.
+In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via "load balancers" (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about [ELB](https://aws.amazon.com/elasticloadbalancing/) and so forth. If, however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.
 
 <div class="clearing">
   <img src="/img/lbs.png"/>
@@ -76,7 +76,7 @@ Whilst the fields should be self-explanatory, here are a list of definitions:
     </tr>
     <tr>
       <td><code>major_version</code></td>
-      <td>The major version the load balancer is bound to. Note, a load balancer's life cycle is bound the the major version of the service it is proxying</td>
+      <td>The major version the load balancer is bound to. Note, a load balancer's lifecycle is bound to the major version of the service it is proxying</td>
     </tr>
   </tbody>
 </table>
@@ -133,4 +133,4 @@ In order for Nelson to be able to spawn ELBs, you will need to give Nelson crede
 
 ### Alternative Implementations
 
-At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward but left as an exercise for the reader. Looking toward the future it probally would make sense for Nelson to support the prominant cloud providers natively, but that work is not currently in the roadmap.
+At the time of writing only the AWS load balancers were natively supported. Supporting additional modes of load balancing is straightforward but left as an exercise for the reader. Looking toward the future it probably would make sense for Nelson to support the prominent cloud providers natively, but that work is not currently in the roadmap.

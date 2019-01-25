@@ -41,6 +41,8 @@ units:
   description: >
     very simple example job that
     prints hello world when run
+  ports:
+    - default->9000/http
 
 plans:
 - name: default
@@ -59,10 +61,10 @@ Nelson supports both services and jobs with ease; more on configuring these unit
 
 ## Enabling Nelson
 
-Now that you have a manifest file, we can ask Nelson to enable deployments for a given repository. In practice Nelson is listening for events from Github (commits, pull requests, deployments etc) using a [repository webhook](https://developer.github.com/v3/repos/hooks/) - Nelson keeps track of all the repositories you have access to as a user on Github, but it will periodically require syncing to ensure that Nelson knows about any new repositories. The first time you use Nelson, no repositories will be listed in the system so we'll have to ask Nelson to sync them.
+Now that you have a manifest file, we can ask Nelson to enable deployments for a given repository. In practice Nelson is listening for events from GitHub (commits, pull requests, deployments etc.) using a [repository webhook](https://developer.github.com/v3/repos/hooks/) - Nelson keeps track of all the repositories you have access to as a user on GitHub, but it will periodically require syncing to ensure that Nelson knows about any new repositories. The first time you use Nelson, no repositories will be listed in the system so we'll have to ask Nelson to sync them.
 
 <div class="alert alert-warning" role="alert">
-  Be aware that Nelson can only access repositories on the command line for which the provided Github access token used to <a href="/getting-started/install.html">login to Nelson</a> with, has access too.
+  Be aware that Nelson can only access repositories on the command line for which the provided GitHub access token used to <a href="/getting-started/install.html">login to Nelson</a> with has access to.
 </div>
 
 To sync your repositories for the first time, run the following:
@@ -99,13 +101,13 @@ $ nelson repos enable \
 --repository hello-world
 ```
 
-This command will instruct the Nelson server to install a Github webhook on the repository specified, which will send subsequent Github Deployment events to Nelson.
+This command will instruct the Nelson server to install a GitHub webhook on the repository specified, which will send subsequent GitHub Deployment events to Nelson.
 
 ## Triggering a Deployment
 
-In most organizations where Nelson is being deployed, [continuous deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) is an explicit goal. That is to say, merging changes into the mainline branch should trigger a deployment into the targeted datacenter(s). Nelson is integrated with Github for this purpose; listening to [Github Deployments](https://developer.github.com/v3/guides/delivering-deployments/) as a trigger for action. You are free to trigger the deployment however you like - Nelson doesn't care, provided the invokation sends the desired [deployable specification](/getting-started/deployables.html)). In order to make triggering deployments easy the Nelson project provides a supporting tool called [Slipway](https://github.com/getnelson/slipway). Checkout <a href="/downloads.html">the downloads page</a> to find the latest release of Slipway and Nelson CLI.
+In most organizations where Nelson is being deployed, [continuous deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) is an explicit goal. That is to say, merging changes into the mainline branch should trigger a deployment into the targeted datacenter(s). Nelson is integrated with GitHub for this purpose; listening to [GitHub Deployments](https://developer.github.com/v3/guides/delivering-deployments/) as a trigger for action. You are free to trigger the deployment however you like - Nelson doesn't care, provided the invocation sends the desired [deployable specification](/getting-started/deployables.html). In order to make triggering deployments easy the Nelson project provides a supporting tool called [Slipway](https://github.com/getnelson/slipway). Checkout <a href="/downloads.html">the downloads page</a> to find the latest release of Slipway and Nelson CLI.
 
-Often Slipway is installed and configured by your CI operator / administrator, but there is nothing preventing you from triggering a deployment from your local machine. Here's an example of deploying from a given Git that was pushed to remote: first, we generate the deployable protocol by supplying the name of the container image that we would like to specify as a deployable:
+Often Slipway is installed and configured by your CI operator / administrator, but there is nothing preventing you from triggering a deployment from your local machine. Here's an example of deploying a previously pushed Git commit: first, we generate the deployable protocol by supplying the name of the container image that we would like to specify as a deployable:
 
 ```
 slipway gen --format nldp "docker.company.com/app/hello-world:1.2.3"
@@ -117,7 +119,7 @@ Be aware that the `gen` command may be called any number of times for a given de
   Ensure that the image name you're passing to the <code>gen</code> command <i> exactly matches that which was defined in the manifest</i> created earlier in this guide. When Nelson operates on your deployment, it will fuse the logical definition in your repository with the runtime information supplied with the deployment invocation.
 </div>
 
-Next, using the deployable files emitted to the local working directory with the `gen` command, create a Github deployment for the tag `1.2.3` using the `deploy` command:
+Next, using the deployable files emitted to the local working directory with the `gen` command, create a GitHub deployment for the tag `1.2.3` using the `deploy` command:
 
 ```
 slipway deploy -d . --repo getnelson/hello-world --ref 1.2.3
@@ -135,7 +137,7 @@ GUID          NAMESPACE  STACK                         STATUS  PLAN    WORKFLOW 
 69e6ebe3efc6  dev        hello-world--1-0-4--416nm3q6  ready   devel   pulsar    2 days ago
 ```
 
-In this instance, of Nelson, the `hello-world` unit is the only thing deployed, but all the usual shell tricks (`grep`, `awk`, `sort -k` etc) will work with the Nelson CLI. If your stack is entirely missing from the normal list, it could be that it failed deployment, in which case you can specify just `failed` state units be returned (empty in the example case, because there were no failed stacks).
+In this instance, of Nelson, the `hello-world` unit is the only thing deployed, but all the usual shell tricks (`grep`, `awk`, `sort -k` etc.) will work with the Nelson CLI. If your stack is entirely missing from the normal list, it could be that it failed deployment, in which case you can specify just `failed` state units be returned (empty in the example case, because there were no failed stacks).
 
 ```
 nelson stack list -s failed -n dev
@@ -154,7 +156,7 @@ For information about the lifecycle of stacks, please see the [dedicated lifecyc
 2018-11-02T21:43:52.715Z: =====> Pulsar workflow completed <=====
 ```
 
-In the event there was a problem launching to the scheduler, writing to Vault, or anything else encompassed by the deployment workflow, any errors will show here in the logs.
+In the event there was a problem launching to the scheduler, writing to Vault, or anything else encompassed by the deployment workflow, those errors will be shown here.
 
 ## Further Reading
 

@@ -2,7 +2,7 @@
 layout: "single"
 title: Contributing
 preamble: >
-  Contributions to Nelson are very much welcome! If you're considering contributing to the project, feel free to swing by the [gitter chat room](https://gitter.im/getnelson/nelson) to disucss the changes before hand (perhaps someone else is already working on your issue!). Alternitivly, please [file an issue](https://github.com/getnelson/nelson/issues) and one of the Nelson team will endevour to get back to you as soon as possible. The sections below outline some of the conventions and useful information for Nelson developers.
+  Contributions to Nelson are very much welcome! If you're considering contributing to the project, feel free to swing by the [Gitter chat room](https://gitter.im/getnelson/nelson) to discuss the changes beforehand (perhaps someone else is already working on your issue!). Alternatively, please [file an issue](https://github.com/getnelson/nelson/issues) and a member of the Nelson team will endeavor to get back to you as soon as possible. The sections below outline some of the conventions and useful information for Nelson developers.
 contents:
 - Development
 - Command Line
@@ -23,20 +23,20 @@ Nelson is written in [Scala](https://scala-lang.org), and built using [SBT](http
 This guide will assume that the path to the Nelson source code on disk is denoted by <code>$NELSON_HOME</code>. Whilst this variable does not need to be literally set in your shell, the author uses this notation to avoid confusing <code>$NELSON_HOME/etc</code> with system <code>/etc</code> for example. 
 </div>
 
-To boot up Nelson locally, there are a handful of items that need to be setup beforehand. First, obtain a [Personal Access Token for Github](https://github.com/settings/tokens). Once you have this, add it to your `~/.bash_profile` as the `GITHUB_TOKEN` environment variable - the specific permissions needed are [listed in the main install documentation](https://getnelson.io/getting-started/install.html#using-the-cli)
+To boot up Nelson locally, there are a handful of items that need to be setup beforehand. First, obtain a [Personal Access Token for GitHub](https://github.com/settings/tokens) with the [following permissions](https://getnelson.io/getting-started/install.html#using-the-cli). Once you have this, add it to your environment with the `GITHUB_TOKEN` variable using `~/.bash_profile`, or whatever file as appropriate for your shell of choice.
 
 ```
-# the value here should be the PAT that you got from Github
+# the value here should be the personal access token that you got from GitHub
 export GITHUB_TOKEN="XXXXXXXXXXXXXXXXXX"
 ```
 
-Next, add a line to your `/etc/hosts` such that you have a `nelson.local` domain pointing to your local loopback interface. This looks like:
+Next, add a line to `/etc/hosts` such that you have a `nelson.local` domain pointing to your local loopback interface. This looks like:
 
 ```
 127.0.0.1 nelson.local
 ```
 
-This may seem like a strange modification, but is required in order to have browsers like Chrome store cookies locally. As Nelson uses cookies for authentication, without this you won't actually be able to maintain an active session. 
+This may seem like a strange modification, but it is required in order to have browsers like Chrome store cookies locally. As Nelson uses cookies for authentication, without this you won't actually be able to maintain an active session. 
 
 This is the bare minimum required to run Nelson. You can then instruct Nelson to boot up by using the following command:
 
@@ -47,17 +47,17 @@ sbt http/reStart
 Nelson will then boot up and be running on `http://nelson.local:9000`. 
 
 <div class="alert alert-warning" role="alert">
-	Be aware that unless you have correctly configured a development OAuth application on Github for your local Nelson, you will get rejected from any activity related to Github.
+  Be aware that unless you have correctly configured a development OAuth application on GitHub for your local Nelson, you will get rejected from any activity related to GitHub.
 </div>
 
-Configuring an OAuth application for local Nelson development is covered <a href="https://getnelson.io/getting-started/install.html#authorize-with-github">in the operator guide</a> section of the documentation. Unless you are working on specific components related to interaction with Github, this should not be needed.
+Configuring an OAuth application for local Nelson development is covered <a href="https://getnelson.io/getting-started/install.html#authorize-with-github">in the operator guide</a> section of the documentation. Unless you are working on specific components related to interaction with GitHub, this should not be needed.
 
-If you need Github access locally, setup the OAuth application and then configure the following properties in `$NELSON_HOME/etc/development/http/http.dev.cfg`:
+If you need GitHub access locally, setup the OAuth application and then configure the following properties in `$NELSON_HOME/etc/development/http/http.dev.cfg`:
 
 ```
 nelson.github.client-id = "<your value>"
 nelson.github.client-secret = "<your value>"
-# If you need github enterprise, uncomment and set the following:
+# If you need GitHub enterprise, uncomment and set the following:
 # nelson.github.domain = "github.yourcompany.com"
 ```
 
@@ -80,7 +80,6 @@ nelson.ui.enabled = false
 
 This can be useful when developing certain types of UI, but largely can be ignored.
 
-
 <h2 id="development-dependencies" data-subheading-of="development">
   Dependencies
 </h2>
@@ -91,7 +90,7 @@ Do be aware that you could also run these dependencies as containers but it can 
 
 ### Kubernetes
 
-Nelson is integrated with [Kubernetes](https://kubernetes.io). You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using [minikube](https://kubernetes.io/docs/setup/minikube/), or leverging one of the cloud-hosted solutions like [GKE](https://cloud.google.com/kubernetes-engine/), [AKE](https://azure.microsoft.com/en-us/services/kubernetes-service/) or [EKS](https://aws.amazon.com/eks/).
+Nelson is integrated with [Kubernetes](https://kubernetes.io). You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using [minikube](https://kubernetes.io/docs/setup/minikube/), or leveraging one of the cloud-hosted solutions like [GKE](https://cloud.google.com/kubernetes-engine/), [AKE](https://azure.microsoft.com/en-us/services/kubernetes-service/) or [EKS](https://aws.amazon.com/eks/).
 
 As Kubernetes itself has a complicated authentication story, Nelson does not try to replicate that at all, and instead simply shells out to the `kubectl` command line application, which in turn uses the Kubernetes configuration defined by `KUBECONFIG` environment variable. In short, provided your `kubectl` is operating with the cluster you wish to use with Nelson no further external setup is required. 
 
@@ -171,7 +170,7 @@ Then, run the Consul binary with `consul agent -dev`.
 
 ### Vault
 
-Install Vault with `brew install vault`, or by downloading and installing [here](https://www.vaultproject.io/downloads.html). Modify the Nelson config at `<project-dir>/etc/development/http/http.dev.cfg`:
+Install Vault with `brew install vault`, or by downloading and installing [here](https://www.vaultproject.io/downloads.html). Modify the Nelson config at `$NELSON_HOME/etc/development/http/http.dev.cfg`:
 
 ```
 datacenters {
@@ -220,9 +219,9 @@ There are a few conventions at play within the Nelson codebase:
 
 ### Database
 
-Nelson's primary data store is a H2 database. This deliberately doesn't scale past a single machine, and was an intentional design choice to limit complexity in the early phases of the project. With that being said, H2 is very capable, and for most users this will work extremely well. If Nelson were reaching the point where H2 on SSD drives were a bottleneck, you would be doing many thousand of deployments a second, which is exceedingly unlikely.
+Nelson's primary data store is a H2 database. This deliberately doesn't scale past a single machine, and was an intentional design choice to limit complexity in the early phases of the project. With that being said, H2 is very capable, and for most users this will work extremely well. If Nelson were reaching the point where H2 on SSD drives were a bottleneck, you would be doing many thousands of deployments a second, which is exceedingly unlikely.
 
-If you start to contribute to Nelson, then its useful to understand the data schema, which is as follows:
+If you start to contribute to Nelson, then it’s useful to understand the data schema, which is as follows:
 
 <div class="clearing">
   <img src="/img/erd.png" width="100%" />
@@ -230,10 +229,9 @@ If you start to contribute to Nelson, then its useful to understand the data sch
 
 As can be seen from the diagram, Nelson has a rather normalized structure. The authors have avoided denormalization of this schema where possible, as Nelson is not in the runtime hot path so the system does not suffer serious performance penalties from such a design; in short it will be able to scale far in excess of the query and write load Nelson actually receives.
 
-
 ### Known Issues
 
-1. Upon receiving notification of a release event on Github, Nelson converts this to events published to its internal event stream (called `Pipeline`). `Pipeline` and messages on it, are not durable. If Nelson is processing a message (or has messages queued because of contention or existing backpressure), and an outage / upgrade or any reason that causes a halt to the JVM process, will loose said messages.
+1. Upon receiving notification of a release event on GitHub, Nelson converts this to events published to its internal event stream (called `Pipeline`). `Pipeline` and messages on it, are not durable. If Nelson is processing a message (or has messages queued because of contention or existing backpressure) and an outage / upgrade, or any issue that causes a halt to the JVM process, occurs, there will be message loss.
 
 1. Nelson does not have a high-availability data store. As mentioned in the database section, this is typically not a problem, but should be a consideration. In the future, the authors may consider upgrading Nelson so it can cluster, but the expectation is that scaling-up will be more cost-effective than scaling-out for most users. Nelson will currently eat up several thousand deployments a minute, which is larger than most organizations will ever reach.
 
@@ -247,7 +245,7 @@ The [Nelson CLI](https://github.com/getnelson/cli) is useful for debugging the N
 nelson login --disable-tls nelson.local:9000
 ```
 
-It's important to note that to use the API locally, a change to the development config at `<project-dir>/etc/development/http/http.dev.cfg` is needed. Add the following line inside the `nelson.github` config:
+It's important to note that to use the API locally, a change to the development config at `$NELSON_HOME/etc/development/http/http.dev.cfg` is needed. Add the following line inside the `nelson.github` config:
 
 ```
 organization-admins = [ "<your-github-handle-here>" ]
@@ -267,12 +265,11 @@ The most convenient method for viewing documentation locally is to run via SBT u
 sbt docs/previewSite
 ```
 
-This will open your default web browser with the documentation site, which is handy for locally viewing the docs. It does however *not* support dynamic reloading of pages when the source changes. Luckily this is supported by Hugo, and can easily be run with a script locally:
+This will open your default web browser with the documentation site, which is handy for locally viewing the docs. It does, however, *not* support dynamic reloading of pages when the source changes. Luckily this is supported by Hugo, and can easily be run with a script locally:
 
 ```
 cd docs/src/hugo
 hugo server -w -b 127.0.0.1 -p 4000
 ```
 
-Hugo will automatically refresh the page when the source files are changed, which can be very helpful when one is itterating on the documentation site over time.
-
+Hugo will automatically refresh the page when the source files are changed, which can be very helpful when one is iterating on the documentation site over time.
