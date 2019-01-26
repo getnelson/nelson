@@ -366,15 +366,68 @@ This section *must* be specified otherwise Nelson will fault at startup.
 
 <span class="badge badge-info">optional</span>
 
+This section controls how Nelson interacts with your Consul cluster.
+
+#### consul.endpoint
+
+Specify the URL that Nelson can reach your Consul servers at. It is highly recomended that this communication take place over HTTPS, and the certificate in use matches the domain being used on the remote server. If you can sucsessfully cURL from the Nelson machine to the endpoint, then Nelson should be able to interact with Consul without issue.
 
 ```
-consul {
-  endpoint  = "http://consul.service.texas.your.company.com"
-  timeout   = 1 second
-  acl-token = "XXXXXXXXX"
-  username  = "XXXXXXXXX"
-  password  = "XXXXXXXXX"
+consul.endpoint  = "http://consul.texas.your.company.com"
+```
+
+#### consul.timeout
+
+Controls how long Nelson should wait for timeouts when interacting with Nomad. This configuration parameter is useful to tune if your Nelson is interacting with a remote Consul cluster in a regional datacenter (i.e. datacenters further away from Nelson will require a longer timeout because of the networking latency). If tuning this parameter, monitoring the Nelson logs and metrics carefully to ensure you do not synthetically introduce high failure rates.
+
+```
+consul.timeout = 1 second
+```
+
+#### consul.acl-token
+
+Consul has a [sohpisticated ACL system](https://www.consul.io/docs/guides/acl.html) that is typically used in production deployments. In order for Nelson to communicate with Consul in such production environments, it requires an ACL token which allows it to read from the service catalog, write to the key-value store etc.
+
+```
+consul.acl-token = "XXXXXXXXX"
+```
+
+Note that as of Consul 1.4+, a new ACL system was introduced to Consul and the token provided to Nelson should have an ACL policiy that uses something like the following:
+
+```
+service_prefix "" {
+  policy = "write"
 }
+node_prefix "" {
+  policy = "read"
+}
+key_prefix "" {
+  policy = "write"
+}
+event_prefix "" {
+  policy = "read"
+}
+key_prefix "_rexec" {
+  policy = "write"
+}
+```
+
+Depending upon your configuration - both of Consul and of Nelson - the above policy could be restricted further to reduce the security profile, but this example definition should provide an indicitive configuration as a starting point.
+
+#### consul.username
+
+While not specifically required by Consul, it is common for operators to put a basic-auth proy in front of their Consul UI, which can impeed Nelon's ability to access the Consul API. If this is the case, specify the `username` here:
+
+```
+consul.username  = "XXXXXXXXX"
+```
+
+#### consul.password
+
+While not specifically required by Consul, it is common for operators to put a basic-auth proy in front of their Consul UI, which can impeed Nelon's ability to access the Consul API. If this is the case, specify the `password` here:
+
+```
+consul.password  = "XXXXXXXXX"
 ```
 
 
@@ -398,17 +451,29 @@ kubernetes {
 
 <span class="badge badge-info">optional</span>
 
+This section controls how Nelson interacts with [Nomad](https://www.nomadproject.io/). If you are not using the Nomad scheudler in your datacenter, then you can omit this section. When launching tasks onto your Nomad instalation, Nelson will use the API and requires no external binaries.
+
+* [nomad.endpoint](#nomad-endpoint)
+* [nomad.timeout](#nomad-timeout)
+
+#### nomad.endpoint
+
+Specify the URL that Nelson can reach your Nomad servers at. It is highly recomended that this communication take place over HTTPS, and the certificate in use matches the domain being used on the remote server. If you can sucsessfully cURL from the Nelson machine to the endpoint, then Nelson should be able to interact with Nomad without issue.
+
+As Nomad servers are often operated as a cluster with a dynamically selected leader, it is common for operators to front their Nomad cluster with a load-balancer in order to reach *any* Nomad server. This is generally fine and Nelson will work perfectly well when Nomad is in this configuration.
+
 ```
-nomad {
-  endpoint = "http://nomad.service.texas.your.company.com:1234/"
-  timeout = 1 second
-  docker {
-    host = "registry.service.texas.your.company.com"
-    user = "someuser"
-    password = "dummypwd"
-  }
-}
+nomad.endpoint   = "https://nomad.texas.company.corp:1234"
 ```
+
+#### nomad.timeout
+
+Controls how long Nelson should wait for timeouts when interacting with Nomad. This configuration parameter is useful to tune if your Nelson is interacting with a remote Nomad in a regional datacenter (i.e. datacenters further away from Nelson will require a longer timeout because of the networking latency). If tuning this parameter, monitoring the Nelson logs and metrics carefully to ensure you do not synthetically introduce high failure rates.
+
+```
+nomad.timeout = 500 milliseconds
+```
+
 
 ----
 
@@ -416,7 +481,48 @@ nomad {
 
 <span class="badge badge-warning">required</span>
 
-sdfsdf
+This section controls how Nelson should interact with the Vault configured in this datacenter. At the time of writing, Vault is a hard requirement and must be configured.
+
+* [vault.endpoint](#vault-endpoint)
+* [vault.auth-token](#vault-auth-token)
+* [vault.timeout](#vault-timeout)
+* [vault.auth-role-prefix](#vault-auth-role-prefix)
+
+#### vault.endpoint
+
+Specify the URL that Nelson can reach your Vault server at. It is highly recomended that this communication take place over HTTPS, and the certificate in use matches the domain being used on the remote server. If you can sucsessfully cURL from the Nelson machine to the Vault endpoint, then Nelson should be able to interact with Vault without issue.
+
+```
+vault.endpoint   = "https://vault.texas.company.corp:1234"
+```
+
+#### vault.auth-token
+
+As Nelson is *generating* Vault policies, it requires a fairly privilidged authentication token, which should be specified as follows:
+
+```
+vault.auth-token = "XXXXXXXXX"
+```
+
+The token that is used here should typically have the ability to create, list and delete vault policies, along with creating [backend auth roles](https://www.vaultproject.io/docs/auth/) (if your schuedling setup needs that functionality). For more information on Vault policies, please [read the Vault documentation](https://www.vaultproject.io/docs/concepts/policies.html).
+
+#### vault.timeout
+
+Controls how long Nelson should wait for timeouts when interacting with Vault. This configuration parameter is useful to tune if your Nelson is interacting with a remote Vault in a regional datacenter (i.e. datacenters further away from Nelson will require a longer timeout because of the networking latency). If tuning this parameter, monitoring the Nelson logs and metrics carefully to ensure you do not synthetically introduce high failure rates.
+
+```
+vault.timeout = 500 milliseconds
+```
+
+#### vault.auth-role-prefix
+
+If your backend auth provider (for kubernetes, as one example) has the same name as the datacenter, you can ignore this field. Given this is not typically the case (operators typically have some convention) then you can specify a prefix that will be prepended to the datacenter name.
+
+```
+vault.auth-role-prefix = "aws-"
+```
+
+This configuration parameter is typically not used. Feel free to drop into the [community channels](/documentation/contributing.html) and talk about your use case if you think you need to use it.
 
 ----
 
@@ -440,7 +546,7 @@ To provide Nelson access to AWS to launch the needed resources, provide an AWS a
 
 ```
 # prefer IAM profiles if using AWS EC2 to host Nelson itself
-datacenter.texas.loadbalancer.aws.access-key-id = "XXXXXXXXX"
+datacenter.texas.infrastructure.loadbalancer.aws.access-key-id = "XXXXXXXXX"
 ```
 
 #### loadbalancer.aws.availability-zones
@@ -465,7 +571,7 @@ availability-zones {
 When Nelson launches the load-balancer you can configure the security group that this ELB should be placed in, which allows operators to decide exactly what firewall rules should be in place. Ultimately this allows administrators to ensure that only specified resources get made public.
 
 ```
-datacenter.texas.loadbalancer.aws.elb-security-group-names = [ "sg-AAAAAAAA", "sg-BBBBBBB" ]
+datacenter.texas.infrastructure.loadbalancer.aws.elb-security-group-names = [ "sg-AAAAAAAA" ]
 ```
 
 #### loadbalancer.aws.image
@@ -473,7 +579,7 @@ datacenter.texas.loadbalancer.aws.elb-security-group-names = [ "sg-AAAAAAAA", "s
 Some operators prefer to run the proxy software as a container that is dynamically injected by Nelson. Others prefer to run baked AMIs that are specified in the launch config. If you want to use a container as the packaging mechinism for the inbound proxy, then specify it here, otherwise omit this field.
 
 ```
-datacenter.texas.loadbalancer.aws.image = "registry.texas.company.com/whatever/infra-lb:1.2.3"
+datacenter.texas.infrastructure.loadbalancer.aws.image = "registry.texas.corp/whatever/infra-lb:1.2.3"
 ```
 
 #### loadbalancer.aws.launch-configuration-name
@@ -481,7 +587,7 @@ datacenter.texas.loadbalancer.aws.image = "registry.texas.company.com/whatever/i
 Nelson will use the specified launch configuration to launch the resources. How this launch configuration is specified - perhaps CloudFormation or Terraform - is out of scope for this documentation, as Nelson only needs to know the name of the launch configuration to boot as a "black box".
 
 ```
-datacenter.texas.loadbalancer.aws.launch-configuration-name = "yourlb-XXXXXXXXXXXXXXXXXX"
+datacenter.texas.infrastructure.loadbalancer.aws.launch-configuration-name = "yourlb-XXXXXXXXXXXX"
 ```
 
 #### loadbalancer.aws.region
@@ -489,7 +595,7 @@ datacenter.texas.loadbalancer.aws.launch-configuration-name = "yourlb-XXXXXXXXXX
 What region should Nelson use when launching AWS resources for this datacenter. This is needed as no assumptions are made that datacenter names fully map to AWS region conventions.
 
 ```
-datacenter.texas.loadbalancer.aws.region = "us-west-2"
+datacenter.texas.infrastructure.loadbalancer.aws.region = "us-west-2"
 ```
 
 #### loadbalancer.aws.secret-access-key
@@ -497,7 +603,7 @@ datacenter.texas.loadbalancer.aws.region = "us-west-2"
 To provide Nelson access to AWS to launch the needed resources, provide an AWS access-key-id and secret-access-key. If Nelson itself is running on an AWS EC2 instance, then it is highly recomended to not specify credentials statically, but instead rely on the IAM instance profile which Nelson will automatically read and use if the static configuration fields are missing.
 
 ```
-datacenter.texas.loadbalancer.aws.secret-access-key = "XXXXXXXXX"
+datacenter.texas.infrastructure.loadbalancer.aws.secret-access-key = "XXXXXXXXX"
 ```
 
 ----
