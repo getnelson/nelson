@@ -88,6 +88,8 @@ These are 100% functionally equivalent, and there is no prescription on what sty
 
 ## Core
 
+<span class="badge badge-warning">required</span>
+
 Some configuration in Nelson is "top-level" in the `nelson` scope. These options are typically core to how Nelson operates, and Nelson administrators should carefully review these options to ensure that they are set to values that make sense for your deployment.
 
 * [nelson.default-namespace](#nelson-default-namespace)
@@ -152,6 +154,8 @@ nelson.timeout = 4 seconds
 
 ## Auditing
 
+<span class="badge badge-info">optional</span>
+
 Nelson has an internal auditing subsystem that keeps a track of all the events that happen, from deployments to cleanup and deliberate user actions.
 
 * [audit.concurrency-limit](#audit-concurrency-limit)
@@ -176,6 +180,8 @@ nelson.audit.inbound-buffer-limit = 50
 ----
 
 ## Cleanup
+
+<span class="badge badge-info">optional</span>
 
 The `cleanup` stanza controls how Nelson evaluates and executes the automatic cleanup operations on the service and job graphs.
 
@@ -220,6 +226,8 @@ nelson.cleanup.sweeper-delay = 24 hours
 
 ## Database
 
+<span class="badge badge-warning">required</span>
+
 Nelson's H2 database requires some configuration to use. By default H2 will just write the database into the process-local folder, but this is typically not what you want. Most operators prefer the Nelson database to be on a redundant or backed-up known location. 
 
 * [database.driver](#database-driver)
@@ -263,9 +271,42 @@ nelson.database.password = "some password"
 
 ## Datacenters
 
+<span class="badge badge-warning">required</span>
+
+The datacenters configuration section is what controls the various places that Nelson can deploy too. Within this section you can configure how Nelson knows how to talk to your scheudler of choice, instruct Nelson where it's Vault instance is, configure dynamic PKI and so forth. The structure of this section is namespaced by the datacenter in question; consider the following example:
+
+```
+datacenters {
+  texas {
+    ...
+  }
+  portland {
+    ...
+  }
+}
+```
+
+In this case two datacenters are configured: `texas` and `portland` - be aware that the names here are arbitrary, but once you choose them it is highly recomended to avoid changing them in the future as end-users can target specific datacenters for data-gravity or placement reason using the [datacenter stanza](/documentation/manifest.html#datacenters) of the Nelson manifest file, so future changes can be potentially disruptive. It is also highly adivsable that you choose unambiguous naming. For example, regions in [AWS](https://aws.amazon.com/) are things like <br/> `us-west-1` and `us-west-2` whilst region names in [GCP](https://cloud.google.com/) are `us-west1`; using these very similar names verbatim can be exceedingly confusing for users. Most companies internally have some taxonomy for their datacenter naming, so using something that users can identify with is usually advisable. Some Nelson users like to use regional airport codes, or even internal codewords - whatever scheme you choose, ensure users understand it.
+
+The following sub-sections will assume that the datacenter name is identified by `*`, representing whatever the administrator configured.
+
+#### datacenters.*.domain
+
+sdfsdfsd
+
+#### datacenters.*.docker-registry
+
+sdfsdf
+
+### datacenter.*.policy
+
+sdfsdf
+
 ----
 
 ## Docker
+
+<span class="badge badge-warning">required</span>
 
 For some workflows and developer experience functionality, Nelson requires access to a [Docker](https://docker.com) daemon to launch and replicate containers. In order to do this, Nelson must be told how to talk to the Docker process. 
 
@@ -295,6 +336,8 @@ nelson.docker.verify-tls = true
 ----
 
 ## Email
+
+<span class="badge badge-info">optional</span>
 
 Nelson can notify you by email when changes to deployments happen. In order to do this, Nelson needs to be configured with an SMTP server. This is fully compatible with public cloud email offerings like SES (or any other provider that implements the SMTP protocol).
 
@@ -347,6 +390,8 @@ nelson.email.password = "somepassword"
 ----
 
 ## Github
+
+<span class="badge badge-warning">required</span>
 
 Nelson requires a set of Github credentials in order to be able to interact with your source code. For more information, please [see the installation section](/getting-started/install.html#nelson-server).
 
@@ -404,6 +449,8 @@ nelson.github.access-token = "replaceme"
 ----
 
 ## Network
+
+<span class="badge badge-warning">required</span>
 
 Specify the networking options used by Nelson, including the network interface to which the JVM binds, port binding, and the address Nelson advertises in its API. 
 
@@ -471,6 +518,8 @@ nelson.network.monitoring-port = 5775
 
 ## Pipeline
 
+<span class="badge badge-info">optional</span>
+
 Nelson's internal "pipeline" is the primary queue and dequeuing mechanism from which the whole deployment process is executed. In short, the pipeline is a work-stealing dequeue, and the configuration allow you to tune the parallelism of this queue and so forth.
 
 * [pipeline.concurrency-limit](#pipeline-concurrency-limit)
@@ -495,6 +544,8 @@ nelson.pipeline.inbound-buffer-limit = 50
 ----
 
 ## Security
+
+<span class="badge badge-warning">required</span>
 
 Nelson has a variety of security options available to administrators. For the most part these are set-once variables, but they affect the operation of the system and can impact users, so it's important to understand their purpose.
 
@@ -558,6 +609,8 @@ nelson.security.use-environment-session = false
 
 ## Slack
 
+<span class="badge badge-info">optional</span>
+
 Nelson can integrate with Slack and send notifications to a Slack channel of your choice.
 
 * [slack.webhook-url](#slack-webhook-url)
@@ -582,6 +635,8 @@ nelson.slack.username = "Nelson"
 ----
 
 ## Templating
+
+<span class="badge badge-info">optional</span>
 
 In order to lint templates, you need to configure the templating engine. This configuration section is primarily exposing the limits and options which control how Nelson will spawn an ephemeral container to lint the template supplied by the user.
 
@@ -644,6 +699,8 @@ nelson.template.template-engine-image = "getnelson/linter-consul-template:2.0.13
 
 ## User Interface
 
+<span class="badge badge-info">optional</span>
+
 Nelson has a pluggable user-interface and can be pointed at a location on disk to provide a custom UI, or the UI can be disabled entirely.
 
 * [ui.enabled](#ui-enabled)
@@ -669,6 +726,8 @@ nelson.ui.file-path = "/path/to/nelson/ui"
 
 
 ## Workflow Logger
+
+<span class="badge badge-info">optional</span>
 
 * [workflow-loggger.inbound-buffer-limit](#workflow-loggger-inbound-buffer-limit)
 * [workflow-loggger.file-path](#workflow-loggger-file-path)
