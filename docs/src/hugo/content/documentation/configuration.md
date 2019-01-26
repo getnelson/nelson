@@ -99,7 +99,7 @@ Some configuration in Nelson is "top-level" in the `nelson` scope. These options
 * [nelson.readiness-delay](#nelson-readiness-delay)
 * [nelson.timeout](#nelson-timeout)
 
-#### nelson.default-namespace 
+#### nelson.default-namespace
 
 upon receiving a github release event, where should Nelson assume the
 application should get deployed too. This can either be a root namespace,
@@ -112,7 +112,7 @@ nelson.default-namespace = "dev"
 
 #### nelson.discovery-delay
 
-The frequency at which nelson should write out the discovery / routing protocol information to your configured routing sub-system. This should typically not be set too high as it will affect the frequency and choppiness of updates in the runtime. For example, if you set the value to 10 minutes and wanted to migrate traffic in 30 minutes, you'd end up with 3 large "steps" in that traffic-shifting curve (assuming a linear specification). 
+The frequency at which nelson should write out the discovery / routing protocol information to your configured routing sub-system. This should typically not be set too high as it will affect the frequency and choppiness of updates in the runtime. For example, if you set the value to 10 minutes and wanted to migrate traffic in 30 minutes, you'd end up with 3 large "steps" in that traffic-shifting curve (assuming a linear specification).
 
 ```
 nelson.discovery-delay = 2 minutes
@@ -128,7 +128,7 @@ nelson.manifest-filename = ".nelson.yml"
 
 #### nelson.proxy-port-whitelist
 
-When using Nelson's [load balancer](/getting-started/routing.html#load-balancers) feature, to avoid exposing random ports on the internet, administrators can keep a whitelist of the ports they are permitting to be exposed. This helps mitigate issues with security surface areas, whilst not restricting users to some hardcoded defaults.  
+When using Nelson's [load balancer](/getting-started/routing.html#load-balancers) feature, to avoid exposing random ports on the internet, administrators can keep a whitelist of the ports they are permitting to be exposed. This helps mitigate issues with security surface areas, whilst not restricting users to some hardcoded defaults.
 
 ```
 nelson.proxy-port-whitelist = [ 80, 443, 8080 ]
@@ -136,7 +136,7 @@ nelson.proxy-port-whitelist = [ 80, 443, 8080 ]
 
 #### nelson.readiness-delay
 
-How frequently should Nelson run the readiness check to see if a service deployment is ready to take active traffic. How frequently this needs to be will largely be affected by the routing sub-system you have elected to use. For example, queries to Consul, vs queries to Kubernetes. 
+How frequently should Nelson run the readiness check to see if a service deployment is ready to take active traffic. How frequently this needs to be will largely be affected by the routing sub-system you have elected to use. For example, queries to Consul, vs queries to Kubernetes.
 
 ```
 nelson.readiness-delay = 3 minutes
@@ -192,7 +192,7 @@ The `cleanup` stanza controls how Nelson evaluates and executes the automatic cl
 
 #### cleanup.cleanup-delay
 
-The cadence at which Nelson should process the stack topology and look for stacks that have been marked as garbage and are pending deletion. This timeout affects how quickly a stack moves from the `ready` state to the `garbage` state, and in turn how quickly items that were `garbage` actually get reaped. 
+The cadence at which Nelson should process the stack topology and look for stacks that have been marked as garbage and are pending deletion. This timeout affects how quickly a stack moves from the `ready` state to the `garbage` state, and in turn how quickly items that were `garbage` actually get reaped.
 
 ```
 nelson.cleanup.cleanup-delay = 10 minutes
@@ -208,7 +208,7 @@ nelson.cleanup.extend-deployment-time-to-live = 30 minutes
 
 #### cleanup.initial-deployment-time-to-live
 
-When a stack is first launched by Nelson, how much of a grace period should be given before Nelson starts to subject the stack to the typical garbage collection process? This is the maximum time that Nelson will check for readiness - once the period elapses, if the stack is not in the `ready` state it will fall subject to the garbage collection process. 
+When a stack is first launched by Nelson, how much of a grace period should be given before Nelson starts to subject the stack to the typical garbage collection process? This is the maximum time that Nelson will check for readiness - once the period elapses, if the stack is not in the `ready` state it will fall subject to the garbage collection process.
 
 ```
 nelson.cleanup.initial-deployment-time-to-live = 30 minutes
@@ -216,7 +216,7 @@ nelson.cleanup.initial-deployment-time-to-live = 30 minutes
 
 #### cleanup.sweeper-delay
 
-Nelson is publishing a set of metadata about stacks to the configured routing subsystem of your choice. Cleaning the discovery / routing systems up is typically done on a slower cadence in the event that a stack needed to be redeployed or an error occurred and something needed to be recovered. The longer this period is set too, the more cruft will accumulate in your discovery / routing system (for example, Consul's KV storage). 
+Nelson is publishing a set of metadata about stacks to the configured routing subsystem of your choice. Cleaning the discovery / routing systems up is typically done on a slower cadence in the event that a stack needed to be redeployed or an error occurred and something needed to be recovered. The longer this period is set too, the more cruft will accumulate in your discovery / routing system (for example, Consul's KV storage).
 
 ```
 nelson.cleanup.sweeper-delay = 24 hours
@@ -228,7 +228,7 @@ nelson.cleanup.sweeper-delay = 24 hours
 
 <span class="badge badge-warning">required</span>
 
-Nelson's H2 database requires some configuration to use. By default H2 will just write the database into the process-local folder, but this is typically not what you want. Most operators prefer the Nelson database to be on a redundant or backed-up known location. 
+Nelson's H2 database requires some configuration to use. By default H2 will just write the database into the process-local folder, but this is typically not what you want. Most operators prefer the Nelson database to be on a redundant or backed-up known location.
 
 * [database.driver](#database-driver)
 * [database.connection](#database-connection)
@@ -290,17 +290,254 @@ In this case two datacenters are configured: `texas` and `portland` - be aware t
 
 The following sub-sections will assume that the datacenter name is identified by `*`, representing whatever the administrator configured.
 
+* [datacenters.*.docker-registry](#datacenters-docker-registry)
+* [datacenters.*.domain](#datacenters-domain)
+* [datacenters.*.infrastructure.loadbalancer](#datacenters-infrastructure-loadbalancer)
+* [datacenters.*.infrastructure.vault](#datacenters-infrastructure-vault)
+* [datacenters.*.policy](#datacenters-policy)
+
 #### datacenters.*.domain
 
-sdfsdfsd
+Every datacenter typically has a "root domain", used for DNS purposes. How this DNS is hosted does not really matter, but examples might be something like `texas.dc.yourcompany.com` or `us-east-1.aws.company.net` etc. This will be used by Nelson when publishing routing information for a given datacenter.
+
+```
+datacenters.texas.domain = "texas.dc.yourcompany.com"
+```
 
 #### datacenters.*.docker-registry
 
+Defines the URL for your docker registry within a given datacenter. Be aware that some operators choose to have a large central registry, which all regions pull from. In this case you can specify the same URL for multiple datacenters, but be aware that this will damage the overall reliability of your system in the event that registry is unavailable. This is why Nelson encourages deployments to have a registry per-datacenter.
+
+```
+datacenters.texas.domain = "reg.texas.dc.yourcompany.com"
+```
+
+----
+
+### datacenters.*.infrastructure
+
+<span class="badge badge-warning">required</span>
+
+The `infrastructrue` section of a given datacenter stanza is one of the most comprehensive sections of the configuration, and as such has been broken down into a handful of subordinate sections in this guide.
+
+* [datacenters.*.infrastructure.scheduler](#datacenters-infrastructure-scheduler)
+* [datacenters.*.infrastructure.routing](#datacenters-infrastructure-routing)
+
+#### datacenters.*.infrastructure.scheduler
+
+As Nelson is integrated with a variety of scheudling systems, the administrator has to instruct Nelson which scheudling substrate is to be used in a given datacenter.
+
+```
+# to use the nomad integration
+infrastructure.scheduler = "nomad"
+
+# to use the kubernetes integration
+infrastructure.scheduler = "kubernetes"
+```
+
+This section *must* be specified otherwise Nelson will fault at startup and complain that there are no scheudlers specified.
+
+#### datacenters.*.infrastructure.routing
+
+Routing is a sophisticated subsystem within Nelson that defines where and how routing and readiness information is calculated and delivered.
+
+```
+# use the kubernetes readiness probes as indication of health
+infrastructure.scheduler = "kubernetes"
+
+# use the consul health checks as indication of readiness and health
+# whilst publishing the routing data in the lighthouse format to the
+# consul key-value storage system
+infrastructure.scheduler = "consul:lighthouse"
+
+# or if you prefer to be less explicit:
+infrastructure.scheduler = "consul"
+
+# ignore routing system and do not publish any information and assume
+# that all stacks become healthy right away.
+infrastructure.scheduler = "noop"
+```
+
+This section *must* be specified otherwise Nelson will fault at startup.
+
+----
+
+### datacenters.*.infrastructure.consul
+
+<span class="badge badge-info">optional</span>
+
+
+```
+consul {
+  endpoint  = "http://consul.service.texas.your.company.com"
+  timeout   = 1 second
+  acl-token = "XXXXXXXXX"
+  username  = "XXXXXXXXX"
+  password  = "XXXXXXXXX"
+}
+```
+
+
+----
+
+### datacenters.*.infrastructure.kubernetes
+
+<span class="badge badge-info">optional</span>
+
+```
+kubernetes {
+  in-cluster = false
+  timeout    = 3 seconds
+  kubeconfig = "/opt/application/conf/kubeconfig"
+}
+```
+
+----
+
+### datacenters.*.infrastructure.nomad
+
+<span class="badge badge-info">optional</span>
+
+```
+nomad {
+  endpoint = "http://nomad.service.texas.your.company.com:1234/"
+  timeout = 1 second
+  docker {
+    host = "registry.service.texas.your.company.com"
+    user = "someuser"
+    password = "dummypwd"
+  }
+}
+```
+
+----
+
+### datacenters.*.infrastructure.vault
+
+<span class="badge badge-warning">required</span>
+
 sdfsdf
+
+----
+
+### datacenters.*.infrastructure.loadbalancer
+
+<span class="badge badge-info">optional</span>
+
+In order to enable Nelson's support for dynamically provisioning load-balencers in public cloud, Nelson needs to know the networking configuration of the target environment. Presntly, only [AWS](https://aws.amazon.com/) is supported.
+
+* [loadbalancer.aws.access-key-id](#loadbalancer-aws-access-key-id)
+* [loadbalancer.aws.availability-zones](#loadbalancer-aws-image)
+* [loadbalancer.aws.elb-security-group-names](#loadbalancer-aws-image)
+* [loadbalancer.aws.image](#loadbalancer-aws-image)
+* [loadbalancer.aws.launch-configuration-name](#loadbalancer-aws-launch-configuration-name)
+* [loadbalancer.aws.region](#loadbalancer-aws-region)
+* [loadbalancer.aws.secret-access-key](#loadbalancer-aws-secret-access-key)
+
+#### loadbalancer.aws.access-key-id
+
+To provide Nelson access to AWS to launch the needed resources, provide an AWS access-key-id and secret-access-key. If Nelson itself is running on an AWS EC2 instance, then it is highly recomended to not specify credentials statically, but instead rely on the IAM instance profile which Nelson will automatically read and use if the static configuration fields are missing.
+
+```
+# prefer IAM profiles if using AWS EC2 to host Nelson itself
+datacenter.texas.loadbalancer.aws.access-key-id = "XXXXXXXXX"
+```
+
+#### loadbalancer.aws.availability-zones
+
+In order to launch load-balancer and auto-scaling group resources, Nelson needs to know what network subnets in your VPC should be used. Nelson makes the assumption that your network has "public" and "private" subdivisions, but if for some reason this is not the case or you do not want Nelson to ever expose publically addressable resources then simply specify the internal subnets in both `private-subnet` and `public-subnet` fields.
+
+```
+availability-zones {
+  texas-a {
+    private-subnet = "subnet-AAAAAAAA"
+    public-subnet = "subnet-BBBBBBB"
+  }
+  texas-b {
+    private-subnet = "subnet-QQQQQQ"
+    public-subnet = "subnet-XXXXXX"
+  }
+}
+```
+
+#### loadbalancer.aws.elb-security-group-names
+
+When Nelson launches the load-balancer you can configure the security group that this ELB should be placed in, which allows operators to decide exactly what firewall rules should be in place. Ultimately this allows administrators to ensure that only specified resources get made public.
+
+```
+datacenter.texas.loadbalancer.aws.elb-security-group-names = [ "sg-AAAAAAAA", "sg-BBBBBBB" ]
+```
+
+#### loadbalancer.aws.image
+
+Some operators prefer to run the proxy software as a container that is dynamically injected by Nelson. Others prefer to run baked AMIs that are specified in the launch config. If you want to use a container as the packaging mechinism for the inbound proxy, then specify it here, otherwise omit this field.
+
+```
+datacenter.texas.loadbalancer.aws.image = "registry.texas.company.com/whatever/infra-lb:1.2.3"
+```
+
+#### loadbalancer.aws.launch-configuration-name
+
+Nelson will use the specified launch configuration to launch the resources. How this launch configuration is specified - perhaps CloudFormation or Terraform - is out of scope for this documentation, as Nelson only needs to know the name of the launch configuration to boot as a "black box".
+
+```
+datacenter.texas.loadbalancer.aws.launch-configuration-name = "yourlb-XXXXXXXXXXXXXXXXXX"
+```
+
+#### loadbalancer.aws.region
+
+What region should Nelson use when launching AWS resources for this datacenter. This is needed as no assumptions are made that datacenter names fully map to AWS region conventions.
+
+```
+datacenter.texas.loadbalancer.aws.region = "us-west-2"
+```
+
+#### loadbalancer.aws.secret-access-key
+
+To provide Nelson access to AWS to launch the needed resources, provide an AWS access-key-id and secret-access-key. If Nelson itself is running on an AWS EC2 instance, then it is highly recomended to not specify credentials statically, but instead rely on the IAM instance profile which Nelson will automatically read and use if the static configuration fields are missing.
+
+```
+datacenter.texas.loadbalancer.aws.secret-access-key = "XXXXXXXXX"
+```
+
+----
 
 ### datacenter.*.policy
 
-sdfsdf
+<span class="badge badge-info">optional</span>
+
+The `policy` section informs Nelson how Vault policies should be generated, and if additional paths should be added to generated policies.
+
+* [policy.resource-creds-path](#policy-resource-creds-path)
+* [policy.pki-path](#policy-pki-path)
+
+#### policy.resource-creds-path
+
+When Nelson generates policies for credentials in Vault, it generates the path based on the template specified with `resource-creds-path`. Units will get read capability on each resource specified. For more information on administering Vault with Nelson, please [see the operator guide](/documentation/operator.html#administering-vault).
+
+Supported variables are as follows:
+
+* `%env%` - root namespace being used for this particular deployment, for example: `dev`.
+* `%resource%` - value will be defined by the `resources` section of the manifest file.
+* `%unit%` - the unit name of the application being deployed.
+
+For more information on the Nelson terminology, please see [the getting started guide](/getting-started/)
+
+```
+datacenters.texas.policy.resource-creds-path = "yourcompany/%env%/%resource%/creds/%unit%"
+```
+
+#### policy.pki-path
+
+It is often desirable to have Vault generate dynamic certificates for every container within a stack deployment. However, to do this, the Vault policy being used by the stack in question needs to be specially configured in order to leverage the PKI backend within Vault. With this frame, the `pki-path` explicitly configures how the PKI backend will be referenced in the generated Vault policy.
+
+Supported variables are as follows:
+
+* `%env%` - root namespace being used for this particular deployment, for example: `dev`.
+
+```
+datacenters.texas.policy.pki-path = "pki/%env%"
+```
 
 ----
 
@@ -308,14 +545,14 @@ sdfsdf
 
 <span class="badge badge-warning">required</span>
 
-For some workflows and developer experience functionality, Nelson requires access to a [Docker](https://docker.com) daemon to launch and replicate containers. In order to do this, Nelson must be told how to talk to the Docker process. 
+For some workflows and developer experience functionality, Nelson requires access to a [Docker](https://docker.com) daemon to launch and replicate containers. In order to do this, Nelson must be told how to talk to the Docker process.
 
 * [docker.connection](#docker-connection)
 * [docker.verify-tls](#docker-verify-tls)
 
 #### docker.connection
 
-Docker supports a range of ways to connect to the daemon process and any of the Docker-supported URIs are valid for this field. 
+Docker supports a range of ways to connect to the daemon process and any of the Docker-supported URIs are valid for this field.
 
 ```
 # using tcp (recomended for security reasons)
@@ -327,11 +564,11 @@ nelson.docker.connection = "unix:///path/to/docker.sock"
 
 #### docker.verify-tls
 
-Depending on your Docker process configuration, you may want to skip TLS verification. The default is to verify TLS (as that is the recommended, secure configuration), but you can optionally disable that verification here. 
+Depending on your Docker process configuration, you may want to skip TLS verification. The default is to verify TLS (as that is the recommended, secure configuration), but you can optionally disable that verification here.
 
 ```
 nelson.docker.verify-tls = true
-``` 
+```
 
 ----
 
@@ -349,7 +586,7 @@ Nelson can notify you by email when changes to deployments happen. In order to d
 
 #### email.host
 
-Controls where Nelson will look for your SMTP email server. 
+Controls where Nelson will look for your SMTP email server.
 
 ```
 nelson.email.host = "mail.company.com"
@@ -424,7 +661,7 @@ nelson.github.redirect-uri = "https://nelson.local/auth/exchange"
 
 #### github.scope
 
-What OAuth scopes should Nelson use when interacting with Github. Read more about Github OAuth scopes [on the Github documentation site](https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). 
+What OAuth scopes should Nelson use when interacting with Github. Read more about Github OAuth scopes [on the Github documentation site](https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
 ```
 nelson.github.scope  = "repo"
@@ -432,7 +669,7 @@ nelson.github.scope  = "repo"
 
 #### github.system-username
 
-Configure the Github username that Nelson will conduct operations as. This is needed because some operations that Nelson does are not in the context of any human interaction. For example, when Nelson conducts a deployment, it's all happening automatically and asynchronously from any human, and thus human-user OAuth tokens cannot be utilized within these operations. To protect privacy Nelson does not store end-user OAuth tokens, and as such needs its own user to interact with your Github account.  
+Configure the Github username that Nelson will conduct operations as. This is needed because some operations that Nelson does are not in the context of any human interaction. For example, when Nelson conducts a deployment, it's all happening automatically and asynchronously from any human, and thus human-user OAuth tokens cannot be utilized within these operations. To protect privacy Nelson does not store end-user OAuth tokens, and as such needs its own user to interact with your Github account.
 
 ```
 nelson.github.system-username = "nelson"
@@ -452,7 +689,7 @@ nelson.github.access-token = "replaceme"
 
 <span class="badge badge-warning">required</span>
 
-Specify the networking options used by Nelson, including the network interface to which the JVM binds, port binding, and the address Nelson advertises in its API. 
+Specify the networking options used by Nelson, including the network interface to which the JVM binds, port binding, and the address Nelson advertises in its API.
 
 * [network.bind-host](#network-bind-host)
 * [network.bind-port](#network-bind-port)
@@ -484,7 +721,7 @@ Typically Nelson is hosted behind a reverse proxy, or otherwise bound to an inte
 nelson.network.external-host = "nelson.yourco.com"
 ```
 
-Whilst not recommended, you can also use an IP address here if you do not have an internal domain name server. 
+Whilst not recommended, you can also use an IP address here if you do not have an internal domain name server.
 
 ```
 nelson.network.external-host = "10.10.1.11"
@@ -570,7 +807,7 @@ nelson.security.encryption-key = "B1oy5R9nVAw1gv0zAlreRg=="
 This field affects the cadence at which user tokens will be refreshed. To be specific, this means that the user of the Nelson CLI will, upon issuance, be able to use that token up to the maximum bound defined by this field (excluding a change in the encryption or signing keys). This value should be set to a size that is not too large, but also not too small causing users to constantly be refreshing tokens which might unduly burden the system if you have a lot of concurrent users.
 
 ```
-# as the field is a duration, you can specify it with 
+# as the field is a duration, you can specify it with
 # a few different formats:
 nelson.security.expire-login-after = 7 days
 
@@ -578,9 +815,9 @@ nelson.security.expire-login-after = 7 days
 nelson.security.expire-login-after = 48 hours
 ```
 
-#### security.key-id 
+#### security.key-id
 
-The key-id is an implementation detail, and is usually statically set by an operator and never changed. Earlier revisions of Nelson used a rotating key system, which was never open-sourced, and so the key-id is a vestigial configuration from that historical detail. 
+The key-id is an implementation detail, and is usually statically set by an operator and never changed. Earlier revisions of Nelson used a rotating key system, which was never open-sourced, and so the key-id is a vestigial configuration from that historical detail.
 
 ```
 nelson.security.key-id = 468513861
@@ -630,7 +867,7 @@ Defines the name that will appear as the poster of messages from Nelson in the S
 
 ```
 nelson.slack.username = "Nelson"
-``` 
+```
 
 ----
 
@@ -664,7 +901,7 @@ nelson.template.cpu-quota = 50000
 
 #### template.memory-mb
 
-Control the maximum amount of memory assigned to this template container execution. Typically this should be a small value, and most templating engines only use a very small amount of memory. 
+Control the maximum amount of memory assigned to this template container execution. Typically this should be a small value, and most templating engines only use a very small amount of memory.
 
 ```
 nelson.template.memory-mb = 8
