@@ -292,7 +292,10 @@ The following sub-sections will assume that the datacenter name is identified by
 
 * [datacenters.*.docker-registry](#datacenters-docker-registry)
 * [datacenters.*.domain](#datacenters-domain)
+* [datacenters.*.infrastructure.consul](#datacenters-infrastructure-consul)
+* [datacenters.*.infrastructure.kubernetes](#datacenters-infrastructure-kubernetes)
 * [datacenters.*.infrastructure.loadbalancer](#datacenters-infrastructure-loadbalancer)
+* [datacenters.*.infrastructure.nomad](#datacenters-infrastructure-nomad)
 * [datacenters.*.infrastructure.vault](#datacenters-infrastructure-vault)
 * [datacenters.*.policy](#datacenters-policy)
 
@@ -437,13 +440,40 @@ consul.password  = "XXXXXXXXX"
 
 <span class="badge badge-info">optional</span>
 
+Nelson has an integration with Kubernetes, but the setup is a little different to Nelson's other scheudler implementations. As Kubernetes utilizes a so-called "fat-client" called `kubectl`, Kubernetes API server does not make direct integrations easy, as so much logic is embedded in the client itself. With this frame, Nelson actually shells out (i.e. fork-exec) to the `kubectl` command-line client in order to interact with the Kubernetes cluster in question.
+
+In addition, some operators even decide to run Nelson itself on top of the Kubernetes cluster that Nelson is controlling. If this is a good idea or not is out of scope for this guide, but it is a supported operational use case.
+
+* [kubernetes.in-cluster](#kubernetes-in-cluster)
+* [kubernetes.kubeconfig](#kubernetes-kubeconfig)
+* [kubernetes.timeout](#kubernetes-timeout)
+
+#### kubernetes.in-cluster
+
+Specifies if the Nelson server itself is running inside a Kubernetes cluster or not. This parameter determintes if Nelson will attempt to use the `kubeconfig` specified by `kubernetes.kubeconfig` field, or if it will use the implicitly defined one inside the cluster, and authenticate using the [ServiceAccount](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) that Nelson was launched with.
+
 ```
-kubernetes {
-  in-cluster = false
-  timeout    = 3 seconds
-  kubeconfig = "/opt/application/conf/kubeconfig"
-}
+kubernetes.in-cluster = false
 ```
+
+#### kubernetes.kubeconfig
+
+If *not* running inside a Kubernetes cluster, but instead interacting with one remotely, then it is nessicary to configure a [kubeconfig](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/#create-a-second-configuration-file) file that has the needed information to access your cluster.
+
+Note that this design allows users to continue to use whatever Kubernetes authentication scheme they are using, without any specific integrations being needed inside Nelson.
+
+```
+kubernetes.kubeconfig = "/opt/application/conf/kubeconfig"
+```
+
+#### kubernetes.timeout
+
+Controls how long Nelson should wait for timeouts when interacting with Kubernetes. This configuration parameter is useful to tune if your Nelson is interacting with a remote cluster in a regional datacenter (i.e. datacenters further away from Nelson will require a longer timeout because of the networking latency). If tuning this parameter, monitoring the Nelson logs and metrics carefully to ensure you do not synthetically introduce high failure rates.
+
+```
+kubernetes.timeout    = 3 seconds
+```
+
 
 ----
 
