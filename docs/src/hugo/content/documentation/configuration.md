@@ -102,7 +102,7 @@ Some configuration in Nelson is "top-level" in the `nelson` scope. These options
 #### nelson.default-namespace
 
 upon receiving a github release event, where should Nelson assume the
-application should get deployed too. This can either be a root namespace,
+application get deployed. This can either be a root namespace,
 or a subordinate namespace, e.g. `stage/unstable`... it's arbitrary, but the
 namespace must exist (otherwise Nelson will attempt to create it on boot)
 
@@ -273,7 +273,7 @@ nelson.database.password = "some password"
 
 <span class="badge badge-warning">required</span>
 
-The datacenters configuration section is what controls the various places that Nelson can deploy too. Within this section you can configure how Nelson knows how to talk to your scheudler of choice, instruct Nelson where it's Vault instance is, configure dynamic PKI and so forth. The structure of this section is namespaced by the datacenter in question; consider the following example:
+The datacenters configuration section is what controls the various places that Nelson can deploy to. Within this section you can configure how Nelson knows how to talk to your scheduler of choice, instruct Nelson where it's Vault instance is, configure dynamic PKI and so forth. The structure of this section is namespaced by the datacenter in question; consider the following example:
 
 ```
 datacenters {
@@ -286,7 +286,7 @@ datacenters {
 }
 ```
 
-In this case two datacenters are configured: `texas` and `portland` - be aware that the names here are arbitrary, but once you choose them it is highly recomended to avoid changing them in the future as end-users can target specific datacenters for data-gravity or placement reason using the [datacenter stanza](/documentation/manifest.html#datacenters) of the Nelson manifest file, so future changes can be potentially disruptive. It is also highly adivsable that you choose unambiguous naming. For example, regions in [AWS](https://aws.amazon.com/) are things like <br/> `us-west-1` and `us-west-2` whilst region names in [GCP](https://cloud.google.com/) are `us-west1`; using these very similar names verbatim can be exceedingly confusing for users. Most companies internally have some taxonomy for their datacenter naming, so using something that users can identify with is usually advisable. Some Nelson users like to use regional airport codes, or even internal codewords - whatever scheme you choose, ensure users understand it.
+In this case two datacenters are configured: `texas` and `portland` - be aware that the names here are arbitrary, but once you choose them it is highly recommended to avoid changing them in the future as end-users can target specific datacenters for data-gravity or placement reason using the [datacenter stanza](/documentation/manifest.html#datacenters) of the Nelson manifest file, so future changes can be potentially disruptive. It is also highly advisable that you choose unambiguous naming. For example, regions in [AWS](https://aws.amazon.com/) are things like <br/> `us-west-1` and `us-west-2` whilst region names in [GCP](https://cloud.google.com/) are `us-west1`; using these very similar names verbatim can be exceedingly confusing for users. Most companies internally have some taxonomy for their datacenter naming, so using something that users can identify with is usually advisable. Some Nelson users like to use regional airport codes, or even internal codewords - whatever scheme you choose, ensure users understand it.
 
 The following sub-sections will assume that the datacenter name is identified by `*`, representing whatever the administrator configured.
 
