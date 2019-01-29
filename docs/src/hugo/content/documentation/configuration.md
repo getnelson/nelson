@@ -328,7 +328,7 @@ The `infrastructrue` section of a given datacenter stanza is one of the most com
 
 #### datacenters.*.infrastructure.scheduler
 
-As Nelson is integrated with a variety of scheudling systems, the administrator has to instruct Nelson which scheudling substrate is to be used in a given datacenter.
+As Nelson is integrated with a variety of scheduling systems, the administrator has to instruct Nelson which scheduling substrate is to be used in a given datacenter.
 
 ```
 # to use the nomad integration
@@ -338,7 +338,7 @@ infrastructure.scheduler = "nomad"
 infrastructure.scheduler = "kubernetes"
 ```
 
-This section *must* be specified otherwise Nelson will fault at startup and complain that there are no scheudlers specified.
+This section *must* be specified otherwise Nelson will fault at startup and complain that there are no schedulers specified.
 
 #### datacenters.*.infrastructure.routing
 
@@ -373,7 +373,7 @@ This section controls how Nelson interacts with your Consul cluster.
 
 #### consul.endpoint
 
-Specify the URL that Nelson can reach your Consul servers at. It is highly recomended that this communication take place over HTTPS, and the certificate in use matches the domain being used on the remote server. If you can sucsessfully cURL from the Nelson machine to the endpoint, then Nelson should be able to interact with Consul without issue.
+Specify the URL that Nelson can reach your Consul servers at. It is highly recomended that this communication take place over HTTPS, and the certificate in use matches the domain being used on the remote server. If you can successfully cURL from the Nelson machine to the endpoint, then Nelson should be able to interact with Consul without issue.
 
 ```
 consul.endpoint  = "http://consul.texas.your.company.com"
@@ -419,7 +419,7 @@ Depending upon your configuration - both of Consul and of Nelson - the above pol
 
 #### consul.username
 
-While not specifically required by Consul, it is common for operators to put a basic-auth proy in front of their Consul UI, which can impeed Nelon's ability to access the Consul API. If this is the case, specify the `username` here:
+While not specifically required by Consul, it is common for operators to put a basic-auth proxy in front of their Consul UI, which can impede Nelon's ability to access the Consul API. If this is the case, specify the `username` here:
 
 ```
 consul.username  = "XXXXXXXXX"
@@ -427,7 +427,7 @@ consul.username  = "XXXXXXXXX"
 
 #### consul.password
 
-While not specifically required by Consul, it is common for operators to put a basic-auth proy in front of their Consul UI, which can impeed Nelon's ability to access the Consul API. If this is the case, specify the `password` here:
+While not specifically required by Consul, it is common for operators to put a basic-auth proxy in front of their Consul UI, which can impede Nelon's ability to access the Consul API. If this is the case, specify the `password` here:
 
 ```
 consul.password  = "XXXXXXXXX"
@@ -481,7 +481,7 @@ kubernetes.timeout    = 3 seconds
 
 <span class="badge badge-info">optional</span>
 
-This section controls how Nelson interacts with [Nomad](https://www.nomadproject.io/). If you are not using the Nomad scheudler in your datacenter, then you can omit this section. When launching tasks onto your Nomad instalation, Nelson will use the API and requires no external binaries.
+This section controls how Nelson interacts with [Nomad](https://www.nomadproject.io/). If you are not using the Nomad scheduler in your datacenter, then you can omit this section. When launching tasks onto your Nomad installation, Nelson will use the API and requires no external binaries.
 
 * [nomad.endpoint](#nomad-endpoint)
 * [nomad.timeout](#nomad-timeout)
@@ -534,7 +534,7 @@ As Nelson is *generating* Vault policies, it requires a fairly privilidged authe
 vault.auth-token = "XXXXXXXXX"
 ```
 
-The token that is used here should typically have the ability to create, list and delete vault policies, along with creating [backend auth roles](https://www.vaultproject.io/docs/auth/) (if your schuedling setup needs that functionality). For more information on Vault policies, please [read the Vault documentation](https://www.vaultproject.io/docs/concepts/policies.html).
+The token that is used here should typically have the ability to create, list and delete vault policies, along with creating [backend auth roles](https://www.vaultproject.io/docs/auth/) (if your scheduling setup needs that functionality). For more information on Vault policies, please [read the Vault documentation](https://www.vaultproject.io/docs/concepts/policies.html).
 
 #### vault.timeout
 
