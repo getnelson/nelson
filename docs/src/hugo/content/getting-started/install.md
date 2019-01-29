@@ -181,17 +181,15 @@ nelson {
       }
 
       infrastructure {
-        scheduler {
-          scheduler = "kubernetes"
-          kubernetes {
-            # is nelson hosted on the cluster it is managing?
-            in-cluster = false
-            # in the event that Nelson is running on a substrate
-            # outside of the deployment clusters, specify the path
-            # to the kubeconfig which will dictate how kubectl does
-            # authentication with the cluster and so forth.
-            kubeconfig = /path/to/.kube/config
-          }
+        scheduler = "kubernetes"
+        kubernetes {
+          # is nelson hosted on the cluster it is managing?
+          in-cluster = false
+          # in the event that Nelson is running on a substrate
+          # outside of the deployment clusters, specify the path
+          # to the kubeconfig which will dictate how kubectl does
+          # authentication with the cluster and so forth.
+          kubeconfig = /path/to/.kube/config
         }
 
         vault {
