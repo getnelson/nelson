@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?1cc2456879aecb53e5cdf09ad31cea63" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?12f10e6c0f4e5abbac994b63b282133c" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?978fca90031383e2081628b7d5d2b2c2" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?1f5f4f99e16b6673ae6743babf48c8fb" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -131,6 +131,10 @@
                   
                       <li class="">
                           <a href="/documentation/cli.html">Command Line</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/configuration.html">Configuration</a>
                       </li>
                   
                       <li class="">
@@ -368,17 +372,15 @@
       }
 
       infrastructure {
-        scheduler {
-          scheduler = &quot;kubernetes&quot;
-          kubernetes {
-            # is nelson hosted on the cluster it is managing?
-            in-cluster = false
-            # in the event that Nelson is running on a substrate
-            # outside of the deployment clusters, specify the path
-            # to the kubeconfig which will dictate how kubectl does
-            # authentication with the cluster and so forth.
-            kubeconfig = /path/to/.kube/config
-          }
+        scheduler = &quot;kubernetes&quot;
+        kubernetes {
+          # is nelson hosted on the cluster it is managing?
+          in-cluster = false
+          # in the event that Nelson is running on a substrate
+          # outside of the deployment clusters, specify the path
+          # to the kubeconfig which will dictate how kubectl does
+          # authentication with the cluster and so forth.
+          kubeconfig = /path/to/.kube/config
         }
 
         vault {
@@ -578,7 +580,7 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
         </p>
         <p>
           Currently v
-                    0.13.164
+                    0.13.165
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -599,9 +601,9 @@ Nelson's database is a simple <a href="http://www.h2database.com/">H2</a> file-b
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?84b0cab9f4ebfdc07cf777bfba0cc892"></script>
+<script src="/js/material.min.js?ff7eea84657706b3f724ea88365a8f28"></script>
 
-<script src="/js/nelson.js?be0fac04efcfe0ca4e23036a206b5e80"></script>
+<script src="/js/nelson.js?8cffb95b04cf0dbcccb421830548ba04"></script>
 
 
   </body>

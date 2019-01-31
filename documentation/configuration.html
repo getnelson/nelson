@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://getnelson.io/favicon.ico?" type="image/x-icon">
+
+    <meta name="generator" content="Hugo 0.48" />
+
+    <title>Nelson – Cloud-native container deployment</title>
+
+    <link href="https://getnelson.io/css/material.min.css?f46c4e6002152dc57b4415c9bd7152b1" rel="stylesheet">
+    
+    <link href="https://getnelson.io/css/nelson.css?f71e5cc4e45b150eb8eb842c744d15ef" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+
+
+  <body>
+    
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-blue-5">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="/img/nelson-without-background.svg?sanitize=true" width="30" height="30" class="d-inline-block align-top" alt="" />
+      &nbsp;
+      Nelson
+    </a>
+    <ul class="navbar-nav mr-auto">
+      
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/introduction/">Introduction</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/getting-started/">Getting Started</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/documentation/">Documentation</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="https://github.com/getnelson/nelson">Code</a>
+      </li>
+      
+      <li class="nav-item ">
+        <a class="nav-link" href="/api/">API</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+    
+
+    <main role="main">
+
+      <div class="container primary">
+        <div class="row">
+          <aside class="col-md-3">
+  <ol>
+    
+    
+        
+            <li class="">
+              <a href="/introduction/" class="">Introduction</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/introduction/use-case.html">Use Cases</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/introduction/architecture.html">Architecture</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/introduction/competitors.html">Competitors</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+        
+            <li class="">
+              <a href="/getting-started/index.html" class="">Getting Started</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/getting-started/install.html">Install</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/first-use.html">First Use</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/deployables.html">Deployables</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/blueprints.html">Blueprints</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/lifecycle.html">Lifecycle</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/routing.html">Routing</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/getting-started/next.html">Further Reading</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+        
+            <li class="active">
+              <a href="/documentation/" class="">Documentation</span></a>
+              <ol class="sub-menu">
+                  
+                      <li class="">
+                          <a href="/documentation/cli.html">Command Line</a>
+                      </li>
+                  
+                      <li class="highlight">
+                          <a href="/documentation/configuration.html">Configuration</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/manifest.html">Manifest Settings</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/blueprints.html">Blueprint Settings</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/operator.html">Operator Guide</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/api.html">REST API</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/contributing.html">Contributing</a>
+                      </li>
+                  
+                      <li class="">
+                          <a href="/documentation/credits.html">Credits</a>
+                      </li>
+                  
+              </ol>
+            </li>
+        
+    
+</ol>
+</aside>
+
+          <article class="col-md-9">
+            <h1>Configuration</h1>
+
+            
+            <p>For installation instructions, see the <a href="/getting-started/install.html">user guide</a> section. This reference guide covers the various configuration options Nelson can have in its configuration file and explains why you might want them.</p>
+            
+
+            
+              <nav id="TableOfContents">
+                <ol>
+                
+                  <li><a href="#overview">Overview</a></li>
+                
+                  <li><a href="#core">Core</a></li>
+                
+                  <li><a href="#auditing">Auditing</a></li>
+                
+                  <li><a href="#cleanup">Cleanup</a></li>
+                
+                  <li><a href="#database">Database</a></li>
+                
+                  <li><a href="#datacenters">Datacenters</a></li>
+                
+                  <li><a href="#docker">Docker</a></li>
+                
+                  <li><a href="#email">Email</a></li>
+                
+                  <li><a href="#github">Github</a></li>
+                
+                  <li><a href="#network">Network</a></li>
+                
+                  <li><a href="#pipeline">Pipeline</a></li>
+                
+                  <li><a href="#security">Security</a></li>
+                
+                  <li><a href="#slack">Slack</a></li>
+                
+                  <li><a href="#templating">Templating</a></li>
+                
+                  <li><a href="#user-interface">User Interface</a></li>
+                
+                  <li><a href="#workflow-logger">Workflow Logger</a></li>
+                
+                </ol>
+              </nav>
+            
+
+            
+            <hr />
+            
+
+            
+
+<h2 id="overview">Overview</h2>
+
+<p>Nelson is configured using <a href="https://github.com/getnelson/knobs">Knobs</a> which is a Scala port of the <a href="http://hackage.haskell.org/package/configurator-0.3.0.0/docs/Data-Configurator.html">Data.Configurator</a> library from Haskell. This format is well-specified and using Knobs allows Nelson to give better, more accurate error messages in the event of a user configuration error. More practically, Knobs supports a simplistic syntax for common data types:</p>
+
+<pre><code># strings
+thing = &quot;value&quot;
+
+# numbers
+foo = 123
+
+# durations
+delay = 30 seconds
+another = 1 minute
+
+# lists of strings
+list-of-thing = [ &quot;buzz&quot;, &quot;qux&quot; ]
+
+# list of integers
+list-of-int = [ 80, 443 ]
+
+</code></pre>
+
+<p>In addition, Knobs allows for &ldquo;grafting&rdquo; which can make using the configuration file easier for operators. For example, Knobs supports grafting:</p>
+
+<pre><code># overrides.cfg
+nelson.network.discovery-delay = 3 minutes
+</code></pre>
+
+<p>Which can be &ldquo;grafted&rdquo; on a parent template:</p>
+
+<pre><code>nelson {
+  ....
+}
+import overrides.cfg
+</code></pre>
+
+<p>This is frequently useful to assemble configuration from discrete modular parts. For a more exhaustive description of the configuration format itself, please see the <a href="http://verizon.github.io/knobs/">Knobs documentation</a>.</p>
+
+<p>All configuration in Nelson is a sub-config of the <code>nelson</code> scope / namespace. This can either be specified using &ldquo;block&rdquo; sytanx, or &ldquo;inline&rdquo; syntax. Consider the following example:</p>
+
+<pre><code># nested block syntax
+nelson {
+  timeout = 4 seconds
+}
+
+# which can also be written using inline syntax:
+nelson.timeout = 4 seconds
+</code></pre>
+
+<p>These are 100% functionally equivalent, and there is no prescription on what style you use where in your deployment of Nelson. This guide uses inline syntax for referencing specific fields, simply for compactness and readability. It is however recommended that the block syntax be used in production deployments, as the Nelson team believe it is more readable for most users.</p>
+
+<hr />
+
+<h2 id="core">Core</h2>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>Some configuration in Nelson is &ldquo;top-level&rdquo; in the <code>nelson</code> scope. These options are typically core to how Nelson operates, and Nelson administrators should carefully review these options to ensure that they are set to values that make sense for your deployment.</p>
+
+<ul>
+<li><a href="#nelson-default-namespace">nelson.default-namespace</a></li>
+<li><a href="#nelson-discovery-delay">nelson.discovery-delay</a></li>
+<li><a href="#nelson-manifest-filename">nelson.manifest-filename</a></li>
+<li><a href="#nelson-proxy-port-whitelist">nelson.proxy-port-whitelist</a></li>
+<li><a href="#nelson-readiness-delay">nelson.readiness-delay</a></li>
+<li><a href="#nelson-timeout">nelson.timeout</a></li>
+</ul>
+
+<h4 id="nelson-default-namespace">nelson.default-namespace</h4>
+
+<p>upon receiving a github release event, where should Nelson assume the
+application get deployed. This can either be a root namespace,
+or a subordinate namespace, e.g. <code>stage/unstable</code>&hellip; it&rsquo;s arbitrary, but the
+namespace must exist (otherwise Nelson will attempt to create it on boot)</p>
+
+<pre><code>nelson.default-namespace = &quot;dev&quot;
+</code></pre>
+
+<h4 id="nelson-discovery-delay">nelson.discovery-delay</h4>
+
+<p>The frequency at which nelson should write out the discovery / routing protocol information to your configured routing sub-system. This should typically not be set too high as it will affect the frequency and choppiness of updates in the runtime. For example, if you set the value to 10 minutes and wanted to migrate traffic in 30 minutes, you&rsquo;d end up with 3 large &ldquo;steps&rdquo; in that traffic-shifting curve (assuming a linear specification).</p>
+
+<pre><code>nelson.discovery-delay = 2 minutes
+</code></pre>
+
+<h4 id="nelson-manifest-filename">nelson.manifest-filename</h4>
+
+<p>When Nelson fetches the repository manifest, this field controls what filename Nelson should be looking for. By default, the expectation is that this config is a path from the root of the repository, but can be specified with relative paths (from the root of any given repository).</p>
+
+<pre><code>nelson.manifest-filename = &quot;.nelson.yml&quot;
+</code></pre>
+
+<h4 id="nelson-proxy-port-whitelist">nelson.proxy-port-whitelist</h4>
+
+<p>When using Nelson&rsquo;s <a href="/getting-started/routing.html#load-balancers">load balancer</a> feature, to avoid exposing random ports on the internet, administrators can keep a whitelist of the ports they are permitting to be exposed. This helps mitigate issues with security surface areas, whilst not restricting users to some hardcoded defaults.</p>
+
+<pre><code>nelson.proxy-port-whitelist = [ 80, 443, 8080 ]
+</code></pre>
+
+<h4 id="nelson-readiness-delay">nelson.readiness-delay</h4>
+
+<p>How frequently should Nelson run the readiness check to see if a service deployment is ready to take active traffic. How frequently this needs to be will largely be affected by the routing sub-system you have elected to use. For example, queries to Consul, vs queries to Kubernetes.</p>
+
+<pre><code>nelson.readiness-delay = 3 minutes
+</code></pre>
+
+<h4 id="nelson-timeout">nelson.timeout</h4>
+
+<p>Controls how long Nelson should wait when talking to external systems. For example, when Nelson makes a call to Vault, or a scheduling sub-system, how long should it wait?</p>
+
+<pre><code>nelson.timeout = 4 seconds
+</code></pre>
+
+<hr />
+
+<h2 id="auditing">Auditing</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>Nelson has an internal auditing subsystem that keeps a track of all the events that happen, from deployments to cleanup and deliberate user actions.</p>
+
+<ul>
+<li><a href="#audit-concurrency-limit">audit.concurrency-limit</a></li>
+<li><a href="#audit-inbound-buffer-limit">audit.inbound-buffer-limit</a></li>
+</ul>
+
+<h4 id="audit-concurrency-limit">audit.concurrency-limit</h4>
+
+<p>As Nelson is executing various parts of its system asynchronously, the audit system has to be able to respond to multiple inbound callers at the same time. This configuration option controls the size of the thread pool that is used specifically for auditing. This should typically be a lower number, but greater than <code>2</code>.</p>
+
+<pre><code>nelson.audit.concurrency-limit = 4
+</code></pre>
+
+<h4 id="audit-inbound-buffer-limit">audit.inbound-buffer-limit</h4>
+
+<p>The auditing system operates as a buffered queue. In order to define the behavior of Nelson, the buffer is capped to a specific value controlled by the <code>inbound-buffer-limit</code> field. In practice this should not be a problem and the default should suffice in nearly every case, but be aware that if Nelson were internally queuing more than the value specified here the queue will block until items have been consumed by one of the auditing processor threads.</p>
+
+<pre><code>nelson.audit.inbound-buffer-limit = 50
+</code></pre>
+
+<hr />
+
+<h2 id="cleanup">Cleanup</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>The <code>cleanup</code> stanza controls how Nelson evaluates and executes the automatic cleanup operations on the service and job graphs.</p>
+
+<ul>
+<li><a href="#cleanup-cleanup-delay">cleanup.cleanup-delay</a></li>
+<li><a href="#cleanup-cleanup-delay">cleanup.extend-deployment-time-to-live</a></li>
+<li><a href="#cleanup-cleanup-delay">cleanup.initial-deployment-time-to-live</a></li>
+<li><a href="#cleanup-cleanup-delay">cleanup.sweeper-delay</a></li>
+</ul>
+
+<h4 id="cleanup-cleanup-delay">cleanup.cleanup-delay</h4>
+
+<p>The cadence at which Nelson should process the stack topology and look for stacks that have been marked as garbage and are pending deletion. This timeout affects how quickly a stack moves from the <code>ready</code> state to the <code>garbage</code> state, and in turn how quickly items that were <code>garbage</code> actually get reaped.</p>
+
+<pre><code>nelson.cleanup.cleanup-delay = 10 minutes
+</code></pre>
+
+<h4 id="cleanup-extend-deployment-time-to-live">cleanup.extend-deployment-time-to-live</h4>
+
+<p>When Nelson determines that a stack is still useful and is to avoid deletion, how long should that stack TTL be increased by? This parameter should be set to the longest time that you would be prepared to wait for a stack to be destroyed. Be aware that if the TTL is less than the <code>cleanup-delay</code> parameter then Nelson will find your stacks to be garbage and delete them. Change this parameter with caution and be sure to validate the behavior is what you want.</p>
+
+<pre><code>nelson.cleanup.extend-deployment-time-to-live = 30 minutes
+</code></pre>
+
+<h4 id="cleanup-initial-deployment-time-to-live">cleanup.initial-deployment-time-to-live</h4>
+
+<p>When a stack is first launched by Nelson, how much of a grace period should be given before Nelson starts to subject the stack to the typical garbage collection process? This is the maximum time that Nelson will check for readiness - once the period elapses, if the stack is not in the <code>ready</code> state it will fall subject to the garbage collection process.</p>
+
+<pre><code>nelson.cleanup.initial-deployment-time-to-live = 30 minutes
+</code></pre>
+
+<h4 id="cleanup-sweeper-delay">cleanup.sweeper-delay</h4>
+
+<p>Nelson is publishing a set of metadata about stacks to the configured routing subsystem of your choice. Cleaning the discovery / routing systems up is typically done on a slower cadence in the event that a stack needed to be redeployed or an error occurred and something needed to be recovered. The longer this period is set too, the more cruft will accumulate in your discovery / routing system (for example, Consul&rsquo;s KV storage).</p>
+
+<pre><code>nelson.cleanup.sweeper-delay = 24 hours
+</code></pre>
+
+<hr />
+
+<h2 id="database">Database</h2>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>Nelson&rsquo;s H2 database requires some configuration to use. By default H2 will just write the database into the process-local folder, but this is typically not what you want. Most operators prefer the Nelson database to be on a redundant or backed-up known location.</p>
+
+<ul>
+<li><a href="#database-driver">database.driver</a></li>
+<li><a href="#database-connection">database.connection</a></li>
+<li><a href="#database-username">database.username</a></li>
+<li><a href="#database-password">database.password</a></li>
+</ul>
+
+<h4 id="database-driver">database.driver</h4>
+
+<p>At the time of writing, Nelson only supported H2 as its backend datastore; this field should typically not be changed by administrators.</p>
+
+<pre><code>nelson.database.driver = &quot;org.h2.Driver&quot;
+</code></pre>
+
+<h4 id="database-connection">database.connection</h4>
+
+<p>Depending on the driver specified in the <code>nelson.database.url</code> field, configure an appropriate JDBC string:</p>
+
+<pre><code>nelson.database.connection = &quot;jdbc:h2:file:/opt/application/db/nelson;DATABASE_TO_UPPER=FALSE;AUTO_SERVER=TRUE;&quot;
+</code></pre>
+
+<h4 id="database-username">database.username</h4>
+
+<p>If your database is using authentication, specify the username with the <code>username</code> field:</p>
+
+<pre><code>nelson.database.username = &quot;admin&quot;
+</code></pre>
+
+<h4 id="database-password">database.password</h4>
+
+<p>If your database is using authentication, specify the password with the <code>password</code> field:</p>
+
+<pre><code>nelson.database.password = &quot;some password&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="datacenters">Datacenters</h2>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>The datacenters configuration section is what controls the various places that Nelson can deploy to. Within this section you can configure how Nelson knows how to talk to your scheduler of choice, instruct Nelson where it&rsquo;s Vault instance is, configure dynamic PKI and so forth. The structure of this section is namespaced by the datacenter in question; consider the following example:</p>
+
+<pre><code>datacenters {
+  texas {
+    ...
+  }
+  portland {
+    ...
+  }
+}
+</code></pre>
+
+<p>In this case two datacenters are configured: <code>texas</code> and <code>portland</code> - be aware that the names here are arbitrary, but once you choose them it is highly recommended to avoid changing them in the future as end-users can target specific datacenters for data-gravity or placement reason using the <a href="/documentation/manifest.html#datacenters">datacenter stanza</a> of the Nelson manifest file, so future changes can be potentially disruptive. It is also highly advisable that you choose unambiguous naming. For example, regions in <a href="https://aws.amazon.com/">AWS</a> are things like <br/> <code>us-west-1</code> and <code>us-west-2</code> whilst region names in <a href="https://cloud.google.com/">GCP</a> are <code>us-west1</code>; using these very similar names verbatim can be exceedingly confusing for users. Most companies internally have some taxonomy for their datacenter naming, so using something that users can identify with is usually advisable. Some Nelson users like to use regional airport codes, or even internal codewords - whatever scheme you choose, ensure users understand it.</p>
+
+<p>The following sub-sections will assume that the datacenter name is identified by <code>*</code>, representing whatever the administrator configured.</p>
+
+<ul>
+<li><a href="#datacenters-docker-registry">datacenters.*.docker-registry</a></li>
+<li><a href="#datacenters-domain">datacenters.*.domain</a></li>
+<li><a href="#datacenters-infrastructure-consul">datacenters.*.infrastructure.consul</a></li>
+<li><a href="#datacenters-infrastructure-kubernetes">datacenters.*.infrastructure.kubernetes</a></li>
+<li><a href="#datacenters-infrastructure-loadbalancer">datacenters.*.infrastructure.loadbalancer</a></li>
+<li><a href="#datacenters-infrastructure-nomad">datacenters.*.infrastructure.nomad</a></li>
+<li><a href="#datacenters-infrastructure-vault">datacenters.*.infrastructure.vault</a></li>
+<li><a href="#datacenters-policy">datacenters.*.policy</a></li>
+</ul>
+
+<h4 id="datacenters-domain">datacenters.*.domain</h4>
+
+<p>Every datacenter typically has a &ldquo;root domain&rdquo;, used for DNS purposes. How this DNS is hosted does not really matter, but examples might be something like <code>texas.dc.yourcompany.com</code> or <code>us-east-1.aws.company.net</code> etc. This will be used by Nelson when publishing routing information for a given datacenter.</p>
+
+<pre><code>datacenters.texas.domain = &quot;texas.dc.yourcompany.com&quot;
+</code></pre>
+
+<h4 id="datacenters-docker-registry">datacenters.*.docker-registry</h4>
+
+<p>Defines the URL for your docker registry within a given datacenter. Be aware that some operators choose to have a large central registry, which all regions pull from. In this case you can specify the same URL for multiple datacenters, but be aware that this will damage the overall reliability of your system in the event that registry is unavailable. This is why Nelson encourages deployments to have a registry per-datacenter.</p>
+
+<pre><code>datacenters.texas.domain = &quot;reg.texas.dc.yourcompany.com&quot;
+</code></pre>
+
+<hr />
+
+<h3 id="datacenters-infrastructure">datacenters.*.infrastructure</h3>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>The <code>infrastructrue</code> section of a given datacenter stanza is one of the most comprehensive sections of the configuration, and as such has been broken down into a handful of subordinate sections in this guide.</p>
+
+<ul>
+<li><a href="#datacenters-infrastructure-scheduler">datacenters.*.infrastructure.scheduler</a></li>
+<li><a href="#datacenters-infrastructure-routing">datacenters.*.infrastructure.routing</a></li>
+</ul>
+
+<h4 id="datacenters-infrastructure-scheduler">datacenters.*.infrastructure.scheduler</h4>
+
+<p>As Nelson is integrated with a variety of scheduling systems, the administrator has to instruct Nelson which scheduling substrate is to be used in a given datacenter.</p>
+
+<pre><code># to use the nomad integration
+infrastructure.scheduler = &quot;nomad&quot;
+
+# to use the kubernetes integration
+infrastructure.scheduler = &quot;kubernetes&quot;
+</code></pre>
+
+<p>This section <em>must</em> be specified otherwise Nelson will fault at startup and complain that there are no schedulers specified.</p>
+
+<h4 id="datacenters-infrastructure-routing">datacenters.*.infrastructure.routing</h4>
+
+<p>Routing is a sophisticated subsystem within Nelson that defines where and how routing and readiness information is calculated and delivered.</p>
+
+<pre><code># use the kubernetes readiness probes as indication of health
+infrastructure.scheduler = &quot;kubernetes&quot;
+
+# use the consul health checks as indication of readiness and health
+# whilst publishing the routing data in the lighthouse format to the
+# consul key-value storage system
+infrastructure.scheduler = &quot;consul:lighthouse&quot;
+
+# or if you prefer to be less explicit:
+infrastructure.scheduler = &quot;consul&quot;
+
+# ignore routing system and do not publish any information and assume
+# that all stacks become healthy right away.
+infrastructure.scheduler = &quot;noop&quot;
+</code></pre>
+
+<p>This section <em>must</em> be specified otherwise Nelson will fault at startup.</p>
+
+<hr />
+
+<h3 id="datacenters-infrastructure-consul">datacenters.*.infrastructure.consul</h3>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>This section controls how Nelson interacts with your Consul cluster.</p>
+
+<h4 id="consul-endpoint">consul.endpoint</h4>
+
+<p>Specify the URL that Nelson can reach your Consul servers at. It is highly recomended that this communication take place over HTTPS, and the certificate in use matches the domain being used on the remote server. If you can successfully cURL from the Nelson machine to the endpoint, then Nelson should be able to interact with Consul without issue.</p>
+
+<pre><code>consul.endpoint  = &quot;http://consul.texas.your.company.com&quot;
+</code></pre>
+
+<h4 id="consul-timeout">consul.timeout</h4>
+
+<p>Controls how long Nelson should wait for timeouts when interacting with Nomad. This configuration parameter is useful to tune if your Nelson is interacting with a remote Consul cluster in a regional datacenter (i.e. datacenters further away from Nelson will require a longer timeout because of the networking latency). If tuning this parameter, monitoring the Nelson logs and metrics carefully to ensure you do not synthetically introduce high failure rates.</p>
+
+<pre><code>consul.timeout = 1 second
+</code></pre>
+
+<h4 id="consul-acl-token">consul.acl-token</h4>
+
+<p>Consul has a <a href="https://www.consul.io/docs/guides/acl.html">sohpisticated ACL system</a> that is typically used in production deployments. In order for Nelson to communicate with Consul in such production environments, it requires an ACL token which allows it to read from the service catalog, write to the key-value store etc.</p>
+
+<pre><code>consul.acl-token = &quot;XXXXXXXXX&quot;
+</code></pre>
+
+<p>Note that as of Consul 1.4+, a new ACL system was introduced to Consul and the token provided to Nelson should have an ACL policiy that uses something like the following:</p>
+
+<pre><code>service_prefix &quot;&quot; {
+  policy = &quot;write&quot;
+}
+node_prefix &quot;&quot; {
+  policy = &quot;read&quot;
+}
+key_prefix &quot;&quot; {
+  policy = &quot;write&quot;
+}
+event_prefix &quot;&quot; {
+  policy = &quot;read&quot;
+}
+key_prefix &quot;_rexec&quot; {
+  policy = &quot;write&quot;
+}
+</code></pre>
+
+<p>Depending upon your configuration - both of Consul and of Nelson - the above policy could be restricted further to reduce the security profile, but this example definition should provide an indicitive configuration as a starting point.</p>
+
+<h4 id="consul-username">consul.username</h4>
+
+<p>While not specifically required by Consul, it is common for operators to put a basic-auth proxy in front of their Consul UI, which can impede Nelon&rsquo;s ability to access the Consul API. If this is the case, specify the <code>username</code> here:</p>
+
+<pre><code>consul.username  = &quot;XXXXXXXXX&quot;
+</code></pre>
+
+<h4 id="consul-password">consul.password</h4>
+
+<p>While not specifically required by Consul, it is common for operators to put a basic-auth proxy in front of their Consul UI, which can impede Nelon&rsquo;s ability to access the Consul API. If this is the case, specify the <code>password</code> here:</p>
+
+<pre><code>consul.password  = &quot;XXXXXXXXX&quot;
+</code></pre>
+
+<hr />
+
+<h3 id="datacenters-infrastructure-kubernetes">datacenters.*.infrastructure.kubernetes</h3>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>Nelson has an integration with Kubernetes, but the setup is a little different to Nelson&rsquo;s other scheudler implementations. As Kubernetes utilizes a so-called &ldquo;fat-client&rdquo; called <code>kubectl</code>, Kubernetes API server does not make direct integrations easy, as so much logic is embedded in the client itself. With this frame, Nelson actually shells out (i.e. fork-exec) to the <code>kubectl</code> command-line client in order to interact with the Kubernetes cluster in question.</p>
+
+<p>In addition, some operators even decide to run Nelson itself on top of the Kubernetes cluster that Nelson is controlling. If this is a good idea or not is out of scope for this guide, but it is a supported operational use case.</p>
+
+<ul>
+<li><a href="#kubernetes-in-cluster">kubernetes.in-cluster</a></li>
+<li><a href="#kubernetes-kubeconfig">kubernetes.kubeconfig</a></li>
+<li><a href="#kubernetes-timeout">kubernetes.timeout</a></li>
+</ul>
+
+<h4 id="kubernetes-in-cluster">kubernetes.in-cluster</h4>
+
+<p>Specifies if the Nelson server itself is running inside a Kubernetes cluster or not. This parameter determintes if Nelson will attempt to use the <code>kubeconfig</code> specified by <code>kubernetes.kubeconfig</code> field, or if it will use the implicitly defined one inside the cluster, and authenticate using the <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">ServiceAccount</a> that Nelson was launched with.</p>
+
+<pre><code>kubernetes.in-cluster = false
+</code></pre>
+
+<h4 id="kubernetes-kubeconfig">kubernetes.kubeconfig</h4>
+
+<p>If <em>not</em> running inside a Kubernetes cluster, but instead interacting with one remotely, then it is nessicary to configure a <a href="https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/#create-a-second-configuration-file">kubeconfig</a> file that has the needed information to access your cluster.</p>
+
+<p>Note that this design allows users to continue to use whatever Kubernetes authentication scheme they are using, without any specific integrations being needed inside Nelson.</p>
+
+<pre><code>kubernetes.kubeconfig = &quot;/opt/application/conf/kubeconfig&quot;
+</code></pre>
+
+<h4 id="kubernetes-timeout">kubernetes.timeout</h4>
+
+<p>Controls how long Nelson should wait for timeouts when interacting with Kubernetes. This configuration parameter is useful to tune if your Nelson is interacting with a remote cluster in a regional datacenter (i.e. datacenters further away from Nelson will require a longer timeout because of the networking latency). If tuning this parameter, monitoring the Nelson logs and metrics carefully to ensure you do not synthetically introduce high failure rates.</p>
+
+<pre><code>kubernetes.timeout    = 3 seconds
+</code></pre>
+
+<hr />
+
+<h3 id="datacenters-infrastructure-nomad">datacenters.*.infrastructure.nomad</h3>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>This section controls how Nelson interacts with <a href="https://www.nomadproject.io/">Nomad</a>. If you are not using the Nomad scheduler in your datacenter, then you can omit this section. When launching tasks onto your Nomad installation, Nelson will use the API and requires no external binaries.</p>
+
+<ul>
+<li><a href="#nomad-endpoint">nomad.endpoint</a></li>
+<li><a href="#nomad-timeout">nomad.timeout</a></li>
+</ul>
+
+<h4 id="nomad-endpoint">nomad.endpoint</h4>
+
+<p>Specify the URL that Nelson can reach your Nomad servers at. It is highly recomended that this communication take place over HTTPS, and the certificate in use matches the domain being used on the remote server. If you can sucsessfully cURL from the Nelson machine to the endpoint, then Nelson should be able to interact with Nomad without issue.</p>
+
+<p>As Nomad servers are often operated as a cluster with a dynamically selected leader, it is common for operators to front their Nomad cluster with a load-balancer in order to reach <em>any</em> Nomad server. This is generally fine and Nelson will work perfectly well when Nomad is in this configuration.</p>
+
+<pre><code>nomad.endpoint   = &quot;https://nomad.texas.company.corp:1234&quot;
+</code></pre>
+
+<h4 id="nomad-timeout">nomad.timeout</h4>
+
+<p>Controls how long Nelson should wait for timeouts when interacting with Nomad. This configuration parameter is useful to tune if your Nelson is interacting with a remote Nomad in a regional datacenter (i.e. datacenters further away from Nelson will require a longer timeout because of the networking latency). If tuning this parameter, monitoring the Nelson logs and metrics carefully to ensure you do not synthetically introduce high failure rates.</p>
+
+<pre><code>nomad.timeout = 500 milliseconds
+</code></pre>
+
+<hr />
+
+<h3 id="datacenters-infrastructure-vault">datacenters.*.infrastructure.vault</h3>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>This section controls how Nelson should interact with the Vault configured in this datacenter. At the time of writing, Vault is a hard requirement and must be configured.</p>
+
+<ul>
+<li><a href="#vault-endpoint">vault.endpoint</a></li>
+<li><a href="#vault-auth-token">vault.auth-token</a></li>
+<li><a href="#vault-timeout">vault.timeout</a></li>
+<li><a href="#vault-auth-role-prefix">vault.auth-role-prefix</a></li>
+</ul>
+
+<h4 id="vault-endpoint">vault.endpoint</h4>
+
+<p>Specify the URL that Nelson can reach your Vault server at. It is highly recomended that this communication take place over HTTPS, and the certificate in use matches the domain being used on the remote server. If you can sucsessfully cURL from the Nelson machine to the Vault endpoint, then Nelson should be able to interact with Vault without issue.</p>
+
+<pre><code>vault.endpoint   = &quot;https://vault.texas.company.corp:1234&quot;
+</code></pre>
+
+<h4 id="vault-auth-token">vault.auth-token</h4>
+
+<p>As Nelson is <em>generating</em> Vault policies, it requires a fairly privilidged authentication token, which should be specified as follows:</p>
+
+<pre><code>vault.auth-token = &quot;XXXXXXXXX&quot;
+</code></pre>
+
+<p>The token that is used here should typically have the ability to create, list and delete vault policies, along with creating <a href="https://www.vaultproject.io/docs/auth/">backend auth roles</a> (if your scheduling setup needs that functionality). For more information on Vault policies, please <a href="https://www.vaultproject.io/docs/concepts/policies.html">read the Vault documentation</a>.</p>
+
+<h4 id="vault-timeout">vault.timeout</h4>
+
+<p>Controls how long Nelson should wait for timeouts when interacting with Vault. This configuration parameter is useful to tune if your Nelson is interacting with a remote Vault in a regional datacenter (i.e. datacenters further away from Nelson will require a longer timeout because of the networking latency). If tuning this parameter, monitoring the Nelson logs and metrics carefully to ensure you do not synthetically introduce high failure rates.</p>
+
+<pre><code>vault.timeout = 500 milliseconds
+</code></pre>
+
+<h4 id="vault-auth-role-prefix">vault.auth-role-prefix</h4>
+
+<p>If your backend auth provider (for kubernetes, as one example) has the same name as the datacenter, you can ignore this field. Given this is not typically the case (operators typically have some convention) then you can specify a prefix that will be prepended to the datacenter name.</p>
+
+<pre><code>vault.auth-role-prefix = &quot;aws-&quot;
+</code></pre>
+
+<p>This configuration parameter is typically not used. Feel free to drop into the <a href="/documentation/contributing.html">community channels</a> and talk about your use case if you think you need to use it.</p>
+
+<hr />
+
+<h3 id="datacenters-infrastructure-loadbalancer">datacenters.*.infrastructure.loadbalancer</h3>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>In order to enable Nelson&rsquo;s support for dynamically provisioning load-balencers in public cloud, Nelson needs to know the networking configuration of the target environment. Presntly, only <a href="https://aws.amazon.com/">AWS</a> is supported.</p>
+
+<ul>
+<li><a href="#loadbalancer-aws-access-key-id">loadbalancer.aws.access-key-id</a></li>
+<li><a href="#loadbalancer-aws-image">loadbalancer.aws.availability-zones</a></li>
+<li><a href="#loadbalancer-aws-image">loadbalancer.aws.elb-security-group-names</a></li>
+<li><a href="#loadbalancer-aws-image">loadbalancer.aws.image</a></li>
+<li><a href="#loadbalancer-aws-launch-configuration-name">loadbalancer.aws.launch-configuration-name</a></li>
+<li><a href="#loadbalancer-aws-region">loadbalancer.aws.region</a></li>
+<li><a href="#loadbalancer-aws-secret-access-key">loadbalancer.aws.secret-access-key</a></li>
+</ul>
+
+<h4 id="loadbalancer-aws-access-key-id">loadbalancer.aws.access-key-id</h4>
+
+<p>To provide Nelson access to AWS to launch the needed resources, provide an AWS access-key-id and secret-access-key. If Nelson itself is running on an AWS EC2 instance, then it is highly recomended to not specify credentials statically, but instead rely on the IAM instance profile which Nelson will automatically read and use if the static configuration fields are missing.</p>
+
+<pre><code># prefer IAM profiles if using AWS EC2 to host Nelson itself
+datacenter.texas.infrastructure.loadbalancer.aws.access-key-id = &quot;XXXXXXXXX&quot;
+</code></pre>
+
+<h4 id="loadbalancer-aws-availability-zones">loadbalancer.aws.availability-zones</h4>
+
+<p>In order to launch load-balancer and auto-scaling group resources, Nelson needs to know what network subnets in your VPC should be used. Nelson makes the assumption that your network has &ldquo;public&rdquo; and &ldquo;private&rdquo; subdivisions, but if for some reason this is not the case or you do not want Nelson to ever expose publically addressable resources then simply specify the internal subnets in both <code>private-subnet</code> and <code>public-subnet</code> fields.</p>
+
+<pre><code>availability-zones {
+  texas-a {
+    private-subnet = &quot;subnet-AAAAAAAA&quot;
+    public-subnet = &quot;subnet-BBBBBBB&quot;
+  }
+  texas-b {
+    private-subnet = &quot;subnet-QQQQQQ&quot;
+    public-subnet = &quot;subnet-XXXXXX&quot;
+  }
+}
+</code></pre>
+
+<h4 id="loadbalancer-aws-elb-security-group-names">loadbalancer.aws.elb-security-group-names</h4>
+
+<p>When Nelson launches the load-balancer you can configure the security group that this ELB should be placed in, which allows operators to decide exactly what firewall rules should be in place. Ultimately this allows administrators to ensure that only specified resources get made public.</p>
+
+<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.elb-security-group-names = [ &quot;sg-AAAAAAAA&quot; ]
+</code></pre>
+
+<h4 id="loadbalancer-aws-image">loadbalancer.aws.image</h4>
+
+<p>Some operators prefer to run the proxy software as a container that is dynamically injected by Nelson. Others prefer to run baked AMIs that are specified in the launch config. If you want to use a container as the packaging mechinism for the inbound proxy, then specify it here, otherwise omit this field.</p>
+
+<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.image = &quot;registry.texas.corp/whatever/infra-lb:1.2.3&quot;
+</code></pre>
+
+<h4 id="loadbalancer-aws-launch-configuration-name">loadbalancer.aws.launch-configuration-name</h4>
+
+<p>Nelson will use the specified launch configuration to launch the resources. How this launch configuration is specified - perhaps CloudFormation or Terraform - is out of scope for this documentation, as Nelson only needs to know the name of the launch configuration to boot as a &ldquo;black box&rdquo;.</p>
+
+<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.launch-configuration-name = &quot;yourlb-XXXXXXXXXXXX&quot;
+</code></pre>
+
+<h4 id="loadbalancer-aws-region">loadbalancer.aws.region</h4>
+
+<p>What region should Nelson use when launching AWS resources for this datacenter. This is needed as no assumptions are made that datacenter names fully map to AWS region conventions.</p>
+
+<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.region = &quot;us-west-2&quot;
+</code></pre>
+
+<h4 id="loadbalancer-aws-secret-access-key">loadbalancer.aws.secret-access-key</h4>
+
+<p>To provide Nelson access to AWS to launch the needed resources, provide an AWS access-key-id and secret-access-key. If Nelson itself is running on an AWS EC2 instance, then it is highly recomended to not specify credentials statically, but instead rely on the IAM instance profile which Nelson will automatically read and use if the static configuration fields are missing.</p>
+
+<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.secret-access-key = &quot;XXXXXXXXX&quot;
+</code></pre>
+
+<hr />
+
+<h3 id="datacenter-policy">datacenter.*.policy</h3>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>The <code>policy</code> section informs Nelson how Vault policies should be generated, and if additional paths should be added to generated policies.</p>
+
+<ul>
+<li><a href="#policy-resource-creds-path">policy.resource-creds-path</a></li>
+<li><a href="#policy-pki-path">policy.pki-path</a></li>
+</ul>
+
+<h4 id="policy-resource-creds-path">policy.resource-creds-path</h4>
+
+<p>When Nelson generates policies for credentials in Vault, it generates the path based on the template specified with <code>resource-creds-path</code>. Units will get read capability on each resource specified. For more information on administering Vault with Nelson, please <a href="/documentation/operator.html#administering-vault">see the operator guide</a>.</p>
+
+<p>Supported variables are as follows:</p>
+
+<ul>
+<li><code>%env%</code> - root namespace being used for this particular deployment, for example: <code>dev</code>.</li>
+<li><code>%resource%</code> - value will be defined by the <code>resources</code> section of the manifest file.</li>
+<li><code>%unit%</code> - the unit name of the application being deployed.</li>
+</ul>
+
+<p>For more information on the Nelson terminology, please see <a href="/getting-started/">the getting started guide</a></p>
+
+<pre><code>datacenters.texas.policy.resource-creds-path = &quot;yourcompany/%env%/%resource%/creds/%unit%&quot;
+</code></pre>
+
+<h4 id="policy-pki-path">policy.pki-path</h4>
+
+<p>It is often desirable to have Vault generate dynamic certificates for every container within a stack deployment. However, to do this, the Vault policy being used by the stack in question needs to be specially configured in order to leverage the PKI backend within Vault. With this frame, the <code>pki-path</code> explicitly configures how the PKI backend will be referenced in the generated Vault policy.</p>
+
+<p>Supported variables are as follows:</p>
+
+<ul>
+<li><code>%env%</code> - root namespace being used for this particular deployment, for example: <code>dev</code>.</li>
+</ul>
+
+<pre><code>datacenters.texas.policy.pki-path = &quot;pki/%env%&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="docker">Docker</h2>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>For some workflows and developer experience functionality, Nelson requires access to a <a href="https://docker.com">Docker</a> daemon to launch and replicate containers. In order to do this, Nelson must be told how to talk to the Docker process.</p>
+
+<ul>
+<li><a href="#docker-connection">docker.connection</a></li>
+<li><a href="#docker-verify-tls">docker.verify-tls</a></li>
+</ul>
+
+<h4 id="docker-connection">docker.connection</h4>
+
+<p>Docker supports a range of ways to connect to the daemon process and any of the Docker-supported URIs are valid for this field.</p>
+
+<pre><code># using tcp (recomended for security reasons)
+nelson.docker.connection = &quot;tcp://0.0.0.0:2376&quot;
+
+# using unix sockets
+nelson.docker.connection = &quot;unix:///path/to/docker.sock&quot;
+</code></pre>
+
+<h4 id="docker-verify-tls">docker.verify-tls</h4>
+
+<p>Depending on your Docker process configuration, you may want to skip TLS verification. The default is to verify TLS (as that is the recommended, secure configuration), but you can optionally disable that verification here.</p>
+
+<pre><code>nelson.docker.verify-tls = true
+</code></pre>
+
+<hr />
+
+<h2 id="email">Email</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>Nelson can notify you by email when changes to deployments happen. In order to do this, Nelson needs to be configured with an SMTP server. This is fully compatible with public cloud email offerings like SES (or any other provider that implements the SMTP protocol).</p>
+
+<ul>
+<li><a href="#email-host">email.host</a></li>
+<li><a href="#email-port">email.port</a></li>
+<li><a href="#email-from">email.from</a></li>
+<li><a href="#email-user">email.user</a></li>
+<li><a href="#email-password">email.password</a></li>
+</ul>
+
+<h4 id="email-host">email.host</h4>
+
+<p>Controls where Nelson will look for your SMTP email server.</p>
+
+<pre><code>nelson.email.host = &quot;mail.company.com&quot;
+</code></pre>
+
+<h4 id="email-port">email.port</h4>
+
+<p>What port should Nelson use when talking to your SMTP email server.</p>
+
+<pre><code>nelson.email.port = 9000
+</code></pre>
+
+<h4 id="email-from">email.from</h4>
+
+<p>When Nelson sends emails about system status, what should the <code>From</code> line in the email be?</p>
+
+<pre><code>nelson.email.from = &quot;nelson@example.com&quot;
+</code></pre>
+
+<h4 id="email-user">email.user</h4>
+
+<p>If your SMTP server requires authentication, what username should be used.</p>
+
+<pre><code>nelson.email.user = &quot;someuser&quot;
+</code></pre>
+
+<h4 id="email-password">email.password</h4>
+
+<p>If your SMTP server requires authentication, what password should be used.</p>
+
+<pre><code>nelson.email.password = &quot;somepassword&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="github">Github</h2>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>Nelson requires a set of Github credentials in order to be able to interact with your source code. For more information, please <a href="/getting-started/install.html#nelson-server">see the installation section</a>.</p>
+
+<ul>
+<li><a href="#github-client-id">github.client-id</a></li>
+<li><a href="#github-client-secret">github.client-secret</a></li>
+<li><a href="#github-github.scope">github.github.scope</a></li>
+<li><a href="#github-access-token">github.access-token</a></li>
+<li><a href="#github-system-username">github.system-username</a></li>
+</ul>
+
+<h4 id="github-client-id">github.client-id</h4>
+
+<pre><code>nelson.github.client-id = &quot;xxxxxxxxxxx&quot;
+</code></pre>
+
+<h4 id="github-client-secret">github.client-secret</h4>
+
+<pre><code>nelson.github.client-secret = &quot;yyyyy&quot;
+</code></pre>
+
+<h4 id="github-redirect-uri">github.redirect-uri</h4>
+
+<p>What is the fully qualified URL that Github will redirect the OAuth exchange back too. This should match the domain configured in <code>network.external-host</code> and <code>network.external-port</code>, if configured.</p>
+
+<pre><code>nelson.github.redirect-uri = &quot;https://nelson.local/auth/exchange&quot;
+</code></pre>
+
+<h4 id="github-scope">github.scope</h4>
+
+<p>What OAuth scopes should Nelson use when interacting with Github. Read more about Github OAuth scopes <a href="https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/">on the Github documentation site</a>.</p>
+
+<pre><code>nelson.github.scope  = &quot;repo&quot;
+</code></pre>
+
+<h4 id="github-system-username">github.system-username</h4>
+
+<p>Configure the Github username that Nelson will conduct operations as. This is needed because some operations that Nelson does are not in the context of any human interaction. For example, when Nelson conducts a deployment, it&rsquo;s all happening automatically and asynchronously from any human, and thus human-user OAuth tokens cannot be utilized within these operations. To protect privacy Nelson does not store end-user OAuth tokens, and as such needs its own user to interact with your Github account.</p>
+
+<pre><code>nelson.github.system-username = &quot;nelson&quot;
+</code></pre>
+
+<h4 id="github-access-token">github.access-token</h4>
+
+<p>Configure an access token for the account specified by <code>system-username</code>.</p>
+
+<pre><code>nelson.github.access-token = &quot;replaceme&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="network">Network</h2>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>Specify the networking options used by Nelson, including the network interface to which the JVM binds, port binding, and the address Nelson advertises in its API.</p>
+
+<ul>
+<li><a href="#network-bind-host">network.bind-host</a></li>
+<li><a href="#network-bind-port">network.bind-port</a></li>
+<li><a href="#network-external-host">network.external-host</a></li>
+<li><a href="#network-external-port">network.external-port</a></li>
+<li><a href="#network-idle-timeout">network.idle-timeout</a></li>
+</ul>
+
+<h4 id="network-bind-host">network.bind-host</h4>
+
+<p>What host - interface - should Nelson bind its JVM server process too.</p>
+
+<pre><code>nelson.network.bind-host = &quot;0.0.0.0&quot;
+</code></pre>
+
+<h4 id="network-bind-port">network.bind-port</h4>
+
+<p>What TCP port should Nelson bind its JVM server process too. This is typically a non-privileged port (i.e. above port 3000).</p>
+
+<pre><code>nelson.network.bind-port = &quot;9000&quot;
+</code></pre>
+
+<h4 id="network-external-host">network.external-host</h4>
+
+<p>Typically Nelson is hosted behind a reverse proxy, or otherwise bound to an internal address. In order for cookie retention to work for browsers, and for Nelson to rewrite its generated URLs to locations that are network accessible, the operator must tell Nelson what that external address is.</p>
+
+<pre><code>nelson.network.external-host = &quot;nelson.yourco.com&quot;
+</code></pre>
+
+<p>Whilst not recommended, you can also use an IP address here if you do not have an internal domain name server.</p>
+
+<pre><code>nelson.network.external-host = &quot;10.10.1.11&quot;
+</code></pre>
+
+<h4 id="network-external-port">network.external-port</h4>
+
+<p>If using a reverse proxy, and <code>external-host</code> is set, what port should be used for external responses (i.e. HTTP 302 redirects and so forth). If external-port is not supplied, then we assume port 443 (https)</p>
+
+<pre><code>nelson.network.external-port = 443
+</code></pre>
+
+<h4 id="network-idle-timeout">network.idle-timeout</h4>
+
+<p><code>idle-timeout</code> defines how long should nelson wait before closing requests to the Nelson server process. Under the hood, this equates to <code>idle-timeout</code> on http4s&rsquo; <a href="https://github.com/http4s/http4s/blob/master/blaze-server/src/main/scala/org/http4s/server/blaze/BlazeBuilder.scala">BlazeBuilder</a>)</p>
+
+<pre><code>nelson.network.idle-timeout = 60 seconds
+</code></pre>
+
+<h4 id="network-monitoring-port">network.monitoring-port</h4>
+
+<p>Nelson uses <a href="https://prometheus.io/">Prometheus</a> as its monitoring solution. Prometheus exposes its metrics for collection via a TCP port, and the <code>monitoring-port</code> allows you to configure what port that is.</p>
+
+<pre><code>nelson.network.monitoring-port = 5775
+</code></pre>
+
+<hr />
+
+<h2 id="pipeline">Pipeline</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>Nelson&rsquo;s internal &ldquo;pipeline&rdquo; is the primary queue and dequeuing mechanism from which the whole deployment process is executed. In short, the pipeline is a work-stealing dequeue, and the configuration allow you to tune the parallelism of this queue and so forth.</p>
+
+<ul>
+<li><a href="#pipeline-concurrency-limit">pipeline.concurrency-limit</a></li>
+<li><a href="#pipeline-inbound-buffer-limit">pipeline.inbound-buffer-limit</a></li>
+</ul>
+
+<h4 id="pipeline-concurrency-limit">pipeline.concurrency-limit</h4>
+
+<p>Defines maximum number of pipeline workflows Nelson will handle at the same time. This limit is typically bound by the hardware that the Nelson server is running on, but a general rule of thumb is to set this value to the same number as the total count of processors that are available to on the machine (or available to Nelson if running in a container).</p>
+
+<pre><code>nelson.pipeline.concurrency-limit = 4
+</code></pre>
+
+<h4 id="pipeline-inbound-buffer-limit">pipeline.inbound-buffer-limit</h4>
+
+<p>Internally, the pipeline is implemented as a queue, and all queues buffer. To avoid queuing infinitely and potentally running out of memory it is prudent to set a maximum size for the queue - most everyone should be using the default value here, and changing this should be very rare as if you have more that 50 pending deployments, something is very wrong (on the basis that Nelson typically processes an entire workflow in a few seconds).</p>
+
+<pre><code>nelson.pipeline.inbound-buffer-limit = 50
+</code></pre>
+
+<hr />
+
+<h2 id="security">Security</h2>
+
+<p><span class="badge badge-warning">required</span></p>
+
+<p>Nelson has a variety of security options available to administrators. For the most part these are set-once variables, but they affect the operation of the system and can impact users, so it&rsquo;s important to understand their purpose.</p>
+
+<ul>
+<li><a href="#security-encryption-key">security.encryption-key</a></li>
+<li><a href="#security-expire-login-after">security.expire-login-after</a></li>
+<li><a href="#security-key-id">security.key-id</a></li>
+<li><a href="#security-signature-key">security.signature-key</a></li>
+<li><a href="#security-use-environment-session">security.use-environment-session</a></li>
+</ul>
+
+<h4 id="security-encryption-key">security.encryption-key</h4>
+
+<p>As the name suggests, this is the encryption key that Nelson uses for its session tokens, supplied and passed around by users of the Nelson API. This key is typically <code>base64</code> encoded and 24 characters long. To make generation of these encryption keys easy, we have <a href="https://github.com/getnelson/nelson/blob/master/bin/generate-keys">provided a script</a> which will dynamically produce a new candidate for a key. Keep in mind that whilst these tokens need to be encrypted, the level of encryption here only needs to be good enough to protect the contents for a period defined by <code>expire-login-after</code>.</p>
+
+<pre><code># this is a dummy value for example purposes only;
+# !!!!!! DO NOT USE THIS VALUE !!!!!!!
+nelson.security.encryption-key = &quot;B1oy5R9nVAw1gv0zAlreRg==&quot;
+</code></pre>
+
+<h4 id="security-expire-login-after">security.expire-login-after</h4>
+
+<p>This field affects the cadence at which user tokens will be refreshed. To be specific, this means that the user of the Nelson CLI will, upon issuance, be able to use that token up to the maximum bound defined by this field (excluding a change in the encryption or signing keys). This value should be set to a size that is not too large, but also not too small causing users to constantly be refreshing tokens which might unduly burden the system if you have a lot of concurrent users.</p>
+
+<pre><code># as the field is a duration, you can specify it with
+# a few different formats:
+nelson.security.expire-login-after = 7 days
+
+# using hours, minutes or seconds etc
+nelson.security.expire-login-after = 48 hours
+</code></pre>
+
+<h4 id="security-key-id">security.key-id</h4>
+
+<p>The key-id is an implementation detail, and is usually statically set by an operator and never changed. Earlier revisions of Nelson used a rotating key system, which was never open-sourced, and so the key-id is a vestigial configuration from that historical detail.</p>
+
+<pre><code>nelson.security.key-id = 468513861
+</code></pre>
+
+<h4 id="security-signature-key">security.signature-key</h4>
+
+<p>The signature key is used to sign tokens to ensure they were not tampered with by clients. Every token will be signed with this key, so keep it safe just like you would the <code>encryption-key</code>.</p>
+
+<pre><code># this is a dummy value for example purposes only;
+# !!!!!! DO NOT USE THIS VALUE !!!!!!!
+nelson.security.signature-key = &quot;1toKbHQzLfb+zLeONuFdIA==&quot;
+</code></pre>
+
+<h4 id="security-use-environment-session">security.use-environment-session</h4>
+
+<p>For development purposes, sometimes we want to not have to actually log in
+with Github OAuth because we&rsquo;re developing locally (potentially even offline). When set to <code>true</code> this configuration forces the system to &ldquo;auto-auth&rdquo; based on local environment variables from the shell in which Nelson was started. This really is for development use only and should <em>never</em>, <em>ever</em>, be used in production.</p>
+
+<pre><code>nelson.security.use-environment-session = false
+</code></pre>
+
+<hr />
+
+<h2 id="slack">Slack</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>Nelson can integrate with Slack and send notifications to a Slack channel of your choice.</p>
+
+<ul>
+<li><a href="#slack-webhook-url">slack.webhook-url</a></li>
+<li><a href="#slack-username">slack.username</a></li>
+</ul>
+
+<h4 id="slack-webhook-url">slack.webhook-url</h4>
+
+<p>The url that your Slack administrator provides from the Slack webhook configuration. For more information please see the <a href="https://api.slack.com/incoming-webhooks">Slack webhook setup guide</a>.</p>
+
+<pre><code>nelson.slack.webhook-url = &quot;https://hooks.slack.com/services/.....&quot;
+</code></pre>
+
+<h4 id="slack-username">slack.username</h4>
+
+<p>Defines the name that will appear as the poster of messages from Nelson in the Slack channel.</p>
+
+<pre><code>nelson.slack.username = &quot;Nelson&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="templating">Templating</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>In order to lint templates, you need to configure the templating engine. This configuration section is primarily exposing the limits and options which control how Nelson will spawn an ephemeral container to lint the template supplied by the user.</p>
+
+<ul>
+<li><a href="#template-cpu-period">template.cpu-period</a></li>
+<li><a href="#template-cpu-quota">template.cpu-quota</a></li>
+<li><a href="#template-memory-mb">template.memory-mb</a></li>
+<li><a href="#template-timeout">template.timeout</a></li>
+</ul>
+
+<h4 id="template-cpu-period">template.cpu-period</h4>
+
+<p>Specify the <a href="https://en.wikipedia.org/wiki/Completely_Fair_Scheduler">CPU CFS</a> scheduler period, which is used alongside <code>cpu-quota</code>. defaults to 100 micro-seconds.</p>
+
+<pre><code>nelson.template.cpu-period = 100000
+</code></pre>
+
+<h4 id="template-cpu-quota">template.cpu-quota</h4>
+
+<p>Impose a <a href="https://en.wikipedia.org/wiki/Completely_Fair_Scheduler">CPU CFS</a> quota on the container. The number of microseconds per cpu-period that the container is limited to before throttled; acting as the effective ceiling for the execution.</p>
+
+<pre><code>nelson.template.cpu-quota = 50000
+</code></pre>
+
+<h4 id="template-memory-mb">template.memory-mb</h4>
+
+<p>Control the maximum amount of memory assigned to this template container execution. Typically this should be a small value, and most templating engines only use a very small amount of memory.</p>
+
+<pre><code>nelson.template.memory-mb = 8
+</code></pre>
+
+<h4 id="template-timeout">template.timeout</h4>
+
+<p>When Nelson spawns a child container, configure the maximum duration to give the container before it is actively killed. This is set to ensure that the Nelson server does not end up with zombie containers which end up suffocating the host system.</p>
+
+<pre><code>nelson.template.timeout = 10 seconds
+</code></pre>
+
+<h4 id="template-temp-dir">template.temp-dir</h4>
+
+<p>What host-path should Nelson bind into the temporary container as a scratch space. Whatever templating engine you&rsquo;ve selected, the output template will be written to this scratch space prior to being deleted.</p>
+
+<pre><code>nelson.template.temp-dir = &quot;/tmp&quot;
+</code></pre>
+
+<p>#### template.template-engine-image</p>
+
+<p>The Nelson ecosystem has <a href="https://github.com/getnelson/containers">a set of containers</a> that are available to be used as templating linting engines. Typically the administrator chooses a template engine for the organization and this is used throughout - all template linting is assumed to be of the same form and users cannot dynamically mix and match. This container image must be accessible (i.e. pull&rsquo;able by the Docker daemon on the Nelson host).</p>
+
+<pre><code>nelson.template.template-engine-image = &quot;getnelson/linter-consul-template:2.0.13&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="user-interface">User Interface</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>Nelson has a pluggable user-interface and can be pointed at a location on disk to provide a custom UI, or the UI can be disabled entirely.</p>
+
+<ul>
+<li><a href="#ui-enabled">ui.enabled</a></li>
+<li><a href="#ui-file-path">ui.file-path</a></li>
+</ul>
+
+<h4 id="ui-enabled">ui.enabled</h4>
+
+<p>Should nelson serve a user interface, or not?</p>
+
+<pre><code>nelson.ui.enabled = true
+</code></pre>
+
+<h4 id="ui-file-path">ui.file-path</h4>
+
+<p>Where are the assets located on disk, that Nelson will serve as its UI contents; this is for local development purposes only and is not typically used in production, as the UI is typically bundled with Nelson itself. However, if desired, this configuration can be used to provide a custom or otherwise altered UI from local disk.</p>
+
+<pre><code>nelson.ui.file-path = &quot;/path/to/nelson/ui&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="workflow-logger">Workflow Logger</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<ul>
+<li><a href="#workflow-loggger-inbound-buffer-limit">workflow-loggger.inbound-buffer-limit</a></li>
+<li><a href="#workflow-loggger-file-path">workflow-loggger.file-path</a></li>
+</ul>
+
+<h4 id="workflow-logger-inbound-buffer-limit">workflow-logger.inbound-buffer-limit</h4>
+
+<p>Every workflow process logs progress information to a file on disk. The logging is run as a separate, asynchronous background processes where writes are first put into a queue and then serialized into the specific file. This configuration value controls what the maximum size of that queue buffer is - most implementations will never need to change the default value.</p>
+
+<pre><code>nelson.workflow-logger.inbound-buffer-limit = 50
+</code></pre>
+
+<h4 id="workflow-logger-file-path">workflow-logger.file-path</h4>
+
+<p>The base directory where the workflow logging files are stored on disk. Ensure when deploying Nelson as a container that this location is bind-mounted to a host volume, or uses a docker-volume container, otherwise the files that were journaled to disk will be destroyed when the container quits.</p>
+
+<pre><code>nelson.workflow-logger.file-path = &quot;/var/nelson/log&quot;
+</code></pre>
+
+          </article>
+
+        </div>
+      </div>
+
+    </main>
+
+    
+<div class="jumbotron bg-dark">
+  <footer class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <p>
+          Built with &hearts; by the Nelson engineering team.
+        </p>
+        <p>
+          Currently v
+                    0.13.165
+                  
+          &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
+          &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
+          &middot; <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>
+          &middot; <script type="text/javascript" src="/js/contact.js"></script>
+        </p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-57263411-7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-57263411-7');
+</script>
+<script src="/js/material.min.js?6becf6501072e08dfeaf654bb51d20eb"></script>
+
+<script src="/js/nelson.js?a5d82d3716d8bd5eeda123af59d95ef3"></script>
+
+
+  </body>
+</html>
