@@ -147,10 +147,10 @@ final case class Blueprints(config: NelsonConfig) extends Default {
     case req @ POST -> Root / "v1" / "blueprints" & IsAuthenticated(session) if IsAuthorized(session) =>
       decode[BlueprintRequestJson](req){ bpr =>
         if (hasIntegrity(bpr.sha256, bpr.template))
-          if (Option(bpr.name).exists(_ != ""))
+          if (Option(bpr.name).exists(_.trim.nonEmpty))
             json(Nelson.createBlueprint(bpr.name, bpr.description, bpr.sha256, bpr.template))
           else
-            BadRequest(s"Blueprints must have a name, otherwise uesrs will not be able to reference them.")
+            BadRequest(s"Blueprints must have a name, otherwise users will not be able to reference them.")
         else
           BadRequest(s"The supplied Sha256 for decoded template content did not match the computed Sha256.")
       }
