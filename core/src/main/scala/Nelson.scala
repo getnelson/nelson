@@ -359,13 +359,18 @@ object Nelson {
       StoreOp.findBlueprint(name, revision).foldMap(cfg.storage)
     }
 
+  /*
+   * NOTE: to prevent totally invalid templates being specified (i.e. things that make the
+   * template parser choke) we defensivly try to proof the inbound blueprint which should
+   * raise an error in the event the blueprint is junk.
+   */
   def createBlueprint(name: String, description: Option[String], sha: Sha256, template: String): NelsonK[Option[Blueprint]] =
-    Kleisli { cfg =>
+    proofBlueprint(template).flatMap(_ => Kleisli { cfg =>
       (for {
         a <- StoreOp.insertBlueprint(name, description, sha, template)
         b <- StoreOp.findBlueprint(name, Blueprint.Revision.HEAD)
       } yield b).foldMap(cfg.storage)
-    }
+    })
 
   def proofBlueprint(templateContent: String): NelsonK[String] = {
     import blueprint.{Template, EnvValue, Render}
