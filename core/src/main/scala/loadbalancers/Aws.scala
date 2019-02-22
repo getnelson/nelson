@@ -65,9 +65,8 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     createELB(name, lb.routes.map(_.port)) <* createASG(name, ns, size)
   }
 
-  // results in LB names like: foo--1--djfjfhjd
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
-    s"$name--${v.toString}--${hash}"
+    s"$name--${v.minVersion.toExternalString}--${hash}"
 
   def deleteELB(name: String): IO[Unit] =
     IO {
