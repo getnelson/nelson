@@ -32,9 +32,8 @@ import journal.Logger
 
 final case class ASGSize(desired: Int, min: Int, max: Int)
 
-/**
+/*
  * Modeling the internal vs internet ELB schemes
- * @url https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/elasticloadbalancing/model/CreateLoadBalancerRequest.html#withScheme-java.lang.String-
  */
 sealed trait ElbScheme
 final object ElbScheme {
