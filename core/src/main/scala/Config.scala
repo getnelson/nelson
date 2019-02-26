@@ -701,6 +701,10 @@ object Config {
       )
     }
 
+    /*
+     * if no scheme is supplied, then the default is to assume internet-facing
+     * loadbalancers, maintaining the existing default functionality.
+     */
     def lookupElbScheme(k: KConfig): Option[ElbScheme] =
       k.lookup[Boolean]("use-internal-elb").map(useInternal =>
         if(useInternal) ElbScheme.Internal
@@ -736,7 +740,7 @@ object Config {
     (lookupRegion(kfg),
      kfg.lookup[String]("launch-configuration-name"),
      kfg.lookup[List[String]]("elb-security-group-names"),
-     lookupElbScheme(kfg)
+     lookupElbScheme(kfg) orElse Some(ElbScheme.External)
     ).mapN((a,b,c,d) => Infrastructure.Aws(creds,a,b,c.toSet,zones,kfg.lookup[String]("image"),d))
   }
 
