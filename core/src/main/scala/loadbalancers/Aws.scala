@@ -32,6 +32,20 @@ import journal.Logger
 
 final case class ASGSize(desired: Int, min: Int, max: Int)
 
+/**
+ * Modeling the internal vs internet ELB schemes
+ * @url https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/elasticloadbalancing/model/CreateLoadBalancerRequest.html#withScheme-java.lang.String-
+ */
+sealed trait ElbScheme
+final object ElbScheme {
+  final case object External extends ElbScheme {
+    override def toString: String = "internet"
+  }
+  final case object Internal extends ElbScheme {
+    override def toString: String = "internal"
+  }
+}
+
 final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   import LoadbalancerOp._
@@ -62,7 +76,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     val name = loadbalancerName(lb.name, v, hash)
     log.debug(s"caling aws client to launch $name")
     val size = asgSize(p)
-    createELB(name, lb.routes.map(_.port)) <* createASG(name, ns, size)
+    createELB(name, lb.routes.map(_.port), cfg.lbScheme) <* createASG(name, ns, size)
   }
 
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
@@ -75,11 +89,12 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       ()
     }
 
-  def createELB(name: String, p: Vector[Port]): IO[DNSName] =
+  def createELB(name: String, p: Vector[Port], scheme: ElbScheme): IO[DNSName] =
     IO {
       val listeners = p.map(p => new Listener(TCP,p.port,p.port)).toList
       val req = new CreateLoadBalancerRequest(name)
         .withListeners(listeners.asJava)
+        .withScheme(scheme.toString)
         .withSecurityGroups(cfg.elbSecurityGroupNames.toList.asJava)
         .withSubnets(cfg.availabilityZones.map(_.publicSubnet).asJava)
 

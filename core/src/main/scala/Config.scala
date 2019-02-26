@@ -693,12 +693,19 @@ object Config {
   def readAwsInfrastructure(kfg: KConfig): Option[Infrastructure.Aws] = {
     import com.amazonaws.regions.Region
     import com.amazonaws.regions.RegionUtils
+    import loadbalancers.ElbScheme
 
     def lookupRegion(k: KConfig): Option[Region] = {
       k.lookup[String]("region").flatMap(name =>
         Option(RegionUtils.getRegion(name))
       )
     }
+
+    def lookupElbScheme(k: KConfig): Option[ElbScheme] =
+      k.lookup[Boolean]("use-internal-elb").map(useInternal =>
+        if(useInternal) ElbScheme.Internal
+        else ElbScheme.External
+      )
 
     def readAvailabilityZone(id: String, kfg: KConfig): Infrastructure.AvailabilityZone = {
       val priv = kfg.require[String]("private-subnet")
@@ -728,8 +735,9 @@ object Config {
 
     (lookupRegion(kfg),
      kfg.lookup[String]("launch-configuration-name"),
-     kfg.lookup[List[String]]("elb-security-group-names")
-    ).mapN((a,b,c) => Infrastructure.Aws(creds,a,b,c.toSet,zones,kfg.lookup[String]("image")))
+     kfg.lookup[List[String]]("elb-security-group-names"),
+     lookupElbScheme(kfg)
+    ).mapN((a,b,c,d) => Infrastructure.Aws(creds,a,b,c.toSet,zones,kfg.lookup[String]("image"),d))
   }
 
   private def readNomad(cfg: KConfig): NomadConfig =
