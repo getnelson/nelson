@@ -191,7 +191,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
 
       val mv = json.decodeEither[ManifestValidation].toOption.get
       val Right(Invalid(e)) = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
-      e should equal (NonEmptyList.of(InvalidLoadbalancerNameLength("xxxxxxxxxxxxxxxxxx"))) }.unsafeRunSync()
+      e should equal (NonEmptyList.of(InvalidLoadbalancerNameLength("xxxxxxxxxxxxxxxxxx", 12))) }.unsafeRunSync()
   }
 
   it should "accept multiple loadbalancer ports" in {
