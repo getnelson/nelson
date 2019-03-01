@@ -569,6 +569,7 @@ In order to enable Nelson's support for dynamically provisioning load-balencers 
 * [loadbalancer.aws.launch-configuration-name](#loadbalancer-aws-launch-configuration-name)
 * [loadbalancer.aws.region](#loadbalancer-aws-region)
 * [loadbalancer.aws.secret-access-key](#loadbalancer-aws-secret-access-key)
+* [loadbalancer.aws.use-internal-elb](#loadbalancer-use-internal-elb)
 
 #### loadbalancer.aws.access-key-id
 
@@ -634,6 +635,14 @@ To provide Nelson access to AWS to launch the needed resources, provide an AWS a
 
 ```
 datacenter.texas.infrastructure.loadbalancer.aws.secret-access-key = "XXXXXXXXX"
+```
+
+#### loadbalancer.aws.use-internal-elb
+
+Depending on your network topology, it can sometimes be desirable to have Nelson spawn internal ELBs, which are not exposed to the internet (and cannot be exposed). In this case, Nelson assumes that you have some kind of VPN or other network route to reach these ELBs.
+
+```
+datacenter.texas.infrastructure.loadbalancer.aws.use-internal-elb = true
 ```
 
 ----
