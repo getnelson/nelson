@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Aws</span><span class="params">(<span name="creds">creds: <span class="extype" name="com.amazonaws.auth.AWSCredentialsProviderChain">AWSCredentialsProviderChain</span></span>, <span name="region">region: <span class="extype" name="com.amazonaws.regions.Region">Region</span></span>, <span name="launchConfigurationName">launchConfigurationName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="elbSecurityGroupNames">elbSecurityGroupNames: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="availabilityZones">availabilityZones: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Infrastructure$$AvailabilityZone.html" class="extype" name="nelson.Infrastructure.AvailabilityZone">AvailabilityZone</a>] = <span class="symbol">Set.empty</span></span>, <span name="image">image: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Aws</span><span class="params">(<span name="creds">creds: <span class="extype" name="com.amazonaws.auth.AWSCredentialsProviderChain">AWSCredentialsProviderChain</span></span>, <span name="region">region: <span class="extype" name="com.amazonaws.regions.Region">Region</span></span>, <span name="launchConfigurationName">launchConfigurationName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="elbSecurityGroupNames">elbSecurityGroupNames: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="availabilityZones">availabilityZones: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Infrastructure$$AvailabilityZone.html" class="extype" name="nelson.Infrastructure.AvailabilityZone">AvailabilityZone</a>] = <span class="symbol">Set.empty</span></span>, <span name="image">image: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="lbScheme">lbScheme: <a href="loadbalancers/ElbScheme.html" class="extype" name="nelson.loadbalancers.ElbScheme">ElbScheme</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.Infrastructure.Aws#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(creds:com.amazonaws.auth.AWSCredentialsProviderChain,region:com.amazonaws.regions.Region,launchConfigurationName:String,elbSecurityGroupNames:Set[String],availabilityZones:Set[nelson.Infrastructure.AvailabilityZone],image:Option[String]):nelson.Infrastructure.Aws"></a>
+      <a id="&lt;init&gt;(creds:com.amazonaws.auth.AWSCredentialsProviderChain,region:com.amazonaws.regions.Region,launchConfigurationName:String,elbSecurityGroupNames:Set[String],availabilityZones:Set[nelson.Infrastructure.AvailabilityZone],image:Option[String],lbScheme:nelson.loadbalancers.ElbScheme):nelson.Infrastructure.Aws"></a>
       <a id="&lt;init&gt;:Aws"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Aws</span><span class="params">(<span name="creds">creds: <span class="extype" name="com.amazonaws.auth.AWSCredentialsProviderChain">AWSCredentialsProviderChain</span></span>, <span name="region">region: <span class="extype" name="com.amazonaws.regions.Region">Region</span></span>, <span name="launchConfigurationName">launchConfigurationName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="elbSecurityGroupNames">elbSecurityGroupNames: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="availabilityZones">availabilityZones: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Infrastructure$$AvailabilityZone.html" class="extype" name="nelson.Infrastructure.AvailabilityZone">AvailabilityZone</a>] = <span class="symbol">Set.empty</span></span>, <span name="image">image: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
+        <span class="name">Aws</span><span class="params">(<span name="creds">creds: <span class="extype" name="com.amazonaws.auth.AWSCredentialsProviderChain">AWSCredentialsProviderChain</span></span>, <span name="region">region: <span class="extype" name="com.amazonaws.regions.Region">Region</span></span>, <span name="launchConfigurationName">launchConfigurationName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="elbSecurityGroupNames">elbSecurityGroupNames: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="availabilityZones">availabilityZones: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Infrastructure$$AvailabilityZone.html" class="extype" name="nelson.Infrastructure.AvailabilityZone">AvailabilityZone</a>] = <span class="symbol">Set.empty</span></span>, <span name="image">image: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="lbScheme">lbScheme: <a href="loadbalancers/ElbScheme.html" class="extype" name="nelson.loadbalancers.ElbScheme">ElbScheme</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#nelson.Infrastructure$$Aws@&lt;init&gt;(creds:com.amazonaws.auth.AWSCredentialsProviderChain,region:com.amazonaws.regions.Region,launchConfigurationName:String,elbSecurityGroupNames:Set[String],availabilityZones:Set[nelson.Infrastructure.AvailabilityZone],image:Option[String]):nelson.Infrastructure.Aws" title="Permalink" target="_top">
+      <a href="../index.html#nelson.Infrastructure$$Aws@&lt;init&gt;(creds:com.amazonaws.auth.AWSCredentialsProviderChain,region:com.amazonaws.regions.Region,launchConfigurationName:String,elbSecurityGroupNames:Set[String],availabilityZones:Set[nelson.Infrastructure.AvailabilityZone],image:Option[String],lbScheme:nelson.loadbalancers.ElbScheme):nelson.Infrastructure.Aws" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -377,6 +377,23 @@
       </span>
       </h4><span class="permalink">
       <a href="../index.html#nelson.Infrastructure$$Aws@launchConfigurationName:String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="nelson.Infrastructure.Aws#lbScheme" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lbScheme:nelson.loadbalancers.ElbScheme"></a>
+      <a id="lbScheme:ElbScheme"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lbScheme</span><span class="result">: <a href="loadbalancers/ElbScheme.html" class="extype" name="nelson.loadbalancers.ElbScheme">ElbScheme</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#nelson.Infrastructure$$Aws@lbScheme:nelson.loadbalancers.ElbScheme" title="Permalink" target="_top">
         <img src="../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

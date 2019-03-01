@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?c75dffb0af4919f246d745db9ddd03be" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?cd31a055b4a355ce3a208efb05b0caba" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?ab907db71efcdc87df9a604fc96ba5a1" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?81ed9d99c7e95123a4eff1f2c1b523ff" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -737,6 +737,7 @@ key_prefix &quot;_rexec&quot; {
 <li><a href="#loadbalancer-aws-launch-configuration-name">loadbalancer.aws.launch-configuration-name</a></li>
 <li><a href="#loadbalancer-aws-region">loadbalancer.aws.region</a></li>
 <li><a href="#loadbalancer-aws-secret-access-key">loadbalancer.aws.secret-access-key</a></li>
+<li><a href="#loadbalancer-use-internal-elb">loadbalancer.aws.use-internal-elb</a></li>
 </ul>
 
 <h4 id="loadbalancer-aws-access-key-id">loadbalancer.aws.access-key-id</h4>
@@ -796,6 +797,13 @@ datacenter.texas.infrastructure.loadbalancer.aws.access-key-id = &quot;XXXXXXXXX
 <p>To provide Nelson access to AWS to launch the needed resources, provide an AWS access-key-id and secret-access-key. If Nelson itself is running on an AWS EC2 instance, then it is highly recomended to not specify credentials statically, but instead rely on the IAM instance profile which Nelson will automatically read and use if the static configuration fields are missing.</p>
 
 <pre><code>datacenter.texas.infrastructure.loadbalancer.aws.secret-access-key = &quot;XXXXXXXXX&quot;
+</code></pre>
+
+<h4 id="loadbalancer-aws-use-internal-elb">loadbalancer.aws.use-internal-elb</h4>
+
+<p>Depending on your network topology, it can sometimes be desirable to have Nelson spawn internal ELBs, which are not exposed to the internet (and cannot be exposed). In this case, Nelson assumes that you have some kind of VPN or other network route to reach these ELBs.</p>
+
+<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.use-internal-elb = true
 </code></pre>
 
 <hr />
@@ -1281,7 +1289,7 @@ with Github OAuth because we&rsquo;re developing locally (potentially even offli
         </p>
         <p>
           Currently v
-                    0.13.167
+                    0.13.168
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -1302,9 +1310,9 @@ with Github OAuth because we&rsquo;re developing locally (potentially even offli
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?5fac479d4c42e3e8bf1b21cdb68a22e5"></script>
+<script src="/js/material.min.js?c70a10eafdf312ae742146f46d4b39e0"></script>
 
-<script src="/js/nelson.js?8e4100eb6e787feae4eaba012e90f932"></script>
+<script src="/js/nelson.js?c2e020bff68453faf3ca274431272b08"></script>
 
 
   </body>
