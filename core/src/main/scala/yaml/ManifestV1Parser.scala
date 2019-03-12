@@ -272,7 +272,7 @@ object ManifestV1Parser {
   }
 
   def toDeploymentTarget(dcs: DatacenterTargetYaml): DeploymentTarget = {
-    val only = Option(dcs).toList.flatMap(_.except.asScala.toList)
+    val only = Option(dcs).toList.flatMap(_.only.asScala.toList)
     val except = Option(dcs).toList.flatMap(_.except.asScala.toList)
     (only, except) match {
       case (o,Nil) if o.nonEmpty => DeploymentTarget.Only(o)
