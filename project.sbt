@@ -25,8 +25,6 @@ lazy val core = project
 
 lazy val http = project.dependsOn(core % "test->test;compile->compile")
 
-lazy val docs = project
-
 enablePlugins(DisablePublishingPlugin)
 
 addCommandAlias("ci", ";test;coverageReport;coverageAggregate;tut;unidoc")
