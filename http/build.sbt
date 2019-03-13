@@ -33,7 +33,7 @@ daemonUser in Docker := "root"
 
 defaultLinuxInstallLocation in Docker := "/opt/application"
 
-dockerUpdateLatest := true
+dockerUpdateLatest := false
 
 dockerExposedPorts := Seq(9000, 5775)
 
