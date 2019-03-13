@@ -5,7 +5,9 @@ steps:
     concurrency: 1
     concurrency_group: primary
     timeout_in_minutes: 45
-    branches: master
+    branches:
+      - master
+      - 0.11.x
     env:
       - BUILDKITE_CLEAN_CHECKOUT: true
     agents:
@@ -16,7 +18,9 @@ steps:
 
   - label: ":radioactive_sign: teardown"
     command: .buildkite/pipeline.teardown.sh
-    branches: master
+    branches:
+      - master
+      - 0.11.x
     env:
       - BUILDKITE_CLEAN_CHECKOUT: true
     agents:
