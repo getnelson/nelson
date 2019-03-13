@@ -19,7 +19,7 @@ organization in Global := "io.getnelson.nelson"
 
 scalaVersion in Global := "2.11.11"
 
-lazy val nelson = project.in(file(".")).aggregate(docs, core, http)
+lazy val nelson = project.in(file(".")).aggregate(core, http)
 
 lazy val core = project
 
