@@ -28,9 +28,7 @@ units:
     resources:
       - name: s3
         description: description of s3
-      - name: postgres
-        description: description of postgres
-
+        
     meta:
       - "foo"
       - "bar"
@@ -94,32 +92,6 @@ plans:
     memory: 512
     instances:
       desired: 1
-    resources:
-    - ref: s3
-      uri: http://s3.aws.com
-      assume: sts:marketing
-    - ref: postgres
-      uri: postgresql://postgres.consul:5432/public
-      role: >-
-        CREATE ROLE "{{ name }}" WITH
-          LOGIN
-          PASSWORD '{{ password }}'
-          VALID UNTIL '{{ expiration }}';
-        GRANT SELECT ON ALL TABLES IN SCHEMA campaigns TO "{{ name }}";
-        GRANT SELECT ON ALL TABLES IN SCHEMA user TO "{{ name }}";
-      revoke: "<override default revocation >"
-    - ref: mongo
-      uri: mongodb://mongo.consul
-      role: >-
-        {
-          "user"  : "{{ name }}",
-          "pwd"   : "{{ password }}",
-          "roles" : [
-            { "role": "admin", "db": "marketing" }
-          ]
-        }
-      revoke: "<override default revocation >"
-
     alert_opt_outs:
       - api_high_request_latency
     health_checks:
