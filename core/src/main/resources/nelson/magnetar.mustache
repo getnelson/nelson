@@ -6,7 +6,7 @@ job "{{unit_name}}" {
   type = "service"
   {{/schedule}}
 
-  region      = "{{datacenter}}"
+  region      = "us"
   datacenters = ["{{datacenter}}"]
 
   {{!- todo support time zone for predefined expressions }}
@@ -42,7 +42,12 @@ job "{{unit_name}}" {
       {{^restart_interval}}
       interval = "5m"
       {{/restart_interval}}
+      {{#retries}}
       attempts = {{retries}}
+      {{/retries}}
+      {{^retries}}
+      attempts = 3
+      {{/retries}}
       {{#restart_delay}}
       delay = "{{restart_delay}}"
       {{/restart_delay}}

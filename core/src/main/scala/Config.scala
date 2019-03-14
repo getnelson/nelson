@@ -576,7 +576,7 @@ object Config {
     } yield Infrastructure.Kubernetes(mode, timeout)
 
     def readNomadScheduler(kfg: KConfig): IO[SchedulerOp ~> IO] =
-      readNomadInfrastructure(kfg) match {
+      readNomadInfrastructure(kfg.subconfig("infrastructure.nomad")) match {
         case Some(n) => http4sClient(n.timeout).map(client => new scheduler.NomadHttp(nomadcfg, n, client, schedulerPool, ec))
         case None    => IO.raiseError(new IllegalArgumentException("Unable to parse the nomad scheduler configuration"))
       }
@@ -645,6 +645,9 @@ object Config {
         case Some("kubernetes") => {
           withKubectl((kubectl, timeout) =>
             IO.pure(new KubernetesShell(kubectl, timeout, ec, schedulerPool)))
+        }
+        case Some("nomad") => {
+          readNomadScheduler(kfg)
         }
         case _ => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
       }
