@@ -75,6 +75,11 @@ class ConfigSpec extends FlatSpec with Matchers {
     } should equal (true)
   }
 
+  it should "successfully provide a default elb scheme in the event its missing" in {
+    val cfg = readAws("nelson/datacenters-aws-missing-elb-scheme.cfg").attempt.unsafeRunSync()
+    cfg.right.get.get.lbScheme should equal (ElbScheme.External)
+  }
+
   behavior of "readTemplate"
 
   it should "take vault address from first datacenter, alphabetically" in {
