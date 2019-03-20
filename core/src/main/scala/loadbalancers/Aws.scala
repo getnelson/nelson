@@ -38,7 +38,7 @@ final case class ASGSize(desired: Int, min: Int, max: Int)
 sealed trait ElbScheme
 final object ElbScheme {
   final case object External extends ElbScheme {
-    override def toString: String = "internet"
+    override def toString: String = "internet-facing"
   }
   final case object Internal extends ElbScheme {
     override def toString: String = "internal"
