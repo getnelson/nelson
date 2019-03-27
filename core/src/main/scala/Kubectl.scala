@@ -1,7 +1,6 @@
 package nelson
 
 import nelson.Datacenter.StackName
-import nelson.Infrastructure.KubernetesMode
 import nelson.health.{HealthCheck, HealthStatus, Passing, Failing, Unknown}
 
 import argonaut.{CursorHistory, DecodeJson, Parse}
@@ -14,11 +13,12 @@ import fs2.Stream
 
 import java.io.{ByteArrayInputStream, InputStream}
 import java.nio.charset.StandardCharsets.UTF_8
+import java.nio.file.Path
 
 import scala.sys.process.{Process, ProcessLogger}
 import scala.collection.mutable.ListBuffer
 
-final class Kubectl(mode: KubernetesMode) {
+final class Kubectl(kubeconfig: Path) {
   import Kubectl._
 
   def apply(payload: String, namespace: NamespaceName): IO[String] = {
@@ -98,7 +98,7 @@ final class Kubectl(mode: KubernetesMode) {
           stdout <- IO(ListBuffer.empty[String])
           stderr <- IO(ListBuffer.empty[String])
           logger <- IO(ProcessLogger(sout => { stdout += sout; () }, serr => { stderr += serr; () }))
-          exitCode <- IO((Process(cmd, None, mode.environment: _*) #< is).run(logger).exitValue)
+          exitCode <- IO((Process(cmd, None, ("KUBECONFIG", kubeconfig.toString)) #< is).run(logger).exitValue)
         } yield Output(stdout.toList, stderr.toList, exitCode)
       }
     }, is => IO(is.close()))
