@@ -58,7 +58,7 @@ final class KubernetesShell(
         }
       }
 
-    deployment.renderedBlueprint.fold(fallback)(spec => kubectl.delete(spec).void)
+    deployment.renderedBlueprint.fold(fallback)(spec => kubectl.delete(spec, ns).void)
   }
 
   // Janky heuristic to see if an attempted (legacy) deletion failed because
@@ -89,7 +89,7 @@ final class KubernetesShell(
 
     for {
       t <- template
-      r <- kubectl.apply(t.render(env))
+      r <- kubectl.apply(t.render(env), ns)
     } yield r
   }
 
