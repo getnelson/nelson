@@ -72,7 +72,8 @@ object Render {
       EnvironmentVariable("NELSON_ENV", ns.root.asString),
       EnvironmentVariable("NELSON_NAMESPACE", ns.asString),
       EnvironmentVariable("NELSON_PLAN", p.name),
-      EnvironmentVariable("NELSON_STACKNAME", sn.toString)
+      EnvironmentVariable("NELSON_STACKNAME", sn.toString),
+      EnvironmentVariable("NELSON_UNITNAME", sn.serviceType)
     )
     val envList = (p.environment.bindings ++ nelsonEnvs).map {
       case EnvironmentVariable(name, value) => MapValue(Map((envvarName, StringValue(name)), (envvarValue, StringValue(value))))
