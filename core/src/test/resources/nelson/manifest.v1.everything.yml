@@ -101,6 +101,9 @@ plans:
         path: "v1/status"
         interval: "10 seconds"
         timeout: "2 seconds"
+    resources:
+      - ref: s3
+        uri: http://s3.aws.com
 
     expiration_policy: retain-latest-two-major
     volumes:
