@@ -186,13 +186,10 @@ nelson {
         scheduler {
           scheduler = "kubernetes"
           kubernetes {
-            # is nelson hosted on the cluster it is managing?
-            in-cluster = false
-            # in the event that Nelson is running on a substrate
-            # outside of the deployment clusters, specify the path
-            # to the kubeconfig which will dictate how kubectl does
-            # authentication with the cluster and so forth.
+            # specify the path to the kubeconfig which will dictate
+            # kubectl do authentication with the cluster and so forth.
             kubeconfig = /path/to/.kube/config
+            timeout = 10 seconds
           }
         }
 

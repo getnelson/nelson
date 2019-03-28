@@ -17,7 +17,6 @@
 package nelson
 
 import nelson.BannedClientsConfig.HttpUserAgent
-import nelson.Infrastructure.KubernetesMode
 import nelson.audit.{Auditor,AuditEvent}
 import nelson.cleanup.ExpirationPolicy
 import nelson.docker.Docker
@@ -542,14 +541,10 @@ object Config {
         })
     }
 
-    def readKubernetesOutClusterParams(kfg: KConfig): Option[KubernetesMode] =
-      kfg.lookup[String]("kubeconfig").map(kubeconfig => KubernetesMode.OutCluster(Paths.get(kubeconfig)))
-
     def readKubernetesInfrastructure(kfg: KConfig): Option[Infrastructure.Kubernetes] = for {
-      inCluster <- kfg.lookup[Boolean]("in-cluster")
-      mode      <- if (inCluster) Some(KubernetesMode.InCluster) else readKubernetesOutClusterParams(kfg)
-      timeout   <- kfg.lookup[FiniteDuration]("timeout")
-    } yield Infrastructure.Kubernetes(mode, timeout)
+      kubeconfig <- kfg.lookup[String]("kubeconfig").map(k => Paths.get(k))
+      timeout    <- kfg.lookup[FiniteDuration]("timeout")
+    } yield Infrastructure.Kubernetes(kubeconfig, timeout)
 
     def readNomadScheduler(kfg: KConfig): IO[SchedulerOp ~> IO] =
       readNomadInfrastructure(kfg) match {
@@ -614,8 +609,8 @@ object Config {
 
         case Some("kubernetes") =>
           readKubernetesInfrastructure(schedConfig.subconfig("kubernetes")) match {
-            case Some(Infrastructure.Kubernetes(mode, timeout)) =>
-              val kubectl = new Kubectl(mode)
+            case Some(Infrastructure.Kubernetes(kubeconfig, timeout)) =>
+              val kubectl = new Kubectl(kubeconfig)
               IO.pure((
                 new KubernetesShell(kubectl, timeout, ec, schedulerPool),
                 new KubernetesHealthClient(kubectl, timeout, ec, schedulerPool),

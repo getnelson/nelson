@@ -1,7 +1,6 @@
 package nelson
 
 import nelson.Datacenter.StackName
-import nelson.Infrastructure.KubernetesMode
 import nelson.health.{HealthCheck, HealthStatus, Passing, Failing, Unknown}
 
 import argonaut.{CursorHistory, DecodeJson, Parse}
@@ -14,25 +13,26 @@ import fs2.Stream
 
 import java.io.{ByteArrayInputStream, InputStream}
 import java.nio.charset.StandardCharsets.UTF_8
+import java.nio.file.Path
 
 import scala.sys.process.{Process, ProcessLogger}
 import scala.collection.mutable.ListBuffer
 
-final class Kubectl(mode: KubernetesMode) {
+final class Kubectl(kubeconfig: Path) {
   import Kubectl._
 
-  def apply(payload: String): IO[String] = {
+  def apply(payload: String, namespace: NamespaceName): IO[String] = {
     val input = IO { new ByteArrayInputStream(payload.getBytes(UTF_8)) }
     for {
-      result <- exec(List("kubectl", "apply", "-f", "-"), input)
+      result <- exec(List("kubectl", "apply", "--context", namespace.root.asString, "-f", "-"), input)
       output <- result.output
     } yield output.mkString("\n")
   }
 
-  def delete(payload: String): IO[String] = {
+  def delete(payload: String, namespace: NamespaceName): IO[String] = {
     val input = IO { new ByteArrayInputStream(payload.getBytes(UTF_8)) }
     for {
-      result <- exec(List("kubectl", "delete", "-f", "-"), input)
+      result <- exec(List("kubectl", "delete", "--context", namespace.root.asString, "-f", "-"), input)
       output <- result.output
     } yield output.mkString("\n")
   }
@@ -53,7 +53,7 @@ final class Kubectl(mode: KubernetesMode) {
 
   def getPods(namespace: NamespaceName, stackName: StackName): IO[List[HealthStatus]] = {
     implicit val healthStatusDecoder = healthStatusDecodeJson
-    exec(List("kubectl", "get", "pods", "-l", s"stackName=${stackName.toString}", "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+    exec(List("kubectl", "get", "pods", "-l", s"stackName=${stackName.toString}", "--context", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(for {
@@ -64,14 +64,14 @@ final class Kubectl(mode: KubernetesMode) {
   }
 
   def getDeployment(namespace: NamespaceName, stackName: StackName): IO[DeploymentStatus] =
-    exec(List("kubectl", "get", "deployment", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+    exec(List("kubectl", "get", "deployment", stackName.toString, "--context", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(Parse.decodeEither[DeploymentStatus](stdout.mkString("\n")).leftMap(kubectlJsonError))
       }
 
   def getCronJob(namespace: NamespaceName, stackName: StackName): IO[JobStatus] =
-    exec(List("kubectl", "get", "job", "-l", s"stackName=${stackName.toString}", "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+    exec(List("kubectl", "get", "job", "-l", s"stackName=${stackName.toString}", "--context", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(for {
@@ -81,14 +81,14 @@ final class Kubectl(mode: KubernetesMode) {
       }
 
   def getJob(namespace: NamespaceName, stackName: StackName): IO[JobStatus] =
-    exec(List("kubectl", "get", "job", stackName.toString, "-n", namespace.root.asString, "-o", "json"), emptyStdin)
+    exec(List("kubectl", "get", "job", stackName.toString, "--context", namespace.root.asString, "-o", "json"), emptyStdin)
       .flatMap(_.output)
       .flatMap { stdout =>
         IO.fromEither(Parse.decodeEither[JobStatus](stdout.mkString("\n")).leftMap(kubectlJsonError))
       }
 
   private def deleteV1(namespace: String, objectType: String, name: String): IO[Output] =
-    exec(List("kubectl", "delete", objectType, name, "-n", namespace), emptyStdin)
+    exec(List("kubectl", "delete", objectType, name, "--context", namespace), emptyStdin)
 
   private def exec(cmd: List[String], stdin: IO[InputStream]): IO[Output] = {
     // We need the new cats-effect resource safety hotness..
@@ -98,7 +98,7 @@ final class Kubectl(mode: KubernetesMode) {
           stdout <- IO(ListBuffer.empty[String])
           stderr <- IO(ListBuffer.empty[String])
           logger <- IO(ProcessLogger(sout => { stdout += sout; () }, serr => { stderr += serr; () }))
-          exitCode <- IO((Process(cmd, None, mode.environment: _*) #< is).run(logger).exitValue)
+          exitCode <- IO((Process(cmd, None, ("KUBECONFIG", kubeconfig.toString)) #< is).run(logger).exitValue)
         } yield Output(stdout.toList, stderr.toList, exitCode)
       }
     }, is => IO(is.close()))
