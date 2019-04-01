@@ -121,7 +121,7 @@ final case class InvalidLoadbalancerPort(port: Int, allowed: List[Int]) extends 
 
 final case class InvalidLoadbalancer(rs: Vector[Manifest.Route]) extends NelsonError(s"""only the default port is allow for loadbalancing: ${rs.map(_.destination.portReference).toList.mkString(",")} have been requested""")
 
-final case class InvalidLoadbalancerNameLength(name: String) extends NelsonError(s"""loadbalancer name ($name) must less that 17 characters""")
+final case class InvalidLoadbalancerNameLength(name: String, max: Int) extends NelsonError(s"""loadbalancer name ($name) must less that $max characters""")
 
 final case class InvalidRouteDefinition(name: String) extends
   NelsonError(s"""loadbalancer $name has invalid route definition, all routes must route to the same backend service""")

@@ -21,6 +21,7 @@ import org.scalatest.{FlatSpec,Matchers}
 import cats.effect.IO
 import cats.implicits._
 import nelson.Util._
+import loadbalancers.ElbScheme
 
 class ConfigSpec extends FlatSpec with Matchers {
 
@@ -58,12 +59,25 @@ class ConfigSpec extends FlatSpec with Matchers {
       msg == "No such key: public-subnet"
     } should equal (true)
   }
+
   it should "fail if private subnet is not specified in aws config" in {
     val cfg = readAws("nelson/datacenters-missing-private-subnet.cfg").attempt.unsafeRunSync()
     cfg.swap.exists { err =>
       val msg = err.getMessage
       msg == "No such key: private-subnet"
     } should equal (true)
+  }
+
+  it should "successfully read the aws config" in {
+    val cfg = readAws("nelson/datacenters-valid-aws.cfg").attempt.unsafeRunSync()
+    cfg.right.exists { c =>
+      c.map(_.lbScheme) == Some(ElbScheme.Internal)
+    } should equal (true)
+  }
+
+  it should "successfully provide a default elb scheme in the event its missing" in {
+    val cfg = readAws("nelson/datacenters-aws-missing-elb-scheme.cfg").attempt.unsafeRunSync()
+    cfg.right.get.get.lbScheme should equal (ElbScheme.External)
   }
 
   behavior of "readTemplate"
