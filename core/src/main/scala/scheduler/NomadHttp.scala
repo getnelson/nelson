@@ -1,3 +1,5 @@
+
+
 //: ----------------------------------------------------------------------------
 //: Copyright (C) 2017 Verizon.  All Rights Reserved.
 //:
@@ -138,8 +140,8 @@ final class NomadHttp(
       .traverse {
         case Left(_)   => IO.raiseError(new IllegalArgumentException("Internal error occured: un-hydrated blueprint passed to scheduler!"))
         case Right(bp) => bp.template.pure[IO]
-      } >>=
-      (_.fold(DefaultBlueprints.magnetar)(_.pure[IO]))
+      }
+      .flatMap(_.fold(DefaultBlueprints.magnetar)(_.pure[IO]))
 
     val magnetarEnv = List(
       EnvironmentVariable("NELSON_DATACENTER", dc.name),
