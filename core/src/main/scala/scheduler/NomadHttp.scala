@@ -165,7 +165,7 @@ final class NomadHttp(
 
     for {
       tmpl <- template
-      spec  = tmpl.render(Render.magnetar(img, dc, ns, u, updatePlan, sn, nomad.docker))
+      spec  = tmpl.render(Render.makeEnv(img, dc, ns, u, sn.version, updatePlan, sn.hash))
       json <- parse(dc, spec)
       spec <- call(name, dc, json)
     } yield spec
