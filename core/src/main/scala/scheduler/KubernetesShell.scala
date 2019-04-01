@@ -68,7 +68,7 @@ final class KubernetesShell(
 
   def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
     val sn = StackName(unit.name, version, hash)
-    val env = Render.canopus(image, dc, ns, unit, plan, sn)
+    val env = Render.makeEnv(image, dc, ns, unit, version, plan, hash)
 
     val fallback = Manifest.getSchedule(unit, plan) match {
       case None => DefaultBlueprints.canopus.service
