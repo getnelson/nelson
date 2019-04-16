@@ -20,7 +20,7 @@ menu:
 Nelson is written in [Scala](https://scala-lang.org), and built using [SBT](http://www.scala-sbt.org/). You will need to install SBT locally before you can start working with the Nelson codebase. Please [follow the install steps](https://www.scala-sbt.org/1.x/docs/Setup.html) to get setup.
 
 <div class="alert alert-info" role="alert">
-This guide will assume that the path to the Nelson source code on disk is denoted by <code>$NELSON_HOME</code>. Whilst this variable does not need to be literally set in your shell, the author uses this notation to avoid confusing <code>$NELSON_HOME/etc</code> with system <code>/etc</code> for example. 
+This guide will assume that the path to the Nelson source code on disk is denoted by <code>$NELSON_HOME</code>. Whilst this variable does not need to be literally set in your shell, the author uses this notation to avoid confusing <code>$NELSON_HOME/etc</code> with system <code>/etc</code> for example.
 </div>
 
 To boot up Nelson locally, there are a handful of items that need to be setup beforehand. First, obtain a [Personal Access Token for GitHub](https://github.com/settings/tokens) with the [following permissions](https://getnelson.io/getting-started/install.html#using-the-cli). Once you have this, add it to your environment with the `GITHUB_TOKEN` variable using `~/.bash_profile`, or whatever file as appropriate for your shell of choice.
@@ -36,15 +36,17 @@ Next, add a line to `/etc/hosts` such that you have a `nelson.local` domain poin
 127.0.0.1 nelson.local
 ```
 
-This may seem like a strange modification, but it is required in order to have browsers like Chrome store cookies locally. As Nelson uses cookies for authentication, without this you won't actually be able to maintain an active session. 
+This may seem like a strange modification, but it is required in order to have browsers like Chrome store cookies locally. As Nelson uses cookies for authentication, without this you won't actually be able to maintain an active session.
 
 This is the bare minimum required to run Nelson. You can then instruct Nelson to boot up by using the following command:
 
 ```
-sbt http/reStart
+$ sbt
+# once the interactive shell loads, run:
+$ http/reStart
 ```
 
-Nelson will then boot up and be running on `http://nelson.local:9000`. 
+Nelson will then boot up and be running on `http://nelson.local:9000`.
 
 <div class="alert alert-warning" role="alert">
   Be aware that unless you have correctly configured a development OAuth application on GitHub for your local Nelson, you will get rejected from any activity related to GitHub.
@@ -86,13 +88,13 @@ This can be useful when developing certain types of UI, but largely can be ignor
 
 Technically, you can run Nelson locally **without** the other system dependencies running locally - some functionality will of course not work. If the feature you're working on doesn't need those systems, please be aware your logs will contain errors reporting that those dependencies are not running. To remove these errors, install and run the needed systems locally before booting Nelson.
 
-Do be aware that you could also run these dependencies as containers but it can often become tricky with networking. This is something that is certainly possible to overcome, but it's more hassle than most people want when getting setup, and so this guide assumes you are running binaries natively. 
+Do be aware that you could also run these dependencies as containers but it can often become tricky with networking. This is something that is certainly possible to overcome, but it's more hassle than most people want when getting setup, and so this guide assumes you are running binaries natively.
 
 ### Kubernetes
 
 Nelson is integrated with [Kubernetes](https://kubernetes.io). You can optionally use it for development purposes, even if you do not use it in production. For local operation, the author proposes using [minikube](https://kubernetes.io/docs/setup/minikube/), or leveraging one of the cloud-hosted solutions like [GKE](https://cloud.google.com/kubernetes-engine/), [AKE](https://azure.microsoft.com/en-us/services/kubernetes-service/) or [EKS](https://aws.amazon.com/eks/).
 
-As Kubernetes itself has a complicated authentication story, Nelson does not try to replicate that at all, and instead simply shells out to the `kubectl` command line application, which in turn uses the Kubernetes configuration defined by `KUBECONFIG` environment variable. In short, provided your `kubectl` is operating with the cluster you wish to use with Nelson no further external setup is required. 
+As Kubernetes itself has a complicated authentication story, Nelson does not try to replicate that at all, and instead simply shells out to the `kubectl` command line application, which in turn uses the Kubernetes configuration defined by `KUBECONFIG` environment variable. In short, provided your `kubectl` is operating with the cluster you wish to use with Nelson no further external setup is required.
 
 To instruct Nelson to use this local Kubernetes cluster, alter the configuration at `$NELSON_HOME/etc/development/http/http.dev.cfg`:
 
@@ -115,7 +117,7 @@ datacenters {
 
 This is all that's needed to use a local Kubernetes configuration.
 
-### Nomad 
+### Nomad
 
 Nelson is integrated with [Hashicorp Nomad](http://nomadproject.io). You can optionally use it for development purposes, even if you do not use it in production. By default, the local development configuration assumes you're running Nomad on the loopback address, `127.0.0.1`. If you wish to point to a remote Nomad cluster, then you must set the following environment variables:
 
