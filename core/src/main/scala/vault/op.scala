@@ -130,6 +130,15 @@ object Vault {
     roleName: String
   ): VaultF[Unit] = Free.liftF(DeleteKubernetesRole(authClusterName, roleName))
 
+  // TODO(drewgonzales360): Do some sort of validation to ensure the roleName is a unitName
+  def createPKIRole(
+    roleName: String
+  ): VaultF[Unit] = Free.liftF(createPKIRole(roleName))
+
+  def deletePKIRole(
+    roleName: String
+  ): VaultF[Unit] = Free.liftF(deletePKIRole(roleName))
+
   case object IsInitialized extends Vault[Boolean]
   final case class Initialize(init: Initialization) extends Vault[InitialCreds]
   final case class Unseal(key: MasterKey) extends Vault[SealStatus]
@@ -151,4 +160,3 @@ object Vault {
     policies: Option[List[String]]) extends Vault[Unit]
   final case class DeleteKubernetesRole(authClusterName: String, roleName: String) extends Vault[Unit]
 }
-
