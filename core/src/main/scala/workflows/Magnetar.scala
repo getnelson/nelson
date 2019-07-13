@@ -41,7 +41,7 @@ object Magnetar extends Workflow[Unit] {
       _  <- writePolicyToVault(cfg = dc.policy, sn = sn, ns = ns.name, rs = rs)
       _  <- logToFile(id, s"writing discovery tables to ${routing.Discovery.consulDiscoveryKey(sn)}")
       _  <- writeDiscoveryToConsul(id, sn, ns.name, dc)
-      _  <- getTrafficShift(unit, p, dc).fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
+      _  <- getTrafficShift(p, dc).fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
       _  <- logToFile(id, s"instructing ${dc.name}'s scheduler to handle service container")
       l  <- launch(i, dc, ns.name, vunit, p, hash)
       _  <- debug(s"response from scheduler $l")

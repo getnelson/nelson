@@ -20,7 +20,7 @@ object Render {
       (image, StringValue(img.toString))
     )
 
-    val jobEnv = fromOption(Manifest.getSchedule(unit, p).flatMap(_.toCron)) { cronExpr =>
+    val jobEnv = fromOption(Manifest.getSchedule(p).flatMap(_.toCron)) { cronExpr =>
       Map((schedule, StringValue(cronExpr)))
     } ++ fromOption(p.environment.desiredInstances) { instances =>
       Map((desiredInstances, StringValue(instances.toString)))

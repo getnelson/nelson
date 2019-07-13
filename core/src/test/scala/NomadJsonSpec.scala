@@ -43,8 +43,7 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
   val ports = Ports(Port("http",8080,"http"), Nil)
 
   it should "generate docker config json with ports" in {
-    val name = "myjobname"
-    val json = NomadJson.dockerConfigJson(nomad, image, Some(ports), NomadJson.BridgeMode, name, NamespaceName("dev"))
+    val json = NomadJson.dockerConfigJson(nomad, image, Some(ports), NomadJson.BridgeMode)
 
     json should equal (Json(
       "port_map" := List(Json("http" := 8080)),
@@ -60,8 +59,7 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
   }
 
   it should "generate docker config json without ports" in {
-    val name="myjobname"
-    val json = NomadJson.dockerConfigJson(nomad, image, None, NomadJson.BridgeMode, name, NamespaceName("dev"))
+    val json = NomadJson.dockerConfigJson(nomad, image, None, NomadJson.BridgeMode)
     json should equal (Json(
       "image" := "https://image",
       "network_mode" := "bridge",
@@ -167,7 +165,7 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
   }
 
   it should "generate task json with ports defined" in {
-    val json = NomadJson.leaderTaskJson("name--1-0-0--abcdef12", "name", image, env, NomadJson.BridgeMode, Some(ports), nomad, NamespaceName("qa"), "default", Set("required-tag1","required-tag2"))
+    val json = NomadJson.leaderTaskJson("name--1-0-0--abcdef12", image, env, NomadJson.BridgeMode, Some(ports), nomad, NamespaceName("qa"), "default", Set("required-tag1","required-tag2"))
     json should equal(Json(
       "Name" := "name--1-0-0--abcdef12",
       "Driver" := "docker",
@@ -231,7 +229,7 @@ class NomadJsonSpec extends FlatSpec with Matchers with Inspectors {
   }
 
   it should "generate task json without ports defined" in {
-    val json = NomadJson.leaderTaskJson("name--1-0-0--abcdef12", "name", image, env, NomadJson.HostMode, None, nomad, NamespaceName("qa"), "default", Set("required-tag1","required-tag2"))
+    val json = NomadJson.leaderTaskJson("name--1-0-0--abcdef12", image, env, NomadJson.HostMode, None, nomad, NamespaceName("qa"), "default", Set("required-tag1","required-tag2"))
     json should equal(Json(
       "Name" := "name--1-0-0--abcdef12",
       "Driver" := "docker",

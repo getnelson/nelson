@@ -16,7 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import cats.implicits._
 import org.scalacheck._, Prop._
 
 object ManifestSpec extends Properties("manifest") with RoutingFixtures {
@@ -55,13 +54,13 @@ object ManifestSpec extends Properties("manifest") with RoutingFixtures {
     val dcs = m.targets.values.map(datacenter(_))
 
     ("verify units are empty") |: {
-      val empty = Manifest.unitActions(Versioned(m), dcs, (dc,ns,p,u) => false)
+      val empty = Manifest.unitActions(Versioned(m), dcs, (_,_,_,_) => false)
       empty.isEmpty
     }
 
     ("verify units are full") |: {
       val units = Manifest.units(m, dcs)
-      val actions = Manifest.unitActions(Versioned(m), dcs, (dc,ns,p,u) => true)
+      val actions = Manifest.unitActions(Versioned(m), dcs, (_,_,_,_) => true)
       units.length == actions.length
     }
   }
@@ -70,13 +69,13 @@ object ManifestSpec extends Properties("manifest") with RoutingFixtures {
     val dcs = m.targets.values.map(datacenter(_))
 
     ("verify loadbalancers are empty") |: {
-      val empty = Manifest.loadbalancerActions(Versioned(m), dcs, (dc,ns,pl,lb) => false)
+      val empty = Manifest.loadbalancerActions(Versioned(m), dcs, (_,_,_,_) => false)
       empty.isEmpty
     }
 
     ("verify loadbalancers are full") |: {
       val lbs = Manifest.loadbalancers(m, dcs)
-      val actions = Manifest.loadbalancerActions(Versioned(m), dcs, (dc,ns,pl,lb) => true)
+      val actions = Manifest.loadbalancerActions(Versioned(m), dcs, (_,_,_,_) => true)
       lbs.length == actions.length
     }
   }

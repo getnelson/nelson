@@ -48,7 +48,7 @@ class TemplatesSpec extends FlatSpec with NelsonSuite {
 
   it should "return InvalidTemplate with error message if it can't be rendered" in {
     render("invalid").unsafeRunSync() should matchPattern {
-      case InvalidTemplate(msg) =>
+      case InvalidTemplate(_) =>
     }
   }
 

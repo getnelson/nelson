@@ -10,7 +10,7 @@ import fs2.{Pipe, Sink, Stream}
 
 import quiver.{Context, Decomp, Graph}
 
-import java.util.concurrent.{ScheduledExecutorService, TimeoutException}
+import java.util.concurrent.TimeoutException
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
@@ -21,7 +21,7 @@ object CatsHelpers {
     /** Run `other` if this IO fails */
     def or(other: IO[A]): IO[A] = io.attempt.flatMap {
       case Right(a) => IO.pure(a)
-      case Left(e)  => other
+      case Left(_)  => other
     }
 
     /** Fail with error if the result of the IO does not satsify the predicate
@@ -31,7 +31,7 @@ object CatsHelpers {
     def ensure(failure: => Throwable)(f: A => Boolean): IO[A] =
       io.flatMap(a => if (f(a)) IO.pure(a) else IO.raiseError(failure))
 
-    def timed(timeout: FiniteDuration)(implicit ec: ExecutionContext, schedulerES: ScheduledExecutorService): IO[A] =
+    def timed(timeout: FiniteDuration)(implicit ec: ExecutionContext): IO[A] =
       IO.race(
         Timer[IO].sleep(timeout).as(new TimeoutException(s"Timed out after ${timeout.toMillis} milliseconds"): Throwable),
         io

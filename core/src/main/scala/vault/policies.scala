@@ -81,8 +81,8 @@ object policies {
       token <- Vault.createToken(policies = Some(List(policyName(sn, ns))))
     } yield (token)).foldMap(interp)
 
-    def release(token: Token) = deletePolicy(sn, ns).foldMap(interp)
+    def release = deletePolicy(sn, ns).foldMap(interp)
 
-    Stream.bracket(acquire)(f, release)
+    Stream.bracket(acquire)(f, (_: Token) => release)
   }
 }

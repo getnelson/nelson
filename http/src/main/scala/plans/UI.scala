@@ -33,7 +33,7 @@ final case class UI(config: NelsonConfig) extends Default {
   import UI._
 
   val service = HttpService[IO] {
-    case GET -> Root & IsAuthenticated(session) =>
+    case GET -> Root & IsAuthenticated(_) =>
       IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "login" & IsAuthenticated(_) =>
@@ -60,7 +60,7 @@ final case class UI(config: NelsonConfig) extends Default {
         uri => Found(Location(uri))
       )
 
-    case GET -> Root / "profile" / owner & IsAuthenticated(_) =>
+    case GET -> Root / "profile" / _ & IsAuthenticated(_) =>
       IO.pure(serveStaticFile(path = "index.html"))
 
     case GET -> Root / "deployments" & IsAuthenticated(_) =>

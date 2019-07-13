@@ -74,7 +74,7 @@ final case class Misc(config: NelsonConfig) extends Default {
       case Right(Invalid(errors)) =>
         // validation error, blame the user
         BadRequest(errors.toList.map(_.getMessage).mkString("\n\n"))
-      case Right(Valid(mf)) =>
+      case Right(Valid(_)) =>
         Ok()
     }
 

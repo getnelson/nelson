@@ -93,32 +93,32 @@ object GitFixtures {
               .flatMap(fromJson[Github.User])
         }
 
-      case GetUserOrgKeys(token: AccessToken) =>
+      case GetUserOrgKeys(_) =>
         loadResourceAsString("/nelson/github.keys.json")
           .flatMap(fromJson[List[OrgKey]])
 
-      case GetOrganizations(keys: List[OrgKey], t: AccessToken) =>
+      case GetOrganizations(_, _) =>
         loadResourceAsString("/nelson/github.organization.json")
           .flatMap(fromJson[List[Organization]])
 
-      case GetUserRepositories(token: AccessToken) =>
+      case GetUserRepositories(_) =>
         loadResourceAsString("/nelson/github.repos.json")
           .flatMap(fromJson[List[Repo]])
 
-      case GetFileFromRepository(slug: Slug, path: String, ref: Reference, t: AccessToken) =>
+      case GetFileFromRepository(_, _, _, _) =>
         contents
 
-      case GetRepoWebHooks(slug: Slug, token: AccessToken) =>
+      case GetRepoWebHooks(_, _) =>
         loadResourceAsString("/nelson/github.webhook.json")
           .flatMap(fromJson[List[WebHook]])
 
-      case PostRepoWebHook(slug: Slug, hook: Github.WebHook, t: AccessToken) =>
+      case PostRepoWebHook(_, hook, _) =>
         IO.pure(hook)
 
-      case DeleteRepoWebHook(slug: Slug, id: Long, token: AccessToken) =>
+      case DeleteRepoWebHook(_, _, _) =>
         IO.unit
 
-      case GetDeployment(slug: Slug, id: Long, t: AccessToken) =>
+      case GetDeployment(_, _, _) =>
         loadResourceAsString("/nelson/github.deployment.json")
           .flatMap(fromJson[Option[Deployment]])
     }

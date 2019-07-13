@@ -19,7 +19,6 @@ package routing
 
 import Datacenter.{Deployment,LoadbalancerDeployment,StackName}
 import cats.Order
-import cats.implicits._
 
 final case class RoutingNode(node: Either[LoadbalancerDeployment, Deployment]) {
   def stackName: StackName = node.fold(_.stackName, _.stackName)

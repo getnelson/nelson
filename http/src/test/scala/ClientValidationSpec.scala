@@ -77,9 +77,6 @@ class ClientValidationSpec extends NelsonSuite {
 
     val config0 = config.copy(bannedClients = Option(clientsConfig))
 
-    val filteredService =
-      ClientValidation.filterUserAgent(Auth(config0).service)(config0)
-
     val resp = Auth(config0).service.orNotFound(req).unsafeRunSync()
     resp.status shouldBe Found
   }

@@ -57,21 +57,21 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
   private val defaultSize = cfg.availabilityZones.toList.length
 
   override def apply[A](op: LoadbalancerOp[A]): IO[A] = op match {
-    case DeleteLoadbalancer(lb, dc, ns) =>
-      delete(lb, dc)
-    case LaunchLoadbalancer(lb, v, dc, ns, p, hash) =>
-      launch(lb, v, dc, ns, p, hash)
+    case DeleteLoadbalancer(lb, _, _) =>
+      delete(lb)
+    case LaunchLoadbalancer(lb, v, _, ns, p, hash) =>
+      launch(lb, v, ns, p, hash)
     case ResizeLoadbalancer(lb, p) =>
       val name = loadbalancerName(lb.loadbalancer.name, lb.loadbalancer.version, lb.hash)
       resizeASG(name, asgSize(p))
   }
 
-  def delete(lb: Datacenter.LoadbalancerDeployment, dc: Datacenter): IO[Unit] = {
+  def delete(lb: Datacenter.LoadbalancerDeployment): IO[Unit] = {
     val name = loadbalancerName(lb.loadbalancer.name, lb.loadbalancer.version, lb.hash)
     deleteELB(name) *> deleteASG(name)
   }
 
-  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, dc: Datacenter, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
+  def launch(lb: Manifest.Loadbalancer, v: MajorVersion, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
     val name = loadbalancerName(lb.name, v, hash)
     log.debug(s"caling aws client to launch $name")
     val size = asgSize(p)

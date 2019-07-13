@@ -17,7 +17,7 @@
 package nelson
 package notifications
 
-import nelson.Datacenter.{Namespace, StackName, Deployment}
+import nelson.Datacenter.{Namespace, StackName}
 import nelson.Manifest.{UnitDef,Versioned}
 import nelson.storage.StoreOp
 
@@ -53,15 +53,15 @@ object Notify {
 
   def sendDecommissionedNotifications(dc: Datacenter, ns: Namespace, d: Datacenter.Deployment)(cfg: NelsonConfig): IO[Unit] = {
 
-    def fetchNotifications(d: Deployment): IO[NotificationSubscriptions] = {
+    def fetchNotifications: IO[NotificationSubscriptions] = {
       def fetchManifest(slug: Slug) = Github.Request.fetchFileFromRepository(slug,
         cfg.manifest.filename, Github.Branch("master"))(cfg.git.systemAccessToken).foldMap(cfg.github)
 
-      def findRelease(guid: GUID) =
+      def findRelease =
         StoreOp.findReleaseByDeploymentGuid(d.guid).map(_.map(_._1.slug)).foldMap(cfg.storage)
 
       val notes = for {
-        slug <- OptionT(findRelease(d.guid))
+        slug <- OptionT(findRelease)
         raw  <- OptionT(fetchManifest(slug))
         man  <- OptionT(IO.pure(yaml.ManifestParser.parse(raw.decoded).toOption))
       } yield man.notifications
@@ -75,7 +75,7 @@ object Notify {
     val subject = s"Decommissioning deployment ${d.stackName} in ${dc.name}"
     val msg = decommissionTemplate(dc.name,ns.name,d.stackName)
     for {
-      n <- fetchNotifications(d)
+      n <- fetchNotifications
       _ <- sendSlack(n.slack.map(_.channel), msg)(cfg.slack)
       _ <- sendEmail(n.email.map(_.recipient), subject, msg)(cfg.email)
     } yield ()

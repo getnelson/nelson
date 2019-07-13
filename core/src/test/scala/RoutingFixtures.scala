@@ -125,7 +125,7 @@ trait RoutingFixtures {
     val dc = datacenter(name)
 
     for {
-      repoids <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get))
+      _ <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get))
       _ <- ingestReleases
       _  <- StoreOp.createDatacenter(dc)
       id <- StoreOp.createNamespace(name, devNs)
@@ -220,7 +220,7 @@ trait RoutingFixtures {
     StoreOp.createRelease(release620) *>
     StoreOp.createRelease(release621)
 
-  def lbManifest(ns: Manifest.Namespace) =
+  def lbManifest =
     Manifest(
       Nil, Nil,
       List(Loadbalancer("lb", Vector(Route(Port("default",9000,"http"), BackendDestination("conductor", "default"))),
@@ -559,7 +559,7 @@ trait RoutingFixtures {
   def ingestLb(m: Manifest, repo: ID): StoreOpF[Unit] =
     m.loadbalancers.traverse_(lb => StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), repo).map(_ => ()))
 
-  def ingestLb( ns: Manifest.Namespace, repo: ID): StoreOpF[Unit] = ingestLb(lbManifest(ns), repo)
+  def ingestLb(repo: ID): StoreOpF[Unit] = ingestLb(lbManifest, repo)
   def ingestConductor( ns: Manifest.Namespace, repo: ID): StoreOpF[Unit] = ingest(conductorManifest(ns), repo)
   def ingestAB1( ns: Manifest.Namespace, repo: ID): StoreOpF[Unit] = ingest(abManifest1(ns), repo)
   def ingestAB2( ns: Manifest.Namespace, repo: ID): StoreOpF[Unit] = ingest(abManifest2(ns), repo)
@@ -580,7 +580,7 @@ trait RoutingFixtures {
   def ingestServiceC2( ns: Manifest.Namespace, repo: ID): StoreOpF[Unit] = ingest(serviceC2Manifest(ns), repo)
 
   def ingestAll(ns: Manifest.Namespace, ns2: Manifest.Namespace, ns3: Manifest.Namespace) =
-    ingestLb(ns,9999) *>
+    ingestLb(9999) *>
     ingestSearch(ns,9999) *>
     ingestInventory2(ns,9999) *>
     ingestInventory1(ns,9999) *>
@@ -685,7 +685,7 @@ trait RoutingFixtures {
        ds <- StoreOp.listDeploymentsForUnitByStatus(nsid, "inventory", NonEmptyList.of(DeploymentStatus.Ready))
        i1 :: i2 :: Nil = ds.toList.sorted(Order[Deployment].toOrdering)
        // We need to create a shift that lasts longer than our test, so our test runs during the shift
-       id <- StoreOp.createTrafficShift(nsid, i2, LinearShiftPolicy, 365.days)
+       _ <- StoreOp.createTrafficShift(nsid, i2, LinearShiftPolicy, 365.days)
        _  <- StoreOp.startTrafficShift(i1.id, i2.id, Instant.now.minusSeconds(30))
      } yield ()
 }

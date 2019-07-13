@@ -92,12 +92,12 @@ trait NelsonSuite
   val testVault: Vault ~> IO = new (Vault ~> IO) {
     def apply[A](v: Vault[A]): IO[A] = IO.pure(v match {
       case Vault.IsInitialized => true
-      case Vault.Initialize(init) => InitialCreds(Nil, RootToken("fake"))
+      case Vault.Initialize(_) => InitialCreds(Nil, RootToken("fake"))
       case Vault.GetSealStatus => SealStatus(false, 0, 0, 0)
       case Vault.Seal => ()
-      case Vault.Unseal(key) => SealStatus(false, 0, 0, 0)
-      case Vault.Get(path) => "fake"
-      case Vault.Set(path, value) => ()
+      case Vault.Unseal(_) => SealStatus(false, 0, 0, 0)
+      case Vault.Get(_) => "fake"
+      case Vault.Set(_, _) => ()
       case Vault.CreatePolicy(_,_) => ()
       case Vault.DeletePolicy(_) => ()
       case Vault.GetMounts => SortedMap.empty
@@ -110,7 +110,7 @@ trait NelsonSuite
   lazy val testSlack: SlackOp ~> IO = new (SlackOp ~> IO) {
     import SlackOp._
     def apply[A](op: SlackOp[A]): IO[A] = op match {
-      case SendSlackNotification(channels, msg) =>
+      case SendSlackNotification(_, _) =>
         IO.unit
     }
   }
@@ -118,7 +118,7 @@ trait NelsonSuite
   lazy val testEmail: EmailOp ~> IO = new (EmailOp ~> IO) {
     import EmailOp._
     def apply[A](op: EmailOp[A]): IO[A] = op match {
-      case SendEmailNotification(r,m,s) =>
+      case SendEmailNotification(_,_,_) =>
         IO.unit
     }
   }
@@ -126,13 +126,13 @@ trait NelsonSuite
   import docker._
   lazy val testDocker = new (DockerOp ~> IO) {
     def apply[A](op: DockerOp[A]) = op match {
-      case DockerOp.Pull(i) =>
+      case DockerOp.Pull(_) =>
         IO((0, Nil))
       case DockerOp.Extract(unit) =>
         IO(Docker.Image(unit.name,None))
-      case DockerOp.Push(i) =>
+      case DockerOp.Push(_) =>
         IO((0, Nil))
-      case DockerOp.Tag(i, r) =>
+      case DockerOp.Tag(i, _) =>
         IO((0, i))
     }
   }
@@ -141,13 +141,13 @@ trait NelsonSuite
   lazy val sched = new (SchedulerOp ~> IO) {
     import scheduler.SchedulerOp._
     def apply[A](op: SchedulerOp[A]) = op match {
-      case Launch(i,dc,ns,unit,e,hash) =>
+      case Launch(_,_,_,unit,_,hash) =>
         val name = Manifest.Versioned.unwrap(unit).name
         val sn = Datacenter.StackName(name, unit.version,hash)
         IO(sn.toString)
-      case Delete(dc,d) =>
+      case Delete(_,_) =>
         IO.unit
-      case Summary(dc,ns,sn) =>
+      case Summary(_,_,_) =>
         IO(None)
     }
   }
@@ -156,11 +156,11 @@ trait NelsonSuite
   lazy val logger = new (LoggingOp ~> IO) {
     import LoggingOp._
     def apply[A](op: LoggingOp[A]) = op match {
-      case Info(msg) =>
+      case Info(_) =>
         IO.unit
-      case Debug(msg) =>
+      case Debug(_) =>
         IO.unit
-      case LogToFile(id, msg) =>
+      case LogToFile(_, _) =>
         IO.unit
     }
   }
@@ -169,7 +169,7 @@ trait NelsonSuite
   lazy val healthI = new (HealthCheckOp ~> IO) {
     import HealthCheckOp._
     def apply[A](op: HealthCheckOp[A]): IO[A] = op match {
-      case Health(dc,ns,sn) => IO.pure(Nil)
+      case Health(_,_,_) => IO.pure(Nil)
     }
   }
 

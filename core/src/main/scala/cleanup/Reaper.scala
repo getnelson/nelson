@@ -44,7 +44,7 @@ object Reaper {
    * to delete the running job.
    */
   def reap(cfg: NelsonConfig): Sink[IO, CleanupRow] =
-    Sink { case (dc, ns, d, gr) =>
+    Sink { case (dc, ns, d, _) =>
       destroy(dc,ns,d.deployment)(dc.workflow)(cfg)
         .map { _ => destroySuccessCounter.labels(ns.name.asString).inc() }
         .recoverWith {

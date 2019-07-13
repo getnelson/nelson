@@ -35,7 +35,6 @@ class DeploymentTableSpec extends NelsonSuite with TypeCheckedTripleEquals {
   it should "deprecate all deployments for a feature version" in {
     val st = StackName("ab", Version(2,2,1), "abcd")
     val sn = ServiceName("ab", st.version.toFeatureVersion)
-    val ns = StoreOp.getNamespace(testName, nsName).foldMap(config.storage).unsafeRunSync().get
     val ab = StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync().get
 
     val before = StoreOp.getDeploymentStatus(ab.id).foldMap(config.storage).unsafeRunSync().get
@@ -52,7 +51,6 @@ class DeploymentTableSpec extends NelsonSuite with TypeCheckedTripleEquals {
     val job311 = StackName("job", Version(3,1,1), "zzzz1")
     val job300 = StackName("job", Version(3,0,0), "zzzz4")
 
-    val ns = StoreOp.getNamespace(testName, nsName).foldMap(config.storage).unsafeRunSync().get
     val j410 = StoreOp.findDeployment(job410).foldMap(config.storage).unsafeRunSync().get
     val j311 = StoreOp.findDeployment(job311).foldMap(config.storage).unsafeRunSync().get
     val j300 = StoreOp.findDeployment(job300).foldMap(config.storage).unsafeRunSync().get

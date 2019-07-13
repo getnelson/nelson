@@ -277,13 +277,13 @@ object Manifest {
     notifications: NotificationSubscriptions
   )
 
-  def isPeriodic(unit: UnitDef, plan: Plan): Boolean =
+  def isPeriodic(plan: Plan): Boolean =
     plan.environment.schedule.isDefined
 
-  def getSchedule(unit: UnitDef, plan: Plan): Option[Schedule] =
+  def getSchedule(plan: Plan): Option[Schedule] =
     plan.environment.schedule
 
-  def getExpirationPolicy(unit: UnitDef, plan: Plan): Option[cleanup.ExpirationPolicy] =
+  def getExpirationPolicy(plan: Plan): Option[cleanup.ExpirationPolicy] =
     plan.environment.policy
 
   def toAction[A](a: A, dc: Datacenter, ns: Namespace, p: Plan, n: NotificationSubscriptions)(implicit A: Actionable[A]): Action = {
@@ -408,7 +408,7 @@ object Manifest {
 
   def verifyDeployable(m: Manifest, dcs: Seq[Datacenter], storage: StoreOp ~> IO): IO[ValidatedNel[NelsonError,Unit]] = {
     val folder: (Datacenter,Namespace,Plan,UnitDef,List[IO[ValidatedNel[NelsonError,Unit]]]) => List[IO[ValidatedNel[NelsonError,Unit]]] =
-      (dc,ns,p,u,res) => StoreOp.verifyDeployable(dc.name, ns.name, u).foldMap(storage) ::  res
+      (dc,ns,_,u,res) => StoreOp.verifyDeployable(dc.name, ns.name, u).foldMap(storage) ::  res
 
     implicit val monoid: Monoid[ValidatedNel[NelsonError, Unit]] =
       new Monoid[ValidatedNel[NelsonError, Unit]] {

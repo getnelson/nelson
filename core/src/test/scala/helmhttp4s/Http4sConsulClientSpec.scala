@@ -70,8 +70,6 @@ class Http4sConsulClientSpec extends FlatSpec with Matchers with TypeCheckedTrip
 }
 
 object Http4sConsulTests {
-  private val base64Encoder = java.util.Base64.getEncoder
-
   def constantConsul(response: Response[IO]): ConsulOp ~> IO = {
     new Http4sConsulClient(
       Uri.uri("http://localhost:8500/v1/kv/v1"),
@@ -80,14 +78,13 @@ object Http4sConsulTests {
   }
 
   def consulResponse(status: Status, s: String): Response[IO] = {
-    val base64 = new String(base64Encoder.encode(s.getBytes("utf-8")), "utf-8")
     val responseBody = body(s)
     Response(status = status, body = responseBody)
   }
 
   def constantResponseClient(response: Response[IO]): Client[IO] = {
     val dispResponse = DisposableResponse(response, IO.unit)
-    Client[IO](Kleisli{(req: Request[IO]) => IO.pure(dispResponse)}, IO.unit)
+    Client[IO](Kleisli{(_: Request[IO]) => IO.pure(dispResponse)}, IO.unit)
   }
 
   def body(s: String): EntityBody[IO] =

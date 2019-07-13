@@ -52,7 +52,7 @@ abstract class Default extends Product with Serializable { self =>
   protected def handleMessageFailure(req: Request[IO], mf: MessageFailure): IO[Response[IO]] = {
     log.error(s"Error handling request ${req.method} ${req.pathInfo}", mf)
     mf match {
-      case MalformedMessageBodyFailure(details, _) =>
+      case MalformedMessageBodyFailure(_, _) =>
         BadRequest(Map(
           "message" -> "Could not parse JSON"
         ).asJson)
@@ -78,7 +78,7 @@ abstract class Default extends Product with Serializable { self =>
     // give some indication what the user needs to fix.
     jsonDecoder[IO].flatMapR[A] { json =>
       DecodeJson.of[A].decodeJson(json).fold(
-        (message, history) => DecodeResult.failure(InvalidMessageBodyFailure(s"$history")),
+        (_, history) => DecodeResult.failure(InvalidMessageBodyFailure(s"$history")),
         DecodeResult.success(_))}
       .decode(req, true).fold(
         mf => handleMessageFailure(req, mf),

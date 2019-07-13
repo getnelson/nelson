@@ -68,7 +68,6 @@ object AuthEnv {
    */
   def instance(
     encryptKey: ByteVector,
-    sigKey: ByteVector,
     getNextNonce: IO[Nonce]
   ): AuthEnv = new AuthEnv {
     val encryption = new SafeHolderEncryption(new SafeHolder)

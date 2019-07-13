@@ -38,7 +38,7 @@ class DiscoveryTableSpec extends NelsonSuite {
     var lbTable: Option[DiscoveryTables] = None
     val dts = Discovery.discoveryTables(rts)
     dts.toList.foreach {
-      case ((sn,y),z) =>
+      case ((sn,_),z) =>
         if(sn.serviceType == "conductor")
           conductorTable = Some(z)
         else if (sn.serviceType == "service-b")
@@ -79,7 +79,7 @@ class DiscoveryTableSpec extends NelsonSuite {
     val rts: List[(Namespace,RoutingGraph)] =
       generateRoutingTables("DiscoveryTableSpec").foldMap(config.storage).unsafeRunSync()
     val dts = Discovery.discoveryTables(rts)
-    val ns = dts.toList.map { case ((deployment,y),z) => y }
+    val ns = dts.toList.map { case ((_,y),_) => y }
     ns.map(_.asString).toSet should be(Set("dev", "dev/sandbox", "dev/sandbox/rodrigo"))
   }
 
@@ -89,14 +89,13 @@ class DiscoveryTableSpec extends NelsonSuite {
     var suTable: Option[DiscoveryTables] = None
     val dts = Discovery.discoveryTables(rts)
     dts.toList.foreach {
-      case ((sn,y),z) =>
+      case ((sn,_),z) =>
         if(sn.serviceType == "ab")
           suTable = Some(z)
     }
 
     val dt: DiscoveryTable = suTable.get.get(NamespaceName("dev")).get
     val sn = dt.get(NamedService("inventory", "default")).get.map(_.stack.stackName.toString)
-    val po = dt.get(NamedService("inventory", "default")).get.map(_.port)
     val we = dt.get(NamedService("inventory", "default")).get.map(_.weight).toList.sum
 
     sn.toList.toSet should be(Set("inventory--1-2-2--ffff", "inventory--1-2-3--ffff"))

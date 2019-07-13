@@ -108,9 +108,9 @@ object Docker {
      */
     val registry: Option[RegistryURI] =
       name.split('/') match {
-        case a@Array(host, user, image) => Option(a.take(2).mkString("/"))
-        case a@Array(user, image)       => Option(s"index.docker.io/$user")
-        case _                          => None
+        case a@Array(_, _, _) => Option(a.take(2).mkString("/"))
+        case Array(user, _)   => Option(s"index.docker.io/$user")
+        case _                => None
       }
 
     /**
@@ -185,7 +185,7 @@ object Docker {
         case resultR(digest,size)    => Some(Result(digest, size.toLong))
         case progressR(hash,message) => Some(Progress(hash, message))
         case errorR(message,context) => Some(Error(message, context))
-        case other                   => None
+        case _                       => None
       }
   }
 
@@ -211,7 +211,7 @@ object Docker {
         case progressR(a,b) => Some(Progress(a,b))
         case errorR(a)      => Some(Error(a))
         case infoR(a, b)    => Some(Info(a, b))
-        case other          => None
+        case _              => None
       }
     }
   }

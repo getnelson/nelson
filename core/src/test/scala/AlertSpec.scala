@@ -58,7 +58,7 @@ class AlertSpec extends FlatSpec
   "writeToConsul" should "write when not opted out" in {
     val interp = for {
       r <- I.expect[Option[String], Unit] {
-        case ConsulOp.KVSet(alertKey, rules) =>
+        case ConsulOp.KVSet(_, rules) =>
           Some(rules) -> IO.unit
       }
     } yield r
@@ -77,7 +77,7 @@ class AlertSpec extends FlatSpec
   it should "only write what is not opted out" in {
     val interp = for {
       r <- I.expect[Option[String], Unit] {
-        case ConsulOp.KVSet(alertKey, rules) =>
+        case ConsulOp.KVSet(_, rules) =>
           Some(rules) -> IO.unit
       }
     } yield r
@@ -93,7 +93,7 @@ class AlertSpec extends FlatSpec
   "deleteFromConsul" should "delete the value at the key" in {
     val interp = for {
       _ <- I.expectU[Unit] {
-        case ConsulOp.KVDelete(alertKey) =>
+        case ConsulOp.KVDelete(_) =>
           IO.unit
       }
     } yield ()

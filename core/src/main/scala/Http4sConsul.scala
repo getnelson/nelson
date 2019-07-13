@@ -18,7 +18,6 @@ package nelson
 
 import cats.~>
 import cats.effect.IO
-import cats.syntax.either._
 import cats.syntax.applicativeError._
 import fs2.Sink
 

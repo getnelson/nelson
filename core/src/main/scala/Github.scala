@@ -27,7 +27,6 @@ import org.http4s.argonaut._
 import org.http4s.client.{Client, UnexpectedStatus}
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration.FiniteDuration
 
 object Github {
   final case class WebHook(
@@ -282,7 +281,6 @@ object Github {
   final class GithubHttp(
     cfg: GithubConfig,
     client: Client[IO],
-    timeout: FiniteDuration,
     ec: ExecutionContext
   ) extends (GithubOp ~> IO) {
     import Interpreter._
@@ -314,7 +312,6 @@ object Github {
           .withBody(json)
 
         val handler: HttpResponse[IO] => IO[AccessToken] = response => for {
-          raw <- response.bodyAsText.compile.foldSemigroup
           actuallyDecoded <- response.as[AccessToken]
         } yield actuallyDecoded
 
@@ -382,8 +379,6 @@ object Github {
 
     case class UnexpectedGithubResponse(context: String, message: String)
         extends Exception(s"Unexpected response from Github when ${context}: ${message}")
-
-    import cats.syntax.either._
 
     def paginationHandler(response: HttpResponse[IO]): IO[(List[Repo], Map[Step, Uri])] =
       if (response.status.code / 100 == 2) {

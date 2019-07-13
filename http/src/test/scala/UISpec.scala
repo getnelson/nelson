@@ -28,7 +28,7 @@ class UISpec extends FlatSpec {
 
   "svg badges" should "match the refrence approved fixtures" in {
     val results: List[Boolean] = DeploymentStatus.all.toList
-      .map(s => s -> UI.badge(s)).map { case (status, xml) =>
+      .map(s => s -> UI.badge(s)).map { case (status, _) =>
         loadSVGFixture(s"/badges/${status.toString}.svg") match {
           case Right(x) => x.toString == UI.badge(status).toString
           case _ => false

@@ -30,7 +30,7 @@ object Canopus extends Workflow[Unit] {
     // thus we should immediately advance mark the deployment as "Ready".  Once Reconciliation is also used as
     // a gating factor for promoting deployments to "Ready", we can potentially set all units to "Warming" here.
     def getStatus(unit: UnitDef, plan: Plan):  DeploymentStatus =
-      if (Manifest.isPeriodic(unit,plan)) Ready
+      if (Manifest.isPeriodic(plan)) Ready
       else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
 
     for {

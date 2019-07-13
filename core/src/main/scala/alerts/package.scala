@@ -33,10 +33,6 @@ package object alerts {
 
   import helm.ConsulOp
 
-  import journal.Logger
-
-  private[this] val logger = Logger("nelson.alerts")
-
   def alertingKey(stackName: StackName): String =
     s"nelson/alerting/v2/${stackName}"
 

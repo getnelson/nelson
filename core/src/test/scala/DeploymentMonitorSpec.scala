@@ -67,8 +67,8 @@ class DeploymentMonitorSpec extends NelsonSuite {
     override def apply[A](s: StoreOp[A]): IO[A] = s match {
       case ListNamespacesForDatacenter(dc) => IO.pure(f(dc))
       case ListDeploymentsForNamespaceByStatus(nsId, statuses, _) => IO.pure(g(nsId -> statuses))
-      case GetDeploymentsForServiceNameByStatus(sn, ns, s) => IO.pure(h.get(sn.serviceType).getOrElse(Nil))
-      case GetTrafficShiftForServiceName(nsid, sn) => IO.pure(i.get(sn.serviceType))
+      case GetDeploymentsForServiceNameByStatus(sn, _, _) => IO.pure(h.get(sn.serviceType).getOrElse(Nil))
+      case GetTrafficShiftForServiceName(_, sn) => IO.pure(i.get(sn.serviceType))
       case _ => IO.raiseError(new Exception("Unexpected Store Operation Executed"))
     }
   }
@@ -77,7 +77,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
   def mkHealthOpWithMajorityHealthy(f: Map[UnitName, HealthStatus]) = new (HealthCheckOp ~> IO) {
     override def apply[A](c: HealthCheckOp[A]): IO[A] = c match {
-      case Health(dc, ns, service) =>
+      case Health(_, _, service) =>
         IO.pure(List(
           f(service.toString),
           HealthStatus("a", Passing, "node000", None),
@@ -90,7 +90,7 @@ class DeploymentMonitorSpec extends NelsonSuite {
 
   def mkHealthOp(f: Map[UnitName, HealthStatus]) = new (HealthCheckOp ~> IO) {
     override def apply[A](c: HealthCheckOp[A]): IO[A] = c match {
-      case Health(dc,ns,service) => IO.pure(List(f(service.toString)))
+      case Health(_,_,service) => IO.pure(List(f(service.toString)))
     }
   }
 

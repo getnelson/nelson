@@ -22,7 +22,6 @@ class JsonSpec extends FlatSpec with Matchers {
   import Util._
   import Json._
   import argonaut._
-  import cats.implicits._
 
   it should "parse the github release defined in the docs" in {
     val out = for {

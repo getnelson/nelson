@@ -27,7 +27,7 @@ final case class Http4sConsulHealthClient(client: ConsulOp ~> IO) extends (Healt
   import HealthCheckOp._
 
   def apply[A](a: HealthCheckOp[A]): IO[A] = a match {
-    case Health(dc, ns, sn) =>
+    case Health(_, _, sn) =>
       val op = ConsulOp.healthListChecksForService(sn.toString, None, None, None).
         map(_.map(hcr => HealthStatus(hcr.checkId, toNelsonStatus(hcr.status), hcr.node, Some(hcr.name))))
       helm.run(client, op)

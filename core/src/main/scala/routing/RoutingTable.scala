@@ -74,8 +74,6 @@ object RoutingTable {
 
   private def addDependencies(from: Deployment, sn: ServiceName): GraphBuild[Unit] = {
 
-    val dc = from.namespace.datacenter
-
     def lookup(ns: NamespaceName, rts: RoutingTables): Option[Target] =
       rts.get(ns).flatMap(_.get((sn.serviceType, sn.version.toMajorVersion)))
 

@@ -77,15 +77,15 @@ object Server {
           )
         case DeploymentCommitFailed(msg) =>
           BadRequest(Map("message" -> msg).asJson)
-        case e@InvalidTrafficShiftReverse(msg) =>
+        case InvalidTrafficShiftReverse(msg) =>
           BadRequest(Map("message" -> msg).asJson)
-        case e@MultipleValidationErrors(errors) =>
+        case e@MultipleValidationErrors(_) =>
           BadRequest(Map("message" -> e.getMessage).asJson)
         case NamespaceCreateFailed(msg) =>
           BadRequest(Map("message" -> msg).asJson)
         case ManualDeployFailed(msg) =>
           BadRequest(Map("message" -> msg).asJson)
-        case e@MissingDeployment(guid) =>
+        case e@MissingDeployment(_) =>
           BadRequest(Map("message" -> e.getMessage).asJson)
         case t: Throwable =>
           log.error(s"Error handling request", t)

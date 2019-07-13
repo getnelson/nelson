@@ -57,7 +57,7 @@ object Actionable {
     def create(u: UnitDef @@ Versioned, dc: Datacenter, ns: Namespace, plan: Plan, hash: String, exp: Instant, fallback: ExpirationPolicy): StoreOpF[Option[ID]] = {
       val unit = Manifest.Versioned.unwrap(u)
       val version = u.version
-      val policy = Manifest.getExpirationPolicy(unit, plan) getOrElse fallback
+      val policy = Manifest.getExpirationPolicy(plan) getOrElse fallback
       (for {
          u  <- OptionT(StoreOp.getUnit(unit.name, version))
          n  <- OptionT(StoreOp.getNamespace(dc.name, ns.name)) // gets a Datacetner.Namespace
@@ -71,7 +71,6 @@ object Actionable {
 
     def action(unit: UnitDef @@ Versioned): Kleisli[IO, (NelsonConfig,ActionConfig), Unit] =
       Kleisli { case (cfg, actionConfig) =>
-        val unitw = Manifest.Versioned.unwrap(unit)
         val ttl = cfg.cleanup.initialTTL.toSeconds
         val exp = Instant.now.plusSeconds(ttl)
         val plan = actionConfig.plan
@@ -79,7 +78,7 @@ object Actionable {
         val ns = actionConfig.namespace
         val hash = actionConfig.hash
         val policy =
-          if (Manifest.isPeriodic(unitw, plan))
+          if (Manifest.isPeriodic(plan))
             cfg.expirationPolicy.defaultPeriodic
           else
             cfg.expirationPolicy.defaultNonPeriodic
@@ -94,7 +93,7 @@ object Actionable {
             e => (Workflow.syntax.status(id, DeploymentStatus.Failed,
                     s"workflow failed because: ${e.getMessage}").foldMap(t) *>
                   incCounter(deployFailureCounter)).attempt,
-            s => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) *>
+            _ => (Notify.sendDeployedNotifications(unit, actionConfig)(cfg) *>
                   incCounter(deploySuccessCounter)).attempt
         ))
 

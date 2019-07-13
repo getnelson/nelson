@@ -29,7 +29,7 @@ import scala.collection.immutable.SortedMap
 trait Json {
   import Vault._
 
-  implicit val encodeRule: EncodeJson[Rule] = EncodeJson { r =>
+  implicit val encodeRule: EncodeJson[Rule] = EncodeJson { _ =>
     jEmptyObject
   }
 

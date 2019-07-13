@@ -718,7 +718,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     .map {
       case (id,slug,acc,Some(hid),hactive) =>
         Repo(id,slug,acc.getOrElse("unknown"),Option(Hook(hid,hactive.getOrElse(false)))).toOption
-      case (id,slug,acc,None,hactive) =>
+      case (id,slug,acc,None,_) =>
         Repo(id,slug,acc.getOrElse("unknown"),None).toOption
     }
     .compile
@@ -749,7 +749,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     .map {
       case (id,slug,acc,Some(hid),hactive) =>
         Repo(id,slug,acc,Option(Hook(hid,hactive))).toOption
-      case (id,slug,acc,None,hactive) =>
+      case (id,slug,acc,None,_) =>
         Repo(id,slug,acc,None).toOption
     }
     .compile
@@ -796,7 +796,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       SET is_deleted = true
     """ ++ whereAnd(in(fr"id", repoIds))
 
-    query.update.run.map(i => log.debug(s"deleting $repos from repositories"))
+    query.update.run.map(_ => log.debug(s"deleting $repos from repositories"))
   }
 
   def killRelease(slug: Slug, version: String): ConnectionIO[Either[Throwable, Unit]] =
