@@ -29,8 +29,8 @@ import nelson.storage.StoreOp
 import nelson.vault._
 import nelson.vault.http4s._
 
-import com.amazonaws.auth.{AWSCredentialsProviderChain, BasicAWSCredentials, EC2ContainerCredentialsProviderWrapper}
-import com.amazonaws.internal.StaticCredentialsProvider
+import com.amazonaws.auth.AWSStaticCredentialsProvider
+import com.amazonaws.auth.{AWSCredentialsProviderChain, AWSStaticCredentialsProvider, BasicAWSCredentials, EC2ContainerCredentialsProviderWrapper}
 
 import cats.~>
 import cats.effect.{Effect, IO}
@@ -728,7 +728,7 @@ object Config {
       val basic = for {
         ak <- kfg.lookup[String]("access-key-id")
         sk <- kfg.lookup[String]("secret-access-key")
-      } yield new StaticCredentialsProvider(new BasicAWSCredentials(ak, sk))
+      } yield new AWSStaticCredentialsProvider(new BasicAWSCredentials(ak, sk))
 
       val ec2Discovery = Option(new EC2ContainerCredentialsProviderWrapper())
 
@@ -738,7 +738,7 @@ object Config {
     val creds = buildProviderChain(kfg)
 
     (lookupRegion(kfg),
-     kfg.lookup[String]("launch-configuration-name"),
+     kfg.lookup[String]("launch-template-id"),
      kfg.lookup[List[String]]("elb-security-group-names"),
      lookupElbScheme(kfg) orElse Some(ElbScheme.External)
     ).mapN((a,b,c,d) => Infrastructure.Aws(creds,a,b,c.toSet,zones,kfg.lookup[String]("image"),d))

@@ -566,7 +566,7 @@ In order to enable Nelson's support for dynamically provisioning load-balencers 
 * [loadbalancer.aws.availability-zones](#loadbalancer-aws-image)
 * [loadbalancer.aws.elb-security-group-names](#loadbalancer-aws-image)
 * [loadbalancer.aws.image](#loadbalancer-aws-image)
-* [loadbalancer.aws.launch-configuration-name](#loadbalancer-aws-launch-configuration-name)
+* [loadbalancer.aws.launch-template-id](#loadbalancer-aws-launch-template-id)
 * [loadbalancer.aws.region](#loadbalancer-aws-region)
 * [loadbalancer.aws.secret-access-key](#loadbalancer-aws-secret-access-key)
 * [loadbalancer.aws.use-internal-elb](#loadbalancer-use-internal-elb)
@@ -613,12 +613,12 @@ Some operators prefer to run the proxy software as a container that is dynamical
 datacenter.texas.infrastructure.loadbalancer.aws.image = "registry.texas.corp/whatever/infra-lb:1.2.3"
 ```
 
-#### loadbalancer.aws.launch-configuration-name
+#### loadbalancer.aws.launch-template-id
 
-Nelson will use the specified launch configuration to launch the resources. How this launch configuration is specified - perhaps CloudFormation or Terraform - is out of scope for this documentation, as Nelson only needs to know the name of the launch configuration to boot as a "black box".
+Nelson will use the specified launch template ID to launch the resources. How this launch template is specified - perhaps CloudFormation or Terraform - is out of scope for this documentation, as Nelson only needs to know the unique ID of the launch template to boot as a "black box". The launch template used will be whatever is marked as `Default` in the AWS settings for the launch template. This affords the user the ability to incrementally make changes, to the launch template without affecting active deployments without explicitly intending to do so.
 
 ```
-datacenter.texas.infrastructure.loadbalancer.aws.launch-configuration-name = "yourlb-XXXXXXXXXXXX"
+datacenter.texas.infrastructure.loadbalancer.aws.launch-template-id = "lt-XXXXXXXXXXXX"
 ```
 
 #### loadbalancer.aws.region
