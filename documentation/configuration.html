@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?cd36c645734cb915ba6fa90710f6b429" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?6a09a04be59a1d04477bd30f0f701442" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?0a3901fb234568f5e98341a1008814d1" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?eee971f85ecb3d2fb5819cf665e6ce9d" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -734,7 +734,7 @@ key_prefix &quot;_rexec&quot; {
 <li><a href="#loadbalancer-aws-image">loadbalancer.aws.availability-zones</a></li>
 <li><a href="#loadbalancer-aws-image">loadbalancer.aws.elb-security-group-names</a></li>
 <li><a href="#loadbalancer-aws-image">loadbalancer.aws.image</a></li>
-<li><a href="#loadbalancer-aws-launch-configuration-name">loadbalancer.aws.launch-configuration-name</a></li>
+<li><a href="#loadbalancer-aws-launch-template-id">loadbalancer.aws.launch-template-id</a></li>
 <li><a href="#loadbalancer-aws-region">loadbalancer.aws.region</a></li>
 <li><a href="#loadbalancer-aws-secret-access-key">loadbalancer.aws.secret-access-key</a></li>
 <li><a href="#loadbalancer-use-internal-elb">loadbalancer.aws.use-internal-elb</a></li>
@@ -778,11 +778,11 @@ datacenter.texas.infrastructure.loadbalancer.aws.access-key-id = &quot;XXXXXXXXX
 <pre><code>datacenter.texas.infrastructure.loadbalancer.aws.image = &quot;registry.texas.corp/whatever/infra-lb:1.2.3&quot;
 </code></pre>
 
-<h4 id="loadbalancer-aws-launch-configuration-name">loadbalancer.aws.launch-configuration-name</h4>
+<h4 id="loadbalancer-aws-launch-template-id">loadbalancer.aws.launch-template-id</h4>
 
-<p>Nelson will use the specified launch configuration to launch the resources. How this launch configuration is specified - perhaps CloudFormation or Terraform - is out of scope for this documentation, as Nelson only needs to know the name of the launch configuration to boot as a &ldquo;black box&rdquo;.</p>
+<p>Nelson will use the specified launch template ID to launch the resources. How this launch template is specified - perhaps CloudFormation or Terraform - is out of scope for this documentation, as Nelson only needs to know the unique ID of the launch template to boot as a &ldquo;black box&rdquo;. The launch template used will be whatever is marked as <code>Default</code> in the AWS settings for the launch template. This affords the user the ability to incrementally make changes, to the launch template without affecting active deployments without explicitly intending to do so.</p>
 
-<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.launch-configuration-name = &quot;yourlb-XXXXXXXXXXXX&quot;
+<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.launch-template-id = &quot;lt-XXXXXXXXXXXX&quot;
 </code></pre>
 
 <h4 id="loadbalancer-aws-region">loadbalancer.aws.region</h4>
@@ -1289,7 +1289,7 @@ with Github OAuth because we&rsquo;re developing locally (potentially even offli
         </p>
         <p>
           Currently v
-                    0.13.175
+                    0.14.176
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -1310,9 +1310,9 @@ with Github OAuth because we&rsquo;re developing locally (potentially even offli
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?48c9a8c6f8e1f08da81d1f2db8d542d6"></script>
+<script src="/js/material.min.js?542b17618d87b1590b032af2b296eeed"></script>
 
-<script src="/js/nelson.js?ccc2d0134ae341a174d6a9e15e2fadb6"></script>
+<script src="/js/nelson.js?934154f1d879014c4cb7abb50c495ad4"></script>
 
 
   </body>

@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?0ffea33c8b5620e3bc9222b46012a5b7" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?fb210073702315e836c2ca527fc14196" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?3c99a9a9a19e09e5952b608a70447346" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?5832803c7c8d9de7fde71a350c2d3b0c" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -200,7 +200,7 @@
 <p>Nelson is written in <a href="https://scala-lang.org">Scala</a>, and built using <a href="http://www.scala-sbt.org/">SBT</a>. You will need to install SBT locally before you can start working with the Nelson codebase. Please <a href="https://www.scala-sbt.org/1.x/docs/Setup.html">follow the install steps</a> to get setup.</p>
 
 <div class="alert alert-info" role="alert">
-This guide will assume that the path to the Nelson source code on disk is denoted by <code>$NELSON_HOME</code>. Whilst this variable does not need to be literally set in your shell, the author uses this notation to avoid confusing <code>$NELSON_HOME/etc</code> with system <code>/etc</code> for example. 
+This guide will assume that the path to the Nelson source code on disk is denoted by <code>$NELSON_HOME</code>. Whilst this variable does not need to be literally set in your shell, the author uses this notation to avoid confusing <code>$NELSON_HOME/etc</code> with system <code>/etc</code> for example.
 </div>
 
 <p>To boot up Nelson locally, there are a handful of items that need to be setup beforehand. First, obtain a <a href="https://github.com/settings/tokens">Personal Access Token for GitHub</a> with the <a href="https://getnelson.io/getting-started/install.html#using-the-cli">following permissions</a>. Once you have this, add it to your environment with the <code>GITHUB_TOKEN</code> variable using <code>~/.bash_profile</code>, or whatever file as appropriate for your shell of choice.</p>
@@ -218,7 +218,9 @@ export GITHUB_TOKEN=&quot;XXXXXXXXXXXXXXXXXX&quot;
 
 <p>This is the bare minimum required to run Nelson. You can then instruct Nelson to boot up by using the following command:</p>
 
-<pre><code>sbt http/reStart
+<pre><code>$ sbt
+# once the interactive shell loads, run:
+$ http/reStart
 </code></pre>
 
 <p>Nelson will then boot up and be running on <code>http://nelson.local:9000</code>.</p>
@@ -459,7 +461,7 @@ hugo server -w -b 127.0.0.1 -p 4000
         </p>
         <p>
           Currently v
-                    0.13.175
+                    0.14.176
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -480,9 +482,9 @@ hugo server -w -b 127.0.0.1 -p 4000
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?e9eb9c9708fa39fd146cef9bf1817ccc"></script>
+<script src="/js/material.min.js?fe10dda540f334d2f628c84d3263475b"></script>
 
-<script src="/js/nelson.js?e7f400130bf87d48f038ba8ec4b3038d"></script>
+<script src="/js/nelson.js?700525aba1f5e089dbb7649006ff5fe9"></script>
 
 
   </body>
