@@ -148,7 +148,7 @@ trait RoutingFixtures {
   def datacenter(name: String) =
     Datacenter(
       name,
-      Infrastructure.Docker(""),
+      Infrastructure.Docker("", None),
       Infrastructure.Domain(""),
       Infrastructure.TrafficShift(LinearShiftPolicy, 1.minutes),
       None,

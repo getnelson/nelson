@@ -93,6 +93,8 @@ object Docker {
   type Name = String
   type Tag = String
   type Digest = String
+  type User = String
+  type Password = String
 
   final case class Image(
     name: Name,
@@ -215,4 +217,6 @@ object Docker {
       }
     }
   }
+
+  final case class Credentials(user: User, password: Password)
 }
