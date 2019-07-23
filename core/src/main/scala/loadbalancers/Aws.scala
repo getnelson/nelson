@@ -20,7 +20,7 @@ package loadbalancers
 import nelson.Manifest.{Port,Plan}
 
 import com.amazonaws.services.elasticloadbalancing.model.{Listener,CreateLoadBalancerRequest,DeleteLoadBalancerRequest}
-import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest}
+import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,LaunchTemplateSpecification,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest}
 import com.amazonaws.services.autoscaling.model.AmazonAutoScalingException
 
 import cats.~>
@@ -153,10 +153,20 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withKey("nelson:ingress:env")
         .withValue(namespace.root.asString)
 
+      // There is significant nuance here. In order to support terraforming
+      // or otherwise out-of-band creation of these launch templates, it makes
+      // sense to use the revision determinated by the administratior. In effect
+      // the admin can control what launch template is used, by setting the default
+      // flag on the launch template. The AWS API for this is documented here:
+      // https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/autoscaling/model/LaunchTemplateSpecification.html#withVersion-java.lang.String-
+      val launchTemplateId = new LaunchTemplateSpecification()
+        .withLaunchTemplateId(cfg.launchTemplateId)
+        .withVersion("$Default")
+
       val req = new CreateAutoScalingGroupRequest()
         .withAutoScalingGroupName(name)
         .withTags(lbTag, nameTag, iTag, namespaceTag, envTag)
-        .withLaunchConfigurationName(cfg.launchConfigurationName)
+        .withLaunchTemplate(launchTemplateId)
         .withVPCZoneIdentifier(cfg.availabilityZones.map(_.privateSubnet).mkString(","))
         .withLoadBalancerNames(name) // ELB name is the same at asg name
         .withDesiredCapacity(size.desired)

@@ -111,20 +111,26 @@ object Infrastructure {
   final case class Aws(
     private val creds: AWSCredentialsProviderChain,
     region: Region,
-    launchConfigurationName: String,
+    launchTemplateId: String,
     elbSecurityGroupNames: Set[String],
     availabilityZones: Set[AvailabilityZone] = Set.empty,
     image: Option[String],
     lbScheme: loadbalancers.ElbScheme
   ) {
-    import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClient
-    import com.amazonaws.services.autoscaling.AmazonAutoScalingClient
+    import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClientBuilder
+    import com.amazonaws.services.autoscaling.AmazonAutoScalingClientBuilder
 
-    val asg = new AmazonAutoScalingClient(creds)
-      .withRegion[AmazonAutoScalingClient](region)
+    val asg = AmazonAutoScalingClientBuilder
+      .standard
+      .withCredentials(creds)
+      .withRegion(region.getName)
+      .build()
 
-    val elb = new AmazonElasticLoadBalancingClient(creds)
-      .withRegion[AmazonElasticLoadBalancingClient](region)
+    val elb = AmazonElasticLoadBalancingClientBuilder
+      .standard
+      .withCredentials(creds)
+      .withRegion(region.getName)
+      .build()
   }
 
   final case class TrafficShift(
