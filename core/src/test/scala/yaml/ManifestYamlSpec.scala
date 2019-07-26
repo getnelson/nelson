@@ -21,8 +21,6 @@ import java.nio.file.Paths
 
 import org.scalatest.{FlatSpec,Matchers}
 import scala.concurrent.duration._
-import cats.instances.either._
-import cats.syntax.foldable._
 
 class ManifestYamlSpec extends FlatSpec with Matchers with SnakeCharmer {
   import Manifest._

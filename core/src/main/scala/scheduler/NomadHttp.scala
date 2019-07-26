@@ -94,12 +94,6 @@ final class NomadHttp(
     }
   }
 
-  private def delete(dc: Datacenter, d: Deployment): IO[Unit] =
-    d.renderedBlueprint.fold(deleteUnitAndChildren(dc, d)) { spec =>
-      // TODO: Delete via spec
-      deleteUnitAndChildren(dc, d)
-    }
-
   /*
    * Calls Nomad to delete the given unit and all child jobs
    */
@@ -124,8 +118,8 @@ final class NomadHttp(
 
   private def getJson(u: UnitDef, name: String, img: Image, dc: Datacenter, ns: NamespaceName, plan: Plan): Json = {
     val tags = cfg.requiredServiceTags.getOrElse(List()).toSet.union(u.meta)
-    val schedule =  Manifest.getSchedule(u, plan)
-    NomadJson.job(name, u.name, plan, img, dc, schedule, u.ports, ns, nomad, tags)
+    val schedule =  Manifest.getSchedule(plan)
+    NomadJson.job(name, plan, img, dc, schedule, u.ports, ns, nomad, tags)
   }
 
   private def buildName(sn: StackName): String =
@@ -217,9 +211,8 @@ object NomadJson {
     nomad: Nomad,
     container: Docker.Image,
     ports: Option[Ports],
-    nm: NetworkMode,
-    name: String,
-    ns: NamespaceName): argonaut.Json = {
+    nm: NetworkMode
+  ): argonaut.Json = {
 
     val maybePorts = ports.map(_.nel.map(p => argonaut.Json(p.ref := p.port)))
 
@@ -342,7 +335,7 @@ object NomadJson {
     )
   }
 
-  def leaderTaskJson(name: String, unitName: UnitName, i: Image, env: Environment, nm: NetworkMode, ports: Option[Ports], nomad: Nomad, ns: NamespaceName, plan: PlanRef, tags: Set[String]): argonaut.Json = {
+  def leaderTaskJson(name: String, i: Image, env: Environment, nm: NetworkMode, ports: Option[Ports], nomad: Nomad, ns: NamespaceName, plan: PlanRef, tags: Set[String]): argonaut.Json = {
     // Nomad does not support resource requests + limits so we just use limits here
     val cpu = (nomad.mhzPerCPU * env.cpu.limitOrElse(0.5)).toInt
     val mem = env.memory.limitOrElse(512.0).toInt
@@ -358,14 +351,14 @@ object NomadJson {
       "Name"      := name,        // Maybe use Static names (primary, sidecar)
       "Driver"    := "docker",
       "leader"    := true,          // When "true", other tasks (necessarily "non leaders") will be gracefully terminated, when the leader task completes
-      "Config"    := dockerConfigJson(nomad, i, ports, nm, name, ns),
+      "Config"    := dockerConfigJson(nomad, i, ports, nm),
       "Env"       := envJson(env.bindings),
       "Resources" := resourcesJson(cpu, mem, ports),
       "LogConfig" := logJson(10,10)
     )
   }
 
-  def job(name: String, unitName: UnitName, plan: Plan, i: Image, dc: Datacenter, schedule: Option[Schedule], ports: Option[Ports], ns: NamespaceName, nomad: Nomad, tags: Set[String]): Json = {
+  def job(name: String, plan: Plan, i: Image, dc: Datacenter, schedule: Option[Schedule], ports: Option[Ports], ns: NamespaceName, nomad: Nomad, tags: Set[String]): Json = {
     val env = plan.environment
     val periodic = schedule.flatMap(_.toCron().map(periodicJson))
     val scheduler = if (schedule.isDefined) "batch" else "service"
@@ -384,7 +377,7 @@ object NomadJson {
             "Name"          := name,
             "Count"         := env.desiredInstances.getOrElse(1),
             "RestartPolicy" := env.retries.map(restartJson).getOrElse(restartJson(3)), // if no retry specified, only try 3 times rather than 15.
-            "Tasks"         := List(leaderTaskJson(name,unitName,i,env,BridgeMode,ports,nomad,ns,plan.name, tags))
+            "Tasks"         := List(leaderTaskJson(name,i,env,BridgeMode,ports,nomad,ns,plan.name, tags))
           )
         )
       )

@@ -21,7 +21,6 @@ import autharbitrary.AuthArbitrary._
 
 import org.scalatest.EitherValues
 import org.scalacheck._, Arbitrary.arbitrary
-import cats.implicits._
 import scodec.bits.ByteVector
 
 class SigningSpec extends AuthSpec with EitherValues {

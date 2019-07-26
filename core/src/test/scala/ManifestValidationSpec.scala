@@ -24,7 +24,6 @@ import argonaut.Argonaut._
 
 import cats.data.NonEmptyList
 import cats.data.Validated.Invalid
-import cats.syntax.either._
 
 import journal.Logger
 
@@ -70,7 +69,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
       b <- ManifestValidator.parseManifestAndValidate(a, config)
     } yield b).unsafeRunSync()
 
-    val Invalid(x) = out
+    val Invalid(_) = out
   }
 
   it should "accept a valid nelson unit" in {
@@ -108,7 +107,7 @@ class ManifestValidationSpec extends NelsonSuite with TimeLimitedTests {
     val mv = json.decodeEither[ManifestValidation].toOption.get
     val res = ManifestValidator.validate(mv.config, mv.units).run(config).attempt.unsafeRunSync()
 
-    val Right(Invalid(x)) = res
+    val Right(Invalid(_)) = res
   }
 
   it should "reject an undeployable manifest" in {

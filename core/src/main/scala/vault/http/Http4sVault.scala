@@ -82,7 +82,7 @@ final class Http4sVaultClient(
 
   def reqVoid(req: IO[Request[IO]]): IO[Unit] =
     client.fetch(req.map(addCreds)) {
-      case NoContent(resp) => IO.pure(())
+      case NoContent(_) => IO.pure(())
       case resp =>
         (for {
           r <- req

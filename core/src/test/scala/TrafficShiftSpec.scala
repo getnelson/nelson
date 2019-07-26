@@ -25,7 +25,6 @@ object TrafficShiftPropertySpec extends Properties("TrafficShift") {
   import Datacenter.TrafficShift
 
   property("fromValue") = forAll { (ts: TrafficShift) =>
-    val ts2 = ts.copy(reverse = None) // remove reverse
     ("verify value is between 0 and 100" |: {
       val value = ts.fromValue
       value >= 0D && value <= 1D

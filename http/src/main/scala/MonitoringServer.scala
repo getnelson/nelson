@@ -26,8 +26,6 @@ import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.exporter.common.TextFormat
 import journal.Logger
 
-import scala.concurrent.duration._
-
 import cats.effect.IO
 
 object MonitoringServer {
@@ -37,9 +35,9 @@ object MonitoringServer {
    */
   def apply(
     registry: CollectorRegistry = CollectorRegistry.defaultRegistry,
-    port: Int = 5775,
-    keyTTL: Duration = 36.hours): IO[MonitoringServer] = IO {
-    val svr = (new MonitoringServer(registry, port, keyTTL))
+    port: Int = 5775
+  ): IO[MonitoringServer] = IO {
+    val svr = (new MonitoringServer(registry, port))
     svr.start()
     svr
   }
@@ -59,8 +57,8 @@ object MonitoringServer {
 
 class MonitoringServer private (
   registry: CollectorRegistry,
-  port: Int,
-  keyTTL: Duration = 36.hours) {
+  port: Int
+) {
 
   import MonitoringServer._
 

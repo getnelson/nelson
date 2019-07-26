@@ -59,12 +59,10 @@ object AuthArbitrary {
   implicit val arbAuthEnv: Arbitrary[AuthEnv] = Arbitrary(
     for {
       encKey <- arbitrary[EncryptionKey]
-      signKey <- arbitrary[SignatureKey]
       randLong <- arbitrary[() => Long]
     } yield
       AuthEnv.instance(
         encryptKey = encKey.bytes,
-        sigKey = signKey.bytes,
         getNextNonce = IO(Nonce.fromLongs(randLong(), randLong()))
       )
     )

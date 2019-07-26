@@ -93,7 +93,7 @@ final case class Repos(config: NelsonConfig) extends Default {
 
     // GET /v1/repos?owner=tim
     // GET /v1/repos?owner=stew
-    case GET -> Root / "v1" / "repos" :? Owner(owner) & IsAuthenticated( session) =>
+    case GET -> Root / "v1" / "repos" :? Owner(owner) & IsAuthenticated(session) =>
       json(Nelson.listRepositories(session, Option(owner)))
 
     // GET /v1/repos?state=active
@@ -115,15 +115,15 @@ final case class Repos(config: NelsonConfig) extends Default {
 
     //////////////////// RELEASES ////////////////////
 
-    case GET -> Root / "v1" / "repos" / owner / repo / "releases" & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "repos" / owner / repo / "releases" & IsAuthenticated(_) =>
       json(Nelson.listRepositoryReleases(Slug(owner,repo)).map(_.toList))
 
     // GET /v1/releases?limit=30
-    case GET -> Root / "v1" / "releases" & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "releases" & IsAuthenticated(_) =>
       json(Nelson.listReleases(None).map(_.toList))
 
     // GET /v1/releases/12345
-    case GET -> Root / "v1" / "releases" / id & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "releases" / id & IsAuthenticated(_) =>
       jsonF(Nelson.getRelease(id.toLong).map(_.toList.headOption)){ option =>
         option match {
           case Some(dc) => Ok(dc.asJson)

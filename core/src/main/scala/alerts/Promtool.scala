@@ -32,7 +32,7 @@ object Promtool {
   final case class PromtoolError(exitCode: Int, msg: String)
       extends RuntimeException(s"Promtool exited with code $exitCode: $msg")
 
-  def validateRules(unitName: UnitName, rules: String): IO[Result] =
+  def validateRules(rules: String): IO[Result] =
     withTempFile(rules, suffix=".rules") { f =>
       Stream.eval(IO {
         val out = new StringBuffer()

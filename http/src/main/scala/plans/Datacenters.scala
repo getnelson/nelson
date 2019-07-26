@@ -53,13 +53,6 @@ final case class Datacenters(config: NelsonConfig) extends Default {
        jEmptyObject).deepmerge(s.asJson)
     }
 
-  private implicit val NamespaceDeploymentEncoder: EncodeJson[(DatacenterRef, Namespace, Deployment)] =
-    EncodeJson { case ((d: DatacenterRef, n: Namespace, s: Deployment)) =>
-      (("datacenter" := d) ->:
-       ("namespace" := n.name.asString) ->:
-       jEmptyObject).deepmerge(s.asJson)
-    }
-
   private implicit val NamespaceDeploymentWithStatusEncoder: EncodeJson[(DatacenterRef, Namespace, Deployment, DeploymentStatus)] =
     EncodeJson { case ((d: DatacenterRef, n: Namespace, s: Deployment, ds: DeploymentStatus)) =>
       (("datacenter" := d) ->:
@@ -95,17 +88,6 @@ final case class Datacenters(config: NelsonConfig) extends Default {
       jEmptyObject
     }
 
-  private implicit val ManualDeploymentDecoder: DecodeJson[ManualDeployment] =
-    casecodec7(ManualDeployment.apply, ManualDeployment.unapply)(
-      "datacenter",
-      "namespace",
-      "service_type",
-      "version",
-      "hash",
-      "description",
-      "port"
-    )
-
   implicit lazy val FeatureVersionCodec: CodecJson[FeatureVersion] =
     CodecJson.casecodec2(FeatureVersion.apply, FeatureVersion.unapply)("major", "minor")
 
@@ -126,7 +108,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * List all the datacenters and their subordinate namespaces
      */
-   case GET -> Root / "v1" / "datacenters" & IsAuthenticated(session) =>
+   case GET -> Root / "v1" / "datacenters" & IsAuthenticated(_) =>
       json(Nelson.listDatacenters(config.pools.defaultExecutor).map(_.toList))
 
     /*
@@ -134,7 +116,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * Show details for a single datacenter
      */
-   case GET -> Root / "v1" / "datacenters" / dcname & IsAuthenticated(session) =>
+   case GET -> Root / "v1" / "datacenters" / dcname & IsAuthenticated(_) =>
       jsonF(Nelson.fetchDatacenterByName(dcname)){ option =>
         option match {
           case Some(dc) => Ok(dc.asJson)
@@ -147,7 +129,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * Returns a list of Namespaces with corresponding RoutingGraph within this datacenter
      */
-   case req @ GET -> Root /"v1" / "datacenters" / dcname / "graph" :? NsO(ns) & IsAuthenticated(_) =>
+   case GET -> Root /"v1" / "datacenters" / dcname / "graph" :? NsO(ns) & IsAuthenticated(_) =>
      ns.map(commaSeparatedStringToNamespace) match {
        case Some(ns) =>
          ns.sequence.fold(
@@ -165,7 +147,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      * dc is optional and if empty will query all datacenters
      * status is optional and if empty will filter by all DeploymentStatus
      */
-   case req @ GET -> Root / "v1" / "deployments" :? Ns(ns) +& Status(s) +& Dc(dc) +& U(u) & IsAuthenticated(session) =>
+   case GET -> Root / "v1" / "deployments" :? Ns(ns) +& Status(s) +& Dc(dc) +& U(u) & IsAuthenticated(_) =>
       val namespace = commaSeparatedStringToNamespace(ns)
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
@@ -192,7 +174,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * Create subordinate namespace(s) in the specified datacenter.
      */
-    case req @ POST -> Root / "v1" / "datacenters" / dcname / "namespaces" & IsAuthenticated(session) =>
+    case req @ POST -> Root / "v1" / "datacenters" / dcname / "namespaces" & IsAuthenticated(_) =>
       decode[NamespaceNameJson](req){ ns =>
         if (ns.namespace.isRoot) BadRequest("creating root namespace is not allowed")
         else json(Nelson.recursiveCreateSubordinateNamespace(dcname.trim.toLowerCase, ns.namespace))
@@ -219,7 +201,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * Returns a summary of everything we know about this deployment
      */
-    case GET -> Root / "v1" / "deployments" / guid & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "deployments" / guid & IsAuthenticated(_) =>
       jsonF(Nelson.fetchDeployment(guid)){
          _ match {
           case Some(summary) => Ok(summary.asJson)
@@ -232,7 +214,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * Returns a summary of everything we know about this deployment runtime
      */
-    case GET -> Root / "v1" / "deployments" / guid / "runtime" & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "deployments" / guid / "runtime" & IsAuthenticated(_) =>
       jsonF(Nelson.getRuntimeSummary(guid)){
          _ match {
           case Some(summary) => Ok(summary.asJson)
@@ -258,7 +240,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * Triggers a redeployment of the specified deployment GUID
      */
-    case req @ POST -> Root / "v1" / "deployments" / guid / "redeploy" & IsAuthenticated(_) =>
+    case POST -> Root / "v1" / "deployments" / guid / "redeploy" & IsAuthenticated(_) =>
       json(Nelson.redeploy(guid))
 
     /*
@@ -266,7 +248,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * Triggers a reverse of an in progress traffic shift given the guid of the to deployment
      */
-    case req @ POST -> Root / "v1" / "deployments" / guid / "trafficshift" / "reverse" & IsAuthenticated(_) =>
+    case POST -> Root / "v1" / "deployments" / guid / "trafficshift" / "reverse" & IsAuthenticated(_) =>
       json(Nelson.reverseTrafficShift(guid))
 
     /*
@@ -277,7 +259,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      * dc is optional and if empty will query all datacenters
      * status is optional and if empty will filter by all DeploymentStatus
      */
-    case req @ GET -> Root / "v1" / "units" :? Ns(ns) +& Status(s) +& Dc(dc) & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "units" :? Ns(ns) +& Status(s) +& Dc(dc) & IsAuthenticated(_) =>
       val namespace = commaSeparatedStringToNamespace(ns)
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       val statuses = s.flatMap(commaSeparatedStringToStatus(_).toNel).getOrElse(DeploymentStatus.nel)
@@ -295,7 +277,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      * Deprecates all of the deployments given a service and feature version
      * accross all datacenters and namespaces
      */
-    case req @ POST -> Root / "v1" / "units" / "deprecate" & IsAuthenticated(session) =>
+    case req @ POST -> Root / "v1" / "units" / "deprecate" & IsAuthenticated(_) =>
       decode[Datacenter.ServiceName](req) { service =>
         json(Nelson.deprecateService(service))
       }
@@ -308,7 +290,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      * Note this does not guarurtee a deployment will be cleaned up as the
      * expiration policy for the deployment will still run.
      */
-    case req @ POST -> Root / "v1" / "units" / "expire" & IsAuthenticated(session) =>
+    case req @ POST -> Root / "v1" / "units" / "expire" & IsAuthenticated(_) =>
       decode[Datacenter.ServiceName](req) { service =>
         json(Nelson.expireService(service))
       }
@@ -324,7 +306,7 @@ final case class Datacenters(config: NelsonConfig) extends Default {
      *
      * commits a unit / version to the specified namespace target
      */
-    case req @ POST -> Root / "v1" / "units" / "commit" & IsAuthenticated(session) =>
+    case req @ POST -> Root / "v1" / "units" / "commit" & IsAuthenticated(_) =>
       decode[Nelson.CommitUnit](req) { commit =>
         json(Nelson.commit(commit.unitName, commit.version, commit.target))
       }

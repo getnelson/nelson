@@ -49,9 +49,9 @@ class WorkflowLoggerSpec extends FlatSpec with Matchers with BeforeAndAfterAll w
 
   private def delete() = {
     import scala.util.Try
-    import scala.collection.JavaConversions._
+    import scala.collection.JavaConverters._
     Try(Files.newDirectoryStream(base)).map(stream =>
-      stream.iterator.toIterator.foreach(file => scala.util.Try(Files.delete(file)))
+      stream.asScala.toIterator.foreach(file => scala.util.Try(Files.delete(file)))
     )
   }
 

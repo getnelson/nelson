@@ -42,7 +42,7 @@ object Pulsar extends Workflow[Unit] {
     // DeploymentMonitor background process).  However, units without ports are not registered in service
     // discovery, and thus we should immediately advance mark the deployment as "Ready".
     def getStatus(unit: UnitDef, plan: Plan):  DeploymentStatus =
-      if (Manifest.isPeriodic(unit,plan)) Ready
+      if (Manifest.isPeriodic(plan)) Ready
       else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
 
     for {
@@ -57,7 +57,7 @@ object Pulsar extends Workflow[Unit] {
       //// write the needful to consul
       _  <- logToFile(id, s"writing discovery tables to ${routing.Discovery.consulDiscoveryKey(sn)}")
       _  <- writeDiscoveryToConsul(id, sn, ns.name, dc)
-      _  <- getTrafficShift(unit, p, dc).fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
+      _  <- getTrafficShift(p, dc).fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
       //// show kubernetes some love
       _ <- logToFile(id, s"Instructing ${dc.name}'s scheduler to handle service container")
       l <- launch(i, dc, ns.name, vunit, p, hash)

@@ -16,7 +16,6 @@
 //: ----------------------------------------------------------------------------
 package nelson
 
-import cats.implicits._
 import org.scalacheck._, Prop._
 
 object NamespaceNameSpec extends Properties("NamespaceNameSpec") {

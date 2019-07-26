@@ -77,7 +77,7 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
      *   "namespace": "dev"
      * }
      */
-    case req @ POST -> Root / "v1" / "loadbalancers" & IsAuthenticated(session) =>
+    case req @ POST -> Root / "v1" / "loadbalancers" & IsAuthenticated(_) =>
       decode[LoadbalancerLaunch](req) { lb =>
         json(Nelson.commitLoadbalancer(lb.name, lb.version, lb.datacenter, lb.namespace))
       }
@@ -87,7 +87,7 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
      *
      * Deletes the loadbalancer for the given guid
      */
-    case DELETE -> Root / "v1" / "loadbalancers" / guid & IsAuthenticated(session) =>
+    case DELETE -> Root / "v1" / "loadbalancers" / guid & IsAuthenticated(_) =>
       json(Nelson.deleteLoadbalancerDeployment(guid))
 
     /*
@@ -95,7 +95,7 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
      *
      * Returns the loadbalancer deployment for given guid
      */
-    case req @ GET -> Root / "v1" / "loadbalancers" / guid & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "loadbalancers" / guid & IsAuthenticated(_) =>
       json(Nelson.fetchLoadbalancerDeployment(guid))
 
     /*
@@ -105,7 +105,7 @@ final case class Loadbalancers(config: NelsonConfig) extends Default {
      * ns is required
      * dc is optional and if empty will query all datacenters
      */
-    case req @ GET -> Root / "v1" / "loadbalancers" :? Ns(ns) +& Dc(dc) & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "loadbalancers" :? Ns(ns) +& Dc(dc) & IsAuthenticated(_) =>
       val namespace = commaSeparatedStringToNamespace(ns)
       val datacenters = dc.map(commaSeparatedStringToList).getOrElse(Nil)
       namespace.toNel.toRight("This endpoint requires a non-empty 'ns' parameter.")

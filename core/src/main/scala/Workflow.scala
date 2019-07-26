@@ -172,8 +172,8 @@ object Workflow {
      * Provides a way to see if creating a traffic shift is actually relevant. In the case
      * of periodic units, shifting traffic would make no sense, so those are NoOps.
      */
-    def getTrafficShift(unit: UnitDef, plan: Plan, d: Datacenter): Option[Manifest.TrafficShift] =
-      if (!Manifest.isPeriodic(unit, plan))
+    def getTrafficShift(plan: Plan, d: Datacenter): Option[Manifest.TrafficShift] =
+      if (!Manifest.isPeriodic(plan))
         Option(plan.environment.trafficShift
                 .getOrElse(Manifest.TrafficShift(d.defaultTrafficShift.policy, d.defaultTrafficShift.duration)))
       else None
@@ -197,7 +197,7 @@ object Workflow {
      * a gating factor for promoting deployments to "Ready", we can potentially set all units to "Warming" here.
      */
     def getStatus(unit: UnitDef, plan: Plan):  DeploymentStatus =
-      if (Manifest.isPeriodic(unit,plan)) DeploymentStatus.Ready
+      if (Manifest.isPeriodic(plan)) DeploymentStatus.Ready
       else unit.ports.fold[DeploymentStatus](DeploymentStatus.Ready)(_ => DeploymentStatus.Warming)
 
     def dockerOps(id: ID, unit: UnitDef, registry: RegistryURI): WorkflowF[Image] = {

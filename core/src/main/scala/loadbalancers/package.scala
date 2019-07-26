@@ -57,7 +57,7 @@ package object loadbalancers {
       ).map(_.port)
 
     graph.nodes.flatMap(_.loadbalancer).map { lb =>
-      val routes: Vector[Inbound] = graph.outs(RoutingNode(lb)).flatMap { case (d, n) =>
+      val routes: Vector[Inbound] = graph.outs(RoutingNode(lb)).flatMap { case (d, _) =>
         findPort(lb.loadbalancer.routes, d, lb.loadbalancer.version).map(p => Inbound(d.stack.stackName, d.portName, p.port))
       }
       (lb.stackName, routes)

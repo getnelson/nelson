@@ -75,13 +75,13 @@ class SweeperSpec extends NelsonSuite {
       "lighthouse/discovery/v1/dep4--1-0-0--dep4hash"       // Also not in Nelson (should be deleted)
     )
 
-    val (consulKeyInNelson1, consulKeyUnclaimedResource1, consulKeyInNelson2, consulKeyNotInNelson1, consulKeyUnclaimedResource2, consulKeyNotInNelson2) =
+    val (_, _, _, consulKeyNotInNelson1, _, consulKeyNotInNelson2) =
       (consulKeys(0), consulKeys(1), consulKeys(2), consulKeys(3), consulKeys(4), consulKeys(5))
 
     val sto = new (StoreOp ~> IO) {
       def apply[A](fa: StoreOp[A]) : IO[A] = fa match {
-        case ListNamespacesForDatacenter(dcName) => IO(namespaces.toSet)
-        case ListDeploymentsForNamespaceByStatus(nsId, deploymentStatuses, None) => IO(deps.toSet.map((d : Deployment) => d -> Ready))
+        case ListNamespacesForDatacenter(_) => IO(namespaces.toSet)
+        case ListDeploymentsForNamespaceByStatus(_, _, None) => IO(deps.toSet.map((d : Deployment) => d -> Ready))
         case _ => IO.raiseError(new Exception("Unexpected Store Operation Executed"))
       }
     }
@@ -102,7 +102,7 @@ class SweeperSpec extends NelsonSuite {
 
     def interp(dc: Datacenter): ConsulOp ~> IO = new (ConsulOp ~> IO) {
       def apply[A](fa: ConsulOp[A]): IO[A] = fa match {
-        case ConsulOp.KVDelete(key) => IO(deleteKeys = deleteKeys :+ (dc.name -> key))
+        case ConsulOp.KVDelete(key) => IO { deleteKeys = deleteKeys :+ (dc.name -> key) }
         case _ => IO.raiseError(new Exception("Unexpected Result."))
       }
     }

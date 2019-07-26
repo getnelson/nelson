@@ -18,7 +18,6 @@ package nelson
 
 import io.prometheus.client.CollectorRegistry
 import org.scalatest.FlatSpec
-import nelson.docker.Docker.Image
 import nelson.scheduler.SchedulerOp
 import nelson.Datacenter._
 
@@ -33,7 +32,6 @@ class InstrumentedNomadClientSpec extends FlatSpec with NelsonSuite {
   val ns = Datacenter.Namespace(0L, NamespaceName("dev"), "dev")
 
   it should "record latency" in {
-    val image = Image("test", "0.0.1")
     def value = getValue("nomad_requests_latency_seconds_count", "nomad_op" -> "delete", "nomad_instance" -> "test")
     val before = value
     val now = java.time.Instant.now

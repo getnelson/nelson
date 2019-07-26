@@ -50,7 +50,6 @@ object RuleRewriter {
     sb.toString
   }
 
-  private val SanitizePrefixPattern = Pattern.compile("^[^a-zA-Z_:]");
   private val SanitizeBodyPattern = Pattern.compile("[^a-zA-Z0-9_:]");
   // Like Prometheus' sanitizeMetricName, but allow colons
   def sanitize(s: String) =

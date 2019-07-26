@@ -55,7 +55,7 @@ class ConsulDiscoverySpec extends NelsonSuite {
           stacks = stacks + key
           ()
 
-        case ConsulOp.KVListKeys(prefix) =>
+        case ConsulOp.KVListKeys(_) =>
           Set.empty
 
         case ConsulOp.KVDelete(key) => ()

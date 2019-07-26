@@ -37,7 +37,6 @@ class ReaperSpec extends NelsonSuite with BeforeAndAfterEach {
 
   it should "mark deployment as terminated" in {
     val st = StackName("search", Version(1,1,0), "foo")
-    val sn = ServiceName("search", st.version.toFeatureVersion)
     val dep = StoreOp.findDeployment(st).foldMap(config.storage).unsafeRunSync().get
 
     val ctx = DeploymentCtx(dep, DeploymentStatus.Garbage, Some(java.time.Instant.now))

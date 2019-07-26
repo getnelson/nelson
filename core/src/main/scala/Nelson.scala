@@ -239,7 +239,7 @@ object Nelson {
    */
   def getVersionedManifestForRelease(r: Released): NelsonK[Manifest @@ Versioned] = {
     for  {
-      cfg <- config
+      _   <- config
       g   <- fetchGithubDeployment(r.referenceId, r.slug)
       v   <- fetchRepoManifestAndValidateDeployable(r.slug, g.ref)
       m   <- Kleisli.liftF(v.fold(e => IO.raiseError(MultipleValidationErrors(e)), m => IO.pure(m)))
@@ -367,7 +367,7 @@ object Nelson {
   def createBlueprint(name: String, description: Option[String], sha: Sha256, template: String): NelsonK[Option[Blueprint]] =
     proofBlueprint(template).flatMap(_ => Kleisli { cfg =>
       (for {
-        a <- StoreOp.insertBlueprint(name, description, sha, template)
+        _ <- StoreOp.insertBlueprint(name, description, sha, template)
         b <- StoreOp.findBlueprint(name, Blueprint.Revision.HEAD)
       } yield b).foldMap(cfg.storage)
     })
@@ -509,7 +509,7 @@ object Nelson {
     for {
       a <- fetchDatacenterByName(dcName)
       b <- a.fold[NelsonK[List[(Namespace,Deployment,DeploymentStatus)]]](Kleisli(_ => empty)){
-        case (dc,set) => findNsByName(set)
+        case (_,set) => findNsByName(set)
       }
     } yield b
   }
@@ -559,7 +559,7 @@ object Nelson {
     for {
       a <- fetchDatacenterByName(dc)
       b <- a.fold[NelsonK[List[(Namespace, RoutingGraph)]]](Kleisli(_ => empty)){
-        case (dc,set) =>
+        case (_,set) =>
 
           val namespaces =
             if (ns.isEmpty) set.toList // if no ns supplied use them all
@@ -725,7 +725,7 @@ object Nelson {
         a <- storage.StoreOp.getDeploymentByGuid(guid).foldMap(config.storage)
         d <- a.tfold(MissingDeployment(guid))(identity(_))
         ns = d.namespace
-        dc <- config.datacenters.find(_.name == ns.datacenter).fold[IO[Datacenter]](IO.raiseError(MisconfiguredDatacenter(ns.datacenter, "couldn't be found")))(IO.pure)
+        _ <- config.datacenters.find(_.name == ns.datacenter).fold[IO[Datacenter]](IO.raiseError(MisconfiguredDatacenter(ns.datacenter, "couldn't be found")))(IO.pure)
         status <- storage.StoreOp.listDeploymentStatuses(d.id).foldMap(config.storage)
       } yield status
     }
@@ -765,7 +765,7 @@ object Nelson {
     for {
       a <- fetchDatacenterByName(dc)
       b <- a.fold[NelsonK[List[(Namespace, GUID, ServiceName)]]](Kleisli(_ => empty)){
-        case (dc,set) => findNsByName(set)
+        case (_,set) => findNsByName(set)
       }
     } yield b
   }
@@ -947,7 +947,7 @@ object Nelson {
     val lbFilter: (Datacenter,Namespace,Plan,Loadbalancer) => Boolean =
       (dc,namespace,_,lb) => dcName == dc.name && namespace.name == ns && lb.name == name
 
-    def validateAndDeployActions(acts: List[Action], m: Manifest @@ Versioned, cfg: NelsonConfig): IO[Unit] = {
+    def validateAndDeployActions(acts: List[Action], cfg: NelsonConfig): IO[Unit] = {
       if (acts.isEmpty)
         IO.raiseError(DeploymentCommitFailed(
           s"Manifest does not reference loadbalancer ${name} ${mv} in namespace ${ns}"))
@@ -958,12 +958,12 @@ object Nelson {
     Kleisli { cfg =>
       for {
         lbo <- StoreOp.getLoadbalancer(name, mv).foldMap(cfg.storage)
-        lb  <- lbo.tfold(DeploymentCommitFailed(s"couldn't find loadbalancer: $name $mv"))(identity)
+        _  <- lbo.tfold(DeploymentCommitFailed(s"couldn't find loadbalancer: $name $mv"))(identity)
         rr  <- StoreOp.getLatestReleaseForLoadbalancer(name, mv).foldMap(cfg.storage)
         r   <- rr.tfold(DeploymentCommitFailed(s"couldn't find latest release for loadblancer $name $mv"))(identity)
         ms  <- getVersionedManifestForRelease(r).run(cfg)
         act  = Manifest.loadbalancerActions(ms, cfg.datacenters, lbFilter)
-        _ <- validateAndDeployActions(act, ms, cfg)
+        _ <- validateAndDeployActions(act, cfg)
       } yield ()
     }
   }
@@ -1006,7 +1006,7 @@ object Nelson {
     for {
       a <- fetchDatacenterByName(dc)
       b <- a.fold[NelsonK[List[(Namespace, LoadbalancerDeployment)]]](Kleisli(_ => empty)){
-        case (dc,set) => findNsByName(set)
+        case (_,set) => findNsByName(set)
       }
     } yield b
   }

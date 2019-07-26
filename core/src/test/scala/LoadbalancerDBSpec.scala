@@ -54,10 +54,10 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to create loadbalancer then find it" in {
     (for {
       _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
-      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      _  <- StoreOp.createDatacenter(dc).foldMap(config.storage)
       ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
       id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999).foldMap(config.storage)
-      d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
+      _  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
       a  <- StoreOp.findLoadbalancerDeployment(lb.name, MajorVersion(1), ns).foldMap(config.storage)
     } yield a).unsafeRunSync().map(_.loadbalancer.name) should contain(lb.name)
   }
@@ -65,7 +65,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to create loadbalancer then get it by id" in {
     (for {
       _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
-      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      _  <- StoreOp.createDatacenter(dc).foldMap(config.storage)
       ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
       id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999).foldMap(config.storage)
       d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
@@ -76,7 +76,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to create loadbalancer then get it by guid" in {
     (for {
       _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
-      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      _  <- StoreOp.createDatacenter(dc).foldMap(config.storage)
       ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
       id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb), 9999).foldMap(config.storage)
       d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
@@ -88,8 +88,8 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "not create a new loadbalancer if it already exists" in {
     val (id1, id2) = (for {
       _   <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
-      dc  <- StoreOp.createDatacenter(dc).foldMap(config.storage)
-      ns  <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
+      _   <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      _   <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
       id  <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999).foldMap(config.storage)
       id2 <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999).foldMap(config.storage)
     } yield (id,id2)).unsafeRunSync()
@@ -99,10 +99,10 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to create loadbalancers, make deploy, and then find them by namespace" in {
     (for {
       _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
-      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      _  <- StoreOp.createDatacenter(dc).foldMap(config.storage)
       ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
       id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb2),9999).foldMap(config.storage)
-      d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
+      _  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)
       a  <- StoreOp.listLoadbalancerDeploymentsForNamespace(ns).foldMap(config.storage)
     } yield a).unsafeRunSync().map(_.loadbalancer.name) should contain(lb2.name)
   }
@@ -110,7 +110,7 @@ class LoadbalancerDBSpec extends NelsonSuite with BeforeAndAfterEach {
   it should "be able to delete loadbalancer by id" in {
     val before = (for {
       _  <- StoreOp.insertOrUpdateRepositories(List(repo.toOption.get)).foldMap(config.storage)
-      dc <- StoreOp.createDatacenter(dc).foldMap(config.storage)
+      _  <- StoreOp.createDatacenter(dc).foldMap(config.storage)
       ns <- StoreOp.createNamespace(testName, namespace).foldMap(config.storage)
       id <- StoreOp.insertLoadbalancerIfAbsent(Versioned(lb),9999).foldMap(config.storage)
       d  <- StoreOp.insertLoadbalancerDeployment(id, ns, "hash", "dns").foldMap(config.storage)

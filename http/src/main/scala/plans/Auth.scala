@@ -23,7 +23,6 @@ import org.http4s.headers.{Location, `Set-Cookie`}
 import org.http4s.argonaut._
 import _root_.argonaut._, Argonaut._
 import cats.effect.IO
-import cats.implicits._
 
 final case class Auth(config: NelsonConfig) extends Default {
   import nelson.Json._
@@ -84,7 +83,7 @@ final case class Auth(config: NelsonConfig) extends Default {
         }
       )
 
-    case req @ GET -> "v1" /: tail & NotAuthenticated() =>
+    case GET -> "v1" /: _ & NotAuthenticated() =>
       Response(status = Unauthorized).withBody("Supplied authentication token is invalid.")
   }
 }

@@ -90,7 +90,7 @@ object ManifestV1Parser {
 
   def parseURI(raw: String): YamlValidation[URI] =
     Either.catchNonFatal(new URI(raw))
-      .leftMap(e => YamlError.invalidURI(raw)).toValidatedNel
+      .leftMap(_ => YamlError.invalidURI(raw)).toValidatedNel
 
   def parseSchedule(str: String): YamlValidation[Schedule] =
     Schedule.parse(str).leftMap(invalidSchedule).toValidatedNel
@@ -265,7 +265,7 @@ object ManifestV1Parser {
       Option(raw.description).toValidNel(missingProperty("unit.description")),
       validateJList("unit.dependencies", raw.dependencies, parseDependency _).map(_.toMap),
       validateJList("unit.resources", raw.resources, parseResource(raw) _).map(_.toSet),
-      parseAlerting(raw.name, raw.alerting),
+      parseAlerting(raw.alerting),
       Option(raw.ports).filter(_.size > 0).traverse(p => mkPorts(p.asScala.toList)),
       Validated.valid(None),
       validateJList("unit.meta", raw.meta, validateMeta _).map(_.toSet)
@@ -342,34 +342,15 @@ object ManifestV1Parser {
   def parseSlackNotifications(raw: NotificationSlackYaml): YamlValidation[List[String]] =
     raw.channels.asScala.toList.validNel
 
-  def parseAlerting(unitName: UnitName, rawAlerting: AlertingYaml): YamlValidation[Alerting] =
-    parsePrometheusAlerting(unitName, rawAlerting.prometheus).map(Alerting.apply)
+  def parseAlerting(rawAlerting: AlertingYaml): YamlValidation[Alerting] =
+    parsePrometheusAlerting(rawAlerting.prometheus).map(Alerting.apply)
 
-  def parsePrometheusAlerting(unitName: UnitName, rawPrometheus: PrometheusConfigYaml): YamlValidation[PrometheusConfig] = {
+  def parsePrometheusAlerting(rawPrometheus: PrometheusConfigYaml): YamlValidation[PrometheusConfig] = {
     import cats.data.Nested
     (
       rawPrometheus.alerts.asScala.toList.traverse(a => Nested(parsePrometheusAlert(a))).value.run(Set.empty).value._2,
       rawPrometheus.rules.asScala.toList.traverse(r => Nested(parsePrometheusRule(r))).value.run(Set.empty).value._2
     ).mapN(PrometheusConfig.apply)
-    // (
-    //   rawPrometheus.alerts.asScala.toList.traverse(parsePrometheusAlert).run(Set.empty).value._2,
-    //   rawPrometheus.rules.asScala.toList.traverse(parsePrometheusRule).run(Set.empty).value._2
-    // ).mapN(PrometheusConfig.apply)
-    /*
-    configV match {
-      case Success(config) =>
-        // All we know at this point was that it was well-formed yaml.  If we
-        // don't also syntax check the rules, we will bring down Prometheus.
-        Promtool.validateRules(unitName, config) map {
-          case Promtool.Valid =>
-            config.successNel
-          case i: Promtool.Invalid =>
-            YamlError.invalidPrometheusRules(i.msg).failureNel
-        }
-      case failure @ Failure(_) =>
-        Task.now(failure)
-    }
-     */
   }
 
   def parsePrometheusAlert(rawAlert: PrometheusAlertYaml): State[Set[String], YamlValidation[PrometheusAlert]] =

@@ -67,7 +67,7 @@ class NelsonSpec extends NelsonSuite with BeforeAndAfterEach {
     val job311 = StackName("job", Version(3,1,1), "zzzz1")
     val job300 = StackName("job", Version(3,0,0), "zzzz4")
 
-    val ns =   StoreOp.getNamespace(testName, NamespaceName("dev")).foldMap(config.storage).unsafeRunSync().get
+    StoreOp.getNamespace(testName, NamespaceName("dev")).foldMap(config.storage).unsafeRunSync().get
     val j410 = StoreOp.findDeployment(job410).foldMap(config.storage).unsafeRunSync().get
     val j311 = StoreOp.findDeployment(job311).foldMap(config.storage).unsafeRunSync().get
     val j300 = StoreOp.findDeployment(job300).foldMap(config.storage).unsafeRunSync().get

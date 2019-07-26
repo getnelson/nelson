@@ -259,9 +259,7 @@ object Fixtures {
 
   val genManifestNamespace: Gen[Manifest.Namespace] =
     for {
-      a <- alphaNumStr
       b <- arbitrary[Set[String]]
-      c <- genEnvironment
       e <- Gen.listOfN(2,genPlan)
       f <- arbitrary[Set[String]]
       g <- genNamespaceName
@@ -305,7 +303,6 @@ object Fixtures {
       c <- Gen.listOfN(2, genManifestUnitDef)
       d <- Gen.listOfN(4, alphaNumStr)
       e <- getNotifications
-      f <- genManifestDeployable
       h <- genPlan
       i <- Gen.listOfN(2, genLoadbalancer)
       j <- genNamespaceName
@@ -315,7 +312,7 @@ object Fixtures {
       plans = List(h),
       loadbalancers = i,
       namespaces =
-        d.map(x => Manifest.Namespace(
+        d.map(_ => Manifest.Namespace(
           name = j,
           units = (b ++ c).map(y => (y.name, Set(h.name))).toSet,
           loadbalancers = i.map(y => (y.name, Some(h.name))).toSet
@@ -415,7 +412,6 @@ object Fixtures {
       a <- choose(1,10000)
       b <- genDCUnit
       c <- genHash
-      d <- choose(1,10000)
       e <- genInstant
       f <- alphaNumStr
     } yield Datacenter.Deployment(a.toLong,b,c,Datacenter.Namespace(1, NamespaceName("dev"), "dc"),e,"manual","default",f,"retain-always",None)

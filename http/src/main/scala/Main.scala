@@ -98,7 +98,7 @@ object Main {
           log.error(s"fatal error starting monitoring server: '$e'")
           e.printStackTrace
         },
-        r => log.info(s"Started monitoring server on ${cfg.network.monitoringPort}")
+        _ => log.info(s"Started monitoring server on ${cfg.network.monitoringPort}")
       )
 
       log.info("starting the nelson server...")

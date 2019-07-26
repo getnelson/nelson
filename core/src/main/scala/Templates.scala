@@ -107,7 +107,6 @@ object Templates {
           // on docker-machine, so we can't just use java.io.tmpdir.
           Files.createDirectories(templateConfig.tempDir)
           val dir = Files.createTempDirectory(templateConfig.tempDir, "nelson")
-          val file = dir.toFile
           dir.toFile.deleteOnExit()
           dir
         })(
@@ -158,7 +157,7 @@ object Templates {
         lintTemplateContainersRunning.inc()
         val exitCode = cmd.!(pLogger)
         exitCode
-      }.timed(templateConfig.timeout)(ec, scheduler).attempt.flatMap {
+      }.timed(templateConfig.timeout)(ec).attempt.flatMap {
         // ^ NOTE: This will return when the timeout is up but will not cancel
         // the already running action - that is pending https://github.com/typelevel/cats-effect/pull/121
         case Right(0) =>
@@ -173,7 +172,7 @@ object Templates {
         case Right(n: Int) =>
           lintTemplateContainersRunning.dec()
           IO.raiseError(LintTemplateError(n, err.toString))
-        case Left(e: TimeoutException) =>
+        case Left(_: TimeoutException) =>
           // We gave up.  We need to terminate the container and show the user as far as we got.
           cleanup(scheduler, dockerConfig, containerName).attempt flatMap { _ => IO.pure(TemplateTimeout(err.toString)) }
         case Left(e) =>

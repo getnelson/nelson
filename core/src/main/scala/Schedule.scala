@@ -66,6 +66,6 @@ object Schedule {
       val definition = CronDefinitionBuilder.instanceDefinitionFor(UNIX)
       val parser = new CronParser(definition)
       parser.parse(str)
-    }.bimap(e => e.getMessage, exp => Cron(str))
+    }.bimap(e => e.getMessage, _ => Cron(str))
   }
 }

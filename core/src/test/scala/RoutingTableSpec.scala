@@ -176,7 +176,6 @@ class RoutingTableSpec extends NelsonSuite with BeforeAndAfterEach {
 
     val inventory1 = StoreOp.findDeployment(StackName("inventory", Version(1,2,2), "ffff")).foldMap(config.storage).unsafeRunSync().get
     val inventory2 = StoreOp.findDeployment(StackName("inventory", Version(1,2,3), "ffff")).foldMap(config.storage).unsafeRunSync().get
-    val id = StoreOp.reverseTrafficShift(inventory2.id, Instant.now.minusSeconds(1)).foldMap(config.storage).unsafeRunSync()
 
     val rts: List[(Namespace, RoutingGraph)] =
       generateRoutingTables("RoutingTableSpec").foldMap(config.storage).unsafeRunSync()

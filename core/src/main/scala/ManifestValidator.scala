@@ -18,9 +18,8 @@ package nelson
 
 import nelson.Datacenter.StackName
 import nelson.Manifest.{UnitDef,Plan,Resource,Namespace,Loadbalancer,HealthCheck,Route}
-import nelson.storage.StoreOp
 
-import cats.{~>, Foldable}
+import cats. Foldable
 import cats.data.{EitherT, Kleisli, ValidatedNel}
 import cats.data.Validated.{Valid, Invalid}
 import cats.effect.IO
@@ -90,7 +89,7 @@ object ManifestValidator {
 
   def validateLoadbalancer(lb: Loadbalancer,
     units: List[UnitDef],
-    whiteList: Option[ProxyPortWhitelist])(stg: StoreOp ~> IO): Valid[Unit] = {
+    whiteList: Option[ProxyPortWhitelist]): Valid[Unit] = {
 
     // NOTE: aws allows elb names to be at most 32 charasters. Nelson generates a name for
     // lbs that include 8 characters for a hash, 4 characters dashes and at least 1
@@ -157,7 +156,7 @@ object ManifestValidator {
     (for {
       // Provide a dummy namespace and version
       a <- EitherT(alerts.rewriteRules(unit, dummyStackName(unit), p.name, DummyNamespaceName, p.environment.alertOptOuts))
-      b <- EitherT(Promtool.validateRules(unit.name, a).map[Either[NelsonError, Unit]] {
+      b <- EitherT(Promtool.validateRules(a).map[Either[NelsonError, Unit]] {
         case Promtool.Valid      => Right(())
         case i: Promtool.Invalid => Left(InvalidPrometheusRules(i.msg): NelsonError)
       })
@@ -168,7 +167,7 @@ object ManifestValidator {
     plan.environment.resources.get(r.name).fold[Valid[Unit]](MissingResourceReference(r.name, plan).invalidNel)(_ => ().validNel)
 
   def validatePeriodic(unit: UnitDef, plan: Plan): Valid[Unit] =
-    if (Manifest.isPeriodic(unit,plan))
+    if (Manifest.isPeriodic(plan))
       plan.environment.trafficShift.fold[Valid[Unit]](().validNel)(_ => PeriodicUnitWithTrafficShift(unit.name).invalidNel)
     else
       ().validNel
@@ -202,7 +201,7 @@ object ManifestValidator {
 
     def validateUnits(m: Manifest, dcs: Seq[Datacenter]): IO[Valid[Unit]] = {
       val folder: (Datacenter,Namespace,Plan,UnitDef,List[IO[Valid[Unit]]]) => List[IO[Valid[Unit]]] =
-        (dc,ns,p,u,res) =>
+        (_,_,p,u,res) =>
           validateUnit(u,p) :: res
 
       Manifest.foldUnits(m, dcs, folder, Nil)
@@ -210,7 +209,7 @@ object ManifestValidator {
         .map(l => Foldable[List].fold(l))
     }
 
-    def validateReferencesDefaultNamespace(m: Manifest, defaultNamespace: NamespaceName): IO[Valid[Unit]] =
+    def validateReferencesDefaultNamespace(m: Manifest): IO[Valid[Unit]] =
       IO.pure(
         m.namespaces.find(x => x.name == cfg.defaultNamespace)
           .fold[Valid[Unit]](MissingDefaultNamespaceReference(cfg.defaultNamespace).invalidNel) { n =>
@@ -221,10 +220,10 @@ object ManifestValidator {
           }
       )
 
-    def validateLoadbalancers(m: Manifest, dcs: Seq[Datacenter]): IO[Valid[Unit]] = {
+    def validateLoadbalancers(m: Manifest): IO[Valid[Unit]] = {
       IO {
         m.loadbalancers.foldLeft(Nil: List[Valid[Unit]])((res,lb) =>
-          validateLoadbalancer(lb, m.units, cfg.proxyPortWhitelist)(cfg.storage) :: res)
+          validateLoadbalancer(lb, m.units, cfg.proxyPortWhitelist) :: res)
           .sequence
           .map(l => Foldable[List].fold(l))
       }
@@ -245,7 +244,7 @@ object ManifestValidator {
               }
           }
           // supplied manifest already held a full blueprint
-          case Some(Right(bp)) => IO.pure(plan.validNel)
+          case Some(Right(_)) => IO.pure(plan.validNel)
           // supplied manfiest did not specify a blueprint
           // so it will recieve the default when the workflow
           // executes
@@ -265,8 +264,8 @@ object ManifestValidator {
       val cumulative: IO[Valid[Manifest]] = for {
         a <- Manifest.verifyDeployable(m, cfg.datacenters, cfg.storage)
         b <- validateUnits(m, cfg.datacenters)
-        c <- validateLoadbalancers(m, cfg.datacenters)
-        d <- validateReferencesDefaultNamespace(m, cfg.defaultNamespace)
+        c <- validateLoadbalancers(m)
+        d <- validateReferencesDefaultNamespace(m)
         e <- validateBlueprints(m)
         (f,g) = e
       } yield (a combine b combine c combine d combine f).map(_ => m.copy(plans = g))

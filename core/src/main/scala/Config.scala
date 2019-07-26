@@ -165,7 +165,6 @@ final case class SecurityConfig(
 
   val env = AuthEnv.instance(
     encryptKey = ByteVector.view(java.util.Base64.getDecoder.decode(encryptionKeyBase64)),
-    sigKey = ByteVector.view(java.util.Base64.getDecoder.decode(signingKeyBase64)),
     getNextNonce = IO(crypto.Nonce.fromSecureRandom(rng))
   )
 
@@ -438,7 +437,6 @@ object Config {
       wflogger <- workflowlogger
       dcs      <- readDatacenters(
         cfg = cfg.subconfig("nelson.datacenters"),
-        nomadcfg = nomadcfg,
         dockercfg = dockercfg,
         schedulerPool = pools.schedulingPool,
         ec = pools.defaultExecutor,
@@ -451,7 +449,7 @@ object Config {
       audit      =  readAudit(cfg.subconfig("nelson.audit"))
       auditQueue <- boundedQueue[IO, AuditEvent[_]](audit.bufferLimit)(Effect[IO], pools.defaultExecutor)
       httpClient <- http
-      gitClient  = new Github.GithubHttp(gitcfg, httpClient, timeout, pools.defaultExecutor)
+      gitClient  = new Github.GithubHttp(gitcfg, httpClient, pools.defaultExecutor)
       slackClient = readSlack(cfg.subconfig("nelson.slack")).map(new SlackHttp(_, httpClient))
     } yield {
       NelsonConfig(
@@ -529,25 +527,11 @@ object Config {
     )
 
   private[nelson] def readDatacenters(cfg: KConfig,
-                                      nomadcfg: NomadConfig,
                                       dockercfg: DockerConfig,
                                       schedulerPool: ScheduledExecutorService,
                                       ec: ExecutionContext,
                                       stg: StoreOp ~> IO,
                                       logger: LoggingOp ~> IO): IO[List[Datacenter]] = {
-
-    def readNomadInfrastructure(kfg: KConfig): Option[Infrastructure.Nomad] = {
-      (kfg.lookup[String]("endpoint"),
-       kfg.lookup[Duration]("timeout"),
-       kfg.lookup[String]("docker.user"),
-       kfg.lookup[String]("docker.password"),
-       kfg.lookup[String]("docker.host"),
-       kfg.lookup[Int]("mhz-per-cpu")
-        ).mapN((a,b,c,d,e,f) => {
-          val uri = Uri.fromString(a).toOption.yolo(s"nomad.endpoint -- $a -- is an invalid Uri")
-          Infrastructure.Nomad(uri,b,c,d,e,f)
-        })
-    }
 
     def readKubernetesOutClusterParams(kfg: KConfig): Option[KubernetesMode] =
       kfg.lookup[String]("kubeconfig").map(kubeconfig => KubernetesMode.OutCluster(Paths.get(kubeconfig)))
@@ -557,12 +541,6 @@ object Config {
       mode      <- if (inCluster) Some(KubernetesMode.InCluster) else readKubernetesOutClusterParams(kfg)
       timeout   <- kfg.lookup[FiniteDuration]("timeout")
     } yield Infrastructure.Kubernetes(mode, timeout)
-
-    def readNomadScheduler(kfg: KConfig): IO[SchedulerOp ~> IO] =
-      readNomadInfrastructure(kfg) match {
-        case Some(n) => http4sClient(n.timeout).map(client => new scheduler.NomadHttp(nomadcfg, n, client, schedulerPool, ec))
-        case None    => IO.raiseError(new IllegalArgumentException("Unable to parse the nomad scheduler configuration"))
-      }
 
     @SuppressWarnings(Array("org.brianmckenna.wartremover.warts.NoNeedForMonad"))
     def readDatacenter(id: String, kfg: KConfig): IO[Datacenter] = {
@@ -627,7 +605,7 @@ object Config {
       val scheduling: IO[SchedulerOp ~> IO] = kfg.lookup[String]("infrastructure.scheduler") match {
         case Some("kubernetes") => {
           withKubectl((kubectl, timeout) =>
-            IO.pure(new KubernetesShell(kubectl, timeout, ec, schedulerPool)))
+            IO.pure(new KubernetesShell(kubectl, timeout, ec)))
         }
         case Some("nomad") => IO.raiseError(NomadNotImplemented)
         case _ => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))
@@ -645,7 +623,7 @@ object Config {
           case Some("kubernetes") => for {
             a <- IO.pure(StubbedConsulClient)
             b <- withKubectl((kubectl, timeout) =>
-              IO.pure(new KubernetesHealthClient(kubectl, timeout, ec, schedulerPool)))
+              IO.pure(new KubernetesHealthClient(kubectl, timeout, ec)))
           } yield (a,b)
 
           case Some("noop") | None => IO.pure((StubbedConsulClient, health.StubbedHealthClient))

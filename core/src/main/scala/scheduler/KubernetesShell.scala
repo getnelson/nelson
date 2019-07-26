@@ -13,8 +13,6 @@ import cats.~>
 import cats.effect.IO
 import cats.implicits._
 
-import java.util.concurrent.ScheduledExecutorService
-
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
@@ -26,24 +24,22 @@ import scala.concurrent.duration.FiniteDuration
 final class KubernetesShell(
   kubectl: Kubectl,
   timeout: FiniteDuration,
-  executionContext: ExecutionContext,
-  scheduledES: ScheduledExecutorService
+  executionContext: ExecutionContext
 ) extends (SchedulerOp ~> IO) {
   import KubernetesShell._
 
   private implicit val kubernetesShellExecutionContext = executionContext
-  private implicit val kubernetesShellScheduledES = scheduledES
 
   def apply[A](fa: SchedulerOp[A]): IO[A] = fa match {
-    case Delete(dc, deployment) =>
-      delete(dc, deployment).timed(timeout)
+    case Delete(_, deployment) =>
+      delete(deployment).timed(timeout)
     case Launch(image, dc, ns, unit, plan, hash) =>
       launch(image, dc, ns, Versioned.unwrap(unit), unit.version, plan, hash).timed(timeout)
-    case Summary(dc, ns, stackName) =>
-      summary(dc, ns, stackName).timed(timeout)
+    case Summary(_, ns, stackName) =>
+      summary(ns, stackName).timed(timeout)
   }
 
-  def delete(dc: Datacenter, deployment: Deployment): IO[Unit] = {
+  def delete(deployment: Deployment): IO[Unit] = {
     val ns = deployment.namespace.name
     val stack = deployment.stackName
 
@@ -69,7 +65,7 @@ final class KubernetesShell(
   def launch(image: Image, dc: Datacenter, ns: NamespaceName, unit: UnitDef, version: Version, plan: Plan, hash: String): IO[String] = {
     val env = Render.makeEnv(image, dc, ns, unit, version, plan, hash)
 
-    val fallback = Manifest.getSchedule(unit, plan) match {
+    val fallback = Manifest.getSchedule(plan) match {
       case None => DefaultBlueprints.canopus.service
       case Some(sched) => sched.toCron match {
         case None => DefaultBlueprints.canopus.job
@@ -93,7 +89,7 @@ final class KubernetesShell(
     } yield r
   }
 
-  def summary(dc: Datacenter, ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
+  def summary(ns: NamespaceName, stackName: StackName): IO[Option[DeploymentSummary]] =
     deploymentSummary(ns, stackName).recoverWith { case _ =>
       cronJobSummary(ns, stackName).recoverWith { case _ =>
         jobSummary(ns, stackName).recover { case _ => None }

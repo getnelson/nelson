@@ -18,7 +18,6 @@ package nelson
 package crypto
 
 import autharbitrary.AuthArbitrary._
-import cats.implicits._
 import scodec.bits.ByteVector
 
 class EncryptionSpec extends AuthSpec {

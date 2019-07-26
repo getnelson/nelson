@@ -93,7 +93,7 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      *
      * List all the available blueprints
      */
-    case GET -> Root / "v1" / "blueprints" & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "blueprints" & IsAuthenticated(_) =>
       json(Nelson.listBlueprints)
 
     /*
@@ -103,7 +103,7 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      *
      * List all the available blueprints
      */
-    case GET -> Root / "v1" / "blueprints" / keyAndRevision & IsAuthenticated(session) =>
+    case GET -> Root / "v1" / "blueprints" / keyAndRevision & IsAuthenticated(_) =>
       Blueprint.parseNamedRevision(keyAndRevision) match {
         case Right((n,r)) => json(Nelson.fetchBlueprint(n,r))
         case Left(_) => BadRequest(s"Unable to parse the supplied '${keyAndRevision}' blueprint reference.")
@@ -122,7 +122,7 @@ final case class Blueprints(config: NelsonConfig) extends Default {
      *  }
      * }}}
      */
-    case req @ POST -> Root / "v1" / "blueprints" / "proof" & IsAuthenticated(session) => {
+    case req @ POST -> Root / "v1" / "blueprints" / "proof" & IsAuthenticated(_) => {
       decode[BlueprintProof](req){ proof =>
         json(Nelson.proofBlueprint(proof.content).map(BlueprintProof(_)))
       }

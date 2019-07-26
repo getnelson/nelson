@@ -54,7 +54,7 @@ final case class DependencyGraph(gr: RoutingGraph) {
     val proc = Process(cmd)
     val pio = new ProcessIO(barf _, slurp _, err _)
     val runningProc = proc.run(pio)
-    val exit = runningProc.exitValue()
+    runningProc.exitValue()
     bytes
   }
 }
