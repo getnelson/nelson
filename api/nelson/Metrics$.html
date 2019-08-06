@@ -1,44 +1,987 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Metrics - nelson.Metrics</title>
-          <meta name="description" content="Metrics - nelson.Metrics" />
-          <meta name="keywords" content="Metrics nelson.Metrics" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
+      <link href="../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/jquery.js"></script>
+      <script type="text/javascript" src="../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../lib/index.js"></script>
+      <script type="text/javascript" src="../index.js"></script>
+      <script type="text/javascript" src="../lib/scheduler.js"></script>
       <script type="text/javascript" src="../lib/template.js"></script>
       <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
       
       <script type="text/javascript">
-         if(top === self) {
-            var url = '../index.html';
-            var hash = 'nelson.Metrics$';
-            var anchor = window.location.hash;
-            var anchor_opt = '';
-            if (anchor.length >= 1)
-              anchor_opt = '@' + anchor.substring(1);
-            window.location.href = url + '#' + hash + anchor_opt;
-         }
-   	  </script>
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../';
+      </script>
     
         </head>
-        <body class="value">
-      <div id="definition">
-        <a href="Metrics.html" title="See companion class"><img alt="Object/Class" src="../lib/object_to_class_big.png" /></a>
-        <p id="owner"><a href="package.html" class="extype" name="nelson">nelson</a></p>
-        <h1><a href="Metrics.html" title="See companion class">Metrics</a></h1><h3><span class="morelinks"><div>
-            Related Docs:
-            <a href="Metrics.html" title="See companion class">class Metrics</a>
-            | <a href="package.html" class="extype" name="nelson">package nelson</a>
-          </div></span></h3><span class="permalink">
-      <a href="../index.html#nelson.Metrics$" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.nelson" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nelson"></a><a id="nelson:nelson"></a>
+      <span class="permalink">
+      <a href="index.html#nelson" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html"><span class="name">nelson</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="nelson.alerts" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="alerts"></a><a id="alerts:alerts"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#alerts" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Contains code related to validating alerts and storing their configuration in Consul." href="alerts/index.html"><span class="name">alerts</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Contains code related to validating alerts and storing their configuration in
+Consul.</p><div class="fullcomment"><div class="comment cmt"><p>Contains code related to validating alerts and storing their configuration in
+Consul.</p><p>In theory, we can support multiple alerting systems.  In current practice, we
+only support Prometheus.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.api" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="api"></a><a id="api:api"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#api" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="api/index.html"><span class="name">api</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.audit" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="audit"></a><a id="audit:audit"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#audit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="audit/index.html"><span class="name">audit</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.blueprint" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="blueprint"></a><a id="blueprint:blueprint"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#blueprint" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="blueprint/index.html"><span class="name">blueprint</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.cleanup" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cleanup"></a><a id="cleanup:cleanup"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#cleanup" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="cleanup/index.html"><span class="name">cleanup</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.crypto" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="crypto"></a><a id="crypto:crypto"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#crypto" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="crypto/index.html"><span class="name">crypto</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.docker" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="docker"></a><a id="docker:docker"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#docker" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="docker/index.html"><span class="name">docker</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.health" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="health"></a><a id="health:health"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#health" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="health/index.html"><span class="name">health</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.http" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="http"></a><a id="http:http"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#http" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="http/index.html"><span class="name">http</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.loadbalancers" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="loadbalancers"></a><a id="loadbalancers:loadbalancers"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#loadbalancers" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="loadbalancers/index.html"><span class="name">loadbalancers</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.logging" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logging"></a><a id="logging:logging"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#logging" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="logging/index.html"><span class="name">logging</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.monitoring" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="monitoring"></a><a id="monitoring:monitoring"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#monitoring" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="monitoring/index.html"><span class="name">monitoring</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.notifications" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifications"></a><a id="notifications:notifications"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#notifications" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="notifications/index.html"><span class="name">notifications</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.plans" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="plans"></a><a id="plans:plans"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#plans" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="plans/index.html"><span class="name">plans</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.routing" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="routing"></a><a id="routing:routing"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#routing" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="routing/index.html"><span class="name">routing</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.scheduler" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="scheduler"></a><a id="scheduler:scheduler"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#scheduler" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="scheduler/index.html"><span class="name">scheduler</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.storage" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="storage"></a><a id="storage:storage"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#storage" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="storage/index.html"><span class="name">storage</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.vault" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="vault"></a><a id="vault:vault"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#vault" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="vault/index.html"><span class="name">vault</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li name="nelson.yaml" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="yaml"></a><a id="yaml:yaml"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#yaml" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="yaml/index.html"><span class="name">yaml</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="$amp$.html" title="We used to get this from Unfiltered."></a>
+                        <a href="$amp$.html" title="We used to get this from Unfiltered.">&amp;</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Accepts.html" title="This should be added to http4s"></a>
+                        <a href="Accepts.html" title="This should be added to http4s">Accepts</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="AcceptsSvg$.html" title="True if a request accepts svg+xml"></a>
+                        <a href="AcceptsSvg$.html" title="True if a request accepts svg+xml">AcceptsSvg</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="AccessToken.html" title=""></a>
+                        <a href="AccessToken.html" title="">AccessToken</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Actionable$.html" title=""></a>
+                        <a class="trait" href="Actionable.html" title="An Actionable is something that can be &quot;acted&quot; upon in the context of a datacenter and namespace."></a>
+                        <a href="Actionable.html" title="An Actionable is something that can be &quot;acted&quot; upon in the context of a datacenter and namespace.">Actionable</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="AtomicShiftPolicy$.html" title=""></a>
+                        <a href="AtomicShiftPolicy$.html" title="">AtomicShiftPolicy</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="AuditConfig.html" title=""></a>
+                        <a href="AuditConfig.html" title="">AuditConfig</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="BannedClientsConfig$.html" title=""></a>
+                        <a class="class" href="BannedClientsConfig.html" title="Configuration for banning/allowing various clients."></a>
+                        <a href="BannedClientsConfig.html" title="Configuration for banning/allowing various clients.">BannedClientsConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Banner$.html" title=""></a>
+                        <a href="Banner$.html" title="">Banner</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Base64$.html" title=""></a>
+                        <a class="class" href="Base64.html" title=""></a>
+                        <a href="Base64.html" title="">Base64</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="package$$BedazzledIO.html" title=""></a>
+                        <a href="package$$BedazzledIO.html" title="">BedazzledIO</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="package$$BedazzledOpt.html" title=""></a>
+                        <a href="package$$BedazzledOpt.html" title="">BedazzledOpt</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="package$$BedazzledString.html" title=""></a>
+                        <a href="package$$BedazzledString.html" title="">BedazzledString</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="BuildInfo$.html" title="This object was generated by sbt-buildinfo."></a>
+                        <a href="BuildInfo$.html" title="This object was generated by sbt-buildinfo.">BuildInfo</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Cache$.html" title="Main public entry point for creating in-memory cache."></a>
+                        <a class="trait" href="Cache.html" title="Basic cache API providing get/put operations"></a>
+                        <a href="Cache.html" title="Basic cache API providing get/put operations">Cache</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="CacheBuilder.html" title="Basic CacheBuilder API for constructing cache instances."></a>
+                        <a href="CacheBuilder.html" title="Basic CacheBuilder API for constructing cache instances.">CacheBuilder</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="CacheConfig.html" title=""></a>
+                        <a href="CacheConfig.html" title="">CacheConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Canopus$.html" title="Kubernetes deployment workflow that just deploys and deletes units."></a>
+                        <a href="Canopus$.html" title="Kubernetes deployment workflow that just deploys and deletes units.">Canopus</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="CatsHelpers$.html" title=""></a>
+                        <a href="CatsHelpers$.html" title="">CatsHelpers</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="CleanupConfig.html" title=""></a>
+                        <a href="CleanupConfig.html" title="">CleanupConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Config$.html" title=""></a>
+                        <a href="Config$.html" title="">Config</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="CycleDetection$.html" title=""></a>
+                        <a href="CycleDetection$.html" title="">CycleDetection</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="CyclicDependency.html" title=""></a>
+                        <a href="CyclicDependency.html" title="">CyclicDependency</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="DatabaseConfig.html" title=""></a>
+                        <a href="DatabaseConfig.html" title="">DatabaseConfig</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Datacenter$.html" title=""></a>
+                        <a class="class" href="Datacenter.html" title=""></a>
+                        <a href="Datacenter.html" title="">Datacenter</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="DependencyGraph.html" title=""></a>
+                        <a href="DependencyGraph.html" title="">DependencyGraph</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="DeploymentCommitFailed.html" title=""></a>
+                        <a href="DeploymentCommitFailed.html" title="">DeploymentCommitFailed</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="DeploymentMonitorConfig.html" title=""></a>
+                        <a href="DeploymentMonitorConfig.html" title="">DeploymentMonitorConfig</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="DeploymentStatus$.html" title=""></a>
+                        <a class="class" href="DeploymentStatus.html" title=""></a>
+                        <a href="DeploymentStatus.html" title="">DeploymentStatus</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="DeprecatedDependency.html" title=""></a>
+                        <a href="DeprecatedDependency.html" title="">DeprecatedDependency</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="DockerConfig.html" title="configuration options for the docker cli controller."></a>
+                        <a href="DockerConfig.html" title="configuration options for the docker cli controller.">DockerConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="EmailConfig.html" title=""></a>
+                        <a href="EmailConfig.html" title="">EmailConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ExceededLimitRange.html" title=""></a>
+                        <a href="ExceededLimitRange.html" title="">ExceededLimitRange</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ExpirationPolicyConfig.html" title=""></a>
+                        <a href="ExpirationPolicyConfig.html" title="">ExpirationPolicyConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="FailedDockerExtraction.html" title=""></a>
+                        <a href="FailedDockerExtraction.html" title="">FailedDockerExtraction</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="FailedDockerOperation.html" title=""></a>
+                        <a href="FailedDockerOperation.html" title="">FailedDockerOperation</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="FailedLoadbalancerDeploy.html" title=""></a>
+                        <a href="FailedLoadbalancerDeploy.html" title="">FailedLoadbalancerDeploy</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="FailedWorkflow.html" title=""></a>
+                        <a href="FailedWorkflow.html" title="">FailedWorkflow</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="FeatureVersion$.html" title=""></a>
+                        <a class="class" href="FeatureVersion.html" title=""></a>
+                        <a href="FeatureVersion.html" title="">FeatureVersion</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Github$.html" title=""></a>
+                        <a href="Github$.html" title="">Github</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="GithubConfig.html" title=""></a>
+                        <a href="GithubConfig.html" title="">GithubConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="GuavaCache.html" title="************** Specific Guava based cache implementation *****************"></a>
+                        <a href="GuavaCache.html" title="************** Specific Guava based cache implementation *****************">GuavaCache</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="GuavaCacheBuilder.html" title=""></a>
+                        <a href="GuavaCacheBuilder.html" title="">GuavaCacheBuilder</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Hook.html" title="Represents the webhook added to the Github repository."></a>
+                        <a href="Hook.html" title="Represents the webhook added to the Github repository.">Hook</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Http4sConsul$.html" title=""></a>
+                        <a href="Http4sConsul$.html" title="">Http4sConsul</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Infrastructure$.html" title=""></a>
+                        <a href="Infrastructure$.html" title="">Infrastructure</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="InstrumentedDockerClient$.html" title=""></a>
+                        <a class="class" href="InstrumentedDockerClient.html" title=""></a>
+                        <a href="InstrumentedDockerClient.html" title="">InstrumentedDockerClient</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="InstrumentedNomadClient$.html" title=""></a>
+                        <a class="class" href="InstrumentedNomadClient.html" title=""></a>
+                        <a href="InstrumentedNomadClient.html" title="">InstrumentedNomadClient</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="InstrumentedVaultClient$.html" title=""></a>
+                        <a class="class" href="InstrumentedVaultClient.html" title=""></a>
+                        <a href="InstrumentedVaultClient.html" title="">InstrumentedVaultClient</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Interpreters.html" title=""></a>
+                        <a href="Interpreters.html" title="">Interpreters</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidDockerImage.html" title=""></a>
+                        <a href="InvalidDockerImage.html" title="">InvalidDockerImage</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidGrant.html" title=""></a>
+                        <a href="InvalidGrant.html" title="">InvalidGrant</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidLoadbalancer.html" title=""></a>
+                        <a href="InvalidLoadbalancer.html" title="">InvalidLoadbalancer</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidLoadbalancerNameLength.html" title=""></a>
+                        <a href="InvalidLoadbalancerNameLength.html" title="">InvalidLoadbalancerNameLength</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidLoadbalancerPort.html" title=""></a>
+                        <a href="InvalidLoadbalancerPort.html" title="">InvalidLoadbalancerPort</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidNamespaceName.html" title=""></a>
+                        <a href="InvalidNamespaceName.html" title="">InvalidNamespaceName</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidPrometheusRules.html" title=""></a>
+                        <a href="InvalidPrometheusRules.html" title="">InvalidPrometheusRules</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidRepoAccess.html" title=""></a>
+                        <a href="InvalidRepoAccess.html" title="">InvalidRepoAccess</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidRouteDefinition.html" title=""></a>
+                        <a href="InvalidRouteDefinition.html" title="">InvalidRouteDefinition</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidSlug.html" title=""></a>
+                        <a href="InvalidSlug.html" title="">InvalidSlug</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidTrafficShiftReverse.html" title=""></a>
+                        <a href="InvalidTrafficShiftReverse.html" title="">InvalidTrafficShiftReverse</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidUnitNameChars.html" title=""></a>
+                        <a href="InvalidUnitNameChars.html" title="">InvalidUnitNameChars</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="InvalidUnitNameLength.html" title=""></a>
+                        <a href="InvalidUnitNameLength.html" title="">InvalidUnitNameLength</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Json$.html" title=""></a>
+                        <a href="Json$.html" title="">Json</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Kubectl$.html" title=""></a>
+                        <a class="class" href="Kubectl.html" title=""></a>
+                        <a href="Kubectl.html" title="">Kubectl</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="LinearShiftPolicy$.html" title=""></a>
+                        <a href="LinearShiftPolicy$.html" title="">LinearShiftPolicy</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="LoadbalancerNotFound.html" title=""></a>
+                        <a href="LoadbalancerNotFound.html" title="">LoadbalancerNotFound</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Magnetar$.html" title=""></a>
+                        <a href="Magnetar$.html" title="">Magnetar</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Main$.html" title=""></a>
+                        <a href="Main$.html" title="">Main</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MajorVersion.html" title=""></a>
+                        <a href="MajorVersion.html" title="">MajorVersion</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Manifest$.html" title=""></a>
+                        <a class="class" href="Manifest.html" title=""></a>
+                        <a href="Manifest.html" title="">Manifest</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ManifestConfig.html" title=""></a>
+                        <a href="ManifestConfig.html" title="">ManifestConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ManifestUnitKindMismatch.html" title=""></a>
+                        <a href="ManifestUnitKindMismatch.html" title="">ManifestUnitKindMismatch</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="ManifestValidator$.html" title=""></a>
+                        <a href="ManifestValidator$.html" title="">ManifestValidator</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ManualDeployFailed.html" title=""></a>
+                        <a href="ManualDeployFailed.html" title="">ManualDeployFailed</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="" title=""></a>
+                        <a class="class" href="Metrics.html" title=""></a>
+                        <a href="Metrics.html" title="">Metrics</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MisconfiguredDatacenter.html" title=""></a>
+                        <a href="MisconfiguredDatacenter.html" title="">MisconfiguredDatacenter</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MissingDefaultNamespaceReference.html" title=""></a>
+                        <a href="MissingDefaultNamespaceReference.html" title="">MissingDefaultNamespaceReference</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MissingDependency.html" title=""></a>
+                        <a href="MissingDependency.html" title="">MissingDependency</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MissingDeployment.html" title=""></a>
+                        <a href="MissingDeployment.html" title="">MissingDeployment</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MissingDeploymentReference.html" title=""></a>
+                        <a href="MissingDeploymentReference.html" title="">MissingDeploymentReference</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MissingHealthCheckPath.html" title=""></a>
+                        <a href="MissingHealthCheckPath.html" title="">MissingHealthCheckPath</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MissingIndividualDefaultNamespaceReference.html" title=""></a>
+                        <a href="MissingIndividualDefaultNamespaceReference.html" title="">MissingIndividualDefaultNamespaceReference</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MissingReleaseForDeployment.html" title=""></a>
+                        <a href="MissingReleaseForDeployment.html" title="">MissingReleaseForDeployment</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MissingResourceReference.html" title=""></a>
+                        <a href="MissingResourceReference.html" title="">MissingResourceReference</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MultipleErrors.html" title=""></a>
+                        <a href="MultipleErrors.html" title="">MultipleErrors</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="MultipleValidationErrors.html" title=""></a>
+                        <a href="MultipleValidationErrors.html" title="">MultipleValidationErrors</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="NamespaceCreateFailed.html" title=""></a>
+                        <a href="NamespaceCreateFailed.html" title="">NamespaceCreateFailed</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="NamespaceName$.html" title=""></a>
+                        <a class="class" href="NamespaceName.html" title=""></a>
+                        <a href="NamespaceName.html" title="">NamespaceName</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Nelson$.html" title=""></a>
+                        <a href="Nelson$.html" title="">Nelson</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="NelsonConfig.html" title="Global configuration for all the various external inputs that Nelson actually cares about."></a>
+                        <a href="NelsonConfig.html" title="Global configuration for all the various external inputs that Nelson actually cares about.">NelsonConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="NelsonError.html" title=""></a>
+                        <a href="NelsonError.html" title="">NelsonError</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="NetworkConfig.html" title="specify the settings for the network configuration of nelson: what ports and addresses are bound, versus which are used for remote callers."></a>
+                        <a href="NetworkConfig.html" title="specify the settings for the network configuration of nelson: what ports and addresses are bound, versus which are used for remote callers.">NetworkConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="NoTargetDatacenters$.html" title=""></a>
+                        <a href="NoTargetDatacenters$.html" title="">NoTargetDatacenters</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="NomadConfig.html" title=""></a>
+                        <a href="NomadConfig.html" title="">NomadConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="NomadNotImplemented$.html" title=""></a>
+                        <a href="NomadNotImplemented$.html" title="">NomadNotImplemented</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="Organization.html" title=""></a>
+                        <a href="Organization.html" title="">Organization</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="PeriodicUnitWithTrafficShift.html" title=""></a>
+                        <a href="PeriodicUnitWithTrafficShift.html" title="">PeriodicUnitWithTrafficShift</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Pipeline$.html" title=""></a>
+                        <a href="Pipeline$.html" title="">Pipeline</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="PipelineConfig.html" title="controls how the workflow pipeline executes, and what concurrency limits are in place."></a>
+                        <a href="PipelineConfig.html" title="controls how the workflow pipeline executes, and what concurrency limits are in place.">PipelineConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="PolicyConfig.html" title="Configuration for auto-generated Vault policies"></a>
+                        <a href="PolicyConfig.html" title="Configuration for auto-generated Vault policies">PolicyConfig</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Pools$.html" title=""></a>
+                        <a class="class" href="Pools.html" title=""></a>
+                        <a href="Pools.html" title="">Pools</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ProblematicDeployable.html" title=""></a>
+                        <a href="ProblematicDeployable.html" title="">ProblematicDeployable</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ProblematicRepoManifest.html" title=""></a>
+                        <a href="ProblematicRepoManifest.html" title="">ProblematicRepoManifest</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="PrometheusConsul$.html" title=""></a>
+                        <a class="class" href="PrometheusConsul.html" title=""></a>
+                        <a href="PrometheusConsul.html" title="">PrometheusConsul</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ProxyPortWhitelist.html" title=""></a>
+                        <a href="ProxyPortWhitelist.html" title="">ProxyPortWhitelist</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Pulsar$.html" title="Kubernetes deployment workflow that deploys and deletes units, whilst provisioning authentication roles in Vault so that Kubernetes pods can talk to Vault at runtime."></a>
+                        <a href="Pulsar$.html" title="Kubernetes deployment workflow that deploys and deletes units, whilst provisioning authentication roles in Vault so that Kubernetes pods can talk to Vault at runtime.">Pulsar</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Released$.html" title=""></a>
+                        <a class="class" href="Released.html" title="Meant to represent a released version of a unit."></a>
+                        <a href="Released.html" title="Meant to represent a released version of a unit.">Released</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="ReleasedDeployment.html" title=""></a>
+                        <a href="ReleasedDeployment.html" title="">ReleasedDeployment</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Repo$.html" title=""></a>
+                        <a class="class" href="Repo.html" title=""></a>
+                        <a href="Repo.html" title="">Repo</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="RepoAccess$.html" title=""></a>
+                        <a class="trait" href="RepoAccess.html" title="Denotes the access aforded to this repository for nelson."></a>
+                        <a href="RepoAccess.html" title="Denotes the access aforded to this repository for nelson.">RepoAccess</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="RepoNotFound.html" title=""></a>
+                        <a href="RepoNotFound.html" title="">RepoNotFound</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Schedule$.html" title=""></a>
+                        <a class="class" href="Schedule.html" title=""></a>
+                        <a href="Schedule.html" title="">Schedule</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="SecurityConfig.html" title=""></a>
+                        <a href="SecurityConfig.html" title="">SecurityConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Server$.html" title=""></a>
+                        <a href="Server$.html" title="">Server</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Session$.html" title=""></a>
+                        <a class="class" href="Session.html" title="this is the data that we store (encrypted) into the cookie stored on users browsers."></a>
+                        <a href="Session.html" title="this is the data that we store (encrypted) into the cookie stored on users browsers.">Session</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="SlackConfig.html" title=""></a>
+                        <a href="SlackConfig.html" title="">SlackConfig</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Slug$.html" title=""></a>
+                        <a class="class" href="Slug.html" title="Typed representation of the owner / repo string that is used to canonically reference a repo within nelson."></a>
+                        <a href="Slug.html" title="Typed representation of the owner / repo string that is used to canonically reference a repo within nelson.">Slug</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="StubbedConsulClient$.html" title=""></a>
+                        <a href="StubbedConsulClient$.html" title="">StubbedConsulClient</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Tag$.html" title="Copied, adapted, and minimized from Scalaz's Tag implementation."></a>
+                        <a href="Tag$.html" title="Copied, adapted, and minimized from Scalaz's Tag implementation.">Tag</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="TaskEvent.html" title=""></a>
+                        <a href="TaskEvent.html" title="">TaskEvent</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="TemplateConfig.html" title=""></a>
+                        <a href="TemplateConfig.html" title="">TemplateConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="Templates$.html" title=""></a>
+                        <a href="Templates$.html" title="">Templates</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="TrafficShiftPolicy$.html" title=""></a>
+                        <a class="trait" href="TrafficShiftPolicy.html" title=""></a>
+                        <a href="TrafficShiftPolicy.html" title="">TrafficShiftPolicy</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UIConfig.html" title="Configuration for servicing the user interface"></a>
+                        <a href="UIConfig.html" title="Configuration for servicing the user interface">UIConfig</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UnexpectedConsulResponse.html" title=""></a>
+                        <a href="UnexpectedConsulResponse.html" title="">UnexpectedConsulResponse</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UnexpectedMissingHook.html" title=""></a>
+                        <a href="UnexpectedMissingHook.html" title="">UnexpectedMissingHook</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UnknownBackendDestination.html" title=""></a>
+                        <a href="UnknownBackendDestination.html" title="">UnknownBackendDestination</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UnknownBlueprintReference.html" title=""></a>
+                        <a href="UnknownBlueprintReference.html" title="">UnknownBlueprintReference</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UnknownDatacenter.html" title=""></a>
+                        <a href="UnknownDatacenter.html" title="">UnknownDatacenter</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UnknownNamespace.html" title=""></a>
+                        <a href="UnknownNamespace.html" title="">UnknownNamespace</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UnknownPortRef.html" title=""></a>
+                        <a href="UnknownPortRef.html" title="">UnknownPortRef</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="UnsatisfiedDeploymentRequirements$.html" title=""></a>
+                        <a class="class" href="UnsatisfiedDeploymentRequirements.html" title=""></a>
+                        <a href="UnsatisfiedDeploymentRequirements.html" title="">UnsatisfiedDeploymentRequirements</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="User.html" title="represents the current user who's logged into the system."></a>
+                        <a href="User.html" title="represents the current user who's logged into the system.">User</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Version$.html" title=""></a>
+                        <a class="class" href="Version.html" title=""></a>
+                        <a href="Version.html" title="">Version</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Versionable$.html" title=""></a>
+                        <a class="trait" href="Versionable.html" title=""></a>
+                        <a href="Versionable.html" title="">Versionable</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="VersionedGitTagRequired.html" title=""></a>
+                        <a href="VersionedGitTagRequired.html" title="">VersionedGitTagRequired</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="Workflow$.html" title=""></a>
+                        <a class="trait" href="Workflow.html" title="Workflows must be defined in terms of a particular type of UnitDef they target, and an output of the workflow."></a>
+                        <a href="Workflow.html" title="Workflows must be defined in terms of a particular type of UnitDef they target, and an output of the workflow.">Workflow</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="WorkflowControlOp$.html" title=""></a>
+                        <a class="class" href="WorkflowControlOp.html" title=""></a>
+                        <a href="WorkflowControlOp.html" title="">WorkflowControlOp</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="WorkflowLoggerConfig.html" title=""></a>
+                        <a href="WorkflowLoggerConfig.html" title="">WorkflowLoggerConfig</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="YamlError$.html" title=""></a>
+                        <a class="class" href="YamlError.html" title=""></a>
+                        <a href="YamlError.html" title="">YamlError</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="YamlParser$.html" title=""></a>
+                        <a class="class" href="YamlParser.html" title=""></a>
+                        <a href="YamlParser.html" title="">YamlParser</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="process$.html" title=""></a>
+                        <a href="process$.html" title="">process</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="object value">
+      <div id="definition">
+        <a href="Metrics.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="index.html" class="extype" name="nelson">nelson</a></p>
+        <h1><a href="Metrics.html" title="See companion class">Metrics</a><span class="permalink">
+      <a href="../nelson/Metrics$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"><div>
+            Companion <a href="Metrics.html" title="See companion class">class Metrics</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -50,40 +993,52 @@
         <span class="name">Metrics</span>
       </span>
       </h4>
+
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/core/src/main/scala/Metrics.scala" target="_blank">Metrics.scala</a></dd></dl><div class="toggleContainer block">
-          <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
-        <div id="order">
-              <span class="filtertype">Ordering</span>
-              <ol>
-                
-                <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By Inheritance</span></li>
-              </ol>
-            </div>
-        <div id="ancestors">
-                <span class="filtertype">Inherited<br />
-                </span>
-                <ol id="linearization">
-                  <li class="in" name="nelson.Metrics"><span>Metrics</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-            <span class="filtertype"></span>
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
             <ol>
-              <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show All</span></li>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
             </ol>
           </div>
-        <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
-          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="nelson.Metrics"><span>Metrics</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
       </div>
 
       <div id="template">
@@ -94,63 +1049,64 @@
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
-      <h4 class="signature">
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
-      <a id="##():Int"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@##():Int" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.Metrics#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply(registry:io.prometheus.client.CollectorRegistry):nelson.Metrics"></a><a id="apply(CollectorRegistry):Metrics"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#apply(registry:io.prometheus.client.CollectorRegistry):nelson.Metrics" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="nelson.Metrics#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(registry:io.prometheus.client.CollectorRegistry):nelson.Metrics"></a>
-      <a id="apply(CollectorRegistry):Metrics"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -158,16 +1114,15 @@
       <span class="symbol">
         <span class="name">apply</span><span class="params">(<span name="registry">registry: <span class="extype" name="io.prometheus.client.CollectorRegistry">CollectorRegistry</span></span>)</span><span class="result">: <a href="Metrics.html" class="extype" name="nelson.Metrics">Metrics</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@apply(registry:io.prometheus.client.CollectorRegistry):nelson.Metrics" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <p class="shortcomment cmt">Construct only once per registry, or you will regret the ensuing runtime exception.</p>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <p class="shortcomment cmt">Construct only once per registry, or you will regret the ensuing runtime exception.</p>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="asInstanceOf[T0]:T0"></a>
-      <a id="asInstanceOf[T0]:T0"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -175,39 +1130,39 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@clone():Object" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="nelson.Metrics#default" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="default:nelson.Metrics"></a>
-      <a id="default:Metrics"></a>
-      <h4 class="signature">
+    </li><li name="nelson.Metrics#default" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="default:nelson.Metrics"></a><a id="default:Metrics"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#default:nelson.Metrics" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
@@ -215,73 +1170,69 @@
       <span class="symbol">
         <span class="name">default</span><span class="result">: <a href="Metrics.html" class="extype" name="nelson.Metrics">Metrics</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@default:nelson.Metrics" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
-      <a id="finalize():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@finalize():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
-      <a id="getClass():Class[_]"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -289,101 +1240,107 @@
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@hashCode():Int" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
-      <a id="notify():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@notify():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notifyAll():Unit"></a>
-      <a id="notifyAll():Unit"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -391,33 +1348,31 @@
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="nelson.Metrics#timer" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="timer(before:cats.effect.IO[Unit],onComplete:cats.data.Kleisli[cats.effect.IO,Double,Unit],onFail:cats.data.Kleisli[cats.effect.IO,Throwable,Unit],onSuccess:cats.effect.IO[Unit]):cats.effect.IO~&gt;cats.effect.IO"></a><a id="timer(IO[Unit],Kleisli[IO,Double,Unit],Kleisli[IO,Throwable,Unit],IO[Unit]):~&gt;[IO,IO]"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#timer(before:cats.effect.IO[Unit],onComplete:cats.data.Kleisli[cats.effect.IO,Double,Unit],onFail:cats.data.Kleisli[cats.effect.IO,Throwable,Unit],onSuccess:cats.effect.IO[Unit]):cats.effect.IO~&gt;cats.effect.IO" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.Metrics#timer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="timer(before:cats.effect.IO[Unit],onComplete:cats.data.Kleisli[cats.effect.IO,Double,Unit],onFail:cats.data.Kleisli[cats.effect.IO,Throwable,Unit],onSuccess:cats.effect.IO[Unit]):cats.~&gt;[cats.effect.IO,cats.effect.IO]"></a>
-      <a id="timer(IO[Unit],Kleisli[IO,Double,Unit],Kleisli[IO,Throwable,Unit],IO[Unit]):~&gt;[IO,IO]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">timer</span><span class="params">(<span name="before">before: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>, <span name="onComplete">onComplete: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>, <span name="onFail">onFail: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="scala.Throwable">Throwable</span>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>, <span name="onSuccess">onSuccess: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
+        <span class="name">timer</span><span class="params">(<span name="before">before: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>, <span name="onComplete">onComplete: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>, <span name="onFail">onFail: <span class="extype" name="cats.data.Kleisli">Kleisli</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="scala.Throwable">Throwable</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>, <span name="onSuccess">onSuccess: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>)</span><span class="result">: <span class="extype" name="cats.~&gt;">~&gt;</span>[<span class="extype" name="cats.effect.IO">IO</span>, <span class="extype" name="cats.effect.IO">IO</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@timer(before:cats.effect.IO[Unit],onComplete:cats.data.Kleisli[cats.effect.IO,Double,Unit],onFail:cats.data.Kleisli[cats.effect.IO,Throwable,Unit],onSuccess:cats.effect.IO[Unit]):cats.~&gt;[cats.effect.IO,cats.effect.IO]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -425,28 +1380,23 @@
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@toString():String" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
-      <a id="wait():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@wait():Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -454,22 +1404,21 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -477,30 +1426,32 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../nelson/Metrics$.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../index.html#nelson.Metrics$@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li></ol>
+    </li>
+              </ol>
             </div>
 
         
@@ -510,9 +1461,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>
@@ -529,7 +1480,9 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+    </body>
+          </div>
+        </div>
+      </div>
     </body>
       </html>

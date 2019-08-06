@@ -1,42 +1,249 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ManifestV1Parser - nelson.yaml.ManifestV1Parser</title>
-          <meta name="description" content="ManifestV1Parser - nelson.yaml.ManifestV1Parser" />
-          <meta name="keywords" content="ManifestV1Parser nelson.yaml.ManifestV1Parser" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
+      <link href="../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../lib/index.js"></script>
+      <script type="text/javascript" src="../../index.js"></script>
+      <script type="text/javascript" src="../../lib/scheduler.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
       
       <script type="text/javascript">
-         if(top === self) {
-            var url = '../../index.html';
-            var hash = 'nelson.yaml.ManifestV1Parser$';
-            var anchor = window.location.hash;
-            var anchor_opt = '';
-            if (anchor.length >= 1)
-              anchor_opt = '@' + anchor.substring(1);
-            window.location.href = url + '#' + hash + anchor_opt;
-         }
-   	  </script>
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../';
+      </script>
     
         </head>
-        <body class="value">
-      <div id="definition">
-        <img alt="Object" src="../../lib/object_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="nelson">nelson</a>.<a href="package.html" class="extype" name="nelson.yaml">yaml</a></p>
-        <h1>ManifestV1Parser</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="nelson.yaml">package yaml</a>
-          </div></span></h3><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.nelson" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nelson"></a><a id="nelson:nelson"></a>
+      <span class="permalink">
+      <a href="index.html#nelson" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">nelson</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="nelson.yaml" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="yaml"></a><a id="yaml:yaml"></a>
+      <span class="permalink">
+      <a href="../nelson/index.html#yaml" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html"><span class="name">yaml</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="nelson">nelson</a></dd></dl></div>
+    </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="AlertingYaml.html" title=""></a>
+                        <a href="AlertingYaml.html" title="">AlertingYaml</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="BackendDestinationParser$.html" title=""></a>
+                        <a class="class" href="BackendDestinationParser.html" title=""></a>
+                        <a href="BackendDestinationParser.html" title="">BackendDestinationParser</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ClusterYaml.html" title=""></a>
+                        <a href="ClusterYaml.html" title="">ClusterYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ConstraintYaml.html" title=""></a>
+                        <a href="ConstraintYaml.html" title="">ConstraintYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="DatacenterTargetYaml.html" title=""></a>
+                        <a href="DatacenterTargetYaml.html" title="">DatacenterTargetYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="DependencyYaml.html" title=""></a>
+                        <a href="DependencyYaml.html" title="">DependencyYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="GroupByYaml.html" title=""></a>
+                        <a href="GroupByYaml.html" title="">GroupByYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="HealthCheckYaml.html" title=""></a>
+                        <a href="HealthCheckYaml.html" title="">HealthCheckYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="InstancesYaml.html" title=""></a>
+                        <a href="InstancesYaml.html" title="">InstancesYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="LikeYaml.html" title=""></a>
+                        <a href="LikeYaml.html" title="">LikeYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="LoadbalancerYaml.html" title=""></a>
+                        <a href="LoadbalancerYaml.html" title="">LoadbalancerYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="ManifestParser$.html" title=""></a>
+                        <a href="ManifestParser$.html" title="">ManifestParser</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="object" href="" title=""></a>
+                        <a href="" title="">ManifestV1Parser</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ManifestYaml.html" title=""></a>
+                        <a href="ManifestYaml.html" title="">ManifestYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NamespaceLoadbalancerYaml.html" title=""></a>
+                        <a href="NamespaceLoadbalancerYaml.html" title="">NamespaceLoadbalancerYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NamespaceUnitYaml.html" title=""></a>
+                        <a href="NamespaceUnitYaml.html" title="">NamespaceUnitYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NamespaceYaml.html" title=""></a>
+                        <a href="NamespaceYaml.html" title="">NamespaceYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NotificationEmailYaml.html" title=""></a>
+                        <a href="NotificationEmailYaml.html" title="">NotificationEmailYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NotificationSlackYaml.html" title=""></a>
+                        <a href="NotificationSlackYaml.html" title="">NotificationSlackYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="NotificationYaml.html" title=""></a>
+                        <a href="NotificationYaml.html" title="">NotificationYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="PlanResourceYaml.html" title=""></a>
+                        <a href="PlanResourceYaml.html" title="">PlanResourceYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="PlanYaml.html" title=""></a>
+                        <a href="PlanYaml.html" title="">PlanYaml</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="PortParser$.html" title="This parser expects the following syntax to be used when serialising port definitions - all elements are required."></a>
+                        <a class="class" href="PortParser.html" title=""></a>
+                        <a href="PortParser.html" title="">PortParser</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="PrometheusAlertYaml.html" title=""></a>
+                        <a href="PrometheusAlertYaml.html" title="">PrometheusAlertYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="PrometheusConfigYaml.html" title=""></a>
+                        <a href="PrometheusConfigYaml.html" title="">PrometheusConfigYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="PrometheusRuleYaml.html" title=""></a>
+                        <a href="PrometheusRuleYaml.html" title="">PrometheusRuleYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="ResourceYaml.html" title=""></a>
+                        <a href="ResourceYaml.html" title="">ResourceYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="RouteYaml.html" title=""></a>
+                        <a href="RouteYaml.html" title="">RouteYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="TrafficShiftYaml.html" title=""></a>
+                        <a href="TrafficShiftYaml.html" title="">TrafficShiftYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="UnitYaml.html" title="Ok this is a bit janky: 'required' fields should have their value initially set to '_' whilst fields that are &quot;optional&quot; should have their value set to a sane default, such as an empty list in the case of lists."></a>
+                        <a href="UnitYaml.html" title="Ok this is a bit janky: 'required' fields should have their value initially set to '_' whilst fields that are &quot;optional&quot; should have their value set to a sane default, such as an empty list in the case of lists.">UnitYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="VolumeYaml.html" title=""></a>
+                        <a href="VolumeYaml.html" title="">VolumeYaml</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="WorkflowYaml.html" title=""></a>
+                        <a href="WorkflowYaml.html" title="">WorkflowYaml</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="object value">
+      <div id="definition">
+        <div class="big-circle object">o</div>
+        <p id="owner"><a href="../index.html" class="extype" name="nelson">nelson</a>.<a href="index.html" class="extype" name="nelson.yaml">yaml</a></p>
+        <h1>ManifestV1Parser<span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -48,40 +255,52 @@
         <span class="name">ManifestV1Parser</span>
       </span>
       </h4>
+
       
           <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/nelson/blob/master/core/src/main/scala/yaml/ManifestV1Parser.scala" target="_blank">ManifestV1Parser.scala</a></dd></dl><div class="toggleContainer block">
-          <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
-        <div id="order">
-              <span class="filtertype">Ordering</span>
-              <ol>
-                
-                <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By Inheritance</span></li>
-              </ol>
-            </div>
-        <div id="ancestors">
-                <span class="filtertype">Inherited<br />
-                </span>
-                <ol id="linearization">
-                  <li class="in" name="nelson.yaml.ManifestV1Parser"><span>ManifestV1Parser</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-            <span class="filtertype"></span>
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
             <ol>
-              <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show All</span></li>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
             </ol>
           </div>
-        <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
-          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="nelson.yaml.ManifestV1Parser"><span>ManifestV1Parser</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
       </div>
 
       <div id="template">
@@ -90,85 +309,85 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="nelson.yaml.ManifestV1Parser.YamlValidation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]"></a>
-      <a id="YamlValidation[A]:YamlValidation[A]"></a>
-      <h4 class="signature">
+              <ol><li name="nelson.yaml.ManifestV1Parser.YamlValidation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]"></a><a id="YamlValidation[A]:YamlValidation[A]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">YamlValidation</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="cats.data.Validated">Validated</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>], <span class="extype" name="nelson.yaml.ManifestV1Parser.YamlValidation.A">A</span>]</span>
+        <span class="name">YamlValidation</span><span class="tparams">[<span name="A">A</span>]</span><span class="result alias"> = <span class="extype" name="cats.data.Validated">Validated</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>], <span class="extype" name="nelson.yaml.ManifestV1Parser.YamlValidation.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       
     </li></ol>
             </div>
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
-      <h4 class="signature">
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
-      <a id="##():Int"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@##():Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@==(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="asInstanceOf[T0]:T0"></a>
-      <a id="asInstanceOf[T0]:T0"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -176,96 +395,93 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@clone():Object" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
-      <a id="finalize():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@finalize():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java/lang/index.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="symbol">classOf[java.lang.Throwable]</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
-      <a id="getClass():Class[_]"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -273,50 +489,53 @@
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@hashCode():Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.yaml.ManifestV1Parser#multipleDefaultPortError" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="multipleDefaultPortError:nelson.YamlError"></a><a id="multipleDefaultPortError:YamlError"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#multipleDefaultPortError:nelson.YamlError" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="nelson.yaml.ManifestV1Parser#multipleDefaultPortError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="multipleDefaultPortError:nelson.YamlError"></a>
-      <a id="multipleDefaultPortError:YamlError"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
@@ -324,33 +543,31 @@
       <span class="symbol">
         <span class="name">multipleDefaultPortError</span><span class="result">: <a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@multipleDefaultPortError:nelson.YamlError" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="nelson.yaml.ManifestV1Parser#noDefaultPortError" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="noDefaultPortError:nelson.YamlError"></a><a id="noDefaultPortError:YamlError"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#noDefaultPortError:nelson.YamlError" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.yaml.ManifestV1Parser#noDefaultPortError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="noDefaultPortError:nelson.YamlError"></a>
-      <a id="noDefaultPortError:YamlError"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
@@ -358,50 +575,53 @@
       <span class="symbol">
         <span class="name">noDefaultPortError</span><span class="result">: <a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@noDefaultPortError:nelson.YamlError" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
       
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
-      <a id="notify():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@notify():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notifyAll():Unit"></a>
-      <a id="notifyAll():Unit"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@notifyAll():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="nelson.yaml.ManifestV1Parser#parse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],nelson.Manifest]"></a><a id="parse(String):Either[NonEmptyList[NelsonError],Manifest]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],nelson.Manifest]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.yaml.ManifestV1Parser#parse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],nelson.Manifest]"></a>
-      <a id="parse(String):Either[NonEmptyList[NelsonError],Manifest]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -409,33 +629,31 @@
       <span class="symbol">
         <span class="name">parse</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="cats.data.NonEmptyList">NonEmptyList</span>[<a href="../NelsonError.html" class="extype" name="nelson.NelsonError">NelsonError</a>], <a href="../Manifest.html" class="extype" name="nelson.Manifest">Manifest</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parse(input:String):Either[cats.data.NonEmptyList[nelson.NelsonError],nelson.Manifest]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <p class="shortcomment cmt"></p>
+    </li><li name="nelson.yaml.ManifestV1Parser#parseAlerting" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseAlerting(rawAlerting:nelson.yaml.AlertingYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Alerting]"></a><a id="parseAlerting(AlertingYaml):YamlValidation[Alerting]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseAlerting(rawAlerting:nelson.yaml.AlertingYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Alerting]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <p class="shortcomment cmt"></p>
-    </li><li name="nelson.yaml.ManifestV1Parser#parseAlerting" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseAlerting(unitName:nelson.UnitName,rawAlerting:nelson.yaml.AlertingYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Alerting]"></a>
-      <a id="parseAlerting(UnitName,AlertingYaml):YamlValidation[Alerting]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseAlerting</span><span class="params">(<span name="unitName">unitName: <a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="rawAlerting">rawAlerting: <a href="AlertingYaml.html" class="extype" name="nelson.yaml.AlertingYaml">AlertingYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Alerting.html" class="extype" name="nelson.Manifest.Alerting">Alerting</a>]</span>
+        <span class="name">parseAlerting</span><span class="params">(<span name="rawAlerting">rawAlerting: <a href="AlertingYaml.html" class="extype" name="nelson.yaml.AlertingYaml">AlertingYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Alerting.html" class="extype" name="nelson.Manifest.Alerting">Alerting</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseAlerting(unitName:nelson.UnitName,rawAlerting:nelson.yaml.AlertingYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Alerting]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseAlphaNumHyphen" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseAlphaNumHyphen(str:String,fieldName:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]"></a><a id="parseAlphaNumHyphen(String,String):YamlValidation[String]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseAlphaNumHyphen(str:String,fieldName:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseAlphaNumHyphen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseAlphaNumHyphen(str:String,fieldName:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]"></a>
-      <a id="parseAlphaNumHyphen(String,String):YamlValidation[String]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -443,16 +661,15 @@
       <span class="symbol">
         <span class="name">parseAlphaNumHyphen</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fieldName">fieldName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseAlphaNumHyphen(str:String,fieldName:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseDependency" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseDependency(dep:nelson.yaml.DependencyYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,nelson.FeatureVersion)]"></a><a id="parseDependency(DependencyYaml):YamlValidation[(String,FeatureVersion)]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseDependency(dep:nelson.yaml.DependencyYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,nelson.FeatureVersion)]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseDependency" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseDependency(dep:nelson.yaml.DependencyYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,nelson.FeatureVersion)]"></a>
-      <a id="parseDependency(DependencyYaml):YamlValidation[(String,FeatureVersion)]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -460,33 +677,31 @@
       <span class="symbol">
         <span class="name">parseDependency</span><span class="params">(<span name="dep">dep: <a href="DependencyYaml.html" class="extype" name="nelson.yaml.DependencyYaml">DependencyYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="../FeatureVersion.html" class="extype" name="nelson.FeatureVersion">FeatureVersion</a>)]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseDependency(dep:nelson.yaml.DependencyYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,nelson.FeatureVersion)]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseDuration" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseDuration(d:String):Either[nelson.YamlError,scala.concurrent.duration.FiniteDuration]"></a><a id="parseDuration(String):Either[YamlError,FiniteDuration]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseDuration(d:String):Either[nelson.YamlError,scala.concurrent.duration.FiniteDuration]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseDuration" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseDuration(d:String):Either[nelson.YamlError,scala.concurrent.duration.FiniteDuration]"></a>
-      <a id="parseDuration(String):Either[YamlError,FiniteDuration]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseDuration</span><span class="params">(<span name="d">d: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>, <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>
+        <span class="name">parseDuration</span><span class="params">(<span name="d">d: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseDuration(d:String):Either[nelson.YamlError,scala.concurrent.duration.FiniteDuration]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseEmailNotifications" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseEmailNotifications(raw:nelson.yaml.NotificationEmailYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]"></a><a id="parseEmailNotifications(NotificationEmailYaml):YamlValidation[List[String]]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseEmailNotifications(raw:nelson.yaml.NotificationEmailYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseEmailNotifications" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseEmailNotifications(raw:nelson.yaml.NotificationEmailYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]"></a>
-      <a id="parseEmailNotifications(NotificationEmailYaml):YamlValidation[List[String]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -494,16 +709,15 @@
       <span class="symbol">
         <span class="name">parseEmailNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationEmailYaml.html" class="extype" name="nelson.yaml.NotificationEmailYaml">NotificationEmailYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseEmailNotifications(raw:nelson.yaml.NotificationEmailYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseNotifications" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseNotifications(raw:nelson.yaml.NotificationYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.notifications.NotificationSubscriptions]"></a><a id="parseNotifications(NotificationYaml):YamlValidation[NotificationSubscriptions]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseNotifications(raw:nelson.yaml.NotificationYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.notifications.NotificationSubscriptions]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseNotifications" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseNotifications(raw:nelson.yaml.NotificationYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.notifications.NotificationSubscriptions]"></a>
-      <a id="parseNotifications(NotificationYaml):YamlValidation[NotificationSubscriptions]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -511,16 +725,15 @@
       <span class="symbol">
         <span class="name">parseNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationYaml.html" class="extype" name="nelson.yaml.NotificationYaml">NotificationYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../notifications/NotificationSubscriptions.html" class="extype" name="nelson.notifications.NotificationSubscriptions">NotificationSubscriptions</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseNotifications(raw:nelson.yaml.NotificationYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.notifications.NotificationSubscriptions]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parsePrometheusAlert" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parsePrometheusAlert(rawAlert:nelson.yaml.PrometheusAlertYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusAlert]]"></a><a id="parsePrometheusAlert(PrometheusAlertYaml):State[Set[String],YamlValidation[PrometheusAlert]]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parsePrometheusAlert(rawAlert:nelson.yaml.PrometheusAlertYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusAlert]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parsePrometheusAlert" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parsePrometheusAlert(rawAlert:nelson.yaml.PrometheusAlertYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusAlert]]"></a>
-      <a id="parsePrometheusAlert(PrometheusAlertYaml):State[Set[String],YamlValidation[PrometheusAlert]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -528,33 +741,31 @@
       <span class="symbol">
         <span class="name">parsePrometheusAlert</span><span class="params">(<span name="rawAlert">rawAlert: <a href="PrometheusAlertYaml.html" class="extype" name="nelson.yaml.PrometheusAlertYaml">PrometheusAlertYaml</a></span>)</span><span class="result">: <span class="extype" name="cats.data.State">State</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusAlert.html" class="extype" name="nelson.Manifest.PrometheusAlert">PrometheusAlert</a>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parsePrometheusAlert(rawAlert:nelson.yaml.PrometheusAlertYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusAlert]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parsePrometheusAlerting" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parsePrometheusAlerting(rawPrometheus:nelson.yaml.PrometheusConfigYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusConfig]"></a><a id="parsePrometheusAlerting(PrometheusConfigYaml):YamlValidation[PrometheusConfig]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parsePrometheusAlerting(rawPrometheus:nelson.yaml.PrometheusConfigYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusConfig]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parsePrometheusAlerting" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parsePrometheusAlerting(unitName:nelson.UnitName,rawPrometheus:nelson.yaml.PrometheusConfigYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusConfig]"></a>
-      <a id="parsePrometheusAlerting(UnitName,PrometheusConfigYaml):YamlValidation[PrometheusConfig]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parsePrometheusAlerting</span><span class="params">(<span name="unitName">unitName: <a href="../package.html#UnitName=String" class="extmbr" name="nelson.UnitName">UnitName</a></span>, <span name="rawPrometheus">rawPrometheus: <a href="PrometheusConfigYaml.html" class="extype" name="nelson.yaml.PrometheusConfigYaml">PrometheusConfigYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusConfig.html" class="extype" name="nelson.Manifest.PrometheusConfig">PrometheusConfig</a>]</span>
+        <span class="name">parsePrometheusAlerting</span><span class="params">(<span name="rawPrometheus">rawPrometheus: <a href="PrometheusConfigYaml.html" class="extype" name="nelson.yaml.PrometheusConfigYaml">PrometheusConfigYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusConfig.html" class="extype" name="nelson.Manifest.PrometheusConfig">PrometheusConfig</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parsePrometheusAlerting(unitName:nelson.UnitName,rawPrometheus:nelson.yaml.PrometheusConfigYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusConfig]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parsePrometheusRule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parsePrometheusRule(rawRule:nelson.yaml.PrometheusRuleYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusRule]]"></a><a id="parsePrometheusRule(PrometheusRuleYaml):State[Set[String],YamlValidation[PrometheusRule]]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parsePrometheusRule(rawRule:nelson.yaml.PrometheusRuleYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusRule]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parsePrometheusRule" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parsePrometheusRule(rawRule:nelson.yaml.PrometheusRuleYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusRule]]"></a>
-      <a id="parsePrometheusRule(PrometheusRuleYaml):State[Set[String],YamlValidation[PrometheusRule]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -562,16 +773,15 @@
       <span class="symbol">
         <span class="name">parsePrometheusRule</span><span class="params">(<span name="rawRule">rawRule: <a href="PrometheusRuleYaml.html" class="extype" name="nelson.yaml.PrometheusRuleYaml">PrometheusRuleYaml</a></span>)</span><span class="result">: <span class="extype" name="cats.data.State">State</span>[<span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Predef.String">String</span>], <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$PrometheusRule.html" class="extype" name="nelson.Manifest.PrometheusRule">PrometheusRule</a>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parsePrometheusRule(rawRule:nelson.yaml.PrometheusRuleYaml):cats.data.State[Set[String],nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.PrometheusRule]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseResource" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseResource(u:nelson.yaml.UnitYaml)(r:nelson.yaml.ResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Resource]"></a><a id="parseResource(UnitYaml)(ResourceYaml):YamlValidation[Resource]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseResource(u:nelson.yaml.UnitYaml)(r:nelson.yaml.ResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Resource]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseResource" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseResource(u:nelson.yaml.UnitYaml)(r:nelson.yaml.ResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Resource]"></a>
-      <a id="parseResource(UnitYaml)(ResourceYaml):YamlValidation[Resource]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -579,16 +789,15 @@
       <span class="symbol">
         <span class="name">parseResource</span><span class="params">(<span name="u">u: <a href="UnitYaml.html" class="extype" name="nelson.yaml.UnitYaml">UnitYaml</a></span>)</span><span class="params">(<span name="r">r: <a href="ResourceYaml.html" class="extype" name="nelson.yaml.ResourceYaml">ResourceYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Resource.html" class="extype" name="nelson.Manifest.Resource">Resource</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseResource(u:nelson.yaml.UnitYaml)(r:nelson.yaml.ResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Resource]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseSchedule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseSchedule(str:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Schedule]"></a><a id="parseSchedule(String):YamlValidation[Schedule]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseSchedule(str:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Schedule]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseSchedule" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseSchedule(str:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Schedule]"></a>
-      <a id="parseSchedule(String):YamlValidation[Schedule]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -596,16 +805,15 @@
       <span class="symbol">
         <span class="name">parseSchedule</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Schedule.html" class="extype" name="nelson.Schedule">Schedule</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseSchedule(str:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Schedule]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseSlackNotifications" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseSlackNotifications(raw:nelson.yaml.NotificationSlackYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]"></a><a id="parseSlackNotifications(NotificationSlackYaml):YamlValidation[List[String]]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseSlackNotifications(raw:nelson.yaml.NotificationSlackYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseSlackNotifications" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseSlackNotifications(raw:nelson.yaml.NotificationSlackYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]"></a>
-      <a id="parseSlackNotifications(NotificationSlackYaml):YamlValidation[List[String]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -613,16 +821,15 @@
       <span class="symbol">
         <span class="name">parseSlackNotifications</span><span class="params">(<span name="raw">raw: <a href="NotificationSlackYaml.html" class="extype" name="nelson.yaml.NotificationSlackYaml">NotificationSlackYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseSlackNotifications(raw:nelson.yaml.NotificationSlackYaml):nelson.yaml.ManifestV1Parser.YamlValidation[List[String]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#parseURI" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="parseURI(raw:String):nelson.yaml.ManifestV1Parser.YamlValidation[java.net.URI]"></a><a id="parseURI(String):YamlValidation[URI]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#parseURI(raw:String):nelson.yaml.ManifestV1Parser.YamlValidation[java.net.URI]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#parseURI" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="parseURI(raw:String):nelson.yaml.ManifestV1Parser.YamlValidation[java.net.URI]"></a>
-      <a id="parseURI(String):YamlValidation[URI]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -630,16 +837,15 @@
       <span class="symbol">
         <span class="name">parseURI</span><span class="params">(<span name="raw">raw: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="java.net.URI">URI</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@parseURI(raw:String):nelson.yaml.ManifestV1Parser.YamlValidation[java.net.URI]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#resolvePolicy" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="resolvePolicy(name:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.cleanup.ExpirationPolicy]"></a><a id="resolvePolicy(String):YamlValidation[ExpirationPolicy]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#resolvePolicy(name:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.cleanup.ExpirationPolicy]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#resolvePolicy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resolvePolicy(name:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.cleanup.ExpirationPolicy]"></a>
-      <a id="resolvePolicy(String):YamlValidation[ExpirationPolicy]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -647,33 +853,31 @@
       <span class="symbol">
         <span class="name">resolvePolicy</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../cleanup/ExpirationPolicy.html" class="extype" name="nelson.cleanup.ExpirationPolicy">ExpirationPolicy</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@resolvePolicy(name:String):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.cleanup.ExpirationPolicy]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#resolveWorkflow" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="resolveWorkflow(name:String):cats.data.ValidatedNel[nelson.YamlError,nelson.Workflow[Unit]]"></a><a id="resolveWorkflow(String):ValidatedNel[YamlError,Workflow[Unit]]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#resolveWorkflow(name:String):cats.data.ValidatedNel[nelson.YamlError,nelson.Workflow[Unit]]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#resolveWorkflow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resolveWorkflow(name:String):cats.data.ValidatedNel[nelson.YamlError,nelson.Workflow[Unit]]"></a>
-      <a id="resolveWorkflow(String):ValidatedNel[YamlError,Workflow[Unit]]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resolveWorkflow</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.data.ValidatedNel">ValidatedNel</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>, <a href="../Workflow.html" class="extype" name="nelson.Workflow">Workflow</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+        <span class="name">resolveWorkflow</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.data.ValidatedNel">ValidatedNel</span>[<a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a>, <a href="../Workflow.html" class="extype" name="nelson.Workflow">Workflow</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@resolveWorkflow(name:String):cats.data.ValidatedNel[nelson.YamlError,nelson.Workflow[Unit]]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -681,16 +885,15 @@
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="nelson.yaml.ManifestV1Parser#toConstraint" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toConstraint(c:nelson.yaml.ConstraintYaml):List[nelson.Manifest.Constraint]"></a><a id="toConstraint(ConstraintYaml):List[Constraint]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toConstraint(c:nelson.yaml.ConstraintYaml):List[nelson.Manifest.Constraint]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="nelson.yaml.ManifestV1Parser#toConstraint" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toConstraint(c:nelson.yaml.ConstraintYaml):List[nelson.Manifest.Constraint]"></a>
-      <a id="toConstraint(ConstraintYaml):List[Constraint]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -698,19 +901,18 @@
       <span class="symbol">
         <span class="name">toConstraint</span><span class="params">(<span name="c">c: <a href="ConstraintYaml.html" class="extype" name="nelson.yaml.ConstraintYaml">ConstraintYaml</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="../Manifest$$Constraint.html" class="extype" name="nelson.Manifest.Constraint">Constraint</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toConstraint(c:nelson.yaml.ConstraintYaml):List[nelson.Manifest.Constraint]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@SuppressWarnings</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="nelson.yaml.ManifestV1Parser#toDeploymentTarget" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toDeploymentTarget(dcs:nelson.yaml.DatacenterTargetYaml):nelson.Manifest.DeploymentTarget"></a>
-      <a id="toDeploymentTarget(DatacenterTargetYaml):DeploymentTarget"></a>
-      <h4 class="signature">
+    </li><li name="nelson.yaml.ManifestV1Parser#toDeploymentTarget" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toDeploymentTarget(dcs:nelson.yaml.DatacenterTargetYaml):nelson.Manifest.DeploymentTarget"></a><a id="toDeploymentTarget(DatacenterTargetYaml):DeploymentTarget"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toDeploymentTarget(dcs:nelson.yaml.DatacenterTargetYaml):nelson.Manifest.DeploymentTarget" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -718,33 +920,31 @@
       <span class="symbol">
         <span class="name">toDeploymentTarget</span><span class="params">(<span name="dcs">dcs: <a href="DatacenterTargetYaml.html" class="extype" name="nelson.yaml.DatacenterTargetYaml">DatacenterTargetYaml</a></span>)</span><span class="result">: <a href="../Manifest$$DeploymentTarget.html" class="extype" name="nelson.Manifest.DeploymentTarget">DeploymentTarget</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toDeploymentTarget(dcs:nelson.yaml.DatacenterTargetYaml):nelson.Manifest.DeploymentTarget" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#toEnvironmentVariable" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toEnvironmentVariable(s:String):Option[nelson.Manifest.EnvironmentVariable]"></a><a id="toEnvironmentVariable(String):Option[EnvironmentVariable]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toEnvironmentVariable(s:String):Option[nelson.Manifest.EnvironmentVariable]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#toEnvironmentVariable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toEnvironmentVariable(s:String):Option[nelson.Manifest.EnvironmentVariable]"></a>
-      <a id="toEnvironmentVariable(String):Option[EnvironmentVariable]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toEnvironmentVariable</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../Manifest$$EnvironmentVariable.html" class="extype" name="nelson.Manifest.EnvironmentVariable">EnvironmentVariable</a>]</span>
+        <span class="name">toEnvironmentVariable</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="../Manifest$$EnvironmentVariable.html" class="extype" name="nelson.Manifest.EnvironmentVariable">EnvironmentVariable</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toEnvironmentVariable(s:String):Option[nelson.Manifest.EnvironmentVariable]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <p class="shortcomment cmt">TIM: need to do something better here with errors.</p>
+    </li><li name="nelson.yaml.ManifestV1Parser#toHealthCheck" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toHealthCheck(raw:nelson.yaml.HealthCheckYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.HealthCheck]"></a><a id="toHealthCheck(HealthCheckYaml):YamlValidation[HealthCheck]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toHealthCheck(raw:nelson.yaml.HealthCheckYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.HealthCheck]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <p class="shortcomment cmt">TIM: need to do something better here with errors.</p>
-    </li><li name="nelson.yaml.ManifestV1Parser#toHealthCheck" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toHealthCheck(raw:nelson.yaml.HealthCheckYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.HealthCheck]"></a>
-      <a id="toHealthCheck(HealthCheckYaml):YamlValidation[HealthCheck]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -752,16 +952,15 @@
       <span class="symbol">
         <span class="name">toHealthCheck</span><span class="params">(<span name="raw">raw: <a href="HealthCheckYaml.html" class="extype" name="nelson.yaml.HealthCheckYaml">HealthCheckYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$HealthCheck.html" class="extype" name="nelson.Manifest.HealthCheck">HealthCheck</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toHealthCheck(raw:nelson.yaml.HealthCheckYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.HealthCheck]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#toLoadbalancer" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toLoadbalancer(raw:nelson.yaml.LoadbalancerYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Loadbalancer]"></a><a id="toLoadbalancer(LoadbalancerYaml):YamlValidation[Loadbalancer]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toLoadbalancer(raw:nelson.yaml.LoadbalancerYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Loadbalancer]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#toLoadbalancer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toLoadbalancer(raw:nelson.yaml.LoadbalancerYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Loadbalancer]"></a>
-      <a id="toLoadbalancer(LoadbalancerYaml):YamlValidation[Loadbalancer]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -769,16 +968,15 @@
       <span class="symbol">
         <span class="name">toLoadbalancer</span><span class="params">(<span name="raw">raw: <a href="LoadbalancerYaml.html" class="extype" name="nelson.yaml.LoadbalancerYaml">LoadbalancerYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Loadbalancer.html" class="extype" name="nelson.Manifest.Loadbalancer">Loadbalancer</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toLoadbalancer(raw:nelson.yaml.LoadbalancerYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Loadbalancer]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#toPlan" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toPlan(raw:nelson.yaml.PlanYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Plan]"></a><a id="toPlan(PlanYaml):YamlValidation[Plan]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toPlan(raw:nelson.yaml.PlanYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Plan]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#toPlan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toPlan(raw:nelson.yaml.PlanYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Plan]"></a>
-      <a id="toPlan(PlanYaml):YamlValidation[Plan]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -786,16 +984,15 @@
       <span class="symbol">
         <span class="name">toPlan</span><span class="params">(<span name="raw">raw: <a href="PlanYaml.html" class="extype" name="nelson.yaml.PlanYaml">PlanYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toPlan(raw:nelson.yaml.PlanYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Plan]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#toPlanResource" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toPlanResource(raw:nelson.yaml.PlanResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,java.net.URI)]"></a><a id="toPlanResource(PlanResourceYaml):YamlValidation[(String,URI)]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toPlanResource(raw:nelson.yaml.PlanResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,java.net.URI)]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#toPlanResource" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toPlanResource(raw:nelson.yaml.PlanResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,java.net.URI)]"></a>
-      <a id="toPlanResource(PlanResourceYaml):YamlValidation[(String,URI)]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -803,16 +1000,15 @@
       <span class="symbol">
         <span class="name">toPlanResource</span><span class="params">(<span name="raw">raw: <a href="PlanResourceYaml.html" class="extype" name="nelson.yaml.PlanResourceYaml">PlanResourceYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="java.net.URI">URI</span>)]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toPlanResource(raw:nelson.yaml.PlanResourceYaml):nelson.yaml.ManifestV1Parser.YamlValidation[(String,java.net.URI)]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -820,16 +1016,15 @@
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toString():String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.yaml.ManifestV1Parser#toUnit" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toUnit(raw:nelson.yaml.UnitYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.UnitDef]"></a><a id="toUnit(UnitYaml):YamlValidation[UnitDef]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#toUnit(raw:nelson.yaml.UnitYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.UnitDef]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="nelson.yaml.ManifestV1Parser#toUnit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="toUnit(raw:nelson.yaml.UnitYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.UnitDef]"></a>
-      <a id="toUnit(UnitYaml):YamlValidation[UnitDef]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -837,101 +1032,95 @@
       <span class="symbol">
         <span class="name">toUnit</span><span class="params">(<span name="raw">raw: <a href="UnitYaml.html" class="extype" name="nelson.yaml.UnitYaml">UnitYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@toUnit(raw:nelson.yaml.UnitYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.UnitDef]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateCPU" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateCPU(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]"></a><a id="validateCPU(Double):YamlValidation[Double]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateCPU(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateCPU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateCPU(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]"></a>
-      <a id="validateCPU(Double):YamlValidation[Double]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateCPU</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
+        <span class="name">validateCPU</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateCPU(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateCPURequest" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateCPURequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]"></a><a id="validateCPURequest(Double,Option[Double]):YamlValidation[ResourceSpec]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateCPURequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateCPURequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateCPURequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]"></a>
-      <a id="validateCPURequest(Double,Option[Double]):YamlValidation[ResourceSpec]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateCPURequest</span><span class="params">(<span name="request">request: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>, <span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$ResourceSpec.html" class="extype" name="nelson.Manifest.ResourceSpec">ResourceSpec</a>]</span>
+        <span class="name">validateCPURequest</span><span class="params">(<span name="request">request: <a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>, <span name="limit">limit: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$ResourceSpec.html" class="extype" name="nelson.Manifest.ResourceSpec">ResourceSpec</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateCPURequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateInstances" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateInstances(i:Int):nelson.yaml.ManifestV1Parser.YamlValidation[Int]"></a><a id="validateInstances(Int):YamlValidation[Int]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateInstances(i:Int):nelson.yaml.ManifestV1Parser.YamlValidation[Int]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateInstances" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateInstances(i:Int):nelson.yaml.ManifestV1Parser.YamlValidation[Int]"></a>
-      <a id="validateInstances(Int):YamlValidation[Int]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateInstances</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">validateInstances</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateInstances(i:Int):nelson.yaml.ManifestV1Parser.YamlValidation[Int]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateMemory" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateMemory(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]"></a><a id="validateMemory(Double):YamlValidation[Double]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateMemory(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateMemory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateMemory(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]"></a>
-      <a id="validateMemory(Double):YamlValidation[Double]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateMemory</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>
+        <span class="name">validateMemory</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateMemory(i:Double):nelson.yaml.ManifestV1Parser.YamlValidation[Double]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateMemoryRequest" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateMemoryRequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]"></a><a id="validateMemoryRequest(Double,Option[Double]):YamlValidation[ResourceSpec]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateMemoryRequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateMemoryRequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateMemoryRequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]"></a>
-      <a id="validateMemoryRequest(Double,Option[Double]):YamlValidation[ResourceSpec]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateMemoryRequest</span><span class="params">(<span name="request">request: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a></span>, <span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Double" class="extype" target="_top">Double</a>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$ResourceSpec.html" class="extype" name="nelson.Manifest.ResourceSpec">ResourceSpec</a>]</span>
+        <span class="name">validateMemoryRequest</span><span class="params">(<span name="request">request: <a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a></span>, <span name="limit">limit: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Double.html#scala.Double" class="extype" name="scala.Double">Double</a>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$ResourceSpec.html" class="extype" name="nelson.Manifest.ResourceSpec">ResourceSpec</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateMemoryRequest(request:Double,limit:Option[Double]):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.ResourceSpec]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateMeta" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateMeta(s:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]"></a><a id="validateMeta(String):YamlValidation[String]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateMeta(s:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateMeta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateMeta(s:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]"></a>
-      <a id="validateMeta(String):YamlValidation[String]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -939,33 +1128,31 @@
       <span class="symbol">
         <span class="name">validateMeta</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateMeta(s:String):nelson.yaml.ManifestV1Parser.YamlValidation[String]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validatePlanConstraints" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validatePlanConstraints[A](n:A,e:A=&gt;nelson.YamlError)(f:A=&gt;Boolean)(implicitevidence$1:Numeric[A]):nelson.yaml.ManifestV1Parser.YamlValidation[A]"></a><a id="validatePlanConstraints[A](A,(A)⇒YamlError)((A)⇒Boolean)(Numeric[A]):YamlValidation[A]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validatePlanConstraints[A](n:A,e:A=&gt;nelson.YamlError)(f:A=&gt;Boolean)(implicitevidence$1:Numeric[A]):nelson.yaml.ManifestV1Parser.YamlValidation[A]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validatePlanConstraints" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validatePlanConstraints[A](n:A,e:A=&gt;nelson.YamlError)(f:A=&gt;Boolean)(implicitevidence$1:Numeric[A]):nelson.yaml.ManifestV1Parser.YamlValidation[A]"></a>
-      <a id="validatePlanConstraints[A](A,(A)⇒YamlError)((A)⇒Boolean)(Numeric[A]):YamlValidation[A]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validatePlanConstraints</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span></span>, <span name="e">e: (<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>) ⇒ <a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>]</span>
+        <span class="name">validatePlanConstraints</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span></span>, <span name="e">e: (<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>) ⇒ <a href="../YamlError.html" class="extype" name="nelson.YamlError">YamlError</a></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>) ⇒ <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>]</span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<span class="extype" name="nelson.yaml.ManifestV1Parser.validatePlanConstraints.A">A</span>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validatePlanConstraints[A](n:A,e:A=&gt;nelson.YamlError)(f:A=&gt;Boolean)(implicitevidence$1:Numeric[A]):nelson.yaml.ManifestV1Parser.YamlValidation[A]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateTrafficShift" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateTrafficShift(raw:nelson.yaml.TrafficShiftYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.TrafficShift]"></a><a id="validateTrafficShift(TrafficShiftYaml):YamlValidation[TrafficShift]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateTrafficShift(raw:nelson.yaml.TrafficShiftYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.TrafficShift]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateTrafficShift" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateTrafficShift(raw:nelson.yaml.TrafficShiftYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.TrafficShift]"></a>
-      <a id="validateTrafficShift(TrafficShiftYaml):YamlValidation[TrafficShift]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -973,33 +1160,31 @@
       <span class="symbol">
         <span class="name">validateTrafficShift</span><span class="params">(<span name="raw">raw: <a href="TrafficShiftYaml.html" class="extype" name="nelson.yaml.TrafficShiftYaml">TrafficShiftYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$TrafficShift.html" class="extype" name="nelson.Manifest.TrafficShift">TrafficShift</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateTrafficShift(raw:nelson.yaml.TrafficShiftYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.TrafficShift]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateTrafficShiftDuration" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateTrafficShiftDuration(dur:String):nelson.yaml.ManifestV1Parser.YamlValidation[scala.concurrent.duration.FiniteDuration]"></a><a id="validateTrafficShiftDuration(String):YamlValidation[FiniteDuration]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateTrafficShiftDuration(dur:String):nelson.yaml.ManifestV1Parser.YamlValidation[scala.concurrent.duration.FiniteDuration]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateTrafficShiftDuration" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateTrafficShiftDuration(dur:String):nelson.yaml.ManifestV1Parser.YamlValidation[scala.concurrent.duration.FiniteDuration]"></a>
-      <a id="validateTrafficShiftDuration(String):YamlValidation[FiniteDuration]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">validateTrafficShiftDuration</span><span class="params">(<span name="dur">dur: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.concurrent.duration.FiniteDuration" class="extype" target="_top">FiniteDuration</a>]</span>
+        <span class="name">validateTrafficShiftDuration</span><span class="params">(<span name="dur">dur: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateTrafficShiftDuration(dur:String):nelson.yaml.ManifestV1Parser.YamlValidation[scala.concurrent.duration.FiniteDuration]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
+      
+      
+    </li><li name="nelson.yaml.ManifestV1Parser#validateVolumes" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateVolumes(volume:nelson.yaml.VolumeYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Volume]"></a><a id="validateVolumes(VolumeYaml):YamlValidation[Volume]"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#validateVolumes(volume:nelson.yaml.VolumeYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Volume]" title="Permalink">
+        <i class="material-icons"></i>
       </a>
     </span>
-      
-    </li><li name="nelson.yaml.ManifestV1Parser#validateVolumes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="validateVolumes(volume:nelson.yaml.VolumeYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Volume]"></a>
-      <a id="validateVolumes(VolumeYaml):YamlValidation[Volume]"></a>
-      <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -1007,28 +1192,23 @@
       <span class="symbol">
         <span class="name">validateVolumes</span><span class="params">(<span name="volume">volume: <a href="VolumeYaml.html" class="extype" name="nelson.yaml.VolumeYaml">VolumeYaml</a></span>)</span><span class="result">: <a href="#YamlValidation[A]=cats.data.ValidatedNel[nelson.YamlError,A]" class="extmbr" name="nelson.yaml.ManifestV1Parser.YamlValidation">YamlValidation</a>[<a href="../Manifest$$Volume.html" class="extype" name="nelson.Manifest.Volume">Volume</a>]</span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@validateVolumes(volume:nelson.yaml.VolumeYaml):nelson.yaml.ManifestV1Parser.YamlValidation[nelson.Manifest.Volume]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
       
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
-      <a id="wait():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@wait():Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -1036,22 +1216,21 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.12.8/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -1059,30 +1238,32 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../../nelson/yaml/ManifestV1Parser$.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#nelson.yaml.ManifestV1Parser$@wait(x$1:Long):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@native</span><span class="args">()</span>
+              
                 <span class="name">@throws</span><span class="args">(<span>
       
       <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li></ol>
+    </li>
+              </ol>
             </div>
 
         
@@ -1092,9 +1273,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.11/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>
             </div>
         
         </div>
@@ -1111,7 +1292,9 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+    </body>
+          </div>
+        </div>
+      </div>
     </body>
       </html>
