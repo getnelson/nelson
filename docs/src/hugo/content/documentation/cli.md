@@ -376,7 +376,7 @@ Any validation errors encountered will be reported back to you exactly as they w
 Debugging file templates is a notoriously difficult and frustrating component to readying the deployment of an application, regardless of the runtime and tooling which is used. Nelson aids in this process by allowing you to simulate the template rendering process exactly as it would occur during deployment.
 
 ```
-λ nelson lint manifest --unit foo --resource s3 --resource mysql --template foo.ctmpl
+λ nelson lint template --unit foo --resource s3 --resource mysql --template foo.ctmpl
 2017/02/06 20:31:57.832769 [INFO] consul-template v0.18.0 (5211c66)
 2017/02/06 20:31:57.832781 [INFO] (runner) creating new runner (dry: true, once: true)
 2017/02/06 20:31:57.832968 [INFO] (runner) creating watcher
