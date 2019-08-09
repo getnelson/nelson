@@ -115,12 +115,12 @@ trait Json {
       jEmptyObject
     }
 
-    implicit val jsonCreatePKIRole: EncodeJson[CreatePKIRole] =
+  implicit val jsonCreatePKIRole: EncodeJson[CreatePKIRole] =
     EncodeJson { cpkir =>
       ("name" := cpkir.serviceAccountNames) ->:
       ("ttl" :?= cpkir.defaultLeaseTTL.map(d => s"${d.toMillis}ms")) ->?:
       ("max_ttl" :?= cpkir.maxLeaseTTL.map(d => s"${d.toMillis}ms")) ->?:
-      ("allow_localhost" :?= cpkir.allowLocalhost) ->?:
+      ("allow_localhost" := cpkir.allowLocalhost) ->:
       jEmptyObject
     }
 }

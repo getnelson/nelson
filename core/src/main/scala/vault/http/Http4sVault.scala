@@ -159,7 +159,7 @@ final class Http4sVaultClient(
   }
 
   def deletePKIRole(dpkir: DeletePKIRole): IO[Unit] = {
-    val engine = kubernetesAuthEngineName(cpkir.engineName)
-    reqVoid(IO.pure(Request(DELETE, v1BaseUri / engine / "roles" / cpkir.roleName)))
+    val engine = kubernetesAuthEngineName(dpkir.engineName)
+    reqVoid(IO.pure(Request(DELETE, v1BaseUri / engine / "roles" / dpkir.roleName)))
   }
 }
