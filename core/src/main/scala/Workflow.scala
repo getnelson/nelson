@@ -160,6 +160,22 @@ object Workflow {
         roleName = sn.toString
       ).inject
 
+    def writePKIRoleToVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
+      Vault.createPKIRole(
+        engineName = dc.name,
+        roleName = sn.toString,
+        serviceAccountNames = List(sn.toString),
+        defaultLeaseTTL = None,
+        maxLeaseTTL = None,
+        allowLocalhost = false
+      ).inject
+
+    def deletePKIRoleFromVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
+      Vault.deletePKIRole(
+        engineName = dc.name,
+        roleName = sn.toString
+      ).inject
+
     def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Datacenter): WorkflowF[Unit] =
       for {
         d  <- StoreOp.getDeployment(id).inject[WorkflowOp]
