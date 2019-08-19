@@ -54,6 +54,9 @@ object Pulsar extends Workflow[Unit] {
       //// create a Vault kubernetes auth role
       _  <- logToFile(id, s"Writing Kubernetes auth role '${sn.toString}' to Vault...")
       _  <- writeKubernetesRoleToVault(dc = dc, sn = sn, ns = ns.name)
+      //// create a Vault PKI auth role
+      _  <- logToFile(id, s"Writing PKI auth role '${sn.toString}' to Vault...")
+      _  <- writePKIRoleToVault(dc = dc, sn = sn)
       //// write the needful to consul
       _  <- logToFile(id, s"writing discovery tables to ${routing.Discovery.consulDiscoveryKey(sn)}")
       _  <- writeDiscoveryToConsul(id, sn, ns.name, dc)
@@ -72,6 +75,8 @@ object Pulsar extends Workflow[Unit] {
     deletePolicyFromVault(d.stackName, ns.name) *>
     logToFile(d.id, s"removing kubernetes role from vault: ${vaultLoggingFields(stackName, ns = ns.name, dcName = dc.name)}") *>
     deleteKubernetesRoleFromVault(dc, d.stackName) *>
+    logToFile(d.id, s"removing PKI role from vault: ${vaultLoggingFields(stackName, ns = ns.name, dcName = dc.name)}") *>
+    deletePKIRoleFromVault(dc, d.stackName) *>
     logToFile(d.id, s"instructing ${dc.name}'s scheduler to decomission ${stackName}") *>
     delete(dc, d) *>
     status(d.id, Terminated, s"Decomissioning deployment ${stackName} in ${dc.name}")

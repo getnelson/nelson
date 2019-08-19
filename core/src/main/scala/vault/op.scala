@@ -130,6 +130,24 @@ object Vault {
     roleName: String
   ): VaultF[Unit] = Free.liftF(DeleteKubernetesRole(authClusterName, roleName))
 
+  def createPKIRole(
+    engineName: String,
+    roleName: String,
+    serviceAccountNames: List[String],
+    defaultLeaseTTL: Option[FiniteDuration],
+    maxLeaseTTL: Option[FiniteDuration],
+    allowLocalhost: Boolean
+  ): VaultF[Unit] = Free.liftF(CreatePKIRole(
+    engineName, roleName,
+    serviceAccountNames,
+    defaultLeaseTTL, maxLeaseTTL,
+    allowLocalhost))
+
+  def deletePKIRole(
+    engineName: String,
+    roleName: String
+  ): VaultF[Unit] = Free.liftF(DeletePKIRole(engineName, roleName))
+
   case object IsInitialized extends Vault[Boolean]
   final case class Initialize(init: Initialization) extends Vault[InitialCreds]
   final case class Unseal(key: MasterKey) extends Vault[SealStatus]
@@ -150,5 +168,13 @@ object Vault {
     maxLeaseTTL: Option[FiniteDuration],
     policies: Option[List[String]]) extends Vault[Unit]
   final case class DeleteKubernetesRole(authClusterName: String, roleName: String) extends Vault[Unit]
+  final case class CreatePKIRole(
+    engineName: String,
+    roleName: String,
+    serviceAccountNames: List[String],
+    defaultLeaseTTL: Option[FiniteDuration],
+    maxLeaseTTL: Option[FiniteDuration],
+    allowLocalhost: Boolean
+  ) extends Vault[Unit]
+  final case class DeletePKIRole(engineName: String, roleName: String) extends Vault[Unit]
 }
-
