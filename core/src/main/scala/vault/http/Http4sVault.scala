@@ -154,12 +154,10 @@ final class Http4sVaultClient(
     authBackendPrefix.map(_ + cn).getOrElse(cn)
 
   def createPKIRole(cpkir: CreatePKIRole): IO[Unit] = {
-    val pkiPath = cpkir.pkiPath.getOrElse("pki")
-    reqVoid(IO.pure(Request(POST, v1BaseUri / pkiPath / "roles" / cpkir.roleName)))
+    reqVoid(IO.pure(Request(POST, v1BaseUri / cpkir.pkiPath / "roles" / cpkir.roleName)))
   }
 
   def deletePKIRole(dpkir: DeletePKIRole): IO[Unit] = {
-    val pkiPath = dpkir.pkiPath.getOrElse("pki")
-    reqVoid(IO.pure(Request(DELETE, v1BaseUri / pkiPath / "roles" / dpkir.roleName)))
+    reqVoid(IO.pure(Request(DELETE, v1BaseUri / dpkir.pkiPath / "roles" / dpkir.roleName)))
   }
 }
