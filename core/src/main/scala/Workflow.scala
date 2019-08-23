@@ -162,6 +162,7 @@ object Workflow {
 
     def writePKIRoleToVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
       Vault.createPKIRole(
+        pkiPath = dc.policy.pkiPath,
         engineName = dc.name,
         roleName = sn.toString,
         serviceAccountNames = List(sn.toString),
@@ -172,6 +173,7 @@ object Workflow {
 
     def deletePKIRoleFromVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
       Vault.deletePKIRole(
+        pkiPath = dc.policy.pkiPath,
         engineName = dc.name,
         roleName = sn.toString
       ).inject
