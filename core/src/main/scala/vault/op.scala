@@ -131,25 +131,25 @@ object Vault {
   ): VaultF[Unit] = Free.liftF(DeleteKubernetesRole(authClusterName, roleName))
 
   def createPKIRole(
-    pkiPath: Option[String],
     engineName: String,
     roleName: String,
     serviceAccountNames: List[String],
     defaultLeaseTTL: Option[FiniteDuration],
     maxLeaseTTL: Option[FiniteDuration],
-    allowLocalhost: Boolean
+    allowLocalhost: Boolean,
+    pkiPath: Option[String]
   ): VaultF[Unit] = Free.liftF(CreatePKIRole(
-    pkiPath,
     engineName, roleName,
     serviceAccountNames,
     defaultLeaseTTL, maxLeaseTTL,
-    allowLocalhost))
+    allowLocalhost,
+    pkiPath))
 
   def deletePKIRole(
-    pkiPath: Option[String],
     engineName: String,
-    roleName: String
-  ): VaultF[Unit] = Free.liftF(DeletePKIRole(pkiPath, engineName, roleName))
+    roleName: String,
+    pkiPath: Option[String]
+  ): VaultF[Unit] = Free.liftF(DeletePKIRole(engineName, roleName, pkiPath))
 
   case object IsInitialized extends Vault[Boolean]
   final case class Initialize(init: Initialization) extends Vault[InitialCreds]
@@ -172,17 +172,17 @@ object Vault {
     policies: Option[List[String]]) extends Vault[Unit]
   final case class DeleteKubernetesRole(authClusterName: String, roleName: String) extends Vault[Unit]
   final case class CreatePKIRole(
-    pkiPath: Option[String],
     engineName: String,
     roleName: String,
     serviceAccountNames: List[String],
     defaultLeaseTTL: Option[FiniteDuration],
     maxLeaseTTL: Option[FiniteDuration],
-    allowLocalhost: Boolean
+    allowLocalhost: Boolean,
+    pkiPath: Option[String]
   ) extends Vault[Unit]
   final case class DeletePKIRole(
-    pkiPath: Option[String], 
     engineName: String, 
-    roleName: String
+    roleName: String,
+    pkiPath: Option[String]
   ) extends Vault[Unit]
 }

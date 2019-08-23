@@ -162,20 +162,20 @@ object Workflow {
 
     def writePKIRoleToVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
       Vault.createPKIRole(
-        pkiPath = dc.policy.pkiPath,
         engineName = dc.name,
         roleName = sn.toString,
         serviceAccountNames = List(sn.toString),
         defaultLeaseTTL = None,
         maxLeaseTTL = None,
-        allowLocalhost = false
+        allowLocalhost = false,
+        pkiPath = dc.policy.pkiPath
       ).inject
 
     def deletePKIRoleFromVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
       Vault.deletePKIRole(
-        pkiPath = dc.policy.pkiPath,
         engineName = dc.name,
-        roleName = sn.toString
+        roleName = sn.toString,
+        pkiPath = dc.policy.pkiPath
       ).inject
 
     def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Datacenter): WorkflowF[Unit] =
