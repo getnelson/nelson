@@ -123,8 +123,8 @@
                         <a href="Vault$$CreateKubernetesRole.html" title="">CreateKubernetesRole</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="class" href="Vault$$CreatePKIRole.html" title=""></a>
-                        <a href="Vault$$CreatePKIRole.html" title="">CreatePKIRole</a>
+                        <a class="class" href="" title=""></a>
+                        <a href="" title="">CreatePKIRole</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="class" href="Vault$$CreatePolicy.html" title=""></a>
@@ -151,8 +151,8 @@
                         <a href="Vault$$Get.html" title="">Get</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="object" href="" title=""></a>
-                        <a href="" title="">GetMounts</a>
+                        <a class="object" href="Vault$$GetMounts$.html" title=""></a>
+                        <a href="Vault$$GetMounts$.html" title="">GetMounts</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="object" href="Vault$$GetSealStatus$.html" title=""></a>
@@ -182,12 +182,12 @@
             </div>
           </div>
           <div id="content">
-            <body class="object value">
+            <body class="class type">
       <div id="definition">
-        <div class="big-circle object">o</div>
+        <div class="big-circle class">c</div>
         <p id="owner"><a href="../index.html" class="extype" name="nelson">nelson</a>.<a href="index.html" class="extype" name="nelson.vault">vault</a>.<a href="Vault$.html" class="extype" name="nelson.vault.Vault">Vault</a></p>
-        <h1>GetMounts<span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html" title="Permalink">
+        <h1>CreatePKIRole<span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -196,11 +196,11 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">GetMounts</span><span class="result"> extends <a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">CreatePKIRole</span><span class="params">(<span name="engineName">engineName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="roleName">roleName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="serviceAccountNames">serviceAccountNames: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="defaultLeaseTTL">defaultLeaseTTL: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>, <span name="maxLeaseTTL">maxLeaseTTL: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>, <span name="allowLocalhost">allowLocalhost: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="pkiPath">pkiPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>] with <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
@@ -209,7 +209,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]], <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -235,7 +235,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="nelson.vault.Vault.GetMounts"><span>GetMounts</span></li><li class="in" name="nelson.vault.Vault"><span>Vault</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="nelson.vault.Vault.CreatePKIRole"><span>CreatePKIRole</span></li><li class="in" name="nelson.vault.Vault"><span>Vault</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -253,7 +253,26 @@
 
       <div id="template">
         <div id="allMembers">
-        
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="nelson.vault.Vault.CreatePKIRole#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(engineName:String,roleName:String,serviceAccountNames:List[String],defaultLeaseTTL:Option[scala.concurrent.duration.FiniteDuration],maxLeaseTTL:Option[scala.concurrent.duration.FiniteDuration],allowLocalhost:Boolean,pkiPath:String):nelson.vault.Vault.CreatePKIRole"></a><a id="&lt;init&gt;:CreatePKIRole"></a>
+      <span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#&lt;init&gt;(engineName:String,roleName:String,serviceAccountNames:List[String],defaultLeaseTTL:Option[scala.concurrent.duration.FiniteDuration],maxLeaseTTL:Option[scala.concurrent.duration.FiniteDuration],allowLocalhost:Boolean,pkiPath:String):nelson.vault.Vault.CreatePKIRole" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">CreatePKIRole</span><span class="params">(<span name="engineName">engineName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="roleName">roleName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="serviceAccountNames">serviceAccountNames: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="defaultLeaseTTL">defaultLeaseTTL: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>, <span name="maxLeaseTTL">maxLeaseTTL: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>, <span name="allowLocalhost">allowLocalhost: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>, <span name="pkiPath">pkiPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+      </span>
+      
+      
+    </li></ol>
+            </div>
 
         
 
@@ -265,7 +284,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -281,7 +300,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html###():Int" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -297,7 +316,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -310,10 +329,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="nelson.vault.Vault.CreatePKIRole#allowLocalhost" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="allowLocalhost:Boolean"></a>
+      <span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#allowLocalhost:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">allowLocalhost</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -329,7 +364,7 @@
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#clone():Object" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -350,10 +385,42 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="nelson.vault.Vault.CreatePKIRole#defaultLeaseTTL" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="defaultLeaseTTL:Option[scala.concurrent.duration.FiniteDuration]"></a><a id="defaultLeaseTTL:Option[FiniteDuration]"></a>
+      <span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#defaultLeaseTTL:Option[scala.concurrent.duration.FiniteDuration]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultLeaseTTL</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
+      </span>
+      
+      
+    </li><li name="nelson.vault.Vault.CreatePKIRole#engineName" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="engineName:String"></a>
+      <span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#engineName:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">engineName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -366,26 +433,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
-      <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#equals(x$1:Any):Boolean" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.12.8/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#finalize():Unit" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -407,7 +458,7 @@
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#getClass():Class[_]" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -426,7 +477,7 @@
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -439,10 +490,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.vault.Vault.CreatePKIRole#maxLeaseTTL" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="maxLeaseTTL:Option[scala.concurrent.duration.FiniteDuration]"></a><a id="maxLeaseTTL:Option[FiniteDuration]"></a>
+      <span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#maxLeaseTTL:Option[scala.concurrent.duration.FiniteDuration]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maxLeaseTTL</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -458,7 +525,7 @@
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#notify():Unit" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -477,7 +544,7 @@
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#notifyAll():Unit" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -493,10 +560,58 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="nelson.vault.Vault.CreatePKIRole#pkiPath" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pkiPath:String"></a>
+      <span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#pkiPath:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pkiPath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
+    </li><li name="nelson.vault.Vault.CreatePKIRole#roleName" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="roleName:String"></a>
+      <span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#roleName:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">roleName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
+    </li><li name="nelson.vault.Vault.CreatePKIRole#serviceAccountNames" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="serviceAccountNames:List[String]"></a>
+      <span class="permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#serviceAccountNames:List[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">serviceAccountNames</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -512,7 +627,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#wait():Unit" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -534,7 +649,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -556,7 +671,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../nelson/vault/Vault$$GetMounts$.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../nelson/vault/Vault$$CreatePKIRole.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -588,7 +703,7 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="nelson.vault.Vault">
-              <h3>Inherited from <a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/collection/immutable/SortedMap.html#scala.collection.immutable.SortedMap" class="extype" name="scala.collection.immutable.SortedMap">SortedMap</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Mount.html" class="extype" name="nelson.vault.Mount">Mount</a>]]</h3>
+              <h3>Inherited from <a href="Vault.html" class="extype" name="nelson.vault.Vault">Vault</a>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.8/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
