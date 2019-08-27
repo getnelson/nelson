@@ -136,17 +136,20 @@ object Vault {
     serviceAccountNames: List[String],
     defaultLeaseTTL: Option[FiniteDuration],
     maxLeaseTTL: Option[FiniteDuration],
-    allowLocalhost: Boolean
+    allowLocalhost: Boolean,
+    pkiPath: String
   ): VaultF[Unit] = Free.liftF(CreatePKIRole(
     engineName, roleName,
     serviceAccountNames,
     defaultLeaseTTL, maxLeaseTTL,
-    allowLocalhost))
+    allowLocalhost,
+    pkiPath))
 
   def deletePKIRole(
     engineName: String,
-    roleName: String
-  ): VaultF[Unit] = Free.liftF(DeletePKIRole(engineName, roleName))
+    roleName: String,
+    pkiPath: String
+  ): VaultF[Unit] = Free.liftF(DeletePKIRole(engineName, roleName, pkiPath))
 
   case object IsInitialized extends Vault[Boolean]
   final case class Initialize(init: Initialization) extends Vault[InitialCreds]
@@ -174,7 +177,12 @@ object Vault {
     serviceAccountNames: List[String],
     defaultLeaseTTL: Option[FiniteDuration],
     maxLeaseTTL: Option[FiniteDuration],
-    allowLocalhost: Boolean
+    allowLocalhost: Boolean,
+    pkiPath: String
   ) extends Vault[Unit]
-  final case class DeletePKIRole(engineName: String, roleName: String) extends Vault[Unit]
+  final case class DeletePKIRole(
+    engineName: String, 
+    roleName: String,
+    pkiPath: String
+  ) extends Vault[Unit]
 }

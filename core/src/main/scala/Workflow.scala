@@ -160,21 +160,32 @@ object Workflow {
         roleName = sn.toString
       ).inject
 
-    def writePKIRoleToVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
+    private def pkiPath(pkiPath: Option[String], ns: NamespaceName) = {
+      val path = pkiPath.getOrElse("pki")
+      path.replaceAllLiterally("%env%", ns.root.asString)
+    }
+
+    def writePKIRoleToVault(dc: Datacenter, sn: StackName, ns: NamespaceName): WorkflowF[Unit] = {
+      val interpolatedPkiPath = pkiPath(dc.policy.pkiPath, ns)
       Vault.createPKIRole(
         engineName = dc.name,
         roleName = sn.toString,
         serviceAccountNames = List(sn.toString),
         defaultLeaseTTL = None,
         maxLeaseTTL = None,
-        allowLocalhost = false
+        allowLocalhost = false,
+        pkiPath = interpolatedPkiPath
       ).inject
+    }
 
-    def deletePKIRoleFromVault(dc: Datacenter, sn: StackName): WorkflowF[Unit] =
+    def deletePKIRoleFromVault(dc: Datacenter, sn: StackName, ns: NamespaceName): WorkflowF[Unit] = {
+      val interpolatedPkiPath = pkiPath(dc.policy.pkiPath, ns)
       Vault.deletePKIRole(
         engineName = dc.name,
-        roleName = sn.toString
+        roleName = sn.toString,
+        pkiPath = interpolatedPkiPath
       ).inject
+    }
 
     def writeDiscoveryToConsul(id: ID, sn: StackName, ns: NamespaceName, dc: Datacenter): WorkflowF[Unit] =
       for {
