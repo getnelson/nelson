@@ -117,7 +117,7 @@ object Infrastructure {
     image: Option[String],
     lbScheme: loadbalancers.ElbScheme
   ) {
-    import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClientBuilder
+    import com.amazonaws.services.elasticloadbalancingv2.AmazonElasticLoadBalancingClientBuilder
     import com.amazonaws.services.autoscaling.AmazonAutoScalingClientBuilder
 
     val asg = AmazonAutoScalingClientBuilder

@@ -49,7 +49,7 @@ libraryDependencies ++= Seq(
   "org.apache.commons"          % "commons-email"                      % "1.3.3",
   "commons-codec"               % "commons-codec"                      % "1.11",
   "com.amazonaws"               % "aws-java-sdk-autoscaling"           % "1.11.595",
-  "com.amazonaws"               % "aws-java-sdk-elasticloadbalancing"  % "1.11.595",
+  "com.amazonaws"               % "aws-java-sdk-elasticloadbalancingv2"  % "1.11.595",
   "com.google.guava"            % "guava"                              % "20.0",
   "com.google.code.findbugs"    % "jsr305"                             % "3.0.1", // needed to provide class javax.annotation.Nullable
   "com.cronutils"               % "cron-utils"                         % "5.0.5",

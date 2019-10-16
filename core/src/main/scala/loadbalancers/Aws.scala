@@ -19,7 +19,9 @@ package loadbalancers
 
 import nelson.Manifest.{Port,Plan}
 
-import com.amazonaws.services.elasticloadbalancing.model.{Listener,CreateLoadBalancerRequest,DeleteLoadBalancerRequest}
+// Temporarily importing everything because I don't know what I need right now.
+// import com.amazonaws.services.elasticloadbalancingv2.model.{CreateListenerRequest,CreateLoadBalancerRequest,DeleteLoadBalancerRequest,LoadBalancerTypeEnum,ProtocolEnum}
+import com.amazonaws.services.elasticloadbalancingv2.model._
 import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,LaunchTemplateSpecification,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest}
 import com.amazonaws.services.autoscaling.model.AmazonAutoScalingException
 
@@ -75,32 +77,100 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     val name = loadbalancerName(lb.name, v, hash)
     log.debug(s"caling aws client to launch $name")
     val size = asgSize(p)
-    createELB(name, lb.routes.map(_.port), cfg.lbScheme) <* createASG(name, ns, size)
+
+    ////////////////////////////////////////////////////////////////////////
+    for {
+      lbarn <- createNLB(name, cfg.lbScheme)
+      targetGroups <- createTargetGroups(name, lb.routes.map(_.port))
+      listeners <- createListeners(lbarn, targetGroups)
+
+      instanceIds <- createASG(name, ns, size)
+      _ <- registerInstancesWithTargetGroups(instanceIds, targetGroups)
+    } yield lbarn -> lbarn.getDNS()
+    ////////////////////////////////////////////////////////////////////////
   }
 
+  // I know this is gonna suck, but the target group has this restriction where
+  // the name of the target group can't have "double dashes". I want the loadbalancer name
+  // to match the target group name, so the loadbalancer won't have the double dashes either.
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
-    s"$name--${v.minVersion.toExternalString}--${hash}"
+    s"$name-${v.minVersion.toExternalString}-${hash}"
 
-  def deleteELB(name: String): IO[Unit] =
+  def deleteELB(lbarn: String): IO[Unit] =
     IO {
-      val req = new DeleteLoadBalancerRequest(name)
-      cfg.elb.deleteLoadBalancer(req)
+      cfg.elb.deleteLoadBalancer(
+        new DeleteLoadBalancerRequest()
+          .withLoadBalancerArn(lbarn)
+      )
       ()
     }
 
-  def createELB(name: String, p: Vector[Port], scheme: ElbScheme): IO[DNSName] =
+  // https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/elasticloadbalancingv2/model/CreateLoadBalancerResult.html
+  // has no method getDNS().
+  def createNLB(name: String, scheme: ElbScheme): IO[String] = {
     IO {
-      val listeners = p.map(p => new Listener(TCP,p.port,p.port)).toList
-      val req = new CreateLoadBalancerRequest(name)
-        .withListeners(listeners.asJava)
+      cfg.elb.createLoadBalancer(new CreateLoadBalancerRequest()
+        .withName(name)
+        .withType(LoadBalancerTypeEnum.Network)
         .withScheme(scheme.toString)
         .withSecurityGroups(cfg.elbSecurityGroupNames.toList.asJava)
         .withSubnets(cfg.availabilityZones.map(_.publicSubnet).asJava)
+      )
 
-      val resp = cfg.elb.createLoadBalancer(req)
-
-      resp.getDNSName()
+      // This is absolute trash.
+      cfg.elb.describeLoadBalancer(new DescribeLoadBalancersRequest()
+        .withNames(name)
+      ).getLoadBalancers().get(0).getLoadBalancerName()
     }
+  }
+
+  // I want this f: List[Port] -> List[TargetGroup]
+  def createTargetGroups(name: String, p: Vector[Port]): Vector[TargetGroup] = {
+    IO{
+      // I want to make the call to create the target groups, then make a list of the
+      // targetgroupnames
+      val targetGroupNames = p.map(
+        (p: Manifest.Port) => {
+          cfg.elb.createTargetGroup(
+            new CreateTargetGroupRequest()
+              .withPort(p.port)
+              .withProtocol(ProtocolEnum.TCP)
+              .withName(name + p.port.toString())
+              .withTargetType(TargetTypeEnum.Instance)
+          )
+          name + p.port.toString()
+        }
+      ).toList()
+
+      cfg.elb.describeTargetGroups(new DescribeTargetGroupsRequest().withNames(targetGroupNames)).getTargetGroups()
+    }
+  }
+
+  def createListeners(lbarn: String, targetGroups: Vector[TargetGroup]): IO[Unit] = {
+    IO{
+      targetGroups.map(targetGroup => cfg.elb.createListener(
+        new CreateListenerRequest()
+          .withLoadBalancerArn(lbarn)
+          .withPort(targetGroup.port)
+          .withProtocol(ProtocolEnum.TCP)
+      ))
+    }
+  }
+
+  def registerInstancesWithTargetGroups(instanceIds: Vector[String], targetGroups: Vector[TargetGroup]): IO[Unit] = {
+    // For every target in targetGroups
+    //   For every instanceID in instances IDs
+    //      targetGroup.targets.append(instanceID)
+    IO{
+      targetGroups.map(
+        (targetGroup: TargetGroup) => {
+          val request = new RegisterTargetsRequest()
+            .withTargets()
+            .withTargetGroupArn()
+        }
+      )
+    }
+  }
 
   def deleteASG(name: String): IO[Unit] =
     IO {
@@ -168,7 +238,6 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withTags(lbTag, nameTag, iTag, namespaceTag, envTag)
         .withLaunchTemplate(launchTemplateId)
         .withVPCZoneIdentifier(cfg.availabilityZones.map(_.privateSubnet).mkString(","))
-        .withLoadBalancerNames(name) // ELB name is the same at asg name
         .withDesiredCapacity(size.desired)
         .withMaxSize(size.max)
         .withMinSize(size.min)
