@@ -19,10 +19,8 @@ package loadbalancers
 
 import nelson.Manifest.{Port,Plan}
 
-// Temporarily importing everything because I don't know what I need right now.
-// import com.amazonaws.services.elasticloadbalancingv2.model.{CreateListenerRequest,CreateLoadBalancerRequest,DeleteLoadBalancerRequest,LoadBalancerTypeEnum,ProtocolEnum}
-import com.amazonaws.services.elasticloadbalancingv2.model._
-import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,LaunchTemplateSpecification,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest}
+import com.amazonaws.services.elasticloadbalancingv2.model.{DeleteLoadBalancerRequest,Action,ActionTypeEnum,LoadBalancer,TargetGroup,CreateLoadBalancerRequest,LoadBalancerTypeEnum,CreateTargetGroupRequest,CreateListenerRequest,Listener,TargetTypeEnum,ProtocolEnum}
+import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,LaunchTemplateSpecification,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest,AttachLoadBalancerTargetGroupsRequest}
 import com.amazonaws.services.autoscaling.model.AmazonAutoScalingException
 
 import cats.~>
@@ -75,100 +73,124 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
     val name = loadbalancerName(lb.name, v, hash)
-    log.debug(s"caling aws client to launch $name")
+    log.debug(s"calling aws client to launch $name")
     val size = asgSize(p)
 
-    ////////////////////////////////////////////////////////////////////////
-    for {
-      lbarn <- createNLB(name, cfg.lbScheme)
-      targetGroups <- createTargetGroups(name, lb.routes.map(_.port))
-      listeners <- createListeners(lbarn, targetGroups)
 
-      instanceIds <- createASG(name, ns, size)
-      _ <- registerInstancesWithTargetGroups(instanceIds, targetGroups)
-    } yield lbarn -> lbarn.getDNS()
-    ////////////////////////////////////////////////////////////////////////
+    for {
+      loadbalancer <- createNLB(name, cfg.lbScheme)
+      targetGroups <- createTargetGroups(name, lb.routes.map(_.port))
+      _ <- createListeners(loadbalancer, targetGroups)
+
+      _ <- createASG(name, ns, size)
+      _ <- attachASGToTargetGroups(name, targetGroups)
+    } yield loadbalancer.getDNSName
   }
 
-  // I know this is gonna suck, but the target group has this restriction where
+  // The target group has this restriction where
   // the name of the target group can't have "double dashes". I want the loadbalancer name
   // to match the target group name, so the loadbalancer won't have the double dashes either.
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
     s"$name-${v.minVersion.toExternalString}-${hash}"
 
-  def deleteELB(lbarn: String): IO[Unit] =
+  def deleteELB(name: String): IO[Unit] =
     IO {
-      cfg.elb.deleteLoadBalancer(
-        new DeleteLoadBalancerRequest()
-          .withLoadBalancerArn(lbarn)
-      )
+      val req = new DeleteLoadBalancerRequest(name)
+      cfg.elb.deleteLoadBalancer(req)
       ()
     }
 
   // https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/elasticloadbalancingv2/model/CreateLoadBalancerResult.html
   // has no method getDNS().
-  def createNLB(name: String, scheme: ElbScheme): IO[String] = {
+  def createNLB(name: String, scheme: ElbScheme): IO[LoadBalancer] = {
     IO {
-      cfg.elb.createLoadBalancer(new CreateLoadBalancerRequest()
+      val req = new CreateLoadBalancerRequest()
         .withName(name)
         .withType(LoadBalancerTypeEnum.Network)
         .withScheme(scheme.toString)
-        .withSecurityGroups(cfg.elbSecurityGroupNames.toList.asJava)
         .withSubnets(cfg.availabilityZones.map(_.publicSubnet).asJava)
+
+      val resp = cfg.elb.createLoadBalancer(req)
+      val loadbalancers: List[LoadBalancer] = resp.getLoadBalancers.asScala.toList
+
+      loadbalancers.head
+    }.recoverWith {
+      case e: java.lang.NullPointerException => IO.raiseError(FailedLoadbalancerDeploy("AWS call return an empty list of loadbalancers", e.getMessage))
+    }
+  }
+
+  def createTargetGroups(name: String, p: Vector[Port]): IO[Vector[TargetGroup]] = {
+
+    def createRequest(p: Manifest.Port, name: String): CreateTargetGroupRequest =
+      new CreateTargetGroupRequest()
+        .withPort(p.port)
+        .withProtocol(ProtocolEnum.TCP)
+        .withName(name+"-"+ p.port.toString())
+        .withTargetType(TargetTypeEnum.Instance)
+
+
+    def createSingleTargetGroup(request: CreateTargetGroupRequest): IO[TargetGroup] = {
+      IO(
+        cfg.elb.createTargetGroup(request)
       )
-
-      // This is absolute trash.
-      cfg.elb.describeLoadBalancer(new DescribeLoadBalancersRequest()
-        .withNames(name)
-      ).getLoadBalancers().get(0).getLoadBalancerName()
+        .map(resp => resp.getTargetGroups().asScala.toList)
+          .map(targetGroupList => targetGroupList.head).recoverWith{
+            case e: Exception =>
+              log.error(s"aws call to create target group for ${request.getName} failed.")
+              IO.raiseError(FailedLoadbalancerDeploy("empty result from AWS something something", e.getMessage))
+      }
     }
+
+    val ctgreqs: Vector[CreateTargetGroupRequest] = p.map(port => createRequest(port, name))
+
+    // (@timperret): I can't think of a way to import this. When I put it at the top,
+    // I got all kinds of weird errors saying parameter is "never used".
+    import cats.implicits._
+    ctgreqs.traverse(req => createSingleTargetGroup(req))
   }
 
-  // I want this f: List[Port] -> List[TargetGroup]
-  def createTargetGroups(name: String, p: Vector[Port]): Vector[TargetGroup] = {
-    IO{
-      // I want to make the call to create the target groups, then make a list of the
-      // targetgroupnames
-      val targetGroupNames = p.map(
-        (p: Manifest.Port) => {
-          cfg.elb.createTargetGroup(
-            new CreateTargetGroupRequest()
-              .withPort(p.port)
-              .withProtocol(ProtocolEnum.TCP)
-              .withName(name + p.port.toString())
-              .withTargetType(TargetTypeEnum.Instance)
-          )
-          name + p.port.toString()
-        }
-      ).toList()
+  def createListeners(loadbalancer: LoadBalancer, targetGroups: Vector[TargetGroup]): IO[Vector[Listener]] = {
 
-      cfg.elb.describeTargetGroups(new DescribeTargetGroupsRequest().withNames(targetGroupNames)).getTargetGroups()
+    def createRequest(lbarn: String, targetGroupARN: String, targetGroupPort: Int): CreateListenerRequest = {
+      val defaultAction: Action = new Action()
+        .withType(ActionTypeEnum.Forward)
+        .withTargetGroupArn(targetGroupARN)
+
+      new CreateListenerRequest()
+        .withLoadBalancerArn(lbarn)
+        .withPort(targetGroupPort)
+        .withProtocol(ProtocolEnum.TCP)
+        .withDefaultActions(defaultAction)
     }
+
+    def createSingleListener(request: CreateListenerRequest): IO[Listener] = {
+      IO(
+        cfg.elb.createListener(request)
+      ).map(resp => resp.getListeners.asScala.toList)
+        .map(listenerList => listenerList.head).recoverWith{
+        case e: Exception =>
+          log.error(s"aws call to create listener for port ${request.getPort} failed")
+          IO.raiseError(FailedLoadbalancerDeploy(s"empty result from AWS create Listener call", e.getMessage))
+      }
+    }
+
+    val reqs: Vector[CreateListenerRequest] = targetGroups.map(tg => createRequest(loadbalancer.getLoadBalancerArn, tg.getTargetGroupArn, tg.getPort))
+
+    // (@timperret): I can't think of a way to import this. When I put it at the top,
+    // I got all kinds of weird errors saying parameter is "never used".
+    import cats.implicits._
+    reqs.traverse(req => createSingleListener(req))
   }
 
-  def createListeners(lbarn: String, targetGroups: Vector[TargetGroup]): IO[Unit] = {
+  def attachASGToTargetGroups(asgName: String, targetGroups: Vector[TargetGroup]): IO[Unit] = {
     IO{
-      targetGroups.map(targetGroup => cfg.elb.createListener(
-        new CreateListenerRequest()
-          .withLoadBalancerArn(lbarn)
-          .withPort(targetGroup.port)
-          .withProtocol(ProtocolEnum.TCP)
-      ))
-    }
-  }
+      val req = new AttachLoadBalancerTargetGroupsRequest()
+        .withAutoScalingGroupName(asgName)
+        .withTargetGroupARNs(targetGroups.map(tg => tg.getTargetGroupArn).asJava)
 
-  def registerInstancesWithTargetGroups(instanceIds: Vector[String], targetGroups: Vector[TargetGroup]): IO[Unit] = {
-    // For every target in targetGroups
-    //   For every instanceID in instances IDs
-    //      targetGroup.targets.append(instanceID)
-    IO{
-      targetGroups.map(
-        (targetGroup: TargetGroup) => {
-          val request = new RegisterTargetsRequest()
-            .withTargets()
-            .withTargetGroupArn()
-        }
-      )
+      cfg.asg.attachLoadBalancerTargetGroups(req)
+
+      ()
     }
   }
 
@@ -253,6 +275,4 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     val max = scala.math.ceil(desired * 1.3).toInt // for some wiggle room
     ASGSize(desired, min, max)
   }
-
-  private val TCP = "TCP"
 }
