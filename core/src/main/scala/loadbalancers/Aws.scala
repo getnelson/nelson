@@ -81,11 +81,10 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     log.debug(s"calling aws client to launch $name")
     val size = asgSize(p)
 
-
     for {
       loadbalancer <- createNLB(name, cfg.lbScheme)
 
-      targetGroups <- createTargetGroups(name, lb.routes.map(_.port))
+      targetGroups <- createTargetGroups(name, lb.routes.toList.map(_.port))
       _ <- createListeners(loadbalancer, targetGroups)
 
       _ <- createASG(name, ns, size)
@@ -100,27 +99,26 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     s"$name-${v.minVersion.toExternalString}-${hash}"
 
   def getLoadBalancerArn(name: String): IO[String] = {
-    val describeLoadBalancerRequest = new DescribeLoadBalancersRequest()
-      .withNames(name)
-    IO(
-      cfg.nlb.describeLoadBalancers(describeLoadBalancerRequest)
-    ).map(resp => resp.getLoadBalancers.asScala.toList)
-      .map(loadbalancerList => loadbalancerList.head.getLoadBalancerArn).recoverWith{
+    val describeLoadBalancerRequest = new DescribeLoadBalancersRequest().withNames(name)
+    (for {
+      response          <- IO(cfg.nlb.describeLoadBalancers(describeLoadBalancerRequest))
+      loadbalancerList  = response.getLoadBalancers.asScala.toList
+      loadbalancerARN   = loadbalancerList.head.getLoadBalancerArn
+    } yield loadbalancerARN).recoverWith{
       case e: Exception =>
         log.error(s"aws call to get loadbalancer ARN ${describeLoadBalancerRequest.getNames.asScala.head} failed.")
         IO.raiseError(FailedLoadbalancerDeploy(s"could not find loadbalancer and therefore could not delete loadbalancer", e.getMessage))
     }
   }
 
-  def deleteNLB(lbarn: String): IO[Unit] = {
-    IO{
+  def deleteNLB(lbarn: String): IO[Unit] =
+    IO {
       val req: DeleteLoadBalancerRequest = new DeleteLoadBalancerRequest()
         .withLoadBalancerArn(lbarn)
 
       cfg.nlb.deleteLoadBalancer(req)
       ()
     }
-  }
 
   // https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/elasticloadbalancingv2/model/CreateLoadBalancerResult.html
   // has no method getDNS().
@@ -141,7 +139,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     }
   }
 
-  def createTargetGroups(name: String, p: Vector[Port]): IO[Vector[TargetGroup]] = {
+  def createTargetGroups(name: String, p: List[Port]): IO[List[TargetGroup]] = {
 
     def createRequest(p: Manifest.Port, name: String): CreateTargetGroupRequest =
       new CreateTargetGroupRequest()
@@ -150,20 +148,19 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withName(name+"-"+ p.port.toString())
         .withTargetType(TargetTypeEnum.Instance)
 
-
     def createSingleTargetGroup(request: CreateTargetGroupRequest): IO[TargetGroup] = {
-      IO(
-        cfg.nlb.createTargetGroup(request)
-      )
-        .map(resp => resp.getTargetGroups().asScala.toList)
-          .map(targetGroupList => targetGroupList.head).recoverWith{
+      (for {
+        response <- IO(cfg.nlb.createTargetGroup(request))
+        targetGroupList = response.getTargetGroups.asScala.toList
+        targetGroup = targetGroupList.head
+      } yield targetGroup).recoverWith{
             case e: Exception =>
               log.error(s"aws call to create target group for ${request.getName} failed.")
               IO.raiseError(FailedLoadbalancerDeploy("empty result from AWS something something", e.getMessage))
       }
     }
 
-    val ctgreqs: Vector[CreateTargetGroupRequest] = p.map(port => createRequest(port, name))
+    val ctgreqs: List[CreateTargetGroupRequest] = p.map(port => createRequest(port, name))
 
     // (@timperret): I can't think of a way to import this. When I put it at the top,
     // I got all kinds of weird errors saying parameter is "never used".
@@ -171,29 +168,29 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     ctgreqs.traverse(req => createSingleTargetGroup(req))
   }
 
-  def getTargetGroupsForNLB(lbarn: String): IO[Vector[TargetGroup]] = {
+  def getTargetGroupsForNLB(lbarn: String): IO[List[TargetGroup]] = {
     val req = new DescribeTargetGroupsRequest()
       .withLoadBalancerArn(lbarn)
 
     IO(
       cfg.nlb.describeTargetGroups(req)
-    ).map(resp => resp.getTargetGroups.asScala.toVector)
+    ).map(resp => resp.getTargetGroups.asScala.toList)
   }
 
-  def deleteTargetGroups(targetGroups: Vector[TargetGroup]): IO[Unit] = {
+  def deleteTargetGroups(targetGroups: List[TargetGroup]): IO[Unit] = {
     def createRequest(targetGroupARN: String): DeleteTargetGroupRequest =
       new DeleteTargetGroupRequest()
           .withTargetGroupArn(targetGroupARN)
 
     IO{
-      val reqs: Vector[DeleteTargetGroupRequest] = targetGroups.map(targetGroup => createRequest(targetGroup.getTargetGroupArn))
+      val reqs: List[DeleteTargetGroupRequest] = targetGroups.map(targetGroup => createRequest(targetGroup.getTargetGroupArn))
 
       reqs.map(req => cfg.nlb.deleteTargetGroup(req))
       ()
     }
   }
 
-  def createListeners(loadbalancer: LoadBalancer, targetGroups: Vector[TargetGroup]): IO[Vector[Listener]] = {
+  def createListeners(loadbalancer: LoadBalancer, targetGroups: List[TargetGroup]): IO[List[Listener]] = {
 
     def createRequest(lbarn: String, targetGroupARN: String, targetGroupPort: Int): CreateListenerRequest = {
       val defaultAction: Action = new Action()
@@ -208,17 +205,18 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     }
 
     def createSingleListener(request: CreateListenerRequest): IO[Listener] = {
-      IO(
-        cfg.nlb.createListener(request)
-      ).map(resp => resp.getListeners.asScala.toList)
-        .map(listenerList => listenerList.head).recoverWith{
+      (for{
+        response <- IO(cfg.nlb.createListener(request))
+        listenerList = response.getListeners.asScala.toList
+        listener = listenerList.head
+      } yield listener).recoverWith{
         case e: Exception =>
           log.error(s"aws call to create listener for port ${request.getPort} failed")
           IO.raiseError(FailedLoadbalancerDeploy(s"empty result from AWS create Listener call", e.getMessage))
       }
     }
 
-    val reqs: Vector[CreateListenerRequest] = targetGroups.map(tg => createRequest(loadbalancer.getLoadBalancerArn, tg.getTargetGroupArn, tg.getPort))
+    val reqs: List[CreateListenerRequest] = targetGroups.map(tg => createRequest(loadbalancer.getLoadBalancerArn, tg.getTargetGroupArn, tg.getPort))
 
     // (@timperret): I can't think of a way to import this. When I put it at the top,
     // I got all kinds of weird errors saying parameter is "never used".
@@ -226,7 +224,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     reqs.traverse(req => createSingleListener(req))
   }
 
-  def attachASGToTargetGroups(asgName: String, targetGroups: Vector[TargetGroup]): IO[Unit] = {
+  def attachASGToTargetGroups(asgName: String, targetGroups: List[TargetGroup]): IO[Unit] = {
     IO{
       val req = new AttachLoadBalancerTargetGroupsRequest()
         .withAutoScalingGroupName(asgName)
