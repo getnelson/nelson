@@ -163,8 +163,6 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
     val ctgreqs: List[CreateTargetGroupRequest] = p.map(port => createRequest(port, name))
 
-    // (@timperret): I can't think of a way to import this. When I put it at the top,
-    // I got all kinds of weird errors saying parameter is "never used".
     import cats.implicits._
     ctgreqs.traverse(req => createSingleTargetGroup(req))
   }
@@ -219,8 +217,6 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
     val reqs: List[CreateListenerRequest] = targetGroups.map(tg => createRequest(loadbalancer.getLoadBalancerArn, tg.getTargetGroupArn, tg.getPort))
 
-    // (@timperret): I can't think of a way to import this. When I put it at the top,
-    // I got all kinds of weird errors saying parameter is "never used".
     import cats.implicits._
     reqs.traverse(req => createSingleListener(req))
   }
