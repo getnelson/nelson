@@ -31,7 +31,7 @@ import journal.Logger
 final case class ASGSize(desired: Int, min: Int, max: Int)
 
 /*
- * Modeling the internal vs internet ELB schemes
+ * Modeling the internal vs internet NLB schemes
  */
 sealed trait NlbScheme
 final object NlbScheme {

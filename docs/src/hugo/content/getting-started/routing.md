@@ -28,7 +28,7 @@ Reviewing the figure, the runtime workflow works as follows:
 
 ## Load Balancers
 
-In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via "load balancers" (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about [ELB](https://aws.amazon.com/elasticloadbalancing/) and so forth. If, however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.
+In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via "load balancers" (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about [NLB](https://aws.amazon.com/elasticloadbalancing/) and so forth. If, however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.
 
 <div class="clearing">
   <img src="/img/lbs.png"/>

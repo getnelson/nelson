@@ -564,12 +564,12 @@ In order to enable Nelson's support for dynamically provisioning load-balencers 
 
 * [loadbalancer.aws.access-key-id](#loadbalancer-aws-access-key-id)
 * [loadbalancer.aws.availability-zones](#loadbalancer-aws-image)
-* [loadbalancer.aws.elb-security-group-names](#loadbalancer-aws-image)
+* [loadbalancer.aws.nlb-security-group-names](#loadbalancer-aws-image)
 * [loadbalancer.aws.image](#loadbalancer-aws-image)
 * [loadbalancer.aws.launch-template-id](#loadbalancer-aws-launch-template-id)
 * [loadbalancer.aws.region](#loadbalancer-aws-region)
 * [loadbalancer.aws.secret-access-key](#loadbalancer-aws-secret-access-key)
-* [loadbalancer.aws.use-internal-elb](#loadbalancer-use-internal-elb)
+* [loadbalancer.aws.use-internal-nlb](#loadbalancer-use-internal-nlb)
 
 #### loadbalancer.aws.access-key-id
 
@@ -595,14 +595,6 @@ availability-zones {
     public-subnet = "subnet-XXXXXX"
   }
 }
-```
-
-#### loadbalancer.aws.elb-security-group-names
-
-When Nelson launches the load-balancer you can configure the security group that this ELB should be placed in, which allows operators to decide exactly what firewall rules should be in place. Ultimately this allows administrators to ensure that only specified resources get made public.
-
-```
-datacenter.texas.infrastructure.loadbalancer.aws.elb-security-group-names = [ "sg-AAAAAAAA" ]
 ```
 
 #### loadbalancer.aws.image
@@ -637,12 +629,12 @@ To provide Nelson access to AWS to launch the needed resources, provide an AWS a
 datacenter.texas.infrastructure.loadbalancer.aws.secret-access-key = "XXXXXXXXX"
 ```
 
-#### loadbalancer.aws.use-internal-elb
+#### loadbalancer.aws.use-internal-nlb
 
-Depending on your network topology, it can sometimes be desirable to have Nelson spawn internal ELBs, which are not exposed to the internet (and cannot be exposed). In this case, Nelson assumes that you have some kind of VPN or other network route to reach these ELBs.
+Depending on your network topology, it can sometimes be desirable to have Nelson spawn internal NLBs, which are not exposed to the internet (and cannot be exposed). In this case, Nelson assumes that you have some kind of VPN or other network route to reach these NLBs.
 
 ```
-datacenter.texas.infrastructure.loadbalancer.aws.use-internal-elb = true
+datacenter.texas.infrastructure.loadbalancer.aws.use-internal-nlb = true
 ```
 
 ----
