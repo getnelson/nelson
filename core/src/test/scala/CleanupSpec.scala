@@ -69,7 +69,7 @@ class CleanupSpec extends NelsonSuite  {
     val statusBefore = StoreOp.getDeploymentStatus(su.id).foldMap(config.storage).unsafeRunSync()
     statusBefore should equal(Some(DeploymentStatus.Warming))
 
-    val exp = java.time.Instant.now().plusSeconds(1000)
+    val exp = java.time.Instant.now().plusSeconds(1000).truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
 
     StoreOp.createDeploymentExpiration(su.id, exp).foldMap(config.storage).unsafeRunSync()
 
