@@ -91,7 +91,7 @@ object ManifestValidator {
     units: List[UnitDef],
     whiteList: Option[ProxyPortWhitelist]): Valid[Unit] = {
 
-    // NOTE: aws allows elb names to be at most 32 charasters. Nelson generates a name for
+    // NOTE: aws allows nlb names to be at most 32 charasters. Nelson generates a name for
     // lbs that include 8 characters for a hash, 4 characters dashes and at least 1
     // character for version, for a total of 13. Giving the version some wiggle room for
     // a total of 15, so the max length of the name is 32 - 15

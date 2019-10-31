@@ -671,7 +671,7 @@ object Config {
   def readAwsInfrastructure(kfg: KConfig): Option[Infrastructure.Aws] = {
     import com.amazonaws.regions.Region
     import com.amazonaws.regions.RegionUtils
-    import loadbalancers.ElbScheme
+    import loadbalancers.NlbScheme
 
     def lookupRegion(k: KConfig): Option[Region] = {
       k.lookup[String]("region").flatMap(name =>
@@ -683,10 +683,10 @@ object Config {
      * if no scheme is supplied, then the default is to assume internet-facing
      * loadbalancers, maintaining the existing default functionality.
      */
-    def lookupElbScheme(k: KConfig): Option[ElbScheme] =
-      k.lookup[Boolean]("use-internal-elb").map(useInternal =>
-        if(useInternal) ElbScheme.Internal
-        else ElbScheme.External
+    def lookupNlbScheme(k: KConfig): Option[NlbScheme] =
+      k.lookup[Boolean]("use-internal-nlb").map(useInternal =>
+        if(useInternal) NlbScheme.Internal
+        else NlbScheme.External
       )
 
     def readAvailabilityZone(id: String, kfg: KConfig): Infrastructure.AvailabilityZone = {
@@ -717,8 +717,8 @@ object Config {
 
     (lookupRegion(kfg),
      kfg.lookup[String]("launch-template-id"),
-     kfg.lookup[List[String]]("elb-security-group-names"),
-     lookupElbScheme(kfg) orElse Some(ElbScheme.External)
+     kfg.lookup[List[String]]("nlb-security-group-names"),
+     lookupNlbScheme(kfg) orElse Some(NlbScheme.External)
     ).mapN((a,b,c,d) => Infrastructure.Aws(creds,a,b,c.toSet,zones,kfg.lookup[String]("image"),d))
   }
 

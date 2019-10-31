@@ -18,16 +18,13 @@ package nelson
 package loadbalancers
 
 import nelson.Manifest.{Port,Plan}
-
-import com.amazonaws.services.elasticloadbalancingv2.model.{DeleteLoadBalancerRequest,Action,ActionTypeEnum,LoadBalancer,TargetGroup,CreateLoadBalancerRequest,LoadBalancerTypeEnum,CreateTargetGroupRequest,CreateListenerRequest,Listener,TargetTypeEnum,ProtocolEnum}
-import com.amazonaws.services.autoscaling.model.{Tag,CreateAutoScalingGroupRequest,LaunchTemplateSpecification,DeleteAutoScalingGroupRequest,UpdateAutoScalingGroupRequest,AttachLoadBalancerTargetGroupsRequest}
+import com.amazonaws.services.elasticloadbalancingv2.model.{Action, ActionTypeEnum, CreateListenerRequest, CreateLoadBalancerRequest, CreateTargetGroupRequest, DeleteLoadBalancerRequest, DeleteTargetGroupRequest, DescribeLoadBalancersRequest, DescribeTargetGroupsRequest, Listener, LoadBalancer, LoadBalancerTypeEnum, ProtocolEnum, TargetGroup, TargetTypeEnum}
+import com.amazonaws.services.autoscaling.model.{AttachLoadBalancerTargetGroupsRequest, CreateAutoScalingGroupRequest, DeleteAutoScalingGroupRequest, LaunchTemplateSpecification, Tag, UpdateAutoScalingGroupRequest}
 import com.amazonaws.services.autoscaling.model.AmazonAutoScalingException
 
 import cats.~>
 import cats.effect.IO
-import cats.syntax.apply._
 import cats.syntax.applicativeError._
-
 import journal.Logger
 
 final case class ASGSize(desired: Int, min: Int, max: Int)
@@ -35,12 +32,12 @@ final case class ASGSize(desired: Int, min: Int, max: Int)
 /*
  * Modeling the internal vs internet ELB schemes
  */
-sealed trait ElbScheme
-final object ElbScheme {
-  final case object External extends ElbScheme {
+sealed trait NlbScheme
+final object NlbScheme {
+  final case object External extends NlbScheme {
     override def toString: String = "internet-facing"
   }
-  final case object Internal extends ElbScheme {
+  final case object Internal extends NlbScheme {
     override def toString: String = "internal"
   }
 }
@@ -68,7 +65,15 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   def delete(lb: Datacenter.LoadbalancerDeployment): IO[Unit] = {
     val name = loadbalancerName(lb.loadbalancer.name, lb.loadbalancer.version, lb.hash)
-    deleteELB(name) *> deleteASG(name)
+    for {
+      lbarn <- getLoadBalancerArn(name)
+      _ <- deleteNLB(lbarn)
+
+      targetGroups <- getTargetGroupsForNLB(lbarn)
+      _ <- deleteTargetGroups(targetGroups)
+
+      _ <- deleteASG(name)
+    } yield ()
   }
 
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
@@ -79,6 +84,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
     for {
       loadbalancer <- createNLB(name, cfg.lbScheme)
+
       targetGroups <- createTargetGroups(name, lb.routes.map(_.port))
       _ <- createListeners(loadbalancer, targetGroups)
 
@@ -93,16 +99,32 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
     s"$name-${v.minVersion.toExternalString}-${hash}"
 
-  def deleteELB(name: String): IO[Unit] =
-    IO {
-      val req = new DeleteLoadBalancerRequest(name)
-      cfg.elb.deleteLoadBalancer(req)
+  def getLoadBalancerArn(name: String): IO[String] = {
+    val describeLoadBalancerRequest = new DescribeLoadBalancersRequest()
+      .withNames(name)
+    IO(
+      cfg.nlb.describeLoadBalancers(describeLoadBalancerRequest)
+    ).map(resp => resp.getLoadBalancers.asScala.toList)
+      .map(loadbalancerList => loadbalancerList.head.getLoadBalancerArn).recoverWith{
+      case e: Exception =>
+        log.error(s"aws call to get loadbalancer ARN ${describeLoadBalancerRequest.getNames.asScala.head} failed.")
+        IO.raiseError(FailedLoadbalancerDeploy(s"could not find loadbalancer and therefore could not delete loadbalancer", e.getMessage))
+    }
+  }
+
+  def deleteNLB(lbarn: String): IO[Unit] = {
+    IO{
+      val req: DeleteLoadBalancerRequest = new DeleteLoadBalancerRequest()
+        .withLoadBalancerArn(lbarn)
+
+      cfg.nlb.deleteLoadBalancer(req)
       ()
     }
+  }
 
   // https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/elasticloadbalancingv2/model/CreateLoadBalancerResult.html
   // has no method getDNS().
-  def createNLB(name: String, scheme: ElbScheme): IO[LoadBalancer] = {
+  def createNLB(name: String, scheme: NlbScheme): IO[LoadBalancer] = {
     IO {
       val req = new CreateLoadBalancerRequest()
         .withName(name)
@@ -110,7 +132,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withScheme(scheme.toString)
         .withSubnets(cfg.availabilityZones.map(_.publicSubnet).asJava)
 
-      val resp = cfg.elb.createLoadBalancer(req)
+      val resp = cfg.nlb.createLoadBalancer(req)
       val loadbalancers: List[LoadBalancer] = resp.getLoadBalancers.asScala.toList
 
       loadbalancers.head
@@ -131,7 +153,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
     def createSingleTargetGroup(request: CreateTargetGroupRequest): IO[TargetGroup] = {
       IO(
-        cfg.elb.createTargetGroup(request)
+        cfg.nlb.createTargetGroup(request)
       )
         .map(resp => resp.getTargetGroups().asScala.toList)
           .map(targetGroupList => targetGroupList.head).recoverWith{
@@ -147,6 +169,28 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     // I got all kinds of weird errors saying parameter is "never used".
     import cats.implicits._
     ctgreqs.traverse(req => createSingleTargetGroup(req))
+  }
+
+  def getTargetGroupsForNLB(lbarn: String): IO[Vector[TargetGroup]] = {
+    val req = new DescribeTargetGroupsRequest()
+      .withLoadBalancerArn(lbarn)
+
+    IO(
+      cfg.nlb.describeTargetGroups(req)
+    ).map(resp => resp.getTargetGroups.asScala.toVector)
+  }
+
+  def deleteTargetGroups(targetGroups: Vector[TargetGroup]): IO[Unit] = {
+    def createRequest(targetGroupARN: String): DeleteTargetGroupRequest =
+      new DeleteTargetGroupRequest()
+          .withTargetGroupArn(targetGroupARN)
+
+    IO{
+      val reqs: Vector[DeleteTargetGroupRequest] = targetGroups.map(targetGroup => createRequest(targetGroup.getTargetGroupArn))
+
+      reqs.map(req => cfg.nlb.deleteTargetGroup(req))
+      ()
+    }
   }
 
   def createListeners(loadbalancer: LoadBalancer, targetGroups: Vector[TargetGroup]): IO[Vector[Listener]] = {
@@ -165,7 +209,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
     def createSingleListener(request: CreateListenerRequest): IO[Listener] = {
       IO(
-        cfg.elb.createListener(request)
+        cfg.nlb.createListener(request)
       ).map(resp => resp.getListeners.asScala.toList)
         .map(listenerList => listenerList.head).recoverWith{
         case e: Exception =>
