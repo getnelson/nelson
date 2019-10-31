@@ -717,9 +717,8 @@ object Config {
 
     (lookupRegion(kfg),
      kfg.lookup[String]("launch-template-id"),
-     kfg.lookup[List[String]]("nlb-security-group-names"),
      lookupNlbScheme(kfg) orElse Some(NlbScheme.External)
-    ).mapN((a,b,c,d) => Infrastructure.Aws(creds,a,b,c.toSet,zones,kfg.lookup[String]("image"),d))
+    ).mapN((a,b,c) => Infrastructure.Aws(creds,a,b,zones,kfg.lookup[String]("image"),c))
   }
 
   private def readNomad(cfg: KConfig): NomadConfig =

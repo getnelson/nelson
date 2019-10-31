@@ -112,7 +112,6 @@ object Infrastructure {
     private val creds: AWSCredentialsProviderChain,
     region: Region,
     launchTemplateId: String,
-    nlbSecurityGroupNames: Set[String],
     availabilityZones: Set[AvailabilityZone] = Set.empty,
     image: Option[String],
     lbScheme: loadbalancers.NlbScheme

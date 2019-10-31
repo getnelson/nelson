@@ -25,6 +25,7 @@ import com.amazonaws.services.autoscaling.model.{AmazonAutoScalingException,Atta
 import cats.~>
 import cats.effect.IO
 import cats.syntax.applicativeError._
+
 import journal.Logger
 
 final case class ASGSize(desired: Int, min: Int, max: Int)
@@ -92,9 +93,9 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     } yield loadbalancer.getDNSName
   }
 
-  // The target group has this restriction where
-  // the name of the target group can't have "double dashes". I want the loadbalancer name
-  // to match the target group name, so the loadbalancer won't have the double dashes either.
+  // The target group has this restriction where the name of the target group can't
+  // have "double dashes". The loadbalancer name should match the target group name,
+  // so the loadbalancer won't have the double dashes either.
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
     s"$name-${v.minVersion.toExternalString}-${hash}"
 
