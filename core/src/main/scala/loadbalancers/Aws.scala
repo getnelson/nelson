@@ -79,13 +79,14 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
     val name = loadbalancerName(lb.name, v, hash)
+    val tgPrefix = targetGroupNamePrefix(lb.name, v)
     log.debug(s"calling aws client to launch $name")
     val size = asgSize(p)
 
     for {
       loadbalancer <- createNLB(name, cfg.lbScheme)
 
-      targetGroups <- createTargetGroups(name, lb.routes.toList.map(_.port))
+      targetGroups <- createTargetGroups(tgPrefix, lb.routes.toList.map(_.port), loadbalancer.getVpcId)
       _ <- createListeners(loadbalancer, targetGroups)
 
       _ <- createASG(name, ns, size)
@@ -93,11 +94,19 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     } yield loadbalancer.getDNSName
   }
 
-  // The target group has this restriction where the name of the target group can't
-  // have "double dashes". The loadbalancer name should match the target group name,
-  // so the loadbalancer won't have the double dashes either.
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
-    s"$name-${v.minVersion.toExternalString}-${hash}"
+    s"$name--${v.minVersion.toExternalString}--${hash}"
+
+  // The target groups have this restriction where the name of the target group can't
+  // have "double dashes" and the entire name must be less than 32 characters.
+  // Unfortunately, target groups will not have the same name as the loadbalancers.
+  // An example target group will be named stack-1-0-0-443 where the last number is the
+  // port that it listens on instead of the hash. This allows stack-1-0-0-80 to be
+  // a different target group for the same loadbalancer. Since target groups are only
+  // associated with loadbalancer at a time, it'll be easy to reason about which target
+  // groups are related to which loadbalancers.
+  def targetGroupNamePrefix(name: String, v: MajorVersion) =
+    s"$name-${v.minVersion.toExternalString}"
 
   def getLoadBalancerArn(name: String): IO[String] = {
     val describeLoadBalancerRequest = new DescribeLoadBalancersRequest().withNames(name)
@@ -121,8 +130,6 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       ()
     }
 
-  // https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/elasticloadbalancingv2/model/CreateLoadBalancerResult.html
-  // has no method getDNS().
   def createNLB(name: String, scheme: NlbScheme): IO[LoadBalancer] = {
     IO {
       val req = new CreateLoadBalancerRequest()
@@ -140,14 +147,15 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     }
   }
 
-  def createTargetGroups(name: String, p: List[Port]): IO[List[TargetGroup]] = {
+  def createTargetGroups(targetGroupNamePrefix: String, p: List[Port], vpcID: String): IO[List[TargetGroup]] = {
 
-    def createRequest(p: Manifest.Port, name: String): CreateTargetGroupRequest =
+    def createRequest(p: Manifest.Port): CreateTargetGroupRequest =
       new CreateTargetGroupRequest()
         .withPort(p.port)
         .withProtocol(ProtocolEnum.TCP)
-        .withName(name+"-"+ p.port.toString())
+        .withName(targetGroupNamePrefix+"-"+ p.port.toString())
         .withTargetType(TargetTypeEnum.Instance)
+        .withVpcId(vpcID)
 
     def createSingleTargetGroup(request: CreateTargetGroupRequest): IO[TargetGroup] = {
       (for {
@@ -161,7 +169,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       }
     }
 
-    val ctgreqs: List[CreateTargetGroupRequest] = p.map(port => createRequest(port, name))
+    val ctgreqs: List[CreateTargetGroupRequest] = p.map(port => createRequest(port))
 
     import cats.implicits._
     ctgreqs.traverse(req => createSingleTargetGroup(req))
@@ -260,6 +268,10 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       cfg.asg.updateAutoScalingGroup(req)
 
       ()
+    }.map(_ => ()).recoverWith {
+      case t: AmazonAutoScalingException if t.getErrorMessage.contains("not found") =>
+        log.info(s"aws call to resize asg responded with ${t.getMessage} for ${name}, swallowing error and doing nothing")
+        IO.unit
     }
 
   def createASG(name: String, namespace: NamespaceName, size: ASGSize): IO[Unit] =
