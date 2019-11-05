@@ -112,12 +112,11 @@ object Infrastructure {
     private val creds: AWSCredentialsProviderChain,
     region: Region,
     launchTemplateId: String,
-    elbSecurityGroupNames: Set[String],
     availabilityZones: Set[AvailabilityZone] = Set.empty,
     image: Option[String],
-    lbScheme: loadbalancers.ElbScheme
+    lbScheme: loadbalancers.NlbScheme
   ) {
-    import com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClientBuilder
+    import com.amazonaws.services.elasticloadbalancingv2.AmazonElasticLoadBalancingClientBuilder
     import com.amazonaws.services.autoscaling.AmazonAutoScalingClientBuilder
 
     val asg = AmazonAutoScalingClientBuilder
@@ -126,7 +125,7 @@ object Infrastructure {
       .withRegion(region.getName)
       .build()
 
-    val elb = AmazonElasticLoadBalancingClientBuilder
+    val nlb = AmazonElasticLoadBalancingClientBuilder
       .standard
       .withCredentials(creds)
       .withRegion(region.getName)
