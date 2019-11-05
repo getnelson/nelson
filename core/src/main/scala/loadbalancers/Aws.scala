@@ -149,7 +149,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       new CreateTargetGroupRequest()
         .withPort(p.port)
         .withProtocol(ProtocolEnum.TCP)
-        .withName(targetGroupNamePrefix+"-"+ p.port.toString())
+        .withName(s"${targetGroupNamePrefix}-${p.port.toString}")
         .withTargetType(TargetTypeEnum.Instance)
         .withVpcId(vpcID)
 
