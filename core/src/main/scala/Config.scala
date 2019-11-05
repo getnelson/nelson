@@ -716,8 +716,8 @@ object Config {
     val creds = buildProviderChain(kfg)
 
     (lookupRegion(kfg),
-     kfg.lookup[String]("launch-template-id"),
-     lookupNlbScheme(kfg) orElse Some(NlbScheme.External)
+      kfg.lookup[String]("launch-template-id"),
+      lookupNlbScheme(kfg) orElse Some(NlbScheme.External)
     ).mapN((a,b,c) => Infrastructure.Aws(creds,a,b,zones,kfg.lookup[String]("image"),c))
   }
 

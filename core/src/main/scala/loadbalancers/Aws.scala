@@ -84,14 +84,12 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     val size = asgSize(p)
 
     for {
-      loadbalancer <- createNLB(name, cfg.lbScheme)
-
-      targetGroups <- createTargetGroups(tgPrefix, lb.routes.toList.map(_.port), loadbalancer.getVpcId)
-      _ <- createListeners(loadbalancer, targetGroups)
-
+      l <- createNLB(name, cfg.lbScheme)
+      t <- createTargetGroups(tgPrefix, lb.routes.toList.map(_.port), l.getVpcId)
+      _ <- createListeners(l, t)
       _ <- createASG(name, ns, size)
-      _ <- attachASGToTargetGroups(name, targetGroups)
-    } yield loadbalancer.getDNSName
+      _ <- attachASGToTargetGroups(name, t)
+    } yield l.getDNSName
   }
 
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
@@ -111,10 +109,10 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
   def getLoadBalancerArn(name: String): IO[String] = {
     val describeLoadBalancerRequest = new DescribeLoadBalancersRequest().withNames(name)
     (for {
-      response          <- IO(cfg.nlb.describeLoadBalancers(describeLoadBalancerRequest))
-      loadbalancerList  = response.getLoadBalancers.asScala.toList
-      loadbalancerARN   = loadbalancerList.head.getLoadBalancerArn
-    } yield loadbalancerARN).recoverWith{
+      r <- IO(cfg.nlb.describeLoadBalancers(describeLoadBalancerRequest))
+      x = r.getLoadBalancers.asScala.toList
+      a = x.head.getLoadBalancerArn
+    } yield a).recoverWith{
       case e: Exception =>
         log.error(s"aws call to get loadbalancer ARN ${describeLoadBalancerRequest.getNames.asScala.head} failed.")
         IO.raiseError(FailedLoadbalancerDeploy(s"could not find loadbalancer and therefore could not delete loadbalancer", e.getMessage))
@@ -123,7 +121,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   def deleteNLB(lbarn: String): IO[Unit] =
     IO {
-      val req: DeleteLoadBalancerRequest = new DeleteLoadBalancerRequest()
+      val req = new DeleteLoadBalancerRequest()
         .withLoadBalancerArn(lbarn)
 
       cfg.nlb.deleteLoadBalancer(req)
@@ -141,9 +139,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       val resp = cfg.nlb.createLoadBalancer(req)
       val loadbalancers: List[LoadBalancer] = resp.getLoadBalancers.asScala.toList
 
-      loadbalancers.head
-    }.recoverWith {
-      case e: java.lang.NullPointerException => IO.raiseError(FailedLoadbalancerDeploy("AWS call return an empty list of loadbalancers", e.getMessage))
+      loadbalancers.headOption.yolo("AWS call return an empty list of loadbalancers")
     }
   }
 
@@ -159,13 +155,12 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
     def createSingleTargetGroup(request: CreateTargetGroupRequest): IO[TargetGroup] = {
       (for {
-        response <- IO(cfg.nlb.createTargetGroup(request))
-        targetGroupList = response.getTargetGroups.asScala.toList
-        targetGroup = targetGroupList.head
-      } yield targetGroup).recoverWith{
-            case e: Exception =>
-              log.error(s"aws call to create target group for ${request.getName} failed.")
-              IO.raiseError(FailedLoadbalancerDeploy("empty result from AWS something something", e.getMessage))
+        r <- IO(cfg.nlb.createTargetGroup(request))
+        l = r.getTargetGroups.asScala.toList
+      } yield l.head).recoverWith {
+        case e: Exception =>
+          log.error(s"aws call to create target group for ${request.getName} failed.")
+          IO.raiseError(FailedLoadbalancerDeploy("empty result from AWS something something", e.getMessage))
       }
     }
 
@@ -179,28 +174,21 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     val req = new DescribeTargetGroupsRequest()
       .withLoadBalancerArn(lbarn)
 
-    IO(
-      cfg.nlb.describeTargetGroups(req)
-    ).map(resp => resp.getTargetGroups.asScala.toList)
+    IO(cfg.nlb.describeTargetGroups(req)
+      ).map(resp => resp.getTargetGroups.asScala.toList)
   }
 
-  def deleteTargetGroups(targetGroups: List[TargetGroup]): IO[Unit] = {
-    def createRequest(targetGroupARN: String): DeleteTargetGroupRequest =
-      new DeleteTargetGroupRequest()
-          .withTargetGroupArn(targetGroupARN)
-
-    IO{
-      val reqs: List[DeleteTargetGroupRequest] = targetGroups.map(targetGroup => createRequest(targetGroup.getTargetGroupArn))
-
-      reqs.map(req => cfg.nlb.deleteTargetGroup(req))
-      ()
-    }
-  }
+  def deleteTargetGroups(targetGroups: List[TargetGroup]): IO[Unit] =
+    IO {
+      targetGroups
+        .map(tg => new DeleteTargetGroupRequest().withTargetGroupArn(tg.getTargetGroupArn))
+        .map(req => cfg.nlb.deleteTargetGroup(req))
+    }.map(_ => ())
 
   def createListeners(loadbalancer: LoadBalancer, targetGroups: List[TargetGroup]): IO[List[Listener]] = {
 
     def createRequest(lbarn: String, targetGroupARN: String, targetGroupPort: Int): CreateListenerRequest = {
-      val defaultAction: Action = new Action()
+      val defaultAction = new Action()
         .withType(ActionTypeEnum.Forward)
         .withTargetGroupArn(targetGroupARN)
 
@@ -213,41 +201,37 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
     def createSingleListener(request: CreateListenerRequest): IO[Listener] = {
       (for{
-        response <- IO(cfg.nlb.createListener(request))
-        listenerList = response.getListeners.asScala.toList
-        listener = listenerList.head
-      } yield listener).recoverWith{
+        r <- IO(cfg.nlb.createListener(request))
+        l = r.getListeners.asScala.toList
+      } yield l.head).recoverWith{
         case e: Exception =>
           log.error(s"aws call to create listener for port ${request.getPort} failed")
           IO.raiseError(FailedLoadbalancerDeploy(s"empty result from AWS create Listener call", e.getMessage))
       }
     }
 
-    val reqs: List[CreateListenerRequest] = targetGroups.map(tg => createRequest(loadbalancer.getLoadBalancerArn, tg.getTargetGroupArn, tg.getPort))
-
     import cats.implicits._
-    reqs.traverse(req => createSingleListener(req))
+
+    targetGroups
+      .map(tg => createRequest(loadbalancer.getLoadBalancerArn, tg.getTargetGroupArn, tg.getPort))
+      .traverse(req => createSingleListener(req))
   }
 
   def attachASGToTargetGroups(asgName: String, targetGroups: List[TargetGroup]): IO[Unit] = {
-    IO{
-      val req = new AttachLoadBalancerTargetGroupsRequest()
-        .withAutoScalingGroupName(asgName)
-        .withTargetGroupARNs(targetGroups.map(tg => tg.getTargetGroupArn).asJava)
+    val arns = targetGroups.map(_.getTargetGroupArn)
+    val req = new AttachLoadBalancerTargetGroupsRequest()
+      .withAutoScalingGroupName(asgName)
+      .withTargetGroupARNs(arns.asJava)
 
-      cfg.asg.attachLoadBalancerTargetGroups(req)
-
-      ()
-    }
+    IO(cfg.asg.attachLoadBalancerTargetGroups(req)).map(_ => ())
   }
 
-  def deleteASG(name: String): IO[Unit] =
-    IO {
-      val req = new DeleteAutoScalingGroupRequest()
-        .withAutoScalingGroupName(name)
-        .withForceDelete(true) // terminates all associated ec2s
-      cfg.asg.deleteAutoScalingGroup(req)
-    }.map(_ => ()).recoverWith {
+  def deleteASG(name: String): IO[Unit] = {
+    val req = new DeleteAutoScalingGroupRequest()
+      .withAutoScalingGroupName(name)
+      .withForceDelete(true) // terminates all associated ec2s
+
+    IO(cfg.asg.deleteAutoScalingGroup(req)).map(_ => ()).recoverWith {
       // Matching on the error message is only way to detect a 404. I trolled the aws
       // documnetation and this is the best I could find, super janky.
       // swallow 404, as we're being asked to delete something that does not exist
@@ -256,23 +240,21 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         log.info(s"aws call to delete asg responded with ${t.getMessage} for ${name}, swallowing error and marking deployment as terminated")
         IO.unit
     }
+  }
 
-  def resizeASG(name: String, size: ASGSize): IO[Unit] =
-    IO {
-      val req = new UpdateAutoScalingGroupRequest()
-        .withAutoScalingGroupName(name)
-        .withDesiredCapacity(size.desired)
-        .withMaxSize(size.max)
-        .withMinSize(size.min)
+  def resizeASG(name: String, size: ASGSize): IO[Unit] = {
+    val req = new UpdateAutoScalingGroupRequest()
+      .withAutoScalingGroupName(name)
+      .withDesiredCapacity(size.desired)
+      .withMaxSize(size.max)
+      .withMinSize(size.min)
 
-      cfg.asg.updateAutoScalingGroup(req)
-
-      ()
-    }.map(_ => ()).recoverWith {
+    IO(cfg.asg.updateAutoScalingGroup(req)).map(_ => ()).recoverWith {
       case t: AmazonAutoScalingException if t.getErrorMessage.contains("not found") =>
         log.info(s"aws call to resize asg responded with ${t.getMessage} for ${name}, swallowing error and doing nothing")
         IO.unit
     }
+  }
 
   def createASG(name: String, namespace: NamespaceName, size: ASGSize): IO[Unit] =
     IO {
