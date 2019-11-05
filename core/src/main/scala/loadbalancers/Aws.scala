@@ -20,7 +20,7 @@ package loadbalancers
 import nelson.Manifest.{Port,Plan}
 
 import com.amazonaws.services.elasticloadbalancingv2.model.{Action,ActionTypeEnum,CreateListenerRequest,CreateLoadBalancerRequest,CreateTargetGroupRequest,DeleteLoadBalancerRequest,DeleteTargetGroupRequest,DescribeLoadBalancersRequest,DescribeTargetGroupsRequest,Listener,LoadBalancer,LoadBalancerTypeEnum,ProtocolEnum,TargetGroup,TargetTypeEnum}
-import com.amazonaws.services.autoscaling.model.{AmazonAutoScalingException,AttachLoadBalancerTargetGroupsRequest, CreateAutoScalingGroupRequest, DeleteAutoScalingGroupRequest, LaunchTemplateSpecification, Tag, UpdateAutoScalingGroupRequest}
+import com.amazonaws.services.autoscaling.model.{AmazonAutoScalingException,AttachLoadBalancerTargetGroupsRequest,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,LaunchTemplateSpecification,Tag,UpdateAutoScalingGroupRequest}
 
 import cats.~>
 import cats.effect.IO
@@ -80,7 +80,6 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
     val name = loadbalancerName(lb.name, v, hash)
     val tgPrefix = targetGroupNamePrefix(lb.name, v)
-    log.debug(s"calling aws client to launch $name")
     val size = asgSize(p)
 
     for {
@@ -95,13 +94,13 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
   def loadbalancerName(name: String, v: MajorVersion, hash: String) =
     s"$name--${v.minVersion.toExternalString}--${hash}"
 
-  // The target groups have this restriction where the name of the target group can't
+  // The target groups have a restriction such that name of the target group can't
   // have "double dashes" and the entire name must be less than 32 characters.
   // Unfortunately, target groups will not have the same name as the loadbalancers.
   // An example target group will be named stack-1-0-0-443 where the last number is the
-  // port that it listens on instead of the hash. This allows stack-1-0-0-80 to be
+  // port that it listens on (instead of the hash). This allows stack-1-0-0-80 to be
   // a different target group for the same loadbalancer. Since target groups are only
-  // associated with loadbalancer at a time, it'll be easy to reason about which target
+  // associated with a single loadbalancer at a time, it'll be easy to reason about which target
   // groups are related to which loadbalancers.
   def targetGroupNamePrefix(name: String, v: MajorVersion) =
     s"$name-${v.minVersion.toExternalString}"
@@ -160,7 +159,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       } yield l.head).recoverWith {
         case e: Exception =>
           log.error(s"aws call to create target group for ${request.getName} failed.")
-          IO.raiseError(FailedLoadbalancerDeploy("empty result from AWS something something", e.getMessage))
+          IO.raiseError(FailedLoadbalancerDeploy("empty result from AWS create target group call", e.getMessage))
       }
     }
 
