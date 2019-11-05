@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?5e47c88b57d1d0d199bac763ebddb110" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?f74ef62a3fecb6eb89f2aab1c45fb831" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?7028664c71fd7e7f32d3a72b4bbdde29" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?f0139762fad5a917146eadb53802c18a" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -732,12 +732,11 @@ key_prefix &quot;_rexec&quot; {
 <ul>
 <li><a href="#loadbalancer-aws-access-key-id">loadbalancer.aws.access-key-id</a></li>
 <li><a href="#loadbalancer-aws-image">loadbalancer.aws.availability-zones</a></li>
-<li><a href="#loadbalancer-aws-image">loadbalancer.aws.elb-security-group-names</a></li>
 <li><a href="#loadbalancer-aws-image">loadbalancer.aws.image</a></li>
 <li><a href="#loadbalancer-aws-launch-template-id">loadbalancer.aws.launch-template-id</a></li>
 <li><a href="#loadbalancer-aws-region">loadbalancer.aws.region</a></li>
 <li><a href="#loadbalancer-aws-secret-access-key">loadbalancer.aws.secret-access-key</a></li>
-<li><a href="#loadbalancer-use-internal-elb">loadbalancer.aws.use-internal-elb</a></li>
+<li><a href="#loadbalancer-use-internal-nlb">loadbalancer.aws.use-internal-nlb</a></li>
 </ul>
 
 <h4 id="loadbalancer-aws-access-key-id">loadbalancer.aws.access-key-id</h4>
@@ -762,13 +761,6 @@ datacenter.texas.infrastructure.loadbalancer.aws.access-key-id = &quot;XXXXXXXXX
     public-subnet = &quot;subnet-XXXXXX&quot;
   }
 }
-</code></pre>
-
-<h4 id="loadbalancer-aws-elb-security-group-names">loadbalancer.aws.elb-security-group-names</h4>
-
-<p>When Nelson launches the load-balancer you can configure the security group that this ELB should be placed in, which allows operators to decide exactly what firewall rules should be in place. Ultimately this allows administrators to ensure that only specified resources get made public.</p>
-
-<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.elb-security-group-names = [ &quot;sg-AAAAAAAA&quot; ]
 </code></pre>
 
 <h4 id="loadbalancer-aws-image">loadbalancer.aws.image</h4>
@@ -799,11 +791,11 @@ datacenter.texas.infrastructure.loadbalancer.aws.access-key-id = &quot;XXXXXXXXX
 <pre><code>datacenter.texas.infrastructure.loadbalancer.aws.secret-access-key = &quot;XXXXXXXXX&quot;
 </code></pre>
 
-<h4 id="loadbalancer-aws-use-internal-elb">loadbalancer.aws.use-internal-elb</h4>
+<h4 id="loadbalancer-aws-use-internal-nlb">loadbalancer.aws.use-internal-nlb</h4>
 
-<p>Depending on your network topology, it can sometimes be desirable to have Nelson spawn internal ELBs, which are not exposed to the internet (and cannot be exposed). In this case, Nelson assumes that you have some kind of VPN or other network route to reach these ELBs.</p>
+<p>Depending on your network topology, it can sometimes be desirable to have Nelson spawn internal NLBs, which are not exposed to the internet (and cannot be exposed). In this case, Nelson assumes that you have some kind of VPN or other network route to reach these NLBs.</p>
 
-<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.use-internal-elb = true
+<pre><code>datacenter.texas.infrastructure.loadbalancer.aws.use-internal-nlb = true
 </code></pre>
 
 <hr />
@@ -1289,7 +1281,7 @@ with Github OAuth because we&rsquo;re developing locally (potentially even offli
         </p>
         <p>
           Currently v
-                    0.14.179
+                    0.15.180
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -1310,9 +1302,9 @@ with Github OAuth because we&rsquo;re developing locally (potentially even offli
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?88ad3aec29779972f160c406f8030671"></script>
+<script src="/js/material.min.js?df40a7719aadab29be977981ee814ebe"></script>
 
-<script src="/js/nelson.js?7477da7257f31114172fec2e54fdcf87"></script>
+<script src="/js/nelson.js?661dd661b1c39a0459ad8c366e436451"></script>
 
 
   </body>

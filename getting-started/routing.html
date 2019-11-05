@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?a8da18c681619fc55c580c9aa9002a79" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?084f1776b18f14e2b664a8305585aec6" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?519b7e81b44328130cbf0fcd0ffc8ff5" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?cd7c001cd261174c7334f7f36711929a" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -200,7 +200,7 @@
 
 <h2 id="load-balancers">Load Balancers</h2>
 
-<p>In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via &ldquo;load balancers&rdquo; (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about <a href="https://aws.amazon.com/elasticloadbalancing/">ELB</a> and so forth. If, however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.</p>
+<p>In addition to service to service routing, Nelson also supports routing traffic into the runtime cluster via &ldquo;load balancers&rdquo; (LBs). Nelson treats these as a logical concept, and supports multiple backend implementations; this means that if Nelson has one datacenter in AWS, it knows about <a href="https://aws.amazon.com/elasticloadbalancing/">NLB</a> and so forth. If, however, you have another datacenter not on a public cloud, Nelson can have alternative backends that do the needful to configure your datacenter for external traffic. The workflow at a high-level is depicted in figure 1.2.</p>
 
 <div class="clearing">
   <img src="/img/lbs.png"/>
@@ -322,7 +322,7 @@
         </p>
         <p>
           Currently v
-                    0.14.179
+                    0.15.180
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -343,9 +343,9 @@
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?b0a95fe49043039712754f32e15dfb36"></script>
+<script src="/js/material.min.js?2624eb964c3616d3e6aae1f85d28d1b8"></script>
 
-<script src="/js/nelson.js?25060f57705029cc3e78b34693baf2e3"></script>
+<script src="/js/nelson.js?b668e6c3b2a5974cf8ca136b72ef03f3"></script>
 
 
   </body>

@@ -110,10 +110,6 @@
                         <a class="class" href="" title=""></a>
                         <a href="" title="">Aws</a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="ElbScheme$.html" title=""></a>
-                        <a class="trait" href="ElbScheme.html" title=""></a>
-                        <a href="ElbScheme.html" title="">ElbScheme</a>
-                      </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="Inbound.html" title="Represents an incomming loadbalancer."></a>
                         <a href="Inbound.html" title="Represents an incomming loadbalancer.">Inbound</a>
@@ -125,6 +121,10 @@
                         <a class="object" href="LoadbalancerOp$.html" title=""></a>
                         <a class="class" href="LoadbalancerOp.html" title=""></a>
                         <a href="LoadbalancerOp.html" title="">LoadbalancerOp</a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="NlbScheme$.html" title=""></a>
+                        <a class="trait" href="NlbScheme.html" title=""></a>
+                        <a href="NlbScheme.html" title="">NlbScheme</a>
                       </li>
               </ul>
             </div>
@@ -341,6 +341,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="nelson.loadbalancers.Aws#attachASGToTargetGroups" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="attachASGToTargetGroups(asgName:String,targetGroups:List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]):cats.effect.IO[Unit]"></a><a id="attachASGToTargetGroups(String,List[TargetGroup]):IO[Unit]"></a>
+      <span class="permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#attachASGToTargetGroups(asgName:String,targetGroups:List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]):cats.effect.IO[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">attachASGToTargetGroups</span><span class="params">(<span name="asgName">asgName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="targetGroups">targetGroups: <span class="extype" name="scala.List">List</span>[<span class="extype" name="com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup">TargetGroup</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -397,10 +413,10 @@
       </span>
       
       
-    </li><li name="nelson.loadbalancers.Aws#createELB" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createELB(name:String,p:Vector[nelson.Manifest.Port],scheme:nelson.loadbalancers.ElbScheme):cats.effect.IO[nelson.DNSName]"></a><a id="createELB(String,Vector[Port],ElbScheme):IO[DNSName]"></a>
+    </li><li name="nelson.loadbalancers.Aws#createListeners" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="createListeners(loadbalancer:com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer,targetGroups:List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]):cats.effect.IO[List[com.amazonaws.services.elasticloadbalancingv2.model.Listener]]"></a><a id="createListeners(LoadBalancer,List[TargetGroup]):IO[List[Listener]]"></a>
       <span class="permalink">
-      <a href="../../nelson/loadbalancers/Aws.html#createELB(name:String,p:Vector[nelson.Manifest.Port],scheme:nelson.loadbalancers.ElbScheme):cats.effect.IO[nelson.DNSName]" title="Permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#createListeners(loadbalancer:com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer,targetGroups:List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]):cats.effect.IO[List[com.amazonaws.services.elasticloadbalancingv2.model.Listener]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -409,7 +425,39 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createELB</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="p">p: <span class="extype" name="scala.Vector">Vector</span>[<a href="../Manifest$$Port.html" class="extype" name="nelson.Manifest.Port">Port</a>]</span>, <span name="scheme">scheme: <a href="ElbScheme.html" class="extype" name="nelson.loadbalancers.ElbScheme">ElbScheme</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="../index.html#DNSName=String" class="extmbr" name="nelson.DNSName">DNSName</a>]</span>
+        <span class="name">createListeners</span><span class="params">(<span name="loadbalancer">loadbalancer: <span class="extype" name="com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer">LoadBalancer</span></span>, <span name="targetGroups">targetGroups: <span class="extype" name="scala.List">List</span>[<span class="extype" name="com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup">TargetGroup</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="com.amazonaws.services.elasticloadbalancingv2.model.Listener">Listener</span>]]</span>
+      </span>
+      
+      
+    </li><li name="nelson.loadbalancers.Aws#createNLB" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="createNLB(name:String,scheme:nelson.loadbalancers.NlbScheme):cats.effect.IO[com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer]"></a><a id="createNLB(String,NlbScheme):IO[LoadBalancer]"></a>
+      <span class="permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#createNLB(name:String,scheme:nelson.loadbalancers.NlbScheme):cats.effect.IO[com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createNLB</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="scheme">scheme: <a href="NlbScheme.html" class="extype" name="nelson.loadbalancers.NlbScheme">NlbScheme</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer">LoadBalancer</span>]</span>
+      </span>
+      
+      
+    </li><li name="nelson.loadbalancers.Aws#createTargetGroups" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="createTargetGroups(targetGroupNamePrefix:String,p:List[nelson.Manifest.Port],vpcID:String):cats.effect.IO[List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]]"></a><a id="createTargetGroups(String,List[Port],String):IO[List[TargetGroup]]"></a>
+      <span class="permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#createTargetGroups(targetGroupNamePrefix:String,p:List[nelson.Manifest.Port],vpcID:String):cats.effect.IO[List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createTargetGroups</span><span class="params">(<span name="targetGroupNamePrefix">targetGroupNamePrefix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="p">p: <span class="extype" name="scala.List">List</span>[<a href="../Manifest$$Port.html" class="extype" name="nelson.Manifest.Port">Port</a>]</span>, <span name="vpcID">vpcID: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup">TargetGroup</span>]]</span>
       </span>
       
       
@@ -445,10 +493,10 @@
       </span>
       
       
-    </li><li name="nelson.loadbalancers.Aws#deleteELB" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="deleteELB(name:String):cats.effect.IO[Unit]"></a><a id="deleteELB(String):IO[Unit]"></a>
+    </li><li name="nelson.loadbalancers.Aws#deleteNLB" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deleteNLB(lbarn:String):cats.effect.IO[Unit]"></a><a id="deleteNLB(String):IO[Unit]"></a>
       <span class="permalink">
-      <a href="../../nelson/loadbalancers/Aws.html#deleteELB(name:String):cats.effect.IO[Unit]" title="Permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#deleteNLB(lbarn:String):cats.effect.IO[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -457,7 +505,23 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteELB</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+        <span class="name">deleteNLB</span><span class="params">(<span name="lbarn">lbarn: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+      </span>
+      
+      
+    </li><li name="nelson.loadbalancers.Aws#deleteTargetGroups" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deleteTargetGroups(targetGroups:List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]):cats.effect.IO[Unit]"></a><a id="deleteTargetGroups(List[TargetGroup]):IO[Unit]"></a>
+      <span class="permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#deleteTargetGroups(targetGroups:List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]):cats.effect.IO[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deleteTargetGroups</span><span class="params">(<span name="targetGroups">targetGroups: <span class="extype" name="scala.List">List</span>[<span class="extype" name="com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup">TargetGroup</span>]</span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
       </span>
       
       
@@ -534,6 +598,38 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="nelson.loadbalancers.Aws#getLoadBalancerArn" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getLoadBalancerArn(name:String):cats.effect.IO[String]"></a><a id="getLoadBalancerArn(String):IO[String]"></a>
+      <span class="permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#getLoadBalancerArn(name:String):cats.effect.IO[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getLoadBalancerArn</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      
+    </li><li name="nelson.loadbalancers.Aws#getTargetGroupsForNLB" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getTargetGroupsForNLB(lbarn:String):cats.effect.IO[List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]]"></a><a id="getTargetGroupsForNLB(String):IO[List[TargetGroup]]"></a>
+      <span class="permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#getTargetGroupsForNLB(lbarn:String):cats.effect.IO[List[com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getTargetGroupsForNLB</span><span class="params">(<span name="lbarn">lbarn: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="com.amazonaws.services.elasticloadbalancingv2.model.TargetGroup">TargetGroup</span>]]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
@@ -719,6 +815,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="nelson.loadbalancers.Aws#targetGroupNamePrefix" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="targetGroupNamePrefix(name:String,v:nelson.MajorVersion):String"></a><a id="targetGroupNamePrefix(String,MajorVersion):String"></a>
+      <span class="permalink">
+      <a href="../../nelson/loadbalancers/Aws.html#targetGroupNamePrefix(name:String,v:nelson.MajorVersion):String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">targetGroupNamePrefix</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <a href="../MajorVersion.html" class="extype" name="nelson.MajorVersion">MajorVersion</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
