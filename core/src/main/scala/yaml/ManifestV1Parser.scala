@@ -127,7 +127,7 @@ object ManifestV1Parser {
   }
 
   def validateInstances(i:Int): YamlValidation[Int] =
-    validatePlanConstraints(i, invalidInstances)(i => i > 0 && i < 500)
+    validatePlanConstraints(i, invalidInstances)(i => i > 0 && i < 5000)
 
   def validateVolumes(volume: VolumeYaml): YamlValidation[Volume] = {
     val name = Option(volume.name).toValidNel(missingVolumeName)
