@@ -564,7 +564,6 @@ In order to enable Nelson's support for dynamically provisioning load-balencers 
 
 * [loadbalancer.aws.access-key-id](#loadbalancer-aws-access-key-id)
 * [loadbalancer.aws.availability-zones](#loadbalancer-aws-image)
-* [loadbalancer.aws.nlb-security-group-names](#loadbalancer-aws-image)
 * [loadbalancer.aws.image](#loadbalancer-aws-image)
 * [loadbalancer.aws.launch-template-id](#loadbalancer-aws-launch-template-id)
 * [loadbalancer.aws.region](#loadbalancer-aws-region)
