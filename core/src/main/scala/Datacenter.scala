@@ -116,7 +116,7 @@ object Infrastructure {
     image: Option[String],
     lbScheme: loadbalancers.NlbScheme
   ) {
-    import com.amazonaws.services.elasticloadbalancingv2.AmazonElasticLoadBalancingClientBuilder
+
     import com.amazonaws.services.autoscaling.AmazonAutoScalingClientBuilder
 
     val asg = AmazonAutoScalingClientBuilder
@@ -125,7 +125,13 @@ object Infrastructure {
       .withRegion(region.getName)
       .build()
 
-    val nlb = AmazonElasticLoadBalancingClientBuilder
+    val elb = com.amazonaws.services.elasticloadbalancing.AmazonElasticLoadBalancingClientBuilder
+      .standard
+      .withCredentials(creds)
+      .withRegion(region.getName)
+      .build()
+
+    val nlb = com.amazonaws.services.elasticloadbalancingv2.AmazonElasticLoadBalancingClientBuilder
       .standard
       .withCredentials(creds)
       .withRegion(region.getName)

@@ -66,15 +66,21 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   def delete(lb: Datacenter.LoadbalancerDeployment): IO[Unit] = {
     val name = loadbalancerName(lb.loadbalancer.name, lb.loadbalancer.version, lb.hash)
-    for {
+    (for {
       lbarn <- getLoadBalancerArn(name)
-      _ <- deleteNLB(lbarn)
-
       targetGroups <- getTargetGroupsForNLB(lbarn)
+      _ <- deleteNLB(lbarn)
       _ <- deleteTargetGroups(targetGroups)
 
       _ <- deleteASG(name)
-    } yield ()
+    } yield ()).recoverWith{
+      case e: Exception =>
+        log.info(s"couldn't delete NLB because ${e.getMessage}. attempting to delete ELB")
+        for {
+          _ <- deleteELB(name)
+          _ <- deleteASG(name)
+        } yield ()
+    }
   }
 
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
@@ -125,6 +131,13 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withLoadBalancerArn(lbarn)
 
       cfg.nlb.deleteLoadBalancer(req)
+      ()
+    }
+
+  def deleteELB(name: String): IO[Unit] =
+    IO {
+      val req = new com.amazonaws.services.elasticloadbalancing.model.DeleteLoadBalancerRequest(name)
+      cfg.elb.deleteLoadBalancer(req)
       ()
     }
 
