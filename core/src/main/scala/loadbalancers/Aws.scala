@@ -79,7 +79,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
     val name = loadbalancerName(lb.name, v, hash)
-    val tgPrefix = targetGroupNamePrefix(lb.name, v)
+    val tgPrefix = targetGroupNamePrefix(lb.name, hash)
     val size = asgSize(p)
 
     for {
@@ -97,13 +97,14 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
   // The target groups have a restriction such that name of the target group can't
   // have "double dashes" and the entire name must be less than 32 characters.
   // Unfortunately, target groups will not have the same name as the loadbalancers.
-  // An example target group will be named stack-1-0-0-443 where the last number is the
-  // port that it listens on (instead of the hash). This allows stack-1-0-0-80 to be
+  // An example target group will be named stack-aevaif-443 where the last number is the
+  // port that it listens on (instead of the hash). This allows stack-qweri-80 to be
   // a different target group for the same loadbalancer. Since target groups are only
   // associated with a single loadbalancer at a time, it'll be easy to reason about which target
-  // groups are related to which loadbalancers.
-  def targetGroupNamePrefix(name: String, v: MajorVersion) =
-    s"$name-${v.minVersion.toExternalString}"
+  // groups are related to which loadbalancers. Administrators will need to reason about
+  // which target group belongs to which loadbalancer based on the hash in the target group name.
+  def targetGroupNamePrefix(name: String, hash: String) =
+    s"$name-$hash"
 
   def getLoadBalancerArn(name: String): IO[String] = {
     val describeLoadBalancerRequest = new DescribeLoadBalancersRequest().withNames(name)
