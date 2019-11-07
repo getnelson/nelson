@@ -66,21 +66,11 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
   def delete(lb: Datacenter.LoadbalancerDeployment): IO[Unit] = {
     val name = loadbalancerName(lb.loadbalancer.name, lb.loadbalancer.version, lb.hash)
-    (for {
-      lbarn <- getLoadBalancerArn(name)
-      targetGroups <- getTargetGroupsForNLB(lbarn)
-      _ <- deleteNLB(lbarn)
-      _ <- deleteTargetGroups(targetGroups)
-
+    for {
       _ <- deleteASG(name)
-    } yield ()).recoverWith{
-      case e: Exception =>
-        log.info(s"couldn't delete NLB because ${e.getMessage}. attempting to delete ELB")
-        for {
-          _ <- deleteELB(name)
-          _ <- deleteASG(name)
-        } yield ()
-    }
+      lbarn <- getLoadBalancerArn(name)
+      _ <- lbarn.fold(deleteELB(name))(deleteTargetGroupsAndNLB(_))
+    } yield ()
   }
 
   def launch(lb: Manifest.Loadbalancer, v: MajorVersion, ns: NamespaceName, p: Plan, hash: String): IO[DNSName] = {
@@ -111,32 +101,67 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
   def targetGroupNamePrefix(name: String, hash: String) =
     s"$name-$hash"
 
-  def getLoadBalancerArn(name: String): IO[String] = {
+  def getLoadBalancerArn(name: String): IO[Option[String]] = {
     val describeLoadBalancerRequest = new DescribeLoadBalancersRequest().withNames(name)
     (for {
       r <- IO(cfg.nlb.describeLoadBalancers(describeLoadBalancerRequest))
       x = r.getLoadBalancers.asScala.toList
       a = x.head.getLoadBalancerArn
-    } yield a).recoverWith{
+    } yield Option(a)).recoverWith{
       case e: Exception =>
-        log.error(s"aws call to get loadbalancer ARN ${describeLoadBalancerRequest.getNames.asScala.head} failed.")
-        IO.raiseError(FailedLoadbalancerDeploy(s"could not find loadbalancer and therefore could not delete loadbalancer", e.getMessage))
+        log.error(s"aws call to get loadbalancer ARN ${describeLoadBalancerRequest.getNames.asScala.head} failed with ${e.getMessage}")
+        IO(None)
     }
   }
 
-  def deleteNLB(lbarn: String): IO[Unit] =
-    IO {
+  // This function is a little confusingly named but it was necessary to
+  // wrap a few deletion actions in this function so that calls to this
+  // up the stack look similar.
+  def deleteTargetGroupsAndNLB(lbarn: String): IO[Unit] = {
+    def deleteNLB(): IO[Unit] = {
       val req = new DeleteLoadBalancerRequest()
         .withLoadBalancerArn(lbarn)
-
-      cfg.nlb.deleteLoadBalancer(req)
-      ()
+      IO{
+        cfg.nlb.deleteLoadBalancer(req)
+        ()
+      }
     }
+
+    def getTargetGroupsForNLB(lbarn: String): IO[List[TargetGroup]] = {
+      val req = new DescribeTargetGroupsRequest()
+        .withLoadBalancerArn(lbarn)
+
+      IO(cfg.nlb.describeTargetGroups(req)
+        ).map(resp => resp.getTargetGroups.asScala.toList)
+    }
+
+    def deleteTargetGroups(targetGroups: List[TargetGroup]): IO[Unit] =
+      IO {
+        targetGroups
+          .map(tg => new DeleteTargetGroupRequest().withTargetGroupArn(tg.getTargetGroupArn))
+          .map(req => cfg.nlb.deleteTargetGroup(req))
+      }.map(_ => ())
+
+    (for {
+      // This has to happen in this specific order. Target groups can't be
+      // deleted if they are used by a loadbalancer.
+      t <- getTargetGroupsForNLB(lbarn)
+      _ <- deleteNLB
+      _ <- deleteTargetGroups(t)
+    } yield ()).recoverWith{
+      case e: Exception =>
+        log.info(s"failed to delete nlb. ${e.getMessage}")
+        IO.unit
+    }
+  }
 
   def deleteELB(name: String): IO[Unit] = {
     log.info(s"attempting to delete elb ${name}")
     val req = new com.amazonaws.services.elasticloadbalancing.model.DeleteLoadBalancerRequest(name)
 
+    // For some reason, even if the loadbalancer doesn't exist and this call
+    // fails, an exception isn't thrown. There is a bug with the AWS JDK but
+    // we'll ignore it for now.
     IO(cfg.elb.deleteLoadBalancer(req)).map(_ => ()).recoverWith {
       case e: Exception =>
         log.info(s"aws call to delete elb responded with ${e.getMessage} for ${name}, swallowing error and marking deployment as terminated")
@@ -185,21 +210,6 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     import cats.implicits._
     ctgreqs.traverse(req => createSingleTargetGroup(req))
   }
-
-  def getTargetGroupsForNLB(lbarn: String): IO[List[TargetGroup]] = {
-    val req = new DescribeTargetGroupsRequest()
-      .withLoadBalancerArn(lbarn)
-
-    IO(cfg.nlb.describeTargetGroups(req)
-      ).map(resp => resp.getTargetGroups.asScala.toList)
-  }
-
-  def deleteTargetGroups(targetGroups: List[TargetGroup]): IO[Unit] =
-    IO {
-      targetGroups
-        .map(tg => new DeleteTargetGroupRequest().withTargetGroupArn(tg.getTargetGroupArn))
-        .map(req => cfg.nlb.deleteTargetGroup(req))
-    }.map(_ => ())
 
   def createListeners(loadbalancer: LoadBalancer, targetGroups: List[TargetGroup]): IO[List[Listener]] = {
 
