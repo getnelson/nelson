@@ -133,12 +133,16 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       ()
     }
 
-  def deleteELB(name: String): IO[Unit] =
-    IO {
-      val req = new com.amazonaws.services.elasticloadbalancing.model.DeleteLoadBalancerRequest(name)
-      cfg.elb.deleteLoadBalancer(req)
-      ()
+  def deleteELB(name: String): IO[Unit] = {
+    log.info(s"attempting to delete elb ${name}")
+    val req = new com.amazonaws.services.elasticloadbalancing.model.DeleteLoadBalancerRequest(name)
+
+    IO(cfg.elb.deleteLoadBalancer(req)).map(_ => ()).recoverWith {
+      case e: Exception =>
+        log.info(s"aws call to delete elb responded with ${e.getMessage} for ${name}, swallowing error and marking deployment as terminated")
+        IO.unit
     }
+  }
 
   def createNLB(name: String, scheme: NlbScheme): IO[LoadBalancer] = {
     IO {
