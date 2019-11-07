@@ -20,7 +20,7 @@ package loadbalancers
 import nelson.Manifest.{Port,Plan}
 
 import com.amazonaws.services.elasticloadbalancingv2.model.{Action,ActionTypeEnum,CreateListenerRequest,CreateLoadBalancerRequest,CreateTargetGroupRequest,DeleteLoadBalancerRequest,DeleteTargetGroupRequest,DescribeLoadBalancersRequest,DescribeTargetGroupsRequest,Listener,LoadBalancer,LoadBalancerTypeEnum,ProtocolEnum,TargetGroup,TargetTypeEnum}
-import com.amazonaws.services.autoscaling.model.{AmazonAutoScalingException,AttachLoadBalancerTargetGroupsRequest,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,LaunchTemplateSpecification,Tag,UpdateAutoScalingGroupRequest}
+import com.amazonaws.services.autoscaling.model.{AmazonAutoScalingException,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,LaunchTemplateSpecification,Tag,UpdateAutoScalingGroupRequest}
 
 import cats.~>
 import cats.effect.IO
@@ -92,8 +92,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       l <- createNLB(name, cfg.lbScheme)
       t <- createTargetGroups(tgPrefix, lb.routes.toList.map(_.port), l.getVpcId)
       _ <- createListeners(l, t)
-      _ <- createASG(name, ns, size)
-      _ <- attachASGToTargetGroups(name, t)
+      _ <- createASG(name, ns, size, t)
     } yield l.getDNSName
   }
 
@@ -230,15 +229,6 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       .traverse(req => createSingleListener(req))
   }
 
-  def attachASGToTargetGroups(asgName: String, targetGroups: List[TargetGroup]): IO[Unit] = {
-    val arns = targetGroups.map(_.getTargetGroupArn)
-    val req = new AttachLoadBalancerTargetGroupsRequest()
-      .withAutoScalingGroupName(asgName)
-      .withTargetGroupARNs(arns.asJava)
-
-    IO(cfg.asg.attachLoadBalancerTargetGroups(req)).map(_ => ())
-  }
-
   def deleteASG(name: String): IO[Unit] = {
     val req = new DeleteAutoScalingGroupRequest()
       .withAutoScalingGroupName(name)
@@ -269,7 +259,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
     }
   }
 
-  def createASG(name: String, namespace: NamespaceName, size: ASGSize): IO[Unit] =
+  def createASG(name: String, namespace: NamespaceName, size: ASGSize, targetGroups: List[TargetGroup]): IO[Unit] =
     IO {
       val nameTag = new Tag()
         .withKey("Name")
@@ -301,6 +291,8 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withLaunchTemplateId(cfg.launchTemplateId)
         .withVersion("$Default")
 
+      val tgarns = targetGroups.map(_.getTargetGroupArn)
+
       val req = new CreateAutoScalingGroupRequest()
         .withAutoScalingGroupName(name)
         .withTags(lbTag, nameTag, iTag, namespaceTag, envTag)
@@ -309,6 +301,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
         .withDesiredCapacity(size.desired)
         .withMaxSize(size.max)
         .withMinSize(size.min)
+        .withTargetGroupARNs(tgarns.asJava)
 
       cfg.asg.createAutoScalingGroup(req)
 
