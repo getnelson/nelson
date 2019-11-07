@@ -20,7 +20,7 @@ package loadbalancers
 import nelson.Manifest.{Port,Plan}
 
 import com.amazonaws.services.elasticloadbalancingv2.model.{Action,ActionTypeEnum,CreateListenerRequest,CreateLoadBalancerRequest,CreateTargetGroupRequest,DeleteLoadBalancerRequest,DeleteTargetGroupRequest,DescribeLoadBalancersRequest,DescribeTargetGroupsRequest,Listener,LoadBalancer,LoadBalancerTypeEnum,ProtocolEnum,TargetGroup,TargetTypeEnum}
-import com.amazonaws.services.autoscaling.model.{AmazonAutoScalingException,AttachLoadBalancerTargetGroupsRequest,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,LaunchTemplateSpecification,Tag,UpdateAutoScalingGroupRequest}
+import com.amazonaws.services.autoscaling.model.{AmazonAutoScalingException,AttachLoadBalancerTargetGroupsRequest,CreateAutoScalingGroupRequest,DeleteAutoScalingGroupRequest,LaunchTemplateSpecification,MetricType,PredefinedMetricSpecification,PutScalingPolicyRequest,Tag,TargetTrackingConfiguration,UpdateAutoScalingGroupRequest}
 
 import cats.~>
 import cats.effect.IO
@@ -88,6 +88,7 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
       _ <- createListeners(l, t)
       _ <- createASG(name, ns, size)
       _ <- attachASGToTargetGroups(name, t)
+      _ <- attachScalingPolicyToASG(name)
     } yield l.getDNSName
   }
 
@@ -300,6 +301,33 @@ final class Aws(cfg: Infrastructure.Aws) extends (LoadbalancerOp ~> IO) {
 
       ()
     }
+
+  // For now we'll scale based on average network io per node
+  def attachScalingPolicyToASG(asgName: String): IO[Unit] = {
+    val metricSpec = new PredefinedMetricSpecification()
+      .withPredefinedMetricType(MetricType.ASGAverageNetworkOut)
+
+    val metricConfiguration = new TargetTrackingConfiguration()
+      .withPredefinedMetricSpecification(metricSpec)
+      .withTargetValue(10000000)
+
+    val req = new PutScalingPolicyRequest()
+      .withAutoScalingGroupName(asgName)
+      .withCooldown(60) // after a scale event, wait 60 seconds
+      .withEstimatedInstanceWarmup(60) // wait 60 seconds for a instance to be available
+      .withPolicyName(asgName)
+      .withPolicyType("TargetTrackingScaling")
+      .withTargetTrackingConfiguration(metricConfiguration)
+
+
+    IO(
+      cfg.asg.putScalingPolicy(req)
+    ).map(_ => ()).recoverWith{
+      case e: Exception =>
+        IO.raiseError(FailedLoadbalancerDeploy(s"couldn't attach autoscaling policy", e.getMessage))
+        IO.unit
+    }
+  }
 
   private def asgSize(p: Plan): ASGSize = {
     val desired = p.environment.desiredInstances getOrElse defaultSize
