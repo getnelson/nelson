@@ -121,6 +121,8 @@ trait Json {
       ("ttl" :?= cpkir.defaultLeaseTTL.map(d => s"${d.toMillis}ms")) ->?:
       ("max_ttl" :?= cpkir.maxLeaseTTL.map(d => s"${d.toMillis}ms")) ->?:
       ("allow_localhost" := cpkir.allowLocalhost) ->:
+      ("require_cn" := cpkir.requireCN) ->:
+      ("allow_any_name" := cpkir.allowAnyName) ->:
       jEmptyObject
     }
 }

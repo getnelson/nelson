@@ -154,7 +154,7 @@ final class Http4sVaultClient(
     authBackendPrefix.map(_ + cn).getOrElse(cn)
 
   def createPKIRole(cpkir: CreatePKIRole): IO[Unit] = {
-    reqVoid(IO.pure(Request(POST, v1BaseUri / cpkir.pkiPath / "roles" / cpkir.roleName)))
+    reqVoid(Request(POST, v1BaseUri / cpkir.pkiPath / "roles" / cpkir.roleName).withBody(cpkir.asJson))
   }
 
   def deletePKIRole(dpkir: DeletePKIRole): IO[Unit] = {
