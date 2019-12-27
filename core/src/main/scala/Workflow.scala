@@ -31,7 +31,7 @@ import cats.implicits._
 
 import helm.ConsulOp
 
-import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.duration._
 
 /**
  * Workflows must be defined in terms of a particular type of UnitDef
@@ -172,9 +172,11 @@ object Workflow {
         roleName = sn.toString,
         serviceAccountNames = List(sn.toString),
         defaultLeaseTTL = None,
-        maxLeaseTTL = None,
+        maxLeaseTTL = Some(43800.hours) /* 5 years */,
         allowLocalhost = false,
-        pkiPath = interpolatedPkiPath
+        requireCN = false,
+        pkiPath = interpolatedPkiPath,
+        allowAnyName = true
       ).inject
     }
 
