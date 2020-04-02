@@ -107,7 +107,7 @@ namespaces:
         plans:
           - dev-plan
 
-  - name: qa
+  - name: prod
     units:
       - ref: foobar
         plans:
