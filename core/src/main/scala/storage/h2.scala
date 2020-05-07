@@ -76,7 +76,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     case FindDeployment(stackName) => findDeployment(stackName).transact(xa)
     case GetDeployment(id) => getDeployment(id).transact(xa)
     case GetDeploymentByGuid(guid) => getDeploymentByGuid(guid).transact(xa)
-    case CreateDeployment(unitId, hash, namespace, wf, plan, policy) => createDeployment(unitId, hash, namespace, wf, plan, policy).transact(xa)
+    case CreateDeployment(unitId, hash, namespace, wf, plan, policy, blueprint) => createDeployment(unitId, hash, namespace, wf, plan, policy, blueprint).transact(xa)
     case CreateDeploymentStatus(id, status, msg) => createDeploymentStatus(id, status, msg).transact(xa)
     case CreateManualDeployment(dc, ns, st, v, hash, desc, port, exp) => createManualDeployment(dc, ns, st, v, hash, desc, port, exp).transact(xa)
     case ListUnitsByStatus(nsid, statuses) => listUnitsByStatus(nsid, statuses).transact(xa)
@@ -306,9 +306,9 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
   /**
    *
    */
-  def createDeployment(unitId: ID, hash: String, namespace: Namespace, wf: WorkflowRef, plan: PlanRef, expPolicy: String): ConnectionIO[ID] =
-    sql"""INSERT INTO PUBLIC.deployments (unit_id, namespace_id, hash, deploy_time, workflow, plan, expiration_policy)
-          VALUES(${unitId}, ${namespace.id}, ${hash}, ${Instant.now()}, ${wf}, ${plan}, $expPolicy)
+  def createDeployment(unitId: ID, hash: String, namespace: Namespace, wf: WorkflowRef, plan: PlanRef, expPolicy: String, blueprint: Option[String]): ConnectionIO[ID] =
+    sql"""INSERT INTO PUBLIC.deployments (unit_id, namespace_id, hash, deploy_time, workflow, plan, expiration_policy, rendered_blueprint)
+          VALUES(${unitId}, ${namespace.id}, ${hash}, ${Instant.now()}, ${wf}, ${plan}, $expPolicy, ${blueprint})
        """.update
           .withUniqueGeneratedKeys[ID]("id")
           .map { id =>
@@ -557,7 +557,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
       _    <- insertRelease(version)
       unit <- insertUnitIfAbsent
       _    <- insertPort(unit)
-      id   <- createDeployment(unit, hash, ns, "manual", Manifest.Plan.default.name, cleanup.RetainUntilDeprecated.name)
+      id   <- createDeployment(unit, hash, ns, "manual", Manifest.Plan.default.name, cleanup.RetainUntilDeprecated.name, None)
       d    <- getDeployment(id)
       _    <- createDeploymentStatus(id, DeploymentStatus.Ready, Some(description))
       _    <- createDeploymentExpiration(id, exp)

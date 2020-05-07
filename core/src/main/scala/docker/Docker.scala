@@ -42,18 +42,8 @@ class Docker(cfg: DockerConfig, scheduler: ScheduledExecutorService, ec: Executi
       case DockerOp.Tag(i, r)     => tag(i, i.to(r)).retryExponentially()(scheduler, ec)
       case DockerOp.Push(i)       => push(i).retryExponentially()(scheduler, ec)
       case DockerOp.Pull(i)       => pull(i).retryExponentially()(scheduler, ec)
-      case DockerOp.Extract(unit) => extract(unit)
+      case DockerOp.Extract(unit) => Docker.Image.fromUnit(unit)
     }
-
-  def extract(unit: Manifest.UnitDef): IO[Image] =
-    unit.deployable.map(_.output).map {
-      case Manifest.Deployable.Container(name) =>
-        Docker.Image.fromString(name).fold(
-          a => IO.raiseError(FailedDockerExtraction(s"$name could not be converted to Docker.Image due to '$a'")),
-          b => IO.pure(b)
-        )
-    }.getOrElse(IO.raiseError(new FailedDockerExtraction(s"input unit '${unit.name}' has no specified deployable.")))
-
 
   //////////////////////// TAG ////////////////////////
 
@@ -139,6 +129,15 @@ object Docker {
     /* because this annoys me every time - we mostly dont have diget */
     def apply(name: Name, tag: Tag): Image =
       Image(name, Option(tag), None)
+
+    def fromUnit(unit: Manifest.UnitDef): IO[Image] =
+      unit.deployable.map(_.output).map {
+        case Manifest.Deployable.Container(name) =>
+          Docker.Image.fromString(name).fold(
+            a => IO.raiseError(FailedDockerExtraction(s"$name could not be converted to Docker.Image due to '$a'")),
+            b => IO.pure(b)
+          )
+        }.getOrElse(IO.raiseError(new FailedDockerExtraction(s"input unit '${unit.name}' has no specified deployable.")))
 
     /**
      * crude parser for docker image names. Handles the following cases:

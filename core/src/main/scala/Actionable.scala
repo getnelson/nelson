@@ -22,6 +22,8 @@ import nelson.Workflow.WorkflowOp
 import nelson.cleanup.ExpirationPolicy
 import nelson.notifications.Notify
 import nelson.storage.{StoreOp, StoreOpF}
+import nelson.docker.Docker
+import nelson.blueprint.{Render,Template}
 
 import cats.~>
 import cats.data.{Kleisli, OptionT}
@@ -54,14 +56,15 @@ object Actionable {
   implicit val UnitDefActionable = new Actionable[UnitDef @@ Versioned] {
     import Manifest.{Namespace,Plan}
 
-    def create(u: UnitDef @@ Versioned, dc: Datacenter, ns: Namespace, plan: Plan, hash: String, exp: Instant, fallback: ExpirationPolicy): StoreOpF[Option[ID]] = {
+    def create(u: UnitDef @@ Versioned, dc: Datacenter, ns: Namespace, plan: Plan, hash: String, exp: Instant, fallback: ExpirationPolicy, blueprint: String): StoreOpF[Option[ID]] = {
       val unit = Manifest.Versioned.unwrap(u)
-      val version = u.version
-      val policy = Manifest.getExpirationPolicy(plan) getOrElse fallback
+      val version: Version = u.version
+      val policy: ExpirationPolicy = Manifest.getExpirationPolicy(plan) getOrElse fallback
+
       (for {
          u  <- OptionT(StoreOp.getUnit(unit.name, version))
-         n  <- OptionT(StoreOp.getNamespace(dc.name, ns.name)) // gets a Datacetner.Namespace
-         id <- OptionT.liftF(StoreOp.createDeployment(u.id, hash, n, plan.environment.workflow.name, plan.name, policy.name))
+         n  <- OptionT(StoreOp.getNamespace(dc.name, ns.name)) // gets a Datacenter.Namespace
+         id <- OptionT.liftF(StoreOp.createDeployment(u.id, hash, n, plan.environment.workflow.name, plan.name, policy.name, Option(blueprint)))
          _  <- OptionT.liftF(plan.environment.resources.map { case (name, uri) =>
                 StoreOp.createDeploymentResource(id, name, uri)
                }.toList.sequence)
@@ -88,6 +91,24 @@ object Actionable {
           ()
         }
 
+        def renderBlueprint(u: UnitDef): IO[String] = {
+          // NOTE: by this point in the system, we know we're dealing with
+          // a hydrated blueprint (i.e. passes manifest validation) so we
+          // take the supplied plan and extract the `Blueprint`, and `Template`
+          // in turn so that these can be rendered and stored.
+          val template: IO[Template] = plan.environment.blueprint match {
+            case Some(Left(_)) => IO.raiseError(new IllegalArgumentException(s"Internal error occurred: un-hydrated blueprint passed to scheduler!"))
+            case Some(Right(bp)) => IO(bp.template)
+            case None => IO.raiseError(new IllegalArgumentException(s"Internal error occurred: no blueprint was specified, so there is no way this can be deployed!"))
+          }
+
+          for {
+            a <- Docker.Image.fromUnit(u)
+            b <- template
+            e  = Render.makeEnv(a, dc, ns.name, u, unit.version, plan, hash)
+          } yield b.render(e)
+        }
+
         def deploy(id: ID)(t: WorkflowOp ~> IO): IO[Either[Throwable, Unit]] =
           plan.environment.workflow.deploy(id, hash, unit, plan, dc, ns).foldMap(t).attempt.flatMap(_.fold(
             e => (Workflow.syntax.status(id, DeploymentStatus.Failed,
@@ -97,9 +118,14 @@ object Actionable {
                   incCounter(deploySuccessCounter)).attempt
         ))
 
-        create(unit, dc, ns, plan, hash, exp, policy).foldMap(cfg.storage).flatMap(_.fold(incCounter(deployFailureCounter)) { id =>
-          deploy(id)(dc.workflow).map(_ => ())
-        })
+        for {
+          a <- renderBlueprint(Manifest.Versioned.unwrap(unit)) // render template
+          b <- create(unit, dc, ns, plan, hash, exp, policy, a)
+                .foldMap(cfg.storage) // converts to IO
+                .flatMap(_.fold(incCounter(deployFailureCounter)) { id =>
+                  deploy(id)(dc.workflow).map(_ => ())
+                })
+        } yield b
       }
   }
 

@@ -130,8 +130,8 @@ object StoreOp {
   def getDeployment(id: ID): StoreOpF[Deployment] =
     Free.liftF(GetDeployment(id))
 
-  def createDeployment(unitId: ID, hash: String, ns: Datacenter.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef): StoreOpF[ID] =
-    Free.liftF(CreateDeployment(unitId, hash, ns, wf, plan, policy))
+  def createDeployment(unitId: ID, hash: String, ns: Datacenter.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef, blueprint: Option[String]): StoreOpF[ID] =
+    Free.liftF(CreateDeployment(unitId, hash, ns, wf, plan, policy, blueprint))
 
   def getDeploymentByGuid(guid: GUID): StoreOpF[Option[Deployment]] =
     Free.liftF(GetDeploymentByGuid(guid))
@@ -278,7 +278,7 @@ object StoreOp {
   final case class GetDeploymentResources(id: ID) extends StoreOp[Set[(String, java.net.URI)]]
   final case class FindDeployment(stackName: StackName) extends StoreOp[Option[Deployment]]
   final case class GetDeployment(id: ID) extends StoreOp[Deployment]
-  final case class CreateDeployment(unitId: ID, hash: String, nn: Datacenter.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef) extends StoreOp[ID]
+  final case class CreateDeployment(unitId: ID, hash: String, nn: Datacenter.Namespace, wf: WorkflowRef, plan: PlanRef, policy: ExpirationPolicyRef, blueprint: Option[String]) extends StoreOp[ID]
   final case class GetDeploymentByGuid(guid: GUID) extends StoreOp[Option[Deployment]]
   final case class CreateDeploymentStatus(id: ID, status: DeploymentStatus, msg: Option[String]) extends StoreOp[Unit]
   final case class ListUnitsByStatus(nsid: ID, statuses: NonEmptyList[DeploymentStatus]) extends StoreOp[Vector[(GUID,ServiceName)]]
