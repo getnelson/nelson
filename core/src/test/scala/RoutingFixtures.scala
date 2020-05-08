@@ -608,7 +608,7 @@ trait RoutingFixtures {
     policy: ExpirationPolicy): StoreOpF[ID] =
     for {
       u   <- StoreOp.getUnit(service, version)
-      did <- StoreOp.createDeployment(u.get.id, hash, ns, "pulsar", "plan", policy.name)
+      did <- StoreOp.createDeployment(u.get.id, hash, ns, "pulsar", "plan", policy.name, Option("<blueprint>"))
       _   <- StoreOp.createDeploymentExpiration(did, Instant.now().plusSeconds(1.day.toSeconds))
       _   <- StoreOp.createDeploymentStatus(did, status, None)
     } yield did
