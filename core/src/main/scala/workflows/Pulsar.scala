@@ -46,8 +46,12 @@ object Pulsar extends Workflow[Unit] {
       else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
 
     for {
-      i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
       _ <- status(id, Pending, "Pulsar workflow about to start")
+      //// extract the docker image with no replication
+      i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
+      //// handle the blueprint rendering, save the bp to the db
+      _  <- logToFile(id, s"Rendering blueprint and saving to the database...")
+      bp <- handleBlueprint(id, i, dc, ns.name, unit, vunit.version, p, hash)
       //// write the policies to Vault
       _  <- logToFile(id, s"Writing policy to vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}")
       _  <- writePolicyToVault(cfg = dc.policy, sn = sn, ns = ns.name, rs = rs)
@@ -63,7 +67,7 @@ object Pulsar extends Workflow[Unit] {
       _  <- getTrafficShift(p, dc).fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
       //// show kubernetes some love
       _ <- logToFile(id, s"Instructing ${dc.name}'s scheduler to handle service container")
-      l <- launch(i, dc, ns.name, vunit, p, hash)
+      l <- launch(i, dc, ns.name, vunit, p, hash, bp)
       _ <- debug(s"Scheduler responded with: ${l}")
       _ <- status(id, getStatus(Manifest.Versioned.unwrap(vunit), p), "=====> Pulsar workflow completed <=====")
     } yield ()

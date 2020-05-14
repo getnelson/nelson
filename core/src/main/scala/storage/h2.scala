@@ -78,6 +78,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
     case GetDeploymentByGuid(guid) => getDeploymentByGuid(guid).transact(xa)
     case CreateDeployment(unitId, hash, namespace, wf, plan, policy) => createDeployment(unitId, hash, namespace, wf, plan, policy).transact(xa)
     case CreateDeploymentStatus(id, status, msg) => createDeploymentStatus(id, status, msg).transact(xa)
+    case UpdateDeploymentBlueprint(id, bp) => updateDeploymentBlueprint(id, bp).transact(xa)
     case CreateManualDeployment(dc, ns, st, v, hash, desc, port, exp) => createManualDeployment(dc, ns, st, v, hash, desc, port, exp).transact(xa)
     case ListUnitsByStatus(nsid, statuses) => listUnitsByStatus(nsid, statuses).transact(xa)
     case FindReleaseByDeploymentGuid(guid) => findReleaseByDeploymentGuid(guid).transact(xa)
@@ -327,6 +328,16 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
               (deployment_id, state, status_msg, status_time)
        VALUES (${id}, ${status.toString}, ${msg}, ${Instant.now()})
        """.update.run.map(_ => log.info(s"[createDeploymentStatus] deployment: ${id} status: ${status} msg: ${msg}"))
+
+  /**
+   * update the renderedBlueprint field of a deployment.
+   * This is not a generalized update on `Deployment` as that would lead
+   * to wider mutabiltiy, which is highly discouraged.
+   */
+  def updateDeploymentBlueprint(id: ID, bp: Option[RenderedBlueprint]): ConnectionIO[Unit] =
+    sql"""
+       UPDATE PUBLIC.deployments SET rendered_blueprint = ${bp} WHERE id = ${id}
+       """.update.run.map(_ => log.info(s"[updateDeploymentBlueprint] deployment: ${id}"))
 
   def getDeploymentStatus(id: ID): ConnectionIO[Option[DeploymentStatus]] =
     listDeploymentStatuses(id).map(_.headOption.map(_._1))

@@ -605,7 +605,7 @@ object Config {
       val scheduling: IO[SchedulerOp ~> IO] = kfg.lookup[String]("infrastructure.scheduler") match {
         case Some("kubernetes") => {
           withKubectl((kubectl, timeout) =>
-            IO.pure(new KubernetesShell(kubectl, timeout, ec)))
+            IO.pure(new KubernetesShell(kubectl, timeout, schedulerPool,  ec)))
         }
         case Some("nomad") => IO.raiseError(NomadNotImplemented)
         case _ => IO.raiseError(new IllegalArgumentException("At least one scheduler must be defined per datacenter"))

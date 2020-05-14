@@ -143,7 +143,7 @@ trait NelsonSuite
   lazy val sched = new (SchedulerOp ~> IO) {
     import scheduler.SchedulerOp._
     def apply[A](op: SchedulerOp[A]) = op match {
-      case Launch(_,_,_,unit,_,hash) =>
+      case Launch(_,_,_,unit,_,hash,_) =>
         val name = Manifest.Versioned.unwrap(unit).name
         val sn = Datacenter.StackName(name, unit.version,hash)
         IO(sn.toString)

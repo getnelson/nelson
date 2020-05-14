@@ -34,7 +34,11 @@ object Magnetar extends Workflow[Unit] {
 
     for {
       _  <- status(id, Pending, "workflow about to start")
+      //// fetch and replicate the images to the remote datacenters
       i  <- dockerOps(id, unit, dc.docker.registry)
+      //// handle the blueprint rendering, save the bp to the db
+      _  <- logToFile(id, s"Rendering blueprint and saving to the database...")
+      bp <- handleBlueprint(id, i, dc, ns.name, unit, vunit.version, p, hash)
       _  <- status(id, Deploying, s"writing alert definitions to ${dc.name}'s consul")
       _  <- writeAlertsToConsul(sn, ns.name, p.name, unit, p.environment.alertOptOuts)
       _  <- logToFile(id, s"writing policy to vault: ${vaultLoggingFields(sn, ns = ns.name, dcName = dc.name)}")
@@ -43,7 +47,7 @@ object Magnetar extends Workflow[Unit] {
       _  <- writeDiscoveryToConsul(id, sn, ns.name, dc)
       _  <- getTrafficShift(p, dc).fold(pure(()))(ts => createTrafficShift(id, ns.name, dc, ts.policy, ts.duration) *> logToFile(id, s"Creating traffic shift: ${ts.policy.ref}"))
       _  <- logToFile(id, s"instructing ${dc.name}'s scheduler to handle service container")
-      l  <- launch(i, dc, ns.name, vunit, p, hash)
+      l  <- launch(i, dc, ns.name, vunit, p, hash, bp)
       _  <- debug(s"response from scheduler $l")
 
       _  <- status(id, getStatus(unit, p), "======> workflow completed <======")

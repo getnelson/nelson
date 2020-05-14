@@ -24,6 +24,7 @@ import nelson.logging.LoggingOp
 import nelson.scheduler.SchedulerOp
 import nelson.storage.{StoreOp}
 import nelson.vault.{Vault,policies}
+import nelson.blueprint.Render
 
 import cats.data.{EitherK, OptionT}
 import cats.free.Free
@@ -92,8 +93,8 @@ object Workflow {
     def pure[A](a: => A): WorkflowF[A] =
       WorkflowControlOp.pure(a).inject
 
-    def launch(i: Image, dc: Datacenter, ns: NamespaceName, u: UnitDef @@ Versioned, p: Plan, hash: String): WorkflowF[String] =
-      SchedulerOp.launch(i, dc, ns, u, p, hash).inject
+    def launch(i: Image, dc: Datacenter, ns: NamespaceName, u: UnitDef @@ Versioned, p: Plan, hash: String, bp: RenderedBlueprint): WorkflowF[String] =
+      SchedulerOp.launch(i, dc, ns, u, p, hash, bp).inject
 
     def delete(dc: Datacenter, d: Deployment): WorkflowF[Unit] =
       SchedulerOp.delete(dc,d).inject
@@ -115,6 +116,23 @@ object Workflow {
 
     def fail[A](reason: String): WorkflowF[A] =
       fail(new RuntimeException(reason))
+
+    def handleBlueprint(id: ID, img: Image, dc: Datacenter, ns: NamespaceName,
+      u: UnitDef, v: Version, p: Plan, hash: String): WorkflowF[RenderedBlueprint] = {
+      val env = Render.makeEnv(img, dc, ns, u, v, p, hash)
+
+      p.environment.blueprint match {
+        case Some(Left(_)) =>
+          fail("Internal error occured: un-hydrated blueprint passed to scheduler!")
+        case Some(Right(bp)) =>
+          val rendered = bp.template.render(env)
+          StoreOp.updateDeploymentBlueprint(id, Option(rendered)).map(_ => rendered).inject
+        case None =>
+          logToFile(id, "no blueprint specified, defaulting to using fallback...") *>
+          fail("Default blueprints are not supported by pulsar")
+          // pure(f(p).render(env))
+      }
+    }
 
     def deleteFromConsul(key: String): WorkflowF[Unit] =
       ConsulOp.kvDelete(key).inject
