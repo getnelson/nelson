@@ -40,7 +40,8 @@ object Params {
     commaSeparatedStringToList(str).map(f)
 
   def commaSeparatedStringToStatus(str: String): List[DeploymentStatus] =
-    commaSeparatedStringTo(str, DeploymentStatus.fromString _)
+    if (str.trim == "all") DeploymentStatus.all.toList
+    else commaSeparatedStringTo(str, DeploymentStatus.fromString _)
 
   def commaSeparatedStringToNamespace(str: String): List[Either[InvalidNamespaceName, NamespaceName]] =
     commaSeparatedStringTo(str, NamespaceName.fromString _)
