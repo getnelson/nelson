@@ -577,6 +577,22 @@
       <p class="shortcomment cmt">Provides a way to see if creating a traffic shift is actually relevant.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a way to see if creating a traffic shift is actually relevant. In the case
 of periodic units, shifting traffic would make no sense, so those are NoOps.
 </p></div></div>
+    </li><li name="nelson.Workflow.syntax#handleBlueprint" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="handleBlueprint(id:nelson.ID,img:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,u:nelson.Manifest.UnitDef,v:nelson.Version,p:nelson.Manifest.Plan,hash:String):nelson.Workflow.WorkflowF[nelson.RenderedBlueprint]"></a><a id="handleBlueprint(ID,Image,Datacenter,NamespaceName,UnitDef,Version,Plan,String):WorkflowF[RenderedBlueprint]"></a>
+      <span class="permalink">
+      <a href="../nelson/Workflow$$syntax$.html#handleBlueprint(id:nelson.ID,img:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,u:nelson.Manifest.UnitDef,v:nelson.Version,p:nelson.Manifest.Plan,hash:String):nelson.Workflow.WorkflowF[nelson.RenderedBlueprint]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handleBlueprint</span><span class="params">(<span name="id">id: <a href="index.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="img">img: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="u">u: <a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="v">v: <a href="Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<a href="index.html#RenderedBlueprint=String" class="extmbr" name="nelson.RenderedBlueprint">RenderedBlueprint</a>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
@@ -629,9 +645,9 @@ of periodic units, shifting traffic would make no sense, so those are NoOps.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="nelson.Workflow.syntax#launch" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="launch(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,u:nelson.Manifest.UnitDef@@nelson.Manifest.Versioned,p:nelson.Manifest.Plan,hash:String):nelson.Workflow.WorkflowF[String]"></a><a id="launch(Image,Datacenter,NamespaceName,@@[UnitDef,Versioned],Plan,String):WorkflowF[String]"></a>
+      <a id="launch(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,u:nelson.Manifest.UnitDef@@nelson.Manifest.Versioned,p:nelson.Manifest.Plan,hash:String,bp:nelson.RenderedBlueprint):nelson.Workflow.WorkflowF[String]"></a><a id="launch(Image,Datacenter,NamespaceName,@@[UnitDef,Versioned],Plan,String,RenderedBlueprint):WorkflowF[String]"></a>
       <span class="permalink">
-      <a href="../nelson/Workflow$$syntax$.html#launch(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,u:nelson.Manifest.UnitDef@@nelson.Manifest.Versioned,p:nelson.Manifest.Plan,hash:String):nelson.Workflow.WorkflowF[String]" title="Permalink">
+      <a href="../nelson/Workflow$$syntax$.html#launch(i:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,u:nelson.Manifest.UnitDef@@nelson.Manifest.Versioned,p:nelson.Manifest.Plan,hash:String,bp:nelson.RenderedBlueprint):nelson.Workflow.WorkflowF[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -640,7 +656,7 @@ of periodic units, shifting traffic would make no sense, so those are NoOps.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">launch</span><span class="params">(<span name="i">i: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="u">u: <a href="index.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">launch</span><span class="params">(<span name="i">i: <a href="docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="u">u: <a href="index.html#@@[T,Tag]=nelson.package.Tagged[T,Tag]" class="extmbr" name="nelson.@@">@@</a>[<a href="Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a>, <a href="Manifest$$Versioned.html" class="extype" name="nelson.Manifest.Versioned">Versioned</a>]</span>, <span name="p">p: <a href="Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="bp">bp: <a href="index.html#RenderedBlueprint=String" class="extmbr" name="nelson.RenderedBlueprint">RenderedBlueprint</a></span>)</span><span class="result">: <a href="Workflow$.html#WorkflowF[A]=cats.free.Free[nelson.Workflow.WorkflowOp,A]" class="extmbr" name="nelson.Workflow.WorkflowF">WorkflowF</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
       

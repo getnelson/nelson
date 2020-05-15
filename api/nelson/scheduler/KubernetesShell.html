@@ -207,9 +207,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="nelson.scheduler.KubernetesShell#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(kubectl:nelson.Kubectl,timeout:scala.concurrent.duration.FiniteDuration,executionContext:scala.concurrent.ExecutionContext):nelson.scheduler.KubernetesShell"></a><a id="&lt;init&gt;:KubernetesShell"></a>
+      <a id="&lt;init&gt;(kubectl:nelson.Kubectl,timeout:scala.concurrent.duration.FiniteDuration,scheduler:java.util.concurrent.ScheduledExecutorService,executionContext:scala.concurrent.ExecutionContext):nelson.scheduler.KubernetesShell"></a><a id="&lt;init&gt;:KubernetesShell"></a>
       <span class="permalink">
-      <a href="../../nelson/scheduler/KubernetesShell.html#&lt;init&gt;(kubectl:nelson.Kubectl,timeout:scala.concurrent.duration.FiniteDuration,executionContext:scala.concurrent.ExecutionContext):nelson.scheduler.KubernetesShell" title="Permalink">
+      <a href="../../nelson/scheduler/KubernetesShell.html#&lt;init&gt;(kubectl:nelson.Kubectl,timeout:scala.concurrent.duration.FiniteDuration,scheduler:java.util.concurrent.ScheduledExecutorService,executionContext:scala.concurrent.ExecutionContext):nelson.scheduler.KubernetesShell" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -218,7 +218,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">KubernetesShell</span><span class="params">(<span name="kubectl">kubectl: <a href="../Kubectl.html" class="extype" name="nelson.Kubectl">Kubectl</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a></span>, <span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/ExecutionContext.html#scala.concurrent.ExecutionContext" class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</a></span>)</span>
+        <span class="name">KubernetesShell</span><span class="params">(<span name="kubectl">kubectl: <a href="../Kubectl.html" class="extype" name="nelson.Kubectl">Kubectl</a></span>, <span name="timeout">timeout: <a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/duration/FiniteDuration.html#scala.concurrent.duration.FiniteDuration" class="extype" name="scala.concurrent.duration.FiniteDuration">FiniteDuration</a></span>, <span name="scheduler">scheduler: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>, <span name="executionContext">executionContext: <a href="http://www.scala-lang.org/api/2.12.8/scala/concurrent/ExecutionContext.html#scala.concurrent.ExecutionContext" class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</a></span>)</span>
       </span>
       
       
@@ -553,22 +553,6 @@
       </span>
       <span class="symbol">
         <span class="name">jobSummary</span><span class="params">(<span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="stackName">stackName: <a href="../Datacenter$$StackName.html" class="extype" name="nelson.Datacenter.StackName">StackName</a></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="DeploymentSummary.html" class="extype" name="nelson.scheduler.DeploymentSummary">DeploymentSummary</a>]]</span>
-      </span>
-      
-      
-    </li><li name="nelson.scheduler.KubernetesShell#launch" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="launch(image:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,unit:nelson.Manifest.UnitDef,version:nelson.Version,plan:nelson.Manifest.Plan,hash:String):cats.effect.IO[String]"></a><a id="launch(Image,Datacenter,NamespaceName,UnitDef,Version,Plan,String):IO[String]"></a>
-      <span class="permalink">
-      <a href="../../nelson/scheduler/KubernetesShell.html#launch(image:nelson.docker.Docker.Image,dc:nelson.Datacenter,ns:nelson.NamespaceName,unit:nelson.Manifest.UnitDef,version:nelson.Version,plan:nelson.Manifest.Plan,hash:String):cats.effect.IO[String]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">launch</span><span class="params">(<span name="image">image: <a href="../docker/Docker$$Image.html" class="extype" name="nelson.docker.Docker.Image">Image</a></span>, <span name="dc">dc: <a href="../Datacenter.html" class="extype" name="nelson.Datacenter">Datacenter</a></span>, <span name="ns">ns: <a href="../NamespaceName.html" class="extype" name="nelson.NamespaceName">NamespaceName</a></span>, <span name="unit">unit: <a href="../Manifest$$UnitDef.html" class="extype" name="nelson.Manifest.UnitDef">UnitDef</a></span>, <span name="version">version: <a href="../Version.html" class="extype" name="nelson.Version">Version</a></span>, <span name="plan">plan: <a href="../Manifest$$Plan.html" class="extype" name="nelson.Manifest.Plan">Plan</a></span>, <span name="hash">hash: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="cats.effect.IO">IO</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
       

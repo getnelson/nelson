@@ -2043,6 +2043,25 @@ has access too.</p>
       </span>
       
       
+    </li><li name="nelson.storage.H2Storage#updateDeploymentBlueprint" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="updateDeploymentBlueprint(id:nelson.ID,bp:Option[nelson.RenderedBlueprint]):doobie.ConnectionIO[Unit]"></a><a id="updateDeploymentBlueprint(ID,Option[RenderedBlueprint]):doobie.ConnectionIO[Unit]"></a>
+      <span class="permalink">
+      <a href="../../nelson/storage/H2Storage.html#updateDeploymentBlueprint(id:nelson.ID,bp:Option[nelson.RenderedBlueprint]):doobie.ConnectionIO[Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateDeploymentBlueprint</span><span class="params">(<span name="id">id: <a href="../index.html#ID=Long" class="extmbr" name="nelson.ID">ID</a></span>, <span name="bp">bp: <a href="http://www.scala-lang.org/api/2.12.8/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="../index.html#RenderedBlueprint=String" class="extmbr" name="nelson.RenderedBlueprint">RenderedBlueprint</a>]</span>)</span><span class="result">: <span class="extype" name="doobie.free.Types.ConnectionIO">doobie.ConnectionIO</span>[<a href="http://www.scala-lang.org/api/2.12.8/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">update the renderedBlueprint field of a deployment.</p><div class="fullcomment"><div class="comment cmt"><p>update the renderedBlueprint field of a deployment.
+This is not a generalized update on <code>Deployment</code> as that would lead
+to wider mutabiltiy, which is highly discouraged.
+</p></div></div>
     </li><li name="nelson.storage.H2Storage#verifyDeployable" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="verifyDeployable(dcName:String,ns:nelson.NamespaceName,unit:nelson.Manifest.UnitDef):doobie.ConnectionIO[cats.data.ValidatedNel[nelson.NelsonError,Unit]]"></a><a id="verifyDeployable(String,NamespaceName,UnitDef):doobie.ConnectionIO[ValidatedNel[NelsonError,Unit]]"></a>
       <span class="permalink">
