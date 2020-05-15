@@ -24,6 +24,8 @@ object Canopus extends Workflow[Unit] {
   val name: WorkflowRef = "canopus"
 
   def deploy(id: ID, hash: String, vunit: UnitDef @@ Versioned, p: Plan, dc: Datacenter, ns: ManifestNamespace): WorkflowF[Unit] = {
+    val unit = Manifest.Versioned.unwrap(vunit)
+
     // When the workflow is completed, we typically want to set the deployment to "Warming", so that once
     // consul indicates the deployment to be passing the health check, we can promote to "Ready" (via the
     // DeploymentMonitor background process).  However, units without ports are not registered in consul, and
@@ -34,12 +36,16 @@ object Canopus extends Workflow[Unit] {
       else unit.ports.fold[DeploymentStatus](Ready)(_ => Warming)
 
     for {
-      i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
       _ <- status(id, Pending, "Canopus workflow about to start")
+      //// extract the docker image with no replication
+      i <- DockerOp.extract(Versioned.unwrap(vunit)).inject[WorkflowOp]
+      //// handle the blueprint rendering, save the bp to the db
+      _  <- logToFile(id, s"Rendering blueprint and saving to the database...")
+      bp <- handleBlueprint(id, i, dc, ns.name, unit, vunit.version, p, hash)
       _ <- logToFile(id, s"Instructing ${dc.name}'s scheduler to handle service container")
-      l <- launch(i, dc, ns.name, vunit, p, hash)
+      l <- launch(i, dc, ns.name, vunit, p, hash, bp)
       _ <- debug(s"Scheduler responded with: ${l}")
-      _ <- status(id, getStatus(Manifest.Versioned.unwrap(vunit), p), "=====> Canopus workflow completed <=====")
+      _ <- status(id, getStatus(unit, p), "=====> Canopus workflow completed <=====")
     } yield ()
   }
 

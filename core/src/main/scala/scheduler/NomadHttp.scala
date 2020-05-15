@@ -58,7 +58,7 @@ final class NomadHttp(
     co match {
       case Delete(dc,d) =>
         deleteUnitAndChildren(dc, d).retryExponentially()(scheduler, ec)
-      case Launch(i, dc, ns, u, p, hash) =>
+      case Launch(i, dc, ns, u, p, hash, _) =>
         val unit = Manifest.Versioned.unwrap(u)
         launch(unit, hash, u.version, i, dc, ns, p).retryExponentially()(scheduler, ec)
       case Summary(dc,_,sn) =>

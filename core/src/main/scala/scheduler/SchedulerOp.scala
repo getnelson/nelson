@@ -28,14 +28,14 @@ object SchedulerOp {
 
   final case class Delete(dc: Datacenter, d: Datacenter.Deployment) extends SchedulerOp[Unit]
 
-  final case class Launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String) extends SchedulerOp[String]
+  final case class Launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String, bp: RenderedBlueprint) extends SchedulerOp[String]
 
   final case class Summary(dc: Datacenter, ns: NamespaceName, sn: Datacenter.StackName) extends SchedulerOp[Option[DeploymentSummary]]
 
   type SchedulerF[A] = Free[SchedulerOp, A]
 
-  def launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String): SchedulerF[String] =
-    Free.liftF(Launch(i, dc, ns, a, p, hash))
+  def launch(i: Image, dc: Datacenter, ns: NamespaceName, a: UnitDef @@ Versioned, p: Plan, hash: String, bp: RenderedBlueprint): SchedulerF[String] =
+    Free.liftF(Launch(i, dc, ns, a, p, hash, bp))
 
   def delete(dc: Datacenter, d: Datacenter.Deployment): SchedulerF[Unit] =
     Free.liftF(Delete(dc,d))
