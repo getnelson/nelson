@@ -77,7 +77,7 @@ object Main {
         log.info(s"starting the $name processor")
         Stoplight(s"${name}_stoplight")(p).compile.drain.unsafeRunAsync(_.fold(
           e => log.error(s"fatal error in background process: name=${name}", e),
-          _ => log.warn(s"background process completed unexpectedly without exception: name=${name}")
+          _ => log.error(s"background process completed unexpectedly without exception: name=${name}")
         ))
       }
 

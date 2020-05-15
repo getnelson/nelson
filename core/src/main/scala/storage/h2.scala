@@ -321,8 +321,8 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
    *
    */
   def createDeploymentStatus(id: ID,
-                              status: DeploymentStatus,
-                              msg: Option[String]): ConnectionIO[Unit] =
+                             status: DeploymentStatus,
+                             msg: Option[String]): ConnectionIO[Unit] =
     sql"""
        INSERT INTO PUBLIC.deployment_statuses
               (deployment_id, state, status_msg, status_time)
