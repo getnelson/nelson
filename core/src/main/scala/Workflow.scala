@@ -128,9 +128,7 @@ object Workflow {
           val rendered = bp.template.render(env)
           StoreOp.updateDeploymentBlueprint(id, Option(rendered)).map(_ => rendered).inject
         case None =>
-          logToFile(id, "no blueprint specified, defaulting to using fallback...") *>
-          fail("Default blueprints are not supported by pulsar")
-          // pure(f(p).render(env))
+          fail("Nelson no longer supports deployment without a blueprint specified; please adjust your manifest and re-submit.")
       }
     }
 
