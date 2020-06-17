@@ -249,19 +249,22 @@ object Pools {
     }
   }
 
-  def default: Pools = {
+  def default: Pools =
+    explicit(defaultPoolSize = 8, schedulingPoolSize = 4)
+
+  def explicit(defaultPoolSize: Int, schedulingPoolSize: Int): Pools = {
     val defaultPool: ExecutorService =
-      Executors.newFixedThreadPool(8, daemonThreads("nelson-thread"))
+      Executors.newFixedThreadPool(defaultPoolSize, daemonThreads("nelson-thread"))
 
     val serverPool: ExecutorService =
       Executors.newCachedThreadPool(daemonThreads("nelson-server"))
 
     val schedulingPool: ScheduledExecutorService =
-      Executors.newScheduledThreadPool(4, daemonThreads("nelson-scheduled-tasks"))
+      Executors.newScheduledThreadPool(schedulingPoolSize, daemonThreads("nelson-scheduled-tasks"))
 
     Pools(defaultPool,
-          serverPool,
-          schedulingPool)
+      serverPool,
+      schedulingPool)
   }
 }
 
@@ -400,7 +403,7 @@ object Config {
     val timeout = cfg.require[FiniteDuration]("nelson.timeout")
     val http = httpBuilder(BlazeClientConfig.defaultConfig.copy(requestTimeout = timeout))
 
-    val pools = Pools.default
+    val pools = readPools(cfg.subconfig("nelson.pools"))
 
     val nomadcfg = readNomad(cfg.subconfig("nelson.nomad"))
 
@@ -482,6 +485,12 @@ object Config {
       )
     }
   }
+
+  private[nelson] def readPools(cfg: KConfig): Pools =
+    Pools.explicit(
+      defaultPoolSize = cfg.require[Int]("default-size"),
+      schedulingPoolSize = cfg.require[Int]("scheduling-size")
+    )
 
   /* Here we're ok to require fields, because they are always specified in
      defaults.cfg. functioanltiy is affected by ui.enabled in the config */
