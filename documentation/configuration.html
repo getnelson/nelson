@@ -12,9 +12,9 @@
 
     <title>Nelson – Cloud-native container deployment</title>
 
-    <link href="https://getnelson.io/css/material.min.css?cd980f55f2e11ec47c2b325e3b09a19b" rel="stylesheet">
+    <link href="https://getnelson.io/css/material.min.css?94db84ed689dc9e18d6371aa555ddb29" rel="stylesheet">
     
-    <link href="https://getnelson.io/css/nelson.css?853d3113f38eff007d22304fc66debb4" rel="stylesheet">
+    <link href="https://getnelson.io/css/nelson.css?2c85d2f6ec04acce09c2f8d370806146" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Barlow:300,600|Open+Sans:300" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -200,6 +200,8 @@
                   <li><a href="#network">Network</a></li>
                 
                   <li><a href="#pipeline">Pipeline</a></li>
+                
+                  <li><a href="#pools">Pools</a></li>
                 
                   <li><a href="#security">Security</a></li>
                 
@@ -1069,6 +1071,33 @@ nelson.docker.connection = &quot;unix:///path/to/docker.sock&quot;
 
 <hr />
 
+<h2 id="pools">Pools</h2>
+
+<p><span class="badge badge-info">optional</span></p>
+
+<p>In certain situations and deployments, its possible that users may want to configure the thread pools Nelson uses in order to reduce contention or improve performance via larger hardware. The size of the two configurable thread pools can be tuned using the following parameters:</p>
+
+<ul>
+<li><a href="#pools-default-size">pools.default-size</a></li>
+<li><a href="#pools-scheduling-size">pools.scheduling-size</a></li>
+</ul>
+
+<h4 id="pools-default-size">pools.default-size</h4>
+
+<p>The default pool is the one that nearly all async operations within Nelson happen on, and in the event that Nelson is conducting a larger service operation, the default 8 threads might not be enough. Best practice is to configure this option as number of CPUs * 2.</p>
+
+<pre><code>nelson.pools.default-size = 8
+</code></pre>
+
+<h4 id="pools-scheduling-size">pools.scheduling-size</h4>
+
+<p>This pool is used for background operations being scheduled and typically should not be adjusted past its default value without advice from the Nelson engineering team.</p>
+
+<pre><code>nelson.pools.scheduling-size = 4
+</code></pre>
+
+<hr />
+
 <h2 id="security">Security</h2>
 
 <p><span class="badge badge-warning">required</span></p>
@@ -1281,7 +1310,7 @@ with Github OAuth because we&rsquo;re developing locally (potentially even offli
         </p>
         <p>
           Currently v
-                    0.16.182
+                    0.16.183
                   
           &middot; <a href="https://github.com/getnelson/nelson">GitHub</a>
           &middot; <a href="https://github.com/getnelson/nelson/issues">Issues</a>
@@ -1302,9 +1331,9 @@ with Github OAuth because we&rsquo;re developing locally (potentially even offli
 
   gtag('config', 'UA-57263411-7');
 </script>
-<script src="/js/material.min.js?64f9a8483adfebdff09e9a209fe45df9"></script>
+<script src="/js/material.min.js?c458660d1fa15208cfa1b6c40731aefa"></script>
 
-<script src="/js/nelson.js?03acf0625fb4c0d983c4ea261b2efa87"></script>
+<script src="/js/nelson.js?dd3f06c64052f9bd14ec3bbcfe94433e"></script>
 
 
   </body>
