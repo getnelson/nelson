@@ -16,6 +16,7 @@ contents:
 - Github
 - Network
 - Pipeline
+- Pools
 - Security
 - Slack
 - Templating
@@ -912,6 +913,32 @@ Internally, the pipeline is implemented as a queue, and all queues buffer. To av
 
 ```
 nelson.pipeline.inbound-buffer-limit = 50
+```
+----
+
+## Pools
+
+<span class="badge badge-info">optional</span>
+
+In certain situations and deployments, its possible that users may want to configure the thread pools Nelson uses in order to reduce contention or improve performance via larger hardware. The size of the two configurable thread pools can be tuned using the following parameters:
+
+* [pools.default-size](#pools-default-size)
+* [pools.scheduling-size](#pools-scheduling-size)
+
+#### pools.default-size
+
+The default pool is the one that nearly all async operations within Nelson happen on, and in the event that Nelson is conducting a larger service operation, the default 8 threads might not be enough. Best practice is to configure this option as number of CPUs * 2.
+
+```
+nelson.pools.default-size = 8
+```
+
+#### pools.scheduling-size
+
+This pool is used for background operations being scheduled and typically should not be adjusted past its default value without advice from the Nelson engineering team.
+
+```
+nelson.pools.scheduling-size = 4
 ```
 
 ----
