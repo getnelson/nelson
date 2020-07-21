@@ -427,7 +427,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         d.rendered_blueprint,
         ds.state
       FROM PUBLIC.deployments AS d
-      LEFT JOIN PUBLIC.deployment_statuses AS ds
+      INNER JOIN PUBLIC.deployment_statuses AS ds
         ON ds.deployment_id = d.id
         AND ds.id = (
           SELECT TOP 1 x.id
@@ -451,7 +451,7 @@ final case class H2Storage(xa: Transactor[IO]) extends (StoreOp ~> IO) {
         d.rendered_blueprint,
         ds.state
       FROM PUBLIC.deployments AS d
-      LEFT JOIN PUBLIC.deployment_statuses AS ds
+      INNER JOIN PUBLIC.deployment_statuses AS ds
         ON ds.deployment_id = d.id
         AND ds.id = (
           SELECT TOP 1 x.id
