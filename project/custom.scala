@@ -25,7 +25,11 @@ object custom {
   )
 
   def revolver = Seq(
-    javaOptions += s"-Dlogback.configurationFile=${baseDirectory.value}/../etc/classpath/revolver/logback.xml",
+    javaOptions ++= Seq(
+      s"-Dlogback.configurationFile=${baseDirectory.value}/../etc/classpath/revolver/logback.xml",
+      // workaround for log4j CVE-2021-44228
+      "log4j2.formatMsgNoLookups=true"
+    ),
     reStartArgs :=
       (baseDirectory.value / ".." / "etc" / "development" / name.value / s"${name.value}.dev.cfg").getCanonicalPath :: Nil,
     mainClass in reStart := (mainClass in run).value
